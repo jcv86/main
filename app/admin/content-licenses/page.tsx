@@ -47,9 +47,9 @@ export default function ContentLicensesPage() {
       case "needs_documentation":
         return "bg-orange/50"
       case "at_risk":
-        return "bg-[rgba(80,160,170,0.5)]/50"
+        return "bg-red/50"
       case "non_compliant":
-        return "bg-[rgba(80,160,170,0.5)]"
+        return "bg-red"
       default:
         return "bg-muted/50"
     }
@@ -135,7 +135,7 @@ export default function ContentLicensesPage() {
             <Card>
               <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                 <CardTitle className="text-sm font-medium">Sin Licencia</CardTitle>
-                <AlertCircle className="h-4 w-4 text-[rgb(80,160,170)]" />
+                <AlertCircle className="h-4 w-4 text-red" />
               </CardHeader>
               <CardContent>
                 <div className="text-2xl font-bold">{unlicensed.length}</div>

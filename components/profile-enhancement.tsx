@@ -81,8 +81,8 @@ export function ProfileEnhancement({ userId }: ProfileEnhancementProps) {
 
   if (error || !profile) {
     return (
-      <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
-        <CardContent className="pt-6 text-[rgb(80,160,170)]-800">{error || 'Profile not found'}</CardContent>
+      <Card className="border-red-200 bg-red-50">
+        <CardContent className="pt-6 text-red-800">{error || 'Profile not found'}</CardContent>
       </Card>
     )
   }
@@ -255,12 +255,12 @@ export function ProfileEnhancement({ userId }: ProfileEnhancementProps) {
               </CardContent>
             </Card>
 
-            <Card className="bg-gradient-to-br from-red-50 to-orange-50 border-[rgb(80,160,170)]-200">
+            <Card className="bg-gradient-to-br from-red-50 to-orange-50 border-red-200">
               <CardHeader className="pb-3">
                 <CardTitle className="text-sm">Lifetime Spent</CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="text-3xl font-bold text-[rgb(80,160,170)]-600">
+                <div className="text-3xl font-bold text-red-600">
                   -{formatDTC(profile.dtc.lifetime_spent)}
                 </div>
               </CardContent>

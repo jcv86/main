@@ -38,7 +38,7 @@ export function AvatarPicker({
     { id: 'professional-1', name: 'Professional', description: 'Classic professional look', emoji: '👔', color: 'bg-blue' },
     { id: 'creative-1', name: 'Creative', description: 'Modern creative style', emoji: '', color: 'bg-purple' },
     { id: 'tech-1', name: 'Tech', description: 'Tech-savvy appearance', emoji: '', color: 'bg-green' },
-    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'bg-[rgba(80,160,170,0.5)]' },
+    { id: 'business-1', name: 'Business', description: 'Corporate executive', emoji: '🏢', color: 'bg-red' },
     { id: 'casual-1', name: 'Casual', description: 'Relaxed casual style', emoji: '😎', color: 'bg-orange' },
     { id: 'formal-1', name: 'Formal', description: 'Formal business attire', emoji: '🎩', color: 'bg-muted' },
   ]
@@ -48,7 +48,7 @@ export function AvatarPicker({
     { id: 'interviewer-classic-2', name: 'Marco', description: 'Tech Lead', emoji: '👨‍', color: 'bg-blue' },
     { id: 'interviewer-classic-3', name: 'Elena', description: 'Executive', emoji: '👩‍', color: 'bg-purple' },
     { id: 'interviewer-classic-4', name: 'David', description: 'Team Manager', emoji: '👨‍', color: 'bg-green' },
-    { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'bg-[rgba(80,160,170,0.5)]' },
+    { id: 'interviewer-modern-1', name: 'Alex', description: 'Career Coach', emoji: '🧑‍🏫', color: 'bg-red' },
     { id: 'interviewer-modern-2', name: 'Jordan', description: 'Recruiter', emoji: '', color: 'bg-orange' },
   ]
 

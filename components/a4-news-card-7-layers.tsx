@@ -55,7 +55,7 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
   }
 
   const getRelevanceColor = (score: number) => {
-    if (score >= 8) return 'bg-[rgba(80,160,170,0.5)]/50/20 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40 border-[rgb(80,160,170)]/30'
+    if (score >= 8) return 'bg-red/50/20 text-red dark:text-red/40 border-red/30'
     if (score >= 6) return 'bg-orange/50/20 text-orange dark:text-orange/40 border-orange/30'
     if (score >= 4) return 'bg-orange/20 text-yellow dark:text-yellow/40 border-yellow/30'
     return 'bg-blue/50/20 text-blue dark:text-blue/40 border-blue/30'
@@ -186,7 +186,7 @@ export function A4NewsCard7Layers({ news, onEngagement }: Props) {
             variant="ghost"
             size="sm"
             onClick={handleSave}
-            className={isSaved ? 'text-[rgb(80,160,170)]' : ''}
+            className={isSaved ? 'text-red' : ''}
           >
             <Heart className={`w-4 h-4 ${isSaved ? 'fill-current' : ''}`} />
           </Button>

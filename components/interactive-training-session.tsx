@@ -197,8 +197,8 @@ export function InteractiveTrainingSession({
             </div>
 
             {error && (
-              <Alert className="bg-[rgba(80,160,170,0.5)]/20 border-[rgb(80,160,170)]/50/30">
-                <AlertDescription className="text-[rgb(80,160,170)]/30">{error}</AlertDescription>
+              <Alert className="bg-red/20 border-red/50/30">
+                <AlertDescription className="text-red/30">{error}</AlertDescription>
               </Alert>
             )}
 
@@ -236,7 +236,7 @@ export function InteractiveTrainingSession({
                 className="w-full h-full object-cover mirror"
                 style={{ transform: 'scaleX(-1)' }}
               />
-              <div className="absolute inset-0 border-2 border-[rgb(80,160,170)]/50/50 rounded-lg pointer-events-none" />
+              <div className="absolute inset-0 border-2 border-red/50/50 rounded-lg pointer-events-none" />
             </div>
 
             {/* Pregunta visible mientras grabas */}

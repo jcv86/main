@@ -14,7 +14,7 @@ export const BrandCard = React.forwardRef<HTMLDivElement, BrandCardProps>(
     const accentColors = {
       yellow: 'border-yellow hover:shadow-yellow/20',
       orange: 'border-orange hover:shadow-orange/20',
-      red: 'border-[rgb(80,160,170)] hover:shadow-[rgba(80,160,170,0.2)]',
+      red: 'border-red hover:shadow-red/20',
       blue: 'border-blue hover:shadow-blue/20',
       purple: 'border-purple hover:shadow-purple/20',
       green: 'border-green hover:shadow-green/20',

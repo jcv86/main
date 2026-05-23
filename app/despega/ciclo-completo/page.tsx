@@ -102,7 +102,7 @@ export default function CycleCompletionPage() {
 
   const getDiscColor = (profile: string | undefined) => {
     switch (profile?.toUpperCase()) {
-      case 'D': return 'bg-[rgba(80,160,170,0.5)]/50/20 border-[rgb(80,160,170)]/30 text-[rgb(80,160,170)]'
+      case 'D': return 'bg-red/50/20 border-red/30 text-red'
       case 'I': return 'bg-orange/20 border-yellow/30 text-yellow'
       case 'S': return 'bg-green/50/20 border-green/30 text-green'
       case 'C': return 'bg-blue/50/20 border-blue/30 text-blue'

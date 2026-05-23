@@ -92,7 +92,7 @@ export function A2Day1RoutGates({
         />
 
         {errors.identity && (
-          <p className="text-xs text-[rgb(80,160,170)]-400">{errors.identity}</p>
+          <p className="text-xs text-red-400">{errors.identity}</p>
         )}
         {identity.length > 0 && (
           <p className="text-xs text-white/40">{identity.length} caracteres</p>
@@ -124,7 +124,7 @@ export function A2Day1RoutGates({
         />
 
         {errors.evidence && (
-          <p className="text-xs text-[rgb(80,160,170)]-400">{errors.evidence}</p>
+          <p className="text-xs text-red-400">{errors.evidence}</p>
         )}
         {evidence.length > 0 && (
           <p className="text-xs text-white/40">{evidence.length} caracteres</p>
@@ -156,7 +156,7 @@ export function A2Day1RoutGates({
         />
 
         {errors.material && (
-          <p className="text-xs text-[rgb(80,160,170)]-400">{errors.material}</p>
+          <p className="text-xs text-red-400">{errors.material}</p>
         )}
         {material.length > 0 && (
           <p className="text-xs text-white/40">{material.length} caracteres</p>

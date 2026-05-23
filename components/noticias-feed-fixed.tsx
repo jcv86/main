@@ -104,7 +104,7 @@ export function NoticiasFeed() {
   }
 
   const getRelevanceColor = (score: number) => {
-    if (score >= 90) return 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] dark:bg-[rgba(80,160,170,0.5)]/30 dark:text-[rgb(80,160,170)]/30'
+    if (score >= 90) return 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30'
     if (score >= 80) return 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30'
     if (score >= 70) return 'bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300'
     return 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/20'
@@ -148,7 +148,7 @@ export function NoticiasFeed() {
 
       {/* Error State */}
       {error && (
-        <div className="bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)]/30 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30 p-3 rounded-lg">
+        <div className="bg-red/10 dark:bg-red/30 text-red dark:text-red/30 p-3 rounded-lg">
           {error}
         </div>
       )}

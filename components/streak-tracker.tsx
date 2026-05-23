@@ -58,8 +58,8 @@ export function StreakTracker({ userId }: StreakTrackerProps) {
 
   if (error) {
     return (
-      <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
-        <CardContent className="pt-6 text-[rgb(80,160,170)]-800">{error}</CardContent>
+      <Card className="border-red-200 bg-red-50">
+        <CardContent className="pt-6 text-red-800">{error}</CardContent>
       </Card>
     )
   }
@@ -184,9 +184,9 @@ export function StreakTracker({ userId }: StreakTrackerProps) {
               <span>🔥 30 Day Streak</span>
               <Badge className="bg-amber-600">+250 XP + Badge</Badge>
             </div>
-            <div className="flex items-center justify-between p-2 rounded bg-[rgba(80,160,170,0.5)]-50">
+            <div className="flex items-center justify-between p-2 rounded bg-red-50">
               <span>🏆 100 Day Streak</span>
-              <Badge className="bg-[rgba(80,160,170,0.5)]-600">+500 XP + Trophy</Badge>
+              <Badge className="bg-red-600">+500 XP + Trophy</Badge>
             </div>
           </div>
         </CardContent>

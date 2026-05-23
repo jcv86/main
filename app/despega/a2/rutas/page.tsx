@@ -196,9 +196,9 @@ export default function A2RoutasPage() {
   if (error) {
     return (
       <div className="min-h-screen bg-background">
-        <Card className="max-w-md border-[rgb(80,160,170)]/20">
+        <Card className="max-w-md border-red/20">
           <CardHeader>
-            <CardTitle className="flex items-center gap-2 text-[rgb(80,160,170)]">
+            <CardTitle className="flex items-center gap-2 text-red">
               <AlertCircle className="w-5 h-5" />
               Error
             </CardTitle>

@@ -183,7 +183,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
               borderColor: validationErrors.role ? 'rgb(239, 68, 68)' : 'rgb(170, 70, 170)'
             }}
           />
-          <p className={`text-xs ${validationErrors.role ? 'text-[rgb(80,160,170)]-400' : 'text-white/50'}`}>
+          <p className={`text-xs ${validationErrors.role ? 'text-red-400' : 'text-white/50'}`}>
             {validationErrors.role || 'Cargo objetivo (3-50 caracteres)'}
           </p>
         </div>
@@ -203,7 +203,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
               borderColor: validationErrors.company ? 'rgb(239, 68, 68)' : 'rgb(170, 70, 170)'
             }}
           />
-          <p className={`text-xs ${validationErrors.company ? 'text-[rgb(80,160,170)]-400' : 'text-white/50'}`}>
+          <p className={`text-xs ${validationErrors.company ? 'text-red-400' : 'text-white/50'}`}>
             {validationErrors.company || 'Empresa u objetivo (2-50 caracteres)'}
           </p>
         </div>
@@ -223,7 +223,7 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
               borderColor: validationErrors.achievements ? 'rgb(239, 68, 68)' : 'rgb(170, 70, 170)'
             }}
           />
-          <p className={`text-xs ${validationErrors.achievements ? 'text-[rgb(80,160,170)]-400' : 'text-white/50'}`}>
+          <p className={`text-xs ${validationErrors.achievements ? 'text-red-400' : 'text-white/50'}`}>
             {validationErrors.achievements || `Logros (${achievements.length}/20 mín.)`}
           </p>
         </div>
@@ -278,16 +278,16 @@ export function PreparationCheck({ onComplete }: PreparationCheckProps) {
           <div className={`rounded-lg p-4 border ${
             aiValidationResult.isValid
               ? 'bg-emerald-500/10 border-emerald-500/30'
-              : 'bg-[rgba(80,160,170,0.5)]-500/10 border-[rgb(80,160,170)]-500/30'
+              : 'bg-red-500/10 border-red-500/30'
           }`}>
             <div className="flex items-start gap-3">
               {aiValidationResult.isValid ? (
                 <Check className="w-5 h-5 text-emerald-400 mt-0.5 flex-shrink-0" />
               ) : (
-                <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-400 mt-0.5 flex-shrink-0" />
+                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
               )}
               <div className="flex-1">
-                <p className={`font-semibold ${aiValidationResult.isValid ? 'text-emerald-400' : 'text-[rgb(80,160,170)]-400'}`}>
+                <p className={`font-semibold ${aiValidationResult.isValid ? 'text-emerald-400' : 'text-red-400'}`}>
                   {aiValidationResult.isValid ? 'Validación Exitosa' : 'Validación Rechazada'}
                 </p>
                 <p className="text-sm text-white/80 mt-1">{aiValidationResult.feedback}</p>

@@ -507,7 +507,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
       case "passed":
         return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-[rgb(80,160,170)]/50" />
+        return <XCircle className="h-4 w-4 text-red/50" />
       case "testing":
         return <Loader2 className="h-4 w-4 animate-spin text-blue/50" />
       default:
@@ -552,7 +552,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
               <p className="text-sm text-muted-foreground">Passed</p>
             </div>
             <div className="text-center p-3 bg-white rounded-[28px] border">
-              <div className="flex items-center justify-center gap-2 text-[rgb(80,160,170)] mb-1">
+              <div className="flex items-center justify-center gap-2 text-red mb-1">
                 <XCircle className="h-5 w-5" />
                 <span className="text-2xl font-bold">{failedTests}</span>
               </div>
@@ -628,7 +628,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                     test.status === "passed"
                       ? "border-green/20 bg-green/5"
                       : test.status === "failed"
-                        ? "border-[rgb(80,160,170)]/20 bg-[rgba(80,160,170,0.5)]/5"
+                        ? "border-red/20 bg-red/5"
                         : test.status === "testing"
                           ? "border-blue/20 bg-blue/5 shadow-lg"
                           : "border-muted/20"
@@ -642,7 +642,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                             test.status === "passed"
                               ? "bg-green/10"
                               : test.status === "failed"
-                                ? "bg-[rgba(80,160,170,0.5)]/10"
+                                ? "bg-red/10"
                                 : test.status === "testing"
                                   ? "bg-blue/10"
                                   : "bg-muted/10"
@@ -663,7 +663,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                     )}
 
                     {test.error && (
-                      <div className="text-sm text-[rgb(80,160,170)] bg-[rgba(80,160,170,0.5)]/10 p-2 rounded">❌ {test.error}</div>
+                      <div className="text-sm text-red bg-red/10 p-2 rounded">❌ {test.error}</div>
                     )}
 
                     {test.events.length > 0 && (
@@ -695,7 +695,7 @@ export function MobileGestureTester({ onGestureDetected, onTestComplete }: Mobil
                     Try different gestures here: tap, double-tap, long press, swipe, pinch, drag
                   </p>
                   {!touchSupport && (
-                    <p className="text-xs text-[rgb(80,160,170)] bg-[rgba(80,160,170,0.5)]/10 p-2 rounded">
+                    <p className="text-xs text-red bg-red/10 p-2 rounded">
                        Touch events not supported on this device
                     </p>
                   )}

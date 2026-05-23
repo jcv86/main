@@ -65,7 +65,7 @@ export function TrainingProgressDashboard() {
       strong_performance: 'bg-blue-500/20 text-blue-400 border-blue-500/30',
       speed_demon: 'bg-purple-500/20 text-purple-400 border-purple-500/30',
       completion_master: 'bg-green-500/20 text-green-400 border-green-500/30',
-      advanced_challenger: 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400 border-[rgb(80,160,170)]-500/30'
+      advanced_challenger: 'bg-red-500/20 text-red-400 border-red-500/30'
     }
     return colors[badge] || 'bg-purple-500/5 text-white/60 border-white/10'
   }
@@ -275,7 +275,7 @@ export function TrainingProgressDashboard() {
                           <span className={`px-2 py-1 rounded text-xs font-medium ${
                             session.level === 'basico' ? 'bg-blue-500/20 text-blue-400' :
                             session.level === 'intermedio' ? 'bg-purple-500/20 text-purple-400' :
-                            'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400'
+                            'bg-red-500/20 text-red-400'
                           }`}>
                             {session.level}
                           </span>

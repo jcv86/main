@@ -90,7 +90,7 @@ export default function NewsletterSignup({ className = '' }: NewsletterSignupPro
       )}
 
       {status === 'error' && (
-        <div className="flex items-center gap-2 mt-3 text-[rgb(80,160,170)]/30">
+        <div className="flex items-center gap-2 mt-3 text-red/30">
           <AlertCircle className="w-4 h-4" />
           <span className="text-sm">{message}</span>
         </div>

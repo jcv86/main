@@ -1954,19 +1954,19 @@ export default function RIASECResults() {
                       </Card>
 
                       {/* IE */}
-                      <Card className="border-2 border-[rgb(80,160,170)]/30">
+                      <Card className="border-2 border-red/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-[rgba(80,160,170,0.5)]/10 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
                               ❤️
                             </div>
                             Inteligencia Emocional Despega
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="bg-[rgba(80,160,170,0.5)]/5 p-3 rounded text-sm">
-                            <strong className="text-[rgb(80,160,170)]">Conexión:</strong>
-                            <p className="text-[rgb(80,160,170)] mt-1">
+                          <div className="bg-red/5 p-3 rounded text-sm">
+                            <strong className="text-red">Conexión:</strong>
+                            <p className="text-red mt-1">
                               RIASEC te muestra tus intereses, IE muestra si tienes las competencias emocionales para
                               prosperar en ellos.
                             </p>
@@ -2055,16 +2055,16 @@ export default function RIASECResults() {
                       <Card className="border-2 border-pink-300">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-[rgba(80,160,170,0.5)]/10 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
                               
                             </div>
                             Competencias Blandas Despega
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="bg-[rgba(80,160,170,0.5)]/5 p-3 rounded text-sm">
+                          <div className="bg-red/5 p-3 rounded text-sm">
                             <strong className="text-pink-900">Conexión:</strong>
-                            <p className="text-[rgb(80,160,170)] mt-1">
+                            <p className="text-red mt-1">
                               RIASEC muestra intereses naturales, Soft Skills muestra habilidades entrenables que puedes
                               desarrollar.
                             </p>
@@ -2192,7 +2192,7 @@ export default function RIASECResults() {
             <Card className="border-l-4 border-l-pink-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Lightbulb className="h-6 w-6 text-[rgb(80,160,170)]" />
+                  <Lightbulb className="h-6 w-6 text-red" />
                   Preguntas de Reflexión Vocacional Profunda
                 </CardTitle>
                 <CardDescription>
@@ -2530,7 +2530,7 @@ export default function RIASECResults() {
                         </td>
                       </tr>
                       <tr>
-                        <td className="border p-3 font-medium text-[rgb(80,160,170)]">Toma de Decisiones</td>
+                        <td className="border p-3 font-medium text-red">Toma de Decisiones</td>
                         <td className="border p-3">
                           <Link
                             href="/biblioteca/the-defining-decade"

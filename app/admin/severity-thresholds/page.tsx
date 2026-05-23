@@ -155,10 +155,10 @@ export default function SeverityThresholdsPage() {
           <Card>
             <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
               <CardTitle className="text-sm font-medium">Críticas</CardTitle>
-              <AlertTriangle className="h-4 w-4 text-[rgb(80,160,170)]" />
+              <AlertTriangle className="h-4 w-4 text-red" />
             </CardHeader>
             <CardContent>
-              <div className="text-2xl font-bold text-[rgb(80,160,170)]">{summary.critical}</div>
+              <div className="text-2xl font-bold text-red">{summary.critical}</div>
               <p className="text-xs text-muted-foreground">Requieren atención inmediata</p>
             </CardContent>
           </Card>
@@ -271,7 +271,7 @@ export default function SeverityThresholdsPage() {
                                 {threshold.unit}
                               </span>
                               {" / "}
-                              <span className="text-[rgb(80,160,170)] font-medium">
+                              <span className="text-red font-medium">
                                 {threshold.critical_threshold}
                                 {threshold.unit}
                               </span>
@@ -305,11 +305,11 @@ export default function SeverityThresholdsPage() {
           ) : (
             <div className="space-y-3">
               {alerts.map((alert) => (
-                <Card key={alert.id} className={alert.severity === "critical" ? "border-[rgb(80,160,170)]/50" : "border-orange"}>
+                <Card key={alert.id} className={alert.severity === "critical" ? "border-red/50" : "border-orange"}>
                   <CardContent className="flex items-center justify-between p-4">
                     <div className="flex items-center gap-4">
                       <AlertTriangle
-                        className={`h-5 w-5 ${alert.severity === "critical" ? "text-[rgb(80,160,170)]" : "text-orange"}`}
+                        className={`h-5 w-5 ${alert.severity === "critical" ? "text-red" : "text-orange"}`}
                       />
                       <div>
                         <div className="flex items-center gap-2 mb-1">

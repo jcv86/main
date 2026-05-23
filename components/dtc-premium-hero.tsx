@@ -93,7 +93,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
               <p className="text-sm text-muted-foreground">Días de Transformación</p>
             </div>
             <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
-              <p className="text-3xl font-bold text-[rgb(80,160,170)] mb-2">∞</p>
+              <p className="text-3xl font-bold text-red mb-2">∞</p>
               <p className="text-sm text-muted-foreground">Coach IA 24/7</p>
             </div>
             <div className="p-6 rounded-[20px] bg-muted/90/40 border border-muted/80">
@@ -114,7 +114,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
               const phaseColors = {
                 yellow: { bg: 'bg-yellow/5', border: 'border-yellow/30', accent: 'text-yellow' },
                 orange: { bg: 'bg-orange/5', border: 'border-orange/30', accent: 'text-orange' },
-                red: { bg: 'bg-[rgba(80,160,170,0.5)]/5', border: 'border-[rgb(80,160,170)]/30', accent: 'text-[rgb(80,160,170)]' },
+                red: { bg: 'bg-red/5', border: 'border-red/30', accent: 'text-red' },
                 blue: { bg: 'bg-blue/5', border: 'border-blue/30', accent: 'text-blue' },
               }
               const colors = phaseColors[phase.accent as keyof typeof phaseColors]
@@ -225,7 +225,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
           <p className="text-muted-foreground mb-8">
             Tu transformación comienza hoy. Sin condiciones. Sin promesas vacías.
           </p>
-          <button className="bg-[rgba(80,160,170,0.5)] text-white font-semibold px-10 py-5 rounded-[20px] text-lg hover:bg-[rgba(80,160,170,0.5)]/90 transition-colors inline-flex items-center gap-2 group">
+          <button className="bg-red text-white font-semibold px-10 py-5 rounded-[20px] text-lg hover:bg-red/90 transition-colors inline-flex items-center gap-2 group">
             Inicia Tu Ruta de 90 Días
             <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </button>

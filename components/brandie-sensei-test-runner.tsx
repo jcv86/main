@@ -137,7 +137,7 @@ export function BrandieSenseiTestRunner() {
       case "pasa_con_advertencias":
         return <AlertTriangle className="w-5 h-5 text-yellow" />
       case "falla":
-        return <XCircle className="w-5 h-5 text-[rgb(80,160,170)]" />
+        return <XCircle className="w-5 h-5 text-red" />
       default:
         return null
     }
@@ -150,7 +150,7 @@ export function BrandieSenseiTestRunner() {
       case "pasa_con_advertencias":
         return "bg-yellow/5 border-yellow/20"
       case "falla":
-        return "bg-[rgba(80,160,170,0.5)]/5 border-[rgb(80,160,170)]/20"
+        return "bg-red/5 border-red/20"
       default:
         return "bg-muted/5"
     }
@@ -225,18 +225,18 @@ export function BrandieSenseiTestRunner() {
                       </div>
 
                       {result.redFlags.length > 0 && (
-                        <Alert className="bg-[rgba(80,160,170,0.5)]/5 border-[rgb(80,160,170)]/20">
-                          <AlertTriangle className="h-4 w-4 text-[rgb(80,160,170)]" />
-                          <AlertDescription className="text-[rgb(80,160,170)]">
+                        <Alert className="bg-red/5 border-red/20">
+                          <AlertTriangle className="h-4 w-4 text-red" />
+                          <AlertDescription className="text-red">
                             <strong>Red Flags:</strong> {result.redFlags.join(", ")}
                           </AlertDescription>
                         </Alert>
                       )}
 
                       {result.criticalFailure && (
-                        <Alert className="bg-[rgba(80,160,170,0.5)]/10 border-[rgb(80,160,170)]/30">
-                          <XCircle className="h-4 w-4 text-[rgb(80,160,170)]" />
-                          <AlertDescription className="text-[rgb(80,160,170)] font-semibold">
+                        <Alert className="bg-red/10 border-red/30">
+                          <XCircle className="h-4 w-4 text-red" />
+                          <AlertDescription className="text-red font-semibold">
                             FALLA CRÍTICA: {result.criticalFailureReason}
                           </AlertDescription>
                         </Alert>

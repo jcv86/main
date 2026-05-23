@@ -165,7 +165,7 @@ export default function SettingsPage() {
       )}
 
       {error && (
-        <div className="mb-6 p-4 rounded-lg bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 text-[rgb(80,160,170)]-400 text-sm flex items-center gap-2">
+        <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4" />
           {error}
         </div>
@@ -319,14 +319,14 @@ export default function SettingsPage() {
         </div>
 
         {/* Communication Preferences - A4 Reality (Red) */}
-        <div className="rounded-lg border-2 border-[rgb(80,160,170)]/30 bg-[rgba(80,160,170,0.5)]/5 p-6 backdrop-blur-sm hover:border-[rgb(80,160,170)]/50 transition-colors">
+        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-red/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-[rgba(80,160,170,0.5)]/30 border border-[rgb(80,160,170)]/50">
-              <LogIn className="w-5 h-5 text-[rgb(80,160,170)]" />
+            <div className="p-2 rounded-lg bg-red/30 border border-red/50">
+              <LogIn className="w-5 h-5 text-red" />
             </div>
             <div>
               <h2 className="text-xl font-semibold text-white">Comunicación</h2>
-              <p className="text-xs text-[rgb(80,160,170)]/60">Tu preferencia de contacto</p>
+              <p className="text-xs text-red/60">Tu preferencia de contacto</p>
             </div>
           </div>
 
@@ -340,7 +340,7 @@ export default function SettingsPage() {
               <select
                 value={preferences.timezone || 'America/Santiago'}
                 onChange={(e) => handlePreferenceChange('timezone', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-[rgba(80,160,170,0.5)]"
+                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-red/50"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -358,7 +358,7 @@ export default function SettingsPage() {
                     onClick={() => handlePreferenceChange('preferred_contact', method.value)}
                     className={`px-4 py-2 rounded-lg transition-all text-sm ${
                       preferences.preferred_contact === method.value
-                        ? 'bg-[rgba(80,160,170,0.5)] text-white'
+                        ? 'bg-red text-white'
                         : 'bg-white/10 text-white/60 hover:bg-white/20'
                     }`}
                   >

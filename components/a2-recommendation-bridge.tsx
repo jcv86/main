@@ -49,7 +49,7 @@ const getPilarColor = (pilar: string) => {
   const colors: Record<string, string> = {
     "energia": "bg-yellow/10 text-yellow",
     "enfoque": "bg-green/10 text-green",
-    "relaciones": "bg-[rgba(80,160,170,0.5)]/10 text-pink-900",
+    "relaciones": "bg-red/10 text-pink-900",
     "plan_ejecutivo": "bg-purple/10 text-purple",
   }
   return colors[pilar] || "bg-muted/10"

@@ -276,7 +276,7 @@ export function MiniPrueba() {
                   {isCorrect ? (
                     <CheckCircle2 className="w-5 h-5 text-green/50 flex-shrink-0" />
                   ) : (
-                    <XCircle className="w-5 h-5 text-[rgb(80,160,170)] flex-shrink-0" />
+                    <XCircle className="w-5 h-5 text-red flex-shrink-0" />
                   )}
                   <div className="flex-1 text-sm">
                     <p className="font-medium line-clamp-1">{q.question}</p>
@@ -289,7 +289,7 @@ export function MiniPrueba() {
                     className={
                       isCorrect
                         ? "bg-green/50/10 text-green dark:text-green/40"
-                        : "bg-[rgba(80,160,170,0.5)]/50/10 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40"
+                        : "bg-red/50/10 text-red dark:text-red/40"
                     }
                   >
                     {isCorrect ? "Correcta" : "Incorrecta"}
@@ -343,7 +343,7 @@ export function MiniPrueba() {
                   ? "bg-green/50/10 text-green dark:text-green/40"
                   : currentQuestion.difficulty === "medio"
                     ? "bg-amber-500/10 text-amber-700 dark:text-amber-400"
-                    : "bg-[rgba(80,160,170,0.5)]/50/10 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40"
+                    : "bg-red/50/10 text-red dark:text-red/40"
               }
               variant="outline"
             >
@@ -363,7 +363,7 @@ export function MiniPrueba() {
                   : idx === currentQuestion.correctAnswer
                     ? "border-green bg-green/50/10"
                     : idx === userAnswer && !isCorrect
-                      ? "border-[rgb(80,160,170)]/50 bg-[rgba(80,160,170,0.5)]/50/10"
+                      ? "border-red/50 bg-red/50/10"
                       : "border-border opacity-50"
               }`}
             >
@@ -373,7 +373,7 @@ export function MiniPrueba() {
                     isAnswered && idx === currentQuestion.correctAnswer
                       ? "bg-green/50 border-green text-white"
                       : isAnswered && idx === userAnswer && !isCorrect
-                        ? "bg-[rgba(80,160,170,0.5)]/50 border-[rgb(80,160,170)]/50 text-white"
+                        ? "bg-red/50 border-red/50 text-white"
                         : "border-current"
                   }`}
                 >
@@ -398,11 +398,11 @@ export function MiniPrueba() {
           className={`border-0 ${
             isCorrect
               ? "bg-green/50/10"
-              : "bg-[rgba(80,160,170,0.5)]/50/10"
+              : "bg-red/50/10"
           }`}
         >
           <AlertCircle className="h-4 w-4" />
-          <AlertDescription className={isCorrect ? "text-green dark:text-green/40" : "text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40"}>
+          <AlertDescription className={isCorrect ? "text-green dark:text-green/40" : "text-red dark:text-red/40"}>
             <p className="font-semibold mb-2">
               {isCorrect ? "¡Correcto!" : "Respuesta incorrecta"}
             </p>

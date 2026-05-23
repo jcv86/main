@@ -3522,7 +3522,7 @@ export default function BookReaderPage() {
                 variant="outline"
                 size="sm"
                 onClick={() => setIsLiked(!isLiked)}
-                className={isLiked ? "text-[rgb(80,160,170)]" : ""}
+                className={isLiked ? "text-red" : ""}
               >
                 <Heart className="h-4 w-4" />
               </Button>
@@ -3645,7 +3645,7 @@ export default function BookReaderPage() {
               )}
 
               {ttsError && (
-                <div className="mt-3 p-2 bg-[rgba(80,160,170,0.5)]/10 border border-[rgb(80,160,170)]/30 rounded text-sm text-[rgb(80,160,170)]">{ttsError}</div>
+                <div className="mt-3 p-2 bg-red/10 border border-red/30 rounded text-sm text-red">{ttsError}</div>
               )}
 
               {!isPlaying && !isPaused && availableVoices.length === 0 && (

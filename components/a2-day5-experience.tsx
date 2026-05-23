@@ -185,10 +185,10 @@ export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
       )}
 
       {error && (
-        <div className="rounded-lg p-4 border border-[rgb(80,160,170)]-500/40" style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
+        <div className="rounded-lg p-4 border border-red-500/40" style={{ backgroundColor: 'rgba(239, 68, 68, 0.05)' }}>
           <div className="flex gap-3">
-            <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-400 flex-shrink-0 mt-0.5" />
-            <p className="text-[rgb(80,160,170)]-300 text-sm">{error}</p>
+            <AlertCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+            <p className="text-red-300 text-sm">{error}</p>
           </div>
         </div>
       )}

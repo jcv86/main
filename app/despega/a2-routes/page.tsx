@@ -443,12 +443,12 @@ export default function A2RoutesPage() {
     return (
       <div className="min-h-screen bg-background p-8">
         <div className="max-w-2xl mx-auto">
-          <Card className="bg-transparent border-[rgb(80,160,170)]/50 p-8">
+          <Card className="bg-transparent border-red/50 p-8">
             <div className="flex items-start gap-4">
-              <AlertCircle className="h-6 w-6 text-[rgb(80,160,170)] flex-shrink-0 mt-1" />
+              <AlertCircle className="h-6 w-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white mb-2">Ruta de 90 Días - Diseña Tu Camino</h2>
-                <p className="text-[rgb(80,160,170)] text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
+                <p className="text-red text-lg mb-6">{error || 'No se encontró ruta personalizada'}</p>
                 <Button 
                   onClick={() => loadAndGenerateRoute()}
                   className="text-white"

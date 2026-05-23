@@ -340,8 +340,8 @@ export default function Conozcamonos1Page() {
           )}
 
           {error && (
-            <div className="mt-4 p-4 bg-[rgba(80,160,170,0.5)]/15 dark:bg-[rgba(80,160,170,0.5)]/20 border border-[rgb(80,160,170)]/40 dark:border-[rgb(80,160,170)]/50 rounded-lg">
-              <p className="text-sm font-semibold text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]">{error}</p>
+            <div className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
+              <p className="text-sm font-semibold text-red dark:text-red">{error}</p>
             </div>
           )}
         </div>

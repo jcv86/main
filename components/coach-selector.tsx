@@ -14,7 +14,7 @@ export function CoachSelector({ onSelect }: CoachSelectorProps) {
       id: "autoconocimiento_proposito" as PromptCategoryId,
       icon: Heart,
       color: "text-pink-600",
-      bgColor: "bg-[rgba(80,160,170,0.5)]/10",
+      bgColor: "bg-red/10",
       borderColor: "hover:border-pink-300",
       coach: "Sofía",
     },

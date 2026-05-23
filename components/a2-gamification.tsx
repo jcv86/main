@@ -96,8 +96,8 @@ export function A2Gamification({ userId, routeId }: A2GamificationProps) {
 
   if (error || !progress) {
     return (
-      <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
-        <CardContent className="pt-6 text-[rgb(80,160,170)]-800">{error || 'No progress data'}</CardContent>
+      <Card className="border-red-200 bg-red-50">
+        <CardContent className="pt-6 text-red-800">{error || 'No progress data'}</CardContent>
       </Card>
     )
   }

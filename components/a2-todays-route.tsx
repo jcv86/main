@@ -24,7 +24,7 @@ export function A2TodaysRoute({ dayNumber, onTaskComplete }: TodaysRouteProps) {
   const taskTypeInfo = A2_TASK_TYPES_INFO[task.type]
   const priorityColor =
     task.priority === 'high'
-      ? 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-300'
+      ? 'bg-red-500/20 text-red-300'
       : task.priority === 'medium'
         ? 'bg-yellow-500/20 text-yellow-300'
         : 'bg-blue-500/20 text-blue-300'

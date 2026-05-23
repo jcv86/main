@@ -188,8 +188,8 @@ export function Day15Experience({ onComplete, userId }: Day15ExperienceProps) {
     <div className="max-w-4xl mx-auto space-y-6 px-4">
       {error && (
         <div className="rounded-lg p-4 flex items-start gap-3" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>
-          <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-500 flex-shrink-0 mt-0.5" />
-          <p className="text-[rgb(80,160,170)]-500">{error}</p>
+          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+          <p className="text-red-500">{error}</p>
         </div>
       )}
 
@@ -274,8 +274,8 @@ export function Day15Experience({ onComplete, userId }: Day15ExperienceProps) {
 
             {stressTestResults.issues.length > 0 && (
               <div className="mt-4 p-3 rounded" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>
-                <p className="text-[rgb(80,160,170)]-400 text-xs font-semibold mb-2">Puntos de Mejora</p>
-                <ul className="text-[rgb(80,160,170)]-400/80 text-xs space-y-1">
+                <p className="text-red-400 text-xs font-semibold mb-2">Puntos de Mejora</p>
+                <ul className="text-red-400/80 text-xs space-y-1">
                   {stressTestResults.issues.map((issue: string, idx: number) => (
                     <li key={idx}>• {issue}</li>
                   ))}

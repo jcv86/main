@@ -76,12 +76,12 @@ export default function TestOpenAIInsightsPage() {
 
         {/* Error Display */}
         {error && (
-          <Card className="bg-[rgba(80,160,170,0.5)]/20 border-[rgb(80,160,170)]/50/50">
+          <Card className="bg-red/20 border-red/50/50">
             <CardContent className="pt-6 flex gap-3">
-              <AlertCircle className="w-6 h-6 text-[rgb(80,160,170)] flex-shrink-0 mt-1" />
+              <AlertCircle className="w-6 h-6 text-red flex-shrink-0 mt-1" />
               <div className="flex-1">
-                <p className="font-semibold text-[rgb(80,160,170)]/10">Test Fallido</p>
-                <p className="text-[rgb(80,160,170)]/20 text-sm mt-1">{error}</p>
+                <p className="font-semibold text-red/10">Test Fallido</p>
+                <p className="text-red/20 text-sm mt-1">{error}</p>
               </div>
             </CardContent>
           </Card>
@@ -209,13 +209,13 @@ export default function TestOpenAIInsightsPage() {
               <CardContent className="space-y-3">
                 <div className="flex items-center justify-between">
                   <span className="text-white/85">Todas las fases completadas</span>
-                  <Badge className={results.validation.all_phases_completed ? 'bg-green' : 'bg-[rgba(80,160,170,0.5)]'}>
+                  <Badge className={results.validation.all_phases_completed ? 'bg-green' : 'bg-red'}>
                     {results.validation.all_phases_completed ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>
                 <div className="flex items-center justify-between">
                   <span className="text-white/85">Cadena BRAIN conectada</span>
-                  <Badge className={results.validation.brain_connected ? 'bg-green' : 'bg-[rgba(80,160,170,0.5)]'}>
+                  <Badge className={results.validation.brain_connected ? 'bg-green' : 'bg-red'}>
                     {results.validation.brain_connected ? 'EXITOSO' : 'FALLIDO'}
                   </Badge>
                 </div>

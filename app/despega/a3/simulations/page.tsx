@@ -75,7 +75,7 @@ const ENTRENAMIENTO_TYPES = [
     ],
     duration: '30-40 min',
     difficulty: 'Maestría',
-    difficultyColor: 'bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)]/30 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20',
+    difficultyColor: 'bg-red/10 dark:bg-red/30 text-red dark:text-red/20',
     icon: Play,
     action: 'Comenzar'
   }

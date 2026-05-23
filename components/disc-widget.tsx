@@ -14,7 +14,7 @@ const DISC_DETAILS = {
   D: {
     label: 'Dominador',
     description: 'Orientado a resultados, decididor rápido',
-    color: 'bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)]/30 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30',
+    color: 'bg-red/10 dark:bg-red/30 text-red dark:text-red/30',
     icon: '⚡',
     traits: ['Decisivo', 'Competitivo', 'Enfocado', 'Determinado'],
   },

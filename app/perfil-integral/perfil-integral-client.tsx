@@ -200,7 +200,7 @@ export function PerfilIntegralClient() {
             <Card className={!ieResult ? "opacity-50" : ""}>
               <CardHeader>
                 <div className="flex items-center justify-between">
-                  <Heart className="h-8 w-8 text-[rgb(80,160,170)]" />
+                  <Heart className="h-8 w-8 text-red" />
                   {ieResult && <Badge variant="secondary">Completado</Badge>}
                 </div>
                 <CardTitle>Inteligencia Emocional</CardTitle>
@@ -209,7 +209,7 @@ export function PerfilIntegralClient() {
               <CardContent>
                 {ieResult ? (
                   <div>
-                    <p className="text-2xl font-bold text-[rgb(80,160,170)] mb-2">{ieResult.score || "N/A"}%</p>
+                    <p className="text-2xl font-bold text-red mb-2">{ieResult.score || "N/A"}%</p>
                     <p className="text-sm text-muted-foreground">Nivel de inteligencia emocional</p>
                   </div>
                 ) : (
@@ -355,7 +355,7 @@ export function PerfilIntegralClient() {
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Heart className="h-6 w-6 text-[rgb(80,160,170)]" />
+                <Heart className="h-6 w-6 text-red" />
                 Cómo Sientes y Gestionas tus Emociones
               </CardTitle>
               <CardDescription>Tu relación con tus emociones y tu capacidad de regularlas</CardDescription>
@@ -392,9 +392,9 @@ export function PerfilIntegralClient() {
                     </div>
                   )}
 
-                  <div className="bg-[rgba(80,160,170,0.5)]/5 border border-[rgb(80,160,170)]/10 rounded-lg p-4">
-                    <p className="text-sm font-medium text-[rgb(80,160,170)] mb-2"> Para tu vida personal</p>
-                    <p className="text-sm text-[rgb(80,160,170)]">
+                  <div className="bg-red/5 border border-red/10 rounded-lg p-4">
+                    <p className="text-sm font-medium text-red mb-2"> Para tu vida personal</p>
+                    <p className="text-sm text-red">
                       Tu nivel de inteligencia emocional impacta directamente en tus relaciones con pareja, familia y
                       amigos. Una alta IE te permite conectar más profundamente, resolver conflictos de forma
                       constructiva y mantener vínculos sanos.

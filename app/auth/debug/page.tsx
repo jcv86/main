@@ -59,7 +59,7 @@ export default function AuthDebugPage() {
               </>
             ) : (
               <>
-                <XCircle className="h-5 w-5 text-[rgb(80,160,170)]" />
+                <XCircle className="h-5 w-5 text-red" />
                 No autenticado
               </>
             )}

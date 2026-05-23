@@ -184,7 +184,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
       case "passed":
         return <CheckCircle className="h-4 w-4 text-green/50" />
       case "failed":
-        return <XCircle className="h-4 w-4 text-[rgb(80,160,170)]" />
+        return <XCircle className="h-4 w-4 text-red" />
       default:
         return <Clock className="h-4 w-4 text-muted-foreground" />
     }
@@ -212,7 +212,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
                 <span className="font-medium">{passedTests}</span> Passed
               </span>
               <span className="flex items-center gap-2">
-                <XCircle className="h-4 w-4 text-[rgb(80,160,170)]" />
+                <XCircle className="h-4 w-4 text-red" />
                 <span className="font-medium">{failedTests}</span> Failed
               </span>
               <span className="flex items-center gap-2">
@@ -262,7 +262,7 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
               metric.status === "passed"
                 ? "border-green/20 bg-green/5"
                 : metric.status === "failed"
-                ? "border-[rgb(80,160,170)]/20 bg-[rgba(80,160,170,0.5)]/5"
+                ? "border-red/20 bg-red/5"
                 : metric.status === "running"
                 ? "border-blue/20 bg-blue/5"
                 : ""
@@ -298,12 +298,12 @@ export function TestFlowMonitor({ onRunTest, onRunAllTests, onResetTests }: Test
               {/* Errors */}
               {metric.errors.length > 0 && (
                 <div className="space-y-1">
-                  <div className="flex items-center gap-1 text-xs text-[rgb(80,160,170)]">
+                  <div className="flex items-center gap-1 text-xs text-red">
                     <AlertTriangle className="h-3 w-3" />
                     Errors ({metric.errors.length})
                   </div>
                   {metric.errors.slice(0, 2).map((error, index) => (
-                    <p key={index} className="text-xs text-[rgb(80,160,170)] truncate">
+                    <p key={index} className="text-xs text-red truncate">
                       {error}
                     </p>
                   ))}

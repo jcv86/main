@@ -32,10 +32,10 @@ export function PillarCard({
   const colorMap = {
     red: {
       bg: 'bg-transparent',
-      border: 'border-[rgb(80,160,170)]/40 dark:border-[rgb(80,160,170)]/60',
-      icon: 'text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]',
-      badge: 'bg-[rgba(80,160,170,0.5)]/15 dark:bg-[rgba(80,160,170,0.5)]/25 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]',
-      button: 'bg-[rgba(80,160,170,0.5)]/80 hover:bg-[rgba(80,160,170,0.5)]/70/80',
+      border: 'border-red/40 dark:border-red/60',
+      icon: 'text-red dark:text-red',
+      badge: 'bg-red/15 dark:bg-red/25 text-red dark:text-red',
+      button: 'bg-red/80 hover:bg-red/70/80',
     },
     blue: {
       bg: 'bg-transparent',

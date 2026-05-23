@@ -115,8 +115,8 @@ export function Day22Experience({ onComplete, userId }: Day22ExperienceProps) {
     <div className="max-w-4xl mx-auto space-y-6 px-4">
       {error && (
         <div className="rounded-lg p-4 flex items-start gap-3" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>
-          <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-500 flex-shrink-0 mt-0.5" />
-          <p className="text-[rgb(80,160,170)]-500">{error}</p>
+          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
+          <p className="text-red-500">{error}</p>
         </div>
       )}
 
@@ -183,7 +183,7 @@ export function Day22Experience({ onComplete, userId }: Day22ExperienceProps) {
                             onClick={() => removeSkill(globalIdx)}
                             size="sm"
                             variant="ghost"
-                            className="text-[rgb(80,160,170)]-400 hover:text-[rgb(80,160,170)]-300 p-1"
+                            className="text-red-400 hover:text-red-300 p-1"
                           >
                             <Trash2 className="w-4 h-4" />
                           </Button>

@@ -55,7 +55,7 @@ export function CanonRouteDisplay({ missions, userProfile }: CanonRouteDisplayPr
     switch (difficulty) {
       case 'easy': return 'bg-green/10 text-green'
       case 'medium': return 'bg-yellow/10 text-yellow'
-      case 'hard': return 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]'
+      case 'hard': return 'bg-red/10 text-red'
       default: return 'bg-muted/10 text-secondary'
     }
   }

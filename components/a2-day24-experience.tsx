@@ -102,7 +102,7 @@ export function Day24Experience({ onComplete, userId }: Day24ExperienceProps) {
 
           <div className="space-y-4">
             <div>
-              <h3 className="text-white font-semibold mb-3 text-[rgb(80,160,170)]-500">Puntos Críticos (Debe Arreglarse)</h3>
+              <h3 className="text-white font-semibold mb-3 text-red-500">Puntos Críticos (Debe Arreglarse)</h3>
               <div className="space-y-2">
                 {criticalIssues.map((issue, idx) => (
                   <label key={idx} className="flex items-center gap-3 p-3 rounded" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>

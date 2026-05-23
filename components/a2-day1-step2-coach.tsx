@@ -96,8 +96,8 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
           </div>
 
           {error && (
-            <div className="bg-[rgba(80,160,170,0.5)]-900/20 border border-[rgb(80,160,170)]-500/30 rounded-lg p-3">
-              <p className="text-[rgb(80,160,170)]-300 text-sm">{error}</p>
+            <div className="bg-red-900/20 border border-red-500/30 rounded-lg p-3">
+              <p className="text-red-300 text-sm">{error}</p>
             </div>
           )}
 

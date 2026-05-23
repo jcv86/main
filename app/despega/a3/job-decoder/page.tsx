@@ -590,7 +590,7 @@ export default function JobDecoderModule() {
               <div className="flex gap-4 text-sm">
                 <span className="flex items-center gap-1 text-green-400"><CheckCircle2 className="w-4 h-4" /> Strong Match</span>
                 <span className="flex items-center gap-1 text-yellow-400"><AlertTriangle className="w-4 h-4" /> Partial Match</span>
-                <span className="flex items-center gap-1 text-[rgb(80,160,170)]-400"><XSquare className="w-4 h-4" /> Gap to Address</span>
+                <span className="flex items-center gap-1 text-red-400"><XSquare className="w-4 h-4" /> Gap to Address</span>
               </div>
               
               <div className="space-y-3">
@@ -608,7 +608,7 @@ export default function JobDecoderModule() {
                               existing?.match === match
                                 ? match === 'strong' ? 'bg-green-500/20 text-green-400 border border-green-500/30'
                                 : match === 'partial' ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30'
-                                : 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400 border border-[rgb(80,160,170)]-500/30'
+                                : 'bg-red-500/20 text-red-400 border border-red-500/30'
                                 : 'bg-white/10 text-white/50 hover:bg-white/20'
                             }`}
                           >

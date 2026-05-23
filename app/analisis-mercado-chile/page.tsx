@@ -33,9 +33,9 @@ export default function AnalisisMercadoChilePage() {
               <strong> desajuste estructural entre formación y demanda laboral</strong>.
             </p>
             <div className="mt-6 grid grid-cols-1 md:grid-cols-3 gap-4">
-              <div className="bg-[rgba(80,160,170,0.5)]/5 p-4 rounded-lg border border-[rgb(80,160,170)]/20">
-                <div className="text-3xl font-bold text-[rgb(80,160,170)] mb-2">917K</div>
-                <div className="text-sm text-[rgb(80,160,170)]">Desempleados totales (Q2 2025)</div>
+              <div className="bg-red/5 p-4 rounded-lg border border-red/20">
+                <div className="text-3xl font-bold text-red mb-2">917K</div>
+                <div className="text-sm text-red">Desempleados totales (Q2 2025)</div>
               </div>
               <div className="bg-orange/5 p-4 rounded-lg border border-orange/20">
                 <div className="text-3xl font-bold text-orange mb-2">60%</div>
@@ -55,7 +55,7 @@ export default function AnalisisMercadoChilePage() {
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
             {/* Crisis de Empleabilidad */}
-            <div className="bg-[rgba(80,160,170,0.5)] rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-red rounded-2xl shadow-lg p-8 text-white">
               <h3 className="text-2xl font-bold mb-4">🚨 Crisis de Empleabilidad</h3>
               <ul className="space-y-3">
                 <li className="flex items-start gap-3">
@@ -63,7 +63,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>8.1%</strong> desempleo profesional (Q1 2025) - máximo histórico
                     <br />
-                    <span className="text-[rgb(80,160,170)]/10 text-sm">+1.4 puntos vs 2024 (+76,229 personas)</span>
+                    <span className="text-red/10 text-sm">+1.4 puntos vs 2024 (+76,229 personas)</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -71,7 +71,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>21.4%</strong> desempleo juvenil (&lt;25 años)
                     <br />
-                    <span className="text-[rgb(80,160,170)]/10 text-sm">2.4x la tasa nacional (8.9%)</span>
+                    <span className="text-red/10 text-sm">2.4x la tasa nacional (8.9%)</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -79,7 +79,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>+69.1%</strong> aumento desempleo de larga duración
                     <br />
-                    <span className="text-[rgb(80,160,170)]/10 text-sm">24,800 profesionales cesantes &gt;6 meses</span>
+                    <span className="text-red/10 text-sm">24,800 profesionales cesantes &gt;6 meses</span>
                   </div>
                 </li>
                 <li className="flex items-start gap-3">
@@ -87,7 +87,7 @@ export default function AnalisisMercadoChilePage() {
                   <div>
                     <strong>41%</strong> de la fuerza laboral tiene educación superior
                     <br />
-                    <span className="text-[rgb(80,160,170)]/10 text-sm">vs 22.4% en 2010 - sobrecalificación</span>
+                    <span className="text-red/10 text-sm">vs 22.4% en 2010 - sobrecalificación</span>
                   </div>
                 </li>
               </ul>
@@ -160,7 +160,7 @@ export default function AnalisisMercadoChilePage() {
                   del mercado.
                 </p>
               </div>
-              <div className="border-l-4 border-[rgb(80,160,170)] pl-4">
+              <div className="border-l-4 border-red pl-4">
                 <h4 className="font-bold text-muted/90 mb-2">Herramientas Obsoletas</h4>
                 <p className="text-muted-foreground text-sm">
                   Servicios universitarios de carrera sobrecargados, tests vocacionales estáticos, sin coaching
@@ -531,7 +531,7 @@ export default function AnalisisMercadoChilePage() {
                   <span>Universidades no integran soft skills en currículum</span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[rgb(80,160,170)] mt-1">✗</span>
+                  <span className="text-red mt-1">✗</span>
                   <span>Brecha crítica: profesionales sin comunicación efectiva, liderazgo, adaptabilidad</span>
                 </li>
               </ul>
@@ -802,7 +802,7 @@ export default function AnalisisMercadoChilePage() {
             </div>
 
             {/* Recomendación 6 */}
-            <div className="bg-[rgba(80,160,170,0.5)] rounded-2xl shadow-lg p-8 text-white">
+            <div className="bg-red rounded-2xl shadow-lg p-8 text-white">
               <div className="flex items-center gap-4 mb-4">
                 <span className="text-5xl">🌎</span>
                 <div>
@@ -817,7 +817,7 @@ export default function AnalisisMercadoChilePage() {
               <div className="space-y-4">
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Por qué estos países:</h4>
-                  <ul className="text-sm space-y-1 text-[rgb(80,160,170)]/5">
+                  <ul className="text-sm space-y-1 text-red/5">
                     <li>
                       • <strong>Colombia:</strong> 2.5M estudiantes universitarios, crisis empleabilidad similar
                     </li>
@@ -835,7 +835,7 @@ export default function AnalisisMercadoChilePage() {
                 </div>
                 <div className="bg-white/10 backdrop-blur rounded-lg p-4">
                   <h4 className="font-bold mb-2">Estrategia de Entrada:</h4>
-                  <p className="text-sm text-[rgb(80,160,170)]/5">
+                  <p className="text-sm text-red/5">
                     <strong>2027:</strong> Post-validación en Chile, lanzar en 1-2 países con alianzas estratégicas.
                     Adaptar biblioteca (agregar libros locales), ajustar pricing regional, establecer partnerships con
                     universidades top (UNAM, ITESM en México; U. de los Andes en Colombia; UBA en Argentina).

@@ -303,7 +303,7 @@ export default function AdminUsersPage() {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <Shield className="h-12 w-12 mx-auto mb-4 text-[rgb(80,160,170)]" />
+          <Shield className="h-12 w-12 mx-auto mb-4 text-red" />
           <h2 className="text-2xl font-bold mb-2">Acceso Denegado</h2>
           <p className="text-muted-foreground">No tienes permisos para acceder a esta página.</p>
         </div>
@@ -548,7 +548,7 @@ export default function AdminUsersPage() {
                           <Edit className="h-4 w-4" />
                         </Button>
                         <Button variant="ghost" size="sm" onClick={() => handleDeleteUser(user.id)}>
-                          <Trash2 className="h-4 w-4 text-[rgb(80,160,170)]" />
+                          <Trash2 className="h-4 w-4 text-red" />
                         </Button>
                       </div>
                     </TableCell>

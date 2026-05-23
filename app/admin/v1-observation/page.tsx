@@ -131,7 +131,7 @@ export default function V1ObservationDashboard() {
             {Object.entries(metrics.dropOffPoints).map(([point, rate]) => (
               <div key={point} className="flex items-center justify-between p-3 bg-muted/5 rounded">
                 <span className="font-medium">{point}</span>
-                <span className={`font-bold ${parseFloat(rate as string) < 30 ? 'text-[rgb(80,160,170)]' : 'text-green'}`}>
+                <span className={`font-bold ${parseFloat(rate as string) < 30 ? 'text-red' : 'text-green'}`}>
                   {rate}
                 </span>
               </div>
@@ -169,8 +169,8 @@ export default function V1ObservationDashboard() {
             <div className="text-3xl font-bold text-blue">{metrics.uniqueSessions}</div>
             <div className="text-sm text-muted-foreground">Sesiones únicas</div>
           </div>
-          <div className="p-4 bg-[rgba(80,160,170,0.5)]/5 rounded text-center">
-            <div className="text-3xl font-bold text-[rgb(80,160,170)]">{metrics.totalErrors}</div>
+          <div className="p-4 bg-red/5 rounded text-center">
+            <div className="text-3xl font-bold text-red">{metrics.totalErrors}</div>
             <div className="text-sm text-muted-foreground">Errores detectados</div>
           </div>
           <div className="p-4 bg-yellow/5 rounded text-center">
@@ -181,24 +181,24 @@ export default function V1ObservationDashboard() {
       </Card>
 
       {/* Critical Observations */}
-      <Card className="border-2 border-[rgb(80,160,170)]/20">
+      <Card className="border-2 border-red/20">
         <CardHeader>
-          <CardTitle className="text-[rgb(80,160,170)]">Observaciones Críticas</CardTitle>
+          <CardTitle className="text-red">Observaciones Críticas</CardTitle>
           <CardDescription>Patrones que indican problemas</CardDescription>
         </CardHeader>
         <CardContent className="space-y-2">
           {metrics.totalErrors > 0 && (
-            <div className="p-3 bg-[rgba(80,160,170,0.5)]/5 text-[rgb(80,160,170)] rounded">
+            <div className="p-3 bg-red/5 text-red rounded">
                {metrics.totalErrors} errores detectados - Revisar logs
             </div>
           )}
           {(metrics.conversionC1toA1 as number) < 0.5 && (
-            <div className="p-3 bg-[rgba(80,160,170,0.5)]/5 text-[rgb(80,160,170)] rounded">
+            <div className="p-3 bg-red/5 text-red rounded">
                Baja conversión C1→A1 ({(metrics.conversionC1toA1 as number * 100).toFixed(1)}%) - Confusión en resultado de A1
             </div>
           )}
           {(metrics.conversionA1toA2 as number) < 0.3 && (
-            <div className="p-3 bg-[rgba(80,160,170,0.5)]/5 text-[rgb(80,160,170)] rounded">
+            <div className="p-3 bg-red/5 text-red rounded">
                Muy baja conversión A1→A2 ({(metrics.conversionA1toA2 as number * 100).toFixed(1)}%) - Bridge CTA no funciona
             </div>
           )}

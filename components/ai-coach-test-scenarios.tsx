@@ -379,14 +379,14 @@ export default function AICoachTestScenarios() {
       case "medium":
         return "bg-yellow/10 text-yellow border-yellow/20"
       case "hard":
-        return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] border-[rgb(80,160,170)]/20"
+        return "bg-red/10 text-red border-red/20"
       default:
         return "bg-muted/10 text-gray-800 border-muted/20"
     }
   }
 
   const getResultIcon = (success: boolean) => {
-    return success ? <CheckCircle className="h-4 w-4 text-green" /> : <Target className="h-4 w-4 text-[rgb(80,160,170)]" />
+    return success ? <CheckCircle className="h-4 w-4 text-green" /> : <Target className="h-4 w-4 text-red" />
   }
 
   const filteredScenarios = testScenarios.filter((scenario) => scenario.category === activeCategory)

@@ -110,7 +110,7 @@ export function A4RadarEstrategico() {
   const getIntensityColor = (intensity: string) => {
     switch (intensity) {
       case 'high':
-        return 'bg-[rgba(80,160,170,0.5)]/20 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30 border-[rgb(80,160,170)]/30'
+        return 'bg-red/20 text-red dark:text-red/30 border-red/30'
       case 'medium':
         return 'bg-orange/20 text-yellow dark:text-yellow/20 border-yellow/30'
       case 'low':
@@ -175,7 +175,7 @@ export function A4RadarEstrategico() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-blue">{economicData.imacec.value}</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.imacec.variation_monthly < 0 ? 'text-[rgb(80,160,170)]' : 'text-green'}`}>
+                  <p className={`text-xs mt-2 font-medium ${economicData.imacec.variation_monthly < 0 ? 'text-red' : 'text-green'}`}>
                     {economicData.imacec.variation_monthly > 0 ? '+' : ''}
                     {economicData.imacec.variation_monthly}% mes
                   </p>
@@ -189,7 +189,7 @@ export function A4RadarEstrategico() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-orange">{economicData.ipc.value}</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual > 3.5 ? 'text-[rgb(80,160,170)]' : 'text-green'}`}>
+                  <p className={`text-xs mt-2 font-medium ${economicData.ipc.variation_annual > 3.5 ? 'text-red' : 'text-green'}`}>
                     +{economicData.ipc.variation_annual}% anual
                   </p>
                   <p className="text-xs text-muted-foreground mt-1">Inflación</p>
@@ -202,7 +202,7 @@ export function A4RadarEstrategico() {
                 </CardHeader>
                 <CardContent>
                   <div className="text-3xl font-bold text-purple">{economicData.tpm.value}%</div>
-                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-[rgb(80,160,170)]' : 'text-green'}`}>
+                  <p className={`text-xs mt-2 font-medium ${economicData.tpm.variation > 0 ? 'text-red' : 'text-green'}`}>
                     {economicData.tpm.variation > 0 ? '+' : ''}
                     {economicData.tpm.variation}%
                   </p>

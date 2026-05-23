@@ -188,7 +188,7 @@ export function WhitepaperClient() {
               </div>
 
               <div className="bg-background">
-                <h4 className="text-lg font-bold mb-3 text-[rgb(80,160,170)]"> Personalized Insights</h4>
+                <h4 className="text-lg font-bold mb-3 text-red"> Personalized Insights</h4>
                 <p className="text-muted text-sm">
                   AI-generated career analysis, percentile rankings, radar charts, development plans, and tailored
                   recommendations based on complete psychometric profile
@@ -685,7 +685,7 @@ export function WhitepaperClient() {
           <h2 className="text-3xl font-bold mb-6 text-foreground">8. Security & Compliance</h2>
 
           <div className="grid md:grid-cols-2 gap-6 mb-6">
-            <div className="bg-[rgba(80,160,170,0.5)]/5 rounded-lg p-6 border border-[rgb(80,160,170)]/10">
+            <div className="bg-red/5 rounded-lg p-6 border border-red/10">
               <h3 className="text-xl font-bold mb-4 text-foreground">Authentication & Authorization</h3>
               <ul className="space-y-2 text-muted">
                 <li>• JWT-based sessions</li>

@@ -137,7 +137,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
+        return "bg-red/10 text-red"
       case "medium":
         return "bg-yellow/10 text-yellow"
       case "low":
@@ -154,7 +154,7 @@ export function AiInsightsPanel({ testType, results, responses }: AiInsightsPane
       case "moderado":
         return <AlertCircle className="h-4 w-4 text-orange" />
       case "difícil":
-        return <Target className="h-4 w-4 text-[rgb(80,160,170)]" />
+        return <Target className="h-4 w-4 text-red" />
       default:
         return <CheckCircle className="h-4 w-4 text-muted-foreground" />
     }

@@ -103,7 +103,7 @@ export default function EnhancedBookReader({
       case "intermedio":
         return "bg-yellow/10 text-yellow"
       case "avanzado":
-        return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
+        return "bg-red/10 text-red"
       default:
         return "bg-muted/10 text-gray-800"
     }
@@ -160,7 +160,7 @@ export default function EnhancedBookReader({
                 variant="outline"
                 size="sm"
                 onClick={() => setIsLiked(!isLiked)}
-                className={isLiked ? "text-[rgb(80,160,170)]" : ""}
+                className={isLiked ? "text-red" : ""}
               >
                 <Heart className="h-4 w-4" />
               </Button>

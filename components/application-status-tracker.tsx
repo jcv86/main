@@ -93,7 +93,7 @@ const getStatusColor = (status: string) => {
     case "hired":
       return "bg-green/20 text-green"
     case "rejected":
-      return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
+      return "bg-red/10 text-red"
     default:
       return "bg-muted/10 text-gray-800"
   }
@@ -101,7 +101,7 @@ const getStatusColor = (status: string) => {
 
 const getStatusIcon = (status: string, isActive: boolean, isCompleted: boolean) => {
   if (status === "rejected") {
-    return <AlertCircle className="h-5 w-5 text-[rgb(80,160,170)]" />
+    return <AlertCircle className="h-5 w-5 text-red" />
   }
   if (isCompleted) {
     return <CheckCircle className="h-5 w-5 text-green" />

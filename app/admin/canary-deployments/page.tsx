@@ -26,7 +26,7 @@ export default function CanaryDeploymentsPage() {
       case "completed":
         return <CheckCircle className="w-5 h-5 text-green" />
       case "failed":
-        return <XCircle className="w-5 h-5 text-[rgb(80,160,170)]" />
+        return <XCircle className="w-5 h-5 text-red" />
       default:
         return <Rocket className="w-5 h-5 text-blue animate-spin" />
     }
@@ -58,7 +58,7 @@ export default function CanaryDeploymentsPage() {
                     deployment.status === "completed"
                       ? "bg-green/10 text-green"
                       : deployment.status === "failed"
-                        ? "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
+                        ? "bg-red/10 text-red"
                         : "bg-blue/10 text-blue"
                   }
                 >

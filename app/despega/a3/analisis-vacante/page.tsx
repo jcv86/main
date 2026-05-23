@@ -87,8 +87,8 @@ export default function AnalisisVacantePagePage() {
   const [analysisTab, setAnalysisTab] = useState<'overview' | 'skills' | 'gaps' | 'prep'>('overview')
   const [isCompleted, setIsCompleted] = useState(false)
 
-  const matchScoreColor = JOB_ANALYSIS.matchScore >= 80 ? 'text-green-400' : JOB_ANALYSIS.matchScore >= 60 ? 'text-yellow-400' : 'text-[rgb(80,160,170)]-400'
-  const matchBgColor = JOB_ANALYSIS.matchScore >= 80 ? 'bg-green-500/10' : JOB_ANALYSIS.matchScore >= 60 ? 'bg-yellow-500/10' : 'bg-[rgba(80,160,170,0.5)]-500/10'
+  const matchScoreColor = JOB_ANALYSIS.matchScore >= 80 ? 'text-green-400' : JOB_ANALYSIS.matchScore >= 60 ? 'text-yellow-400' : 'text-red-400'
+  const matchBgColor = JOB_ANALYSIS.matchScore >= 80 ? 'bg-green-500/10' : JOB_ANALYSIS.matchScore >= 60 ? 'bg-yellow-500/10' : 'bg-red-500/10'
 
   if (isCompleted) {
     return <ModuleCompletionScreen moduleId="analisis-vacante" moduleName="Análisis de Vacante" xpEarned={120} />
@@ -237,14 +237,14 @@ export default function AnalisisVacantePagePage() {
                     </div>
                     <div className="flex items-center gap-3">
                       {skill.required ? (
-                        <Badge className="bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-300">Requerido</Badge>
+                        <Badge className="bg-red-500/20 text-red-300">Requerido</Badge>
                       ) : (
                         <Badge className="bg-blue-500/20 text-blue-300">Deseado</Badge>
                       )}
                       <div className={`w-2 h-2 rounded-full ${
                         skill.yourLevel === 'Expert' ? 'bg-green-500' :
                         skill.yourLevel === 'Advanced' ? 'bg-yellow-500' :
-                        skill.yourLevel === 'Intermediate' ? 'bg-orange-500' : 'bg-[rgba(80,160,170,0.5)]-500'
+                        skill.yourLevel === 'Intermediate' ? 'bg-orange-500' : 'bg-red-500'
                       }`} />
                     </div>
                   </div>
@@ -260,7 +260,7 @@ export default function AnalisisVacantePagePage() {
                 {JOB_ANALYSIS.softSkills.map((skill, idx) => (
                   <div key={idx} className="flex items-center justify-between p-3 border border-purple-500/20 rounded">
                     <p className="font-semibold text-white">{skill.skill}</p>
-                    <Badge className={skill.importance === 'Alta' ? 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-300' : 'bg-yellow-500/20 text-yellow-300'}>
+                    <Badge className={skill.importance === 'Alta' ? 'bg-red-500/20 text-red-300' : 'bg-yellow-500/20 text-yellow-300'}>
                       {skill.importance} Importancia
                     </Badge>
                   </div>
@@ -273,21 +273,21 @@ export default function AnalisisVacantePagePage() {
         {/* Gaps Tab */}
         {analysisTab === 'gaps' && (
           <div className="space-y-6">
-            <Card className="rounded-[2px] bg-[rgba(80,160,170,0.5)]-500/5 border-[rgb(80,160,170)]-500/30">
+            <Card className="rounded-[2px] bg-red-500/5 border-red-500/30">
               <CardHeader>
-                <CardTitle className="flex items-center gap-2 text-[rgb(80,160,170)]-300">
+                <CardTitle className="flex items-center gap-2 text-red-300">
                   <AlertCircle className="w-5 h-5" />
                   Brechas Identificadas
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
                 {JOB_ANALYSIS.gaps.map((gap, idx) => (
-                  <div key={idx} className="p-4 bg-black border border-[rgb(80,160,170)]-500/20 rounded-lg">
+                  <div key={idx} className="p-4 bg-black border border-red-500/20 rounded-lg">
                     <div className="flex items-start gap-3 mb-2">
-                      <AlertCircle className="w-4 h-4 text-[rgb(80,160,170)]-400 mt-1 flex-shrink-0" />
+                      <AlertCircle className="w-4 h-4 text-red-400 mt-1 flex-shrink-0" />
                       <div className="flex-1">
                         <p className="font-semibold text-white">{gap.gap}</p>
-                        <Badge className={gap.priority === 'Alta' ? 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-300 mt-2' : 'bg-yellow-500/20 text-yellow-300 mt-2'}>
+                        <Badge className={gap.priority === 'Alta' ? 'bg-red-500/20 text-red-300 mt-2' : 'bg-yellow-500/20 text-yellow-300 mt-2'}>
                           Prioridad {gap.priority}
                         </Badge>
                       </div>

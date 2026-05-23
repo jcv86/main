@@ -104,7 +104,7 @@ export default function A1ResultadoPage() {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
-          <p className="text-[rgb(80,160,170)] mb-4">{error}</p>
+          <p className="text-red mb-4">{error}</p>
           <Button onClick={() => router.push('/despega/a1-cerebral')}>
             Volver al Test
           </Button>
@@ -240,8 +240,8 @@ export default function A1ResultadoPage() {
                 <p className="font-semibold text-yellow dark:text-yellow/20">1. Plan Ejecutivo (Influencia & Visión)</p>
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para inspirar, comunicar dirección y llevar gente contigo</p>
               </div>
-              <div className="p-3 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20 rounded-[28px] border-l-4 border-[rgb(80,160,170)]/50">
-                <p className="font-semibold text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30">2. Energía (Acción & Dinamismo)</p>
+              <div className="p-3 bg-red/5 dark:bg-red/20 rounded-[28px] border-l-4 border-red/50">
+                <p className="font-semibold text-red dark:text-red/30">2. Energía (Acción & Dinamismo)</p>
                 <p className="text-sm text-muted-foreground dark:text-white/85 mt-1">Tu capacidad para iniciar, moverte rápido y llevar momentum</p>
               </div>
               <div className="p-3 bg-green/5 dark:bg-green/20 rounded-[28px] border-l-4 border-green">
@@ -368,8 +368,8 @@ export default function A1ResultadoPage() {
                 <li>• Ambientes con mucha burocracia o cambios de rumbo</li>
               </ul>
             </div>
-            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-[rgb(80,160,170)]/20 dark:border-[rgb(80,160,170)]">
-              <p className="font-semibold text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20 mb-2">Señal de Alerta</p>
+            <div className="p-4 bg-white dark:bg-background rounded-[28px] border border-red/20 dark:border-red">
+              <p className="font-semibold text-red dark:text-red/20 mb-2">Señal de Alerta</p>
               <p className="text-sm text-muted-foreground dark:text-muted-foreground">Si después de 3-6 meses en un rol sigues sin autonomía clara o decisión, es probable que no es el lugar. Confía en eso.</p>
             </div>
           </CardContent>

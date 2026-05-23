@@ -97,7 +97,7 @@ export function LinkedInProfileCard() {
 
       <CardContent className="space-y-4">
         {error && hasAttemptedSync && (
-          <div className="p-3 bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] rounded-lg flex gap-2">
+          <div className="p-3 bg-red/10 text-red rounded-lg flex gap-2">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <span className="text-sm">{error}</span>
           </div>

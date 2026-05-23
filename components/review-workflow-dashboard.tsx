@@ -231,17 +231,17 @@ export default function ReviewWorkflowDashboard() {
                     <div>
                       <p className="text-sm text-muted-foreground">Satisfacción</p>
                       <p className="text-2xl font-bold">{task.avg_satisfaction.toFixed(1)}★</p>
-                      {task.avg_satisfaction < 4.3 && <p className="text-xs text-[rgb(80,160,170)]">Bajo umbral (4.3★)</p>}
+                      {task.avg_satisfaction < 4.3 && <p className="text-xs text-red">Bajo umbral (4.3★)</p>}
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Engagement</p>
                       <p className="text-2xl font-bold">{task.avg_engagement.toFixed(1)} msgs</p>
-                      {task.avg_engagement < 2.5 && <p className="text-xs text-[rgb(80,160,170)]">Bajo umbral (2.5)</p>}
+                      {task.avg_engagement < 2.5 && <p className="text-xs text-red">Bajo umbral (2.5)</p>}
                     </div>
                     <div>
                       <p className="text-sm text-muted-foreground">Acción</p>
                       <p className="text-2xl font-bold">{task.action_completion_rate.toFixed(0)}%</p>
-                      {task.action_completion_rate < 60 && <p className="text-xs text-[rgb(80,160,170)]">Bajo umbral (60%)</p>}
+                      {task.action_completion_rate < 60 && <p className="text-xs text-red">Bajo umbral (60%)</p>}
                     </div>
                   </div>
 

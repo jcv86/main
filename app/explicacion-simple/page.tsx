@@ -33,28 +33,28 @@ export default function ExplicacionSimplePage() {
               El mercado laboral chileno enfrenta desafíos críticos de empleabilidad y desarrollo profesional:
             </p>
             <div className="bg-white rounded-xl p-6 mb-4">
-              <h3 className="font-bold text-[rgb(80,160,170)] text-xl mb-3">Datos del Mercado Chileno (2025):</h3>
+              <h3 className="font-bold text-red text-xl mb-3">Datos del Mercado Chileno (2025):</h3>
               <ul className="space-y-2 text-muted">
                 <li className="flex items-start gap-2">
-                  <span className="text-[rgb(80,160,170)] font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>8.1%</strong> de desempleo entre profesionales (máximo histórico)
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[rgb(80,160,170)] font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>21.4%</strong> de desempleo juvenil (menores de 25 años)
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[rgb(80,160,170)] font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>60%</strong> de empresas no encuentran talento con las habilidades adecuadas
                   </span>
                 </li>
                 <li className="flex items-start gap-2">
-                  <span className="text-[rgb(80,160,170)] font-bold mt-1">•</span>
+                  <span className="text-red font-bold mt-1">•</span>
                   <span>
                     <strong>85%</strong> del éxito profesional depende de habilidades blandas (Harvard)
                   </span>

@@ -84,12 +84,12 @@ export default function ModulePage() {
   if (error || !module) {
     return (
       <div className="container mx-auto py-8">
-        <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
+        <Card className="border-red-200 bg-red-50">
           <CardHeader>
-            <CardTitle className="text-[rgb(80,160,170)]-900">Error</CardTitle>
+            <CardTitle className="text-red-900">Error</CardTitle>
           </CardHeader>
           <CardContent>
-            <p className="text-[rgb(80,160,170)]-700">{error || 'Módulo no encontrado'}</p>
+            <p className="text-red-700">{error || 'Módulo no encontrado'}</p>
           </CardContent>
         </Card>
       </div>

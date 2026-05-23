@@ -215,10 +215,10 @@ export default function A1CerebralPage() {
             {/* MENOS como yo column */}
             <div>
               <div className="flex items-center gap-3 mb-6">
-                <div className="bg-[rgba(80,160,170,0.5)] rounded-full w-10 h-10 flex items-center justify-center">
+                <div className="bg-red rounded-full w-10 h-10 flex items-center justify-center">
                   <span className="text-white font-bold text-xl">−</span>
                 </div>
-                <p className="text-xl font-bold text-[rgb(80,160,170)]">MENOS como yo</p>
+                <p className="text-xl font-bold text-red">MENOS como yo</p>
               </div>
               <div className="space-y-3">
                 {q.opciones.map((opt) => (
@@ -228,10 +228,10 @@ export default function A1CerebralPage() {
                     disabled={more[q.id] === opt.texto}
                     className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base ${
                       less[q.id] === opt.texto 
-                        ? 'border-[rgb(80,160,170)] bg-[rgba(80,160,170,0.5)]/25 text-white shadow-lg shadow-[rgba(80,160,170,0.2)]' 
+                        ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20' 
                         : more[q.id] === opt.texto 
                           ? 'border-muted/20 bg-muted/5 text-white/70 opacity-50 cursor-not-allowed' 
-                          : 'border-[rgb(80,160,170)]/40 text-white/90 hover:border-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.5)]/15 hover:text-white'
+                          : 'border-red/40 text-white/90 hover:border-red hover:bg-red/15 hover:text-white'
                     }`}>
                     {opt.texto}
                   </button>
@@ -242,8 +242,8 @@ export default function A1CerebralPage() {
 
           {/* Error message */}
           {error && (
-            <div className="mb-6 p-4 bg-[rgba(80,160,170,0.5)]/15 border-2 border-[rgb(80,160,170)]/40 rounded-lg">
-              <p className="text-[rgb(80,160,170)] font-semibold text-center"> {error}</p>
+            <div className="mb-6 p-4 bg-red/15 border-2 border-red/40 rounded-lg">
+              <p className="text-red font-semibold text-center"> {error}</p>
             </div>
           )}
         </div>

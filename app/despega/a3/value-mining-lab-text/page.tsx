@@ -313,10 +313,10 @@ export default function ValueMiningLabModule() {
         <Card className="rounded-[2px] bg-white/5 border-white/10 p-5">
           <p className="text-white/50 text-xs uppercase tracking-wider mb-3">Example Transformation</p>
           <div className="grid md:grid-cols-2 gap-4">
-            <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-[2px] p-4">
+            <div className="bg-red-500/10 border border-red-500/30 rounded-[2px] p-4">
               <div className="flex items-center gap-2 mb-2">
-                <AlertCircle className="w-4 h-4 text-[rgb(80,160,170)]-400" />
-                <p className="text-[rgb(80,160,170)]-400 text-sm font-medium">Before (Task Only)</p>
+                <AlertCircle className="w-4 h-4 text-red-400" />
+                <p className="text-red-400 text-sm font-medium">Before (Task Only)</p>
               </div>
               <p className="text-white/70">&quot;I answered customer emails.&quot;</p>
             </div>

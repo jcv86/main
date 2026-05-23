@@ -43,7 +43,7 @@ export function DocumentCard({ document, isSelected, onSelect, onEdit }: Documen
     >
       <div className="flex items-start justify-between mb-3">
         <div className="flex-1">
-          <h3 className="font-semibold text-[rgb(80,160,170)]-400 mb-1">{document.title}</h3>
+          <h3 className="font-semibold text-red-400 mb-1">{document.title}</h3>
           <div className="flex items-center gap-2 text-sm text-gray-400">
             <FileText size={14} />
             <span className="capitalize">{document.type}</span>
@@ -76,7 +76,7 @@ export function DocumentCard({ document, isSelected, onSelect, onEdit }: Documen
             e.stopPropagation()
             onEdit(document)
           }}
-          className="text-[rgb(80,160,170)]-400 hover:text-[rgb(80,160,170)]-300 hover:bg-stone-800"
+          className="text-red-400 hover:text-red-300 hover:bg-stone-800"
         >
           <Edit size={14} className="mr-1" />
           Editar

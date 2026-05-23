@@ -62,7 +62,7 @@ export function PeerComparison({
       case "below_average":
         return "bg-orange/10 text-orange"
       case "needs_improvement":
-        return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
+        return "bg-red/10 text-red"
       default:
         return "bg-muted/10 text-gray-800"
     }

@@ -73,7 +73,7 @@ export function CriticalLogsDashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <AlertTriangle className="h-5 w-5 text-[rgb(80,160,170)]" />
+              <AlertTriangle className="h-5 w-5 text-red" />
               <span className="text-3xl font-bold">{data.summary.total_critical}</span>
             </div>
           </CardContent>
@@ -111,7 +111,7 @@ export function CriticalLogsDashboard() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <Target className="h-5 w-5 text-[rgb(80,160,170)]" />
+              <Target className="h-5 w-5 text-red" />
               <span className="text-3xl font-bold">{data.summary.low_action_count}</span>
             </div>
             <p className="text-xs text-muted-foreground mt-1">{"< 60%"}</p>

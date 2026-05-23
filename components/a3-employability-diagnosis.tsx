@@ -160,15 +160,15 @@ export function A3EmployabilityDiagnosis({ onComplete }: EmployabilityDiagnosisP
         </div>
 
         {/* Gaps */}
-        <div className="bg-[rgba(80,160,170,0.5)]/5 p-4 rounded-[28px] border border-[rgb(80,160,170)]/20">
+        <div className="bg-red/5 p-4 rounded-[28px] border border-red/20">
           <div className="font-medium mb-3 flex items-center gap-2">
-            <AlertCircle className="w-4 h-4 text-[rgb(80,160,170)]" />
+            <AlertCircle className="w-4 h-4 text-red" />
             Brechas Principales
           </div>
           <ul className="space-y-2">
             {diagnosis?.gaps?.map((gap: string, idx: number) => (
               <li key={idx} className="text-sm text-muted flex items-start gap-2">
-                <span className="text-[rgb(80,160,170)] font-bold">•</span>
+                <span className="text-red font-bold">•</span>
                 {gap}
               </li>
             ))}

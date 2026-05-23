@@ -228,7 +228,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Avatar className="h-8 w-8">
                             <AvatarFallback
                               className={
-                                message.coach === "sofia" ? "bg-[rgba(80,160,170,0.5)]/10 text-pink-700" : "bg-blue/10 text-blue"
+                                message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
                               }
                             >
                               {message.coach === "sofia" ? "S" : "D"}
@@ -237,7 +237,7 @@ export function SofiaDaniCoach({ userEmail, testType, testResults, conversationC
                           <Badge
                             variant="secondary"
                             className={`text-[10px] px-1 py-0 ${
-                              message.coach === "sofia" ? "bg-[rgba(80,160,170,0.5)]/10 text-pink-700" : "bg-blue/10 text-blue"
+                              message.coach === "sofia" ? "bg-red/10 text-pink-700" : "bg-blue/10 text-blue"
                             }`}
                           >
                             {message.coach === "sofia" ? "Sofía" : "Dani"}

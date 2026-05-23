@@ -64,7 +64,7 @@ export default function BitacoraPage() {
   }
 
   const getMoodColor = (mood: number) => {
-    if (mood <= 2) return 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]'
+    if (mood <= 2) return 'bg-red/10 text-red'
     if (mood === 3) return 'bg-yellow/10 text-yellow'
     return 'bg-green/10 text-green'
   }
@@ -108,9 +108,9 @@ export default function BitacoraPage() {
 
         {/* Error State */}
         {error && (
-          <Card className="border-0 shadow-md bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20 border-l-4 border-l-red-500">
+          <Card className="border-0 shadow-md bg-red/5 dark:bg-red/20 border-l-4 border-l-red-500">
             <CardContent className="p-4">
-              <p className="text-sm text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20">
+              <p className="text-sm text-red dark:text-red/20">
                 <strong>Error:</strong> {error}
               </p>
             </CardContent>

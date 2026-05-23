@@ -78,10 +78,10 @@ export function A3ModuleAccessGate({
   if (!canAccess && accessInfo) {
     return (
       <div className="max-w-2xl mx-auto p-6 space-y-6">
-        <Card className="border-[rgb(80,160,170)]-500/30 bg-[rgba(80,160,170,0.5)]-500/10">
+        <Card className="border-red-500/30 bg-red-500/10">
           <div className="p-6">
             <div className="flex items-start gap-4">
-              <Lock className="w-6 h-6 text-[rgb(80,160,170)]-400 flex-shrink-0 mt-1" />
+              <Lock className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
               <div className="flex-1">
                 <h2 className="text-xl font-bold text-white mb-2">
                   Módulo No Disponible

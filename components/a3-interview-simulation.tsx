@@ -287,7 +287,7 @@ export function A3InterviewSimulation({ level, type, interviewerId, onComplete }
             <div>
               <CardTitle>Pregunta {currentQuestionIdx + 1} de {questions.length}</CardTitle>
             </div>
-            <Badge className="bg-[rgba(80,160,170,0.5)] flex items-center gap-2">
+            <Badge className="bg-red flex items-center gap-2">
               <span className="animate-pulse">●</span>
               {formatTime(recordingTime)}
             </Badge>

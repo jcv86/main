@@ -58,7 +58,7 @@ export function SkillGapAnalysis({ userEmail }: SkillGapAnalysisProps) {
   }
 
   const getPriorityColor = (score: number) => {
-    if (score >= 8) return "text-[rgb(80,160,170)] bg-[rgba(80,160,170,0.5)]/10"
+    if (score >= 8) return "text-red bg-red/10"
     if (score >= 5) return "text-orange bg-orange/10"
     if (score >= 3) return "text-yellow bg-yellow/10"
     return "text-green bg-green/10"

@@ -355,8 +355,8 @@ export default function RiskDifficultQuestionsLabModule() {
                               </div>
 
                               <div className="space-y-3 mt-3">
-                                <div className="bg-[rgba(80,160,170,0.5)]-500/10 p-2 rounded">
-                                  <p className="text-xs text-[rgb(80,160,170)]-400 mb-1">Dangerous Answer:</p>
+                                <div className="bg-red-500/10 p-2 rounded">
+                                  <p className="text-xs text-red-400 mb-1">Dangerous Answer:</p>
                                   <p className="text-sm text-white/70 italic">{cat.dangerAnswer}</p>
                                 </div>
 
@@ -392,10 +392,10 @@ export default function RiskDifficultQuestionsLabModule() {
                     {/* Activity 2: Red Flags */}
                     {index === 2 && (
                       <div className="space-y-4">
-                        <Card className="rounded-[2px] bg-[rgba(80,160,170,0.5)]-500/10 border-[rgb(80,160,170)]-500/30 p-4">
+                        <Card className="rounded-[2px] bg-red-500/10 border-red-500/30 p-4">
                           <div className="flex items-center gap-2 mb-3">
-                            <AlertTriangle className="w-5 h-5 text-[rgb(80,160,170)]-400" />
-                            <h4 className="font-semibold text-[rgb(80,160,170)]-400">Red Flag Phrases to NEVER Say</h4>
+                            <AlertTriangle className="w-5 h-5 text-red-400" />
+                            <h4 className="font-semibold text-red-400">Red Flag Phrases to NEVER Say</h4>
                           </div>
                           <p className="text-sm text-white/70">
                             These phrases immediately raise concerns for interviewers. Memorize them so you never accidentally use them.
@@ -405,7 +405,7 @@ export default function RiskDifficultQuestionsLabModule() {
                         <div className="space-y-2">
                           {RED_FLAGS.map((flag, i) => (
                             <div key={i} className="flex gap-3 p-3 bg-white/5 rounded">
-                              <XCircle className="w-5 h-5 text-[rgb(80,160,170)]-400 flex-shrink-0 mt-0.5" />
+                              <XCircle className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
                               <div>
                                 <p className="text-white font-medium">{flag.bad}</p>
                                 <p className="text-sm text-white/60">{flag.why}</p>

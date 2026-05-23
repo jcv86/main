@@ -385,7 +385,7 @@ ${
       case "offline":
         return (
           <Badge variant="outline" className="text-xs">
-            <AlertCircle className="h-3 w-3 mr-1 text-[rgb(80,160,170)]" />
+            <AlertCircle className="h-3 w-3 mr-1 text-red" />
             Sin Conexión
           </Badge>
         )

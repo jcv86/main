@@ -435,7 +435,7 @@ export default function ChallensingTrainingPage() {
                     </Button>
 
                     {evaluationError && (
-                      <div className="flex items-start gap-2 text-[rgb(80,160,170)] text-sm bg-[rgba(80,160,170,0.5)]/40 border border-[rgb(80,160,170)]/40 p-3 rounded-lg">
+                      <div className="flex items-start gap-2 text-red text-sm bg-red/40 border border-red/40 p-3 rounded-lg">
                         <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
                         <span>{evaluationError}</span>
                       </div>
@@ -526,7 +526,7 @@ export default function ChallensingTrainingPage() {
                   <div>
                     <p className="text-xs text-white/60 font-semibold mb-2">Promedio General</p>
                     <div className="flex items-end gap-2">
-                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green' : averageScore >= 60 ? 'text-yellow' : 'text-[rgb(80,160,170)]'}`}>
+                      <span className={`text-4xl font-bold ${averageScore >= 75 ? 'text-green' : averageScore >= 60 ? 'text-yellow' : 'text-red'}`}>
                         {averageScore}
                       </span>
                       <span className="text-xs text-white/60 pb-2">/100</span>
@@ -569,7 +569,7 @@ export default function ChallensingTrainingPage() {
                       <div className="mt-0.5">
                         {completedQuestions.includes(idx) && scores[idx] ? (
                           <div className={`w-6 h-6 rounded-full flex items-center justify-center text-white text-xs font-bold ${
-                            scores[idx] >= 75 ? 'bg-green' : scores[idx] >= 60 ? 'bg-yellow' : 'bg-[rgba(80,160,170,0.5)]'
+                            scores[idx] >= 75 ? 'bg-green' : scores[idx] >= 60 ? 'bg-yellow' : 'bg-red'
                           }`}>
                             {scores[idx]}
                           </div>
