@@ -589,8 +589,8 @@ export default function A2RoutesPage() {
         {/* Main Route Breakdown - Tus 90 Días Estructurados */}
         <Card className="bg-transparent border-muted/80">
           <CardHeader>
-              <CardTitle className="flex items-center gap-2 text-2xl" style={{ color: 'rgba(90, 90, 150)' }}>
-                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(90, 90, 150, 0.6)' }} />
+              <CardTitle className="flex items-center gap-2 text-2xl" style={{ color: '#6045d3' }}>
+                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgba(96, 69, 211, 0.6)' }} />
                 Tus 90 Días Estructurados
               </CardTitle>
             </CardHeader>
