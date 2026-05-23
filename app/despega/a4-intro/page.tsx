@@ -72,7 +72,7 @@ export default function ContinuousExecutionIntroPage() {
         />
 
         <div className="space-y-8">
-          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg">
+          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg border-0">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white">
                 <Radar className="w-8 h-8" style={{ color: 'rgba(225, 120, 130)' }} />
@@ -91,7 +91,7 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg">
+          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg border-0">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white font-light">
                 <TrendingUp className="w-8 h-8" style={{ color: 'rgba(225, 120, 130)' }} />
@@ -122,7 +122,7 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[rgba(0,0,0,0.1)] shadow-lg">
+          <Card className="bg-[rgba(0,0,0,0.1)] shadow-lg border-0">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl text-white font-light">Tu Flujo de Ejecución</CardTitle>
               <CardDescription className="text-white/75 text-lg">Cómo funciona tu ejecución continua</CardDescription>
@@ -134,7 +134,7 @@ export default function ContinuousExecutionIntroPage() {
                   { num: '2', label: 'Analiza', desc: 'Te proporciona insights estratégicos personalizados' },
                   { num: '3', label: 'Ejecuta', desc: 'Tú actúas con inteligencia de mercado real' }
                 ].map((step, idx) => (
-                  <div key={idx} className="bg-background/50 border-[rgba(225,120,130,0.2)] p-6 rounded-xl text-center transition-all" style={{ borderWidth: '2px' }}>
+                  <div key={idx} className="bg-background/50 p-6 rounded-xl text-center transition-all">
                     <div className="text-5xl font-black mb-3" style={{ color: 'rgba(225, 120, 130)' }}>{step.num}</div>
                     <p className="font-bold text-white text-xl mb-2">{step.label}</p>
                     <p className="text-white/85 text-base">{step.desc}</p>
@@ -149,7 +149,7 @@ export default function ContinuousExecutionIntroPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg">
+          <Card className="bg-[rgba(225,120,130,0.2)] shadow-lg border-0">
             <CardHeader className="pb-4">
               <CardTitle className="text-3xl flex items-center gap-3 text-white font-light">
                 <Radar className="w-8 h-8" style={{ color: 'rgba(225, 120, 130, 0.2)' }} />
