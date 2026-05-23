@@ -10,8 +10,9 @@ import { Progress } from '@/components/ui/progress'
 import { 
   ArrowRight, ArrowLeft, CheckCircle2, Users, Lightbulb, RefreshCw,
   ChevronDown, ChevronUp, MessageCircle, ThumbsUp, AlertCircle, 
-  Sparkles, Eye, RotateCcw, Save
+  Sparkles, Eye, RotateCcw, Save, Loader2, Zap
 } from 'lucide-react'
+import { useCoaching } from '@/lib/hooks/use-coaching'
 
 const MODULE_XP = 130
 
@@ -85,76 +86,26 @@ const PRACTICE_SESSIONS = [
   }
 ]
 
-// Simulated AI feedback generator
-const generateFeedback = (answer: string, session: typeof PRACTICE_SESSIONS[0]) => {
-  const wordCount = answer.trim().split(/\s+/).length
-  const hasNumbers = /\d+/.test(answer)
-  const usesI = (answer.match(/\bI\b/gi) || []).length
-  const usesWe = (answer.match(/\bwe\b/gi) || []).length
-  
-  const feedback = {
-    scores: session.feedbackCriteria.map(criteria => ({
-      ...criteria,
-      score: Math.random() > 0.3 ? 'good' : Math.random() > 0.5 ? 'needs-work' : 'missing'
-    })),
-    issues: [] as string[],
-    strengths: [] as string[],
-    suggestion: ''
-  }
-  
-  // Check word count
-  if (wordCount < 40) {
-    feedback.issues.push('Answer is too short - add more detail')
-  } else if (wordCount > 150) {
-    feedback.issues.push('Answer is too long - focus on key points')
-  } else {
-    feedback.strengths.push('Good answer length')
-  }
-  
-  // Check for specificity
-  if (hasNumbers) {
-    feedback.strengths.push('Includes specific numbers/metrics')
-  } else {
-    feedback.issues.push('Add specific numbers or metrics for impact')
-  }
-  
-  // Check pronoun usage for STAR
-  if (session.id === 'challenge') {
-    if (usesI > usesWe) {
-      feedback.strengths.push('Good focus on your personal contributions')
-    } else if (usesWe > usesI) {
-      feedback.issues.push('Too focused on "we" - highlight YOUR actions with "I"')
-    }
-  }
-  
-  // Add random applicable issues
-  const randomIssue = session.commonIssues[Math.floor(Math.random() * session.commonIssues.length)]
-  if (feedback.issues.length < 2 && Math.random() > 0.5) {
-    feedback.issues.push(randomIssue)
-  }
-  
-  // Generate suggestion
-  const randomTip = session.improvementTips[Math.floor(Math.random() * session.improvementTips.length)]
-  feedback.suggestion = randomTip
-  
-  return feedback
-}
+// Removed mock generateFeedback - now using real LLM API via useCoaching hook
 
 export default function CoachPracticeRoomModule() {
   const router = useRouter()
+  const { generateFeedback: callLLMCoach, feedback: llmFeedback, loading: coachLoading } = useCoaching()
   const [currentStep, setCurrentStep] = useState(0)
   const [completedSteps, setCompletedSteps] = useState<number[]>([])
   const [expandedSection, setExpandedSection] = useState<string | null>('intro')
   
   // Practice state
   const [answers, setAnswers] = useState<Record<string, { original: string; improved: string }>>({})
-  const [feedback, setFeedback] = useState<Record<string, ReturnType<typeof generateFeedback>>>({})
+  const [feedback, setFeedback] = useState<Record<string, string>>({})
   const [showingFeedback, setShowingFeedback] = useState<Record<string, boolean>>({})
   const [iterations, setIterations] = useState<Record<string, number>>({})
 
   const progress = Math.round((completedSteps.length / PRACTICE_SESSIONS.length) * 100)
 
-  const submitAnswer = (sessionId: string, answer: string, isImproved: boolean = false) => {
+  const submitAnswer = async (sessionId: string, answer: string, isImproved: boolean = false) => {
+    if (!answer.trim()) return
+
     setAnswers(prev => ({
       ...prev,
       [sessionId]: isImproved 
@@ -164,10 +115,19 @@ export default function CoachPracticeRoomModule() {
     
     const session = PRACTICE_SESSIONS.find(s => s.id === sessionId)
     if (session) {
-      const newFeedback = generateFeedback(answer, session)
-      setFeedback(prev => ({ ...prev, [sessionId]: newFeedback }))
-      setShowingFeedback(prev => ({ ...prev, [sessionId]: true }))
-      setIterations(prev => ({ ...prev, [sessionId]: (prev[sessionId] || 0) + 1 }))
+      // Call LLM API for real coaching feedback
+      const result = await callLLMCoach({
+        question: session.question,
+        userResponse: answer,
+        interviewType: 'behavioral',
+        roleContext: 'Professional development - interview coaching practice'
+      })
+
+      if (result.success) {
+        setFeedback(prev => ({ ...prev, [sessionId]: result.feedback }))
+        setShowingFeedback(prev => ({ ...prev, [sessionId]: true }))
+        setIterations(prev => ({ ...prev, [sessionId]: (prev[sessionId] || 0) + 1 }))
+      }
     }
   }
 

@@ -37,9 +37,6 @@ export async function GET(request: NextRequest) {
     }
 
     let userId = user.id
-      console.log('[v0] API documents - Cannot determine user ID, returning 401')
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
 
     const type = searchParams.get('type') as DocumentType | null
     const status = searchParams.get('status') as DocumentStatus | null
