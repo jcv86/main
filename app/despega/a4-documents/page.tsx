@@ -25,7 +25,19 @@ import {
   Play,
   Calendar,
   Loader,
+  Mail,
+  Mic,
+  Map,
+  MessageCircle,
+  Users,
 } from 'lucide-react'
+import { 
+  DOCUMENT_TYPE_MAP, 
+  SPECIALTY_MAP, 
+  ACTIVITY_NAMES,
+  getDocumentLabel,
+  getDocumentCategory 
+} from '@/lib/constants/dtc-document-types'
 
 interface DTCTestResult {
   id: string
@@ -164,12 +176,19 @@ export default function A4DocumentsPage() {
   }, [fetchDocuments, authLoading, user])
 
   const getTypeIcon = (type: string) => {
-    switch (type.toLowerCase()) {
-      case 'mbti':
-      case 'disc':
-      case 'big five':
-      case 'riasec':
-        return <Brain className="w-5 h-5" />
+    switch (type?.toLowerCase()) {
+      case 'cv':
+        return <FileText className="w-5 h-5" />
+      case 'cover_letter':
+        return <Mail className="w-5 h-5" />
+      case 'elevator_pitch':
+        return <Mic className="w-5 h-5" />
+      case 'linkedin_summary':
+        return <Users className="w-5 h-5" />
+      case 'career_roadmap':
+        return <Map className="w-5 h-5" />
+      case 'interview_prep':
+        return <MessageCircle className="w-5 h-5" />
       case 'video':
         return <Play className="w-5 h-5" />
       case 'document':
@@ -255,11 +274,12 @@ export default function A4DocumentsPage() {
             </SelectTrigger>
             <SelectContent>
               <SelectItem value="all">Todos los tipos</SelectItem>
-              <SelectItem value="MBTI">MBTI</SelectItem>
-              <SelectItem value="DISC">DISC</SelectItem>
-              <SelectItem value="Big Five">Big Five</SelectItem>
-              <SelectItem value="video">Videos</SelectItem>
-              <SelectItem value="document">Documentos</SelectItem>
+              <SelectItem value="cv">CV</SelectItem>
+              <SelectItem value="cover_letter">Carta de Presentación</SelectItem>
+              <SelectItem value="elevator_pitch">Elevator Pitch</SelectItem>
+              <SelectItem value="linkedin_summary">LinkedIn Summary</SelectItem>
+              <SelectItem value="career_roadmap">Ruta de Carrera</SelectItem>
+              <SelectItem value="interview_prep">Prep. Entrevista</SelectItem>
             </SelectContent>
           </Select>
         </div>
@@ -383,45 +403,54 @@ export default function A4DocumentsPage() {
           {/* Artifacts Tab */}
           <TabsContent value="artifacts" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              {artifacts.map((artifact) => (
-                <div key={artifact.id} className="bg-card border border-border rounded-lg p-5">
-                  <div className="flex items-start justify-between mb-3">
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-primary/10 rounded-lg">
-                        {getTypeIcon(artifact.artifact_type)}
-                      </div>
-                      <div>
-                        <h3 className="font-semibold text-foreground">{artifact.title}</h3>
-                        <p className="text-xs text-muted-foreground">
-                          {artifact.activity_type && (
-                            <span className={`inline-block px-2 py-1 rounded ${getActivityColor(artifact.activity_type)}`}>
-                              {artifact.activity_type}
-                            </span>
-                          )}
-                        </p>
+              {artifacts.map((artifact) => {
+                const docType = DOCUMENT_TYPE_MAP[artifact.artifact_type]
+                const category = getDocumentCategory(artifact.artifact_type)
+                const specialty = artifact.tags?.find(tag => SPECIALTY_MAP[tag])
+                
+                return (
+                  <div key={artifact.id} className="bg-card border border-border rounded-lg p-5">
+                    <div className="flex items-start justify-between mb-3">
+                      <div className="flex items-center gap-3">
+                        <div className={`p-2 rounded-lg ${docType?.color || 'bg-blue-500'} bg-opacity-10`}>
+                          {getTypeIcon(artifact.artifact_type)}
+                        </div>
+                        <div>
+                          <h3 className="font-semibold text-foreground">{artifact.title}</h3>
+                          <p className="text-xs text-muted-foreground">
+                            {category}
+                          </p>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                  <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
-                    {artifact.description}
-                  </p>
-                  {artifact.ai_summary && (
-                    <p className="text-xs bg-secondary/50 p-2 rounded mb-3">
-                      {artifact.ai_summary}
+                    <p className="text-sm text-muted-foreground mb-3 line-clamp-2">
+                      {artifact.description}
                     </p>
-                  )}
-                  <div className="flex flex-wrap gap-1 mb-3">
-                    {artifact.tags.slice(0, 2).map(tag => (
-                      <Badge key={tag} variant="outline" className="text-xs">
-                        {tag}
-                      </Badge>
-                    ))}
+                    {artifact.ai_summary && (
+                      <p className="text-xs bg-secondary/50 p-2 rounded mb-3 line-clamp-2">
+                        {artifact.ai_summary}
+                      </p>
+                    )}
+                    <div className="flex flex-wrap gap-1 mb-3">
+                      {specialty && (
+                        <Badge className={`text-xs ${SPECIALTY_MAP[specialty].color}`}>
+                          {SPECIALTY_MAP[specialty].label}
+                        </Badge>
+                      )}
+                      {artifact.tags?.slice(0, 2).map(tag => (
+                        !SPECIALTY_MAP[tag] && (
+                          <Badge key={tag} variant="outline" className="text-xs">
+                            {tag}
+                          </Badge>
+                        )
+                      ))}
+                    </div>
+                    <div className="text-xs text-muted-foreground pt-3 border-t border-border">
+                      {new Date(artifact.completed_at).toLocaleDateString('es-ES')}
+                    </div>
                   </div>
-                  <div className="text-xs text-muted-foreground pt-3 border-t border-border">
-                    {new Date(artifact.completed_at).toLocaleDateString('es-ES')}
-                  </div>
-                </div>
-              ))}
+                )
+              })}
             </div>
           </TabsContent>
 
