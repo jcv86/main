@@ -1,28 +1,16 @@
 import { createClient } from "@/lib/supabase/server"
 import { NextResponse } from "next/server"
-
-// Rate limiting store (simple in-memory for now, can be upgraded to Redis)
-const rateLimitStore = new Map<string, { count: number; resetTime: number }>()
-
-function checkRateLimit(identifier: string, limit: number = 10, windowMs: number = 60000): boolean {
-  const now = Date.now()
-  const record = rateLimitStore.get(identifier)
-
-  if (!record || now > record.resetTime) {
-    rateLimitStore.set(identifier, { count: 1, resetTime: now + windowMs })
-    return true
-  }
-
-  if (record.count < limit) {
-    record.count++
-    return true
-  }
-
-  return false
-}
+import { checkRateLimit, rateLimiters } from "@/lib/middleware/rate-limit"
+import { success, error, ApiErrors, validateRequired, logger } from "@/lib/api/error-handler"
 
 export async function POST(request: Request) {
   try {
+    // Check rate limit for AI endpoints
+    const rateLimitResponse = await checkRateLimit(request, rateLimiters.ai)
+    if (rateLimitResponse) {
+      return rateLimitResponse
+    }
+
     const supabase = await createClient()
 
     // Get user with error handling
@@ -33,14 +21,8 @@ export async function POST(request: Request) {
       } = await supabase.auth.getUser()
       user = authUser
     } catch (authError) {
-      console.error("Auth error:", authError instanceof Error ? authError.message : String(authError))
+      logger.warn('Auth check failed', { error: authError instanceof Error ? authError.message : String(authError) })
       // Continue without user for testing
-    }
-
-    // Rate limiting per user
-    const userId = user?.id || "00000000-0000-0000-0000-000000000000"
-    if (!checkRateLimit(userId)) {
-      return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
     }
 
     const body = await request.json()
@@ -58,11 +40,37 @@ export async function POST(request: Request) {
     } = body
 
     // Validate required fields
-    if (!session_id || message_count === undefined) {
-      return NextResponse.json(
-        { error: "Missing required fields: session_id, message_count" },
-        { status: 400 }
+    const validation = validateRequired(body, ['session_id', 'message_count'])
+    if (!validation.valid) {
+      return error(
+        {
+          ...ApiErrors.INVALID_REQUEST,
+          message: `Missing required fields: ${validation.missing.join(', ')}`,
+        },
+        { missing: validation.missing }
       )
+    }
+
+    // Rate limiting per user
+    const userId = user?.id || "00000000-0000-0000-0000-000000000000"
+
+    // Calculate engagement score
+    const engagement_score = Math.min(message_count / 2.0, 1.0)
+
+    const metricsData = {
+      user_email: user?.email || "test@despegar.com",
+      session_id,
+      message_count,
+      engagement_score,
+      satisfaction_rating,
+      satisfaction_feedback,
+      suggested_action,
+      action_completed,
+      action_completed_at: action_completed ? new Date().toISOString() : null,
+      action_notes,
+      coach_type,
+      conversation_category,
+      updated_at: new Date().toISOString(),
     }
 
     // Upsert coaching session
@@ -85,62 +93,48 @@ export async function POST(request: Request) {
     )
 
     if (sessionError) {
-      console.error("Session error:", sessionError.message)
-      return NextResponse.json(
+      logger.error('Session creation failed', { message: sessionError.message, code: sessionError.code })
+      return error(
         {
-          error: "Failed to create/update session",
-          code: sessionError.code,
+          ...ApiErrors.INTERNAL_ERROR,
+          message: "Failed to create/update session",
         },
-        { status: 500 },
+        { sessionError: sessionError.message }
       )
     }
 
-    // Calculate engagement score
-    const engagement_score = Math.min(message_count / 2.0, 1.0)
+    const { data, error: metricsError } = await supabase.from("coaching_metrics").insert(metricsData).select().single()
 
-    const metricsData = {
-      user_email: user?.email || "test@despegar.com",
-      session_id,
-      message_count,
-      engagement_score,
-      satisfaction_rating,
-      satisfaction_feedback,
-      suggested_action,
-      action_completed,
-      action_completed_at: action_completed ? new Date().toISOString() : null,
-      action_notes,
-      coach_type,
-      conversation_category,
-      updated_at: new Date().toISOString(),
-    }
-
-    const { data, error } = await supabase.from("coaching_metrics").insert(metricsData).select().single()
-
-    if (error) {
-      console.error("Metrics insert error:", error.message)
-      return NextResponse.json(
+    if (metricsError) {
+      logger.error('Metrics insertion failed', { message: metricsError.message, code: metricsError.code })
+      return error(
         {
-          error: "Failed to save metrics",
-          code: error.code,
+          ...ApiErrors.INTERNAL_ERROR,
+          message: "Failed to save metrics",
         },
-        { status: 500 },
+        { metricsError: metricsError.message }
       )
     }
 
-    return NextResponse.json({ success: true, data })
-  } catch (error) {
-    console.error("Coaching metrics API error:", error instanceof Error ? error.message : String(error))
-    return NextResponse.json(
-      {
-        error: "Internal server error",
-      },
-      { status: 500 },
-    )
+    logger.info('Coaching metrics saved successfully', { session_id, user_id: userId })
+    return success({ success: true, data })
+  } catch (err) {
+    logger.error('Coaching metrics POST error', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    })
+    return error(ApiErrors.INTERNAL_ERROR)
   }
 }
 
 export async function GET(request: Request) {
   try {
+    // Check rate limit for API endpoints (less strict)
+    const rateLimitResponse = await checkRateLimit(request, rateLimiters.api)
+    if (rateLimitResponse) {
+      return rateLimitResponse
+    }
+
     const supabase = await createClient()
 
     // Get user with error handling
@@ -151,13 +145,7 @@ export async function GET(request: Request) {
       } = await supabase.auth.getUser()
       user = authUser
     } catch (authError) {
-      console.error("Auth error:", authError instanceof Error ? authError.message : String(authError))
-    }
-
-    // Rate limiting per user
-    const userId = user?.id || "00000000-0000-0000-0000-000000000000"
-    if (!checkRateLimit(userId, 30, 60000)) {
-      return NextResponse.json({ error: "Rate limit exceeded" }, { status: 429 })
+      logger.warn('Auth check failed during GET', { error: authError instanceof Error ? authError.message : String(authError) })
     }
 
     const { searchParams } = new URL(request.url)
@@ -173,11 +161,17 @@ export async function GET(request: Request) {
       query = query.eq("session_id", session_id)
     }
 
-    const { data, error } = await query
+    const { data, error: fetchError } = await query
 
-    if (error) {
-      console.error("Metrics fetch error:", error.message)
-      return NextResponse.json({ error: "Failed to fetch metrics" }, { status: 500 })
+    if (fetchError) {
+      logger.error('Metrics fetch failed', { message: fetchError.message, code: fetchError.code })
+      return error(
+        {
+          ...ApiErrors.INTERNAL_ERROR,
+          message: "Failed to fetch metrics",
+        },
+        { fetchError: fetchError.message }
+      )
     }
 
     // Calculate aggregate metrics
@@ -193,7 +187,9 @@ export async function GET(request: Request) {
     const meetsSatisfactionTarget = avgSatisfaction >= 4.0
     const meetsActionTarget = completionRate >= 0.5
 
-    return NextResponse.json({
+    logger.info('Coaching metrics retrieved', { total_sessions: totalSessions, user_email: user?.email })
+
+    return success({
       metrics: data,
       aggregates: {
         totalSessions,
@@ -206,13 +202,11 @@ export async function GET(request: Request) {
         meetsActionTarget,
       },
     })
-  } catch (error) {
-    console.error("Coaching metrics GET error:", error instanceof Error ? error.message : String(error))
-    return NextResponse.json(
-      {
-        error: "Internal server error",
-      },
-      { status: 500 },
-    )
+  } catch (err) {
+    logger.error('Coaching metrics GET error', {
+      error: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    })
+    return error(ApiErrors.INTERNAL_ERROR)
   }
 }
