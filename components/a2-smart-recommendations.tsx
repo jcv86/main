@@ -187,7 +187,7 @@ export function SmartRecommendations({
   const difficultyColors = {
     fundamental: 'bg-green/10 text-green',
     intermedio: 'bg-yellow/10 text-yellow',
-    avanzado: 'bg-red/10 text-red'
+    avanzado: 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]'
   }
 
   return (

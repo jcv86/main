@@ -409,7 +409,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
                               <AvatarFallback
                                 className={
                                   message.coach === "sofia"
-                                    ? "bg-red/10 text-pink-700 text-xs"
+                                    ? "bg-[rgba(80,160,170,0.5)]/10 text-pink-700 text-xs"
                                     : "bg-blue/10 text-blue text-xs"
                                 }
                               >
@@ -516,7 +516,7 @@ Vamos a seguir un proceso estructurado de 6 etapas:
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <Heart className="h-5 w-5 text-red" />
+                <Heart className="h-5 w-5 text-[rgb(80,160,170)]" />
                 Situaciones Identificadas
               </CardTitle>
               <CardDescription>Situaciones reales donde aplicarás lo aprendido</CardDescription>

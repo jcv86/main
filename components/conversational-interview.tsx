@@ -371,9 +371,9 @@ export function ConversationalInterview({
 
         {/* Error */}
         {error && (
-          <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
-            <AlertTriangle className="h-4 w-4 text-red" />
-            <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
+          <Alert variant="destructive" className="border-[rgb(80,160,170)]/30 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20">
+            <AlertTriangle className="h-4 w-4 text-[rgb(80,160,170)]" />
+            <AlertDescription className="text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20 ml-2">{error}</AlertDescription>
           </Alert>
         )}
 
@@ -507,7 +507,7 @@ function getAvatarGradient(avatarId: string): string {
     'professional-1': 'bg-background',
     'creative-1': 'bg-background',
     'tech-1': 'bg-background',
-    'business-1': 'bg-red',
+    'business-1': 'bg-[rgba(80,160,170,0.5)]',
     'casual-1': 'bg-background',
     'formal-1': 'bg-background',
     'interviewer-classic-1': 'bg-background',

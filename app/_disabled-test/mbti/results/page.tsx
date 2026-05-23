@@ -451,8 +451,8 @@ export default function MBTIResultsPage() {
 
                     <div className="space-y-3">
                       <div className="flex items-start gap-3">
-                        <div className="w-8 h-8 rounded-full bg-red/10 flex items-center justify-center flex-shrink-0">
-                          <Brain className="w-4 h-4 text-red" />
+                        <div className="w-8 h-8 rounded-full bg-[rgba(80,160,170,0.5)]/10 flex items-center justify-center flex-shrink-0">
+                          <Brain className="w-4 h-4 text-[rgb(80,160,170)]" />
                         </div>
                         <div>
                           <h4 className="font-semibold text-foreground">Decisiones</h4>
@@ -549,7 +549,7 @@ export default function MBTIResultsPage() {
                       </h4>
                       <ul className="space-y-2 text-sm text-muted">
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-red mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("F")
                               ? "Tus emociones guían tus decisiones de vida: con quién estar, qué hacer, qué tolerar"
@@ -557,7 +557,7 @@ export default function MBTIResultsPage() {
                           </span>
                         </li>
                         <li className="flex items-start gap-2">
-                          <ArrowRight className="w-4 h-4 text-red mt-0.5 flex-shrink-0" />
+                          <ArrowRight className="w-4 h-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
                           <span>
                             {mbtiType.includes("I")
                               ? "Necesitas tiempo a solas para recargar. No es egoísta, es supervivencia"
@@ -1084,12 +1084,12 @@ export default function MBTIResultsPage() {
                     </CardContent>
                   </Card>
 
-                  <Card className="border-2 border-red/30">
+                  <Card className="border-2 border-[rgb(80,160,170)]/30">
                     <CardHeader>
                       <CardTitle className="text-base">Inteligencia Emocional</CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-red/5 p-3 rounded text-sm">
+                      <div className="bg-[rgba(80,160,170,0.5)]/5 p-3 rounded text-sm">
                         <strong>Conexión:</strong>
                         <p className="mt-1">
                           MBTI explica cómo prefieres procesar emociones, IE mide qué tan bien lo haces.
@@ -1202,7 +1202,7 @@ export default function MBTIResultsPage() {
             <Card className="border-l-4 border-l-pink-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Lightbulb className="h-6 w-6 text-red" />
+                  <Lightbulb className="h-6 w-6 text-[rgb(80,160,170)]" />
                   Preguntas de Reflexión Profunda
                 </CardTitle>
                 <CardDescription>Explora tu tipo MBTI más allá de los resultados del test</CardDescription>

@@ -36,7 +36,7 @@ export function MiniTest({
       case "medio":
         return "bg-amber-500/10 text-amber-700"
       case "difícil":
-        return "bg-red/50/10 text-red"
+        return "bg-[rgba(80,160,170,0.5)]/50/10 text-[rgb(80,160,170)]"
     }
   }
 

@@ -53,7 +53,7 @@ const categories: { id: Category; label: string; icon: React.ReactNode; color: s
   { id: "trabajo", label: "Trabajo", icon: <Briefcase className="h-4 w-4" />, color: "bg-blue/50" },
   { id: "psicologia", label: "Psicología", icon: <Heart className="h-4 w-4" />, color: "bg-purple/50" },
   { id: "bienestar", label: "Bienestar", icon: <Heart className="h-4 w-4" />, color: "bg-green/50" },
-  { id: "relaciones", label: "Relaciones", icon: <Users className="h-4 w-4" />, color: "bg-red/50" },
+  { id: "relaciones", label: "Relaciones", icon: <Users className="h-4 w-4" />, color: "bg-[rgba(80,160,170,0.5)]/50" },
   { id: "habitos", label: "Hábitos", icon: <Target className="h-4 w-4" />, color: "bg-orange/50" },
   { id: "dinero", label: "Dinero", icon: <DollarSign className="h-4 w-4" />, color: "bg-green/50" },
   { id: "proposito", label: "Propósito", icon: <Compass className="h-4 w-4" />, color: "bg-blue/50" },

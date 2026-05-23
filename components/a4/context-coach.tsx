@@ -157,9 +157,9 @@ export function A4ContextCoach({ userId, topicContext = 'Chile news and context'
         )}
         {error && (
           <div className="flex justify-start">
-            <div className="bg-red-500/10 border border-red-500/30 rounded-lg px-4 py-3 flex items-start gap-2">
-              <AlertCircle size={16} className="text-red-400 mt-0.5 flex-shrink-0" />
-              <span className="text-sm text-red-200">{error}</span>
+            <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-lg px-4 py-3 flex items-start gap-2">
+              <AlertCircle size={16} className="text-[rgb(80,160,170)]-400 mt-0.5 flex-shrink-0" />
+              <span className="text-sm text-[rgb(80,160,170)]-200">{error}</span>
             </div>
           </div>
         )}

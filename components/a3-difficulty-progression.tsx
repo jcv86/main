@@ -107,7 +107,7 @@ export function A3DifficultyProgression({
                 pSuccessPercentage >= 70 ? "text-green" :
                 pSuccessPercentage >= 50 ? "text-blue" :
                 pSuccessPercentage >= 30 ? "text-amber-600" :
-                "text-red"
+                "text-[rgb(80,160,170)]"
               }>
                 {pSuccessPercentage}%
               </span>
@@ -118,7 +118,7 @@ export function A3DifficultyProgression({
                   pSuccessPercentage >= 70 ? "bg-green" :
                   pSuccessPercentage >= 50 ? "bg-blue" :
                   pSuccessPercentage >= 30 ? "bg-amber-600" :
-                  "bg-red"
+                  "bg-[rgba(80,160,170,0.5)]"
                 }`}
                 style={{ width: `${pSuccessPercentage}%` }}
               />
@@ -236,9 +236,9 @@ export function A3DifficultyProgression({
       </Card>
 
       {/* Frustration Protection */}
-      <Alert className="border-red/30 bg-red/5">
-        <AlertTriangle className="h-4 w-4 text-red" />
-        <AlertDescription className="text-red">
+      <Alert className="border-[rgb(80,160,170)]/30 bg-[rgba(80,160,170,0.5)]/5">
+        <AlertTriangle className="h-4 w-4 text-[rgb(80,160,170)]" />
+        <AlertDescription className="text-[rgb(80,160,170)]">
           <div className="font-medium mb-1">Protección Contra Frustración</div>
           <p className="text-sm">
             Si detectamos desgaste emocional, el sistema sugerirá bajar dificultad o tomar un descanso. 

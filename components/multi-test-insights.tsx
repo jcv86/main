@@ -253,7 +253,7 @@ export function MultiTestInsights({ userEmail, currentTestType }: MultiTestInsig
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
-                <MapPin className="h-5 w-5 text-red" />
+                <MapPin className="h-5 w-5 text-[rgb(80,160,170)]" />
                 Insights del Mercado Laboral Chileno
               </CardTitle>
               <CardDescription>Oportunidades específicas para tu perfil en Chile</CardDescription>

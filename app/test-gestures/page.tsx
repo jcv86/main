@@ -151,7 +151,7 @@ export default function TestGesturesPage() {
                   <div className="text-sm text-muted-foreground">Passed</div>
                 </div>
                 <div className="text-center p-3 bg-white rounded-lg border">
-                  <div className="text-2xl font-bold text-red">
+                  <div className="text-2xl font-bold text-[rgb(80,160,170)]">
                     {gestureResults.filter((r) => r.status === "failed").length}
                   </div>
                   <div className="text-sm text-muted-foreground">Failed</div>

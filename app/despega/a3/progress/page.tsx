@@ -140,7 +140,7 @@ export default function ProgresoPage() {
               { skill: 'Manejo de Presión', progress: 55, color: 'bg-orange/50' },
               { skill: 'Storytelling', progress: 70, color: 'bg-blue/50' },
               { skill: 'Confianza en Video', progress: 65, color: 'bg-green/50' },
-              { skill: 'Coherencia Emocional', progress: 50, color: 'bg-red/50' },
+              { skill: 'Coherencia Emocional', progress: 50, color: 'bg-[rgba(80,160,170,0.5)]/50' },
             ].map((item) => (
               <div key={item.skill} className="space-y-2">
                 <div className="flex items-center justify-between">

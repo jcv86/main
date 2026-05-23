@@ -339,8 +339,8 @@ export default function AnswerArchitectureModule() {
                 {/* Examples */}
                 {showExamples[answerType.id] && answerType.badExample && (
                   <div className="grid md:grid-cols-2 gap-4">
-                    <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
-                      <p className="text-red-400 text-xs uppercase font-medium mb-1">Weak Answer</p>
+                    <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-lg p-3">
+                      <p className="text-[rgb(80,160,170)]-400 text-xs uppercase font-medium mb-1">Weak Answer</p>
                       <p className="text-white/60 text-sm italic">{answerType.badExample}</p>
                     </div>
                     <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">

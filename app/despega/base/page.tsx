@@ -16,9 +16,9 @@ const CATEGORIAS_BASE = [
     name: "Noticias del Día",
     description: "Mantente informado de lo relevante",
     icon: Newspaper,
-    color: "bg-red/50",
-    lightColor: "bg-red/10",
-    textColor: "text-red",
+    color: "bg-[rgba(80,160,170,0.5)]/50",
+    lightColor: "bg-[rgba(80,160,170,0.5)]/10",
+    textColor: "text-[rgb(80,160,170)]",
   },
   {
     id: "cultura",

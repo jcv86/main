@@ -309,7 +309,7 @@ export default function EntrenamientoEstructuradoPage() {
                 <div className="flex items-start justify-between mb-2">
                   <CardTitle className="text-lg">{lesson.title}</CardTitle>
                   <Badge className={
-                    lesson.difficulty === 'Crítico' ? 'bg-red-500/20 text-red-300' :
+                    lesson.difficulty === 'Crítico' ? 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-300' :
                     lesson.difficulty === 'Avanzado' ? 'bg-orange-500/20 text-orange-300' :
                     'bg-yellow-500/20 text-yellow-300'
                   }>

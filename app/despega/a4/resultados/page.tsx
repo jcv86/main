@@ -119,8 +119,8 @@ export default function A4ResultadosPage() {
       <ASection title="Resultados: Tu Inteligencia Estratégica" subtitle="Análisis y Recomendaciones" icon="" colorClass="from-blue/50">
         <ASectionPart title="Error" icon={<Target />}>
           <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
-              <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
+            <div className="p-6 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20 border-2 border-[rgb(80,160,170)]/20 dark:border-[rgb(80,160,170)]/50 rounded-lg">
+              <p className="text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30 font-semibold text-lg">{error}</p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a4')} 

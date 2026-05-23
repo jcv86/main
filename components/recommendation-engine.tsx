@@ -72,7 +72,7 @@ export function RecommendationEngine() {
   const getDifficultyColor = (difficulty: string) => {
     if (difficulty === 'beginner') return 'bg-green/10 text-green'
     if (difficulty === 'intermediate') return 'bg-blue/10 text-blue'
-    return 'bg-red/10 text-red'
+    return 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]'
   }
 
   return (

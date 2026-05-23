@@ -30,7 +30,7 @@ const ROUTE_INFO = {
     name: "Relaciones Significativas",
     icon: "",
     color: "from-red/50500",
-    bgColor: "bg-red/5 dark:bg-red/20",
+    bgColor: "bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20",
     textColor: "text-pink-900 dark:text-pink-100",
   },
   plan_ejecutivo: {
@@ -232,7 +232,7 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.objective && (
-                <p className="text-sm text-red dark:text-red/40">{errors.objective}</p>
+                <p className="text-sm text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40">{errors.objective}</p>
               )}
               <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {objective.length} caracteres | Mínimo: 10 caracteres
@@ -280,7 +280,7 @@ export default function Mision90DiasPage() {
                 className="min-h-24 resize-none"
               />
               {errors.successMetric && (
-                <p className="text-sm text-red dark:text-red/40">{errors.successMetric}</p>
+                <p className="text-sm text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40">{errors.successMetric}</p>
               )}
               <p className="text-xs text-muted-foreground dark:text-muted-foreground">
                 {successMetric.length} caracteres | Mínimo: 10 caracteres

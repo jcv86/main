@@ -32,7 +32,7 @@ const getDifficultyColor = (level?: string) => {
   const colorMap: Record<string, string> = {
     'Beginner': 'bg-green-500/20 text-green-300 border-green/30',
     'Intermediate': 'bg-yellow/50/20 text-yellow-300 border-yellow-500/30',
-    'Advanced': 'bg-red-500/20 text-red-300 border-red-500/30',
+    'Advanced': 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-300 border-[rgb(80,160,170)]-500/30',
   }
   return colorMap[level || 'Beginner'] || 'bg-blue-500/20 text-blue-300 border-blue/50/30'
 }

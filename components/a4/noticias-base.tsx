@@ -30,7 +30,7 @@ const categoryColors = {
 }
 
 const impactBadges = {
-  alta: "bg-red/50/10 text-red",
+  alta: "bg-[rgba(80,160,170,0.5)]/50/10 text-[rgb(80,160,170)]",
   media: "bg-amber-500/10 text-amber-700",
   baja: "bg-green/50/10 text-green",
 }

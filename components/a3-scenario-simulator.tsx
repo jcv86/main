@@ -71,7 +71,7 @@ export function A3ScenarioSimulator({ scenario, onComplete }: A3ScenarioSimulato
       comunicacion: { icon: "💬", color: "bg-green/10", label: "Comunicación" },
       negociacion: { icon: "", color: "bg-orange/10", label: "Negociación" },
       liderazgo: { icon: "👥", color: "bg-purple/10", label: "Liderazgo" },
-      crisis: { icon: "🚨", color: "bg-red/10", label: "Gestión de Crisis" },
+      crisis: { icon: "🚨", color: "bg-[rgba(80,160,170,0.5)]/10", label: "Gestión de Crisis" },
       planificacion: { icon: "📋", color: "bg-blue/10", label: "Planificación" },
     }
     return configs[tipo] || configs.decision

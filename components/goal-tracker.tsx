@@ -100,7 +100,7 @@ export function GoalTracker({ userId, userEmail }: { userId: string; userEmail: 
   const getPriorityColor = (priority: string) => {
     switch (priority) {
       case "high":
-        return "bg-red/10 text-red"
+        return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
       case "medium":
         return "bg-yellow/10 text-yellow"
       case "low":

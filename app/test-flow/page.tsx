@@ -290,7 +290,7 @@ export default function TestFlowVerification() {
                     {passedTests} Passed
                   </span>
                   <span className="flex items-center gap-1">
-                    <XCircle className="h-4 w-4 text-red" />
+                    <XCircle className="h-4 w-4 text-[rgb(80,160,170)]" />
                     {failedTests} Failed
                   </span>
                   <span className="flex items-center gap-1">
@@ -392,13 +392,13 @@ export default function TestFlowVerification() {
 
                   {/* Errors */}
                   {check.errors.length > 0 && (
-                    <div className="mt-3 p-2 bg-red/5 border border-red/20 rounded">
-                      <div className="flex items-center gap-2 text-red text-sm font-medium mb-1">
+                    <div className="mt-3 p-2 bg-[rgba(80,160,170,0.5)]/5 border border-[rgb(80,160,170)]/20 rounded">
+                      <div className="flex items-center gap-2 text-[rgb(80,160,170)] text-sm font-medium mb-1">
                         <AlertTriangle className="h-4 w-4" />
                         Errors Found
                       </div>
                       {check.errors.map((error, index) => (
-                        <p key={index} className="text-red text-xs">
+                        <p key={index} className="text-[rgb(80,160,170)] text-xs">
                           {error}
                         </p>
                       ))}
@@ -441,9 +441,9 @@ export default function TestFlowVerification() {
                   </div>
                 ) : (
                   <div className="space-y-2">
-                    <AlertTriangle className="h-12 w-12 text-red mx-auto" />
-                    <h3 className="text-xl font-semibold text-red">Issues Found</h3>
-                    <p className="text-red">
+                    <AlertTriangle className="h-12 w-12 text-[rgb(80,160,170)] mx-auto" />
+                    <h3 className="text-xl font-semibold text-[rgb(80,160,170)]">Issues Found</h3>
+                    <p className="text-[rgb(80,160,170)]">
                       {failedTests} test(s) failed verification. Please check the errors above.
                     </p>
                   </div>

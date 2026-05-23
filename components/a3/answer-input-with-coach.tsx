@@ -120,7 +120,7 @@ export function AnswerInputWithCoach({
               disabled={isSending || isLoading}
               className={`p-2 rounded-lg transition-all ${
                 isRecording
-                  ? 'bg-red-500/20 border border-red-500 text-red-400'
+                  ? 'bg-[rgba(80,160,170,0.5)]-500/20 border border-[rgb(80,160,170)]-500 text-[rgb(80,160,170)]-400'
                   : 'bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 hover:bg-cyan-500/20'
               } disabled:opacity-50 disabled:cursor-not-allowed`}
               title={isRecording ? 'Detener grabación' : 'Grabar respuesta'}
@@ -129,7 +129,7 @@ export function AnswerInputWithCoach({
             </button>
 
             {/* Status Text */}
-            {isRecording && <span className="text-sm text-red-400">Grabando...</span>}
+            {isRecording && <span className="text-sm text-[rgb(80,160,170)]-400">Grabando...</span>}
             {transcript && !isRecording && <span className="text-sm text-cyan-400 line-clamp-1">{transcript}</span>}
           </div>
 

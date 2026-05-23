@@ -120,25 +120,25 @@ export default function LeaderboardPage() {
               {stats?.topStreaks && stats.topStreaks.length > 0 ? (
                 <div className="space-y-2">
                   {stats.topStreaks.slice(0, 20).map((user, index) => (
-                    <Card key={index} className={index < 3 ? 'border-red/20 bg-red/5/30 dark:bg-red/20' : ''}>
+                    <Card key={index} className={index < 3 ? 'border-[rgb(80,160,170)]/20 bg-[rgba(80,160,170,0.5)]/5/30 dark:bg-[rgba(80,160,170,0.5)]/20' : ''}>
                       <CardContent className="flex items-center justify-between p-4">
                         <div className="flex items-center gap-4 flex-1">
                           <div className={`flex items-center justify-center w-12 h-12 rounded-full font-bold text-lg ${
-                            index === 0 ? 'bg-red/50 text-white' : index === 1 ? 'bg-muted/40 text-white' : index === 2 ? 'bg-orange/40 text-white' : 'bg-muted text-muted-foreground'
+                            index === 0 ? 'bg-[rgba(80,160,170,0.5)]/50 text-white' : index === 1 ? 'bg-muted/40 text-white' : index === 2 ? 'bg-orange/40 text-white' : 'bg-muted text-muted-foreground'
                           }`}>
                             {index === 0 && user.streak > 0 ? <Flame className="h-6 w-6" /> : index + 1}
                           </div>
                           <div>
                             <p className="font-semibold flex items-center gap-2">
                               {user.name}
-                              {user.streak >= 7 && <Badge className="bg-red/50 text-xs">En Racha</Badge>}
+                              {user.streak >= 7 && <Badge className="bg-[rgba(80,160,170,0.5)]/50 text-xs">En Racha</Badge>}
                             </p>
                           </div>
                         </div>
                         <div className="text-right">
                           <div className="text-2xl font-bold flex items-center gap-1">
                             {user.streak}
-                            {user.streak > 0 && <Flame className="h-5 w-5 text-red" />}
+                            {user.streak > 0 && <Flame className="h-5 w-5 text-[rgb(80,160,170)]" />}
                           </div>
                           <p className="text-xs text-muted-foreground">días seguidos</p>
                         </div>

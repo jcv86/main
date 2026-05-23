@@ -517,7 +517,7 @@ export default function EnhancedSearchAlgorithm({ books, onBookSelect, trigger }
                               </Badge>
                             )}
                             {result.matchDetails.popularityBoost > 0.5 && (
-                              <Badge variant="outline" className="text-xs bg-red/5">
+                              <Badge variant="outline" className="text-xs bg-[rgba(80,160,170,0.5)]/5">
                                 🔥 Popular
                               </Badge>
                             )}

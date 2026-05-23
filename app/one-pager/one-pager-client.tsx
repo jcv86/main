@@ -55,7 +55,7 @@ export default function OnePagerClient() {
             <div className="space-y-6">
               {/* The Problem */}
               <section>
-                <h2 className="text-xl font-bold mb-3 text-foreground border-l-4 border-red/50 pl-3">El Problema</h2>
+                <h2 className="text-xl font-bold mb-3 text-foreground border-l-4 border-[rgb(80,160,170)]/50 pl-3">El Problema</h2>
                 <ul className="space-y-2 text-sm text-muted">
                   <li>
                     • <strong>Costoso:</strong> La orientación profesional cuesta $100-300/sesión, inaccesible para la

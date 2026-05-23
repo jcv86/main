@@ -81,7 +81,7 @@ export default function A4DocumentsPage() {
       <div className="max-w-7xl mx-auto">
         {/* Header */}
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-red-400 mb-2">Mi Workspace DTC</h1>
+          <h1 className="text-4xl font-bold text-[rgb(80,160,170)]-400 mb-2">Mi Workspace DTC</h1>
           <p className="text-base text-gray-300">
             Gestiona todos tus documentos, contratos y evidencia en un solo lugar.
           </p>
@@ -100,13 +100,13 @@ export default function A4DocumentsPage() {
 
             {isLoading ? (
               <div className="flex items-center justify-center py-12">
-                <Loader className="animate-spin text-red-400" size={32} />
+                <Loader className="animate-spin text-[rgb(80,160,170)]-400" size={32} />
               </div>
             ) : filteredDocuments.length === 0 ? (
               <div className="text-center py-12">
                 <FileText className="mx-auto mb-4 text-gray-400" size={48} />
                 <p className="text-gray-400 mb-4">No hay documentos que coincidan con los filtros</p>
-                <Button onClick={() => setIsEditing(true)} className="bg-red-500 hover:bg-red-600 text-white">
+                <Button onClick={() => setIsEditing(true)} className="bg-[rgba(80,160,170,0.5)]-500 hover:bg-[rgba(80,160,170,0.5)]-600 text-white">
                   <Plus className="mr-2" size={16} />
                   Crear documento
                 </Button>
@@ -141,9 +141,9 @@ export default function A4DocumentsPage() {
             ) : selectedDocument ? (
               <div className="bg-stone-900 rounded-lg p-6">
                 <div className="mb-4">
-                  <h2 className="text-2xl font-bold text-red-400 mb-2">{selectedDocument.title}</h2>
+                  <h2 className="text-2xl font-bold text-[rgb(80,160,170)]-400 mb-2">{selectedDocument.title}</h2>
                   <div className="flex gap-2 mb-4">
-                    <span className="px-3 py-1 bg-red-500/20 text-red-400 rounded-full text-sm">
+                    <span className="px-3 py-1 bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400 rounded-full text-sm">
                       {selectedDocument.type}
                     </span>
                     <span className="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm">
@@ -158,13 +158,13 @@ export default function A4DocumentsPage() {
 
                 {selectedDocument.ai_summary && (
                   <div className="mb-6 p-4 bg-gray-900 rounded-lg">
-                    <h3 className="font-semibold text-sm mb-2 text-red-400">Resumen IA</h3>
+                    <h3 className="font-semibold text-sm mb-2 text-[rgb(80,160,170)]-400">Resumen IA</h3>
                     <p className="text-sm text-gray-400">{selectedDocument.ai_summary}</p>
                   </div>
                 )}
 
                 <div className="flex gap-2">
-                  <Button onClick={() => handleEditDocument(selectedDocument)} className="flex-1 bg-red-500 hover:bg-red-600 text-white">
+                  <Button onClick={() => handleEditDocument(selectedDocument)} className="flex-1 bg-[rgba(80,160,170,0.5)]-500 hover:bg-[rgba(80,160,170,0.5)]-600 text-white">
                     Editar
                   </Button>
                   <Button variant="outline" className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-900">

@@ -259,7 +259,7 @@ export default function Conozcamonos2Page() {
                       maxLength={question.maxLength}
                       className={`flex-1 p-3 border bg-white dark:bg-card text-muted/90 dark:text-white placeholder-slate-400 resize-none focus:outline-none focus:border-blue disabled:opacity-50 transition-colors ${
                         error && !validatingIds.has(question.id) 
-                          ? 'border-red/50 dark:border-red/50 bg-red/5 dark:bg-red/20' 
+                          ? 'border-[rgb(80,160,170)]/50 dark:border-[rgb(80,160,170)]/50 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20' 
                           : 'border-muted/30 dark:border-muted/60'
                       }`}
                       style={{ borderRadius: '2px' }}
@@ -276,7 +276,7 @@ export default function Conozcamonos2Page() {
                   )}
                   
                   {error && !validatingIds.has(question.id) && (
-                    <div className="text-sm text-white bg-red/40 p-4 rounded-lg border-2 border-red/60 font-semibold">
+                    <div className="text-sm text-white bg-[rgba(80,160,170,0.5)]/40 p-4 rounded-lg border-2 border-[rgb(80,160,170)]/60 font-semibold">
                       {error}
                     </div>
                   )}
@@ -334,7 +334,7 @@ export default function Conozcamonos2Page() {
         </div>
 
         {error && (
-          <div className="bg-red/30 border-2 border-red/60 rounded-lg p-8 mb-6 shadow-lg">
+          <div className="bg-[rgba(80,160,170,0.5)]/30 border-2 border-[rgb(80,160,170)]/60 rounded-lg p-8 mb-6 shadow-lg">
             <div className="flex items-start gap-4">
               <span className="text-4xl flex-shrink-0"></span>
               <div className="flex-1">

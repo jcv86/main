@@ -95,7 +95,7 @@ const competencyInfo = {
   empathy: {
     name: "Empatía",
     icon: Heart,
-    color: "bg-red/50",
+    color: "bg-[rgba(80,160,170,0.5)]/50",
     description: "Capacidad para entender y conectar con las emociones de otros",
     lowDescription: "Practica la escucha activa y observación emocional",
     mediumDescription: "Buena empatía, sigue desarrollando la conexión emocional",
@@ -234,7 +234,7 @@ export default function EmotionalIntelligenceResults() {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="text-center">
-          <Heart className="h-12 w-12 animate-pulse mx-auto mb-4 text-red" />
+          <Heart className="h-12 w-12 animate-pulse mx-auto mb-4 text-[rgb(80,160,170)]" />
           <p className="text-muted-foreground">Cargando tus resultados...</p>
         </div>
       </div>
@@ -246,12 +246,12 @@ export default function EmotionalIntelligenceResults() {
       <div className="min-h-screen flex items-center justify-center bg-background">
         <Card className="w-full max-w-md">
           <CardContent className="text-center p-8">
-            <Heart className="h-16 w-16 mx-auto mb-6 text-red" />
+            <Heart className="h-16 w-16 mx-auto mb-6 text-[rgb(80,160,170)]" />
             <h2 className="text-2xl font-bold text-foreground mb-4">No se encontraron resultados</h2>
             <p className="text-xl text-muted-foreground mb-6">
               Parece que aún no has completado el test de Inteligencia Emocional Despega.
             </p>
-            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red/50 hover:bg-red">
+            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-[rgba(80,160,170,0.5)]/50 hover:bg-[rgba(80,160,170,0.5)]">
               Realizar Test
             </Button>
           </CardContent>
@@ -298,7 +298,7 @@ export default function EmotionalIntelligenceResults() {
                 <Badge className={`${overallLevel.bgColor} ${overallLevel.color} text-lg px-4 py-2`}>
                   {overallLevel.level}
                 </Badge>
-                <p className="text-red/10 mt-4 text-lg">
+                <p className="text-[rgb(80,160,170)]/10 mt-4 text-lg">
                   {results.overall_score >= 85
                     ? "¡Excelente! Tienes una inteligencia emocional muy desarrollada que te permite navegar efectivamente las situaciones sociales y profesionales."
                     : results.overall_score >= 70
@@ -311,15 +311,15 @@ export default function EmotionalIntelligenceResults() {
               <div className="text-center">
                 <div className="bg-white bg-opacity-20 rounded-2xl p-8">
                   <div className="text-4xl font-bold mb-2">{overallLevel.level}</div>
-                  <div className="text-red/10 mb-4">Inteligencia Emocional</div>
+                  <div className="text-[rgb(80,160,170)]/10 mb-4">Inteligencia Emocional</div>
                   <div className="flex justify-center space-x-4 text-sm">
                     <div className="text-center">
                       <div className="text-2xl font-bold">{Object.keys(results.competency_scores).length}</div>
-                      <div className="text-red/10">Competencias</div>
+                      <div className="text-[rgb(80,160,170)]/10">Competencias</div>
                     </div>
                     <div className="text-center">
                       <div className="text-2xl font-bold">{results.duration || 25}m</div>
-                      <div className="text-red/10">Duración</div>
+                      <div className="text-[rgb(80,160,170)]/10">Duración</div>
                     </div>
                   </div>
                 </div>
@@ -524,7 +524,7 @@ export default function EmotionalIntelligenceResults() {
                     </Card>
                     <Card className="border-l-4 border-l-pink-500">
                       <CardContent className="pt-6">
-                        <h4 className="font-semibold text-red mb-2">2. Regulación Emocional</h4>
+                        <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">2. Regulación Emocional</h4>
                         <p className="text-muted">
                           {(testResults?.competencies?.find((c) => c.name === "Autorregulación")?.score ?? 0) >= 70
                             ? "Manejas bien tus emociones intensas y sabes calmarte cuando es necesario."
@@ -579,15 +579,15 @@ export default function EmotionalIntelligenceResults() {
                         </h4>
                         <ul className="space-y-2 text-sm text-muted">
                           <li className="flex items-start space-x-2">
-                            <CheckCircle2 className="h-4 w-4 text-red mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
                             <span>Relaciones familiares más profundas y auténticas</span>
                           </li>
                           <li className="flex items-start space-x-2">
-                            <CheckCircle2 className="h-4 w-4 text-red mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
                             <span>Mejor gestión del estrés y bienestar emocional</span>
                           </li>
                           <li className="flex items-start space-x-2">
-                            <CheckCircle2 className="h-4 w-4 text-red mt-0.5 flex-shrink-0" />
+                            <CheckCircle2 className="h-4 w-4 text-[rgb(80,160,170)] mt-0.5 flex-shrink-0" />
                             <span>Mayor autoconocimiento y paz interior</span>
                           </li>
                         </ul>
@@ -1485,16 +1485,16 @@ export default function EmotionalIntelligenceResults() {
                   <Card className="border-2 border-pink-300">
                     <CardHeader>
                       <CardTitle className="text-base flex items-center gap-2">
-                        <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
+                        <div className="w-8 h-8 bg-[rgba(80,160,170,0.5)]/10 rounded-full flex items-center justify-center text-lg">
                           
                         </div>
                         Competencias Blandas
                       </CardTitle>
                     </CardHeader>
                     <CardContent className="space-y-3">
-                      <div className="bg-red/5 p-3 rounded text-sm">
+                      <div className="bg-[rgba(80,160,170,0.5)]/5 p-3 rounded text-sm">
                         <strong className="text-pink-900">Conexión:</strong>
-                        <p className="text-red mt-1">
+                        <p className="text-[rgb(80,160,170)] mt-1">
                           IE es la base de TODAS las soft skills. Comunicación, liderazgo, trabajo en equipo dependen de
                           tu inteligencia emocional.
                         </p>
@@ -1571,7 +1571,7 @@ export default function EmotionalIntelligenceResults() {
             <Card className="border-l-4 border-l-pink-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center space-x-2">
-                  <Lightbulb className="h-6 w-6 text-red" />
+                  <Lightbulb className="h-6 w-6 text-[rgb(80,160,170)]" />
                   <span>Preguntas de Reflexión Profunda</span>
                 </CardTitle>
                 <CardDescription>Explora tu inteligencia emocional más allá de los números del test</CardDescription>

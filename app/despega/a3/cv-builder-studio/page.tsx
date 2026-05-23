@@ -504,8 +504,8 @@ export default function CVBuilderStudioModule() {
             <div className="mt-6 space-y-4">
               {/* Example comparison */}
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
-                  <p className="text-red-400 text-xs uppercase font-medium mb-1">Weak Summary</p>
+                <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-lg p-3">
+                  <p className="text-[rgb(80,160,170)]-400 text-xs uppercase font-medium mb-1">Weak Summary</p>
                   <p className="text-white/60 text-sm italic">{CV_SECTIONS[1].examples?.weak}</p>
                 </div>
                 <div className="bg-[rgba(170,70,170,0.15)] border border-[rgba(170,70,170,0.4)] rounded-lg p-3">
@@ -601,8 +601,8 @@ export default function CVBuilderStudioModule() {
               
               {/* Example */}
               <div className="grid md:grid-cols-2 gap-4">
-                <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-3">
-                  <p className="text-red-400 text-xs uppercase font-medium mb-1">Task-focused (Weak)</p>
+                <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-lg p-3">
+                  <p className="text-[rgb(80,160,170)]-400 text-xs uppercase font-medium mb-1">Task-focused (Weak)</p>
                   <p className="text-white/60 text-sm">{CV_SECTIONS[2].examples?.weak}</p>
                 </div>
                 <div className="bg-[rgba(170,70,170,0.15)] border border-[rgba(170,70,170,0.4)] rounded-lg p-3">
@@ -792,7 +792,7 @@ export default function CVBuilderStudioModule() {
                     </div>
                     <span className="text-white/80 text-sm text-left flex-1">{item.text}</span>
                     {item.critical && (
-                      <Badge className="bg-red-500/20 text-red-400 border-red-500/30 text-xs">Critical</Badge>
+                      <Badge className="bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400 border-[rgb(80,160,170)]-500/30 text-xs">Critical</Badge>
                     )}
                   </button>
                 ))}

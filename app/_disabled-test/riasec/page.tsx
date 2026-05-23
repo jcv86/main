@@ -428,7 +428,7 @@ export default function RIASECTest() {
                 <h4 className="font-semibold text-purple mb-1">Investigativo (I)</h4>
                 <p className="text-purple">Research, analysis, and problem-solving activities</p>
               </div>
-              <div className="p-3 bg-red/5 rounded-lg">
+              <div className="p-3 bg-[rgba(80,160,170,0.5)]/5 rounded-lg">
                 <h4 className="font-semibold text-pink-900 mb-1">Artístico (A)</h4>
                 <p className="text-pink-700">Creative, expressive, and artistic activities</p>
               </div>

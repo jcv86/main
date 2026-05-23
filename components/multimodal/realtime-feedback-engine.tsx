@@ -131,7 +131,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
               key={idx}
               className={`p-3 rounded-[28px] border-l-4 ${
                 item.severity === 'critical'
-                  ? 'bg-red/5 border-red/50'
+                  ? 'bg-[rgba(80,160,170,0.5)]/5 border-[rgb(80,160,170)]/50'
                   : item.severity === 'warning'
                   ? 'bg-yellow/5 border-orange'
                   : 'bg-blue/5 border-blue/50'
@@ -139,7 +139,7 @@ export function RealtimeFeedbackEngine({ isRecording, videoStream }: RealtimeFee
             >
               <div className="flex items-start gap-2">
                 {item.severity === 'critical' && (
-                  <AlertCircle className="w-4 h-4 text-red flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="w-4 h-4 text-[rgb(80,160,170)] flex-shrink-0 mt-0.5" />
                 )}
                 <div className="flex-1">
                   <p className="text-sm font-medium">

@@ -19,7 +19,7 @@ interface DISCProfile {
 const DISC_DESCRIPTIONS: Record<string, { name: string; color: string; description: string }> = {
   D: {
     name: "Dominancia",
-    color: "bg-red/50/10",
+    color: "bg-[rgba(80,160,170,0.5)]/50/10",
     description: "Orientado a resultados, directo y decisivo",
   },
   I: {

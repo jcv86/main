@@ -258,7 +258,7 @@ export function MobileTestDetector({ onDeviceChange }: MobileTestDetectorProps) 
                         ? "bg-green/50"
                         : deviceInfo.battery > 20
                           ? "bg-orange"
-                          : "bg-red/50"`}
+                          : "bg-[rgba(80,160,170,0.5)]/50"`}
                     }`}
                     style={{ width: `${deviceInfo.battery}%` }}
                   />

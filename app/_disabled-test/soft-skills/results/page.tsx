@@ -188,7 +188,7 @@ export default function SoftSkillsResults() {
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green"
     if (score >= 60) return "text-yellow"
-    return "text-red"
+    return "text-[rgb(80,160,170)]"
   }
 
   const getScoreLabel = (score: number) => {
@@ -200,7 +200,7 @@ export default function SoftSkillsResults() {
   const getScoreBadgeColor = (score: number) => {
     if (score >= 80) return "bg-green/10 text-green"
     if (score >= 60) return "bg-yellow/10 text-yellow"
-    return "bg-red/10 text-red"
+    return "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]"
   }
 
   // Dynamically determine top skills for overview and library sections
@@ -1062,19 +1062,19 @@ export default function SoftSkillsResults() {
                       </Card>
 
                       {/* IE Connection */}
-                      <Card className="border-2 border-red/30">
+                      <Card className="border-2 border-[rgb(80,160,170)]/30">
                         <CardHeader>
                           <CardTitle className="text-base flex items-center gap-2">
-                            <div className="w-8 h-8 bg-red/10 rounded-full flex items-center justify-center text-lg">
+                            <div className="w-8 h-8 bg-[rgba(80,160,170,0.5)]/10 rounded-full flex items-center justify-center text-lg">
                               ❤️
                             </div>
                             Inteligencia Emocional Despega
                           </CardTitle>
                         </CardHeader>
                         <CardContent className="space-y-3">
-                          <div className="bg-red/5 p-3 rounded text-sm">
-                            <strong className="text-red">Conexión:</strong>
-                            <p className="text-red mt-1">
+                          <div className="bg-[rgba(80,160,170,0.5)]/5 p-3 rounded text-sm">
+                            <strong className="text-[rgb(80,160,170)]">Conexión:</strong>
+                            <p className="text-[rgb(80,160,170)] mt-1">
                               IE mide tu capacidad emocional innata, Soft Skills mide cómo la aplicas en el mundo real.
                             </p>
                           </div>
@@ -1290,7 +1290,7 @@ export default function SoftSkillsResults() {
             <Card className="border-l-4 border-l-pink-500">
               <CardHeader>
                 <CardTitle className="text-2xl flex items-center gap-2">
-                  <Lightbulb className="h-6 w-6 text-red" />
+                  <Lightbulb className="h-6 w-6 text-[rgb(80,160,170)]" />
                   Preguntas de Reflexión Profunda
                 </CardTitle>
                 <CardDescription>Convierte tus resultados de Soft Skills en autoconocimiento aplicado</CardDescription>

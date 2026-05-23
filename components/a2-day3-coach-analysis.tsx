@@ -92,9 +92,9 @@ export function Day3CoachAnalysis({
           </div>
         </div>
 
-        <div className="border-t border-red-300/20 pt-6 space-y-3">
-          <p className="text-sm font-semibold text-red-300">⚠️ BRECHA REAL (Qué falta)</p>
-          <div className="pl-4 border-l-2 border-red-300">
+        <div className="border-t border-[rgb(80,160,170)]-300/20 pt-6 space-y-3">
+          <p className="text-sm font-semibold text-[rgb(80,160,170)]-300">⚠️ BRECHA REAL (Qué falta)</p>
+          <div className="pl-4 border-l-2 border-[rgb(80,160,170)]-300">
             <p className="text-white/90 text-sm mb-3">
               Para estar mejor posicionado en tu mercado objetivo, deberías fortalecer:
             </p>

@@ -209,13 +209,13 @@ export function A1WowReport({ profile, insights, userName = 'Profesional' }: A1W
               </div>
             </div>
             <div>
-              <h4 className="font-semibold text-red-400 mb-3 flex items-center gap-2">
+              <h4 className="font-semibold text-[rgb(80,160,170)]-400 mb-3 flex items-center gap-2">
                 <TrendingUp className="w-4 h-4 rotate-180" />
                 Drenas En
               </h4>
               <div className="space-y-2">
                 {roles.drena.map((role, idx) => (
-                  <Badge key={idx} variant="outline" className="bg-red/10 text-white border-red/30">
+                  <Badge key={idx} variant="outline" className="bg-[rgba(80,160,170,0.5)]/10 text-white border-[rgb(80,160,170)]/30">
                     {role}
                   </Badge>
                 ))}

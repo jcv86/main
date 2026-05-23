@@ -316,9 +316,9 @@ Un patrón interesante fue cómo [OBSERVACIÓN]. Esto está conectado con lo que
         {/* User Input */}
         <form onSubmit={handleUserResponse} className="space-y-3">
           {error && (
-            <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
-              <AlertTriangle className="h-4 w-4 text-red" />
-              <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
+            <Alert variant="destructive" className="border-[rgb(80,160,170)]/30 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20">
+              <AlertTriangle className="h-4 w-4 text-[rgb(80,160,170)]" />
+              <AlertDescription className="text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20 ml-2">{error}</AlertDescription>
             </Alert>
           )}
 

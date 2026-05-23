@@ -45,7 +45,7 @@ export default function EmotionalIntelligenceResultsLoading() {
         {/* Content Skeleton */}
         <div className="bg-white rounded-lg shadow-lg p-8">
           <div className="flex items-center space-x-3 mb-6">
-            <Brain className="h-8 w-8 text-red animate-pulse" />
+            <Brain className="h-8 w-8 text-[rgb(80,160,170)] animate-pulse" />
             <div className="h-8 bg-muted/20 rounded-lg w-64 animate-pulse"></div>
           </div>
           <div className="h-4 bg-muted/20 rounded w-full mb-4 animate-pulse"></div>
@@ -86,7 +86,7 @@ export default function EmotionalIntelligenceResultsLoading() {
         {/* Loading Indicator */}
         <div className="min-h-screen flex items-center justify-center bg-background">
           <div className="text-center">
-            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-red/50 mx-auto mb-4"></div>
+            <div className="animate-spin rounded-full h-16 w-16 border-b-2 border-[rgb(80,160,170)]/50 mx-auto mb-4"></div>
             <h2 className="text-xl font-semibold text-foreground mb-2">Cargando resultados...</h2>
             <p className="text-muted-foreground">Analizando tu perfil de inteligencia emocional</p>
           </div>

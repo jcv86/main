@@ -329,7 +329,7 @@ export default function CoachPracticeRoomModule() {
                         className={`p-2 rounded-lg text-center ${
                           score === 'good' ? 'bg-green-500/20 border border-green-500/30' :
                           score === 'needs-work' ? 'bg-yellow-500/20 border border-yellow-500/30' :
-                          score === 'missing' ? 'bg-red-500/20 border border-red-500/30' :
+                          score === 'missing' ? 'bg-[rgba(80,160,170,0.5)]-500/20 border border-[rgb(80,160,170)]-500/30' :
                           'bg-white/5 border border-white/10'
                         }`}
                       >

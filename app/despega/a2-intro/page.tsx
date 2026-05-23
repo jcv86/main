@@ -89,8 +89,8 @@ export default function A2IntroPage() {
                 La Exploración es tu plan de acción de 90 días diseñado específicamente según tu perfil Despega Cerebral. Cada día, micro-acciones concretas que se adaptan a tu estilo natural.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)', borderRadius: '2px' }}>
-                  <p className="font-bold text-red mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>📋 Rutas Personalizadas</p>
+                <div className="p-5 bg-[rgba(80,160,170,0.5)]/20 dark:bg-[rgba(80,160,170,0.5)]/25 border-2 border-[rgb(80,160,170)] rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)', borderRadius: '2px' }}>
+                  <p className="font-bold text-[rgb(80,160,170)] mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>📋 Rutas Personalizadas</p>
                   <p className="text-white/85 text-sm">3 sprints de 30 días adaptados a tu perfil</p>
                 </div>
                 <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl" style={{ borderColor: 'rgba(255, 200, 0, 0.4)', backgroundColor: 'rgba(255, 200, 0, 0.15)', borderRadius: '2px' }}>
@@ -154,8 +154,8 @@ export default function A2IntroPage() {
               <div className="p-8 rounded-[28px]" style={{ borderRadius: '2px', backgroundColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
-                    <p className="text-base font-bold text-red mb-3 flex items-center gap-2">
-                      <span className="w-8 h-8 bg-red text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
+                    <p className="text-base font-bold text-[rgb(80,160,170)] mb-3 flex items-center gap-2">
+                      <span className="w-8 h-8 bg-[rgba(80,160,170,0.5)] text-white rounded-full flex items-center justify-center font-bold text-sm">1</span>
                       ATERRIZAJE
                     </p>
                     <p className="text-white/85 text-sm leading-relaxed">Días 1-30: Tomar velocidad, establecer rutinas, descubrir tu ritmo natural</p>

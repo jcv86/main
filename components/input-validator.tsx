@@ -110,7 +110,7 @@ export function InputValidator({
       {errors.length > 0 && (
         <div className="space-y-1">
           {errors.map((error, idx) => (
-            <div key={idx} className="flex items-start gap-2 text-xs text-red/40 bg-red/50/10 p-2 rounded border border-red/50/20">
+            <div key={idx} className="flex items-start gap-2 text-xs text-[rgb(80,160,170)]/40 bg-[rgba(80,160,170,0.5)]/50/10 p-2 rounded border border-[rgb(80,160,170)]/50/20">
               <AlertCircle className="w-4 h-4 mt-0.5 flex-shrink-0" />
               <span>{error}</span>
             </div>

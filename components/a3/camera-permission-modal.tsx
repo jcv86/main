@@ -165,8 +165,8 @@ export function CameraPermissionModal({
                 )}
                 {cameraStatus === 'error' && (
                   <>
-                    <span className="w-2 h-2 rounded-full bg-red-400"></span>
-                    <span className="text-xs font-semibold text-red-400">Error</span>
+                    <span className="w-2 h-2 rounded-full bg-[rgba(80,160,170,0.5)]-400"></span>
+                    <span className="text-xs font-semibold text-[rgb(80,160,170)]-400">Error</span>
                   </>
                 )}
               </div>
@@ -190,8 +190,8 @@ export function CameraPermissionModal({
                 )}
                 {microphoneStatus === 'error' && (
                   <>
-                    <span className="w-2 h-2 rounded-full bg-red-400"></span>
-                    <span className="text-xs font-semibold text-red-400">Error</span>
+                    <span className="w-2 h-2 rounded-full bg-[rgba(80,160,170,0.5)]-400"></span>
+                    <span className="text-xs font-semibold text-[rgb(80,160,170)]-400">Error</span>
                   </>
                 )}
               </div>

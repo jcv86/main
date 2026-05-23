@@ -71,7 +71,7 @@ export function JobRecommendationsCard() {
 
       <CardContent className="space-y-4">
         {error && hasAttemptedLoad && (
-          <div className="p-3 bg-red/10 text-red rounded-lg text-sm">
+          <div className="p-3 bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] rounded-lg text-sm">
             {error}
           </div>
         )}

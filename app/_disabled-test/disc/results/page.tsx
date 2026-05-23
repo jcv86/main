@@ -259,7 +259,7 @@ export default function DISCResultsPage() {
 
   const getContentTag = (priority: "now" | "next" | "later") => {
     const tags = {
-      now: { label: "FOCO ACTUAL", color: "bg-red/10 text-red border-red/30" },
+      now: { label: "FOCO ACTUAL", color: "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] border-[rgb(80,160,170)]/30" },
       next: { label: "PRÓXIMA MISIÓN", color: "bg-amber-100 text-amber-800 border-amber-300" },
       later: { label: "PARA CUANDO QUIERAS", color: "bg-blue/10 text-blue border-blue/30" },
     }
@@ -808,7 +808,7 @@ export default function DISCResultsPage() {
                     <Card>
                       <CardContent className="pt-4">
                         <div className="flex gap-3">
-                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-red/10 flex items-center justify-center font-bold text-red">
+                          <div className="flex-shrink-0 w-8 h-8 rounded-full bg-[rgba(80,160,170,0.5)]/10 flex items-center justify-center font-bold text-[rgb(80,160,170)]">
                             5
                           </div>
                           <div>
@@ -941,8 +941,8 @@ export default function DISCResultsPage() {
               </CardHeader>
               <CardContent>
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-                  <div className="p-4 bg-red/5 rounded-lg text-center">
-                    <div className="text-3xl font-bold text-red">{discResult.d_score}%</div>
+                  <div className="p-4 bg-[rgba(80,160,170,0.5)]/5 rounded-lg text-center">
+                    <div className="text-3xl font-bold text-[rgb(80,160,170)]">{discResult.d_score}%</div>
                     <div className="font-semibold mt-1">Dominancia</div>
                   </div>
                   <div className="p-4 bg-yellow/5 rounded-lg text-center">
@@ -1530,7 +1530,7 @@ export default function DISCResultsPage() {
                         <>
                           <tr className="border-b hover:bg-muted/5">
                             <td className="p-3">
-                              <Badge variant="outline" className="bg-red/5">
+                              <Badge variant="outline" className="bg-[rgba(80,160,170,0.5)]/5">
                                 {discResult.d_score > 70 ? "Intensidad en discusiones" : "Asertividad equilibrada"}
                               </Badge>
                             </td>
@@ -1741,7 +1741,7 @@ export default function DISCResultsPage() {
                             </tr>
                             <tr className="border-b hover:bg-muted/5">
                               <td className="p-3">
-                                <Badge variant="outline" className="bg-red/5">
+                                <Badge variant="outline" className="bg-[rgba(80,160,170,0.5)]/5">
                                   Desarrollo integral
                                 </Badge>
                               </td>

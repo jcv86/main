@@ -132,23 +132,23 @@ export default function TestPerformancePage() {
                 </div>
               </div>
               <div>
-                <h4 className="font-semibold mb-3 text-red">Needs Improvement</h4>
+                <h4 className="font-semibold mb-3 text-[rgb(80,160,170)]">Needs Improvement</h4>
                 <div className="space-y-2 text-sm">
                   <div className="flex justify-between">
                     <span>Response Time:</span>
-                    <span className="font-mono text-red">&gt; 100ms</span>
+                    <span className="font-mono text-[rgb(80,160,170)]">&gt; 100ms</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Success Rate:</span>
-                    <span className="font-mono text-red">&lt; 85%</span>
+                    <span className="font-mono text-[rgb(80,160,170)]">&lt; 85%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Accuracy:</span>
-                    <span className="font-mono text-red">&lt; 75%</span>
+                    <span className="font-mono text-[rgb(80,160,170)]">&lt; 75%</span>
                   </div>
                   <div className="flex justify-between">
                     <span>User Experience:</span>
-                    <span className="text-red">Frustrating</span>
+                    <span className="text-[rgb(80,160,170)]">Frustrating</span>
                   </div>
                 </div>
               </div>

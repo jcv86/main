@@ -385,7 +385,7 @@ export function DespegaNavbar() {
                       setProfileOpen(false)
                       handleLogout()
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-[rgb(80,160,170)]-400/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.5)]-500/10 transition-all"
                   >
                     <LogOut className="w-4 h-4" />
                     Salir
@@ -494,7 +494,7 @@ export function DespegaNavbar() {
                 }}
                 variant="outline"
                 size="sm"
-                className="w-full justify-start gap-2 border-white/20 text-red-400/80 hover:text-red-400 hover:bg-red-500/10"
+                className="w-full justify-start gap-2 border-white/20 text-[rgb(80,160,170)]-400/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.5)]-500/10"
               >
                 <LogOut className="w-4 h-4" />
                 Salir

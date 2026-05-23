@@ -143,7 +143,7 @@ export default function YourRouteIntroPage() {
       <div className="min-h-screen bg-background">
         <Card className="max-w-md">
           <CardContent className="pt-6">
-            <p className="text-red dark:text-red/40 mb-4">{error}</p>
+            <p className="text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40 mb-4">{error}</p>
             <Button onClick={() => router.push('/despega/a1-cerebral')} className="w-full">
               Volver a A1
             </Button>
@@ -191,9 +191,9 @@ export default function YourRouteIntroPage() {
 
               {/* Cerebro Profile Scores */}
               <div className="grid grid-cols-2 md:grid-cols-4 gap-3 my-6">
-                <div className="bg-red/5 dark:bg-red/20 p-3 rounded-[28px] border border-red/20 dark:border-red">
-                  <p className="text-xs text-red dark:text-red/40 font-semibold">Energía</p>
-                  <p className="text-2xl font-bold text-red dark:text-red/30">{cerebroProfile?.energia}%</p>
+                <div className="bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20 p-3 rounded-[28px] border border-[rgb(80,160,170)]/20 dark:border-[rgb(80,160,170)]">
+                  <p className="text-xs text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40 font-semibold">Energía</p>
+                  <p className="text-2xl font-bold text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30">{cerebroProfile?.energia}%</p>
                 </div>
                 <div className="bg-yellow/5 dark:bg-yellow/20 p-3 rounded-[28px] border border-yellow/20 dark:border-yellow">
                   <p className="text-xs text-yellow dark:text-yellow/40 font-semibold">Enfoque</p>

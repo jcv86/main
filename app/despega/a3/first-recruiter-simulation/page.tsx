@@ -194,7 +194,7 @@ export default function FirstRecruiterSimulationModule() {
             </Button>
           </Link>
           <div className="flex items-center gap-2">
-            <Badge className="bg-red-500/20 text-red-400 border-red-500/30">
+            <Badge className="bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400 border-[rgb(80,160,170)]-500/30">
               <Video className="w-3 h-3 mr-1" />
               Live Simulation
             </Badge>
@@ -207,8 +207,8 @@ export default function FirstRecruiterSimulationModule() {
         {/* Title */}
         <div className="space-y-4">
           <div className="flex items-center gap-3">
-            <div className="w-12 h-12 rounded-lg bg-red-500/20 flex items-center justify-center">
-              <Video className="w-6 h-6 text-red-400" />
+            <div className="w-12 h-12 rounded-lg bg-[rgba(80,160,170,0.5)]-500/20 flex items-center justify-center">
+              <Video className="w-6 h-6 text-[rgb(80,160,170)]-400" />
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Primera Simulación con Reclutador</h1>

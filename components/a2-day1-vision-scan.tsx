@@ -91,7 +91,7 @@ export function A2Day1VisionScan({
         />
 
         {errors.change30Days && (
-          <div className="flex gap-2 text-sm text-red-400">
+          <div className="flex gap-2 text-sm text-[rgb(80,160,170)]-400">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <p>{errors.change30Days}</p>
           </div>
@@ -125,7 +125,7 @@ export function A2Day1VisionScan({
         />
 
         {errors.targetRole && (
-          <div className="flex gap-2 text-sm text-red-400">
+          <div className="flex gap-2 text-sm text-[rgb(80,160,170)]-400">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <p>{errors.targetRole}</p>
           </div>
@@ -159,7 +159,7 @@ export function A2Day1VisionScan({
         />
 
         {errors.mainBlocker && (
-          <div className="flex gap-2 text-sm text-red-400">
+          <div className="flex gap-2 text-sm text-[rgb(80,160,170)]-400">
             <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
             <p>{errors.mainBlocker}</p>
           </div>

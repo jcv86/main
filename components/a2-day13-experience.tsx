@@ -202,8 +202,8 @@ export function Day13Experience({ onComplete, userId }: Day13ExperienceProps) {
     <div className="max-w-4xl mx-auto space-y-6 px-4">
       {error && (
         <div className="rounded-lg p-4 flex items-start gap-3" style={{ backgroundColor: 'rgba(220, 38, 38, 0.1)' }}>
-          <AlertCircle className="w-5 h-5 text-red-500 flex-shrink-0 mt-0.5" />
-          <p className="text-red-500">{error}</p>
+          <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-500 flex-shrink-0 mt-0.5" />
+          <p className="text-[rgb(80,160,170)]-500">{error}</p>
         </div>
       )}
 
@@ -282,9 +282,9 @@ export function Day13Experience({ onComplete, userId }: Day13ExperienceProps) {
                         </div>
                         <button
                           onClick={() => removeFragment(stmtIdx, fragIdx)}
-                          className="ml-2 p-1 hover:bg-red-500/20 rounded"
+                          className="ml-2 p-1 hover:bg-[rgba(80,160,170,0.5)]-500/20 rounded"
                         >
-                          <X className="w-4 h-4 text-red-400" />
+                          <X className="w-4 h-4 text-[rgb(80,160,170)]-400" />
                         </button>
                       </div>
                     ))}

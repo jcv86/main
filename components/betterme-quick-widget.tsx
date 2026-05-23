@@ -56,7 +56,7 @@ export function BetterMeQuickWidget() {
           <div className="text-center p-2 bg-background/50 rounded-lg">
             <div className="flex items-center justify-center gap-1 text-2xl font-bold">
               {stats.streak}
-              {stats.streak > 0 && <Flame className="h-5 w-5 text-red" />}
+              {stats.streak > 0 && <Flame className="h-5 w-5 text-[rgb(80,160,170)]" />}
             </div>
             <p className="text-xs text-muted-foreground">Racha</p>
           </div>

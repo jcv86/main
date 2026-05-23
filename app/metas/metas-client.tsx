@@ -334,7 +334,7 @@ export default function MetasSMARTClient() {
       case "pausada":
         return "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow-300"
       case "abandonada":
-        return "bg-red/10 dark:bg-red text-red dark:text-red/20"
+        return "bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)] text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20"
       default:
         return "bg-muted/10 dark:bg-gray-800 text-gray-800 dark:text-white/80"
     }

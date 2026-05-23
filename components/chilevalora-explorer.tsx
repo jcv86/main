@@ -302,7 +302,7 @@ interface ProfileCardProps {
 
 function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardProps) {
   const demandColor = {
-    alto: 'bg-red/10 text-red',
+    alto: 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]',
     medio: 'bg-yellow/10 text-yellow',
     bajo: 'bg-green/10 text-green',
   }
@@ -323,7 +323,7 @@ function ProfileCard({ profile, isFavorite, onFavorite, onSelect }: ProfileCardP
             className="p-2 hover:bg-accent rounded-lg"
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted-foreground'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-[rgb(80,160,170)]' : 'text-muted-foreground'}`}
             />
           </button>
         </div>
@@ -388,7 +388,7 @@ function CareerMatchCard({ match, isFavorite, onFavorite, onSelect }: CareerMatc
             }}
           >
             <Heart
-              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-red' : 'text-muted-foreground'}`}
+              className={`h-5 w-5 ${isFavorite ? 'fill-red-500 text-[rgb(80,160,170)]' : 'text-muted-foreground'}`}
             />
           </button>
         </div>

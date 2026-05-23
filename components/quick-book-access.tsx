@@ -355,7 +355,7 @@ export default function QuickBookAccess({ books, onBookSelect, trigger }: QuickB
     if (result.matchDetails.popularityBoost > 0.5) {
       badges.push({
         label: "🔥 Popular",
-        color: "bg-red/5 text-red",
+        color: "bg-[rgba(80,160,170,0.5)]/5 text-[rgb(80,160,170)]",
       })
     }
     return badges

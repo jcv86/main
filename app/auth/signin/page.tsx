@@ -157,12 +157,12 @@ export default function SignInPage() {
           <CardContent className="pt-8 pb-8 space-y-5">
             {/* OAuth Error Alert */}
             {error && (
-              <div className="p-4 bg-red/5 dark:bg-red/20 border-l-4 border-red/50 rounded-r-lg">
+              <div className="p-4 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20 border-l-4 border-[rgb(80,160,170)]/50 rounded-r-lg">
                 <div className="flex gap-3">
-                  <AlertCircle className="h-5 w-5 text-red dark:text-red/40 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-red dark:text-red/20">Error de autenticacion</p>
-                    <p className="text-sm text-red dark:text-red/30 mt-1">{error}</p>
+                    <p className="font-semibold text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20">Error de autenticacion</p>
+                    <p className="text-sm text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30 mt-1">{error}</p>
                   </div>
                 </div>
               </div>

@@ -40,7 +40,7 @@ const developmentAreas = [
     id: "inteligencia-emocional",
     name: "Inteligencia Emocional",
     icon: Heart,
-    color: "bg-red/50",
+    color: "bg-[rgba(80,160,170,0.5)]/50",
     description: "Gestiona tus emociones y relaciones interpersonales",
     relatedTests: ["emotional-intelligence", "soft-skills"],
   },
@@ -709,7 +709,7 @@ export default function RecursosClient() {
                                         ? "border-green text-green"
                                         : challenge.difficulty === "Medio"
                                           ? "border-orange text-yellow"
-                                          : "border-red/50 text-red"
+                                          : "border-[rgb(80,160,170)]/50 text-[rgb(80,160,170)]"
                                     }
                                   >
                                     {challenge.difficulty}

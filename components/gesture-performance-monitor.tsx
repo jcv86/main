@@ -195,7 +195,7 @@ export function GesturePerformanceMonitor() {
       case "improving":
         return <TrendingUp className="h-4 w-4 text-green/50" />
       case "declining":
-        return <TrendingDown className="h-4 w-4 text-red" />
+        return <TrendingDown className="h-4 w-4 text-[rgb(80,160,170)]" />
       default:
         return <BarChart3 className="h-4 w-4 text-blue/50" />
     }
@@ -203,9 +203,9 @@ export function GesturePerformanceMonitor() {
 
   const getPerformanceColor = (value: number, type: "time" | "rate") => {
     if (type === "time") {
-      return value < 100 ? "text-green" : value < 200 ? "text-yellow" : "text-red"
+      return value < 100 ? "text-green" : value < 200 ? "text-yellow" : "text-[rgb(80,160,170)]"
     } else {
-      return value >= 90 ? "text-green" : value >= 70 ? "text-yellow" : "text-red"
+      return value >= 90 ? "text-green" : value >= 70 ? "text-yellow" : "text-[rgb(80,160,170)]"
     }
   }
 
@@ -376,7 +376,7 @@ export function GesturePerformanceMonitor() {
                     <div
                       key={`${metric.timestamp}-${index}`}
                       className={`p-3 rounded-[28px] border transition-all ${
-                        metric.success ? "bg-green/5 border-green/20" : "bg-red/5 border-red/20"
+                        metric.success ? "bg-green/5 border-green/20" : "bg-[rgba(80,160,170,0.5)]/5 border-[rgb(80,160,170)]/20"
                       }`}
                     >
                       <div className="flex items-center justify-between">

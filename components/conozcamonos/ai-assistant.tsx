@@ -112,7 +112,7 @@ export function AIAssistant({
       </div>
 
       {error && (
-        <div className="flex gap-2 p-2 bg-red/10 dark:bg-red text-red dark:text-red/20 rounded text-sm">
+        <div className="flex gap-2 p-2 bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)] text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20 rounded text-sm">
           <AlertCircle className="w-4 h-4 flex-shrink-0 mt-0.5" />
           <p>{error}</p>
         </div>

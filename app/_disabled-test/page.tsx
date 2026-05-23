@@ -405,7 +405,7 @@ export default function TestsPage() {
                               ? "bg-green/10 dark:bg-green text-green dark:text-green/30 border-green/20 dark:border-green"
                               : test.difficulty === "Intermediate"
                                 ? "bg-yellow/10 dark:bg-yellow text-yellow dark:text-yellow/20 border-yellow/20 dark:border-yellow"
-                                : "bg-red/10 dark:bg-red text-red dark:text-red/30 border-red/20 dark:border-red"`}
+                                : "bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)] text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30 border-[rgb(80,160,170)]/20 dark:border-[rgb(80,160,170)]"`}
                           }`}
                         >
                           {test.difficulty === "Beginner"
@@ -457,7 +457,7 @@ export default function TestsPage() {
                             className={
                               isPrereqCompleted
                                 ? "text-green dark:text-green/40"
-                                : "text-red dark:text-red/40"
+                                : "text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40"
                             }
                           >
                             {prereqTest?.title}

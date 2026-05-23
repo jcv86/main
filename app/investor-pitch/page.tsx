@@ -57,7 +57,7 @@ export default function InvestorPitch() {
         <section className="mb-12">
           <div className="bg-white rounded-2xl p-8 shadow-lg border border-muted/20">
             <h2 className="text-3xl font-bold mb-6 text-foreground flex items-center gap-3">
-              <span className="w-12 h-12 bg-red/10 rounded-xl flex items-center justify-center text-2xl"></span>
+              <span className="w-12 h-12 bg-[rgba(80,160,170,0.5)]/10 rounded-xl flex items-center justify-center text-2xl"></span>
               El Problema
             </h2>
             <div className="grid md:grid-cols-3 gap-6">
@@ -315,7 +315,7 @@ export default function InvestorPitch() {
                   </p>
                 </div>
 
-                <div className="bg-red/5 rounded-lg p-5 border border-pink-100">
+                <div className="bg-[rgba(80,160,170,0.5)]/5 rounded-lg p-5 border border-pink-100">
                   <h3 className="font-bold text-lg mb-2 text-foreground"> Stack Tecnológico Moderno</h3>
                   <p className="text-muted text-sm">
                     Construido con Next.js 15, React 19, PostgreSQL con pgvector. Los competidores utilizan tecnología

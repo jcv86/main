@@ -35,7 +35,7 @@ export function LearningPathCard({ path, userProgress, onStart, onContinue }: Le
     beginner: "bg-green/10 text-green",
     intermediate: "bg-blue/10 text-blue",
     advanced: "bg-purple/10 text-purple",
-    expert: "bg-red/10 text-red",
+    expert: "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)]",
   }
 
   return (

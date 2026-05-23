@@ -409,7 +409,7 @@ export default function BibliotecaPage() {
           </CardHeader>
           <CardContent>
             <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5 text-red" />
+              <TrendingUp className="h-5 w-5 text-[rgb(80,160,170)]" />
               <span className="text-2xl font-bold">{stats.authors}</span>
             </div>
           </CardContent>

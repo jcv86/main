@@ -106,11 +106,11 @@ export function PresenceCheck({ onComplete }: PresenceCheckProps) {
 
         {/* Error state */}
         {cameraError && (
-          <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4">
+          <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-lg p-4">
             <div className="flex items-start gap-3">
-              <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+              <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-400 mt-0.5 flex-shrink-0" />
               <div>
-                <p className="text-red-400 font-semibold">Cámara No Disponible</p>
+                <p className="text-[rgb(80,160,170)]-400 font-semibold">Cámara No Disponible</p>
                 <p className="text-sm text-white/70 mt-1">
                   No se puede acceder a la cámara. Por favor, verifica que has otorgado los permisos necesarios.
                 </p>

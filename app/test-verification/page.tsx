@@ -214,7 +214,7 @@ export default function TestVerificationPage() {
                       </Badge>
                     )}
                     {flow.status === 'failed' && (
-                      <Badge className="bg-red/20 text-red">
+                      <Badge className="bg-[rgba(80,160,170,0.5)]/20 text-[rgb(80,160,170)]">
                         <XCircle className="h-4 w-4 mr-1" />
                         Failed
                       </Badge>
@@ -232,7 +232,7 @@ export default function TestVerificationPage() {
                     {flow.checks.map((check, idx) => (
                       <div key={idx} className="flex items-center gap-3 p-2 bg-background rounded">
                         {check.status === 'passed' && <CheckCircle className="h-4 w-4 text-green" />}
-                        {check.status === 'failed' && <XCircle className="h-4 w-4 text-red" />}
+                        {check.status === 'failed' && <XCircle className="h-4 w-4 text-[rgb(80,160,170)]" />}
                         {check.status === 'running' && <Loader2 className="h-4 w-4 animate-spin text-blue" />}
                         {check.status === 'pending' && <div className="h-4 w-4 rounded-full border-2 border-muted" />}
                         <span className="text-sm">{check.name}</span>

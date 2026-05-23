@@ -217,14 +217,14 @@ export function DashboardContent() {
               {/* Perfil Scores Grid */}
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 {/* D Score - Impulsor */}
-                <div className="p-4 bg-red/5 dark:bg-red/20 rounded-[28px] border border-red/20 dark:border-red">
+                <div className="p-4 bg-[rgba(80,160,170,0.5)]/5 dark:bg-[rgba(80,160,170,0.5)]/20 rounded-[28px] border border-[rgb(80,160,170)]/20 dark:border-[rgb(80,160,170)]">
                   <div className="flex items-center gap-2 mb-2">
                     <span className="text-2xl">⚡</span>
-                    <span className="text-2xl font-bold text-red">{testResults.test_results.d_score || 0}%</span>
+                    <span className="text-2xl font-bold text-[rgb(80,160,170)]">{testResults.test_results.d_score || 0}%</span>
                   </div>
-                  <p className="text-sm font-medium text-red dark:text-red/30">Impulsor</p>
+                  <p className="text-sm font-medium text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/30">Impulsor</p>
                   <Progress value={testResults.test_results.d_score || 0} className="mt-2" />
-                  <p className="text-xs text-red dark:text-red/40 mt-1">Decisión y Resultados</p>
+                  <p className="text-xs text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40 mt-1">Decisión y Resultados</p>
                 </div>
 
                 {/* I Score - Catalizador */}

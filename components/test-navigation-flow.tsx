@@ -53,7 +53,7 @@ const tests: TestInfo[] = [
     questions: 20,
     difficulty: "Beginner",
     icon: Heart,
-    color: "bg-red/50",
+    color: "bg-[rgba(80,160,170,0.5)]/50",
     path: "/test/emotional-intelligence",
   },
   {
@@ -282,7 +282,7 @@ export default function TestNavigationFlow() {
                       const prereqTest = tests.find((t) => t.id === prereq)
                       const isPrereqCompleted = completedTests.includes(prereq)
                       return (
-                        <span key={prereq} className={isPrereqCompleted ? "text-green" : "text-red"}>
+                        <span key={prereq} className={isPrereqCompleted ? "text-green" : "text-[rgb(80,160,170)]"}>
                           {prereqTest?.name}
                           {test.prerequisites!.indexOf(prereq) < test.prerequisites!.length - 1 && ", "}
                         </span>

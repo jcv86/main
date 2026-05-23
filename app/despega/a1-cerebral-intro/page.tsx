@@ -83,8 +83,8 @@ export default function A1CerebralIntroPage() {
                 El Análisis Cerebral identifica tu estilo natural de comunicación y liderazgo según cuatro dimensiones:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)', borderRadius: '2px' }}>
-                  <p className="font-bold text-red mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔴 Impulsor</p>
+                <div className="p-5 bg-[rgba(80,160,170,0.5)]/20 dark:bg-[rgba(80,160,170,0.5)]/25 border-2 border-[rgb(80,160,170)] rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)', borderRadius: '2px' }}>
+                  <p className="font-bold text-[rgb(80,160,170)] mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔴 Impulsor</p>
                   <p className="text-white/85 text-sm">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
                 <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl" style={{ borderColor: 'rgba(255, 200, 0, 0.4)', backgroundColor: 'rgba(255, 200, 0, 0.15)', borderRadius: '2px' }}>
@@ -179,8 +179,8 @@ export default function A1CerebralIntroPage() {
 
                   {/* MENOS column */}
                   <div>
-                    <p className="text-base font-bold text-red mb-6 flex items-center gap-2">
-                      <span className="bg-red text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">−</span>
+                    <p className="text-base font-bold text-[rgb(80,160,170)] mb-6 flex items-center gap-2">
+                      <span className="bg-[rgba(80,160,170,0.5)] text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">−</span>
                       MENOS como yo
                     </p>
                     <div className="space-y-3">
@@ -196,7 +196,7 @@ export default function A1CerebralIntroPage() {
                         <p className="text-white/85">Paciente y considerado</p>
                         <p className="text-xs text-white/75 mt-1">Estabilizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-red/30 transition-all">
+                      <button className="w-full p-4 border-2 border-[rgb(80,160,170)] bg-[rgba(80,160,170,0.5)]/20 rounded-lg text-left hover:bg-[rgba(80,160,170,0.5)]/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
                         <p className="text-xs text-white/75 mt-1">Arquitecto</p>
                       </button>

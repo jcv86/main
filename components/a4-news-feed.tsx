@@ -44,7 +44,7 @@ const getRelevanceIcon = (score: number) => {
 }
 
 const getRelevanceBadge = (score: number) => {
-  if (score >= 80) return { color: "bg-red/10 text-red dark:bg-red/30 dark:text-red/30", label: "Crítico" }
+  if (score >= 80) return { color: "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] dark:bg-[rgba(80,160,170,0.5)]/30 dark:text-[rgb(80,160,170)]/30", label: "Crítico" }
   if (score >= 60) return { color: "bg-amber-100 text-amber-800 dark:bg-amber-900/30 dark:text-amber-300", label: "Alto" }
   if (score >= 40) return { color: "bg-blue/10 text-blue dark:bg-blue/30 dark:text-blue-200", label: "Medio" }
   return { color: "bg-muted/10 text-gray-800 dark:bg-transparent/30 dark:text-white/85", label: "Bajo" }

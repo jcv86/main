@@ -144,7 +144,7 @@ export function TrainingResultsCard({ result, onContinue }: { result: TrainingRe
     switch (result.level) {
       case 'basico': return 'bg-blue-500/20 text-blue-400 border-blue-500/30'
       case 'intermedio': return 'bg-purple-500/20 text-purple-400 border-purple-500/30'
-      case 'avanzado': return 'bg-red-500/20 text-red-400 border-red-500/30'
+      case 'avanzado': return 'bg-[rgba(80,160,170,0.5)]-500/20 text-[rgb(80,160,170)]-400 border-[rgb(80,160,170)]-500/30'
     }
   }
 

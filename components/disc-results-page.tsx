@@ -31,7 +31,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
       name: 'Impulsor - Orientado a Resultados',
       emoji: '⚡',
       color: 'from-red-600500',
-      tagColor: 'bg-red',
+      tagColor: 'bg-[rgba(80,160,170,0.5)]',
       description: 'Eres directo, decidido y enfocado en lograr objetivos. Te mueves rápido, tomas decisiones firmes y no te detienes ante obstáculos.',
       whatItMeans: 'Te caracterizas por tu impulso para actuar y hacer cosas. Eres alguien que toma el control de situaciones y avanza sin dudar.',
     },
@@ -161,7 +161,7 @@ export function DiscResultsPage({ results, c1Context, onContinue }: ResultsProps
         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           {(['D', 'I', 'S', 'C'] as const).map((key) => {
             const names: Record<string, string> = { D: 'Impulsor', I: 'Catalizador', S: 'Estabilizador', C: 'Arquitecto' }
-            const colors: Record<string, string> = { D: 'bg-red', I: 'bg-orange', S: 'bg-green', C: 'bg-blue' }
+            const colors: Record<string, string> = { D: 'bg-[rgba(80,160,170,0.5)]', I: 'bg-orange', S: 'bg-green', C: 'bg-blue' }
             const isActive = profile === key
 
             return (

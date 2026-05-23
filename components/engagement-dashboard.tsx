@@ -79,7 +79,7 @@ export function EngagementDashboard() {
                 <p className="text-xs text-muted-foreground">Racha</p>
                 <p className="text-2xl font-bold mt-1">{metrics.reading_streak}d</p>
               </div>
-              <TrendingUp className="w-8 h-8 text-red opacity-50" />
+              <TrendingUp className="w-8 h-8 text-[rgb(80,160,170)] opacity-50" />
             </div>
           </CardContent>
         </Card>

@@ -142,8 +142,8 @@ export function Leaderboard() {
 
   if (error) {
     return (
-      <Card className="border-red-200 bg-red-50">
-        <CardContent className="pt-6 text-red-800">{error}</CardContent>
+      <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
+        <CardContent className="pt-6 text-[rgb(80,160,170)]-800">{error}</CardContent>
       </Card>
     )
   }

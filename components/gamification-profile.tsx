@@ -96,7 +96,7 @@ export function GamificationProfile({
           {/* Stats Grid */}
           <div className="grid grid-cols-4 gap-4">
             <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
-              <Flame className="w-6 h-6 text-red mx-auto mb-2" />
+              <Flame className="w-6 h-6 text-[rgb(80,160,170)] mx-auto mb-2" />
               <p className="text-2xl font-bold text-foreground">{streak}</p>
               <p className="text-xs text-muted-foreground">Current Streak</p>
             </div>
@@ -171,7 +171,7 @@ export function GamificationProfile({
       {/* Streak Information */}
       <Card className="p-6 bg-background">
         <div className="flex items-start gap-4">
-          <Flame className="w-8 h-8 text-red flex-shrink-0" />
+          <Flame className="w-8 h-8 text-[rgb(80,160,170)] flex-shrink-0" />
           <div>
             <h3 className="text-lg font-bold text-foreground">Maintain Your Streak!</h3>
             <p className="text-sm text-muted mt-2">

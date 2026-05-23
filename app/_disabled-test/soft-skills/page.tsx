@@ -667,9 +667,9 @@ export default function SoftSkillsTest() {
               <div className="p-2 bg-purple/5 rounded text-purple">Liderazgo</div>
               <div className="p-2 bg-green/5 rounded text-green">Trabajo en Equipo</div>
               <div className="p-2 bg-orange/5 rounded text-orange">Resolución de Problemas</div>
-              <div className="p-2 bg-red/5 rounded text-pink-900">Adaptabilidad</div>
+              <div className="p-2 bg-[rgba(80,160,170,0.5)]/5 rounded text-pink-900">Adaptabilidad</div>
               <div className="p-2 bg-yellow/5 rounded text-yellow">Gestión del Tiempo</div>
-              <div className="p-2 bg-red/5 rounded text-red">Inteligencia Emocional</div>
+              <div className="p-2 bg-[rgba(80,160,170,0.5)]/5 rounded text-[rgb(80,160,170)]">Inteligencia Emocional</div>
               <div className="p-2 bg-blue/5 rounded text-indigo-900">Creatividad</div>
             </div>
           </CardContent>

@@ -16,7 +16,7 @@ export const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>
     const accentBgColors = {
       yellow: 'bg-yellow hover:bg-yellow/90',
       orange: 'bg-orange/80 hover:bg-orange/70/90',
-      red: 'bg-red/80 hover:bg-red/70/90',
+      red: 'bg-[rgba(80,160,170,0.5)]/80 hover:bg-[rgba(80,160,170,0.5)]/70/90',
       blue: 'bg-blue/80 hover:bg-blue/70/90',
       purple: 'bg-purple/80 hover:bg-purple/70/90',
       green: 'bg-green/80 hover:bg-green/70/90',
@@ -25,7 +25,7 @@ export const BrandButton = React.forwardRef<HTMLButtonElement, BrandButtonProps>
     const accentBorderColors = {
       yellow: 'border-yellow text-yellow hover:bg-yellow/10',
       orange: 'border-orange text-orange hover:bg-orange/10',
-      red: 'border-red text-red hover:bg-red/10',
+      red: 'border-[rgb(80,160,170)] text-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.5)]/10',
       blue: 'border-blue text-blue hover:bg-blue/10',
       purple: 'border-purple text-purple hover:bg-purple/10',
       green: 'border-green text-green hover:bg-green/10',

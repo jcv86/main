@@ -61,7 +61,7 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
   const getStatus = () => {
     if (totalScore >= 80) return { text: 'Listo para practicar', color: 'text-emerald-400', bg: 'bg-emerald-500/10' }
     if (totalScore >= 60) return { text: 'Ajustes menores', color: 'text-yellow-400', bg: 'bg-yellow/50/10' }
-    return { text: 'Revisar antes de simular', color: 'text-red-400', bg: 'bg-red-500/10' }
+    return { text: 'Revisar antes de simular', color: 'text-[rgb(80,160,170)]-400', bg: 'bg-[rgba(80,160,170,0.5)]-500/10' }
   }
 
   const status = getStatus()
@@ -276,8 +276,8 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
                 <p className="text-white/70 text-sm mt-1">Revisa las áreas con puntuación más baja para mejorar</p>
               </div>
             ) : (
-              <div className="bg-red-500/10 border border-red-500/30 rounded-lg p-4 text-center">
-                <p className="text-red-400 font-semibold">Revisa tu configuración</p>
+              <div className="bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30 rounded-lg p-4 text-center">
+                <p className="text-[rgb(80,160,170)]-400 font-semibold">Revisa tu configuración</p>
                 <p className="text-white/70 text-sm mt-1">Completa los checks pendientes para una mejor experiencia</p>
               </div>
             )}
@@ -341,9 +341,9 @@ export function Interview0PreAudit({ onComplete, onProgressUpdate }: { onComplet
             
             {/* Error message if save failed */}
             {saveError && (
-              <div className="bg-red-500/20 border border-red-500/50 rounded-lg p-3 text-center">
-                <p className="text-red-400 text-sm">{saveError}</p>
-                <p className="text-red-300/70 text-xs mt-1">Intenta de nuevo</p>
+              <div className="bg-[rgba(80,160,170,0.5)]-500/20 border border-[rgb(80,160,170)]-500/50 rounded-lg p-3 text-center">
+                <p className="text-[rgb(80,160,170)]-400 text-sm">{saveError}</p>
+                <p className="text-[rgb(80,160,170)]-300/70 text-xs mt-1">Intenta de nuevo</p>
               </div>
             )}
           </CardContent>

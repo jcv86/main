@@ -204,14 +204,14 @@ export default function MetodoSTARPage() {
             {/* Common Mistakes */}
             <div className="mt-8">
               <h3 className="text-xl font-bold mb-4 flex items-center gap-2">
-                <AlertCircle className="w-5 h-5 text-red-500" />
+                <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-500" />
                 Errores Comunes a Evitar
               </h3>
               <div className="grid gap-3">
                 {COMMON_MISTAKES.map((item, idx) => (
-                  <Card key={idx} className="bg-red-500/5 border-red-500/20">
+                  <Card key={idx} className="bg-[rgba(80,160,170,0.5)]-500/5 border-[rgb(80,160,170)]-500/20">
                     <CardContent className="pt-4">
-                      <p className="font-semibold text-red-300 mb-1">{item.mistake}</p>
+                      <p className="font-semibold text-[rgb(80,160,170)]-300 mb-1">{item.mistake}</p>
                       <p className="text-sm text-white/60 mb-2">Impacto: {item.impact}</p>
                       <p className="text-sm text-green-400">Solución: {item.solution}</p>
                     </CardContent>

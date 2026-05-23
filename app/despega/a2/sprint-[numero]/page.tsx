@@ -337,7 +337,7 @@ export default function SprintViewerPage() {
   const difficultyColors = {
     fácil: "bg-green/10 dark:bg-green/30 text-green dark:text-green/20",
     medio: "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200",
-    desafiante: "bg-red/10 dark:bg-red/30 text-red dark:text-red/20"
+    desafiante: "bg-[rgba(80,160,170,0.5)]/10 dark:bg-[rgba(80,160,170,0.5)]/30 text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/20"
   }
 
   return (

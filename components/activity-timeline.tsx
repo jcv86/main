@@ -59,7 +59,7 @@ export function ActivityTimeline({ userId, limit = 10 }: ActivityTimelineProps) 
       case 'level_up':
         return <Trophy className="h-4 w-4 text-yellow-500" />
       case 'badge_unlock':
-        return <Flame className="h-4 w-4 text-red-500" />
+        return <Flame className="h-4 w-4 text-[rgb(80,160,170)]-500" />
       case 'milestone':
         return <BookOpen className="h-4 w-4 text-blue-500" />
       case 'achievement':
@@ -78,7 +78,7 @@ export function ActivityTimeline({ userId, limit = 10 }: ActivityTimelineProps) 
       case 'level_up':
         return 'bg-yellow-50 border-yellow-200'
       case 'badge_unlock':
-        return 'bg-red-50 border-red-200'
+        return 'bg-[rgba(80,160,170,0.5)]-50 border-[rgb(80,160,170)]-200'
       case 'milestone':
         return 'bg-blue-50 border-blue-200'
       case 'achievement':
@@ -107,8 +107,8 @@ export function ActivityTimeline({ userId, limit = 10 }: ActivityTimelineProps) 
 
   if (error) {
     return (
-      <Card className="border-red-200 bg-red-50">
-        <CardContent className="pt-6 text-red-800">{error}</CardContent>
+      <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
+        <CardContent className="pt-6 text-[rgb(80,160,170)]-800">{error}</CardContent>
       </Card>
     )
   }

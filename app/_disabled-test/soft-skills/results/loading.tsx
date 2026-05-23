@@ -15,16 +15,16 @@ export default function SoftSkillsResultsLoading() {
         </div>
 
         {/* Progress Section */}
-        <Card className="mb-8 border-red/20 shadow-lg">
+        <Card className="mb-8 border-[rgb(80,160,170)]/20 shadow-lg">
           <CardContent className="p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2">
-                <Loader2 className="h-5 w-5 animate-spin text-red" />
+                <Loader2 className="h-5 w-5 animate-spin text-[rgb(80,160,170)]" />
                 <span className="text-lg font-semibold text-gray-800">
                   Analizando tus competencias profesionales...
                 </span>
               </div>
-              <span className="text-red font-bold">75%</span>
+              <span className="text-[rgb(80,160,170)] font-bold">75%</span>
             </div>
             <Progress value={75} className="h-3 mb-4" />
 
@@ -42,7 +42,7 @@ export default function SoftSkillsResultsLoading() {
                 <div className="w-2 h-2 bg-green/50 rounded-full"></div>
                 <span>✅ Midiendo capacidad de trabajo en equipo</span>
               </div>
-              <div className="flex items-center gap-2 text-red">
+              <div className="flex items-center gap-2 text-[rgb(80,160,170)]">
                 <Loader2 className="w-2 h-2 animate-spin" />
                 <span>🔄 Generando recomendaciones personalizadas</span>
               </div>
@@ -54,9 +54,9 @@ export default function SoftSkillsResultsLoading() {
         <div className="mb-8">
           <h3 className="text-xl font-semibold text-gray-800 mb-4 text-center">Descubre lo que analizaremos para ti</h3>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            <Card className="border-red/20 hover:shadow-md transition-shadow">
+            <Card className="border-[rgb(80,160,170)]/20 hover:shadow-md transition-shadow">
               <CardContent className="p-4 text-center">
-                <MessageCircle className="h-8 w-8 text-red mx-auto mb-2" />
+                <MessageCircle className="h-8 w-8 text-[rgb(80,160,170)] mx-auto mb-2" />
                 <h4 className="font-semibold text-gray-800 mb-1">Análisis de Comunicación</h4>
                 <p className="text-sm text-muted-foreground">Evaluamos tu capacidad para transmitir ideas efectivamente</p>
               </CardContent>

@@ -283,7 +283,7 @@ export default function GuidedInterviewPage() {
             {/* Timer */}
             <div className="flex items-center gap-2">
               <span className="text-sm font-semibold">Tiempo disponible:</span>
-              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-red' : 'text-muted-foreground dark:text-muted-foreground'}`}>
+              <div className={`text-2xl font-bold ${timeLeft < 30 ? 'text-[rgb(80,160,170)]' : 'text-muted-foreground dark:text-muted-foreground'}`}>
                 {Math.floor(timeLeft / 60)}:{(timeLeft % 60).toString().padStart(2, '0')}
               </div>
             </div>

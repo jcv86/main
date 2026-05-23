@@ -326,7 +326,7 @@ export default function ComprehensiveGestureTestPage() {
       case "completed":
         return <CheckCircle className="h-5 w-5 text-green" />
       case "failed":
-        return <XCircle className="h-5 w-5 text-red" />
+        return <XCircle className="h-5 w-5 text-[rgb(80,160,170)]" />
       case "running":
         return <Clock className="h-5 w-5 text-blue/50 animate-spin" />
       default:
@@ -597,7 +597,7 @@ export default function ComprehensiveGestureTestPage() {
                               className={`text-xs ${`}
                                 result.success
                                   ? "bg-green/10 text-green hover:bg-green/10"
-                                  : "bg-red/10 text-red hover:bg-red/10"`}
+                                  : "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.5)]/10"`}
                               }`}
                             >
                               {gesture}: {result.responseTime}ms
@@ -666,7 +666,7 @@ export default function ComprehensiveGestureTestPage() {
                                   {result.success ? (
                                     <CheckCircle className="h-4 w-4 text-green" />
                                   ) : (
-                                    <XCircle className="h-4 w-4 text-red" />
+                                    <XCircle className="h-4 w-4 text-[rgb(80,160,170)]" />
                                   )}
                                   <span className="font-medium text-foreground capitalize">
                                     {gesture.replace("-", " ")}

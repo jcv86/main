@@ -40,7 +40,7 @@ const getResourceIcon = (tipo: string) => {
 const getResourceColor = (tipo: string) => {
   const colors: Record<string, string> = {
     articulo: "bg-blue/10 text-blue dark:bg-blue/40 dark:text-blue-200",
-    video: "bg-red/10 text-red dark:bg-red/40 dark:text-red/30",
+    video: "bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] dark:bg-[rgba(80,160,170,0.5)]/40 dark:text-[rgb(80,160,170)]/30",
     podcast: "bg-purple/10 text-purple dark:bg-purple/40 dark:text-purple/20",
     libro: "bg-green/10 text-green dark:bg-green/40 dark:text-green/30",
   }

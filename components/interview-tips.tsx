@@ -148,7 +148,7 @@ export function InterviewTips({
           <div className="text-sm font-semibold text-indigo-700 dark:text-indigo-300">
             Saldo DTC: {dtcBalance !== null ? dtcBalance : '...'} 
             {dtcBalance !== null && dtcBalance < 150 && !canUseFreeTip && (
-              <span className="text-red ml-2">({150 - dtcBalance} para premium)</span>
+              <span className="text-[rgb(80,160,170)] ml-2">({150 - dtcBalance} para premium)</span>
             )}
           </div>
         </div>

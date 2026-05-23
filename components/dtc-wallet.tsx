@@ -61,8 +61,8 @@ export function DTCWallet({ userId }: DTCWalletProps) {
 
   if (error) {
     return (
-      <Card className="border-red-200 bg-red-50">
-        <CardContent className="pt-6 text-red-800">{error}</CardContent>
+      <Card className="border-[rgb(80,160,170)]-200 bg-[rgba(80,160,170,0.5)]-50">
+        <CardContent className="pt-6 text-[rgb(80,160,170)]-800">{error}</CardContent>
       </Card>
     )
   }
@@ -113,11 +113,11 @@ export function DTCWallet({ userId }: DTCWalletProps) {
               </div>
             </div>
             <div>
-              <div className="flex items-center gap-1 text-red-700 font-medium mb-1">
+              <div className="flex items-center gap-1 text-[rgb(80,160,170)]-700 font-medium mb-1">
                 <TrendingDown className="h-4 w-4" />
                 <span>Spent</span>
               </div>
-              <div className="text-2xl font-bold text-red-600">
+              <div className="text-2xl font-bold text-[rgb(80,160,170)]-600">
                 -{formatDTC(data.lifetime_spent)}
               </div>
             </div>
@@ -149,7 +149,7 @@ export function DTCWallet({ userId }: DTCWalletProps) {
                   className={`flex items-center justify-between p-4 rounded-lg border ${
                     tx.type === 'earn'
                       ? 'bg-green-50 border-green-200'
-                      : 'bg-red-50 border-red-200'
+                      : 'bg-[rgba(80,160,170,0.5)]-50 border-[rgb(80,160,170)]-200'
                   }`}
                 >
                   <div className="flex items-center gap-3 flex-1">
@@ -157,7 +157,7 @@ export function DTCWallet({ userId }: DTCWalletProps) {
                       className={`p-2 rounded-lg ${
                         tx.type === 'earn'
                           ? 'bg-green-100'
-                          : 'bg-red-100'
+                          : 'bg-[rgba(80,160,170,0.5)]-100'
                       }`}
                     >
                       {tx.type === 'earn' ? (
@@ -165,11 +165,11 @@ export function DTCWallet({ userId }: DTCWalletProps) {
                           className={`h-5 w-5 ${
                             tx.type === 'earn'
                               ? 'text-green-600'
-                              : 'text-red-600'
+                              : 'text-[rgb(80,160,170)]-600'
                           }`}
                         />
                       ) : (
-                        <TrendingDown className="h-5 w-5 text-red-600" />
+                        <TrendingDown className="h-5 w-5 text-[rgb(80,160,170)]-600" />
                       )}
                     </div>
                     <div className="min-w-0">
@@ -189,7 +189,7 @@ export function DTCWallet({ userId }: DTCWalletProps) {
                       className={
                         tx.type === 'earn'
                           ? 'bg-green-600'
-                          : 'bg-red-600'
+                          : 'bg-[rgba(80,160,170,0.5)]-600'
                       }
                     >
                       {tx.type === 'earn' ? '+' : '-'}{tx.amount}

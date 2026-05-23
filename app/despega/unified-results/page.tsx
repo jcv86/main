@@ -71,7 +71,7 @@ export default function UnifiedTestDashboard() {
       blue: "bg-blue/5 border-blue/30 dark:bg-blue/20 dark:border-blue/10",
       purple: "bg-purple/5 border-purple/30 dark:bg-purple/20 dark:border-purple",
       indigo: "bg-blue/5 border-blue/30 dark:bg-indigo-950/20 dark:border-blue",
-      red: "bg-red/5 border-red/20 dark:bg-red/20 dark:border-red",
+      red: "bg-[rgba(80,160,170,0.5)]/5 border-[rgb(80,160,170)]/20 dark:bg-[rgba(80,160,170,0.5)]/20 dark:border-[rgb(80,160,170)]",
       teal: "bg-teal-50 border-blue/20 dark:bg-teal-950/20 dark:border-teal-800",
     }
     return colors[color] || colors.blue
@@ -82,7 +82,7 @@ export default function UnifiedTestDashboard() {
       blue: "text-blue dark:text-blue/40",
       purple: "text-purple dark:text-purple/40",
       indigo: "text-blue dark:text-indigo-400",
-      red: "text-red dark:text-red/40",
+      red: "text-[rgb(80,160,170)] dark:text-[rgb(80,160,170)]/40",
       teal: "text-blue dark:text-teal-400",
     }
     return colors[color] || colors.blue

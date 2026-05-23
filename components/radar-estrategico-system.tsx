@@ -380,7 +380,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
   const getPriorityBadge = (prioridad: string) => {
     const config = {
-      estructural: { bg: 'bg-red/30', text: 'text-red/30', label: 'Estructural', icon: AlertTriangle },
+      estructural: { bg: 'bg-[rgba(80,160,170,0.5)]/30', text: 'text-[rgb(80,160,170)]/30', label: 'Estructural', icon: AlertTriangle },
       tactico: { bg: 'bg-yellow/30', text: 'text-yellow/30', label: 'Táctico', icon: TrendingUp },
       contextual: { bg: 'bg-green/30', text: 'text-green/30', label: 'Contextual', icon: Eye }
     }
@@ -433,7 +433,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
           </div>
           <div className="grid md:grid-cols-2 gap-4">
             <div>
-              <h4 className="text-sm font-semibold text-red/40 mb-1">🔴 Riesgo Principal</h4>
+              <h4 className="text-sm font-semibold text-[rgb(80,160,170)]/40 mb-1">🔴 Riesgo Principal</h4>
               <p className="text-white/85 text-sm">{radarData.lecturaBas.riesgoPrincipal}</p>
             </div>
             <div>
@@ -488,7 +488,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
 
                       <div className="grid sm:grid-cols-2 gap-4">
                         <div>
-                          <h4 className="text-xs font-semibold text-red/40 uppercase mb-1">❌ Error del consenso</h4>
+                          <h4 className="text-xs font-semibold text-[rgb(80,160,170)]/40 uppercase mb-1">❌ Error del consenso</h4>
                           <p className="text-white/85 text-sm">{noticia.errorConsensual}</p>
                         </div>
                         <div>
@@ -512,7 +512,7 @@ export function RadarEstrategico({ personalizationContext }: RadarEstrategicoPro
                         <div className="space-y-1 text-xs">
                           <p><span className="text-green/40">Corto:</span> {noticia.impactoTemporal.corto}</p>
                           <p><span className="text-yellow/40">Medio:</span> {noticia.impactoTemporal.medio}</p>
-                          <p><span className="text-red/40">Largo:</span> {noticia.impactoTemporal.largo}</p>
+                          <p><span className="text-[rgb(80,160,170)]/40">Largo:</span> {noticia.impactoTemporal.largo}</p>
                         </div>
                       </div>
 

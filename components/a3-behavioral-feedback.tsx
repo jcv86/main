@@ -18,7 +18,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
   const getScoreColor = (score: number) => {
     if (score >= 80) return "text-green"
     if (score >= 60) return "text-amber-600"
-    return "text-red"
+    return "text-[rgb(80,160,170)]"
   }
 
   return (
@@ -165,7 +165,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
                   observations?.response_focus === "muy_enfocada" ? "bg-green" :
                   observations?.response_focus === "enfocada" ? "bg-green/50" :
                   observations?.response_focus === "dispersa" ? "bg-amber-600" :
-                  "bg-red"
+                  "bg-[rgba(80,160,170,0.5)]"
                 }>
                   {observations?.response_focus?.replace("_", " ")}
                 </Badge>
@@ -229,7 +229,7 @@ export function A3BehavioralFeedback({ observations, emotionalState, performance
             </div>
             <div className="p-3 bg-muted/5 rounded">
               <div className="text-sm text-muted-foreground">Pico Máximo</div>
-              <div className="text-2xl font-bold text-red">{emotionalState?.max_anxiety_during}%</div>
+              <div className="text-2xl font-bold text-[rgb(80,160,170)]">{emotionalState?.max_anxiety_during}%</div>
             </div>
           </div>
 

@@ -174,7 +174,7 @@ export function PromptManagementDashboard() {
                   {perf.avg_satisfaction >= 4.3 ? (
                     <TrendingUp className="h-4 w-4 text-green/50" />
                   ) : (
-                    <TrendingDown className="h-4 w-4 text-red" />
+                    <TrendingDown className="h-4 w-4 text-[rgb(80,160,170)]" />
                   )}
                 </div>
               </div>

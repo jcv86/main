@@ -461,7 +461,7 @@ export function ConversationalInterviewSimulator({
       'professional-1': 'bg-background',
       'creative-1': 'bg-background',
       'tech-1': 'bg-background',
-      'business-1': 'bg-red',
+      'business-1': 'bg-[rgba(80,160,170,0.5)]',
       'casual-1': 'bg-background',
       'formal-1': 'bg-background',
       'interviewer-classic-1': 'bg-background',
@@ -650,7 +650,7 @@ export function ConversationalInterviewSimulator({
 
                 {/* Recording status - Top Left */}
                 <div className="absolute top-3 left-3 flex items-center gap-2 z-10">
-                  <div className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-red-500 animate-pulse' : 'bg-emerald-500'}`} />
+                  <div className={`w-2.5 h-2.5 rounded-full ${isListening ? 'bg-[rgba(80,160,170,0.5)]-500 animate-pulse' : 'bg-emerald-500'}`} />
                   <span className="text-xs font-bold text-white bg-black/60 px-2 py-1 rounded-full uppercase tracking-wide">
                     {isListening ? 'Grabando' : 'Listo'}
                   </span>
@@ -700,7 +700,7 @@ export function ConversationalInterviewSimulator({
                       onClick={isListening ? stopListening : startListening}
                       className={`px-4 py-3 rounded-lg text-sm font-semibold transition-all border flex items-center gap-2 ${
                         isListening
-                          ? 'bg-red-600/80 border-red-500/50 text-white'
+                          ? 'bg-[rgba(80,160,170,0.5)]-600/80 border-[rgb(80,160,170)]-500/50 text-white'
                           : 'bg-muted/20 border-muted/40 text-muted-foreground hover:bg-muted/30'
                       }`}
                     >
@@ -778,9 +778,9 @@ export function ConversationalInterviewSimulator({
             </div>
 
             {error && (
-              <Alert variant="destructive" className="border-red/30 bg-red/5">
-                <AlertTriangle className="h-4 w-4 text-red" />
-                <AlertDescription className="text-red ml-2">
+              <Alert variant="destructive" className="border-[rgb(80,160,170)]/30 bg-[rgba(80,160,170,0.5)]/5">
+                <AlertTriangle className="h-4 w-4 text-[rgb(80,160,170)]" />
+                <AlertDescription className="text-[rgb(80,160,170)] ml-2">
                   {error}
                 </AlertDescription>
               </Alert>

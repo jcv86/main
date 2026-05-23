@@ -79,7 +79,7 @@ const getTipoColor = (tipo: string) => {
     libro: { badge: 'rounded-[16px]', icon: '', color: 'rgba(225, 120, 130, 0.40)' },
     articulo: { badge: 'bg-purple/10 text-purple dark:bg-purple/30 dark:text-purple/20', icon: '📄' },
     podcast: { badge: 'bg-green/10 text-green dark:bg-green/30 dark:text-green/30', icon: '🎧' },
-    video: { badge: 'bg-red/10 text-red dark:bg-red/30 dark:text-red/30', icon: '🎬' },
+    video: { badge: 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] dark:bg-[rgba(80,160,170,0.5)]/30 dark:text-[rgb(80,160,170)]/30', icon: '🎬' },
     reporte: { badge: 'bg-orange/10 text-orange dark:bg-orange/30 dark:text-orange/30', icon: '' },
   }
   return colors[tipo] || { badge: 'bg-muted/10 text-gray-800', icon: '📖' }
@@ -88,7 +88,7 @@ const getTipoColor = (tipo: string) => {
 const getCategoriaColor = (categoria: string) => {
   const colors: Record<string, string> = {
     'Liderazgo': 'bg-blue/10 text-blue dark:bg-blue/30 dark:text-indigo-300',
-    'Emprendimiento': 'bg-red/10 text-red dark:bg-red/30 dark:text-pink-300',
+    'Emprendimiento': 'bg-[rgba(80,160,170,0.5)]/10 text-[rgb(80,160,170)] dark:bg-[rgba(80,160,170,0.5)]/30 dark:text-pink-300',
     'Negociación': 'bg-cyan/10 text-cyan dark:bg-cyan/30 dark:text-cyan/30',
     'Toma de Decisiones': 'bg-yellow/10 text-yellow dark:bg-yellow/30 dark:text-yellow/20',
   }

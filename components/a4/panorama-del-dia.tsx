@@ -61,7 +61,7 @@ export function PanoramadelDia({
   const getColorClasses = (importance: string) => {
     switch (importance) {
       case "high":
-        return "border-l-4 border-l-red-500 bg-red/50/5"
+        return "border-l-4 border-l-red-500 bg-[rgba(80,160,170,0.5)]/50/5"
       case "medium":
         return "border-l-4 border-l-amber-500 bg-amber-500/5"
       default:

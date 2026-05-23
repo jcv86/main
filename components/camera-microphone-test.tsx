@@ -138,7 +138,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
               )}
               {cameraStatus === 'error' && (
                 <div className="absolute inset-0 flex items-center justify-center bg-black/80">
-                  <AlertCircle className="w-8 h-8 text-red-400" />
+                  <AlertCircle className="w-8 h-8 text-[rgb(80,160,170)]-400" />
                 </div>
               )}
             </div>
@@ -158,7 +158,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
                   Verificada
                 </div>
               ) : cameraStatus === 'error' ? (
-                <div className="flex items-center gap-2 text-red-400 text-sm font-semibold">
+                <div className="flex items-center gap-2 text-[rgb(80,160,170)]-400 text-sm font-semibold">
                   <AlertCircle className="w-4 h-4" />
                   Error
                 </div>
@@ -179,7 +179,7 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
                   Listo
                 </div>
               ) : micStatus === 'error' ? (
-                <div className="flex items-center gap-2 text-red-400 text-sm font-semibold">
+                <div className="flex items-center gap-2 text-[rgb(80,160,170)]-400 text-sm font-semibold">
                   <AlertCircle className="w-4 h-4" />
                   Error
                 </div>
@@ -204,11 +204,11 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
 
           {/* Error State */}
           {(cameraStatus === 'error' || micStatus === 'error') && (
-            <div className="rounded-lg p-4 bg-red-500/10 border border-red-500/30">
+            <div className="rounded-lg p-4 bg-[rgba(80,160,170,0.5)]-500/10 border border-[rgb(80,160,170)]-500/30">
               <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+                <AlertCircle className="w-5 h-5 text-[rgb(80,160,170)]-400 mt-0.5 flex-shrink-0" />
                 <div>
-                  <p className="font-semibold text-red-400">Dispositivos No Disponibles</p>
+                  <p className="font-semibold text-[rgb(80,160,170)]-400">Dispositivos No Disponibles</p>
                   <p className="text-sm text-white/70 mt-2">
                     {cameraStatus === 'error' && 'No se puede acceder a la cámara. '}
                     {micStatus === 'error' && 'No se puede acceder al micrófono. '}
