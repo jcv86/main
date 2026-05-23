@@ -151,14 +151,14 @@ ${contextSummary.profileSummary}
         Siempre personalizas el contenido basándote en los datos del usuario.
         Usas formato Markdown para estructurar el contenido.`,
       prompt: fullPrompt,
-      maxTokens: 4000,
+      maxOutputTokens: 4000,
     })
 
     // Generate a suggested title
     const suggestedTitle = generateTitle(documentType as SimpleDocumentType, targetRole, targetCompany)
 
     // Log the generation for analytics (non-blocking)
-    supabase.from('a4_generation_logs').insert({
+    void supabase.from('a4_generation_logs').insert({
       user_id: user.id,
       document_type: documentType,
       prompt_tokens: fullPrompt.length,
@@ -166,7 +166,7 @@ ${contextSummary.profileSummary}
       model_used: 'claude-sonnet-4',
       generation_params: { targetCompany, targetRole },
       created_at: new Date().toISOString()
-    }).then(() => {}).catch(() => {})
+    })
 
     return NextResponse.json({
       content: generatedContent,

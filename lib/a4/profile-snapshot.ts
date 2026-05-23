@@ -312,7 +312,7 @@ export async function getUserProgressOverTime(userId: string): Promise<{
     cvReadinessChange: number
     interviewReadinessChange: number
     applicationReadinessChange: number
-    totalDays: number
+    daysElapsed: number
   } | null
 }> {
   const snapshots = await getUserSnapshots(userId)

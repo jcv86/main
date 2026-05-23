@@ -127,14 +127,14 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to create document' }, { status: 500 })
     }
 
-    // Track signal
-    await supabase.from('a4_profile_signals').insert({
+    // Track signal (non-blocking)
+    void supabase.from('a4_profile_signals').insert({
       user_id: user.id,
       signal_type: 'document_created',
       source_phase: sourcePhase,
       signal_data: { documentType, documentId: document.id },
       weight: 1.0
-    }).catch(() => {}) // Non-blocking
+    })
 
     return NextResponse.json({
       document,
@@ -177,12 +177,12 @@ export async function PATCH(request: NextRequest) {
     // Create version before updating if content changed
     if (createVersion && content && content !== existingDoc.content) {
       const newVersion = (existingDoc.current_version || 0) + 1
-      await supabase.from('a4_document_versions').insert({
+      void supabase.from('a4_document_versions').insert({
         document_id: documentId,
         version_number: newVersion,
         content: existingDoc.content,
         change_summary: 'Auto-saved before edit'
-      }).catch(() => {})
+      })
     }
 
     // Update document
