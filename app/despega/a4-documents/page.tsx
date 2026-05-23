@@ -310,12 +310,27 @@ export default function A4DocumentsPage() {
             <div className="space-y-3">
               {/* Merge and sort all items */}
               {[
-                ...testResults.map(t => ({ ...t, type: 'test', date: t.completed_at })),
-                ...artifacts.map(a => ({ ...a, type: 'artifact', date: a.completed_at })),
-                ...milestones.map(m => ({ ...m, type: 'milestone', date: m.achieved_at })),
+                ...testResults.map(t => ({ ...t, type: 'test' as const, date: t.completed_at })),
+                ...artifacts.map(a => ({ ...a, type: 'artifact' as const, date: a.completed_at })),
+                ...milestones.map(m => ({ ...m, type: 'milestone' as const, date: m.achieved_at })),
               ]
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-                .map((item) => (
+                .map((item) => {
+                  const getTitle = () => {
+                    if (item.type === 'test' && 'test_name' in item) return (item as any).test_name
+                    if (item.type === 'artifact' && 'title' in item) return (item as any).title
+                    if (item.type === 'milestone' && 'title' in item) return (item as any).title
+                    return ''
+                  }
+                  
+                  const getDescription = () => {
+                    if (item.type === 'test' && 'interpretation' in item) return (item as any).interpretation
+                    if (item.type === 'artifact' && 'description' in item) return (item as any).description
+                    if (item.type === 'milestone' && 'description' in item) return (item as any).description
+                    return ''
+                  }
+
+                  return (
                   <div key={item.id} className="bg-card border border-border/30 rounded-lg p-4 hover:border-primary transition-colors">
                     <div className="flex items-start gap-4">
                       <div className="mt-1 text-primary">
@@ -325,10 +340,10 @@ export default function A4DocumentsPage() {
                       </div>
                       <div className="flex-1 min-w-0">
                         <h3 className="font-semibold text-foreground truncate">
-                          {item.test_name || item.title}
+                          {getTitle()}
                         </h3>
                         <p className="text-sm text-muted-foreground mt-1">
-                          {item.description || item.interpretation}
+                          {getDescription()}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-3">
                           {(item.tags || []).slice(0, 3).map(tag => (
@@ -336,9 +351,9 @@ export default function A4DocumentsPage() {
                               {tag}
                             </Badge>
                           ))}
-                          {item.activity_type && (
-                            <Badge className={`text-xs ${getActivityColor(item.activity_type)}`}>
-                              {item.activity_type}
+                          {(item as any).activity_type && (
+                            <Badge className={`text-xs ${getActivityColor((item as any).activity_type)}`}>
+                              {(item as any).activity_type}
                             </Badge>
                           )}
                         </div>
@@ -347,20 +362,21 @@ export default function A4DocumentsPage() {
                         <div className="text-xs text-muted-foreground">
                           {new Date(item.date).toLocaleDateString('es-ES')}
                         </div>
-                        {item.score && (
+                        {(item as any).score && (
                           <div className="text-lg font-bold text-primary mt-1">
-                            {item.score}%
+                            {(item as any).score}%
                           </div>
                         )}
-                        {item.xp_earned && (
+                        {(item as any).xp_earned && (
                           <div className="text-sm font-semibold text-primary">
-                            +{item.xp_earned} XP
+                            +{(item as any).xp_earned} XP
                           </div>
                         )}
                       </div>
                     </div>
                   </div>
-                ))}
+                )
+                })}
             </div>
           </TabsContent>
 
