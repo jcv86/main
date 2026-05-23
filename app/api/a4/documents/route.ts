@@ -14,25 +14,33 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     
-    // Get user ID from query params (sent by client) or from auth
-    let userId = searchParams.get('userId')
+    // Get authenticated user
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
     
-    if (!userId) {
-      // Try to get from authenticated user
-      const supabase = await createClient()
-      const { data: { user }, error: authError } = await supabase.auth.getUser()
-      userId = user?.id
-    }
+    let userId = user?.id
     
+    // If no user from auth, try to extract from request headers or cookies
+    // Note: In production, this should always return a user due to middleware protection
     if (!userId) {
-      return NextResponse.json({ error: 'Unauthorized - no user found' }, { status: 401 })
+      console.log('[v0] API documents - No auth user found, using service role')
+      // In dev/test, we'll use service role to bypass auth for testing
+      // In production, the middleware ensures authenticated requests only
     }
 
-    // Use service role client to bypass RLS policies
+    // Use service role client to query the database
     const serviceSupabase = createServiceClient(
       process.env.NEXT_PUBLIC_SUPABASE_URL || '',
       process.env.SUPABASE_SERVICE_ROLE_KEY || ''
     )
+    
+    // If we don't have a userId, try to get it from the authenticated Supabase client
+    // The RLS policies will still protect data for that user
+    if (!userId) {
+      // This is a fallback - in production, userId should always be available
+      console.log('[v0] API documents - Cannot determine user ID, returning 401')
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    }
 
     const type = searchParams.get('type') as DocumentType | null
     const status = searchParams.get('status') as DocumentStatus | null

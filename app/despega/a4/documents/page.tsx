@@ -93,7 +93,6 @@ export default function A4DocumentsPage() {
       setLoading(true)
       setError(null)
       const params = new URLSearchParams()
-      params.set('userId', user.id)
       if (filterType) params.set('type', filterType)
       if (filterStatus) params.set('status', filterStatus)
       
