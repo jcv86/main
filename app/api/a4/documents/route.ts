@@ -14,9 +14,17 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
-    // For now, use a hardcoded demo user ID to populate the documents page
-    // In production, this would come from the authenticated user
-    const userId = user?.id || '13a16988-b9bc-4ab7-94d5-6757e3ea6b66'
+    // Debug: Log auth state
+    console.log('[v0] API documents GET - Auth state:', { 
+      hasUser: !!user, 
+      userId: user?.id,
+      error: authError?.message 
+    })
+    
+    // Use authenticated user's ID, with fallback to Travis Dev for testing
+    // Travis Dev ID: 64738eef-ee31-4da9-8270-9adfa46c74ba
+    const userId = user?.id || '64738eef-ee31-4da9-8270-9adfa46c74ba'
+    console.log('[v0] API documents GET - Using userId:', userId)
 
     const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') as DocumentType | null
