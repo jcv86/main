@@ -50,9 +50,17 @@ export async function middleware(request: NextRequest) {
   }
 
   // Check for demo user in cookie (set by demo login)
-  const demoUser = request.cookies.get('demo_user')?.value
-  if (demoUser) {
-    return NextResponse.next()
+  const demoUserCookie = request.cookies.get('demo_user')?.value
+  if (demoUserCookie) {
+    const response = NextResponse.next()
+    // Extend cookie expiry on every request
+    response.cookies.set('demo_user', demoUserCookie, {
+      httpOnly: false,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 86400 * 7 // 7 days
+    })
+    return response
   }
 
   // Use Supabase session management for all other routes

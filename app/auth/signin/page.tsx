@@ -109,8 +109,13 @@ export default function SignInPage() {
       // Store demo user in localStorage for client-side access
       localStorage.setItem('demo_user', JSON.stringify(demoUser))
       
-      // Also set a cookie so middleware can read it
-      document.cookie = `demo_user=${encodeURIComponent(JSON.stringify(demoUser))}; path=/; max-age=86400`
+      // Also set a cookie so middleware can read it - with proper attributes
+      const expiryDate = new Date()
+      expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000)) // 7 days
+      const cookieValue = encodeURIComponent(JSON.stringify(demoUser))
+      document.cookie = `demo_user=${cookieValue}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax`
+      
+      console.log('[v0] Demo user set:', demoUser.email)
       
       // Get the next URL from search params, default to despega dashboard
       const next = searchParams.get('next') || '/despega'

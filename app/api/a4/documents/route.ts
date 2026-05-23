@@ -1,12 +1,7 @@
-/**
- * A4 Documents API Routes
- * 
- * Endpoints for document management, generation, and retrieval
- */
-
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { createClient as createServiceClient } from '@supabase/supabase-js'
+import { getDemoUserFromRequest, isDemoUser } from '@/lib/auth/demo-user'
 import type { DocumentType, DocumentStatus } from '@/lib/a4/types'
 
 // GET /api/a4/documents - List user documents
@@ -14,30 +9,34 @@ export async function GET(request: NextRequest) {
   try {
     const { searchParams } = new URL(request.url)
     
+    // Check for demo user first
+    const demoUser = getDemoUserFromRequest(request)
+    if (demoUser) {
+      console.log('[v0] API documents - Demo user:', demoUser.email)
+      // Return empty array for demo users (they don't have real documents)
+      return NextResponse.json({
+        documents: [],
+        stats: {
+          total: 0,
+          completed: 0,
+          pending: 0,
+          archived: 0
+        }
+      })
+    }
+    
     // Get authenticated user
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
-    let userId = user?.id
-    
-    // If no user from auth, try to extract from request headers or cookies
-    // Note: In production, this should always return a user due to middleware protection
-    if (!userId) {
-      console.log('[v0] API documents - No auth user found, using service role')
-      // In dev/test, we'll use service role to bypass auth for testing
-      // In production, the middleware ensures authenticated requests only
+    if (!user) {
+      return NextResponse.json(
+        { error: 'Unauthorized' },
+        { status: 401 }
+      )
     }
 
-    // Use service role client to query the database
-    const serviceSupabase = createServiceClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL || '',
-      process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-    )
-    
-    // If we don't have a userId, try to get it from the authenticated Supabase client
-    // The RLS policies will still protect data for that user
-    if (!userId) {
-      // This is a fallback - in production, userId should always be available
+    let userId = user.id
       console.log('[v0] API documents - Cannot determine user ID, returning 401')
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
