@@ -12,12 +12,21 @@ import type { DocumentType, DocumentStatus } from '@/lib/a4/types'
 // GET /api/a4/documents - List user documents
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { searchParams } = new URL(request.url)
     
-    // Use authenticated user's ID, with fallback to Travis Dev for testing
-    // Travis Dev ID: 64738eef-ee31-4da9-8270-9adfa46c74ba
-    const userId = user?.id || '64738eef-ee31-4da9-8270-9adfa46c74ba'
+    // Get user ID from query params (sent by client) or from auth
+    let userId = searchParams.get('userId')
+    
+    if (!userId) {
+      // Try to get from authenticated user
+      const supabase = await createClient()
+      const { data: { user }, error: authError } = await supabase.auth.getUser()
+      userId = user?.id
+    }
+    
+    if (!userId) {
+      return NextResponse.json({ error: 'Unauthorized - no user found' }, { status: 401 })
+    }
 
     // Use service role client to bypass RLS policies
     const serviceSupabase = createServiceClient(
@@ -25,10 +34,9 @@ export async function GET(request: NextRequest) {
       process.env.SUPABASE_SERVICE_ROLE_KEY || ''
     )
 
-    const { searchParams } = new URL(request.url)
     const type = searchParams.get('type') as DocumentType | null
     const status = searchParams.get('status') as DocumentStatus | null
-    const source = searchParams.get('source') // 'user', 'agent', 'jtest', 'system'
+    const source = searchParams.get('source')
     const phase = searchParams.get('phase')
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
