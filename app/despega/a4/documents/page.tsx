@@ -78,32 +78,32 @@ export default function A4DocumentsPage() {
   const [error, setError] = useState<string | null>(null)
   const [realUserId, setRealUserId] = useState<string | null>(null)
 
-  // Get REAL user ID from Supabase auth once on mount
+  // Get REAL user ID from Supabase auth state listener
   useEffect(() => {
-    const getRealUserId = async () => {
-      const supabase = createClient()
-      const { data: { user: authUser } } = await supabase.auth.getUser()
-      if (authUser?.id) {
-        console.log('[v0] Got real user ID:', authUser.id)
-        setRealUserId(authUser.id)
-      } else {
-        console.log('[v0] No auth user, will retry...')
-        // Retry after a short delay (session might be loading)
-        setTimeout(async () => {
-          const { data: { user: retryUser } } = await supabase.auth.getUser()
-          if (retryUser?.id) {
-            console.log('[v0] Got real user ID on retry:', retryUser.id)
-            setRealUserId(retryUser.id)
-          }
-        }, 500)
+    const supabase = createClient()
+    
+    // Listen to auth state changes
+    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
+      if (session?.user?.id) {
+        console.log('[v0] Got auth user ID from listener:', session.user.id)
+        setRealUserId(session.user.id)
       }
-    }
-    getRealUserId()
+    })
+    
+    // Also try immediate getUser() call
+    supabase.auth.getUser().then(({ data: { user: authUser } }) => {
+      if (authUser?.id) {
+        console.log('[v0] Got real user ID from getUser:', authUser.id)
+        setRealUserId(authUser.id)
+      }
+    })
+    
+    return () => subscription?.unsubscribe()
   }, [])
 
   // Fetch documents using client-side Supabase (works with auth)
   const fetchDocuments = useCallback(async () => {
-    if (authLoading || !user || !realUserId) return
+    if (authLoading || !user) return
 
     try {
       setLoading(true)
@@ -111,15 +111,12 @@ export default function A4DocumentsPage() {
       
       const supabase = createClient()
       
-      console.log('[v0] Fetching documents for realUserId:', realUserId)
+      console.log('[v0] Fetching documents, authLoading:', authLoading, 'user:', user?.id)
       
-      console.log('[v0] Fetching documents for user:', realUserId)
-      
-      // Build query with REAL user ID
+      // Build query - let RLS filter by user
       let query = supabase
         .from('dtc_documents')
         .select('*')
-        .eq('user_id', realUserId)
         .order('updated_at', { ascending: false })
       
       if (filterType) {
@@ -138,6 +135,7 @@ export default function A4DocumentsPage() {
       }
       
       const docs = (data || []) as DTCDocument[]
+      console.log('[v0] Got documents:', docs.length)
       setDocuments(docs)
       
       // Calculate stats
@@ -162,10 +160,10 @@ export default function A4DocumentsPage() {
   }, [filterType, filterStatus, user, authLoading, realUserId])
 
   useEffect(() => {
-    if (!authLoading && user && realUserId) {
+    if (!authLoading && user) {
       fetchDocuments()
     }
-  }, [fetchDocuments, authLoading, user, realUserId])
+  }, [fetchDocuments, authLoading, user])
 
   const getDocumentIcon = (type: string) => {
     const docType = DOCUMENT_TYPES.find(t => t.value === type)
@@ -183,16 +181,16 @@ export default function A4DocumentsPage() {
 
   const handleDelete = async (docId: string) => {
     if (!confirm('¿Estás seguro de eliminar este documento?')) return
-    if (!user || !realUserId) return
+    if (!user) return
     
     try {
       const supabase = createClient()
       
+      // RLS will ensure only the user can delete their own documents
       const { error: deleteError } = await supabase
         .from('dtc_documents')
         .delete()
         .eq('id', docId)
-        .eq('user_id', realUserId)
       
       if (deleteError) {
         console.error('[v0] Error deleting document:', deleteError)
