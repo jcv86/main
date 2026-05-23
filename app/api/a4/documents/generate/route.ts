@@ -2,11 +2,11 @@
  * A4 Document Generation API
  * 
  * AI-powered document generation with context from A1-A3
+ * Uses direct OpenAI API calls via OPENAI_API_KEY
  */
 
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
-import { generateText } from 'ai'
 
 // Simple document type for API usage
 type SimpleDocumentType = 
@@ -74,6 +74,15 @@ const DOCUMENT_PROMPTS: Record<SimpleDocumentType, string> = {
 
 export async function POST(request: NextRequest) {
   try {
+    const apiKey = process.env.OPENAI_API_KEY
+    if (!apiKey) {
+      console.error('[v0] OPENAI_API_KEY not configured')
+      return NextResponse.json(
+        { error: 'OpenAI API key not configured' },
+        { status: 500 }
+      )
+    }
+
     const supabase = await createClient()
     const { data: { user }, error: authError } = await supabase.auth.getUser()
     
@@ -142,17 +151,55 @@ ${contextSummary.profileSummary}
       fullPrompt += `\n## Instrucciones Adicionales: ${customPrompt}`
     }
 
-    // Generate content using AI
-    const { text: generatedContent } = await generateText({
-      model: 'anthropic/claude-sonnet-4-20250514',
-      system: `Eres un experto coach de carrera especializado en el mercado laboral chileno.
-        Generas documentos profesionales de alta calidad en español.
-        Tu tono es profesional pero cercano, usando el "tú" informal.
-        Siempre personalizas el contenido basándote en los datos del usuario.
-        Usas formato Markdown para estructurar el contenido.`,
-      prompt: fullPrompt,
-      maxOutputTokens: 4000,
+    // Generate content using OpenAI
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${apiKey}`
+      },
+      body: JSON.stringify({
+        model: 'gpt-4-turbo',
+        messages: [
+          {
+            role: 'system',
+            content: `Eres un experto coach de carrera especializado en el mercado laboral chileno.
+Generas documentos profesionales de alta calidad en español.
+Tu tono es profesional pero cercano, usando el "tú" informal.
+Siempre personalizas el contenido basándote en los datos del usuario.
+Usas formato Markdown para estructurar el contenido.`
+          },
+          {
+            role: 'user',
+            content: fullPrompt
+          }
+        ],
+        temperature: 0.7,
+        max_tokens: 4000
+      })
     })
+
+    if (!response.ok) {
+      const error = await response.json()
+      console.error('[v0] OpenAI API error:', error)
+      return NextResponse.json(
+        { error: 'OpenAI API error', details: error },
+        { status: response.status }
+      )
+    }
+
+    const data = (await response.json()) as {
+      choices: Array<{ message: { content: string } }>
+    }
+
+    const generatedContent = data.choices[0]?.message?.content || ''
+
+    if (!generatedContent) {
+      return NextResponse.json(
+        { error: 'No content generated' },
+        { status: 500 }
+      )
+    }
 
     // Generate a suggested title
     const suggestedTitle = generateTitle(documentType as SimpleDocumentType, targetRole, targetCompany)
@@ -163,7 +210,7 @@ ${contextSummary.profileSummary}
       document_type: documentType,
       prompt_tokens: fullPrompt.length,
       completion_tokens: generatedContent.length,
-      model_used: 'claude-sonnet-4',
+      model_used: 'gpt-4-turbo',
       generation_params: { targetCompany, targetRole },
       created_at: new Date().toISOString()
     })
