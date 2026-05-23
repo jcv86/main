@@ -91,13 +91,13 @@ export default function A1ReportPage() {
         // Continue without C1 context
       }
       
-      // Fetch enhanced insights from the new endpoint
-      const response = await fetch('/api/despega/a1-enhanced-insights', {
+      // Fetch enhanced insights from the API endpoint
+      const response = await fetch('/api/a1/insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profile,
-          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0],
+          userId: user?.id,
           c1Context
         })
       })
@@ -106,21 +106,8 @@ export default function A1ReportPage() {
       const data = await response.json()
       setInsights(data.insights)
       
-      // Save insights to database for persistence
-      try {
-        await fetch('/api/despega/save-a1-insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: user?.id,
-            discProfile: profile,
-            insights: data.insights
-          })
-        })
-      } catch (err) {
-        console.warn('[v0] Failed to save insights to database:', err)
-        // Don't fail if persistence fails - insights are still shown
-      }
+      // Insights loaded successfully
+      setInsightsLoading(false)
     } catch (err) {
       console.error('[v0] Error loading AI insights:', err)
       // Silently fail - insights are optional
