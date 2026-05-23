@@ -28,15 +28,7 @@ export async function GET(request: NextRequest) {
 
     let query = supabase
       .from('a4_documents_extended')
-      .select(`
-        *,
-        a4_document_versions(id, version_number, created_at),
-        a4_document_feedback(id, rating, created_at),
-        a4_document_label_assignments(
-          label_id,
-          a4_document_labels(label_name, label_color)
-        )
-      `)
+      .select('*')
       .eq('user_id', userId)
       .order('updated_at', { ascending: false })
       .range(offset, offset + limit - 1)
