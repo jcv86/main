@@ -87,6 +87,25 @@ export async function POST(request: NextRequest) {
       throw new Error(`Database error: ${error.message}`)
     }
 
+    // Trigger auto-detection webhook for job matching
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/webhooks/auto-detection`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-webhook-signature': 'internal'
+        },
+        body: JSON.stringify({
+          event: 'a1_completed',
+          userId: user.id,
+          data: { assessment_id: data?.id }
+        })
+      })
+      console.log('[v0] A1 completion webhook triggered')
+    } catch (webhookError) {
+      console.warn('[v0] Warning: Could not trigger auto-detection webhook:', webhookError)
+    }
+
     return NextResponse.json({
       success: true,
       assessmentId: data?.id,
