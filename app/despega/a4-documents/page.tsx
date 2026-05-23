@@ -234,23 +234,23 @@ export default function A4DocumentsPage() {
         {/* Stats Grid */}
         {stats && (
           <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border/30 rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Pruebas</div>
               <div className="text-2xl font-bold text-foreground">{stats.totalTests}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border/30 rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Artefactos</div>
               <div className="text-2xl font-bold text-foreground">{stats.totalArtifacts}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border/30 rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Logros</div>
               <div className="text-2xl font-bold text-foreground">{stats.totalMilestones}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border/30 rounded-lg p-4">
               <div className="text-sm text-muted-foreground">XP Ganados</div>
               <div className="text-2xl font-bold text-primary">{stats.totalXP}</div>
             </div>
-            <div className="bg-card border border-border rounded-lg p-4">
+            <div className="bg-card border border-border/30 rounded-lg p-4">
               <div className="text-sm text-muted-foreground">Puntos</div>
               <div className="text-2xl font-bold text-primary">{stats.totalPoints}</div>
             </div>
@@ -316,7 +316,7 @@ export default function A4DocumentsPage() {
               ]
                 .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
                 .map((item) => (
-                  <div key={item.id} className="bg-card border border-border rounded-lg p-4 hover:border-primary transition-colors">
+                  <div key={item.id} className="bg-card border border-border/30 rounded-lg p-4 hover:border-primary transition-colors">
                     <div className="flex items-start gap-4">
                       <div className="mt-1 text-primary">
                         {item.type === 'test' && <TestTube className="w-5 h-5" />}
@@ -368,7 +368,7 @@ export default function A4DocumentsPage() {
           <TabsContent value="tests" className="space-y-4">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {testResults.map((test) => (
-                <div key={test.id} className="bg-card border border-border rounded-lg p-5">
+                <div key={test.id} className="bg-card border border-border/30 rounded-lg p-5">
                   <div className="flex items-start justify-between mb-3">
                     <div className="flex items-center gap-3">
                       <Brain className="w-6 h-6 text-primary" />
@@ -409,7 +409,7 @@ export default function A4DocumentsPage() {
                 const specialty = artifact.tags?.find(tag => SPECIALTY_MAP[tag])
                 
                 return (
-                  <div key={artifact.id} className="bg-card border border-border rounded-lg p-5">
+                  <div key={artifact.id} className="bg-card border border-border/30 rounded-lg p-5">
                     <div className="flex items-start justify-between mb-3">
                       <div className="flex items-center gap-3">
                         <div className={`p-2 rounded-lg ${docType?.color || 'bg-blue-500'} bg-opacity-10`}>
@@ -461,7 +461,7 @@ export default function A4DocumentsPage() {
           <TabsContent value="progress" className="space-y-4">
             <div className="space-y-3">
               {milestones.map((milestone) => (
-                <div key={milestone.id} className="bg-card border border-border rounded-lg p-4">
+                <div key={milestone.id} className="bg-card border border-border/30 rounded-lg p-4">
                   <div className="flex items-start justify-between">
                     <div className="flex items-start gap-4 flex-1">
                       <Trophy className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
