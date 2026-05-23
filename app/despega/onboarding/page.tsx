@@ -54,6 +54,13 @@ export default function DespegaOnboarding() {
           return
         }
 
+        // Check if this is a demo user - demo users skip onboarding
+        if (user.id?.startsWith('demo-')) {
+          console.log('[v0] Demo user detected, skipping onboarding')
+          router.push('/despega')
+          return
+        }
+
         // Check if C2-Paso2 is completed (user fully onboarded)
         const { data: c2Data } = await supabase
           .from("canon_conozcamonos_2_responses")

@@ -10,6 +10,22 @@ export function useAuthRedirect() {
   const [isInitialCheck, setIsInitialCheck] = useState(true)
 
   useEffect(() => {
+    // First, immediately check for demo user in localStorage
+    const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+    if (demoUserStr) {
+      try {
+        const demoUser = JSON.parse(demoUserStr)
+        console.log('[v0] Demo user found immediately:', demoUser.email)
+        setUser(demoUser)
+        setLoading(false)
+        setIsInitialCheck(false)
+        // Don't return - still set up the listener in case they sign in for real
+      } catch (e) {
+        console.log('[v0] Error parsing demo user:', e)
+        localStorage.removeItem('demo_user')
+      }
+    }
+
     // Subscribe to auth state changes for real users (this is the PRIMARY auth source)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {
