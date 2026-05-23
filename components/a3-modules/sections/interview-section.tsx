@@ -153,7 +153,7 @@ export function InterviewSection({
               <Button
                 onClick={handleStartRecording}
                 size="lg"
-                className="bg-red-600 hover:bg-red-700"
+                className="bg-[rgba(80,160,170,0.5)] hover:bg-[rgba(80,160,170,0.6)]-700"
               >
                 <Mic className="w-4 h-4 mr-2" />
                 Comenzar Grabación
@@ -163,10 +163,10 @@ export function InterviewSection({
 
           {isRecording && (
             <div className="space-y-4 animate-pulse">
-              <div className="inline-block p-4 bg-red-100 rounded-full">
-                <Mic className="w-8 h-8 text-red-600" />
+              <div className="inline-block p-4 bg-[rgba(80,160,170,0.5)] rounded-full">
+                <Mic className="w-8 h-8 text-[rgb(80,160,170)]" />
               </div>
-              <p className="text-red-600 font-semibold">Grabando...</p>
+              <p className="text-[rgb(80,160,170)] font-semibold">Grabando...</p>
               <Button
                 onClick={handleStopRecording}
                 size="lg"

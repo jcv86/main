@@ -196,7 +196,7 @@ export default function A1CerebralIntroPage() {
                         <p className="text-white/85">Paciente y considerado</p>
                         <p className="text-xs text-white/75 mt-1">Estabilizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-red/30 transition-all">
+                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-[rgba(80,160,170,0.6)]/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
                         <p className="text-xs text-white/75 mt-1">Arquitecto</p>
                       </button>

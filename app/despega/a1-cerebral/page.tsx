@@ -231,7 +231,7 @@ export default function A1CerebralPage() {
                         ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20' 
                         : more[q.id] === opt.texto 
                           ? 'border-muted/20 bg-muted/5 text-white/70 opacity-50 cursor-not-allowed' 
-                          : 'border-red/40 text-white/90 hover:border-red hover:bg-red/15 hover:text-white'
+                          : 'border-red/40 text-white/90 hover:border-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.6)]/15 hover:text-white'
                     }`}>
                     {opt.texto}
                   </button>

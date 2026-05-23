@@ -171,7 +171,7 @@ export function DevRouteDebugPanel() {
             <Button
               onClick={handleReset}
               size="sm"
-              className="w-full bg-red-600/40 hover:bg-red-600/60 text-red-200 text-xs border border-red-500/40"
+              className="w-full bg-[rgba(80,160,170,0.5)]/40 hover:bg-[rgba(80,160,170,0.6)]-600/60 text-[rgb(80,160,170)] text-xs border border-[rgb(80,160,170)]/40"
             >
               <Trash2 className="w-3 h-3 mr-1" />
               Reset All

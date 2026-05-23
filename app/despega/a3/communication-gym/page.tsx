@@ -372,8 +372,8 @@ export default function CommunicationGymModule() {
                     <div className="bg-white/5 border border-white/10 rounded-lg p-6 text-center">
                       {isRecording ? (
                         <div className="space-y-4">
-                          <div className="w-20 h-20 rounded-full bg-red-500/20 flex items-center justify-center mx-auto animate-pulse">
-                            <Mic className="w-10 h-10 text-red-400" />
+                          <div className="w-20 h-20 rounded-full bg-[rgba(80,160,170,0.5)]/20 flex items-center justify-center mx-auto animate-pulse">
+                            <Mic className="w-10 h-10 text-[rgb(80,160,170)]" />
                           </div>
                           <p className="text-white text-2xl font-mono">{formatTime(recordingTime)}</p>
                           <p className="text-white/50 text-sm">
@@ -383,7 +383,7 @@ export default function CommunicationGymModule() {
                           </p>
                           <Button 
                             onClick={() => stopRecording(drill.id)}
-                            className="bg-red-500 hover:bg-red-600"
+                            className="bg-[rgba(80,160,170,0.5)] hover:bg-[rgba(80,160,170,0.6)]-600"
                           >
                             <Pause className="w-4 h-4 mr-2" />
                             Stop Recording
@@ -480,7 +480,7 @@ export default function CommunicationGymModule() {
                               onClick={() => setAssessments(prev => ({ ...prev, [aspect.id]: option }))}
                               className={`flex-1 px-3 py-2 rounded-lg text-sm transition-all ${
                                 assessments[aspect.id] === option
-                                  ? i === 0 ? 'bg-red-500/20 text-red-400 border border-red-500/30' :
+                                  ? i === 0 ? 'bg-[rgba(80,160,170,0.5)]/20 text-[rgb(80,160,170)] border border-[rgb(80,160,170)]/30' :
                                     i === 1 ? 'bg-yellow-500/20 text-yellow-400 border border-yellow-500/30' :
                                     'bg-green-500/20 text-green-400 border border-green-500/30'
                                   : 'bg-white/5 text-white/60 hover:bg-white/10'

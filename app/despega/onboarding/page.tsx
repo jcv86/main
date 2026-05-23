@@ -357,16 +357,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-red dark:text-red/40">MENOS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Analítico y preciso
                       </button>
                     </div>
@@ -1023,7 +1023,7 @@ export default function DespegaOnboarding() {
                             ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMenos === option.dimension
                             ? "border-red/50 bg-red/5"
-                            : "border-muted/20 hover:border-red/30"
+                            : "border-muted/20 hover:border-[rgb(80,160,170)]/30"
                         }`}
                       >
                         <div className="flex items-center gap-3">

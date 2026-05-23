@@ -240,7 +240,7 @@ export default function ProfileDashboard() {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-[rgb(80,160,170)]/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.6)]-500/10 transition-all"
               >
                 <LogOut className="w-4 h-4" />
                 Salir
@@ -484,7 +484,7 @@ export default function ProfileDashboard() {
               )}
 
               {data.sections?.a4 && (
-                <Card className="border-red/30 bg-red/5 hover:border-red/50 transition-colors">
+                <Card className="border-red/30 bg-red/5 hover:border-[rgb(80,160,170)]/50 transition-colors">
                   <CardContent className="pt-6 pb-6">
                     <p className="text-sm text-red uppercase tracking-wider font-semibold mb-3">
                       {data.sections.a4.name}

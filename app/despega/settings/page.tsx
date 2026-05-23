@@ -165,7 +165,7 @@ export default function SettingsPage() {
       )}
 
       {error && (
-        <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
+        <div className="mb-6 p-4 rounded-lg bg-[rgba(80,160,170,0.5)]/10 border border-[rgb(80,160,170)]/30 text-[rgb(80,160,170)] text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4" />
           {error}
         </div>
@@ -319,7 +319,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Communication Preferences - A4 Reality (Red) */}
-        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-red/50 transition-colors">
+        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-[rgb(80,160,170)]/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-red/30 border border-red/50">
               <LogIn className="w-5 h-5 text-red" />

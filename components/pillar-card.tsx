@@ -35,7 +35,7 @@ export function PillarCard({
       border: 'border-red/40 dark:border-red/60',
       icon: 'text-red dark:text-red',
       badge: 'bg-red/15 dark:bg-red/25 text-red dark:text-red',
-      button: 'bg-red/80 hover:bg-red/70/80',
+      button: 'bg-red/80 hover:bg-[rgba(80,160,170,0.6)]/70/80',
     },
     blue: {
       bg: 'bg-transparent',

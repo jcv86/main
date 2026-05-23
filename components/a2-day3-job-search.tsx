@@ -84,9 +84,9 @@ export function Day3JobSearch({
                 </div>
                 <button
                   onClick={() => {}}
-                  className="p-2 hover:bg-red-500/20 rounded-lg transition"
+                  className="p-2 hover:bg-[rgba(80,160,170,0.6)]-500/20 rounded-lg transition"
                 >
-                  <Trash2 className="w-4 h-4 text-red-400" />
+                  <Trash2 className="w-4 h-4 text-[rgb(80,160,170)]" />
                 </button>
               </div>
               {signal.location && (

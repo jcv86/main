@@ -53,7 +53,7 @@ export function DocumentEditor({ document, userId, onSave, onCancel }: DocumentE
 
   return (
     <div className="bg-stone-900 rounded-lg p-6 space-y-4">
-      <h3 className="text-lg font-semibold text-red-400">
+      <h3 className="text-lg font-semibold text-[rgb(80,160,170)]">
         {document ? 'Editar Documento' : 'Nuevo Documento'}
       </h3>
 
@@ -97,7 +97,7 @@ export function DocumentEditor({ document, userId, onSave, onCancel }: DocumentE
       </div>
 
       <div className="flex gap-2 pt-4">
-        <Button onClick={handleSave} disabled={isSaving} className="flex-1 bg-red-500 hover:bg-red-600 text-white">
+        <Button onClick={handleSave} disabled={isSaving} className="flex-1 bg-[rgba(80,160,170,0.5)] hover:bg-[rgba(80,160,170,0.6)]-600 text-white">
           {isSaving ? (
             <>
               <Loader className="animate-spin mr-2" size={16} />

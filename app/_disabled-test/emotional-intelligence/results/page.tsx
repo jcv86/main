@@ -251,7 +251,7 @@ export default function EmotionalIntelligenceResults() {
             <p className="text-xl text-muted-foreground mb-6">
               Parece que aún no has completado el test de Inteligencia Emocional Despega.
             </p>
-            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red/50 hover:bg-red">
+            <Button onClick={() => router.push("/test/emotional-intelligence")} className="bg-red/50 hover:bg-[rgba(80,160,170,0.6)]">
               Realizar Test
             </Button>
           </CardContent>
