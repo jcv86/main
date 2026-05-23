@@ -460,14 +460,14 @@ export default function A4DocumentsPage() {
                         <div className="text-xs text-muted-foreground">
                           {new Date(item.date).toLocaleDateString('es-ES')}
                         </div>
-                        {item.score && (
+                        {(item as any).score && (
                           <div className="text-lg font-bold text-primary mt-1">
-                            {item.score}%
+                            {(item as any).score}%
                           </div>
                         )}
-                        {item.xp_earned && (
+                        {(item as any).xp_earned && (
                           <div className="text-sm font-semibold text-primary">
-                            +{item.xp_earned} XP
+                            +{(item as any).xp_earned} XP
                           </div>
                         )}
                       </div>
