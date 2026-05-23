@@ -87,11 +87,24 @@ export default function A4DocumentsPage() {
       
       const supabase = createClient()
       
-      // Build query
+      // Get REAL user ID from Supabase auth (not demo user object)
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+      const realUserId = authUser?.id
+      
+      if (!realUserId) {
+        console.error('[v0] No authenticated user found')
+        setError('No se encontró usuario autenticado')
+        setLoading(false)
+        return
+      }
+      
+      console.log('[v0] Fetching documents for user:', realUserId)
+      
+      // Build query with REAL user ID
       let query = supabase
         .from('dtc_documents')
         .select('*')
-        .eq('user_id', user.id)
+        .eq('user_id', realUserId)
         .order('updated_at', { ascending: false })
       
       if (filterType) {
@@ -159,11 +172,21 @@ export default function A4DocumentsPage() {
     
     try {
       const supabase = createClient()
+      
+      // Get REAL user ID from Supabase auth
+      const { data: { user: authUser } } = await supabase.auth.getUser()
+      const realUserId = authUser?.id
+      
+      if (!realUserId) {
+        setError('No se encontró usuario autenticado')
+        return
+      }
+      
       const { error: deleteError } = await supabase
         .from('dtc_documents')
         .delete()
         .eq('id', docId)
-        .eq('user_id', user.id)
+        .eq('user_id', realUserId)
       
       if (deleteError) {
         console.error('[v0] Error deleting document:', deleteError)

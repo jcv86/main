@@ -97,19 +97,29 @@ export default function SignInPage() {
     setIsLoadingDemo(true)
 
     try {
-      // For demo access, create a demo session and set cookie
-      const demoUser = {
-        id: `demo-${testEmail.split('@')[0]}`,
-        email: testEmail,
-        aud: 'authenticated',
-        role: 'authenticated',
+      const supabase = createClient()
+      if (!supabase) {
+        setError('Error de configuracion: Supabase no esta disponible')
+        setIsLoadingDemo(false)
+        return
       }
 
-      // Store demo user in cookie (server-side readable for middleware)
-      document.cookie = `demo_user=${JSON.stringify(demoUser)}; path=/; max-age=86400`
-      
-      // Also store in localStorage for client-side
-      localStorage.setItem('demo_user', JSON.stringify(demoUser))
+      // Use real Supabase authentication with demo password
+      // All demo users have the same password: "demo123456"
+      const { data, error: signInError } = await supabase.auth.signInWithPassword({
+        email: testEmail,
+        password: 'demo123456'
+      })
+
+      if (signInError) {
+        console.error('[v0] Demo login error:', signInError)
+        // If password login fails, fallback to magic link or show error
+        setError(`Error al iniciar sesión: ${signInError.message}`)
+        setIsLoadingDemo(false)
+        return
+      }
+
+      console.log('[v0] Demo login successful:', data.user?.email, data.user?.id)
       
       // Get the next URL from search params, default to dashboard
       const next = searchParams.get('next') || '/dashboard'
