@@ -398,20 +398,20 @@ export default function A4DocumentsPage() {
 
         {/* Tabs */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
-            <TabsTrigger value="timeline" className="flex items-center gap-2">
+          <TabsList className="grid w-full grid-cols-4 border-0" style={{ backgroundColor: `rgba(225, 120, 130, 0.15)`, borderBottom: `1px solid rgba(225, 120, 130, 0.4)` }}>
+            <TabsTrigger value="timeline" className="flex items-center gap-2 text-slate-300 data-[state=active]:text-white" style={{ color: 'inherit' }}>
               <Calendar className="w-4 h-4" />
               <span className="hidden sm:inline">Timeline</span>
             </TabsTrigger>
-            <TabsTrigger value="tests" className="flex items-center gap-2">
+            <TabsTrigger value="tests" className="flex items-center gap-2 text-slate-300 data-[state=active]:text-white" style={{ color: 'inherit' }}>
               <TestTube className="w-4 h-4" />
               <span className="hidden sm:inline">Pruebas</span>
             </TabsTrigger>
-            <TabsTrigger value="artifacts" className="flex items-center gap-2">
+            <TabsTrigger value="artifacts" className="flex items-center gap-2 text-slate-300 data-[state=active]:text-white" style={{ color: 'inherit' }}>
               <FileText className="w-4 h-4" />
               <span className="hidden sm:inline">Artefactos</span>
             </TabsTrigger>
-            <TabsTrigger value="progress" className="flex items-center gap-2">
+            <TabsTrigger value="progress" className="flex items-center gap-2 text-slate-300 data-[state=active]:text-white" style={{ color: 'inherit' }}>
               <Trophy className="w-4 h-4" />
               <span className="hidden sm:inline">Logros</span>
             </TabsTrigger>
