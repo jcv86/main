@@ -26,23 +26,25 @@ import {
   Target,
   TrendingUp,
   Users,
-  BarChart
+  BarChart,
+  ArrowLeft,
+  Loader
 } from 'lucide-react'
 import Link from 'next/link'
+import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 
 interface Document {
   id: string
   type: string
   title: string
-  content: string
+  content: string | null
   status: string
   source: string
-  source_module: string
+  source_module: string | null
   created_at: string
   updated_at: string
-  metadata: Record<string, unknown>
-  a4_document_versions?: { id: string; version_number: number; created_at: string }[]
-  a4_document_feedback?: { id: string; rating: number; created_at: string }[]
+  metadata?: Record<string, unknown> | null
+  version?: number
 }
 
 interface DocumentStats {
@@ -67,13 +69,14 @@ const DOCUMENT_TYPES = [
 
 const STATUS_BADGES: Record<string, { label: string; variant: 'default' | 'secondary' | 'destructive' | 'outline' }> = {
   draft: { label: 'Borrador', variant: 'secondary' },
-  ready: { label: 'Listo', variant: 'default' },
-  exported: { label: 'Exportado', variant: 'outline' },
+  review: { label: 'En Revisión', variant: 'outline' },
+  approved: { label: 'Aprobado', variant: 'default' },
   archived: { label: 'Archivado', variant: 'destructive' }
 }
 
 export default function A4DocumentsPage() {
   const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const [documents, setDocuments] = useState<Document[]>([])
   const [stats, setStats] = useState<DocumentStats | null>(null)
   const [loading, setLoading] = useState(true)
@@ -81,40 +84,43 @@ export default function A4DocumentsPage() {
   const [filterType, setFilterType] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
   const [activeTab, setActiveTab] = useState('all')
+  const [error, setError] = useState<string | null>(null)
 
   const fetchDocuments = useCallback(async () => {
+    if (authLoading || !user) return
+
     try {
       setLoading(true)
+      setError(null)
       const params = new URLSearchParams()
       if (filterType) params.set('type', filterType)
       if (filterStatus) params.set('status', filterStatus)
       
+      console.log('[v0] Fetching documents with params:', params.toString())
       const response = await fetch(`/api/a4/documents?${params.toString()}`)
-      const data = await response.json()
       
-      if (response.ok) {
-        setDocuments(data.documents || [])
-        setStats(data.stats || null)
+      if (!response.ok) {
+        throw new Error(`API error: ${response.status}`)
       }
-    } catch (error) {
-      console.error('[A4 Documents] Error fetching:', error)
+      
+      const data = await response.json()
+      console.log('[v0] Fetched documents:', data)
+      
+      setDocuments(data.documents || [])
+      setStats(data.stats || null)
+    } catch (err) {
+      console.error('[v0] Error fetching documents:', err)
+      setError(err instanceof Error ? err.message : 'Error al cargar documentos')
     } finally {
       setLoading(false)
     }
-  }, [filterType, filterStatus])
+  }, [filterType, filterStatus, user, authLoading])
 
   useEffect(() => {
-    fetchDocuments()
-  }, [fetchDocuments])
-
-  const filteredDocuments = documents.filter(doc => {
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase()
-      return doc.title.toLowerCase().includes(query) || 
-             doc.content?.toLowerCase().includes(query)
+    if (!authLoading && user) {
+      fetchDocuments()
     }
-    return true
-  })
+  }, [fetchDocuments, authLoading, user])
 
   const getDocumentIcon = (type: string) => {
     const docType = DOCUMENT_TYPES.find(t => t.value === type)
@@ -131,7 +137,7 @@ export default function A4DocumentsPage() {
   }
 
   const handleDelete = async (docId: string) => {
-    if (!confirm('¿Estás seguro de archivar este documento?')) return
+    if (!confirm('¿Estás seguro de eliminar este documento?')) return
     
     try {
       const response = await fetch(`/api/a4/documents?id=${docId}`, {
@@ -139,11 +145,26 @@ export default function A4DocumentsPage() {
       })
       
       if (response.ok) {
-        fetchDocuments()
+        setDocuments(documents.filter(d => d.id !== docId))
+      } else {
+        setError('Error al eliminar el documento')
       }
-    } catch (error) {
-      console.error('[A4 Documents] Error deleting:', error)
+    } catch (err) {
+      console.error('[v0] Error deleting document:', err)
+      setError('Error al eliminar el documento')
     }
+  }
+
+  if (authLoading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[rgb(80,160,170)]"></div>
+      </div>
+    )
+  }
+
+  if (!user) {
+    return null
   }
 
   return (
@@ -151,22 +172,41 @@ export default function A4DocumentsPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Header */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8">
-          <div>
-            <h1 className="text-3xl font-bold text-foreground">
-              Mis Documentos
-            </h1>
-            <p className="text-muted-foreground mt-1">
-              Genera y gestiona tus documentos profesionales con IA
-            </p>
+          <div className="flex items-center gap-4">
+            <Link href="/despega/a4">
+              <Button variant="ghost" size="sm">
+                <ArrowLeft className="w-4 h-4" />
+              </Button>
+            </Link>
+            <div>
+              <h1 className="text-3xl font-bold text-foreground">
+                Mis Documentos
+              </h1>
+              <p className="text-muted-foreground mt-1">
+                Gestiona tus documentos profesionales
+              </p>
+            </div>
           </div>
           
           <Link href="/despega/a4/documents/new">
-            <Button className="bg-[rgba(80,160,170,0.6)] hover:bg-[rgba(80,160,170,0.8)] text-white border-[rgb(80,160,170)]">
+            <Button className="bg-[rgba(80,160,170,0.6)] hover:bg-[rgba(80,160,170,0.8)] text-white">
               <Plus className="h-4 w-4 mr-2" />
               Nuevo Documento
             </Button>
           </Link>
         </div>
+
+        {/* Error Alert */}
+        {error && (
+          <Card className="bg-red-900/20 border-red-500/50 mb-6">
+            <CardContent className="pt-6">
+              <p className="text-red-400 flex items-center gap-2">
+                <AlertCircle className="h-4 w-4" />
+                {error}
+              </p>
+            </CardContent>
+          </Card>
+        )}
 
         {/* Stats Cards */}
         {stats && (
@@ -177,7 +217,7 @@ export default function A4DocumentsPage() {
                   <FileText className="h-8 w-8 text-[rgb(80,160,170)]" />
                   <div>
                     <p className="text-2xl font-bold">{stats.total}</p>
-                    <p className="text-xs text-muted-foreground">Total Documentos</p>
+                    <p className="text-xs text-muted-foreground">Total</p>
                   </div>
                 </div>
               </CardContent>
@@ -200,8 +240,8 @@ export default function A4DocumentsPage() {
                 <div className="flex items-center gap-3">
                   <CheckCircle className="h-8 w-8 text-green-400" />
                   <div>
-                    <p className="text-2xl font-bold">{stats.byStatus?.ready || 0}</p>
-                    <p className="text-xs text-muted-foreground">Listos</p>
+                    <p className="text-2xl font-bold">{stats.byStatus?.approved || 0}</p>
+                    <p className="text-xs text-muted-foreground">Aprobados</p>
                   </div>
                 </div>
               </CardContent>
@@ -212,8 +252,8 @@ export default function A4DocumentsPage() {
                 <div className="flex items-center gap-3">
                   <Download className="h-8 w-8 text-blue-400" />
                   <div>
-                    <p className="text-2xl font-bold">{stats.byStatus?.exported || 0}</p>
-                    <p className="text-xs text-muted-foreground">Exportados</p>
+                    <p className="text-2xl font-bold">{stats.byStatus?.review || 0}</p>
+                    <p className="text-xs text-muted-foreground">En Revisión</p>
                   </div>
                 </div>
               </CardContent>
@@ -252,42 +292,24 @@ export default function A4DocumentsPage() {
             >
               <option value="">Todos los estados</option>
               <option value="draft">Borrador</option>
-              <option value="ready">Listo</option>
-              <option value="exported">Exportado</option>
+              <option value="review">En Revisión</option>
+              <option value="approved">Aprobado</option>
             </select>
           </div>
         </div>
 
-        {/* Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="mb-6">
-          <TabsList className="bg-slate-900/50 border border-[rgb(80,160,170)]">
-            <TabsTrigger value="all" className="data-[state=active]:bg-[rgba(80,160,170,0.6)]">
-              Todos
-            </TabsTrigger>
-            <TabsTrigger value="cv" className="data-[state=active]:bg-[rgba(80,160,170,0.6)]">
-              CVs
-            </TabsTrigger>
-            <TabsTrigger value="letters" className="data-[state=active]:bg-[rgba(80,160,170,0.6)]">
-              Cartas
-            </TabsTrigger>
-            <TabsTrigger value="prep" className="data-[state=active]:bg-[rgba(80,160,170,0.6)]">
-              Preparación
-            </TabsTrigger>
-          </TabsList>
-        </Tabs>
-
         {/* Documents Grid */}
         {loading ? (
           <div className="flex items-center justify-center py-12">
-            <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[rgb(80,160,170)]"></div>
+            <Loader className="h-8 w-8 text-[rgb(80,160,170)] animate-spin" />
           </div>
-        ) : filteredDocuments.length === 0 ? (
+        ) : documents.length === 0 ? (
           <Card className="bg-slate-900/50 border-[rgb(80,160,170)]">
             <CardContent className="flex flex-col items-center justify-center py-12">
               <FileText className="h-12 w-12 text-muted-foreground mb-4" />
               <h3 className="text-lg font-medium mb-2">No hay documentos</h3>
               <p className="text-muted-foreground text-center mb-4">
-                Crea tu primer documento profesional con ayuda de IA
+                Comienza a crear tus documentos profesionales
               </p>
               <Link href="/despega/a4/documents/new">
                 <Button className="bg-[rgba(80,160,170,0.6)] hover:bg-[rgba(80,160,170,0.8)]">
@@ -299,16 +321,16 @@ export default function A4DocumentsPage() {
           </Card>
         ) : (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredDocuments.map((doc) => (
+            {documents.map((doc) => (
               <Card 
                 key={doc.id} 
-                className="bg-slate-900/50 border-[rgb(80,160,170)] hover:border-[rgba(80,160,170,0.8)] transition-colors cursor-pointer"
+                className="bg-slate-900/50 border-[rgb(80,160,170)] hover:border-[rgba(80,160,170,0.8)] transition-colors"
               >
                 <CardHeader className="pb-3">
                   <div className="flex items-start justify-between">
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-1 min-w-0">
                       {getDocumentIcon(doc.type)}
-                      <div>
+                      <div className="min-w-0 flex-1">
                         <CardTitle className="text-base line-clamp-1">
                           {doc.title}
                         </CardTitle>
@@ -317,7 +339,7 @@ export default function A4DocumentsPage() {
                         </CardDescription>
                       </div>
                     </div>
-                    <Badge variant={STATUS_BADGES[doc.status]?.variant || 'secondary'}>
+                    <Badge variant={STATUS_BADGES[doc.status]?.variant || 'secondary'} className="ml-2 flex-shrink-0">
                       {STATUS_BADGES[doc.status]?.label || doc.status}
                     </Badge>
                   </div>
@@ -325,7 +347,7 @@ export default function A4DocumentsPage() {
                 
                 <CardContent>
                   <p className="text-sm text-muted-foreground line-clamp-2 mb-4">
-                    {doc.content?.substring(0, 120)}...
+                    {doc.content?.substring(0, 120) || 'Sin contenido'}...
                   </p>
                   
                   <div className="flex items-center justify-between text-xs text-muted-foreground mb-4">
@@ -333,8 +355,8 @@ export default function A4DocumentsPage() {
                       <Clock className="h-3 w-3" />
                       {formatDate(doc.updated_at)}
                     </span>
-                    {doc.a4_document_versions && doc.a4_document_versions.length > 0 && (
-                      <span>v{doc.a4_document_versions[0]?.version_number || 1}</span>
+                    {doc.version && (
+                      <span>v{doc.version}</span>
                     )}
                   </div>
                   
