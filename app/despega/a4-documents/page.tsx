@@ -116,6 +116,7 @@ export default function A4DocumentsPage() {
       const { data: testsData, error: testsError } = await supabase
         .from('dtc_test_results')
         .select('*')
+        .eq('user_id', user.id)
         .order('completed_at', { ascending: false })
 
       console.log('[v0] Test results:', { count: testsData?.length, error: testsError })
@@ -127,6 +128,7 @@ export default function A4DocumentsPage() {
       const { data: artifactsData, error: artifactsError } = await supabase
         .from('dtc_activity_artifacts')
         .select('*')
+        .eq('user_id', user.id)
         .order('completed_at', { ascending: false })
 
       console.log('[v0] Artifacts:', { count: artifactsData?.length, error: artifactsError })
@@ -138,6 +140,7 @@ export default function A4DocumentsPage() {
       const { data: milestonesData, error: milestonesError } = await supabase
         .from('dtc_progress_milestones')
         .select('*')
+        .eq('user_id', user.id)
         .order('achieved_at', { ascending: false })
 
       console.log('[v0] Milestones:', { count: milestonesData?.length, error: milestonesError })
