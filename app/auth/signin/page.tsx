@@ -111,8 +111,10 @@ export default function SignInPage() {
       
       // Get the next URL from search params, default to dashboard
       const next = searchParams.get('next') || '/dashboard'
+      
+      // Push and refresh will complete the navigation
       router.push(next)
-      router.refresh()
+      // Note: don't call setIsLoadingDemo(false) here as the page will navigate away
     } catch (err) {
       console.error('[v0] Quick login error:', err)
       setError('Error al iniciar sesión. Por favor intenta nuevamente.')

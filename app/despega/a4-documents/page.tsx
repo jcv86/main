@@ -346,7 +346,7 @@ export default function A4DocumentsPage() {
                           {getDescription()}
                         </p>
                         <div className="flex flex-wrap gap-2 mt-3">
-                          {(item.tags || []).slice(0, 3).map(tag => (
+                          {(item.type !== 'milestone' ? (item as any).tags || [] : []).slice(0, 3).map(tag => (
                             <Badge key={tag} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
