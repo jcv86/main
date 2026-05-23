@@ -1,8 +1,8 @@
 # Lista de Progreso MVP - DTC Despega Tu Carrera
 
 **Fecha de Evaluacion:** 22 de Mayo 2026  
-**Version:** 6.0.0 - LISTO PARA PRODUCCION  
-**Evaluacion General:** 100% LISTO PARA PRODUCCION
+**Version:** 6.0.0 - MVP FEATURE-COMPLETE  
+**Evaluacion General:** MVP Feature-Complete, build verificado
 
 ---
 
@@ -179,7 +179,7 @@
 | Base de Datos | 100% | LISTO |
 | Infraestructura | 100% | LISTO |
 
-**TOTAL GENERAL: 100% LISTO PARA PRODUCCION**
+**TOTAL GENERAL: MVP FEATURE-COMPLETE**
 
 ---
 
@@ -201,18 +201,18 @@
 
 | Metrica | Valor | Estado |
 |---------|-------|--------|
-| Uptime | 99.9%+ | OK |
-| Tiempo de respuesta | <150ms | OK |
-| Carga de pagina | <2s | OK |
-| Lighthouse | 92+ | OK |
-| Core Web Vitals | Verde | OK |
+| Uptime Objetivo | 99.9%+ | Via Vercel |
+| Tiempo de respuesta | <150ms | Esperado via CDN |
+| Carga de pagina | <2s | Objetivo |
+| Lighthouse | 90+ | Objetivo |
+| Core Web Vitals | Verde | Objetivo |
 | Errores criticos | 0 | OK |
 
 ---
 
 ## PROXIMOS PASOS
 
-1. **Go-Live:** 23 de Mayo 2026 (APROBADO)
+1. **Go-Live:** 23 de Mayo 2026 (programado)
 2. **Monitoreo post-lanzamiento:** Configurado
 3. **Soporte usuario:** Equipo listo
 4. **Iteraciones futuras:** Planificadas
@@ -222,4 +222,4 @@
 **Documento:** Lista de Progreso MVP  
 **Version:** 6.0.0  
 **Fecha:** 22 de Mayo 2026  
-**Estado:** 100% LISTO PARA PRODUCCION
+**Estado:** MVP FEATURE-COMPLETE, build verificado
