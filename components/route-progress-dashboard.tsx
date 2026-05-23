@@ -217,7 +217,7 @@ export default function RouteProgressDashboard({
                   </div>
                   <div className="grid grid-cols-2 gap-3">
                     {progress.badges.slice(0, 4).map((badge, idx) => (
-                      <div key={idx} className="p-3 bg-gray-800 rounded-lg border border-gray-700 flex items-center gap-2 text-center" style={{ animation: `fadeIn 0.5s ease-out ${idx * 0.1}s both` }}>
+                      <div key={idx} className="p-3 bg-gray-800 rounded-lg border border-[rgb(80,160,170)] flex items-center gap-2 text-center" style={{ animation: `fadeIn 0.5s ease-out ${idx * 0.1}s both` }}>
                         <span className="text-lg">{badge.split(' ')[0]}</span>
                         <span className="text-xs text-gray-400">{badge.split(' ').slice(1).join(' ')}</span>
                       </div>
@@ -292,7 +292,7 @@ export default function RouteProgressDashboard({
                   </div>
 
                   {/* Challenge Progress */}
-                  <div className="space-y-3 pt-2 border-t border-gray-800">
+                  <div className="space-y-3 pt-2 border-t border-[rgb(80,160,170)]">
                     <div className="flex justify-between items-center">
                       <span className="text-xs font-medium text-gray-400">Progreso: {challenge.progress}/{challenge.total}</span>
                       <span className="text-sm font-bold text-gray-400">

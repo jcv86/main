@@ -93,7 +93,7 @@ export function A3ModuleAccessGate({
                 {/* Block Reasons */}
                 <div className="space-y-2 mb-6">
                   {accessInfo.blockReasons.map((reason, idx) => (
-                    <Alert key={idx} className="bg-slate-900/50 border-slate-600">
+                    <Alert key={idx} className="bg-slate-900/50 border-[rgb(80,160,170)]">
                       <AlertTriangle className="h-4 w-4 text-yellow-400" />
                       <AlertDescription className="text-slate-300">
                         {reason}
@@ -103,7 +103,7 @@ export function A3ModuleAccessGate({
                 </div>
 
                 {/* Status Summary */}
-                <div className="grid grid-cols-2 gap-4 p-4 rounded-lg bg-slate-900/30 border border-slate-700">
+                <div className="grid grid-cols-2 gap-4 p-4 rounded-lg bg-slate-900/30 border border-[rgb(80,160,170)]">
                   <div>
                     <p className="text-xs text-slate-400 mb-1">Día Actual</p>
                     <p className="text-lg font-bold text-white">{accessInfo.currentDay} / 90</p>

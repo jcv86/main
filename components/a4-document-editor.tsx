@@ -64,7 +64,7 @@ export function DocumentEditor({ document, userId, onSave, onCancel }: DocumentE
           onChange={e => setTitle(e.target.value)}
           placeholder="Título del documento"
           disabled={isSaving}
-          className="bg-black border-gray-700 text-white placeholder-gray-500"
+          className="bg-black border-[rgb(80,160,170)] text-white placeholder-gray-500"
         />
       </div>
 
@@ -76,7 +76,7 @@ export function DocumentEditor({ document, userId, onSave, onCancel }: DocumentE
           placeholder="Contenido del documento..."
           rows={8}
           disabled={isSaving}
-          className="resize-none bg-black border-gray-700 text-white placeholder-gray-500"
+          className="resize-none bg-black border-[rgb(80,160,170)] text-white placeholder-gray-500"
         />
       </div>
 
@@ -86,7 +86,7 @@ export function DocumentEditor({ document, userId, onSave, onCancel }: DocumentE
           value={status}
           onChange={e => setStatus(e.target.value)}
           disabled={isSaving}
-          className="w-full px-3 py-2 border border-gray-700 rounded-md bg-black text-white"
+          className="w-full px-3 py-2 border border-[rgb(80,160,170)] rounded-md bg-black text-white"
         >
           <option value="draft">Borrador</option>
           <option value="review">En Revisión</option>
@@ -107,7 +107,7 @@ export function DocumentEditor({ document, userId, onSave, onCancel }: DocumentE
             'Guardar'
           )}
         </Button>
-        <Button onClick={onCancel} variant="outline" disabled={isSaving} className="flex-1 border-gray-600 text-gray-300 hover:bg-stone-900">
+        <Button onClick={onCancel} variant="outline" disabled={isSaving} className="flex-1 border-[rgb(80,160,170)] text-gray-300 hover:bg-stone-900">
           Cancelar
         </Button>
       </div>

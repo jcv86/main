@@ -79,7 +79,7 @@ export default function PillarHubPage() {
                     ? 'border-green-500 bg-green-500/5'
                     : isUnlocked
                       ? 'border-purple-500 bg-purple-500/5'
-                      : 'border-slate-700 bg-slate-800/50 opacity-60'
+                      : 'border-[rgb(80,160,170)] bg-slate-950/50 opacity-60'
                 }`}
               >
                 {/* Completion Badge */}
@@ -95,7 +95,7 @@ export default function PillarHubPage() {
                         {isCompleted && (
                           <Badge className="bg-green-600 text-white">✓ Completado</Badge>
                         )}
-                        {!isUnlocked && <Badge className="bg-slate-600 text-white">Bloqueado</Badge>}
+                        {!isUnlocked && <Badge className="bg-slate-950 text-white">Bloqueado</Badge>}
                       </div>
                       <CardDescription className="text-slate-300">{pillar.description}</CardDescription>
                     </div>
@@ -114,7 +114,7 @@ export default function PillarHubPage() {
                     </div>
                     <Progress
                       value={(progress.percentage + (completedPillars.includes(pillar.id) ? 0 : 0)) / 2}
-                      className="bg-slate-700"
+                      className="bg-slate-950"
                     />
                   </div>
 
@@ -139,7 +139,7 @@ export default function PillarHubPage() {
                             className={`w-2 h-2 rounded-full ${
                               completedActivities.includes(activity.id)
                                 ? 'bg-green-400'
-                                : 'bg-slate-500'
+                                : 'bg-slate-950'
                             }`}
                           />
                           {activity.name.split(':')[1] || activity.name} ({activity.xp} XP)
@@ -189,7 +189,7 @@ export default function PillarHubPage() {
         </div>
 
         {/* Quick Stats */}
-        <Card className="bg-slate-800 border-slate-700">
+        <Card className="bg-slate-950 border-[rgb(80,160,170)]">
           <CardHeader>
             <CardTitle className="text-white">Tu Progreso General</CardTitle>
           </CardHeader>

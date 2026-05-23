@@ -133,9 +133,9 @@ export default function Dia1Page() {
 
   return (
     <div className="fixed inset-0 bg-black/50 flex items-center justify-center p-4 z-50">
-      <div className="bg-slate-900 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-slate-800">
+      <div className="bg-slate-950 rounded-lg w-full max-w-2xl max-h-[90vh] overflow-y-auto border border-[rgb(80,160,170)]">
         {/* Header */}
-        <div className="sticky top-0 bg-slate-950 border-b border-slate-800 p-6 flex items-center justify-between">
+        <div className="sticky top-0 bg-slate-950 border-b border-[rgb(80,160,170)] p-6 flex items-center justify-between">
           <div>
             <div className="text-sm text-purple-400 font-medium">Día 1</div>
             <h1 className="text-2xl font-bold text-white mt-1">
@@ -161,7 +161,7 @@ export default function Dia1Page() {
           {/* INTRO STEP */}
           {step === 'intro' && (
             <div className="space-y-6">
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+              <div className="bg-slate-950/50 border border-[rgb(80,160,170)] rounded-lg p-6">
                 <p className="text-slate-300 text-lg">
                   Crea un documento estructurado con tu objetivo profesional, hitos clave y timeline realista.
                 </p>
@@ -173,42 +173,42 @@ export default function Dia1Page() {
                   Pasos a Seguir
                 </h3>
                 <div className="space-y-3">
-                  <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 flex gap-4">
+                  <div className="bg-slate-950/30 border border-[rgb(80,160,170)] rounded-lg p-4 flex gap-4">
                     <div className="text-2xl">✍️</div>
                     <div>
                       <div className="text-white font-semibold">1. Escribe tu visión</div>
                       <div className="text-slate-400 text-sm">Responde 3 preguntas clave (~10 min)</div>
                     </div>
                   </div>
-                  <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 flex gap-4">
+                  <div className="bg-slate-950/30 border border-[rgb(80,160,170)] rounded-lg p-4 flex gap-4">
                     <div className="text-2xl">🤖</div>
                     <div>
                       <div className="text-white font-semibold">2. Opción: Mejora con Coach IA</div>
                       <div className="text-slate-400 text-sm">Pulir visión profesional (~5 min)</div>
                     </div>
                   </div>
-                  <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 flex gap-4">
+                  <div className="bg-slate-950/30 border border-[rgb(80,160,170)] rounded-lg p-4 flex gap-4">
                     <div className="text-2xl">🎯</div>
                     <div>
                       <div className="text-white font-semibold">3. Define 3 hitos (30/60/90 días)</div>
                       <div className="text-slate-400 text-sm">Control points (~10 min)</div>
                     </div>
                   </div>
-                  <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 flex gap-4">
+                  <div className="bg-slate-950/30 border border-[rgb(80,160,170)] rounded-lg p-4 flex gap-4">
                     <div className="text-2xl">📝</div>
                     <div>
                       <div className="text-white font-semibold">4. Plan de acciones</div>
                       <div className="text-slate-400 text-sm">4 categorías de trabajo (~15 min)</div>
                     </div>
                   </div>
-                  <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 flex gap-4">
+                  <div className="bg-slate-950/30 border border-[rgb(80,160,170)] rounded-lg p-4 flex gap-4">
                     <div className="text-2xl">📲</div>
                     <div>
                       <div className="text-white font-semibold">5. Exporta a Notion</div>
                       <div className="text-slate-400 text-sm">Crea plan real y descarga (~5 min)</div>
                     </div>
                   </div>
-                  <div className="bg-slate-800/30 border border-slate-700 rounded-lg p-4 flex gap-4">
+                  <div className="bg-slate-950/30 border border-[rgb(80,160,170)] rounded-lg p-4 flex gap-4">
                     <div className="text-2xl">✅</div>
                     <div>
                       <div className="text-white font-semibold">6. Análisis de DTC</div>
@@ -238,7 +238,7 @@ export default function Dia1Page() {
                     placeholder="Ej: Director de Producto en empresa Tech B2B, liderando equipos de 10+ personas..."
                     value={data.role}
                     onChange={(e) => setData({ ...data, role: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
                     rows={3}
                   />
                   <div className="text-xs text-slate-400 mt-1">Mínimo 10 caracteres (actual: {data.role.length})</div>
@@ -252,7 +252,7 @@ export default function Dia1Page() {
                     placeholder="Ej: Startup de Series B, ambiente colaborativo, flexibilidad remota, équipo multicultural..."
                     value={data.environment}
                     onChange={(e) => setData({ ...data, environment: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
                     rows={3}
                   />
                   <div className="text-xs text-slate-400 mt-1">Mínimo 10 caracteres (actual: {data.environment.length})</div>
@@ -266,14 +266,14 @@ export default function Dia1Page() {
                     placeholder="Ej: Implementar proceso de innovación, posicionarme como experto, crecimiento salarial del 50%..."
                     value={data.careerResult}
                     onChange={(e) => setData({ ...data, careerResult: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
                     rows={3}
                   />
                   <div className="text-xs text-slate-400 mt-1">Mínimo 10 caracteres (actual: {data.careerResult.length})</div>
                 </div>
               </div>
 
-              <div className={`p-4 rounded-lg border ${visionValid ? 'bg-green-500/10 border-green-500/20' : 'bg-slate-800/30 border-slate-700'}`}>
+              <div className={`p-4 rounded-lg border ${visionValid ? 'bg-green-500/10 border-green-500/20' : 'bg-slate-950/30 border-[rgb(80,160,170)]'}`}>
                 <div className="text-sm text-slate-300 flex items-start gap-2">
                   {visionValid ? (
                     <>
@@ -302,7 +302,7 @@ export default function Dia1Page() {
                     <p className="text-slate-300 mb-4">
                       Nuestro coach profesional puede pulir tu visión para hacerla más impactante y clara. Es completamente opcional.
                     </p>
-                    <div className="bg-slate-800/50 border border-slate-700 rounded p-4">
+                    <div className="bg-slate-950/50 border border-[rgb(80,160,170)] rounded p-4">
                       <p className="text-slate-200 italic">
                         "{data.coachVersion || 'Profesional con experiencia comprobada en ' + data.role + ', enfocado en lograr ' + data.careerResult + ' dentro de un ambiente ' + data.environment}"
                       </p>
@@ -315,7 +315,7 @@ export default function Dia1Page() {
                 <Button
                   onClick={() => handleCoachOffer(false)}
                   variant="outline"
-                  className="border-slate-700 text-slate-300 hover:bg-slate-800/50"
+                  className="border-[rgb(80,160,170)] text-slate-300 hover:bg-slate-950/50"
                 >
                   Mantener mi versión
                 </Button>
@@ -332,7 +332,7 @@ export default function Dia1Page() {
           {/* MILESTONES STEP */}
           {step === 'milestones' && (
             <div className="space-y-6">
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+              <div className="bg-slate-950/50 border border-[rgb(80,160,170)] rounded-lg p-4">
                 <p className="text-slate-300">Define 3 hitos clave a 30, 60 y 90 días. Deben ser realistas y alcanzables.</p>
               </div>
 
@@ -343,7 +343,7 @@ export default function Dia1Page() {
                     placeholder="Ej: CV actualizado, 5 empresas identificadas, LinkedIn optimizado..."
                     value={data.day10}
                     onChange={(e) => setData({ ...data, day10: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
                     rows={2}
                   />
                 </div>
@@ -354,7 +354,7 @@ export default function Dia1Page() {
                     placeholder="Ej: 10+ postulaciones, 3 entrevistas realizadas, respuestas ensayadas..."
                     value={data.day20}
                     onChange={(e) => setData({ ...data, day20: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
                     rows={2}
                   />
                 </div>
@@ -365,13 +365,13 @@ export default function Dia1Page() {
                     placeholder="Ej: Oferta recibida y negociada, o avanzar a siguiente ronda..."
                     value={data.day30}
                     onChange={(e) => setData({ ...data, day30: e.target.value })}
-                    className="w-full bg-slate-800 border border-slate-700 rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
+                    className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-3 text-white placeholder-slate-500 focus:outline-none focus:border-purple-500 focus:ring-1 focus:ring-purple-500 resize-none"
                     rows={2}
                   />
                 </div>
               </div>
 
-              <div className={`p-4 rounded-lg border ${milestonesValid ? 'bg-green-500/10 border-green-500/20' : 'bg-slate-800/30 border-slate-700'}`}>
+              <div className={`p-4 rounded-lg border ${milestonesValid ? 'bg-green-500/10 border-green-500/20' : 'bg-slate-950/30 border-[rgb(80,160,170)]'}`}>
                 <div className="text-sm text-slate-300 flex items-center gap-2">
                   {milestonesValid ? (
                     <>
@@ -392,7 +392,7 @@ export default function Dia1Page() {
           {/* ACTIONS STEP */}
           {step === 'actions' && (
             <div className="space-y-6">
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+              <div className="bg-slate-950/50 border border-[rgb(80,160,170)] rounded-lg p-4">
                 <p className="text-slate-300">Define acciones en 4 categorías. Mínimo 1 acción por categoría.</p>
               </div>
 
@@ -410,14 +410,14 @@ export default function Dia1Page() {
                         newActions[idx] = e.target.value
                         setData({ ...data, clarityActions: newActions })
                       }}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
+                      className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
                     />
                   ))}
                   <Button
                     onClick={() => setData({ ...data, clarityActions: [...data.clarityActions, ''] })}
                     variant="outline"
                     size="sm"
-                    className="border-slate-700 text-slate-300"
+                    className="border-[rgb(80,160,170)] text-slate-300"
                   >
                     + Agregar acción
                   </Button>
@@ -436,14 +436,14 @@ export default function Dia1Page() {
                         newActions[idx] = e.target.value
                         setData({ ...data, materialActions: newActions })
                       }}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
+                      className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
                     />
                   ))}
                   <Button
                     onClick={() => setData({ ...data, materialActions: [...data.materialActions, ''] })}
                     variant="outline"
                     size="sm"
-                    className="border-slate-700 text-slate-300"
+                    className="border-[rgb(80,160,170)] text-slate-300"
                   >
                     + Agregar acción
                   </Button>
@@ -462,14 +462,14 @@ export default function Dia1Page() {
                         newActions[idx] = e.target.value
                         setData({ ...data, interviewActions: newActions })
                       }}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
+                      className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
                     />
                   ))}
                   <Button
                     onClick={() => setData({ ...data, interviewActions: [...data.interviewActions, ''] })}
                     variant="outline"
                     size="sm"
-                    className="border-slate-700 text-slate-300"
+                    className="border-[rgb(80,160,170)] text-slate-300"
                   >
                     + Agregar acción
                   </Button>
@@ -488,21 +488,21 @@ export default function Dia1Page() {
                         newActions[idx] = e.target.value
                         setData({ ...data, realActions: newActions })
                       }}
-                      className="w-full bg-slate-800 border border-slate-700 rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
+                      className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-2 text-white placeholder-slate-500 mb-2 focus:outline-none focus:border-purple-500"
                     />
                   ))}
                   <Button
                     onClick={() => setData({ ...data, realActions: [...data.realActions, ''] })}
                     variant="outline"
                     size="sm"
-                    className="border-slate-700 text-slate-300"
+                    className="border-[rgb(80,160,170)] text-slate-300"
                   >
                     + Agregar acción
                   </Button>
                 </div>
               </div>
 
-              <div className={`p-4 rounded-lg border ${actionsValid ? 'bg-green-500/10 border-green-500/20' : 'bg-slate-800/30 border-slate-700'}`}>
+              <div className={`p-4 rounded-lg border ${actionsValid ? 'bg-green-500/10 border-green-500/20' : 'bg-slate-950/30 border-[rgb(80,160,170)]'}`}>
                 <div className="text-sm text-slate-300 flex items-center gap-2">
                   {actionsValid ? (
                     <>
@@ -563,7 +563,7 @@ export default function Dia1Page() {
                 </div>
               </div>
 
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-4">
+              <div className="bg-slate-950/50 border border-[rgb(80,160,170)] rounded-lg p-4">
                 <p className="text-slate-300 text-sm">
                   <strong>Consejo:</strong> En Notion puedes organizar mejor tus tareas, agregar fechas, comentarios, y compartir con tu coach o mentor.
                 </p>
@@ -574,7 +574,7 @@ export default function Dia1Page() {
           {/* NOTION UPLOAD STEP */}
           {step === 'notion-upload' && (
             <div className="space-y-6">
-              <div className="bg-slate-800/50 border border-slate-700 rounded-lg p-6">
+              <div className="bg-slate-950/50 border border-[rgb(80,160,170)] rounded-lg p-6">
                 <div className="text-center space-y-4">
                   <Upload className="w-12 h-12 mx-auto text-purple-400" />
                   <h3 className="text-lg font-semibold text-white">Sube tu plan desde Notion</h3>
@@ -674,7 +674,7 @@ export default function Dia1Page() {
         </div>
 
         {/* Footer */}
-        <div className="sticky bottom-0 bg-slate-950 border-t border-slate-800 p-6 flex gap-3 justify-between">
+        <div className="sticky bottom-0 bg-slate-950 border-t border-[rgb(80,160,170)] p-6 flex gap-3 justify-between">
           <Button
             onClick={() => {
               if (step === 'intro') setStep('intro')
@@ -688,7 +688,7 @@ export default function Dia1Page() {
               else if (step === 'results' && data.analysisStatus === 'needs-revision') handleRedirectToFix()
             }}
             variant="outline"
-            className="border-slate-700 text-slate-300 hover:bg-slate-800/50"
+            className="border-[rgb(80,160,170)] text-slate-300 hover:bg-slate-950/50"
           >
             <ChevronLeft className="w-4 h-4 mr-1" /> Atrás
           </Button>

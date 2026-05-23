@@ -394,7 +394,7 @@ export default function CVBuilderStudioModule() {
                   <h2 className="font-bold text-sm uppercase text-gray-500 mb-1">Skills</h2>
                   <div className="flex flex-wrap gap-2">
                     {Object.values(cvData.skills).flat().map((skill, i) => (
-                      <span key={i} className="text-xs bg-gray-100 px-2 py-1 rounded">{skill}</span>
+                      <span key={i} className="text-xs bg-slate-950 px-2 py-1 rounded">{skill}</span>
                     ))}
                   </div>
                 </div>

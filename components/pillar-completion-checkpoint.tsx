@@ -77,7 +77,7 @@ export function PillarCompletionCheckpoint({
 
           {/* Next Pillar Info */}
           {nextPillar && (
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-slate-700">
+            <div className="bg-slate-800/50 rounded-lg p-4 border border-[rgb(80,160,170)]">
               <p className="text-sm text-slate-400 mb-2">Siguiente:</p>
               <p className="text-lg font-semibold text-white">{nextPillar.name}</p>
               <p className="text-sm text-slate-300">{nextPillar.description}</p>

@@ -258,7 +258,7 @@ export function BrainChatInterface() {
                       className={`max-w-[85%] rounded-2xl p-4 ${
                         message.role === "user"
                           ? "bg-background"
-                          : "bg-muted/10 dark:bg-gray-800 border border-muted/20 dark:border-gray-700"
+                          : "bg-muted/10 dark:bg-gray-800 border border-muted/20 dark:border-[rgb(80,160,170)]"
                       }`}
                     >
                       <div className="whitespace-pre-wrap text-sm leading-relaxed">{message.content}</div>
@@ -266,7 +266,7 @@ export function BrainChatInterface() {
                       {message.role === "assistant" && (
                         <>
                           {message.confidence !== undefined && (
-                            <div className="flex items-center gap-4 mt-4 pt-3 border-t border-muted/20 dark:border-gray-700 text-xs">
+                            <div className="flex items-center gap-4 mt-4 pt-3 border-t border-muted/20 dark:border-[rgb(80,160,170)] text-xs">
                               <div className="flex items-center gap-1.5">
                                 <TrendingUp className="h-3.5 w-3.5 text-green" />
                                 <span className="font-medium">Confianza: {Math.round(message.confidence)}%</span>

@@ -127,7 +127,7 @@ export function A2A3ProgressWidget({
             className={`rounded-lg p-3 border ${
               a3CanAccess
                 ? 'bg-emerald-500/10 border-emerald-500/30'
-                : 'bg-slate-500/10 border-slate-500/30'
+                : 'bg-slate-500/10 border-[rgb(80,160,170)]/30'
             }`}
           >
             <div className="flex items-center gap-2">
@@ -156,7 +156,7 @@ export function A2A3ProgressWidget({
 
       {/* Timeline Overview (optional) */}
       <div className="lg:col-span-2">
-        <Card className="bg-slate-900/40 border-slate-500/30 rounded-[28px] p-6">
+        <Card className="bg-slate-900/40 border-[rgb(80,160,170)]/30 rounded-[28px] p-6">
           <h3 className="text-sm uppercase tracking-wide text-slate-400 font-semibold mb-4">
             90-Day Journey
           </h3>

@@ -148,7 +148,7 @@ export function CameraPermissionModal({
           {/* Device status */}
           <div className="space-y-2">
             {/* Camera status */}
-            <div className="flex items-center justify-between p-3 rounded-lg border border-gray-700/50 bg-gray-800/30">
+            <div className="flex items-center justify-between p-3 rounded-lg border border-[rgb(80,160,170)]/50 bg-gray-800/30">
               <div className="flex items-center gap-3">
                 <Video className="w-5 h-5 text-gray-400" />
                 <span className="text-sm font-medium text-white">Cámara</span>
@@ -173,7 +173,7 @@ export function CameraPermissionModal({
             </div>
 
             {/* Microphone status */}
-            <div className="flex items-center justify-between p-3 rounded-lg border border-gray-700/50 bg-gray-800/30">
+            <div className="flex items-center justify-between p-3 rounded-lg border border-[rgb(80,160,170)]/50 bg-gray-800/30">
               <div className="flex items-center gap-3">
                 <Mic className="w-5 h-5 text-gray-400" />
                 <span className="text-sm font-medium text-white">Micrófono</span>

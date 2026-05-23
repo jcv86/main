@@ -140,7 +140,7 @@ export function A2DayPageTemplate({
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* C1: Professional Identity */}
                   {routeContext.c1 && (
-                    <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-700/40">
+                    <div className="bg-slate-800/40 rounded-lg p-3 border border-[rgb(80,160,170)]/40">
                       <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Identidad</p>
                       <p className="text-white mt-2 font-medium">{routeContext.c1.targetRole}</p>
                       <p className="text-slate-400 text-sm mt-1">{routeContext.c1.industry}</p>
@@ -149,7 +149,7 @@ export function A2DayPageTemplate({
                   
                   {/* A1: Communication Profile */}
                   {routeContext.a1 && (
-                    <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-700/40">
+                    <div className="bg-slate-800/40 rounded-lg p-3 border border-[rgb(80,160,170)]/40">
                       <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Estilo</p>
                       <p className="text-white mt-2 font-medium capitalize">{routeContext.a1.communicationStyle}</p>
                       <p className="text-slate-400 text-sm mt-1">Comunicación efectiva</p>
@@ -158,7 +158,7 @@ export function A2DayPageTemplate({
                   
                   {/* C2: Evidence Vault */}
                   {routeContext.c2 && (
-                    <div className="bg-slate-800/40 rounded-lg p-3 border border-slate-700/40">
+                    <div className="bg-slate-800/40 rounded-lg p-3 border border-[rgb(80,160,170)]/40">
                       <p className="text-xs font-semibold text-slate-400 uppercase tracking-wider">Tu Evidencia</p>
                       <p className="text-white mt-2 font-medium">{routeContext.c2.achievements?.length || 0} Logros</p>
                       <p className="text-slate-400 text-sm mt-1">Documentados</p>

@@ -50,7 +50,7 @@ export default function A2DashboardPage() {
         </div>
 
         {/* Progress Bar */}
-        <div className="bg-slate-900 border border-slate-700 rounded-lg p-6 mb-8">
+        <div className="bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-6 mb-8">
           <div className="flex justify-between items-center mb-4">
             <div>
               <h2 className="text-xl font-bold text-white">Tu Progreso</h2>
@@ -60,7 +60,7 @@ export default function A2DashboardPage() {
               <p className="text-3xl font-bold text-cyan-400">{Math.round(progressPercent)}%</p>
             </div>
           </div>
-          <div className="w-full bg-slate-800 rounded-full h-3">
+          <div className="w-full bg-slate-950 rounded-full h-3">
             <div 
               className="bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 h-3 rounded-full transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
@@ -83,7 +83,7 @@ export default function A2DashboardPage() {
               placeholder="Buscar día..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-900 border border-slate-700 rounded px-4 py-2 pl-10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded px-4 py-2 pl-10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
             />
           </div>
 
@@ -95,7 +95,7 @@ export default function A2DashboardPage() {
                 className={`px-4 py-2 rounded whitespace-nowrap text-sm font-medium transition-colors ${
                   filter === phase
                     ? 'bg-cyan-600 text-white'
-                    : 'bg-slate-800 text-slate-300 hover:bg-slate-700'
+                    : 'bg-slate-950 text-slate-300 hover:bg-slate-950'
                 }`}
               >
                 {phase === 'all' ? 'Todos' : phaseName[phase as keyof typeof phaseName]}
@@ -122,10 +122,10 @@ export default function A2DashboardPage() {
                     : 'cursor-not-allowed opacity-60'
                 }`}
               >
-                <div className={`bg-slate-900 border rounded-lg p-4 h-full ${
+                <div className={`bg-slate-950 border rounded-lg p-4 h-full ${
                   isUnlocked
-                    ? 'border-slate-700 hover:border-cyan-500'
-                    : 'border-slate-800'
+                    ? 'border-[rgb(80,160,170)] hover:border-cyan-500'
+                    : 'border-[rgb(80,160,170)]'
                 }`}>
                   {/* Day number & status */}
                   <div className="flex justify-between items-start mb-3">
@@ -181,7 +181,7 @@ export default function A2DashboardPage() {
             { phase: 'real-action', days: '31-60', title: 'Acción Real e Interviews', color: 'from-green-600 to-emerald-600' },
             { phase: 'refinement', days: '61-90', title: 'Refinamiento y Crecimiento', color: 'from-amber-600 to-orange-600' }
           ].map((p) => (
-            <div key={p.phase} className="bg-slate-900 border border-slate-700 rounded-lg p-4">
+            <div key={p.phase} className="bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-4">
               <div className={`w-full h-1 rounded-full bg-gradient-to-r ${p.color} mb-3`}></div>
               <p className="text-slate-400 text-xs font-medium mb-1">Fase {p.days}</p>
               <h3 className="text-white font-bold text-sm mb-2">{p.title}</h3>

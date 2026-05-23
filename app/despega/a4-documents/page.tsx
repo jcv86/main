@@ -146,7 +146,7 @@ export default function A4DocumentsPage() {
                     <span className="px-3 py-1 bg-[rgba(80,160,170,0.5)]/20 text-[rgb(80,160,170)] rounded-full text-sm">
                       {selectedDocument.type}
                     </span>
-                    <span className="px-3 py-1 bg-gray-700 text-gray-300 rounded-full text-sm">
+                    <span className="px-3 py-1 bg-slate-950 text-gray-300 rounded-full text-sm">
                       {selectedDocument.status}
                     </span>
                   </div>
@@ -157,7 +157,7 @@ export default function A4DocumentsPage() {
                 </div>
 
                 {selectedDocument.ai_summary && (
-                  <div className="mb-6 p-4 bg-gray-900 rounded-lg">
+                  <div className="mb-6 p-4 bg-slate-950 rounded-lg">
                     <h3 className="font-semibold text-sm mb-2 text-[rgb(80,160,170)]">Resumen IA</h3>
                     <p className="text-sm text-gray-400">{selectedDocument.ai_summary}</p>
                   </div>
@@ -167,7 +167,7 @@ export default function A4DocumentsPage() {
                   <Button onClick={() => handleEditDocument(selectedDocument)} className="flex-1 bg-[rgba(80,160,170,0.5)] hover:bg-[rgba(80,160,170,0.6)]-600 text-white">
                     Editar
                   </Button>
-                  <Button variant="outline" className="flex-1 border-gray-600 text-gray-300 hover:bg-gray-900">
+                  <Button variant="outline" className="flex-1 border-[rgb(80,160,170)] text-gray-300 hover:bg-slate-950">
                     Descargar
                   </Button>
                 </div>

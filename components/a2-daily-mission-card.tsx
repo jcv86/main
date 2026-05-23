@@ -110,7 +110,7 @@ export function A2DailyMissionCard({
           ? 'bg-slate-900/20 border-green-500/40 hover:border-green-500/60'
           : isAvailable
             ? 'bg-slate-900/20 border-purple-500/40 hover:border-purple-500/80 hover:bg-purple-500/5 cursor-pointer'
-            : 'bg-slate-900/20 border-slate-700/20 opacity-60'
+            : 'bg-slate-900/20 border-[rgb(80,160,170)]/20 opacity-60'
       }`}
     >
       <div className="p-6 space-y-4">

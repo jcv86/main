@@ -76,7 +76,7 @@ export function DevRouteDebugPanel() {
 
       {/* Expanded Panel */}
       {isOpen && (
-        <div className="absolute bottom-14 right-0 bg-slate-950 border border-slate-700 rounded-lg p-4 w-80 shadow-xl space-y-4 max-h-96 overflow-y-auto">
+        <div className="absolute bottom-14 right-0 bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-4 w-80 shadow-xl space-y-4 max-h-96 overflow-y-auto">
           {/* Header */}
           <div className="space-y-2">
             <h3 className="text-sm font-bold text-white flex items-center gap-2">
@@ -134,7 +134,7 @@ export function DevRouteDebugPanel() {
           </div>
 
           {/* Seeding Controls */}
-          <div className="space-y-2 border-t border-slate-700 pt-3">
+          <div className="space-y-2 border-t border-[rgb(80,160,170)] pt-3">
             <p className="text-xs font-semibold text-slate-400 uppercase">Seed Data</p>
             
             <Button
@@ -153,7 +153,7 @@ export function DevRouteDebugPanel() {
                 max="90"
                 value={seedUntilDay}
                 onChange={(e) => setSeedUntilDay(Math.min(90, Math.max(1, parseInt(e.target.value))))}
-                className="flex-1 bg-slate-800 border border-slate-700 rounded px-2 py-1 text-xs text-white"
+                className="flex-1 bg-slate-800 border border-[rgb(80,160,170)] rounded px-2 py-1 text-xs text-white"
                 placeholder="Day number"
               />
               <Button
@@ -167,7 +167,7 @@ export function DevRouteDebugPanel() {
           </div>
 
           {/* Reset Control */}
-          <div className="border-t border-slate-700 pt-3">
+          <div className="border-t border-[rgb(80,160,170)] pt-3">
             <Button
               onClick={handleReset}
               size="sm"
@@ -179,7 +179,7 @@ export function DevRouteDebugPanel() {
           </div>
 
           {/* Debug Info */}
-          <div className="bg-slate-900/50 rounded p-2 text-xs text-slate-500 border border-slate-800 space-y-1">
+          <div className="bg-slate-900/50 rounded p-2 text-xs text-slate-500 border border-[rgb(80,160,170)] space-y-1">
             <p>Mode: {state.mode}</p>
             {state.seededDataUsed && <p className="text-blue-400">Using seeded data</p>}
             <p>Last updated: {state.lastUpdated?.toLocaleTimeString()}</p>

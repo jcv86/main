@@ -82,7 +82,7 @@ Se guardará automáticamente en DTC Docs.`
             placeholder="https://notion.so/..."
             value={notionLink}
             onChange={(e) => setNotionLink(e.target.value)}
-            className="bg-slate-800/50 border-slate-600 text-white rounded-lg"
+            className="bg-slate-800/50 border-[rgb(80,160,170)] text-white rounded-lg"
             style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
           />
           <p className="text-xs text-white/50">If you have a Notion template, paste the link here. We&apos;ll help you keep it updated.</p>

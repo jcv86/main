@@ -77,7 +77,7 @@ export function A2Day1Step2Coach({ visionData, onNext, onBack }: Step2CoachProps
       {!enhanced ? (
         <div className="space-y-6">
           {/* Your Original Vision */}
-          <div className="bg-slate-900/30 border border-slate-700/50 rounded-lg p-4 space-y-4">
+          <div className="bg-slate-900/30 border border-[rgb(80,160,170)]/50 rounded-lg p-4 space-y-4">
             <p className="text-sm font-semibold text-white/70">TU VISIÓN ORIGINAL:</p>
             <div className="space-y-3 text-white/80">
               <div>

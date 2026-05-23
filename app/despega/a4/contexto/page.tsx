@@ -117,7 +117,7 @@ export default function A4ContextPage() {
       )}
 
       {/* Footer */}
-      <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-gray-700/50 text-center">
+      <div className="max-w-6xl mx-auto mt-12 pt-8 border-t border-[rgb(80,160,170)]/50 text-center">
         <p className="text-sm text-gray-500">A4 es parte de tu camino de 90 días en Despega Tu Carrera</p>
       </div>
     </div>

@@ -84,7 +84,7 @@ export default function PillarsHubPage() {
       </div>
 
       {/* Overall Progress */}
-      <Card className="mb-12 border-neutral-700 bg-neutral-900">
+      <Card className="mb-12 border-[rgb(80,160,170)] bg-neutral-900">
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
@@ -115,8 +115,8 @@ export default function PillarsHubPage() {
               key={pillar.id}
               className={`border transition-all ${
                 isLocked
-                  ? 'border-neutral-700 bg-neutral-900 opacity-50'
-                  : 'border-neutral-700 bg-neutral-900 hover:border-neutral-600'
+                  ? 'border-[rgb(80,160,170)] bg-neutral-900 opacity-50'
+                  : 'border-[rgb(80,160,170)] bg-neutral-900 hover:border-[rgb(80,160,170)]'
               }`}
             >
               <CardHeader>

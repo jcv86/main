@@ -326,7 +326,7 @@ export default function DespegaOnboarding() {
                 <span className="font-semibold text-muted-foreground dark:text-muted-foreground">Evaluación Despega Cerebral</span>
                 <span className="text-muted-foreground dark:text-muted-foreground">1/28</span>
               </div>
-              <div className="h-1 rounded-full overflow-hidden bg-slate-600 dark:bg-slate-600">
+              <div className="h-1 rounded-full overflow-hidden bg-slate-950 dark:bg-slate-950">
                 <div className="h-full rounded-full w-1 bg-cyan dark:bg-cyan"></div>
               </div>
               

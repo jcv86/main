@@ -55,7 +55,7 @@ export function CheckpointScreen({
 
   return (
     <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-md border-neutral-700 bg-neutral-900 shadow-2xl">
+      <Card className="w-full max-w-md border-[rgb(80,160,170)] bg-neutral-900 shadow-2xl">
         <div className="p-8 space-y-6 text-center">
           {/* Trophy Animation */}
           <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 mx-auto mb-4">
@@ -100,7 +100,7 @@ export function CheckpointScreen({
             <Button
               onClick={() => router.push('/despega/pillars-hub')}
               variant="outline"
-              className="w-full border-neutral-700 text-neutral-300 hover:bg-neutral-800"
+              className="w-full border-[rgb(80,160,170)] text-neutral-300 hover:bg-neutral-800"
             >
               Ver Progreso General
             </Button>
