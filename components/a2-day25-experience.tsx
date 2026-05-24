@@ -108,8 +108,8 @@ export function Day25Experience({ onComplete, userId }: Day25ExperienceProps) {
                     onClick={() => setExportFormat(option.value)}
                     className={`w-full text-left p-4 rounded-lg transition-all border-2 ${
                       exportFormat === option.value
-                        ? 'border-white bg-white/10'
-                        : 'border-[rgba(80,160,170,0.2)] bg-white/5 hover:border-white/40'
+                        ? 'border-[rgba(80,160,170,0.8)] bg-white/10'
+                        : 'border-[rgba(80,160,170,0.2)] bg-white/5 hover:border-[rgba(80,160,170,0.4)]'
                     }`}
                   >
                     <div className="flex items-center gap-3">

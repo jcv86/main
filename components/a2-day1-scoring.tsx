@@ -126,7 +126,7 @@ export function A2Day1Scoring({
           style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-5 h-5 animate-spin rounded-full border-2 border-[rgba(80,160,170,0.2)] border-t-white/50"></div>
+            <div className="w-5 h-5 animate-spin rounded-full border-2 border-[rgba(80,160,170,0.2)] border-t-[rgba(80,160,170,0.8)]"></div>
             <p className="text-white font-semibold">Analizando tu ruta...</p>
           </div>
 
