@@ -46,10 +46,10 @@ export default function CVValidatorPage() {
 
           <Card className="border-slate-700/50">
             <CardHeader>
-              <CardTitle className="text-sm">Improve Your Score</CardTitle>
+              <CardTitle className="text-sm">Mejora Tu Puntuación</CardTitle>
             </CardHeader>
             <CardContent className="text-sm text-slate-300">
-              Follow our suggestions to increase your ATS pass rate and get more interview callbacks.
+              Sigue nuestras sugerencias para aumentar tu tasa de paso ATS y obtener más llamadas de entrevista.
             </CardContent>
           </Card>
         </div>
@@ -59,19 +59,19 @@ export default function CVValidatorPage() {
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Zap className="w-5 h-5 text-[rgb(170,70,170)]" />
-              Quick Tips for ATS Optimization
+              Consejos Rápidos para Optimización ATS
             </CardTitle>
           </CardHeader>
           <CardContent>
             <ul className="space-y-2 text-sm text-slate-300">
-              <li>✓ Use standard formatting (avoid tables, images, fancy fonts)</li>
-              <li>✓ Include a clear contact section with email and phone</li>
-              <li>✓ Use bullet points for experience descriptions</li>
-              <li>✓ Start bullets with action verbs (Developed, Managed, Led)</li>
-              <li>✓ Include quantifiable results (increased by X%, reduced costs by Y)</li>
-              <li>✓ List relevant technical skills clearly</li>
-              <li>✓ Keep line length under 100 characters for better parsing</li>
-              <li>✓ Avoid special characters and unusual fonts</li>
+              <li>✓ Usa formato estándar (evita tablas, imágenes, fuentes decorativas)</li>
+              <li>✓ Incluye una sección de contacto clara con correo y teléfono</li>
+              <li>✓ Usa viñetas para descripciones de experiencia</li>
+              <li>✓ Comienza viñetas con verbos de acción (Desarrollé, Gestioné, Lideré)</li>
+              <li>✓ Incluye resultados cuantificables (aumentó X%, redujo costos Y)</li>
+              <li>✓ Lista habilidades técnicas relevantes claramente</li>
+              <li>✓ Mantén líneas bajo 100 caracteres para mejor análisis</li>
+              <li>✓ Evita caracteres especiales y fuentes inusuales</li>
             </ul>
           </CardContent>
         </Card>

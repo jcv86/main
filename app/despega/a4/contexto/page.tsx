@@ -104,7 +104,7 @@ export default function A4ContextPage() {
 
           {/* Tips */}
           <div className="p-4 bg-gradient-to-br from-yellow-900/20 to-yellow-800/10 border border-yellow-500/20 rounded-lg">
-            <h3 className="font-semibold text-white mb-3">💡 Tips:</h3>
+            <h3 className="font-semibold text-white mb-3">💡 Consejos:</h3>
             <ul className="text-sm text-gray-300 space-y-2">
               <li>• Pregunta como si no supieras nada</li>
               <li>• No hay preguntas tontas aquí</li>
