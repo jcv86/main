@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",
-    "@ai-sdk/openai": "^3.0.65",
     "@ai-sdk/react": "^3.0.148",
     "@auth/core": "latest",
     "@auth/supabase-adapter": "^1.11.1",
@@ -42,7 +41,6 @@
     "@vercel/analytics": "^1.4.1",
     "@vercel/blob": "2.0.0",
     "@vercel/speed-insights": "^1.1.0",
-    "ai": "^6.0.190",
     "axios": "^1.16.1",
     "bcrypt": "^6.0.0",
     "bcryptjs": "^3.0.3",
