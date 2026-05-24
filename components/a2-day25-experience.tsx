@@ -109,7 +109,7 @@ export function Day25Experience({ onComplete, userId }: Day25ExperienceProps) {
                     className={`w-full text-left p-4 rounded-lg transition-all border-2 ${
                       exportFormat === option.value
                         ? 'border-white bg-white/10'
-                        : 'border-white/20 bg-white/5 hover:border-white/40'
+                        : 'border-[rgba(80,160,170,0.2)] bg-white/5 hover:border-white/40'
                     }`}
                   >
                     <div className="flex items-center gap-3">
@@ -131,7 +131,7 @@ export function Day25Experience({ onComplete, userId }: Day25ExperienceProps) {
                 placeholder="Ej: CV_Base_DTC_JuanGomez_2025"
                 value={fileName}
                 onChange={(e) => setFileName(e.target.value)}
-                className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40"
+                className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40"
               />
               <p className="text-white/60 text-xs mt-2">Sugerido: CV_Base_DTC_[TuNombre]_[Fecha]</p>
             </div>

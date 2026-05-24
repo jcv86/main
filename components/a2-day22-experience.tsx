@@ -139,14 +139,14 @@ export function Day22Experience({ onComplete, userId }: Day22ExperienceProps) {
 
           <div className="space-y-6">
             {Object.entries(categories).map(([categoryKey, categoryLabel]) => (
-              <div key={categoryKey} className="rounded-lg p-4 border border-white/20" style={{ backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
+              <div key={categoryKey} className="rounded-lg p-4 border border-[rgba(80,160,170,0.2)]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
                 <div className="flex items-center justify-between mb-3">
                   <h3 className="text-white font-semibold">{categoryLabel}</h3>
                   <Button
                     onClick={() => addSkill(categoryKey as Skill['category'])}
                     size="sm"
                     variant="outline"
-                    className="text-white/80 hover:text-white border-white/20"
+                    className="text-white/80 hover:text-white border-[rgba(80,160,170,0.2)]"
                   >
                     <Plus className="w-4 h-4 mr-1" />
                     Agregar
@@ -166,13 +166,13 @@ export function Day22Experience({ onComplete, userId }: Day22ExperienceProps) {
                               placeholder={`Ej: ${categoryKey === 'technical' ? 'React, TypeScript' : categoryKey === 'soft' ? 'Liderazgo de equipos' : categoryKey === 'languages' ? 'English' : 'Figma'}`}
                               value={skill.skillName}
                               onChange={(e) => updateSkill(globalIdx, 'skillName', e.target.value)}
-                              className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                              className="w-full px-3 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                             />
                           </div>
                           <select
                             value={skill.proficiencyLevel || 'intermediate'}
                             onChange={(e) => updateSkill(globalIdx, 'proficiencyLevel', e.target.value)}
-                            className="px-2 py-2 rounded bg-white/10 border border-white/20 text-white text-xs"
+                            className="px-2 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white text-xs"
                           >
                             <option value="beginner">Inicial</option>
                             <option value="intermediate">Intermedio</option>

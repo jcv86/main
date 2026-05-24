@@ -182,7 +182,7 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
         className="border-b"
         style={{
           backgroundColor: 'rgba(90, 90, 150, 0)',
-          borderColor: 'rgba(90, 90, 150, 0)',
+          borderColor: 'rgba(80, 160, 170, 0.2)',
         }}
       >
         <div className="max-w-4xl mx-auto px-4 py-6 space-y-3">

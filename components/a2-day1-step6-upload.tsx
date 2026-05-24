@@ -65,7 +65,7 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
       {!uploaded ? (
         <div className="space-y-4">
           {/* File Upload Area */}
-          <label className="block border-2 border-dashed rounded-[28px] p-8 text-center transition cursor-pointer group" style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
+          <label className="block border-2 border-dashed rounded-[28px] p-8 text-center transition cursor-pointer group" style={{ borderColor: 'rgba(80, 160, 170, 0.2)', backgroundColor: 'rgba(90, 90, 150, 0.05)' }}>
             <input
               type="file"
               onChange={handleFileSelect}
@@ -130,7 +130,7 @@ export function A2Day1Step6Upload({ onNext, onBack }: Step6UploadProps) {
           onClick={onBack}
           variant="outline"
           className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
-          style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+          style={{ borderColor: 'rgba(80, 160, 170, 0.2)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           Atrás
         </Button>

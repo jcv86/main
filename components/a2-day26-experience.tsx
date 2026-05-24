@@ -104,7 +104,7 @@ export function Day26Experience({ onComplete, userId }: Day26ExperienceProps) {
               placeholder="Escribe tu reflexión... El mayor aprendizaje fue... Mi perfil es más claro porque... Estoy listo para Arc 2 porque..."
               value={reflection}
               onChange={(e) => setReflection(e.target.value)}
-              className="w-full px-4 py-4 rounded bg-white/10 border border-white/20 text-white placeholder-white/40"
+              className="w-full px-4 py-4 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40"
               rows={6}
             />
           </div>

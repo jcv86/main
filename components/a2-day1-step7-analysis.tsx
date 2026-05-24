@@ -83,7 +83,7 @@ export function A2Day1Step7Analysis({
           <p className="text-white/60">Your Day 1 plan is being analyzed by our AI coach...</p>
         </div>
 
-        <div className="rounded-[28px] border p-8 flex flex-col items-center justify-center min-h-48" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+        <div className="rounded-[28px] border p-8 flex flex-col items-center justify-center min-h-48" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)' }}>
           <Loader2 className="w-12 h-12 animate-spin mb-4" style={{ color: 'rgba(90, 90, 150, 0.8)' }} />
           <p className="text-white/70">Analyzing your vision, milestones, and action plan...</p>
         </div>
@@ -174,7 +174,7 @@ export function A2Day1Step7Analysis({
       </div>
 
       {/* Feedback */}
-      <div className="rounded-[28px] border p-4 space-y-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+      <div className="rounded-[28px] border p-4 space-y-3" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <h3 className="font-semibold text-white">Detailed Feedback</h3>
         <p className="text-white/70 text-sm">{result?.feedback}</p>
       </div>
@@ -210,7 +210,7 @@ export function A2Day1Step7Analysis({
             onClick={onRevise}
             variant="outline"
             className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
-            style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+            style={{ borderColor: 'rgba(80, 160, 170, 0.2)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
           >
             <RotateCcw className="w-4 h-4 mr-2" />
             Revisar y Reenviar

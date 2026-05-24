@@ -267,7 +267,7 @@ export function Day15Experience({ onComplete, userId }: Day15ExperienceProps) {
               </div>
             </div>
 
-            <div className="mt-4 pt-4 border-t border-white/20">
+            <div className="mt-4 pt-4 border-t border-[rgba(80,160,170,0.2)]">
               <p className="text-white text-sm mb-2 font-semibold">Recomendación</p>
               <p className="text-white/85 text-sm">{stressTestResults.recommendation}</p>
             </div>

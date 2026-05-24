@@ -59,7 +59,7 @@ export function A2Day1RoutGates({
       {/* Intro */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <p className="text-sm text-white/70 leading-relaxed">
           Las 3 Puertas son checkpoints que validan tu progreso. No es tu CV completo. 
@@ -86,7 +86,7 @@ export function A2Day1RoutGates({
           className="min-h-[100px]"
           style={{
             backgroundColor: 'rgba(15, 15, 30, 0.5)',
-            borderColor: 'rgba(90, 90, 150, 0.2)',
+            borderColor: 'rgba(80, 160, 170, 0.2)',
             color: 'white',
           }}
         />
@@ -118,7 +118,7 @@ export function A2Day1RoutGates({
           className="min-h-[100px]"
           style={{
             backgroundColor: 'rgba(15, 15, 30, 0.5)',
-            borderColor: 'rgba(90, 90, 150, 0.2)',
+            borderColor: 'rgba(80, 160, 170, 0.2)',
             color: 'white',
           }}
         />
@@ -150,7 +150,7 @@ export function A2Day1RoutGates({
           className="min-h-[100px]"
           style={{
             backgroundColor: 'rgba(15, 15, 30, 0.5)',
-            borderColor: 'rgba(90, 90, 150, 0.2)',
+            borderColor: 'rgba(80, 160, 170, 0.2)',
             color: 'white',
           }}
         />
@@ -164,7 +164,7 @@ export function A2Day1RoutGates({
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={handleNext}
           disabled={!isComplete}

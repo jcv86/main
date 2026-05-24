@@ -106,7 +106,7 @@ export function A2Day1Upload({
       {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <h3 className="font-bold text-white mb-2">Sube Tu Documento Editado</h3>
         <p className="text-sm text-white/70">
@@ -124,7 +124,7 @@ export function A2Day1Upload({
               onClick={() => setUploadMethod('file')}
               className="p-4 rounded-lg border transition hover:border-opacity-100"
               style={{
-                borderColor: 'rgba(90, 90, 150, 0.3)',
+                borderColor: 'rgba(80, 160, 170, 0.2)',
                 backgroundColor: 'rgba(90, 90, 150, 0.05)',
               }}
             >
@@ -137,7 +137,7 @@ export function A2Day1Upload({
               onClick={() => setUploadMethod('text')}
               className="p-4 rounded-lg border transition hover:border-opacity-100"
               style={{
-                borderColor: 'rgba(90, 90, 150, 0.3)',
+                borderColor: 'rgba(80, 160, 170, 0.2)',
                 backgroundColor: 'rgba(90, 90, 150, 0.05)',
               }}
             >
@@ -155,7 +155,7 @@ export function A2Day1Upload({
           <div
             className="rounded-lg p-6 border-2 border-dashed text-center"
             style={{
-              borderColor: 'rgba(90, 90, 150, 0.3)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               backgroundColor: 'rgba(90, 90, 150, 0.05)',
             }}
           >
@@ -193,7 +193,7 @@ export function A2Day1Upload({
             className="min-h-[300px]"
             style={{
               backgroundColor: 'rgba(15, 15, 30, 0.5)',
-              borderColor: 'rgba(90, 90, 150, 0.2)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               color: 'white',
             }}
           />
@@ -241,7 +241,7 @@ export function A2Day1Upload({
       )}
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={handleProceed}
           disabled={validationStatus !== 'valid'}
@@ -269,7 +269,7 @@ export function A2Day1Upload({
             variant="outline"
             className="w-full"
             style={{
-              borderColor: 'rgba(90, 90, 150, 0.3)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               color: 'white',
             }}
           >

@@ -151,7 +151,7 @@ export function Day19_20Experience({ onComplete, userId, dayNumber = 19 }: Day19
                   placeholder="Ej: Gerente de Producto en TechCorp"
                   value={bullets.experienceTitle}
                   onChange={(e) => handleInputChange('experienceTitle', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -161,7 +161,7 @@ export function Day19_20Experience({ onComplete, userId, dayNumber = 19 }: Day19
                 <select
                   value={bullets.experienceType}
                   onChange={(e) => handleInputChange('experienceType', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white text-sm"
                 >
                   {experienceTypes.map((type) => (
                     <option key={type.value} value={type.value} className="bg-gray-900">
@@ -183,7 +183,7 @@ export function Day19_20Experience({ onComplete, userId, dayNumber = 19 }: Day19
                   placeholder={`Bullet ${i}: Ej: Dirigí reuniones semanales con el equipo`}
                   value={bullets[`raw${i}` as keyof BulletSet]}
                   onChange={(e) => handleInputChange(`raw${i}` as keyof BulletSet, e.target.value)}
-                  className="w-full px-4 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                   rows={2}
                 />
               ))}
@@ -216,7 +216,7 @@ export function Day19_20Experience({ onComplete, userId, dayNumber = 19 }: Day19
                 <textarea
                   value={bullets[`improved${i}` as keyof BulletSet]}
                   onChange={(e) => handleInputChange(`improved${i}` as keyof BulletSet, e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white text-sm"
                   rows={3}
                 />
               </div>

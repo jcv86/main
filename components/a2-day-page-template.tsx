@@ -79,11 +79,11 @@ export function A2DayPageTemplate({
   return (
     <div className="min-h-screen bg-background">
       {/* Header */}
-      <div className="border-b" style={{ backgroundColor: 'rgba(90, 90, 150, 0)', borderColor: 'rgba(90, 90, 150, 0)' }}>
+      <div className="border-b" style={{ backgroundColor: 'rgba(90, 90, 150, 0)', borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <div className="max-w-4xl mx-auto px-4 py-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-3">
-              <Badge className="text-white" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)', borderColor: 'rgba(90, 90, 150, 0.6)' }}>
+              <Badge className="text-white" style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)', borderColor: 'rgba(80, 160, 170, 0.2)' }}>
                 Día {dayNumber} de 90
               </Badge>
               <Badge className={typeInfo.color}>
@@ -169,14 +169,14 @@ export function A2DayPageTemplate({
             )}
 
             {/* Why This Matters */}
-            <div className="rounded-[28px] border border-purple-500/40 bg-purple-500/5 p-6 space-y-4">
+            <div className="rounded-[28px] border border-[rgba(80,160,170,0.2)] bg-purple-500/5 p-6 space-y-4">
               <h3 className="text-lg font-semibold text-purple-300">¿Por qué es importante?</h3>
               <p className="text-white/80 leading-relaxed">{mission.whyItMatters}</p>
             </div>
 
             {/* A3 Checkpoint Info with CTA */}
             {checkpoint && (
-              <div className="rounded-[28px] border border-emerald-500/40 bg-emerald-500/5 p-6 space-y-4">
+              <div className="rounded-[28px] border border-[rgba(80,160,170,0.2)] bg-emerald-500/5 p-6 space-y-4">
                 <div className="flex items-start justify-between">
                   <div>
                     <h3 className="text-lg font-semibold text-emerald-300">🎯 A3 Learning Checkpoint</h3>

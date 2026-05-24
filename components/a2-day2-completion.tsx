@@ -55,7 +55,7 @@ export function A2Day2Completion({
         className="rounded-lg p-6 space-y-4"
         style={{
           backgroundColor: 'rgba(90, 90, 150, 0.05)',
-          borderColor: 'rgba(90, 90, 150, 0.2)',
+          borderColor: 'rgba(80, 160, 170, 0.2)',
           border: '1px solid',
         }}
       >
@@ -93,7 +93,7 @@ export function A2Day2Completion({
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={handleSubmit}
           disabled={isSubmitting}
@@ -109,7 +109,7 @@ export function A2Day2Completion({
           variant="outline"
           className="w-full"
           style={{
-            borderColor: 'rgba(90, 90, 150, 0.3)',
+            borderColor: 'rgba(80, 160, 170, 0.2)',
             color: 'white',
           }}
         >

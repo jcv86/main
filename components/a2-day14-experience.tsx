@@ -218,21 +218,21 @@ Lo más importante que aprendí: ${draft.result.learned}
                     placeholder="¿Dónde sucedió esto? (empresa, proyecto, equipo)"
                     value={draft.context.scene}
                     onChange={(e) => updateDraft('context', 'scene', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                   <textarea
                     placeholder="¿Cuál era la situación general?"
                     value={draft.context.situation}
                     onChange={(e) => updateDraft('context', 'situation', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                   <textarea
                     placeholder="¿Qué problema necesitaba ser resuelto?"
                     value={draft.context.problem}
                     onChange={(e) => updateDraft('context', 'problem', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                 </div>
@@ -245,21 +245,21 @@ Lo más importante que aprendí: ${draft.result.learned}
                     placeholder="¿Qué acción específica tomaste?"
                     value={draft.action.what}
                     onChange={(e) => updateDraft('action', 'what', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                   <textarea
                     placeholder="¿Qué decisiones clave tomaste?"
                     value={draft.action.decisions}
                     onChange={(e) => updateDraft('action', 'decisions', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                   <textarea
                     placeholder="¿Qué herramientas o recursos usaste?"
                     value={draft.action.tools}
                     onChange={(e) => updateDraft('action', 'tools', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                 </div>
@@ -272,21 +272,21 @@ Lo más importante que aprendí: ${draft.result.learned}
                     placeholder="¿Qué cambió como resultado?"
                     value={draft.result.changed}
                     onChange={(e) => updateDraft('result', 'changed', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                   <textarea
                     placeholder="¿Quién se benefició? (métricas, personas, equipo)"
                     value={draft.result.benefited}
                     onChange={(e) => updateDraft('result', 'benefited', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                   <textarea
                     placeholder="¿Qué aprendiste?"
                     value={draft.result.learned}
                     onChange={(e) => updateDraft('result', 'learned', e.target.value)}
-                    className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                    className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     rows={2}
                   />
                 </div>

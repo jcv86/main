@@ -200,7 +200,7 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
 
           <div className="space-y-4">
             {bullets.map((bullet, idx) => (
-              <div key={idx} className="rounded-lg p-4 border border-white/20" style={{ backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
+              <div key={idx} className="rounded-lg p-4 border border-[rgba(80,160,170,0.2)]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
                 <div className="flex items-start justify-between mb-3">
                   <p className="text-white/60 text-sm font-semibold">Bullet {bullet.bulletNumber}</p>
                 </div>
@@ -213,7 +213,7 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
                       placeholder="Ej: Coordiné, Implementé, Diseñé"
                       value={bullet.actionVerb || ''}
                       onChange={(e) => updateBullet(idx, 'actionVerb', e.target.value)}
-                      className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                      className="w-full px-3 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     />
                   </div>
 
@@ -223,7 +223,7 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
                       placeholder="¿Dónde? ¿Con cuántas personas? ¿En qué industria?"
                       value={bullet.context || ''}
                       onChange={(e) => updateBullet(idx, 'context', e.target.value)}
-                      className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                      className="w-full px-3 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                       rows={2}
                     />
                   </div>
@@ -235,7 +235,7 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
                       placeholder="Ej: $500K revenue, 40% improvement, 8 team members"
                       value={bullet.impactMetrics || ''}
                       onChange={(e) => updateBullet(idx, 'impactMetrics', e.target.value)}
-                      className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                      className="w-full px-3 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                     />
                   </div>
 
@@ -245,7 +245,7 @@ export function Day21Experience({ onComplete, userId }: Day21ExperienceProps) {
                       placeholder="El bullet final pulido"
                       value={bullet.improvedBullet || ''}
                       onChange={(e) => updateBullet(idx, 'improvedBullet', e.target.value)}
-                      className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                      className="w-full px-3 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                       rows={2}
                     />
                   </div>

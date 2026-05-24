@@ -13,7 +13,7 @@ export function A2Day1Intro({ onNext }: A2Day1IntroProps) {
         className="rounded-lg p-8 space-y-6"
         style={{
           backgroundColor: 'rgba(90, 90, 150, 0.1)',
-          borderColor: 'rgba(90, 90, 150, 0.2)',
+          borderColor: 'rgba(80, 160, 170, 0.2)',
           border: '1px solid',
         }}
       >

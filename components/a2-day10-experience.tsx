@@ -215,7 +215,7 @@ export function Day10Experience({ onComplete, userId }: Day10ExperienceProps) {
             <div className="space-y-3 max-h-64 overflow-y-auto">
               {tasks.length > 0 ? (
                 tasks.map((task, idx) => (
-                  <div key={idx} className="text-white/80 text-sm p-2 rounded border border-white/20">
+                  <div key={idx} className="text-white/80 text-sm p-2 rounded border border-[rgba(80,160,170,0.2)]">
                     <p className="font-semibold">{task.value}</p>
                     <p className="text-white/60">Impact: {task.impact}</p>
                   </div>

@@ -66,7 +66,7 @@ Se guardará automáticamente en DTC Docs.`
       </div>
 
       {/* Notion Option */}
-      <div className="rounded-[28px] border p-4 space-y-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+      <div className="rounded-[28px] border p-4 space-y-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-semibold text-white flex items-center gap-2">
@@ -83,14 +83,14 @@ Se guardará automáticamente en DTC Docs.`
             value={notionLink}
             onChange={(e) => setNotionLink(e.target.value)}
             className="bg-slate-800/50 border-[rgb(80,160,170)] text-white rounded-lg"
-            style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }}
+            style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}
           />
           <p className="text-xs text-white/50">If you have a Notion template, paste the link here. We&apos;ll help you keep it updated.</p>
         </div>
       </div>
 
       {/* Download Options */}
-      <div className="rounded-[28px] border p-4 space-y-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.3)' }}>
+      <div className="rounded-[28px] border p-4 space-y-4" style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <div className="flex items-start justify-between">
           <div>
             <h3 className="font-semibold text-white flex items-center gap-2">
@@ -105,7 +105,7 @@ Se guardará automáticamente en DTC Docs.`
             onClick={handleCopyToClipboard}
             variant="outline"
             className="font-semibold hover:opacity-80 transition"
-            style={{ borderColor: 'rgba(90, 90, 150, 0.5)', color: 'rgba(90, 90, 150, 0.8)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+            style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'rgba(90, 90, 150, 0.8)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
           >
             Copiar al portapapeles
           </Button>
@@ -113,7 +113,7 @@ Se guardará automáticamente en DTC Docs.`
             onClick={handleDownload}
             variant="outline"
             className="font-semibold hover:opacity-80 transition"
-            style={{ borderColor: 'rgba(90, 90, 150, 0.5)', color: 'rgba(90, 90, 150, 0.8)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+            style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'rgba(90, 90, 150, 0.8)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
           >
             Descargar TXT
           </Button>
@@ -126,7 +126,7 @@ Se guardará automáticamente en DTC Docs.`
           onClick={onBack}
           variant="outline"
           className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
-          style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+          style={{ borderColor: 'rgba(80, 160, 170, 0.2)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           Atrás
         </Button>

@@ -238,7 +238,7 @@ export function Day13Experience({ onComplete, userId }: Day13ExperienceProps) {
             </div>
 
             {expandedIdx === stmtIdx && (
-              <div className="mt-4 space-y-4 border-t border-white/20 pt-4">
+              <div className="mt-4 space-y-4 border-t border-[rgba(80,160,170,0.2)] pt-4">
                 {/* Proof Types */}
                 <div>
                   <p className="text-white/80 text-xs font-semibold mb-2">Tipos de Prueba</p>
@@ -298,7 +298,7 @@ export function Day13Experience({ onComplete, userId }: Day13ExperienceProps) {
                       onChange={(e) =>
                         setFragmentInputs({ ...fragmentInputs, [`stmt-${stmtIdx}`]: e.target.value })
                       }
-                      className="flex-1 px-2 py-2 rounded text-sm bg-white/10 border border-white/20 text-white placeholder-white/40"
+                      className="flex-1 px-2 py-2 rounded text-sm bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40"
                     />
                     <button
                       onClick={() => addFragment(stmtIdx)}

@@ -147,7 +147,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="Tu nombre completo"
                   value={cvData.fullName}
                   onChange={(e) => handleInputChange('fullName', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -159,7 +159,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="Ej: Product Manager, Ingeniero de Software"
                   value={cvData.professionalTitle}
                   onChange={(e) => handleInputChange('professionalTitle', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -171,7 +171,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="Ciudad, País"
                   value={cvData.location}
                   onChange={(e) => handleInputChange('location', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -183,7 +183,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="tu@email.com"
                   value={cvData.contactEmail}
                   onChange={(e) => handleInputChange('contactEmail', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -195,7 +195,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="+1 (555) 123-4567"
                   value={cvData.phone}
                   onChange={(e) => handleInputChange('phone', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -207,7 +207,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="linkedin.com/in/tuprofile"
                   value={cvData.linkedinUrl}
                   onChange={(e) => handleInputChange('linkedinUrl', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
 
@@ -219,7 +219,7 @@ export function Day17Experience({ onComplete, userId }: Day17ExperienceProps) {
                   placeholder="tuportfolio.com"
                   value={cvData.portfolioUrl}
                   onChange={(e) => handleInputChange('portfolioUrl', e.target.value)}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 />
               </div>
             </div>

@@ -172,7 +172,7 @@ export function Day9Experience({ onComplete, userId }: Day9ExperienceProps) {
             <div className="space-y-2 max-h-64 overflow-y-auto">
               {memories.length > 0 ? (
                 memories.map((memory, idx) => (
-                  <div key={idx} className="text-white/80 text-sm p-2 rounded border border-white/20">
+                  <div key={idx} className="text-white/80 text-sm p-2 rounded border border-[rgba(80,160,170,0.2)]">
                     <p className="font-semibold">{memory.memory_text}</p>
                     <p className="text-white/60 text-xs mt-1">Donde: {memory.memory_where}</p>
                   </div>

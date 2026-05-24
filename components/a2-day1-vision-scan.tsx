@@ -72,7 +72,7 @@ export function A2Day1VisionScan({
       <div className="space-y-4">
         <div
           className="rounded-lg p-4"
-          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
         >
           <p className="text-sm font-semibold text-white/70">PREGUNTA 1 DE 3</p>
           <h3 className="text-lg font-bold text-white mt-2">¿Qué quieres cambiar en los próximos 30 días?</h3>
@@ -106,7 +106,7 @@ export function A2Day1VisionScan({
       <div className="space-y-4">
         <div
           className="rounded-lg p-4"
-          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
         >
           <p className="text-sm font-semibold text-white/70">PREGUNTA 2 DE 3</p>
           <h3 className="text-lg font-bold text-white mt-2">¿Qué tipo de rol, empresa o entorno quieres acercar a tu vida?</h3>
@@ -140,7 +140,7 @@ export function A2Day1VisionScan({
       <div className="space-y-4">
         <div
           className="rounded-lg p-4"
-          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
         >
           <p className="text-sm font-semibold text-white/70">PREGUNTA 3 DE 3</p>
           <h3 className="text-lg font-bold text-white mt-2">¿Qué problema profesional quieres dejar de repetir?</h3>
@@ -171,7 +171,7 @@ export function A2Day1VisionScan({
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={handleNext}
           disabled={!isComplete}

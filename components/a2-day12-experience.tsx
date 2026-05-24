@@ -210,7 +210,7 @@ export function Day12Experience({ onComplete, userId }: Day12ExperienceProps) {
                   <select
                     value={stmt.category}
                     onChange={(e) => updateCategory(idx, e.target.value)}
-                    className="w-full px-3 py-2 rounded bg-white/10 border border-white/20 text-white text-sm"
+                    className="w-full px-3 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white text-sm"
                   >
                     {categories.map((cat) => (
                       <option key={cat} value={cat} className="bg-gray-900">
@@ -242,14 +242,14 @@ export function Day12Experience({ onComplete, userId }: Day12ExperienceProps) {
                     <button
                       onClick={() => updateRank(idx, stmt.rank - 1)}
                       disabled={stmt.rank === 1}
-                      className="flex-1 px-2 py-2 rounded bg-white/10 border border-white/20 text-white disabled:opacity-50 hover:bg-white/20"
+                      className="flex-1 px-2 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white disabled:opacity-50 hover:bg-white/20"
                     >
                       <ArrowUp className="w-4 h-4 mx-auto" />
                     </button>
                     <button
                       onClick={() => updateRank(idx, stmt.rank + 1)}
                       disabled={stmt.rank === statements.length}
-                      className="flex-1 px-2 py-2 rounded bg-white/10 border border-white/20 text-white disabled:opacity-50 hover:bg-white/20"
+                      className="flex-1 px-2 py-2 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white disabled:opacity-50 hover:bg-white/20"
                     >
                       <ArrowDown className="w-4 h-4 mx-auto" />
                     </button>
@@ -266,7 +266,7 @@ export function Day12Experience({ onComplete, userId }: Day12ExperienceProps) {
         <div className="overflow-x-auto">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-white/20">
+              <tr className="border-b border-[rgba(80,160,170,0.2)]">
                 <th className="text-left py-2 px-3 text-white/60 font-semibold">Rank</th>
                 <th className="text-left py-2 px-3 text-white/60 font-semibold">Declaración</th>
                 <th className="text-left py-2 px-3 text-white/60 font-semibold">Categoría</th>
@@ -275,7 +275,7 @@ export function Day12Experience({ onComplete, userId }: Day12ExperienceProps) {
             </thead>
             <tbody>
               {statements.map((stmt) => (
-                <tr key={stmt.id} className="border-b border-white/10">
+                <tr key={stmt.id} className="border-b border-[rgba(80,160,170,0.1)]">
                   <td className="py-2 px-3 text-white font-bold">{stmt.rank}</td>
                   <td className="py-2 px-3 text-white/85 text-xs">{stmt.text.substring(0, 50)}...</td>
                   <td className="py-2 px-3 text-white/85">{stmt.category}</td>

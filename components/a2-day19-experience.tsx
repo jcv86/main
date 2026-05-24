@@ -103,7 +103,7 @@ export function Day19Experience({ onComplete, userId }: Day19ExperienceProps) {
           <textarea
             value={jobAnalysis}
             onChange={(e) => setJobAnalysis(e.target.value)}
-            className="w-full h-64 p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-cyan-400"
+            className="w-full h-64 p-4 bg-white/5 border border-[rgba(80,160,170,0.2)] rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-cyan-400"
             placeholder="Tu análisis aquí..."
           />
 

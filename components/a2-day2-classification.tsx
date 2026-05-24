@@ -54,7 +54,7 @@ export function A2Day2Classification({
           style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-5 h-5 animate-spin rounded-full border-2 border-white/20 border-t-white/50"></div>
+            <div className="w-5 h-5 animate-spin rounded-full border-2 border-[rgba(80,160,170,0.2)] border-t-white/50"></div>
             <p className="text-white font-semibold">Clasificando evidencia...</p>
           </div>
 
@@ -81,7 +81,7 @@ export function A2Day2Classification({
       {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <div className="flex items-center gap-2 mb-2">
           <Sparkles className="w-5 h-5" style={{ color: 'rgb(80, 160, 170)' }} />
@@ -100,7 +100,7 @@ export function A2Day2Classification({
             className="p-4 rounded-lg"
             style={{
               backgroundColor: 'rgba(90, 90, 150, 0.05)',
-              borderColor: 'rgba(90, 90, 150, 0.2)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               border: '1px solid',
             }}
           >
@@ -125,7 +125,7 @@ export function A2Day2Classification({
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <button
           onClick={handleNext}
           className="w-full py-3 rounded-lg text-white font-semibold transition"

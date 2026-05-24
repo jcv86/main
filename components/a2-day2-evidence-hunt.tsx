@@ -63,7 +63,7 @@ export function A2Day2EvidenceHunt({
       {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <h3 className="font-bold text-white mb-2">Caza en 5 Lugares</h3>
         <p className="text-sm text-white/70">
@@ -127,7 +127,7 @@ export function A2Day2EvidenceHunt({
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={onNext}
           disabled={!isComplete}

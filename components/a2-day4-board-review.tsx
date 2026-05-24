@@ -26,7 +26,7 @@ export function Day4BoardReview({
         <div
           className="rounded-lg p-6 border-2 space-y-2"
           style={{
-            borderColor: 'rgba(90, 90, 150, 0.4)',
+            borderColor: 'rgba(80, 160, 170, 0.2)',
             backgroundColor: 'rgba(90, 90, 150, 0.08)',
           }}
         >

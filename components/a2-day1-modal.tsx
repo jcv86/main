@@ -105,7 +105,7 @@ export function A2Day1Modal({ isOpen, onClose, onComplete }: A2Day1ModalProps) {
 
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-[28px]" style={{ backgroundColor: 'rgba(15, 17, 23, 0.98)', borderColor: 'rgba(90, 90, 150, 0.4)', border: '1px solid rgba(90, 90, 150, 0.4)' }}>
+      <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-[28px]" style={{ backgroundColor: 'rgba(15, 17, 23, 0.98)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid rgba(90, 90, 150, 0.4)' }}>
         <DialogHeader className="flex items-center justify-between pr-8">
           <div className="flex-1">
             <DialogTitle className="text-2xl font-bold text-white">

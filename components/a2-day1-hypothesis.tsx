@@ -82,7 +82,7 @@ esto es absolutamente alcanzable en 30 días si nos enfocamos en evidencia real 
       {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <div className="flex items-center gap-2">
           <Sparkles className="w-5 h-5" style={{ color: 'rgb(80, 160, 170)' }} />
@@ -107,7 +107,7 @@ esto es absolutamente alcanzable en 30 días si nos enfocamos en evidencia real 
       ) : (
         <div
           className="rounded-lg p-6 space-y-4 whitespace-pre-wrap text-sm text-white/80 leading-relaxed"
-          style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
         >
           {hypothesis}
         </div>
@@ -136,7 +136,7 @@ esto es absolutamente alcanzable en 30 días si nos enfocamos en evidencia real 
                 variant="outline"
                 className="w-full text-xs"
                 disabled
-                style={{ borderColor: 'rgba(90, 90, 150, 0.3)', color: 'rgba(255,255,255,0.5)' }}
+                style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'rgba(255,255,255,0.5)' }}
               >
                 Pedir versión más directa
               </Button>
@@ -144,7 +144,7 @@ esto es absolutamente alcanzable en 30 días si nos enfocamos en evidencia real 
                 variant="outline"
                 className="w-full text-xs"
                 disabled
-                style={{ borderColor: 'rgba(90, 90, 150, 0.3)', color: 'rgba(255,255,255,0.5)' }}
+                style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'rgba(255,255,255,0.5)' }}
               >
                 Pedir versión más simple
               </Button>
@@ -152,7 +152,7 @@ esto es absolutamente alcanzable en 30 días si nos enfocamos en evidencia real 
                 variant="outline"
                 className="w-full text-xs"
                 onClick={handleAccept}
-                style={{ borderColor: 'rgba(90, 90, 150, 0.3)', color: 'rgba(255,255,255,0.9)' }}
+                style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'rgba(255,255,255,0.9)' }}
               >
                 Editar manualmente
               </Button>

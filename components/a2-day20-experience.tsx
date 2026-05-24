@@ -103,7 +103,7 @@ export function Day20Experience({ onComplete, userId }: Day20ExperienceProps) {
           <textarea
             value={marketStrategy}
             onChange={(e) => setMarketStrategy(e.target.value)}
-            className="w-full h-64 p-4 bg-white/5 border border-white/20 rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-cyan-400"
+            className="w-full h-64 p-4 bg-white/5 border border-[rgba(80,160,170,0.2)] rounded-lg text-white placeholder-white/40 focus:outline-none focus:border-cyan-400"
             placeholder="Tu estrategia aquí..."
           />
 

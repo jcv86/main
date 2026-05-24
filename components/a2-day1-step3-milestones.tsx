@@ -96,7 +96,7 @@ export function A2Day1Step3Milestones({ onNext, onBack, initialData }: Step3Mile
           onClick={onBack}
           variant="outline"
           className="flex-1 text-white hover:opacity-80 transition py-6 rounded-full font-semibold"
-          style={{ borderColor: 'rgba(90, 90, 150, 0.5)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
+          style={{ borderColor: 'rgba(80, 160, 170, 0.2)', backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           Atrás
         </Button>

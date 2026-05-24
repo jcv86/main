@@ -170,7 +170,7 @@ export function Day18Experience({ onComplete, userId }: Day18ExperienceProps) {
             <textarea
               value={professionalSummary}
               onChange={(e) => setProfessionalSummary(e.target.value)}
-              className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+              className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
               rows={4}
             />
           </div>

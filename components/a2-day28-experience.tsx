@@ -152,7 +152,7 @@ export function Day28Experience({ onComplete, userId }: Day28ExperienceProps) {
                   placeholder="Escribe lo que un reclutador entendería rápidamente"
                   value={scanAnswers.first10Seconds}
                   onChange={(e) => setScanAnswers({ ...scanAnswers, first10Seconds: e.target.value })}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                   rows={3}
                 />
               </div>
@@ -165,7 +165,7 @@ export function Day28Experience({ onComplete, userId }: Day28ExperienceProps) {
                   placeholder="Qué te hace sentir como candidato fuerte"
                   value={scanAnswers.confidencePart}
                   onChange={(e) => setScanAnswers({ ...scanAnswers, confidencePart: e.target.value })}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                   rows={2}
                 />
               </div>
@@ -178,7 +178,7 @@ export function Day28Experience({ onComplete, userId }: Day28ExperienceProps) {
                   placeholder="Qué podría mejorar o aclarar"
                   value={scanAnswers.doubtPart}
                   onChange={(e) => setScanAnswers({ ...scanAnswers, doubtPart: e.target.value })}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                   rows={2}
                 />
               </div>
@@ -191,7 +191,7 @@ export function Day28Experience({ onComplete, userId }: Day28ExperienceProps) {
                   placeholder="La pregunta más importante que te haría"
                   value={scanAnswers.recruiterQuestion}
                   onChange={(e) => setScanAnswers({ ...scanAnswers, recruiterQuestion: e.target.value })}
-                  className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                  className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                   rows={2}
                 />
               </div>
@@ -246,7 +246,7 @@ export function Day28Experience({ onComplete, userId }: Day28ExperienceProps) {
               <select
                 value={improvementFocus}
                 onChange={(e) => setImprovementFocus(e.target.value)}
-                className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white text-sm"
+                className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white text-sm"
               >
                 <option value="">Selecciona un área a mejorar</option>
                 <option value="clarity">Aclarar dirección de rol</option>
@@ -261,7 +261,7 @@ export function Day28Experience({ onComplete, userId }: Day28ExperienceProps) {
                 placeholder="Escribe la mejora específica que harías"
                 value={improvementNote}
                 onChange={(e) => setImprovementNote(e.target.value)}
-                className="w-full px-4 py-3 rounded bg-white/10 border border-white/20 text-white placeholder-white/40 text-sm"
+                className="w-full px-4 py-3 rounded bg-white/10 border border-[rgba(80,160,170,0.2)] text-white placeholder-white/40 text-sm"
                 rows={3}
               />
             </div>

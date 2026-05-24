@@ -73,7 +73,7 @@ export function Day7MirrorCardBuilder({ a2Data, onCardBuilt, isLoading, onNext }
           <div className="text-white/80 text-sm space-y-2">
             <p className="font-semibold">{title || 'Senior Product Manager - B2B SaaS'}</p>
             <p className="text-white/60">{description || 'Lanzo productos que generan impacto. Coordino equipos y creo valor duradero.'}</p>
-            <div className="pt-3 border-t border-white/20 mt-3 space-y-1 text-xs">
+            <div className="pt-3 border-t border-[rgba(80,160,170,0.2)] mt-3 space-y-1 text-xs">
               <p>Rol: Senior PM</p>
               <p>Fortalezas: Lanzamiento, Equipos, Ingresos</p>
               <p>Market Fit: Alto (demanda creciente)</p>

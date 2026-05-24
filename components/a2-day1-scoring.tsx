@@ -126,7 +126,7 @@ export function A2Day1Scoring({
           style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
         >
           <div className="flex items-center gap-3 mb-4">
-            <div className="w-5 h-5 animate-spin rounded-full border-2 border-white/20 border-t-white/50"></div>
+            <div className="w-5 h-5 animate-spin rounded-full border-2 border-[rgba(80,160,170,0.2)] border-t-white/50"></div>
             <p className="text-white font-semibold">Analizando tu ruta...</p>
           </div>
 
@@ -292,7 +292,7 @@ export function A2Day1Scoring({
       )}
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         {passStatus === 'pass' && (
           <Button
             onClick={handleSubmit}
@@ -318,7 +318,7 @@ export function A2Day1Scoring({
             <Button
               onClick={() => window.location.reload()}
               variant="outline"
-              style={{ borderColor: 'rgba(90, 90, 150, 0.3)', color: 'white' }}
+              style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'white' }}
             >
               Cargar Documento Editado
             </Button>

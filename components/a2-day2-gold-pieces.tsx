@@ -35,7 +35,7 @@ export function A2Day2GoldPieces({
       {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <h3 className="font-bold text-white mb-2">Las 3 Piezas de Oro</h3>
         <p className="text-sm text-white/70">
@@ -86,7 +86,7 @@ export function A2Day2GoldPieces({
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={() => onNext(selectedGoldPieces.map((id) => fragments.find((f) => f.id === id)))}
           disabled={!isComplete}

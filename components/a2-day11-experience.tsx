@@ -239,7 +239,7 @@ el crecimiento del negocio y la satisfacción de stakeholders.`,
             <div className="space-y-2">
               {seeds.length > 0 ? (
                 seeds.map((seed, idx) => (
-                  <div key={idx} className="text-white/80 text-sm p-3 rounded border border-white/20" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)' }}>
+                  <div key={idx} className="text-white/80 text-sm p-3 rounded border border-[rgba(80,160,170,0.2)]" style={{ backgroundColor: 'rgba(80, 160, 170, 0.1)' }}>
                     <p className="font-semibold">{seed.value}</p>
                     <p className="text-white/60 text-xs mt-1">Impact: {seed.impact}</p>
                   </div>
@@ -339,7 +339,7 @@ el crecimiento del negocio y la satisfacción de stakeholders.`,
                     <p className="text-xs font-semibold text-white/60 uppercase mb-2">Original</p>
                     <p className="text-white text-sm">{stmt.statement}</p>
                   </div>
-                  <div className="border-t border-white/20 pt-3">
+                  <div className="border-t border-[rgba(80,160,170,0.2)] pt-3">
                     <p className="text-xs font-semibold text-white/60 uppercase mb-2">Mejorado</p>
                     <p className="text-white/85 text-sm leading-relaxed">{stmt.coachEnhanced}</p>
                   </div>

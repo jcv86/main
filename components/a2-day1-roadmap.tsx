@@ -127,7 +127,7 @@ INSTRUCCIONES:
       {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid' }}
+        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
       >
         <h3 className="font-bold text-white mb-2">Tu Documento de Ruta Está Listo</h3>
         <p className="text-sm text-white/70">
@@ -140,7 +140,7 @@ INSTRUCCIONES:
         className="rounded-lg p-6 space-y-2 font-mono text-sm text-white/80 whitespace-pre-wrap max-h-96 overflow-y-auto"
         style={{
           backgroundColor: 'rgba(90, 90, 150, 0.05)',
-          borderColor: 'rgba(90, 90, 150, 0.2)',
+          borderColor: 'rgba(80, 160, 170, 0.2)',
           border: '1px solid',
         }}
       >
@@ -157,7 +157,7 @@ INSTRUCCIONES:
             variant="outline"
             className="flex items-center justify-center gap-2"
             style={{
-              borderColor: 'rgba(90, 90, 150, 0.3)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               backgroundColor: copied ? 'rgba(80, 160, 170, 0.2)' : 'transparent',
               color: 'white',
             }}
@@ -179,7 +179,7 @@ INSTRUCCIONES:
             onClick={handleDownloadMarkdown}
             variant="outline"
             style={{
-              borderColor: 'rgba(90, 90, 150, 0.3)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               color: 'white',
             }}
           >
@@ -190,7 +190,7 @@ INSTRUCCIONES:
             onClick={handleDownloadText}
             variant="outline"
             style={{
-              borderColor: 'rgba(90, 90, 150, 0.3)',
+              borderColor: 'rgba(80, 160, 170, 0.2)',
               color: 'white',
             }}
           >
@@ -217,7 +217,7 @@ INSTRUCCIONES:
       </div>
 
       {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(90, 90, 150, 0.2)' }}>
+      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
         <Button
           onClick={() => onNext(roadmapContent)}
           className="w-full"
