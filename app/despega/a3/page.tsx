@@ -367,7 +367,7 @@ export default function A3BasicLevelTrainingPath() {
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
           <Loader2 className="w-8 h-8 animate-spin" style={{ color: PILLAR3_PRIMARY }} />
-          <p className="text-white/70">Loading your progress...</p>
+          <p className="text-white/70">Cargando tu progreso...</p>
         </div>
       </div>
     )

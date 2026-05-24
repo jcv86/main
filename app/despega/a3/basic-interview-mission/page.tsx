@@ -305,7 +305,7 @@ export default function BasicInterviewMissionModule() {
 
             {/* Tips */}
             <Card className="rounded-[2px] bg-[rgba(80,160,170,0.1)] border-[rgba(80,160,170,0.3)] p-4">
-              <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">Tips for Success</h4>
+              <h4 className="font-semibold text-[rgb(80,160,170)] mb-2">Consejos para el Éxito</h4>
               <ul className="space-y-1 text-sm text-white/70">
                 <li>• Take your time to think before answering</li>
                 <li>• Use the STAR/Marco CARs from Arquitectura de Respuestas</li>
