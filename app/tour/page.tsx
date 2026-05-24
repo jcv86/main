@@ -9,10 +9,10 @@ export default function TourPage() {
         {/* Header */}
         <div className="text-center space-y-3">
           <h1 className="text-4xl md:text-5xl font-black text-white mb-2">
-            120-Second Site Tour
+            Recorrido Completo de la Plataforma - 120 Segundos
           </h1>
           <p className="text-white/70 text-lg">
-            Complete walkthrough of Despega Tu Carrera focusing on the A3 Training module and Interview Coaching
+            Demostración completa del módulo A3 Entrenamiento y el Sistema de Entrevistas con Coach de IA
           </p>
         </div>
 
@@ -22,65 +22,65 @@ export default function TourPage() {
         {/* Sections Overview */}
         <div className="grid md:grid-cols-2 gap-6">
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">Tour Sections</h2>
+            <h2 className="text-2xl font-bold text-white">Secciones del Recorrido</h2>
             <ul className="space-y-2 text-white/80 text-sm">
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">1.</span>
-                <span><strong>A3 Intro</strong> - Complete training program overview (Ruta Nivel Básico)</span>
+                <span><strong>Introducción A3</strong> - Vista completa del programa de entrenamiento (Ruta Nivel Básico)</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">2.</span>
-                <span><strong>3-Month Journey</strong> - Mes 1 (Fundamentals), Mes 2 (Acceleration), Mes 3 (Mastery)</span>
+                <span><strong>Viaje de 3 Meses</strong> - Mes 1 (Fundamentos), Mes 2 (Aceleración), Mes 3 (Dominio)</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">3.</span>
-                <span><strong>10 Training Modules</strong> - Complete path: 90 tasks, 1,340 XP, advanced options</span>
+                <span><strong>10 Módulos de Entrenamiento</strong> - Ruta completa: 90 tareas, 1,340 XP, opciones avanzadas</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">4.</span>
-                <span><strong>Module Details</strong> - Career Mirror, Value Mining, CV Builder, Job Decoder</span>
+                <span><strong>Detalles de Módulos</strong> - Espejo de Carrera, Minería de Valor, Constructor CV, Decodificador</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">5.</span>
-                <span><strong>Interview Modules</strong> - Answer Architecture, Coach Practice Room ⭐, Communication Gym</span>
+                <span><strong>Módulos de Entrevista</strong> - Arquitectura de Respuestas, Sala del Coach ⭐, Gimnasio Comunicación</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">6.</span>
-                <span><strong>Simulations & Mastery</strong> - Recruiter Simulation, Difficult Questions, Final Certification</span>
+                <span><strong>Simulaciones & Maestría</strong> - Simulación Reclutador, Preguntas Difíciles, Certificación Final</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">7.</span>
-                <span><strong>Coach Practice Room</strong> ⭐ - Interactive AI coaching with 3 interview questions</span>
+                <span><strong>Sala de Práctica del Coach</strong> ⭐ - Entrenamiento interactivo con Coach IA + 3 preguntas</span>
               </li>
               <li className="flex gap-2">
                 <span className="text-[rgb(80,160,170)]">8.</span>
-                <span><strong>CV Builder Studio</strong> - ATS optimization and professional document building</span>
+                <span><strong>Estudio Constructor CV</strong> - Optimización ATS y construcción profesional de documentos</span>
               </li>
             </ul>
           </div>
 
           <div className="space-y-4">
-            <h2 className="text-2xl font-bold text-white">Key Features</h2>
+            <h2 className="text-2xl font-bold text-white">Características Clave</h2>
             <div className="space-y-3">
               <div className="p-4 rounded-lg bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.2)]">
-                <p className="text-[rgb(80,160,170)] font-bold mb-1">10 Complete Modules</p>
-                <p className="text-white/80 text-sm">1,340 XP across 90-day progressive journey</p>
+                <p className="text-[rgb(80,160,170)] font-bold mb-1">10 Módulos Completos</p>
+                <p className="text-white/80 text-sm">1,340 XP en recorrido progresivo de 90 días</p>
               </div>
               <div className="p-4 rounded-lg bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.2)]">
-                <p className="text-[rgb(80,160,170)] font-bold mb-1">Interview Questions</p>
-                <p className="text-white/80 text-sm">3 core questions with real-time AI coaching feedback</p>
+                <p className="text-[rgb(80,160,170)] font-bold mb-1">Preguntas de Entrevista</p>
+                <p className="text-white/80 text-sm">3 preguntas clave con retroalimentación de Coach IA en tiempo real</p>
               </div>
               <div className="p-4 rounded-lg bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.2)]">
-                <p className="text-[rgb(80,160,170)] font-bold mb-1">Answer Architecture</p>
-                <p className="text-white/80 text-sm">STAR & CAR frameworks for structured responses</p>
+                <p className="text-[rgb(80,160,170)] font-bold mb-1">Arquitectura de Respuestas</p>
+                <p className="text-white/80 text-sm">Métodos STAR & CAR para respuestas estructuradas</p>
               </div>
               <div className="p-4 rounded-lg bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.2)]">
-                <p className="text-[rgb(80,160,170)] font-bold mb-1">Real Simulations</p>
-                <p className="text-white/80 text-sm">Recruiter simulation & difficult questions lab</p>
+                <p className="text-[rgb(80,160,170)] font-bold mb-1">Simulaciones Reales</p>
+                <p className="text-white/80 text-sm">Simulación con Reclutador & Laboratorio de Preguntas Difíciles</p>
               </div>
               <div className="p-4 rounded-lg bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.2)]">
-                <p className="text-[rgb(80,160,170)] font-bold mb-1">AI Coach Integration</p>
-                <p className="text-white/80 text-sm">Real-time feedback and improvement suggestions</p>
+                <p className="text-[rgb(80,160,170)] font-bold mb-1">Coach IA Integrado</p>
+                <p className="text-white/80 text-sm">Retroalimentación en tiempo real y sugerencias de mejora</p>
               </div>
             </div>
           </div>
@@ -88,33 +88,33 @@ export default function TourPage() {
 
         {/* Interview Coaching Details */}
         <div className="bg-[rgba(80,160,170,0.05)] border border-[rgba(80,160,170,0.2)] rounded-xl p-6">
-          <h2 className="text-2xl font-bold text-white mb-4">Coach Practice Room - Interview Coaching</h2>
+          <h2 className="text-2xl font-bold text-white mb-4">Sala de Práctica del Coach - Sistema de Entrevistas con IA</h2>
           <div className="grid md:grid-cols-3 gap-4">
             <div className="space-y-2">
-              <h3 className="text-[rgb(80,160,170)] font-bold">Question 1</h3>
+              <h3 className="text-[rgb(80,160,170)] font-bold">Pregunta 1: El Coach</h3>
               <p className="text-white/80 text-sm">
-                "Cuéntame sobre ti" (Tell me about yourself)
+                "Cuéntame sobre ti"
               </p>
-              <p className="text-white/60 text-xs">Practice structure, relevance, duration, and specific details</p>
+              <p className="text-white/60 text-xs">Coach IA proporciona retroalimentación en tiempo real sobre estructura, relevancia, duración y detalles</p>
             </div>
             <div className="space-y-2">
-              <h3 className="text-[rgb(80,160,170)] font-bold">Question 2</h3>
+              <h3 className="text-[rgb(80,160,170)] font-bold">Pregunta 2: El Entrevistador</h3>
               <p className="text-white/80 text-sm">
-                "¿Por qué quieres trabajar aquí?" (Why work here?)
+                "¿Por qué quieres trabajar aquí?"
               </p>
-              <p className="text-white/60 text-xs">Research, cultural fit, motivation alignment</p>
+              <p className="text-white/60 text-xs">Simulación de entrevistador real evaluando investigación, alineación cultural y motivación</p>
             </div>
             <div className="space-y-2">
-              <h3 className="text-[rgb(80,160,170)] font-bold">Question 3</h3>
+              <h3 className="text-[rgb(80,160,170)] font-bold">Pregunta 3: Reclutador</h3>
               <p className="text-white/80 text-sm">
-                "Cuéntame sobre una situación desafiante..." (Challenging situation)
+                "Situación desafiante que superaste..."
               </p>
-              <p className="text-white/60 text-xs">STAR method, problem-solving, impact demonstration</p>
+              <p className="text-white/60 text-xs">Reclutador profesional evaluando método STAR, resolución de problemas e impacto</p>
             </div>
           </div>
           <div className="mt-4 p-3 bg-black/30 rounded border border-[rgba(80,160,170,0.1)]">
             <p className="text-white/70 text-sm">
-              <strong>Practice Loop:</strong> Answer → Receive AI Feedback → Review Criteria → Improve & Re-answer → Continue
+              <strong>Bucle de Práctica:</strong> Responde → Recibe Retroalimentación IA → Revisa Criterios → Mejora y Reintenta → Continúa
             </p>
           </div>
         </div>
@@ -123,19 +123,19 @@ export default function TourPage() {
         <div className="grid md:grid-cols-4 gap-4">
           <div className="bg-[rgba(80,160,170,0.05)] border border-[rgba(80,160,170,0.2)] rounded-lg p-4 text-center">
             <div className="text-2xl font-black text-[rgb(80,160,170)]">95s</div>
-            <p className="text-white/70 text-sm mt-1">Tour Duration</p>
+            <p className="text-white/70 text-sm mt-1">Duración del Recorrido</p>
           </div>
           <div className="bg-[rgba(80,160,170,0.05)] border border-[rgba(80,160,170,0.2)] rounded-lg p-4 text-center">
             <div className="text-2xl font-black text-[rgb(80,160,170)]">16</div>
-            <p className="text-white/70 text-sm mt-1">Frames</p>
+            <p className="text-white/70 text-sm mt-1">Fotogramas</p>
           </div>
           <div className="bg-[rgba(80,160,170,0.05)] border border-[rgba(80,160,170,0.2)] rounded-lg p-4 text-center">
             <div className="text-2xl font-black text-[rgb(80,160,170)]">10</div>
-            <p className="text-white/70 text-sm mt-1">Training Modules</p>
+            <p className="text-white/70 text-sm mt-1">Módulos de Entrenamiento</p>
           </div>
           <div className="bg-[rgba(80,160,170,0.05)] border border-[rgba(80,160,170,0.2)] rounded-lg p-4 text-center">
             <div className="text-2xl font-black text-[rgb(80,160,170)]">1,340</div>
-            <p className="text-white/70 text-sm mt-1">Total XP</p>
+            <p className="text-white/70 text-sm mt-1">XP Total</p>
           </div>
         </div>
       </div>

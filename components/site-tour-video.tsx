@@ -8,27 +8,27 @@ export default function SiteTourVideo() {
 
   const frames = [
     // A3 Intro Section
-    { image: '/tour-videos/a3-main-intro.png', title: 'A3 Training - "Ruta de Entrenamiento Nivel Básico"', duration: 6 },
-    { image: '/tour-videos/a3-intro-modules.png', title: 'A3 - 3-Month Progressive Journey (Mes 1-3)', duration: 5 },
-    { image: '/tour-videos/a3-10-modules.png', title: 'A3 - Complete 10 Module Path (90 tasks, 0% progress)', duration: 6 },
-    { image: '/tour-videos/a3-simulations-menu.png', title: 'A3 - Advanced Level Options & Module 1: Espejo de Carrera', duration: 6 },
+    { image: '/tour-videos/a3-main-intro.png', title: 'A3 Entrenamiento - "Ruta de Entrenamiento Nivel Básico"', duration: 6 },
+    { image: '/tour-videos/a3-intro-modules.png', title: 'Viaje de 3 Meses (Mes 1: Fundamentos, Mes 2: Aceleración, Mes 3: Dominio)', duration: 5 },
+    { image: '/tour-videos/a3-10-modules.png', title: 'Ruta Completa de 10 Módulos (90 tareas, 0% progreso)', duration: 6 },
+    { image: '/tour-videos/a3-simulations-menu.png', title: 'Opciones Nivel Avanzado & Módulo 1: Espejo de Carrera', duration: 6 },
     
     // A3 Training Modules Detail
-    { image: '/tour-videos/a3-all-modules.png', title: 'A3 Modules 2-3: Value Mining Lab & CV Builder Studio', duration: 6 },
-    { image: '/tour-videos/a3-interview-modules.png', title: 'A3 Modules 4-5: Job Decoder & Answer Architecture (STAR/CAR)', duration: 6 },
-    { image: '/tour-videos/a3-interview-sim-modules.png', title: 'A3 Modules 6-7: Coach Practice Room & Communication Gym', duration: 6 },
-    { image: '/tour-videos/a3-final-modules.png', title: 'A3 Modules 8-9: Recruiter Simulation & Difficult Questions Lab', duration: 6 },
-    { image: '/tour-videos/a3-module-10.png', title: 'A3 Module 10: Basic Interview Mission (Final Certification - 220 XP)', duration: 6 },
+    { image: '/tour-videos/a3-all-modules.png', title: 'Módulos 2-3: Laboratorio de Minería de Valor & Constructor CV', duration: 6 },
+    { image: '/tour-videos/a3-interview-modules.png', title: 'Módulos 4-5: Decodificador de Ofertas & Arquitectura de Respuestas (STAR/CAR)', duration: 6 },
+    { image: '/tour-videos/a3-interview-sim-modules.png', title: 'Módulos 6-7: Sala del Coach & Gimnasio de Comunicación', duration: 6 },
+    { image: '/tour-videos/a3-final-modules.png', title: 'Módulos 8-9: Simulación con Reclutador & Laboratorio de Preguntas Difíciles', duration: 6 },
+    { image: '/tour-videos/a3-module-10.png', title: 'Módulo 10: Misión de Entrevista Básica (Certificación Final - 220 XP)', duration: 6 },
     
     // Interview & Coaching Sections
-    { image: '/tour-videos/coach-practice-room.png', title: 'Coach Practice Room - Interactive Interview Training', duration: 7 },
-    { image: '/tour-videos/coach-questions.png', title: 'Question 1: "Cuéntame sobre ti" with AI Coach Feedback', duration: 8 },
-    { image: '/tour-videos/coach-more-questions.png', title: 'Interview Coaching with Evaluation Criteria & Answer Field', duration: 8 },
-    { image: '/tour-videos/a3-second-question.png', title: 'All 3 Interview Questions: Personal + Motivation + Challenge Story', duration: 7 },
+    { image: '/tour-videos/coach-practice-room.png', title: 'Sala de Práctica del Coach - Entrenamiento Interactivo de Entrevistas', duration: 7 },
+    { image: '/tour-videos/coach-questions.png', title: 'Pregunta 1: "Cuéntame sobre ti" con Retroalimentación del Coach IA', duration: 8 },
+    { image: '/tour-videos/coach-more-questions.png', title: 'Entrenamiento de Entrevistas con Criterios de Evaluación y Campo de Respuesta', duration: 8 },
+    { image: '/tour-videos/a3-second-question.png', title: 'Las 3 Preguntas de Entrevista: Personal + Motivación + Historia de Desafío', duration: 7 },
     
     // CV Builder & Completion
-    { image: '/tour-videos/a3-cv-builder.png', title: 'CV Builder Studio - ATS-Optimized Document Building', duration: 6 },
-    { image: '/tour-videos/a3-cv-content.png', title: 'CV Module Content with Professional Email & LinkedIn Tips', duration: 6 },
+    { image: '/tour-videos/a3-cv-builder.png', title: 'Estudio Constructor CV - Construcción de Documentos Optimizada para ATS', duration: 6 },
+    { image: '/tour-videos/a3-cv-content.png', title: 'Contenido del Módulo CV con Consejos de Email Profesional y LinkedIn', duration: 6 },
   ];
 
   const totalDuration = frames.reduce((sum, f) => sum + f.duration, 0);
@@ -57,7 +57,7 @@ export default function SiteTourVideo() {
         <div className="absolute top-0 left-0 right-0 bg-gradient-to-b from-black/50 to-transparent p-4">
           <h3 className="text-white font-semibold">{frames[currentFrame].title}</h3>
           <p className="text-white/70 text-sm">
-            Frame {currentFrame + 1} of {frames.length} • {totalDuration}s total
+            Fotograma {currentFrame + 1} de {frames.length} • {totalDuration}s total
           </p>
         </div>
       </div>
@@ -100,14 +100,14 @@ export default function SiteTourVideo() {
             <button
               onClick={() => setIsPlaying(!isPlaying)}
               className="p-2 rounded-lg bg-[rgb(80,160,170)] hover:bg-[rgb(80,160,170)]/80 text-white transition-all"
-              title={isPlaying ? 'Pause' : 'Play'}
+              title={isPlaying ? 'Pausar' : 'Reproducir'}
             >
               {isPlaying ? <Pause size={20} /> : <Play size={20} />}
             </button>
             <button
               onClick={() => setIsMuted(!isMuted)}
               className="p-2 rounded-lg bg-white/10 hover:bg-white/20 text-white transition-all"
-              title={isMuted ? 'Unmute' : 'Mute'}
+              title={isMuted ? 'Habilitar sonido' : 'Silenciar'}
             >
               {isMuted ? <VolumeX size={20} /> : <Volume2 size={20} />}
             </button>
@@ -119,9 +119,9 @@ export default function SiteTourVideo() {
 
         {/* Info */}
         <div className="text-white/60 text-xs space-y-1">
-          <p>🎯 <span className="text-white">Tour Contents:</span> Login • Dashboard • A3 Training Module • Coach Practice Room • Interview Questions • CV Builder</p>
-          <p>⏱️ <span className="text-white">Total Duration:</span> {totalDuration} seconds • 15 key sections</p>
-          <p>📍 <span className="text-white">Focus Areas:</span> Interview coaching section & A3 Training module walkthrough</p>
+          <p>🎯 <span className="text-white">Contenido del Recorrido:</span> Login • Dashboard • Módulo A3 • Sala del Coach • Preguntas de Entrevista • Constructor CV</p>
+          <p>⏱️ <span className="text-white">Duración Total:</span> {totalDuration} segundos • 16 fotogramas principales</p>
+          <p>📍 <span className="text-white">Áreas de Enfoque:</span> Sistema de entrevistas con Coach IA y Módulo A3 Entrenamiento</p>
         </div>
       </div>
     </div>
