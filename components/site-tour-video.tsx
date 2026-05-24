@@ -7,21 +7,28 @@ export default function SiteTourVideo() {
   const [isMuted, setIsMuted] = useState(false);
 
   const frames = [
-    { image: '/tour-videos/auth-page.png', title: 'Login & Authentication', duration: 3 },
-    { image: '/tour-videos/dashboard.png', title: 'Dashboard Overview', duration: 5 },
-    { image: '/tour-videos/a3-main.png', title: 'A3 Training Module', duration: 4 },
-    { image: '/tour-videos/a3-training-home.png', title: 'Training Home', duration: 5 },
-    { image: '/tour-videos/a3-menu.png', title: 'Navigation Menu', duration: 3 },
-    { image: '/tour-videos/a3-trainings.png', title: 'Training Routes Overview', duration: 6 },
-    { image: '/tour-videos/a3-modules.png', title: 'Progress Modules', duration: 5 },
-    { image: '/tour-videos/a3-coaching.png', title: 'Coaching Section', duration: 5 },
-    { image: '/tour-videos/coach-practice-room.png', title: 'Coach Practice Room - Introduction', duration: 8 },
-    { image: '/tour-videos/coach-questions.png', title: 'Interview Questions - Start', duration: 10 },
-    { image: '/tour-videos/coach-more-questions.png', title: 'Interview Practice Details', duration: 12 },
-    { image: '/tour-videos/a3-second-question.png', title: 'All Three Interview Questions', duration: 10 },
-    { image: '/tour-videos/a3-cv-builder.png', title: 'CV Builder Studio', duration: 8 },
-    { image: '/tour-videos/a3-cv-content.png', title: 'CV Builder Content', duration: 10 },
-    { image: '/tour-videos/a3-interview-practice.png', title: 'Interview Practice Complete', duration: 6 },
+    // A3 Intro Section
+    { image: '/tour-videos/a3-main-intro.png', title: 'A3 Training - "Ruta de Entrenamiento Nivel Básico"', duration: 6 },
+    { image: '/tour-videos/a3-intro-modules.png', title: 'A3 - 3-Month Progressive Journey (Mes 1-3)', duration: 5 },
+    { image: '/tour-videos/a3-10-modules.png', title: 'A3 - Complete 10 Module Path (90 tasks, 0% progress)', duration: 6 },
+    { image: '/tour-videos/a3-simulations-menu.png', title: 'A3 - Advanced Level Options & Module 1: Espejo de Carrera', duration: 6 },
+    
+    // A3 Training Modules Detail
+    { image: '/tour-videos/a3-all-modules.png', title: 'A3 Modules 2-3: Value Mining Lab & CV Builder Studio', duration: 6 },
+    { image: '/tour-videos/a3-interview-modules.png', title: 'A3 Modules 4-5: Job Decoder & Answer Architecture (STAR/CAR)', duration: 6 },
+    { image: '/tour-videos/a3-interview-sim-modules.png', title: 'A3 Modules 6-7: Coach Practice Room & Communication Gym', duration: 6 },
+    { image: '/tour-videos/a3-final-modules.png', title: 'A3 Modules 8-9: Recruiter Simulation & Difficult Questions Lab', duration: 6 },
+    { image: '/tour-videos/a3-module-10.png', title: 'A3 Module 10: Basic Interview Mission (Final Certification - 220 XP)', duration: 6 },
+    
+    // Interview & Coaching Sections
+    { image: '/tour-videos/coach-practice-room.png', title: 'Coach Practice Room - Interactive Interview Training', duration: 7 },
+    { image: '/tour-videos/coach-questions.png', title: 'Question 1: "Cuéntame sobre ti" with AI Coach Feedback', duration: 8 },
+    { image: '/tour-videos/coach-more-questions.png', title: 'Interview Coaching with Evaluation Criteria & Answer Field', duration: 8 },
+    { image: '/tour-videos/a3-second-question.png', title: 'All 3 Interview Questions: Personal + Motivation + Challenge Story', duration: 7 },
+    
+    // CV Builder & Completion
+    { image: '/tour-videos/a3-cv-builder.png', title: 'CV Builder Studio - ATS-Optimized Document Building', duration: 6 },
+    { image: '/tour-videos/a3-cv-content.png', title: 'CV Module Content with Professional Email & LinkedIn Tips', duration: 6 },
   ];
 
   const totalDuration = frames.reduce((sum, f) => sum + f.duration, 0);
