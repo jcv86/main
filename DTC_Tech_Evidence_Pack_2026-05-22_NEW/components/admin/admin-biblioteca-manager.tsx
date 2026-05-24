@@ -1,1 +1,0 @@
-export { AdminBibliotecaManager } from "./index"

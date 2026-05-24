@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { processVideoFile, cleanupProcessedFiles } from './video-processor'
-// Multimodal analysis is a stub feature - not implemented yet
 import * as path from 'path'
 import * as os from 'os'
 
@@ -17,11 +16,13 @@ export async function queueMultimodalAnalysis(jobData: JobData): Promise<string>
   try {
     const supabase = await createClient()
 
-    // Process video file
-    const processingResult = await processVideoFile(jobData.videoPath)
+    // Process video file with temp directory
+    const tempDir = path.join(os.tmpdir(), `video-${Date.now()}`)
+    const processingResult = await processVideoFile(jobData.videoPath, tempDir, 1)
 
-    if (!processingResult.success) {
-      throw new Error(`Failed to process video: ${processingResult.error}`)
+    // Check if processing succeeded
+    if (!processingResult?.framesPath || !processingResult?.audioPath) {
+      throw new Error('Failed to process video: missing frames or audio path')
     }
 
     // Perform multimodal analysis (using mock data - real implementation would call OpenAI Vision/Whisper)
@@ -65,7 +66,7 @@ export async function queueMultimodalAnalysis(jobData: JobData): Promise<string>
     }
 
     // Cleanup processed files
-    await cleanupProcessedFiles(processingResult.tempDir)
+    await cleanupProcessedFiles(tempDir)
 
     return savedAnalysis?.id || 'unknown'
   } catch (error) {

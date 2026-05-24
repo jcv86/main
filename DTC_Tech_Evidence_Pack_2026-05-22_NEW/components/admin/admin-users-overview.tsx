@@ -1,5 +1,0 @@
-export { AdminUsersOverview } from "./index"
-export { AdminTesisManager } from "./index"
-export { AdminNoticiasManager } from "./index"
-export { AdminTestsManager } from "./index"
-export { AdminBibliotecaManager } from "./index"

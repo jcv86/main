@@ -1,1 +1,0 @@
-export { AdminTesisManager } from "./index"
