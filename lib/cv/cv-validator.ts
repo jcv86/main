@@ -207,7 +207,7 @@ function identifyStrengths(cv: ParsedCV): string[] {
 }
 
 function generateRecommendations(cv: ParsedCV, jobRequirements?: string[]): ATSScore['recommendations'] {
-  const recommendations: ATSScore['recommendations'][] = []
+  const recommendations: { keyword: string; context: string }[] = []
 
   if (!jobRequirements) return recommendations
 

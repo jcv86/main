@@ -185,7 +185,8 @@ async function seedJobs() {
       process.exit(1)
     }
 
-    console.log(`[v0] ✓ Seeded ${data ? data.length : 0} job opportunities`)
+    const seedCount = data ? (data as any[]).length : 0
+    console.log(`[v0] ✓ Seeded ${seedCount} job opportunities`)
     process.exit(0)
   } catch (err) {
     console.error('[v0] Seed failed:', err)

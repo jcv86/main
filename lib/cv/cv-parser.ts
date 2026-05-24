@@ -9,7 +9,7 @@ interface CVSection {
   confidence: number
 }
 
-interface ParsedCV {
+export interface ParsedCV {
   rawText: string
   sections: CVSection[]
   extractedSkills: string[]
@@ -226,8 +226,8 @@ function calculateATSReadability(text: string, lines: string[], skills: string[]
   return {
     hasContactInfo: /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/.test(text),
     hasStrongSummary: lines.length > 5 && text.length > 200,
-    hasClearSections: text.toLowerCase().match(/(experiencia|education|skills)/gi)?.length || 0 >= 2,
-    usesBulletPoints: text.includes('•') || text.includes('-') && lines.filter(l => l.startsWith('-')).length > 5,
+    hasClearSections: (text.toLowerCase().match(/(experiencia|education|skills)/gi)?.length || 0) >= 2,
+    usesBulletPoints: text.includes('•') || (text.includes('-') && lines.filter(l => l.startsWith('-')).length > 5),
     hasMetrics: /\d+\%|\d+\+|increased|improved|reduced|achieved/i.test(text),
     hasActionVerbs: ACTION_VERBS.some(verb => text.includes(verb))
   }
