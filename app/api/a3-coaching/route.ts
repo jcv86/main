@@ -1,5 +1,6 @@
 import { generateText } from 'ai'
 import { openai } from '@ai-sdk/openai'
+import type { LanguageModel } from 'ai'
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { getDemoUserFromRequest } from '@/lib/auth/demo-user'
@@ -72,8 +73,10 @@ export async function POST(request: NextRequest) {
     Proporciona feedback constructivo sobre esta respuesta de entrevista.`
 
     // Generate coaching feedback using OpenAI
+    const model: LanguageModel = openai('gpt-4-turbo')
+    
     const result = await generateText({
-      model: openai('gpt-4-turbo'),
+      model,
       system: coachingSystemPrompt,
       prompt: userPrompt,
       temperature: 0.7,

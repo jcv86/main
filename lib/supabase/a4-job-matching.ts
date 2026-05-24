@@ -6,6 +6,75 @@
 import { createClient } from '@/lib/supabase/server'
 import type { MatchResult } from '@/lib/algorithms/job-matching'
 
+// Types
+interface JobMatchInput {
+  userId: string
+  jobId: string
+  matchScore: number
+  matchDetails?: Record<string, any>
+  discoveredVia?: string
+}
+
+interface MatchedJob {
+  jobId: string
+  jobTitle: string
+  company: string
+  matchScore: number
+  details?: Record<string, any>
+}
+
+/**
+ * Match jobs for a user based on their profile
+ */
+export async function matchJobsForUser(
+  userId: string,
+  skills: string[],
+  experienceLevel: string,
+  specializations: string[]
+): Promise<MatchedJob[]> {
+  // This function runs the job matching algorithm
+  // For now, return mock results - in production, run actual algorithm
+  
+  console.log(`[v0] Matching jobs for user ${userId} with ${skills.length} skills`)
+  
+  // TODO: Integrate with actual matching algorithm
+  return [{
+    jobId: 'job_1',
+    jobTitle: 'Senior Developer',
+    company: 'Tech Co',
+    matchScore: 85,
+    details: {
+      skillsMatched: skills.slice(0, 3),
+      experienceMatch: true
+    }
+  }]
+}
+
+/**
+ * Save a single job match
+ */
+export async function saveJobMatch(input: JobMatchInput) {
+  const supabase = await createClient()
+
+  const { data, error } = await supabase.from('a4_job_matches_individual').insert([
+    {
+      user_id: input.userId,
+      job_id: input.jobId,
+      match_score: input.matchScore,
+      match_details: input.matchDetails ? JSON.stringify(input.matchDetails) : null,
+      discovered_via: input.discoveredVia || 'algorithm',
+      timestamp: new Date().toISOString(),
+    },
+  ])
+
+  if (error) {
+    console.error('[v0] Error saving job match:', error)
+    throw error
+  }
+
+  return data
+}
+
 /**
  * Save job match results for a user
  */

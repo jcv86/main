@@ -364,6 +364,6 @@ function createMetricsTable(data) {
 }
 
 Packer.toBuffer(doc).then(buffer => {
-  fs.writeFileSync(path.join(__dirname, '../DESPEGA_RESUMEN_EJECUTIVO.docx'), buffer);
+  fs.writeFileSync(path.join(__dirname, '../_EJECUTIVO.docx'), buffer);
   console.log('✓ DOCX generado: DESPEGA_RESUMEN_EJECUTIVO.docx');
 });

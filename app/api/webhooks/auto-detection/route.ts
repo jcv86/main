@@ -5,6 +5,8 @@
  * Runs job matching and creates notifications for high-match opportunities
  */
 
+export const runtime = 'nodejs' // Required for Supabase
+
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { invalidateProfileCache, getUserUnifiedProfile } from '@/lib/a1-a2-a3/profile-builder'
