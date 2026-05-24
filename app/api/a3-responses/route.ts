@@ -63,7 +63,7 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({
       success: true,
       message: 'Response saved successfully',
-      id: data?.[0]?.id || 'unknown'
+      id: (data && data.length > 0) ? data[0].id : 'unknown'
     })
   } catch (error) {
     console.error('[v0] A3 responses API error:', error)
