@@ -266,9 +266,9 @@ export default function DespegazoDashboard() {
         {/* Hero Header - Improved */}
         <div className="mb-12 md:mb-20">
           <div className="flex flex-col md:flex-row items-start gap-4 md:gap-6 mb-6 md:mb-8">
-            <div className="text-5xl md:text-7xl flex-shrink-0">💫</div>
+            <div className="text-5xl md:text-7xl flex-shrink-0"></div>
             <div className="flex-1">
-              <h1 className="text-4xl md:text-6xl lg:text-7xl font-black text-white leading-tight mb-3 md:mb-4">
+              <h1 className="text-4xl md:text-6xl lg:text-7xl font-light text-white leading-tight mb-3 md:mb-4">
                 Tu Transformación <br className="hidden md:block"/>
                 Comienza Aquí
               </h1>
@@ -278,7 +278,7 @@ export default function DespegazoDashboard() {
               </p>
             </div>
           </div>
-          <div className="h-1 w-24 md:w-32 bg-gradient-to-r from-purple to-blue rounded-full"></div>
+          <div className="h-1 w-24 md:w-32 bg-gradient-to-r from-[rgb(80,160,170)] to-[rgb(80,160,170)] rounded-full"></div>
         </div>
 
         {/* Readiness Score Card - Improved */}
@@ -286,15 +286,15 @@ export default function DespegazoDashboard() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 md:gap-8">
             {/* Score Display */}
             <div className="lg:col-span-1 flex flex-col justify-center">
-              <div className="bg-gradient-to-br from-purple/20 to-blue/20 border-2 border-purple/40 rounded-xl md:rounded-2xl p-6 md:p-10 text-center hover:border-purple/60 transition-all">
+              <div className="bg-gradient-to-br from-[rgba(80,160,170,0.4)] to-[rgba(80,160,170,0.2)] border-2 border-[rgba(80,160,170,0.2)] rounded-xl md:rounded-2xl p-6 md:p-10 text-center hover:border-[rgba(80,160,170,0.6)] transition-all">
                 <p className="text-sm md:text-lg text-white/75 font-semibold mb-3">Tu Readiness Score</p>
                 <div className={`text-6xl md:text-8xl font-black mb-4 ${scoreColor} transition-colors duration-500`}>
                   {readiness.overall_score}
                 </div>
                 <div className="w-full h-2 md:h-3 bg-white/20 rounded-full overflow-hidden border border-[rgb(80,160,170)]/30 mb-4">
                   <div
-                    className="h-full bg-gradient-to-r from-purple to-blue transition-all duration-500"
-                    style={{ width: `${readiness.overall_score}%` }}
+                    className="h-full bg-gradient-to-r transition-all duration-500"
+                    style={{ backgroundImage: 'linear-gradient(to right, rgba(90, 90, 150, 0.8), rgb(80, 160, 170))', width: `${readiness.overall_score}%` }}
                   />
                 </div>
                 <p className="text-white/80 text-xs md:text-sm">
@@ -307,12 +307,12 @@ export default function DespegazoDashboard() {
 
             {/* Next Steps */}
             <div className="lg:col-span-2">
-              <h3 className="text-2xl md:text-3xl font-bold text-white mb-4 md:mb-8">Próximos Pasos Recomendados</h3>
+              <h3 className="text-2xl md:text-3xl font-light text-white mb-4 md:mb-8">Próximos Pasos Recomendados</h3>
               <div className="space-y-3 md:space-y-4">
                 {readiness.recommendations.slice(0, 4).map((rec, i) => (
                   <div key={i} className="flex gap-3 md:gap-4 p-4 md:p-5 bg-background/50 border border-[rgb(80,160,170)]/10 rounded-lg md:rounded-xl hover:border-[rgb(80,160,170)]/30 hover:bg-background/70 transition-all cursor-pointer">
                     <div className="text-lg md:text-2xl flex-shrink-0">
-                      {i === 0 ? '1️⃣' : i === 1 ? '2️⃣' : i === 2 ? '3️⃣' : '4️⃣'}
+                      {i === 0 ? '1' : i === 1 ? '2' : i === 2 ? '3' : '4'}
                     </div>
                     <p className="text-white/90 text-sm md:text-base font-semibold leading-relaxed">{rec}</p>
                   </div>
@@ -324,9 +324,9 @@ export default function DespegazoDashboard() {
 
         {/* Strengths & Gaps */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8 mb-12 md:mb-20">
-          <div className="bg-gradient-to-br from-green/20 to-emerald/20 border-2 border-green/40 rounded-xl md:rounded-2xl p-6 md:p-10 hover:border-green/60 transition-all">
+          <div className="bg-gradient-to-br from-[rgba(80,160,170,0.3)] to-[rgba(80,160,170,0.1)] border-2 border-[rgba(80,160,170,0.2)] rounded-xl md:rounded-2xl p-6 md:p-10 hover:border-[rgba(80,160,170,0.6)] transition-all">
             <h3 className="text-lg md:text-2xl font-bold text-white mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
-              <CheckCircle2 className="w-5 md:w-7 h-5 md:h-7 text-green flex-shrink-0" /> Tus Fortalezas
+              <CheckCircle2 className="w-5 md:w-7 h-5 md:h-7 text-[rgb(80,160,170)] flex-shrink-0" /> Tus Fortalezas
             </h3>
             <ul className="space-y-2 md:space-y-3">
               {readiness.strengths.length > 0 ? (
@@ -341,15 +341,15 @@ export default function DespegazoDashboard() {
             </ul>
           </div>
 
-          <div className="bg-gradient-to-br from-orange/20 to-red/20 border-2 border-orange/40 rounded-xl md:rounded-2xl p-6 md:p-10 hover:border-orange/60 transition-all">
+          <div className="bg-gradient-to-br from-[rgba(80,160,170,0.3)] to-[rgba(80,160,170,0.1)] border-2 border-[rgba(80,160,170,0.2)] rounded-xl md:rounded-2xl p-6 md:p-10 hover:border-[rgba(80,160,170,0.6)] transition-all">
             <h3 className="text-lg md:text-2xl font-bold text-white mb-4 md:mb-6 flex items-center gap-2 md:gap-3">
-              <AlertCircle className="w-5 md:w-7 h-5 md:h-7 text-orange flex-shrink-0" /> Áreas de Mejora
+              <AlertCircle className="w-5 md:w-7 h-5 md:h-7 text-[rgb(225,120,130)] flex-shrink-0" /> Áreas de Mejora
             </h3>
             <ul className="space-y-2 md:space-y-3">
               {readiness.gaps.length > 0 ? (
                 readiness.gaps.map((gap, i) => (
                   <li key={i} className="text-white/90 text-sm md:text-lg font-semibold flex gap-2 md:gap-3">
-                    <span className="text-orange flex-shrink-0">→</span> <span>{gap}</span>
+                    <span className="text-[rgb(225,120,130)] flex-shrink-0">→</span> <span>{gap}</span>
                   </li>
                 ))
               ) : (
@@ -361,7 +361,7 @@ export default function DespegazoDashboard() {
 
         {/* Progress by Stage - Better Cards */}
         <div className="mb-12 md:mb-20">
-          <h2 className="text-3xl md:text-4xl font-black text-white mb-6 md:mb-10">Tu Camino de 4 Etapas</h2>
+          <h2 className="text-3xl md:text-4xl font-light text-white mb-6 md:mb-10">Tu Camino de 4 Etapas</h2>
 
           <div className="space-y-3 md:space-y-5">
             {stages.map((stage, i) => (
@@ -375,7 +375,12 @@ export default function DespegazoDashboard() {
                     <div className="text-3xl md:text-5xl flex-shrink-0">{stage.icon}</div>
                     <div className="flex-1 min-w-0">
                       <div className="flex items-center gap-2 md:gap-3 mb-1 md:mb-2 flex-wrap">
-                        <h3 className="text-xl md:text-3xl font-black text-white group-hover:text-purple transition-colors">
+                        <h3 className="text-xl md:text-3xl font-black transition-colors" style={{
+                          color: stage.name === 'El Ritual' ? 'rgb(80,160,170)' : 
+                                 stage.name === 'Exploración' ? 'rgb(90,90,150)' :
+                                 stage.name === 'Entrenamiento' ? 'rgb(170,70,170)' :
+                                 'rgb(225,120,130)'
+                        }}>
                           {stage.name}
                         </h3>
                         <span className="text-xs md:text-sm font-bold px-2 md:px-3 py-0.5 md:py-1 rounded-full bg-white/10 text-white/75">
@@ -387,29 +392,86 @@ export default function DespegazoDashboard() {
                   </div>
                   
                   {stage.completed ? (
-                    <Badge className="bg-green/30 text-green border-2 border-green/50 px-3 md:px-4 py-1 md:py-2 text-xs md:text-base font-bold flex-shrink-0">
+                    <Badge className="px-3 md:px-4 py-1 md:py-2 text-xs md:text-base font-bold flex-shrink-0" style={{
+                      backgroundColor: stage.name === 'El Ritual' ? 'rgba(80,160,170,0.2)' :
+                                       stage.name === 'Exploración' ? 'rgba(90,90,150,0.2)' :
+                                       stage.name === 'Entrenamiento' ? 'rgba(170,70,170,0.2)' :
+                                       'rgba(225,120,130,0.2)',
+                      color: stage.name === 'El Ritual' ? 'rgb(80,160,170)' :
+                             stage.name === 'Exploración' ? 'rgb(90,90,150)' :
+                             stage.name === 'Entrenamiento' ? 'rgb(170,70,170)' :
+                             'rgb(225,120,130)',
+                      borderColor: stage.name === 'El Ritual' ? 'rgba(80,160,170,0.2)' :
+                                   stage.name === 'Exploración' ? 'rgba(90,90,150,0.4)' :
+                                   stage.name === 'Entrenamiento' ? 'rgba(170,70,170,0.2)' :
+                                   'rgba(225,120,130,0.2)',
+                      borderWidth: '2px'
+                    }}>
                        Completado
                     </Badge>
                   ) : (
                     <div className="text-center flex-shrink-0">
-                      <div className="text-3xl md:text-4xl font-black text-purple mb-0.5 md:mb-1">{Math.round(stage.score)}%</div>
+                      <div className="text-3xl md:text-4xl font-black mb-0.5 md:mb-1" style={{
+                        color: stage.name === 'El Ritual' ? 'rgb(80,160,170)' :
+                               stage.name === 'Exploración' ? 'rgb(90,90,150)' :
+                               stage.name === 'Entrenamiento' ? 'rgb(170,70,170)' :
+                               'rgb(225,120,130)'
+                      }}>{Math.round(stage.score)}%</div>
                       <p className="text-white/60 text-xs md:text-sm font-semibold">Progreso</p>
                     </div>
                   )}
                 </div>
 
-                <Progress value={stage.score} className="h-2 md:h-3 bg-white/20 rounded-full mb-4 md:mb-6" />
+                <div className="h-2 md:h-3 bg-white/20 rounded-full overflow-hidden mb-4 md:mb-6">
+                  <div 
+                    className="h-full transition-all" 
+                    style={{
+                      width: `${stage.score}%`,
+                      backgroundColor: stage.name === 'El Ritual' ? 'rgb(80,160,170)' :
+                                        stage.name === 'Exploración' ? 'rgb(90,90,150)' :
+                                        stage.name === 'Entrenamiento' ? 'rgb(170,70,170)' :
+                                        'rgb(225,120,130)'
+                    }}
+                  />
+                </div>
 
                 <Button
                   onClick={(e) => {
                     e.stopPropagation()
                     router.push(stage.href)
                   }}
-                  className={`w-full font-bold text-sm md:text-lg py-4 md:py-6 transition-all active:scale-95 ${
-                    stage.completed
-                      ? 'bg-green/30 hover:bg-green/40 text-green border-2 border-green/50'
-                      : 'bg-purple/70 hover:bg-purple/60 text-white border-2 border-purple/50'
-                  }`}
+                  style={{
+                    backgroundColor: stage.completed ? 'transparent' : 'transparent',
+                    backgroundImage: stage.completed 
+                      ? 'linear-gradient(to right bottom, rgba(80, 160, 170, 0.3), rgba(80, 160, 170, 0.1))'
+                      : stage.name === 'El Ritual' 
+                      ? 'linear-gradient(to right bottom, rgba(80, 160, 170, 0.3), rgba(80, 160, 170, 0.1))'
+                      : stage.name === 'Exploración'
+                      ? 'linear-gradient(to right bottom, rgba(80, 160, 170, 0.3), rgba(80, 160, 170, 0.1))'
+                      : stage.name === 'Entrenamiento'
+                      ? 'linear-gradient(to right bottom, rgba(170, 70, 170, 0.3), rgba(170, 70, 170, 0.1))'
+                      : 'linear-gradient(to right bottom, rgba(225, 120, 130, 0.3), rgba(225, 120, 130, 0.1))',
+                    color: stage.completed
+                      ? 'rgb(80,160,170)'
+                      : stage.name === 'El Ritual'
+                      ? 'rgb(80,160,170)'
+                      : stage.name === 'Exploración'
+                      ? 'rgb(90,90,150)'
+                      : stage.name === 'Entrenamiento'
+                      ? 'rgb(170,70,170)'
+                      : 'rgb(225,120,130)',
+                    borderColor: stage.completed
+                      ? 'rgba(80,160,170,0.2)'
+                      : stage.name === 'El Ritual'
+                      ? 'rgba(80,160,170,0.2)'
+                      : stage.name === 'Exploración'
+                      ? 'rgba(90,90,150,0.4)'
+                      : stage.name === 'Entrenamiento'
+                      ? 'rgba(170,70,170,0.4)'
+                      : 'rgba(225,120,130,0.2)',
+                    borderWidth: '2px'
+                  }}
+                  className="w-full font-bold text-sm md:text-lg py-4 md:py-6 transition-all active:scale-95 border-2"
                 >
                   {stage.completed ? 'Ver Resultados' : 'Continuar Ahora'}
                   <ArrowRight className="w-4 md:w-5 h-4 md:h-5 ml-2 group-hover:translate-x-1 transition-transform" />
@@ -423,15 +485,26 @@ export default function DespegazoDashboard() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-6 mb-8 md:mb-12">
           <Button
             onClick={() => router.push('/despega/conozcamonos-1')}
-            variant="outline"
-            className="h-12 md:h-16 border-2 border-[rgb(80,160,170)]/30 hover:border-purple/60 text-white hover:text-purple font-bold text-sm md:text-lg rounded-lg md:rounded-xl transition-all active:scale-95"
+            style={{
+              backgroundColor: 'transparent',
+              color: 'rgba(80, 160, 170, 0.8)',
+              borderColor: 'rgba(80, 160, 170, 0.3)',
+              borderWidth: '2px'
+            }}
+            className="h-12 md:h-16 hover:border-purple/60 font-bold text-sm md:text-lg rounded-lg md:rounded-xl transition-all active:scale-95"
           >
             <Clock className="w-4 md:w-6 h-4 md:h-6 mr-2 md:mr-3" />
             Continuar Mi Jornada
           </Button>
           <Button
             onClick={() => loadUserProgress()}
-            className="h-12 md:h-16 bg-purple/70 hover:bg-purple/60 font-bold text-sm md:text-lg text-white rounded-lg md:rounded-xl border-2 border-purple/50 transition-all active:scale-95"
+            style={{
+              backgroundColor: 'rgba(80, 160, 170, 0.6)',
+              borderColor: 'rgba(80, 160, 170, 0.1)',
+              borderWidth: '2px',
+              color: 'white'
+            }}
+            className="h-12 md:h-16 font-bold text-sm md:text-lg rounded-lg md:rounded-xl transition-all active:scale-95"
           >
             <TrendingUp className="w-4 md:w-6 h-4 md:h-6 mr-2 md:mr-3" />
             Actualizar Mi Progreso
@@ -439,12 +512,12 @@ export default function DespegazoDashboard() {
         </div>
 
         {/* Motivational Footer */}
-        <div className="bg-gradient-to-r from-purple/20 to-blue/20 border-2 border-purple/40 rounded-lg md:rounded-2xl p-6 md:p-8 text-center hover:border-purple/60 transition-all">
+        <div className="bg-gradient-to-r from-[rgba(80,160,170,0.3)] to-[rgba(80,160,170,0.1)] border-2 border-[rgba(80,160,170,0.0)] rounded-lg md:rounded-2xl p-6 md:p-8 text-center hover:border-[rgba(80,160,170,0.6)] transition-all">
           <p className="text-white/90 text-base md:text-lg font-semibold mb-2 md:mb-3">
             Tu Score Se Actualiza Automáticamente
           </p>
           <p className="text-white/75 text-sm md:text-base">
-            Alcanza <span className="font-bold text-purple">80+</span> para estar completamente listo. 
+            Alcanza <span className="font-bold text-[rgb(80,160,170)]">80+</span> para estar completamente listo. 
             Cada acción te acerca más a tu transformación.
           </p>
         </div>
