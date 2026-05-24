@@ -60,10 +60,18 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    let responseId = 'unknown'
+    if (data) {
+      const dataArray = data as any[]
+      if (Array.isArray(dataArray) && dataArray.length > 0 && dataArray[0].id) {
+        responseId = dataArray[0].id
+      }
+    }
+
     return NextResponse.json({
       success: true,
       message: 'Response saved successfully',
-      id: (data && data.length > 0) ? data[0].id : 'unknown'
+      id: responseId
     })
   } catch (error) {
     console.error('[v0] A3 responses API error:', error)

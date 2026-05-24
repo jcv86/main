@@ -1,6 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { matchUserToJobs, filterByMatchScore } from '@/lib/algorithms/job-matching'
 import type { UserProfile, JobListing, MatchResult } from '@/lib/algorithms/job-matching'
+import { NextResponse } from 'next/server'
 
 export const runtime = 'nodejs'
 
@@ -18,7 +19,7 @@ export async function GET(request: Request) {
     } = await supabase.auth.getUser()
 
     if (!user) {
-      return Response.json({ error: 'Unauthorized' }, { status: 401 })
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
     // Fetch user profile (combine from multiple tables)
@@ -53,7 +54,7 @@ export async function GET(request: Request) {
 
     if (jobsError) {
       console.error('Error fetching jobs:', jobsError)
-      return Response.json({ error: 'Failed to fetch jobs' }, { status: 500 })
+      return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 })
     }
 
     // Match user to jobs
@@ -74,7 +75,7 @@ export async function GET(request: Request) {
       }
     })
 
-    return Response.json({
+    return NextResponse.json({
       success: true,
       total_jobs: allJobs?.length || 0,
       total_matches: filtered.length,
@@ -83,7 +84,7 @@ export async function GET(request: Request) {
     })
   } catch (error) {
     console.error('Job matching error:', error)
-    return Response.json(
+    return NextResponse.json(
       {
         error: 'Internal server error',
         details: error instanceof Error ? error.message : 'Unknown error',

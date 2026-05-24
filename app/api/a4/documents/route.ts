@@ -45,7 +45,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '50')
     const offset = parseInt(searchParams.get('offset') || '0')
 
-    let query = serviceSupabase
+    let query = supabase
       .from('a4_documents_extended')
       .select('*')
       .eq('user_id', userId)
@@ -65,7 +65,7 @@ export async function GET(request: NextRequest) {
     }
 
     // Get document stats
-    const { data: stats } = await serviceSupabase
+    const { data: stats } = await supabase
       .from('a4_documents_extended')
       .select('type, status, source')
       .eq('user_id', userId)

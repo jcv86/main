@@ -60,7 +60,8 @@ export async function POST(request: NextRequest) {
 
     for (const jobMatch of highMatches) {
       // Check if we already notified about this job
-      const { data: existingNotifications } = await createClient()
+      const supabase = await createClient()
+      const { data: existingNotifications } = await supabase
         .from('job_match_notifications')
         .select('id')
         .eq('user_id', payload.userId)
