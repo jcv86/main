@@ -54,7 +54,7 @@ export default function GamificationPage() {
             <p className="text-muted-foreground mt-2">Track your progress and unlock achievements</p>
           </div>
           <Link href="/despega/a3/dtc-shop">
-            <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white">Get Premium Tips</Button>
+            <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white">Obtener Consejos Premium</Button>
           </Link>
         </div>
 
@@ -92,10 +92,10 @@ export default function GamificationPage() {
             </CardHeader>
             <CardContent className="space-y-3 text-sm">
               <div>
-                <strong>Free Tips:</strong> Get 3 free AI tips per interview
+                <strong>Consejos Gratis:</strong> Obtén 3 consejos IA gratis por entrevista
               </div>
               <div>
-                <strong>Premium Tips:</strong> Unlock 3 more tips for 150 DTC points
+                <strong>Consejos Premium:</strong> Desbloquea 3 consejos más por 150 puntos DTC
               </div>
               <div>
                 <strong>XP System:</strong> Earn XP to level up from Bronze to Diamond

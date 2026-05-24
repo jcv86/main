@@ -514,7 +514,7 @@ export default function CommunicationGymModule() {
                 
                 {/* Tips */}
                 <div className="space-y-2">
-                  <p className="text-white/50 text-xs uppercase">Tips</p>
+                  <p className="text-white/50 text-xs uppercase">Consejos</p>
                   {drill.tips?.map((tip, i) => (
                     <div key={i} className="flex items-start gap-2">
                       <Zap className="w-4 h-4 text-[rgb(80,160,170)] mt-0.5" />

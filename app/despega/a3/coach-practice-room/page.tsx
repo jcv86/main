@@ -189,7 +189,7 @@ export default function CoachPracticeRoomModule() {
             </div>
             <div>
               <h1 className="text-3xl font-bold text-white">Sala de Práctica del Coach</h1>
-              <p className="text-white/60">Practice with feedback • Improve through iteration</p>
+              <p className="text-white/60">Practica con retroalimentación • Mejora a través de la iteración</p>
             </div>
           </div>
           <p className="text-white/70 max-w-2xl">
@@ -369,7 +369,7 @@ export default function CoachPracticeRoomModule() {
                             )}
                             {feedbackData?.issues?.length > 0 && (
                               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                                <p className="text-yellow-400 text-xs uppercase font-medium mb-2">Areas to Improve</p>
+                                <p className="text-yellow-400 text-xs uppercase font-medium mb-2">Áreas de Mejora</p>
                                 <ul className="space-y-1">
                                   {feedbackData.issues.map((issue: any, i: number) => (
                                     <li key={i} className="text-white/70 text-sm">! {issue}</li>

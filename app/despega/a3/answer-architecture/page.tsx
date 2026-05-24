@@ -314,7 +314,7 @@ export default function AnswerArchitectureModule() {
                 
                 {/* Tips */}
                 <div className="bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.3)] rounded-lg p-3">
-                  <p className="text-[rgb(80,160,170)] text-xs uppercase font-medium mb-2">Tips</p>
+                  <p className="text-[rgb(80,160,170)] text-xs uppercase font-medium mb-2">Consejos</p>
                   <ul className="text-white/60 text-sm space-y-1">
                     {answerType.tips.map((tip, i) => (
                       <li key={i} className="flex items-start gap-2">

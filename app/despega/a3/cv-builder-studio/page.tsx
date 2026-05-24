@@ -433,7 +433,7 @@ export default function CVBuilderStudioModule() {
             <div className="mt-6 space-y-4">
               {/* Tips */}
               <div className="bg-[rgba(80,160,170,0.1)] border border-[rgba(80,160,170,0.3)] rounded-lg p-3">
-                <p className="text-[rgb(80,160,170)] text-sm font-medium mb-2">Pro Tips:</p>
+                <p className="text-[rgb(80,160,170)] text-sm font-medium mb-2">Consejos Pro:</p>
                 <ul className="text-white/60 text-sm space-y-1">
                   {CV_SECTIONS[0].tips.map((tip, i) => (
                     <li key={i} className="flex items-start gap-2">
