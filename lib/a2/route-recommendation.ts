@@ -23,7 +23,7 @@ export interface RouteRecommendation {
  * C (Conscientiousness) -> Professional
  */
 export function recommendRouteByDISC(discProfile: DISCProfile): RouteRecommendation {
-  const { dominance, influence, steadiness, conscientiousness } = discProfile
+  const { D: dominance, I: influence, S: steadiness, C: conscientiousness } = discProfile
 
   // Normalize scores to 0-1
   const totalScore = dominance + influence + steadiness + conscientiousness
@@ -129,7 +129,7 @@ export function scoreRouteForDISC(
   route: 'persona' | 'profesional' | 'hibrido',
   discProfile: DISCProfile
 ): number {
-  const { dominance, influence, steadiness, conscientiousness } = discProfile
+  const { D: dominance, I: influence, S: steadiness, C: conscientiousness } = discProfile
   const totalScore = dominance + influence + steadiness + conscientiousness
   const d = dominance / totalScore
   const i = influence / totalScore

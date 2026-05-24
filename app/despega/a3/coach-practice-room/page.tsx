@@ -350,58 +350,43 @@ export default function CoachPracticeRoomModule() {
                     </p>
                     
                     {/* Parse feedback safely */}
-                    {(() => {
+                    {showingFeedback[session.id] && feedback[session.id] ? (() => {
                       try {
                         const feedbackData = typeof feedback[session.id] === 'string' 
                           ? JSON.parse(feedback[session.id]) 
                           : feedback[session.id]
                         return (
                           <>
-                            {/* Fortalezas */}
                             {feedbackData?.strengths?.length > 0 && (
                               <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
-                                <p className="text-green-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
-                                  <ThumbsUp className="w-3 h-3" /> Fortalezas
-                                </p>
+                                <p className="text-green-400 text-xs uppercase font-medium mb-2">Fortalezas</p>
                                 <ul className="space-y-1">
                                   {feedbackData.strengths.map((s: any, i: number) => (
-                                    <li key={i} className="text-white/70 text-sm flex items-start gap-2">
-                                      <span className="text-green-400">+</span> {s}
-                                    </li>
+                                    <li key={i} className="text-white/70 text-sm">+ {s}</li>
                                   ))}
                                 </ul>
                               </div>
                             )}
-                            
-                            {/* Issues */}
                             {feedbackData?.issues?.length > 0 && (
                               <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                                <p className="text-yellow-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
-                                  <AlertCircle className="w-3 h-3" /> Areas to Improve
-                                </p>
+                                <p className="text-yellow-400 text-xs uppercase font-medium mb-2">Areas to Improve</p>
                                 <ul className="space-y-1">
                                   {feedbackData.issues.map((issue: any, i: number) => (
-                                    <li key={i} className="text-white/70 text-sm flex items-start gap-2">
-                                      <span className="text-yellow-400">!</span> {issue}
-                                    </li>
+                                    <li key={i} className="text-white/70 text-sm">! {issue}</li>
                                   ))}
                                 </ul>
                               </div>
                             )}
-                            
-                            {/* Suggestion */}
                             <div className="bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)] rounded-lg p-3">
-                              <p className="text-[rgb(170,70,170)] text-xs uppercase font-medium mb-1 flex items-center gap-1">
-                                <Sparkles className="w-3 h-3" /> Suggestion
-                              </p>
-                              <p className="text-white/70 text-sm">{feedbackData?.suggestion || 'No suggestion available'}</p>
+                              <p className="text-[rgb(170,70,170)] text-xs uppercase font-medium mb-1">Suggestion</p>
+                              <p className="text-white/70 text-sm">{feedbackData?.suggestion || 'Keep practicing!'}</p>
                             </div>
                           </>
                         )
-                      } catch {
+                      } catch (e) {
                         return <div className="text-white/50 text-sm">Unable to parse feedback</div>
                       }
-                    })()
+                    })() : null}
                   </div>
                 )}
                 
