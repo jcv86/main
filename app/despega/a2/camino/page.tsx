@@ -71,21 +71,24 @@ export default function A2CaminoPage() {
             <h2 className="text-2xl font-bold">¿Prefieres elegir manualmente?</h2>
             <p className="text-muted-foreground">También puedes explorar todas las opciones disponibles</p>
           </div>
-        {/* Manual Selection */}
-        <div className="grid md:grid-cols-3 gap-4">
+
+          {/* Manual Selection */}
+          <div className="grid md:grid-cols-3 gap-4">
+          {caminoOptions.map((camino) => (
+            <div
               key={camino.id}
               onClick={() => setSelectedCamino(camino.id)}
-              className={`cursor-pointer transition-all ${`}
+              className={`cursor-pointer transition-all ${
                 selectedCamino === camino.id
                   ? "ring-2 ring-slate-900 dark:ring-slate-50"
-                  : ""`}
+                  : ""
               }`}
             >
               <Card
-                className={`h-full hover:shadow-lg transition-shadow ${`}
+                className={`h-full hover:shadow-lg transition-shadow ${
                   selectedCamino === camino.id
                     ? "bg-muted/10 dark:bg-card"
-                    : ""`}
+                    : ""
                 }`}
               >
                 <CardHeader>
@@ -113,6 +116,7 @@ export default function A2CaminoPage() {
               </Card>
             </div>
           ))}
+        </div>
         </div>
 
         {/* CTA */}

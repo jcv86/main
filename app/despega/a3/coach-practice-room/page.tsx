@@ -282,8 +282,12 @@ export default function CoachPracticeRoomModule() {
                 {/* Criteria to hit */}
                 <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
                   {session.feedbackCriteria.map((criteria) => {
-                    const score = feedback[session.id]?.scores.find(s => s.id === criteria.id)?.score
-                    return (
+                    try {
+                      const feedbackData = typeof feedback[session.id] === 'string' 
+                        ? JSON.parse(feedback[session.id]) 
+                        : feedback[session.id]
+                      const score = feedbackData?.scores?.find((s: any) => s.id === criteria.id)?.score
+                      return (
                       <div 
                         key={criteria.id}
                         className={`p-2 rounded-lg text-center ${
@@ -297,6 +301,13 @@ export default function CoachPracticeRoomModule() {
                         <p className="text-white/50 text-xs">{criteria.description}</p>
                       </div>
                     )
+                    } catch {
+                      return (
+                        <div key={criteria.id} className="p-2 rounded-lg text-center bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10">
+                          <p className="text-white text-xs font-medium">{criteria.label}</p>
+                        </div>
+                      )
+                    }
                   })}
                 </div>
                 
@@ -338,45 +349,59 @@ export default function CoachPracticeRoomModule() {
                       Coach Feedback
                     </p>
                     
-                    {/* Fortalezas */}
-                    {feedback[session.id].strengths.length > 0 && (
-                      <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
-                        <p className="text-green-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
-                          <ThumbsUp className="w-3 h-3" /> Fortalezas
-                        </p>
-                        <ul className="space-y-1">
-                          {feedback[session.id].strengths.map((s, i) => (
-                            <li key={i} className="text-white/70 text-sm flex items-start gap-2">
-                              <span className="text-green-400">+</span> {s}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {/* Issues */}
-                    {feedback[session.id].issues.length > 0 && (
-                      <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
-                        <p className="text-yellow-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
-                          <AlertCircle className="w-3 h-3" /> Areas to Improve
-                        </p>
-                        <ul className="space-y-1">
-                          {feedback[session.id].issues.map((issue, i) => (
-                            <li key={i} className="text-white/70 text-sm flex items-start gap-2">
-                              <span className="text-yellow-400">!</span> {issue}
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-                    
-                    {/* Suggestion */}
-                    <div className="bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)] rounded-lg p-3">
-                      <p className="text-[rgb(170,70,170)] text-xs uppercase font-medium mb-1 flex items-center gap-1">
-                        <Sparkles className="w-3 h-3" /> Suggestion
-                      </p>
-                      <p className="text-white/70 text-sm">{feedback[session.id].suggestion}</p>
-                    </div>
+                    {/* Parse feedback safely */}
+                    {(() => {
+                      try {
+                        const feedbackData = typeof feedback[session.id] === 'string' 
+                          ? JSON.parse(feedback[session.id]) 
+                          : feedback[session.id]
+                        return (
+                          <>
+                            {/* Fortalezas */}
+                            {feedbackData?.strengths?.length > 0 && (
+                              <div className="bg-green-500/10 border border-green-500/30 rounded-lg p-3">
+                                <p className="text-green-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
+                                  <ThumbsUp className="w-3 h-3" /> Fortalezas
+                                </p>
+                                <ul className="space-y-1">
+                                  {feedbackData.strengths.map((s: any, i: number) => (
+                                    <li key={i} className="text-white/70 text-sm flex items-start gap-2">
+                                      <span className="text-green-400">+</span> {s}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            {/* Issues */}
+                            {feedbackData?.issues?.length > 0 && (
+                              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-lg p-3">
+                                <p className="text-yellow-400 text-xs uppercase font-medium mb-2 flex items-center gap-1">
+                                  <AlertCircle className="w-3 h-3" /> Areas to Improve
+                                </p>
+                                <ul className="space-y-1">
+                                  {feedbackData.issues.map((issue: any, i: number) => (
+                                    <li key={i} className="text-white/70 text-sm flex items-start gap-2">
+                                      <span className="text-yellow-400">!</span> {issue}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            )}
+                            
+                            {/* Suggestion */}
+                            <div className="bg-[rgba(170,70,170,0.1)] border border-[rgba(170,70,170,0.3)] rounded-lg p-3">
+                              <p className="text-[rgb(170,70,170)] text-xs uppercase font-medium mb-1 flex items-center gap-1">
+                                <Sparkles className="w-3 h-3" /> Suggestion
+                              </p>
+                              <p className="text-white/70 text-sm">{feedbackData?.suggestion || 'No suggestion available'}</p>
+                            </div>
+                          </>
+                        )
+                      } catch {
+                        return <div className="text-white/50 text-sm">Unable to parse feedback</div>
+                      }
+                    })()
                   </div>
                 )}
                 
