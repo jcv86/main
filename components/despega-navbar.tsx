@@ -36,7 +36,7 @@ const stages = [
     icon: Home,
     routes: [
       { label: 'Bienvenida', href: '/despega/bienvenida' },
-      { label: 'Dashboard', href: '/despega' },
+      { label: 'Área Personal', href: '/despega' },
     ]
   },
   {
