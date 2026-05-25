@@ -97,13 +97,17 @@ export default function SignInPage() {
     setIsLoadingDemo(true)
 
     try {
+      // Check if this is the Travis dev account (has full access)
+      const isTravisDev = testEmail === 'travis@nuanu.com'
+      
       // For demo access, create a demo session in localStorage
       // This bypasses real Supabase auth for testing purposes
       const demoUser = {
-        id: `demo-${testEmail.split('@')[0]}`,
+        id: isTravisDev ? '64738eef-ee31-4da9-8270-9adfa46c74ba' : `demo-${testEmail.split('@')[0]}`,
         email: testEmail,
         aud: 'authenticated',
-        role: 'authenticated',
+        role: isTravisDev ? 'dev' : 'authenticated',
+        is_dev: isTravisDev,
       }
 
       // Store demo user in localStorage for client-side access
@@ -115,10 +119,11 @@ export default function SignInPage() {
       const cookieValue = encodeURIComponent(JSON.stringify(demoUser))
       document.cookie = `demo_user=${cookieValue}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax`
       
-      console.log('[v0] Demo user set:', demoUser.email)
+      console.log('[v0] Demo user set:', demoUser.email, isTravisDev ? '(DEV MODE)' : '')
       
-      // Get the next URL from search params, default to onboarding start
-      const next = searchParams.get('next') || '/despega/conozcamonos-1'
+      // Travis dev account goes directly to dashboard, others go to onboarding
+      const defaultRoute = isTravisDev ? '/dashboard' : '/despega/conozcamonos-1'
+      const next = searchParams.get('next') || defaultRoute
       
       // Use hard navigation to ensure cookie is sent with the request
       window.location.href = next

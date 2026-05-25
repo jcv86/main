@@ -106,26 +106,36 @@ export async function middleware(request: NextRequest) {
 
   // Check for demo user in cookie (set by demo login)
   const demoUserCookie = request.cookies.get('demo_user')?.value
-  const hasDemo = !!demoUserCookie
   
   if (demoUserCookie) {
-    const response = NextResponse.next()
-    // Extend cookie expiry on every request
-    response.cookies.set('demo_user', demoUserCookie, {
-      httpOnly: false,
-      secure: process.env.NODE_ENV === 'production',
-      sameSite: 'lax',
-      maxAge: 86400 * 7 // 7 days
-    })
-    
-    // Redirect to onboarding if trying to access dashboard directly
-    if (isProtectedRoute(pathname) && !isOnboardingRoute(pathname)) {
-      console.log('[v0] Demo user redirected from', pathname, 'to onboarding')
-      const redirectUrl = new URL('/despega/conozcamonos-1', request.nextUrl)
-      return NextResponse.redirect(redirectUrl)
+    try {
+      const demoUser = JSON.parse(decodeURIComponent(demoUserCookie))
+      const isTravisDev = demoUser.is_dev === true || demoUser.email === 'travis@nuanu.com'
+      
+      const response = NextResponse.next()
+      // Extend cookie expiry on every request
+      response.cookies.set('demo_user', demoUserCookie, {
+        httpOnly: false,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: 86400 * 7 // 7 days
+      })
+      
+      // Travis dev account has FULL ACCESS - no restrictions
+      if (isTravisDev) {
+        return response
+      }
+      
+      // Regular demo users: redirect to onboarding if trying to access protected routes
+      if (isProtectedRoute(pathname) && !isOnboardingRoute(pathname)) {
+        const redirectUrl = new URL('/despega/conozcamonos-1', request.nextUrl)
+        return NextResponse.redirect(redirectUrl)
+      }
+      
+      return response
+    } catch {
+      // Invalid cookie, continue to Supabase auth
     }
-    
-    return response
   }
 
   // Use Supabase session management for all other routes
