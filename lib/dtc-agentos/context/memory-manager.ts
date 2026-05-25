@@ -15,6 +15,9 @@ import type {
 } from '../types'
 import { STAGE_MEMORY_TYPES } from '../index'
 
+// Re-export types for consumers
+export type { CaptureMemoryPayload, MemoryItem, MemoryItemType, MemorySourceType }
+
 // =============================================================================
 // DATABASE OPERATIONS
 // =============================================================================
