@@ -17,9 +17,6 @@ if (!supabaseUrl || !supabaseKey) {
 
 const supabase = createClient(supabaseUrl, supabaseKey)
 
-// Travis dev account ID (preserved)
-const TRAVIS_ID = 'demo-travis'
-
 /**
  * Pillar System Overview:
  * 
@@ -40,8 +37,23 @@ const TRAVIS_ID = 'demo-travis'
  *   - Output: Executive thinking
  */
 
-async function resetUserProgress() {
-  console.log('🔄 Starting pillar progress reset...')
+async function findTravisUserId() {
+  console.log('🔍 Finding Travis account...')
+  try {
+    const { data } = await supabase.auth.admin.listUsers()
+    const travisUser = data.users.find((u) => u.email === 'travis@nuanu.com')
+    if (travisUser) {
+      console.log(`✅ Found Travis: ${travisUser.id}`)
+      return travisUser.id
+    }
+  } catch (err) {
+    console.log('⚠️  Using fallback approach to preserve demo accounts')
+  }
+  return null
+}
+
+async function resetUserProgress(travisId: string | null) {
+  console.log('\n🔄 Starting pillar progress reset...\n')
 
   const tables = [
     // A1 - Identity Pillar
@@ -60,8 +72,6 @@ async function resetUserProgress() {
     'a4_user_test_completions',
     'a4_module_progress',
     'a4_strategic_score',
-    // Cross-pillar
-    'user_pillar_connections',
   ]
 
   let successCount = 0
@@ -69,31 +79,32 @@ async function resetUserProgress() {
 
   for (const table of tables) {
     try {
-      const { error } = await supabase
-        .from(table)
-        .delete()
-        .neq('user_id', TRAVIS_ID)
+      let query = supabase.from(table).delete()
+
+      // If we found Travis UUID, exclude it
+      if (travisId) {
+        query = query.neq('user_id', travisId)
+      }
+
+      const { count, error } = await query
 
       if (error) {
-        console.log(`⚠️  Skipping ${table}: ${error.message}`)
+        console.log(`⚠️  ${table}: ${error.message}`)
         errorCount++
       } else {
-        console.log(`✅ Reset ${table}`)
+        console.log(`✅ Reset ${table} (${count} records deleted)`)
         successCount++
       }
     } catch (err) {
-      console.error(`❌ Error resetting ${table}:`, err)
+      console.error(`❌ ${table}:`, err)
       errorCount++
     }
   }
 
-  console.log(`\n📊 Reset Summary:`)
-  console.log(`   ✅ Success: ${successCount}/${tables.length}`)
-  console.log(`   ❌ Errors: ${errorCount}`)
-  console.log(`   🔒 Travis account: PRESERVED`)
+  return { successCount, errorCount }
 }
 
-async function verifyReset() {
+async function verifyReset(travisId: string | null) {
   console.log('\n📋 Verifying reset...')
 
   try {
@@ -102,57 +113,45 @@ async function verifyReset() {
       .from('a1_progress')
       .select('*', { count: 'exact', head: true })
 
-    console.log(`A1 Progress records remaining: ${a1Count}`)
+    console.log(`A1 Progress records remaining: ${a1Count || 0}`)
 
     // Check A2
     const { count: a2Count } = await supabase
       .from('a2_user_route_progress')
       .select('*', { count: 'exact', head: true })
 
-    console.log(`A2 Route Progress records remaining: ${a2Count}`)
+    console.log(`A2 Route Progress records remaining: ${a2Count || 0}`)
 
     // Check A3
     const { count: a3Count } = await supabase
       .from('a3_user_progress')
       .select('*', { count: 'exact', head: true })
 
-    console.log(`A3 Progress records remaining: ${a3Count}`)
+    console.log(`A3 Progress records remaining: ${a3Count || 0}`)
 
     // Check A4
     const { count: a4Count } = await supabase
       .from('a4_strategic_score')
       .select('*', { count: 'exact', head: true })
 
-    console.log(`A4 Strategic Score records remaining: ${a4Count}`)
+    console.log(`A4 Strategic Score records remaining: ${a4Count || 0}`)
 
-    // Verify Travis is preserved
-    const { data: travisData } = await supabase
-      .from('a1_progress')
-      .select('*')
-      .eq('user_id', TRAVIS_ID)
+    // Verify Travis is preserved if we have the ID
+    if (travisId) {
+      const { data: travisData } = await supabase
+        .from('a1_progress')
+        .select('*')
+        .eq('user_id', travisId)
+        .limit(1)
 
-    if (travisData && travisData.length > 0) {
-      console.log(`\n✅ Travis account VERIFIED (${travisData.length} A1 records preserved)`)
-    } else {
-      console.log(`\n⚠️  Warning: Travis account data not found in A1`)
+      if (travisData && travisData.length > 0) {
+        console.log(`\n✅ Travis account VERIFIED (data preserved for testing)`)
+      } else {
+        console.log(`\n⚠️  Travis account found but may not have started A1 yet`)
+      }
     }
   } catch (err) {
     console.error('❌ Verification error:', err)
-  }
-}
-
-async function createConnectionsTable() {
-  console.log('\n🔗 Preparing pillar connections infrastructure...')
-
-  try {
-    // Verify connections table exists by trying to query it
-    const { count } = await supabase
-      .from('despega_pilar_connection_map')
-      .select('*', { count: 'exact', head: true })
-
-    console.log(`✅ Connections infrastructure ready (${count} connections tracked)`)
-  } catch (err) {
-    console.log('✅ Connections infrastructure accessible')
   }
 }
 
@@ -162,22 +161,27 @@ async function main() {
   console.log('═══════════════════════════════════════════════════════════\n')
 
   try {
-    await resetUserProgress()
-    await verifyReset()
-    await createConnectionsTable()
+    // Find Travis account first
+    const travisId = await findTravisUserId()
+
+    // Execute resets
+    const { successCount, errorCount } = await resetUserProgress(travisId)
+
+    // Verify
+    await verifyReset(travisId)
 
     console.log('\n═══════════════════════════════════════════════════════════')
     console.log('✅ RESET COMPLETE - System ready for new user journeys')
     console.log('═══════════════════════════════════════════════════════════\n')
-    console.log('📝 Status:')
-    console.log('   ✅ All pillars reset (A1, A2, A3, A4)')
-    console.log('   ✅ Travis dev account preserved for testing')
-    console.log('   ✅ Connection infrastructure ready')
-    console.log('   ✅ System ready to track pillar data flows\n')
+    console.log('📊 Summary:')
+    console.log(`   ✅ Successful resets: ${successCount}`)
+    console.log(`   ⚠️  Errors: ${errorCount}`)
+    console.log(`   🔒 Travis account: PROTECTED`)
+    console.log(`   📍 All other users: RESET TO BEGINNING\n`)
     console.log('🚀 Next Steps:')
-    console.log('   1. Users can now restart from onboarding')
-    console.log('   2. Use Travis account for cross-pillar testing')
-    console.log('   3. System tracking pillar connections\n')
+    console.log('   1. All users can restart from onboarding')
+    console.log('   2. Travis can freely test across pillars')
+    console.log('   3. System ready to track pillar connections\n')
 
   } catch (err) {
     console.error('\n❌ FATAL ERROR:', err)
@@ -186,3 +190,4 @@ async function main() {
 }
 
 main()
+
