@@ -28,7 +28,7 @@ const lora = Lora({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://despegatucarrera.cl"),
+  metadataBase: new URL("https://www.despegatucarrera.com"),
   title: {
     default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
     template: "%s | Despega Tu Carrera",
@@ -57,7 +57,7 @@ export const metadata: Metadata = {
     "planificación carrera",
     "empleabilidad Chile",
   ],
-  authors: [{ name: "Despega Tu Carrera", url: "https://despegatucarrera.cl" }],
+  authors: [{ name: "Despega Tu Carrera", url: "https://www.despegatucarrera.com" }],
   creator: "Despega Tu Carrera",
   publisher: "Despega Tu Carrera",
   formatDetection: {
@@ -68,14 +68,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://despegatucarrera.cl",
+    url: "https://www.despegatucarrera.com",
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA y Tests Psicométricos",
     description:
       "Transforma tu carrera con evaluaciones científicas, contenido especializado y coaching personalizado con inteligencia artificial.",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://www.despegatucarrera.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
@@ -86,7 +86,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA",
     description: "Tests psicométricos, contenido especializado y coaching con IA. Impulsa tu carrera hoy.",
-    images: ["/twitter-image.png"],
+    images: ["https://www.despegatucarrera.com/twitter-image.png"],
     creator: "@despegatucarrera",
   },
   robots: {
@@ -101,10 +101,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://despegatucarrera.cl",
+    canonical: "https://www.despegatucarrera.com",
     languages: {
-      "es-CL": "https://despegatucarrera.cl",
-      es: "https://despegatucarrera.cl/es",
+      "es-CL": "https://www.despegatucarrera.com",
+      es: "https://www.despegatucarrera.com/es",
     },
   },
   verification: {
@@ -160,8 +160,8 @@ export default function RootLayout({
               name: "Despega Tu Carrera",
               description:
                 "Plataforma líder en Chile para desarrollo profesional con IA, tests psicométricos y coaching personalizado",
-              url: "https://despegatucarrera.cl",
-              logo: "https://despegatucarrera.cl/logo.png",
+              url: "https://www.despegatucarrera.com",
+              logo: "https://www.despegatucarrera.com/logo.png",
               sameAs: [
                 "https://www.linkedin.com/company/despegatucarrera",
                 "https://twitter.com/despegatucarrera",

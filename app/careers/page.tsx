@@ -28,11 +28,11 @@ export default function CareersPage() {
             <div className="bg-blue/5 p-4 rounded-lg">
               <p className="text-sm text-muted-foreground mb-3">Envíanos tu interés a:</p>
               <a 
-                href="mailto:equipo@despegatucarrera.cl"
+                href="mailto:equipo@despegatucarrera.com"
                 className="inline-flex items-center gap-2 text-blue hover:text-blue font-semibold"
               >
                 <Mail className="w-4 h-4" />
-                equipo@despegatucarrera.cl
+                equipo@despegatucarrera.com
               </a>
             </div>
 

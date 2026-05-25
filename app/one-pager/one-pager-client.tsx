@@ -311,10 +311,10 @@ export default function OnePagerClient() {
                 <h2 className="text-lg font-bold mb-3 text-foreground">Contacto</h2>
                 <div className="space-y-2 text-sm text-muted">
                   <div>
-                    <strong>Email:</strong> joaquin@despegatucarrera.cl
+                    <strong>Email:</strong> joaquin@despegatucarrera.com
                   </div>
                   <div>
-                    <strong>Website:</strong> despegatucarrera.cl
+                    <strong>Website:</strong> www.despegatucarrera.com
                   </div>
                   <div>
                     <strong>Ubicación:</strong> Santiago, Chile

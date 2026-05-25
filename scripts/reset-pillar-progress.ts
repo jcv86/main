@@ -41,7 +41,7 @@ async function findTravisUserId() {
   console.log('🔍 Finding Travis account...')
   try {
     const { data } = await supabase.auth.admin.listUsers()
-    const travisUser = data.users.find((u) => u.email === 'travis@nuanu.com')
+    const travisUser = data?.users?.find((u: any) => u.email === 'travis@nuanu.com')
     if (travisUser) {
       console.log(`✅ Found Travis: ${travisUser.id}`)
       return travisUser.id

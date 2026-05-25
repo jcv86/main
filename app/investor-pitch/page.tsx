@@ -1,5 +1,6 @@
 import type { Metadata } from "next"
 import Link from "next/link"
+import { Mail } from "lucide-react"
 
 export const metadata: Metadata = {
   title: "Presentación para Inversionistas - Despega Tu Carrera | Plataforma de Desarrollo Profesional",
@@ -534,11 +535,12 @@ export default function InvestorPitch() {
               ¿Interesado en aprender más? Nos encantaría discutir esta oportunidad contigo.
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <a
-                href="mailto:joaquin@despegatucarrera.cl"
-                className="px-8 py-4 bg-purple text-white rounded-xl font-semibold hover:bg-purple transition-colors"
+              <a 
+                href="mailto:joaquin@despegatucarrera.com"
+                className="inline-flex items-center gap-2 text-blue hover:text-blue font-semibold"
               >
-                Contacta a Joaquin (CEO)
+                <Mail className="w-4 h-4" />
+                joaquin@despegatucarrera.com
               </a>
               <Link
                 href="/whitepaper"

@@ -1,0 +1,38 @@
+# Robots.txt for Despega Tu Carrera
+# https://www.despegatucarrera.com/robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /admin
+Disallow: /api
+Disallow: /auth
+Disallow: /dashboard
+Disallow: /despega
+Disallow: /*.json$
+Disallow: /*?*sort=
+Disallow: /*?*filter=
+
+# Crawl delay for responsible crawling
+Crawl-delay: 1
+
+# Sitemaps
+Sitemap: https://www.despegatucarrera.com/sitemap.xml
+
+# Specific search engines
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 0.5
+
+User-agent: AhrefsBot
+Allow: /
+Crawl-delay: 2
+
+User-agent: SemrushBot
+Crawl-delay: 2
+
+User-agent: MJ12bot
+Crawl-delay: 2
