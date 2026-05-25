@@ -117,8 +117,8 @@ export default function SignInPage() {
       
       console.log('[v0] Demo user set:', demoUser.email)
       
-      // Get the next URL from search params, default to despega dashboard
-      const next = searchParams.get('next') || '/despega'
+      // Get the next URL from search params, default to onboarding start
+      const next = searchParams.get('next') || '/despega/conozcamonos-1'
       
       // Use hard navigation to ensure cookie is sent with the request
       window.location.href = next

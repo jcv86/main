@@ -10,8 +10,29 @@ const PUBLIC_ROUTES = [
   '/api/documentos',
 ]
 
+// Auth routes
+const AUTH_ROUTES = ['/auth', '/auth/signin', '/auth/callback']
+
+// Onboarding routes (protected but requires auth)
+const ONBOARDING_ROUTES = ['/despega/conozcamonos-1']
+
+// Protected routes that require auth (not onboarding)
+const PROTECTED_ROUTES = ['/dashboard', '/a4-dashboard']
+
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
+}
+
+function isAuthRoute(pathname: string): boolean {
+  return AUTH_ROUTES.some(route => pathname.startsWith(route))
+}
+
+function isOnboardingRoute(pathname: string): boolean {
+  return ONBOARDING_ROUTES.some(route => pathname.startsWith(route))
+}
+
+function isProtectedRoute(pathname: string): boolean {
+  return PROTECTED_ROUTES.some(route => pathname.startsWith(route))
 }
 
 export async function middleware(request: NextRequest) {
@@ -85,6 +106,8 @@ export async function middleware(request: NextRequest) {
 
   // Check for demo user in cookie (set by demo login)
   const demoUserCookie = request.cookies.get('demo_user')?.value
+  const hasDemo = !!demoUserCookie
+  
   if (demoUserCookie) {
     const response = NextResponse.next()
     // Extend cookie expiry on every request
@@ -94,6 +117,14 @@ export async function middleware(request: NextRequest) {
       sameSite: 'lax',
       maxAge: 86400 * 7 // 7 days
     })
+    
+    // Redirect to onboarding if trying to access dashboard directly
+    if (isProtectedRoute(pathname) && !isOnboardingRoute(pathname)) {
+      console.log('[v0] Demo user redirected from', pathname, 'to onboarding')
+      const redirectUrl = new URL('/despega/conozcamonos-1', request.nextUrl)
+      return NextResponse.redirect(redirectUrl)
+    }
+    
     return response
   }
 
