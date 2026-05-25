@@ -8,7 +8,8 @@
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
-    "generate:docs": "node scripts/generate-docx.js"
+    "generate:docs": "node scripts/generate-docx.js",
+    "db:reset-progress": "node --env-file-if-exists=/vercel/share/.env.project --env-file-if-exists=/vercel/share/.env.snowflake scripts/reset-pillar-progress.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",
