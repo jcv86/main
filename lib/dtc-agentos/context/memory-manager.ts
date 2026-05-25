@@ -13,7 +13,16 @@ import type {
   CaptureMemoryPayload,
   CommandId,
 } from '../types'
-import { STAGE_MEMORY_TYPES } from '../index'
+
+// Define stage memory types - what memory items should be captured from each stage
+export const STAGE_MEMORY_TYPES: Record<string, MemoryItemType[]> = {
+  c1: ['career_goal', 'motivation', 'constraint', 'learning_preference'],
+  a1: ['strength', 'weakness', 'communication_style', 'interview_pattern'],
+  c2: ['role_target', 'skill', 'achievement', 'market_region', 'company_preference'],
+  a2: ['feedback_received', 'evidence'],
+  a3: ['star_story', 'interview_pattern', 'skill', 'weakness', 'feedback_received'],
+  a4: ['evidence', 'star_story', 'achievement']
+}
 
 // Re-export types for consumers
 export type { CaptureMemoryPayload, MemoryItem, MemoryItemType, MemorySourceType }

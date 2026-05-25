@@ -1,8 +1,19 @@
 import OpenAI from 'openai'
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-})
+// Lazy-load OpenAI client to avoid initialization at build time
+let openaiClient: OpenAI | null = null
+
+function getOpenAIClient(): OpenAI {
+  if (!openaiClient) {
+    if (!process.env.OPENAI_API_KEY) {
+      throw new Error('OPENAI_API_KEY environment variable is not set')
+    }
+    openaiClient = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
+    })
+  }
+  return openaiClient
+}
 
 export interface InterviewQuestion {
   questionNumber: number
@@ -87,7 +98,7 @@ For each question, provide:
 Format as JSON array with: [{ "question": "...", "category": "...", "competencies": [...] }]
     `
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: 'gpt-4-turbo',
       messages: [
         {
@@ -163,7 +174,7 @@ Criterios de Scoring:
 - 0-2: Respuesta insuficiente, no aborda la pregunta
     `
 
-    const response = await openai.chat.completions.create({
+    const response = await getOpenAIClient().chat.completions.create({
       model: 'gpt-4-turbo',
       messages: [
         {
@@ -301,7 +312,7 @@ La nueva pregunta debe:
 Responde SOLO con la nueva pregunta, sin explicaciones adicionales.
       `
 
-      const response = await openai.chat.completions.create({
+      const response = await getOpenAIClient().chat.completions.create({
         model: 'gpt-4-turbo',
         messages: [
           {

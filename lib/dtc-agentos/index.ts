@@ -221,20 +221,21 @@ export {
 } from './evaluation/evaluator'
 
 export {
-  A3Rubrics,
-  BEHAVIORAL_RUBRIC,
-  SITUATIONAL_RUBRIC,
-  TECHNICAL_RUBRIC,
-  NEGOTIATION_RUBRIC,
+  EVALUATION_RUBRICS,
+  getRubric,
+  getPassingScore,
+  formatRubricForPrompt,
 } from './evaluation/rubrics'
 
 // =============================================================================
 // UNLOCK SYSTEM
 // =============================================================================
 export {
-  UnlockRulesEngine,
-  MODULE_UNLOCK_RULES,
-  type UnlockCheckResult,
+  UNLOCK_RULES,
+  checkUnlock,
+  checkAllModuleUnlocks,
+  checkInterviewLevelUnlocks,
+  getNextMilestone,
 } from './unlock/rules-engine'
 
 // =============================================================================
