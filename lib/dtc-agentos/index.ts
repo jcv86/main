@@ -132,18 +132,6 @@ export const ALL_MODULES = [
 export const INTERVIEW_LEVELS = ['basic', 'advanced', 'pro'] as const
 export type InterviewLevel = typeof INTERVIEW_LEVELS[number]
 
-/**
- * Memory types that should be captured from each stage
- */
-export const STAGE_MEMORY_TYPES = {
-  c1: ['career_goal', 'motivation', 'constraint', 'learning_preference'],
-  a1: ['strength', 'weakness', 'communication_style', 'interview_pattern'],
-  c2: ['role_target', 'market_region', 'company_preference'],
-  a2: ['evidence', 'feedback_received'],
-  a3: ['interview_pattern', 'feedback_received', 'achievement'],
-  a4: ['star_story', 'evidence', 'achievement'],
-} as const
-
 // =============================================================================
 // HELPER FUNCTIONS
 // =============================================================================
@@ -212,22 +200,24 @@ export function formatDuration(ms: number): string {
 // CONTEXT & MEMORY SYSTEM
 // =============================================================================
 export {
-  MemoryManager,
-  MemoryType,
-  MemorySource,
-  type UserMemory,
+  getUserMemory,
+  getMemoryBySource,
+  captureMemory,
+  captureMemories,
+  formatMemoriesForContext,
 } from './context/memory-manager'
 
 export {
-  ContextBuilder,
+  buildDtcContext,
+  formatContextForPrompt,
 } from './context/context-builder'
 
 // =============================================================================
 // EVALUATION SYSTEM
 // =============================================================================
 export {
-  Evaluator,
-  type EvaluationResult,
+  evaluateInterviewAnswer,
+  type EvaluateAnswerResult,
 } from './evaluation/evaluator'
 
 export {

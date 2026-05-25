@@ -9,9 +9,6 @@
 export {
   onC1Complete,
   onA1Complete,
-  type DISCProfile,
-  type DISCInsight,
-  type A1AnalysisResult
 } from './c1-a1-adapter'
 
 // C2/A2 - Professional Profile Flow
@@ -19,9 +16,6 @@ export {
   onC2ProfileComplete,
   onC2GoalsComplete,
   onA2Complete,
-  type ProfessionalProfile,
-  type CareerGoals,
-  type A2AnalysisResult
 } from './c2-a2-adapter'
 
 // A3 - Training Modules Flow
@@ -30,17 +24,12 @@ export {
   onA3Interaction,
   onA3ModuleComplete,
   MODULE_AGENT_MAPPING,
-  type ModuleSession,
-  type A3ModuleInteraction
 } from './a3-adapter'
 
 // A4 - Document Generation Flow
 export {
   onA4DocumentGenerated,
   checkA4Readiness,
-  type DocumentType,
-  type DocumentGenerationRequest,
-  type GeneratedDocument,
-  type DocumentInsight
 } from './a4-adapter'
+
 

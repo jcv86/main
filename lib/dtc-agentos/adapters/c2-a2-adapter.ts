@@ -16,7 +16,7 @@ export type CareerGoals = any
 export type A2AnalysisResult = any
 
 // ============================================================================
-// C2 ADAPTER - PROFESSIONAL PROFILE COMPLETION
+// ADAPTER FUNCTIONS
 // ============================================================================
 
 /**
@@ -50,10 +50,6 @@ export async function onC2GoalsComplete(
     memoriesCreated: 1
   })
 }
-
-// ============================================================================
-// A2 ADAPTER - PREPAREDNESS ANALYSIS
-// ============================================================================
 
 /**
  * Hook to call after A2 preparedness analysis is generated

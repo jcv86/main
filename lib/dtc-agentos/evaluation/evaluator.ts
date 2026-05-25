@@ -11,6 +11,7 @@ import type {
   Evaluation,
   EvaluationScore,
   ModuleRubric,
+  AgentId,
 } from '../types'
 import { getRubric, formatRubricForPrompt, getPassingScore } from './rubrics'
 import { captureMemory } from '../context/memory-manager'
@@ -134,7 +135,6 @@ async function generateAIEvaluation(params: {
     system: systemPrompt,
     prompt: userPrompt,
     temperature: 0.3, // Lower temperature for more consistent evaluations
-    maxTokens: 2000,
   })
 
   // Parse the AI response
@@ -501,7 +501,7 @@ function mapDbToEvaluation(row: Record<string, unknown>): Evaluation {
     id: row.id as string,
     userId: row.user_id as string,
     moduleId: row.module_id as string,
-    agentId: row.agent_id as string,
+    agentId: row.agent_id as AgentId,
     questionId: row.question_id as string,
     question: row.question as string,
     answer: row.answer as string,
