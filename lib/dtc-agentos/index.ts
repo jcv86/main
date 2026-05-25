@@ -207,3 +207,192 @@ export function formatDuration(ms: number): string {
   if (ms < 60000) return `${(ms / 1000).toFixed(1)}s`
   return `${(ms / 60000).toFixed(1)}m`
 }
+
+// =============================================================================
+// CONTEXT & MEMORY SYSTEM
+// =============================================================================
+export {
+  MemoryManager,
+  MemoryType,
+  MemorySource,
+  type UserMemory,
+} from './context/memory-manager'
+
+export {
+  ContextBuilder,
+} from './context/context-builder'
+
+// =============================================================================
+// EVALUATION SYSTEM
+// =============================================================================
+export {
+  Evaluator,
+  type EvaluationResult,
+} from './evaluation/evaluator'
+
+export {
+  A3Rubrics,
+  BEHAVIORAL_RUBRIC,
+  SITUATIONAL_RUBRIC,
+  TECHNICAL_RUBRIC,
+  NEGOTIATION_RUBRIC,
+} from './evaluation/rubrics'
+
+// =============================================================================
+// UNLOCK SYSTEM
+// =============================================================================
+export {
+  UnlockRulesEngine,
+  MODULE_UNLOCK_RULES,
+  type UnlockCheckResult,
+} from './unlock/rules-engine'
+
+// =============================================================================
+// FLOW ADAPTERS
+// =============================================================================
+export * from './adapters'
+
+// =============================================================================
+// AGENTOS CORE CLASS
+// =============================================================================
+
+import { createClient } from '@/lib/supabase/server'
+
+/**
+ * Main DTCAgentOS class for system-wide operations
+ */
+export class DTCAgentOS {
+  /**
+   * Log an agent run for analytics and debugging
+   */
+  static async logAgentRun(params: {
+    userId: string
+    agentId: string
+    context: Record<string, any>
+    response: Record<string, any>
+    memoriesExtracted: number
+    tokensUsed: number
+  }): Promise<void> {
+    try {
+      const supabase = await createClient()
+      await supabase.from('agent_runs').insert({
+        user_id: params.userId,
+        agent_id: params.agentId,
+        context_snapshot: params.context,
+        response_snapshot: params.response,
+        memories_extracted: params.memoriesExtracted,
+        tokens_used: params.tokensUsed,
+        created_at: new Date().toISOString()
+      })
+    } catch (error) {
+      console.error('[DTCAgentOS] Failed to log agent run:', error)
+    }
+  }
+  
+  /**
+   * Log a command run for analytics and debugging
+   */
+  static async logCommandRun(params: {
+    userId: string
+    commandId: string
+    input: Record<string, any>
+    output: Record<string, any>
+    memoriesCreated: number
+  }): Promise<void> {
+    try {
+      const supabase = await createClient()
+      await supabase.from('command_runs').insert({
+        user_id: params.userId,
+        command_id: params.commandId,
+        input_snapshot: params.input,
+        output_snapshot: params.output,
+        memories_created: params.memoriesCreated,
+        created_at: new Date().toISOString()
+      })
+    } catch (error) {
+      console.error('[DTCAgentOS] Failed to log command run:', error)
+    }
+  }
+  
+  /**
+   * Get user's current journey state
+   */
+  static async getJourneyState(userId: string): Promise<{
+    stage: 'onboarding' | 'discovery' | 'training' | 'ready'
+    completedSteps: string[]
+    currentFocus: string
+    nextAction: string
+  }> {
+    const supabase = await createClient()
+    
+    // Check completed milestones
+    const { data: milestones } = await supabase
+      .from('user_memories')
+      .select('key')
+      .eq('user_id', userId)
+      .eq('type', 'milestone')
+    
+    const completedKeys = milestones?.map(m => m.key) || []
+    
+    // Determine stage based on completed milestones
+    const hasC1 = completedKeys.includes('c1_disc_completed')
+    const hasA1 = completedKeys.includes('a1_analysis_completed')
+    const hasC2 = completedKeys.includes('c2_profile_completed')
+    const hasA2 = completedKeys.includes('a2_analysis_completed')
+    const hasA3 = completedKeys.includes('a3_training_completed')
+    
+    let stage: 'onboarding' | 'discovery' | 'training' | 'ready'
+    let currentFocus: string
+    let nextAction: string
+    
+    if (!hasC1) {
+      stage = 'onboarding'
+      currentFocus = 'Completar evaluación DISC'
+      nextAction = 'Ir al cuestionario C1'
+    } else if (!hasA1 || !hasC2) {
+      stage = 'onboarding'
+      currentFocus = 'Completar perfil profesional'
+      nextAction = hasA1 ? 'Completar información profesional C2' : 'Ver resultados DISC A1'
+    } else if (!hasA2) {
+      stage = 'discovery'
+      currentFocus = 'Análisis de preparación'
+      nextAction = 'Ver análisis completo A2'
+    } else if (!hasA3) {
+      stage = 'training'
+      currentFocus = 'Entrenamiento de módulos'
+      nextAction = 'Continuar entrenamiento A3'
+    } else {
+      stage = 'ready'
+      currentFocus = 'Preparación completa'
+      nextAction = 'Generar documentos A4'
+    }
+    
+    return {
+      stage,
+      completedSteps: completedKeys,
+      currentFocus,
+      nextAction
+    }
+  }
+  
+  /**
+   * Initialize AgentOS for a new user
+   */
+  static async initializeUser(userId: string): Promise<void> {
+    const supabase = await createClient()
+    
+    // Create initial user memory entry
+    await supabase.from('user_memories').insert({
+      user_id: userId,
+      type: 'milestone',
+      source: 'system',
+      key: 'user_initialized',
+      value: {
+        initialized_at: new Date().toISOString(),
+        version: '2.0'
+      },
+      confidence: 1.0,
+      extracted_from: 'DTCAgentOS Initialization'
+    })
+  }
+}
