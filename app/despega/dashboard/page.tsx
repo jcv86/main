@@ -20,31 +20,36 @@ export default function DashboardPage() {
       try {
         console.log('[v0] Loading user data from dashboard endpoint')
         
-        // Ensure demo user is in cookie for server-side access
-        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        if (demoUserStr) {
-          document.cookie = `demo_user=${demoUserStr}; path=/; max-age=86400`
-          console.log('[v0] Demo user synced to cookie')
-        }
+        // TODO: Implement /api/dashboard-data endpoint
+        // For now, skip loading dashboard data from REST endpoint
+        setLoading(false)
+        return
         
-        // Call the dashboard data endpoint
-        const response = await fetch('/rest/dashboard-data')
+        // // Ensure demo user is in cookie for server-side access
+        // const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+        // if (demoUserStr) {
+        //   document.cookie = `demo_user=${demoUserStr}; path=/; max-age=86400`
+        //   console.log('[v0] Demo user synced to cookie')
+        // }
         
-        if (!response.ok) {
-          console.error('[v0] Failed to fetch dashboard data:', response.status)
-          setLoading(false)
-          return
-        }
+        // // Call the dashboard data endpoint
+        // const response = await fetch('/api/dashboard-data')
         
-        const data = await response.json()
-        console.log('[v0] Dashboard data loaded:', {
-          name: data.name,
-          progressPercent: data.progressPercent,
-          hasA2Mission: !!data.a2_mission,
-          trainingsCount: data.a3_trainings?.length || 0
-        })
+        // if (!response.ok) {
+        //   console.error('[v0] Failed to fetch dashboard data:', response.status)
+        //   setLoading(false)
+        //   return
+        // }
         
-        setUserData(data)
+        // const data = await response.json()
+        // console.log('[v0] Dashboard data loaded:', {
+        //   name: data.name,
+        //   progressPercent: data.progressPercent,
+        //   hasA2Mission: !!data.a2_mission,
+        //   trainingsCount: data.a3_trainings?.length || 0
+        // })
+        
+        // setUserData(data)
       } catch (error) {
         console.error('[v0] Error loading dashboard:', error)
       } finally {
