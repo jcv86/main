@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Montserrat, Lora } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
@@ -29,13 +29,6 @@ const lora = Lora({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://despegatucarrera.cl"),
-  viewport: {
-    width: "device-width",
-    initialScale: 1,
-    maximumScale: 1,
-    userScalable: false,
-  },
-  themeColor: "#1a1a1a",
   title: {
     default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
     template: "%s | Despega Tu Carrera",
@@ -124,6 +117,14 @@ export const metadata: Metadata = {
   category: "education",
   classification: "Professional Development Platform",
   generator: 'v0.app'
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#1a1a1a",
 }
 
 export default function RootLayout({
