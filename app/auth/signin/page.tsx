@@ -138,15 +138,14 @@ export default function SignInPage() {
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
-      {/* Background decorative elements */}
-      <div className="absolute inset-0 overflow-hidden pointer-events-none">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/20 dark:bg-purple/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse" />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/20 dark:bg-blue/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30 animate-pulse animation-delay-2000" />
-        <div className="absolute top-1/2 left-1/2 w-80 h-80 bg-cyan/20 dark:bg-cyan/20 rounded-full mix-blend-multiply filter blur-3xl opacity-30" />
+      {/* Optimized: Minimal CSS-only decorative elements to reduce paint layers */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden">
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/10 rounded-full opacity-20" style={{ filter: 'blur(80px)' }} />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/10 rounded-full opacity-20" style={{ filter: 'blur(80px)' }} />
       </div>
 
       <div className="relative w-full max-w-md space-y-6">
-        {/* Header section */}
+        {/* Header section - optimized for FCP */}
         <div className="text-center space-y-3 mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
             <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
@@ -184,7 +183,7 @@ export default function SignInPage() {
             <Button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-white hover:bg-muted/5 border-2 border-muted/20 text-muted/90 hover:border-blue/30 hover:shadow-md transition-all duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
+              className="w-full h-12 text-base gap-2 bg-white hover:bg-muted/5 border-2 border-muted/20 text-muted/90 hover:border-blue/30 transition-colors duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
             >
               {isLoadingGoogle ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -198,7 +197,7 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 text-white shadow-md hover:shadow-lg transition-all duration-200"
+              className="w-full h-12 text-base gap-2 text-white transition-colors duration-200"
               style={{ backgroundColor: 'rgba(14, 118, 168, 0.6)' }}
             >
               {isLoadingLinkedIn ? (
