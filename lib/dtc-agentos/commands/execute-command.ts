@@ -71,8 +71,8 @@ export async function executeCommand(
       }
     }
 
-    const agent = getAgent(params.agentId)
-    const mode = dtcModes[params.modeId]
+    const agent = getAgent(params.agentId as any)
+    const mode = dtcModes[params.modeId as any]
     
     if (!agent || !mode) {
       return {
@@ -300,8 +300,8 @@ async function executeMemoryUpdate(params: ExecuteCommandParams, context: any) {
   // Updates memory items
   await captureMemory({
     userId: params.userId,
-    sourceType: params.params.sourceType as string,
-    memoryType: params.params.memoryType as string,
+    sourceType: params.params.sourceType as any,
+    memoryType: params.params.memoryType as any,
     content: params.params.content as string,
   })
   return { status: 'updated' }
