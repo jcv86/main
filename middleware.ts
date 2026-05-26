@@ -2,6 +2,7 @@ import { updateSession } from '@/lib/supabase/middleware'
 import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, rateLimiters } from '@/lib/middleware/rate-limit'
 import { logger } from '@/lib/logger'
+import { getPillarFromPath, shouldEnforcePillarAccess, getAccessDeniedRedirect } from '@/lib/pillar-access-validation'
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -19,6 +20,16 @@ const ONBOARDING_ROUTES = ['/despega/conozcamonos-1']
 // Protected routes that require auth (not onboarding)
 const PROTECTED_ROUTES = ['/dashboard', '/a4-dashboard']
 
+// Routes that bypass pillar access validation (can be accessed anytime after auth)
+const PILLAR_EXEMPT_ROUTES = [
+  '/dashboard',
+  '/biblioteca',
+  '/documentos',
+  '/documentos-publicos',
+  '/api/auth',
+  '/api/documentos',
+]
+
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
 }
@@ -33,6 +44,10 @@ function isOnboardingRoute(pathname: string): boolean {
 
 function isProtectedRoute(pathname: string): boolean {
   return PROTECTED_ROUTES.some(route => pathname.startsWith(route))
+}
+
+function isPillarExemptRoute(pathname: string): boolean {
+  return PILLAR_EXEMPT_ROUTES.some(route => pathname.startsWith(route))
 }
 
 export async function middleware(request: NextRequest) {
