@@ -1,5 +1,6 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { executeCommand } from '@/lib/dtc-agentos/commands/execute-command'
 
 export async function POST(request: NextRequest) {
   try {
@@ -104,6 +105,32 @@ export async function POST(request: NextRequest) {
       console.log('[v0] A1 completion webhook triggered')
     } catch (webhookError) {
       console.warn('[v0] Warning: Could not trigger auto-detection webhook:', webhookError)
+    }
+
+    // Capture memory from A1 assessment
+    try {
+      const result = await executeCommand({
+        userId: user.id,
+        commandId: '/dtc:a1-identity-audit',
+        agentId: 'coach',
+        modeId: 'identity-audit',
+        params: {
+          testId: data?.id,
+          responses,
+          discProfile: disc_profile,
+          dominantPattern: dominant_pattern,
+        },
+      })
+
+      if (!result.success) {
+        console.error('[v0] Failed to capture A1 memory:', result.error)
+        // Don't fail the whole request if memory capture fails
+      } else {
+        console.log('[v0] A1 memory captured successfully:', result.memoryUpdates)
+      }
+    } catch (memoryError) {
+      console.error('[v0] Exception capturing A1 memory:', memoryError)
+      // Don't fail the whole request if memory capture fails
     }
 
     return NextResponse.json({
