@@ -33,10 +33,19 @@ export async function GET(request: NextRequest) {
         priority: 'low',
         xpReward: 20,
         isRestDay: true
+      }, {
+        headers: {
+          'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
+          'CDN-Cache-Control': 'max-age=3600'
+        }
       })
     }
 
-    return NextResponse.json(task)
+    const response = NextResponse.json(task)
+    // Cache static daily tasks for 1 hour, revalidate for 24 hours
+    response.headers.set('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400')
+    response.headers.set('CDN-Cache-Control', 'max-age=3600')
+    return response
   } catch (error) {
     console.error('[v0] Error fetching daily task:', error)
     return NextResponse.json(

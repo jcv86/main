@@ -1,5 +1,54 @@
 @import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
+/* Cumulative Layout Shift (CLS) Prevention */
+/* Reserve space for dynamic content and prevent layout shifts */
+html {
+  /* Prevent font-size changes from affecting layout */
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body {
+  /* Ensure consistent font metrics to prevent CLS */
+  font-family: var(--font-montserrat), var(--font-lora), system-ui, sans-serif;
+  font-size: 1rem;
+  line-height: 1.5;
+  /* Reserve space for scrollbar to prevent shift on page change */
+  scrollbar-gutter: stable;
+}
+
+/* Reserve space for common UI elements to prevent CLS */
+img,
+picture,
+video {
+  /* Aspect ratio helps prevent layout shifts */
+  display: block;
+  height: auto;
+}
+
+/* Prevent button text wrapping from causing CLS */
+button,
+[role="button"] {
+  min-height: 44px; /* Touch target minimum */
+  /* Reserve padding to prevent text reflow */
+  padding: 0.5rem 1rem;
+}
+
+/* Prevent input fields from resizing */
+input,
+textarea,
+select {
+  min-height: 44px;
+  min-width: 100%;
+}
+
+/* Prevent cards/containers from collapsing */
+[role="contentinfo"],
+[role="main"],
+[role="navigation"] {
+  min-height: auto;
+}
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;

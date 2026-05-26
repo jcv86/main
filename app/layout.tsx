@@ -14,17 +14,21 @@ if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
   validateEnvironment()
 }
 
-// DTC Brand Typography
+// DTC Brand Typography - Optimized font loading
 const montserrat = Montserrat({ 
   subsets: ["latin"],
   variable: "--font-montserrat",
   weight: ["400", "500", "600", "700"],
+  display: "swap", // Prevent FOUT, swap immediately
+  preload: true,
 })
 
 const lora = Lora({ 
   subsets: ["latin"],
   variable: "--font-lora",
   weight: ["400", "500", "600", "700"],
+  display: "swap", // Prevent FOUT
+  preload: true,
 })
 
 export const metadata: Metadata = {
