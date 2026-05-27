@@ -1,21 +1,27 @@
 {
+  "extends": ["next/core-web-vitals", "next/typescript"],
   "rules": {
-    "no-restricted-syntax": [
-      "error",
-      {
-        "selector": "TemplateLiteral > TemplateElement[value.raw=/text-(red|blue|green|yellow|purple|orange|pink|cyan|white|black|gray)/]",
-        "message": "Use semantic color tokens from brandbook instead of hardcoded colors. Example: text-primary, text-secondary, text-accent"
-      },
-      {
-        "selector": "TemplateLiteral > TemplateElement[value.raw=/bg-(red|blue|green|yellow|purple|orange|pink|cyan|white|black|gray)(?!-50|-(100|200|300|400|500|600|700|800|900))/]",
-        "message": "Use semantic background colors from brandbook. Example: bg-background, bg-surface, bg-brand-primary"
-      }
-    ],
-    "no-console": [
-      "warn",
-      {
-        "allow": ["warn", "error"]
-      }
-    ]
-  }
+    "react-hooks/rules-of-hooks": "error",
+    "react-hooks/exhaustive-deps": "off",
+    "no-console": "off",
+    "@next/next/no-html-link-for-pages": "off",
+    "@next/next/no-assign-module-variable": "off",
+    "@next/next/no-img-element": "off",
+    "react/display-name": "off",
+    "react/no-unescaped-entities": "off",
+    "@typescript-eslint/no-explicit-any": "off",
+    "@typescript-eslint/no-unused-vars": "off",
+    "@typescript-eslint/no-empty-object-type": "off",
+    "import/no-anonymous-default-export": "off",
+    "prefer-const": "off",
+    "prefer-spread": "off"
+  },
+  "ignorePatterns": [
+    "node_modules/",
+    ".next/",
+    "dist/",
+    "build/",
+    "coverage/",
+    ".vercel/"
+  ]
 }

@@ -33,21 +33,9 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const categoryData = PROMPT_CATEGORIES[categoryId]
-  
-  if (!categoryData) {
-    return (
-      <div className="flex flex-col h-full items-center justify-center p-8 text-center">
-        <p className="text-lg text-muted-foreground mb-4">
-          Lo sentimos, esta categoría no está disponible.
-        </p>
-        <Button onClick={onBack}>Volver</Button>
-      </div>
-    )
-  }
+  const coach = categoryData?.coach === "sofia" ? "sofia" : "dani"
 
-  const coach = categoryData.coach === "sofia" ? "sofia" : categoryData.coach === "dani" ? "dani" : "sofia"
-  const conversationCategory = categoryId
-
+  // Move hooks before conditional check
   useEffect(() => {
     setSessionId(crypto.randomUUID())
 
@@ -66,8 +54,10 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
       setMessages([welcomeMessage])
     }
 
-    initializeCoach()
-  }, [categoryId, userEmail])
+    if (categoryData) {
+      initializeCoach()
+    }
+  }, [categoryId, userEmail, coach, categoryData])
 
   useEffect(() => {
     if (sessionId && promptVariantId && userEmail) {
@@ -78,6 +68,19 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+  
+  if (!categoryData) {
+    return (
+      <div className="flex flex-col h-full items-center justify-center p-8 text-center">
+        <p className="text-lg text-muted-foreground mb-4">
+          Lo sentimos, esta categoría no está disponible.
+        </p>
+        <Button onClick={onBack}>Volver</Button>
+      </div>
+    )
+  }
+
+  const conversationCategory = categoryId
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return
