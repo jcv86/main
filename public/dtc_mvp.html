@@ -375,6 +375,86 @@
         /* Print Styles */
         @media print {
             body {
+                background: var(--bg-darker) !important;
+            }
+            
+            .page {
+                page-break-after: always;
+                padding: 40px !important;
+                background: var(--bg-darker) !important;
+                min-height: 297mm !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+            }
+            
+            .title-page {
+                page-break-after: always;
+                min-height: 297mm !important;
+                background: linear-gradient(135deg, rgba(90, 90, 150, 0.3) 0%, rgba(80, 160, 170, 0.1) 100%), var(--bg-darker) !important;
+            }
+            
+            .page-header {
+                page-break-inside: avoid;
+            }
+            
+            .info-box {
+                page-break-inside: avoid;
+                background: var(--purple-bg) !important;
+                border: 1px solid var(--purple-border) !important;
+            }
+            
+            .image-container {
+                page-break-inside: avoid;
+                background: var(--bg-darker) !important;
+            }
+            
+            .highlight-box {
+                page-break-inside: avoid;
+            }
+            
+            h1, h2, h3 {
+                page-break-after: avoid;
+            }
+            
+            ul, ol {
+                page-break-inside: avoid;
+            }
+            
+            .print-button {
+                display: none !important;
+            }
+        }
+        
+        .print-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: var(--cyan-accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(80, 160, 170, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .print-button:hover {
+            background: var(--cyan-accent-hover);
+            box-shadow: 0 6px 20px rgba(80, 160, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .print-button:active {
+            transform: translateY(0);
+        }
+        @media print {
+            body {
                 background: var(--bg-darker);
             }
             
@@ -653,7 +733,48 @@
         <p>Plataforma: Despega Tu Carrera | Postulación: CORFO Semilla Inicia 2026</p>
         <p>Brandbook aplicado: Colores púrpura y cyan | Stack: Next.js 15 + Supabase</p>
     </div>
-</div>
+    </div>
+
+    <!-- Print Button -->
+    <button class="print-button" onclick="descargarPDF()">📥 Descargar PDF</button>
+
+    <!-- HTML2PDF Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    
+    <script>
+        function descargarPDF() {
+            const element = document.body;
+            const opt = {
+                margin: [10, 10, 10, 10],
+                filename: 'DTC_Respaldo_MVP_CORFO_2026.pdf',
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    logging: false,
+                    backgroundColor: '#000000',
+                    useCORS: true,
+                    allowTaint: true
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    compress: true
+                },
+                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+            };
+            
+            html2pdf().set(opt).from(element).save();
+        }
+        
+        // Keyboard shortcut: Ctrl+Shift+P para descargar
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.code === 'KeyP') {
+                e.preventDefault();
+                descargarPDF();
+            }
+        });
+    </script>
 
 </body>
 </html>
