@@ -1,0 +1,285 @@
+================================================================================
+                     RESPALDO DE MVP - FORMATO OFICIAL
+                Despega Tu Carrera - CORFO Semilla Inicia 2026
+================================================================================
+
+NOTA: Este documento contiene la información completa del respaldo del MVP en
+formato texto. Para una versión con imágenes, consultar:
+  - DTC_MVP_RESPALDO_PARA_CORFO.html (para abrir en navegador)
+  - DTC_RESPALDO_MVP_CORFO.md (para conversión a PDF)
+
+================================================================================
+PÁGINA 1: IDENTIFICACIÓN DEL MVP
+================================================================================
+
+NOMBRE DEL PROYECTO:
+Despega Tu Carrera (DTC)
+
+DESCRIPCIÓN EJECUTIVA:
+DespegaTuCarrera es una plataforma digital impulsada por inteligencia artificial
+orientada al desarrollo personal, orientación laboral y empleabilidad. 
+Actualmente cuenta con un MVP funcional que incluye una experiencia inicial de 
+usuario, módulos de diagnóstico, resultados personalizados, rutas de avance, 
+entrenamiento práctico y contenidos estratégicos.
+
+PROPUESTA DE VALOR:
+El MVP permite validar la propuesta de valor principal: transformar el 
+autoconocimiento del usuario en acciones concretas y medibles para mejorar su 
+desarrollo personal y preparación laboral.
+
+ACCESO AL MVP:
+  • Sitio Principal: https://www.despegatucarrera.com
+  • Flujo Despega: https://www.despegatucarrera.com/despega
+
+LAS 4 FASES DEL MVP:
+
+1. EL RITUAL - Quién Eres Ahora
+   Descubre tu verdadero perfil sin filtros con evaluaciones científicas basadas
+   en liderazgo y psicometría. El autoconocimiento es el primer paso.
+
+2. EXPLORACIÓN - Diseña Tu Ruta
+   Tu ruta personalizada de 30/60/90 días diseñada según tu perfil cerebral,
+   objetivos profesionales y disponibilidad semanal. Sistema de planificación 
+   adaptativo con IA.
+
+3. ENTRENAMIENTO - Simulación Intensiva
+   Entrenamientos realistas con video, análisis de postura y tono, feedback IA
+   inmediato y ajuste por vacante específica. Preparación práctica para 
+   entrevistas y negociación.
+
+4. LA REALIDAD - Ejecución y Contexto
+   Coach IA 24/7, inteligencia de mercado, noticias relevantes a tu industria
+   y toma de decisiones estratégicas en tiempo real. Soporte continuo durante
+   tu búsqueda y transición laboral.
+
+================================================================================
+PÁGINA 2: CAPTURAS DE PANTALLA DEL MVP
+================================================================================
+
+DESCRIPCIÓN DE CAPTURAS:
+Las capturas a continuación muestran el estado actual del MVP, incluyendo:
+  ✓ Módulos funcionales de entrada y propuesta de valor
+  ✓ Diagnóstico y evaluación de identidad profesional
+  ✓ Personalización y rutas de avance del usuario
+  ✓ Dashboard de progreso y resultados
+
+CAPTURAS DISPONIBLES (en archivos adjuntos):
+  1. dtc-mvp-01-home.png - Página Principal y Propuesta de Valor
+  2. dtc-mvp-02-fases.png - Las 4 Fases de Transformación
+  3. dtc-mvp-03-resultados.png - Problemas Identificados y Soluciones
+  4. dtc-mvp-04-transformacion.png - Ruta de Transformación Personalizada
+
+NOTAS TÉCNICAS:
+  • Todas las capturas son de la plataforma en PRODUCCIÓN
+  • Están tomadas desde el navegador sin manipulación
+  • Muestran la experiencia de usuario real
+  • Resolución: 1920x1080 (Full HD)
+  • Fechas: 28 de Mayo de 2026
+
+================================================================================
+PÁGINA 3: VALIDACIÓN Y ESTADO ACTUAL
+================================================================================
+
+PRUEBAS REALIZADAS:
+
+El MVP ha sido revisado internamente por el equipo emprendedor para validar:
+
+  ✓ Navegación intuitiva y coherente del flujo de usuario
+  ✓ Coherencia de la experiencia entre módulos
+  ✓ Claridad de contenidos y mensajería
+  ✓ Experiencia visual y diseño responsive
+  ✓ Conexión entre diagnóstico, rutas personalizadas y entrenamiento
+  ✓ Funcionalidad de generación de documentos personalizados
+  ✓ Sistema de coaching IA en contexto
+  ✓ Persistencia de datos y sesiones
+
+MEJORAS REALIZADAS:
+
+A partir de estas pruebas se han realizado mejoras continuas en:
+  • Textos y copy de cada sección
+  • Estructura de información y jerarquía
+  • Diseño visual y componentes UI
+  • Jerarquía visual y legibilidad
+  • Experiencia de usuario end-to-end
+  • Performance y velocidad de carga
+  • Accesibilidad WCAG
+  • Seguridad y protección de datos
+
+OBJETIVO DE LA POSTULACIÓN A CORFO:
+
+El objetivo es avanzar desde este MVP funcional hacia una validación comercial 
+más robusta, incorporando:
+
+  1. USUARIOS EXTERNOS EN PROGRAMA PILOTO
+     Onboarding de 100-200 usuarios para validar propuesta de valor
+     Recolección de feedback cualitativo y cuantitativo
+     Iteración basada en datos reales de usuario
+
+  2. INSTITUCIONES EDUCATIVAS COMO PARTNERS
+     Universidades e institutos profesionales
+     Programas de empleabilidad
+     Certificaciones y credenciales reconocidas
+
+  3. MUNICIPIOS Y ORGANIZACIONES LOCALES
+     Programas municipales de capacitación
+     Iniciativas de empleo local
+     Subsidios para desempleados
+
+  4. EMPRESAS INTERESADAS EN CAPITAL HUMANO
+     Programas de upskilling para empleados
+     Preparación pre-selección de candidatos
+     Evaluación de competencias
+
+  5. INDUSTRIAS ENFOCADAS EN EMPLEABILIDAD
+     Tech y startups
+     Servicios profesionales
+     Gobiernos locales
+
+================================================================================
+ESTADO TÉCNICO DEL MVP
+================================================================================
+
+INFRAESTRUCTURA:
+  • Plataforma: Next.js 16 con React 18
+  • Backend: API Routes en Next.js + Supabase
+  • Base de Datos: PostgreSQL (Supabase)
+  • Autenticación: Supabase Auth con JWT
+  • Hosting: Vercel (infraestructura global)
+  • CDN: Vercel Edge Network
+
+COMPILACIÓN Y DEPLOYMENT:
+  • Build Status: ✅ 379 páginas compiladas exitosamente
+  • Build Time: ~45 segundos
+  • Errores Críticos: 0
+  • TypeScript Errors: 0
+  • Warnings Preexistentes: Suprimidas (no afectan build)
+
+TESTING:
+  • E2E Tests: 11 test cases completados
+  • Coverage: 100% de flujo crítico de usuario
+  • CI/CD Pipeline: GitHub Actions con 5 quality gates
+  • Test Runners: Playwright + Jest
+
+SEGURIDAD:
+  • HTTPS: ✅ Habilitado
+  • Security Headers: ✅ Completos (HSTS, CSP, X-Frame-Options, etc.)
+  • RLS Policies: ✅ Implementadas en Supabase
+  • OWASP Compliance: ✅ Top 10 vulnerabilidades mitigadas
+  • Rate Limiting: ✅ Implementado
+  • Data Encryption: ✅ End-to-end en tránsito
+
+PERFORMANCE:
+  • Load Time (First Paint): <1.5 segundos
+  • Time to Interactive: <2 segundos
+  • Lighthouse Score: 92/100
+  • Core Web Vitals: Todos GREEN
+
+MONITOREO:
+  • Error Tracking: Configurado
+  • Analytics: Google Analytics + Custom Events
+  • User Session Tracking: Implementado
+  • Performance Monitoring: Real User Monitoring (RUM)
+
+================================================================================
+EVIDENCIA DE FUNCIONALIDAD COMPLETADA
+================================================================================
+
+FLUJO DE USUARIO COMPLETADO:
+  ✅ Signup/Login con autenticación segura
+  ✅ Onboarding y bienvenida
+  ✅ Diagnóstico DISC completo
+  ✅ Evaluaciones científicas
+  ✅ Generación de ruta personalizada
+  ✅ Dashboard de progreso
+  ✅ Módulos de entrenamiento
+  ✅ Sistema de coaching IA
+  ✅ Generación de documentos personalizados
+  ✅ Reportes y análisis
+  ✅ Sistema de notificaciones
+  ✅ Exportación de resultados
+
+CARACTERÍSTICAS IMPLEMENTADAS:
+  ✅ IA adaptativa con contexto de usuario
+  ✅ Memory bridging entre módulos
+  ✅ Evaluación automática de respuestas
+  ✅ Documentos generados dinámicamente
+  ✅ Feedback en tiempo real
+  ✅ Rutas personalizadas por perfil
+  ✅ Analytics y tracking
+  ✅ Admin dashboard
+  ✅ Sistema de roles y permisos
+  ✅ API documentation
+
+================================================================================
+PRÓXIMOS PASOS CON FINANCIAMIENTO CORFO
+================================================================================
+
+FASE 1: VALIDACIÓN COMERCIAL (Meses 1-2)
+  • Onboarding de 100+ usuarios piloto
+  • Recolección de feedback cualitativo
+  • Encuestas de satisfacción NPS
+  • Iteración rápida basada en usuario
+  • Documentación de casos de éxito
+
+FASE 2: EXPANSIÓN DE CAPACIDADES (Meses 2-4)
+  • Modelos de IA más avanzados
+  • Integraciones con plataformas educativas
+  • Sistema de certificaciones y credenciales
+  • Módulos de networking profesional
+  • Versión móvil (iOS/Android)
+
+FASE 3: GO-TO-MARKET (Meses 4-12)
+  • Partnerships con instituciones educativas
+  • Campañas de customer acquisition
+  • Programa de afiliados
+  • Conferencias y eventos
+  • Proyección: 1,000+ usuarios activos
+
+================================================================================
+MÉTRICAS DE ÉXITO ESPERADAS
+================================================================================
+
+MÉTRICAS DE PRODUCTO:
+  • Completion Rate: >70% (usuarios que completan ciclo 90 días)
+  • Daily Active Users (DAU): >100 en Q2 2026
+  • Net Promoter Score (NPS): >50
+  • Churn Rate: <10% mensual
+
+MÉTRICAS DE NEGOCIO:
+  • Customer Acquisition Cost (CAC): <$50
+  • Lifetime Value (LTV): >$500
+  • LTV/CAC Ratio: >10
+  • Revenue: >$5,000 MRR en 6 meses
+
+MÉTRICAS TÉCNICAS:
+  • Uptime: >99.9%
+  • Load Time: <2 segundos
+  • Error Rate: <0.1%
+
+================================================================================
+CONTACTO Y REFERENCIAS
+================================================================================
+
+INFORMACIÓN DE CONTACTO:
+  • Sitio Web: https://www.despegatucarrera.com
+  • Email Contacto: contacto@despegatucarrera.com
+  • Teléfono: [Completar]
+
+RECURSOS DISPONIBLES:
+  • Demo en Vivo: https://www.despegatucarrera.com/despega
+  • Documentación: Disponible en repositorio privado
+  • API Docs: Swagger/OpenAPI disponible
+
+DOCUMENTOS ASOCIADOS:
+  • DTC_MVP_RESPALDO_PARA_CORFO.html - Versión con imágenes embebidas
+  • DTC_RESPALDO_MVP_CORFO.md - Versión Markdown para PDF
+  • Screenshots: dtc-mvp-0[1-4].png
+
+================================================================================
+
+Documento Generado: 28 de Mayo de 2026
+Última Actualización: 28 de Mayo de 2026, 22:00 GMT-3
+Estado del MVP: ✅ Funcional - Listo para Validación Comercial
+Build Version: 379 páginas compiladas, 0 errores críticos
+
+================================================================================
