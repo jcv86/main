@@ -350,6 +350,28 @@
             letter-spacing: 0.5px;
         }
         
+        /* Page Header with Logo */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--purple-muted);
+        }
+        
+        .page-header img {
+            height: 50px;
+            object-fit: contain;
+        }
+        
+        .page-header .page-number {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
         /* Print Styles */
         @media print {
             body {
@@ -368,6 +390,7 @@
 <!-- PORTADA -->
 <div class="page title-page">
     <div class="title-page-content">
+        <img src="/dtc-logo.png" alt="DTC Logo" style="height: 120px; margin-bottom: 40px; object-fit: contain;">
         <h1>DESPEGA TU CARRERA</h1>
         <div class="divider"></div>
         <p class="subtitle">Respaldo del MVP</p>
@@ -378,6 +401,10 @@
 
 <!-- PÁGINA 1: IDENTIFICACIÓN DEL MVP -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Identificación</span>
+    </div>
     <h1>Identificación del MVP</h1>
     
     <div class="section">
@@ -415,6 +442,10 @@
 
 <!-- PÁGINA 2: INICIO Y AUTENTICACIÓN -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Inicio</span>
+    </div>
     <h1>Inicio y Autenticación del Usuario</h1>
     
     <p>La plataforma inicia con un hero profesional que comunica la propuesta de valor inmediatamente. El usuario accede mediante autenticación moderna (Google, LinkedIn) o cuentas demo para exploración inicial del MVP.</p>
@@ -435,6 +466,10 @@
 
 <!-- PÁGINA 3: DASHBOARD PRINCIPAL -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Dashboard</span>
+    </div>
     <h1>Dashboard Principal — Centro de Comando</h1>
     
     <p>El dashboard es el corazón de la plataforma. Muestra métricas en tiempo real (Metas Activas, Libros Leídos, Puntos Totales), DEBUG INFO del usuario y acceso rápido a próximos pasos personalizados. La interfaz está diseñada siguiendo el brandbook con colores púrpura y cyan.</p>
@@ -466,6 +501,10 @@
 
 <!-- PÁGINA 4: PLAN DE 90 DÍAS -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Plan 90 Días</span>
+    </div>
     <h1>Plan de 90 Días y Próximos Pasos</h1>
     
     <p>El sistema presenta un plan estructurado de transformación en 90 días con próximos pasos recomendados personalizados según el perfil del usuario. Los usuarios acceden a módulos de evaluación o exploran la biblioteca de recursos de forma independiente.</p>
@@ -490,6 +529,10 @@
 
 <!-- PÁGINA 5: MÓDULOS DEL PROGRAMA -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Módulos</span>
+    </div>
     <h1>Módulos del Programa — Las 4 Fases</h1>
     
     <p>Despega Tu Carrera organiza el journey del usuario en 4 fases complementarias. Cada fase proporciona coaching IA contextual, retroalimentación en tiempo real y adaptación a las necesidades individuales del usuario.</p>
@@ -512,6 +555,10 @@
 
 <!-- PÁGINA 6: A3 ENTREVISTAS INTELIGENTES -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">A3 Entrevistas</span>
+    </div>
     <h1>A3 — Módulo de Entrevistas Inteligentes</h1>
     
     <p>El módulo A3 proporciona entrevistas simuladas con coaching IA que adapta dinámicamente las preguntas según el perfil del usuario, sector objetivo y desempeño previo. Incluye 3 niveles de dificultad (Básico, Avanzado, Pro) con retroalimentación contextual inmediata.</p>
@@ -536,6 +583,10 @@
 
 <!-- PÁGINA 7: ESTADO ACTUAL Y FUNCIONALIDADES -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Estado Actual</span>
+    </div>
     <h1>Estado Actual y Funcionalidades Implementadas</h1>
     
     <div class="image-container">
@@ -565,6 +616,10 @@
 
 <!-- PÁGINA 8: CONCLUSIÓN Y PRÓXIMOS PASOS -->
 <div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Conclusión</span>
+    </div>
     <h1>Conclusión y Próximos Pasos</h1>
     
     <div class="info-box">

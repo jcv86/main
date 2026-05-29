@@ -12,8 +12,12 @@ export default function LandingPageOptimized() {
       <nav className="border-b border-white/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
         <div className="container mx-auto px-4">
           <div className="flex items-center justify-between h-16">
+            {/* Left side - Logo */}
+            <div className="flex items-center">
+              <img src="/dtc-logo.png" alt="DTC Logo" className="h-10 object-contain" />
+            </div>
             {/* Right side */}
-            <div className="flex items-center gap-4 ml-auto">
+            <div className="flex items-center gap-4">
               <ThemeToggle />
               <Link href="/auth/signin" prefetch={true}>
                 <Button size="sm" className="rounded-full text-white" style={{ backgroundColor: 'rgba(90, 200, 220, 0.80)' }}>
