@@ -1,0 +1,85 @@
+╔══════════════════════════════════════════════════════════════════════════════╗
+║                                                                              ║
+║                       ⭐ LEER ESTO PRIMERO ⭐                               ║
+║                                                                              ║
+║              Tu PDF para CORFO está listo en 2 minutos                       ║
+║                                                                              ║
+╚══════════════════════════════════════════════════════════════════════════════╝
+
+TAREAS RÁPIDAS COMPLETADAS:
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ Capturadas 5 screenshots del MVP
+✅ Creado documento HTML profesional
+✅ Incluidas todas las imágenes
+✅ Redactado en español completo
+✅ Formateado para CORFO
+
+AHORA:
+
+1. Abre este archivo: dtc_mvp.html
+   Ubicación: /vercel/share/v0-project/dtc_mvp.html
+
+2. En tu navegador presiona: Ctrl+P (o Cmd+P en Mac)
+
+3. Selecciona: "Guardar como PDF"
+
+4. Nombre del archivo: DTC_Respaldo_MVP_Semilla_Inicia_2026.pdf
+
+¡LISTO! Tu PDF está creado en 1 minuto.
+
+═══════════════════════════════════════════════════════════════════════════════
+ARCHIVOS DISPONIBLES
+═══════════════════════════════════════════════════════════════════════════════
+
+📄 dtc_mvp.html ................... HTML para convertir a PDF (RECOMENDADO)
+📄 DTC_RESPALDO_MVP_CORFO.md ...... Markdown con screenshots
+📄 DTC_MVP_RESUMEN_EJECUTIVO.txt .. Resumen ejecutivo
+📄 CORFO_MVP_RESPALDO_INDICE.txt .. Índice completo
+📁 public/corfo-mvp/ ........... Screenshots individuales
+
+═══════════════════════════════════════════════════════════════════════════════
+QUÉ CONTIENE EL PDF
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Portada profesional
+✓ Descripción del MVP (con links)
+✓ 5 Screenshots a color
+✓ Módulos funcionales listados
+✓ Métricas de producción
+✓ Estado: Production Ready
+✓ Objetivo de CORFO
+✓ Próximos pasos
+
+═══════════════════════════════════════════════════════════════════════════════
+LINKS A INCLUIR EN FORMULARIO CORFO
+═══════════════════════════════════════════════════════════════════════════════
+
+Portal: https://www.despegatucarrera.com
+Demo:   https://www.despegatucarrera.com/despega
+
+Usuarios demo (prueba rápida):
+• Travis (Dev)
+• Ana (Marketing)
+• Carlos (PM)
+• María (Admin)
+
+═══════════════════════════════════════════════════════════════════════════════
+CONFIRMACIÓN
+═══════════════════════════════════════════════════════════════════════════════
+
+Cuando hayas completado los pasos, deberías tener:
+
+✓ Archivo: DTC_Respaldo_MVP_Semilla_Inicia_2026.pdf
+✓ Tamaño: ~2-3 MB
+✓ Páginas: 4
+✓ Contenido: Completo y profesional
+
+Sube este PDF a CORFO en la sección de "Material Complementario".
+
+═══════════════════════════════════════════════════════════════════════════════
+
+¡Eso es todo! El MVP está documentado y listo para CORFO.
+
+Preguntas? Ver: CORFO_MVP_RESPALDO_INDICE.txt
+
