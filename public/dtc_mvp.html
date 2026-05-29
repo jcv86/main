@@ -386,60 +386,182 @@
             
             body {
                 background: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
             }
             
             .page {
                 page-break-after: always;
                 padding: 40px !important;
                 background: #000000 !important;
-                min-height: 297mm !important;
+                min-height: auto !important;
+                height: auto !important;
                 box-shadow: none !important;
                 margin: 0 !important;
                 color: #ffffff !important;
+                display: block !important;
+                page-break-inside: avoid;
+            }
+            
+            .page-number {
+                color: #ffffff !important;
+            }
+            
+            .page img {
+                max-width: 100% !important;
+                height: auto !important;
             }
             
             .title-page {
                 page-break-after: always;
-                min-height: 297mm !important;
+                min-height: auto !important;
+                height: auto !important;
                 background: linear-gradient(135deg, rgba(90, 90, 150, 0.3) 0%, rgba(80, 160, 170, 0.1) 100%), #000000 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                padding: 40px !important;
+                page-break-inside: avoid;
             }
             
             .page-header {
                 page-break-inside: avoid;
+                margin-bottom: 20px !important;
+            }
+            
+            .page-header img {
+                max-width: 40px !important;
+                height: auto !important;
+                margin-right: 10px !important;
             }
             
             .info-box {
-                page-break-inside: avoid;
                 background: rgba(90, 90, 150, 0.2) !important;
                 border: 1px solid rgba(90, 90, 150, 0.6) !important;
                 color: #ffffff !important;
+                padding: 15px !important;
+                margin: 15px 0 !important;
+                page-break-inside: avoid;
             }
             
             .image-container {
-                page-break-inside: avoid;
                 background: #000000 !important;
+                margin: 15px 0 !important;
+                padding: 10px !important;
+                page-break-inside: avoid;
+            }
+            
+            .image-label {
+                color: #b0b0b0 !important;
+                font-size: 12px !important;
+                margin-bottom: 10px !important;
+                font-style: italic !important;
+            }
+            
+            .image-container img {
+                max-width: 100% !important;
+                height: auto !important;
+                display: block !important;
             }
             
             .highlight-box {
-                page-break-inside: avoid;
                 background: linear-gradient(90deg, rgba(80, 160, 170, 0.15) 0%, rgba(80, 160, 170, 0.05) 100%) !important;
+                padding: 15px !important;
+                margin: 15px 0 !important;
+                page-break-inside: avoid;
+                color: #ffffff !important;
+            }
+            
+            .metrics-grid {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 15px !important;
+                margin: 15px 0 !important;
+                page-break-inside: avoid;
+            }
+            
+            .metric-item {
+                background: rgba(90, 90, 150, 0.15) !important;
+                padding: 15px !important;
+                text-align: center !important;
+                border: 1px solid rgba(80, 160, 170, 0.3) !important;
+                color: #ffffff !important;
+            }
+            
+            .metric-value {
+                font-size: 24px !important;
+                font-weight: bold !important;
+                color: rgb(80, 160, 170) !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .metric-label {
+                font-size: 12px !important;
+                color: #b0b0b0 !important;
+            }
+            
+            .badge {
+                display: inline-block !important;
+                background: rgba(80, 160, 170, 0.2) !important;
+                border: 1px solid rgba(80, 160, 170, 0.5) !important;
+                color: rgb(80, 160, 170) !important;
+                padding: 5px 10px !important;
+                margin: 5px 5px 5px 0 !important;
+                border-radius: 4px !important;
+                font-size: 11px !important;
+                font-weight: 500 !important;
+            }
+            
+            .divider {
+                border-top: 1px solid rgba(90, 90, 150, 0.3) !important;
+                margin: 20px 0 !important;
+            }
+            
+            .footer {
+                text-align: center !important;
+                font-size: 11px !important;
+                color: #b0b0b0 !important;
+                margin-top: 20px !important;
+                page-break-inside: avoid;
             }
             
             h1, h2, h3 {
                 page-break-after: avoid;
                 color: #ffffff !important;
+                margin: 15px 0 10px 0 !important;
+            }
+            
+            h1 {
+                font-size: 28px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+            }
+            
+            h3 {
+                font-size: 16px !important;
             }
             
             ul, ol {
-                page-break-inside: avoid;
+                margin: 10px 0 10px 20px !important;
+                color: #ffffff !important;
+            }
+            
+            li {
+                margin: 5px 0 !important;
+                color: #ffffff !important;
             }
             
             .print-button {
                 display: none !important;
             }
             
-            p, li {
+            p {
                 color: #ffffff !important;
+                margin: 10px 0 !important;
+                line-height: 1.6 !important;
             }
         }
         
