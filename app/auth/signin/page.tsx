@@ -5,7 +5,8 @@ import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
-import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles } from 'lucide-react'
+import { Chrome, Linkedin, AlertCircle, Loader2, Sparkles, ArrowRight } from 'lucide-react'
+import Image from 'next/image'
 
 export default function SignInPage() {
   const router = useRouter()
@@ -137,43 +138,57 @@ export default function SignInPage() {
   const isLoading = isLoadingGoogle || isLoadingLinkedIn || isLoadingDemo
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
-      {/* Optimized: Minimal CSS-only decorative elements to reduce paint layers */}
+    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-8 relative overflow-hidden">
+      {/* Background gradient elements - subtle and elegant */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden">
-        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/10 rounded-full opacity-20" style={{ filter: 'blur(80px)' }} />
-        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-blue/10 rounded-full opacity-20" style={{ filter: 'blur(80px)' }} />
+        <div className="absolute -top-40 -right-40 w-80 h-80 bg-purple/5 rounded-full opacity-40" style={{ filter: 'blur(80px)' }} />
+        <div className="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan/5 rounded-full opacity-40" style={{ filter: 'blur(80px)' }} />
       </div>
 
-      <div className="relative w-full max-w-md space-y-6">
-        {/* Header section - optimized for FCP */}
-        <div className="text-center space-y-3 mb-8">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <div className="p-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
-              <Sparkles className="w-6 h-6 text-white" />
-            </div>
-          </div>
-          <h1 className="text-4xl" style={{ color: 'rgba(80, 160, 170, 0.8)', fontWeight: '500' }}>
+      <div className="relative w-full max-w-md">
+        {/* Logo at top */}
+        <div className="flex justify-center mb-8">
+          <img src="/dtc-logo.png" alt="DTC Logo" className="h-12 object-contain" />
+        </div>
+
+        {/* Header section */}
+        <div className="text-center space-y-2 mb-10">
+          <h1 className="text-4xl font-light tracking-tight" style={{ color: 'rgba(80, 160, 170, 0.9)' }}>
             Despega Tu Carrera
           </h1>
-          <p className="text-lg text-muted-foreground dark:text-white/85">
+          <p className="text-base text-muted-foreground dark:text-white/70">
             Tu transformación profesional comienza hoy
           </p>
-          <p className="text-sm text-muted-foreground dark:text-muted-foreground max-w-sm mx-auto">
+          <p className="text-sm text-muted-foreground dark:text-white/60">
             Descubre quién eres, explora tu potencial, entrénate para triunfar
           </p>
         </div>
 
-        {/* Main Card */}
-        <Card className="border-2 shadow-xl backdrop-blur-sm dark:bg-background/80" style={{ borderColor: 'rgba(80, 160, 170, 0.6)', backgroundColor: 'rgba(0, 0, 0, 0)' }}>
-          <CardContent className="pt-8 pb-8 space-y-5">
+        {/* Main Card with improved styling */}
+        <Card 
+          className="border backdrop-blur-sm shadow-2xl relative overflow-hidden dark:bg-black/60"
+          style={{ 
+            borderColor: 'rgba(90, 90, 150, 0.6)',
+            backgroundColor: 'rgba(15, 17, 23, 0.9)',
+          }}
+        >
+          {/* Gradient overlay for premium feel */}
+          <div 
+            className="absolute inset-0 opacity-20 pointer-events-none"
+            style={{
+              background: 'linear-gradient(135deg, rgba(90, 90, 150, 0.1) 0%, rgba(80, 160, 170, 0.05) 100%)'
+            }}
+          />
+
+          <CardContent className="pt-8 pb-8 space-y-6 relative z-10">
             {/* OAuth Error Alert */}
             {error && (
-              <div className="p-4 bg-red/5 dark:bg-red/20 border-l-4 border-red/50 rounded-r-lg">
+              <div className="p-4 bg-red/5 dark:bg-red/10 border-l-4 border-red/40 rounded-lg backdrop-blur-sm">
                 <div className="flex gap-3">
-                  <AlertCircle className="h-5 w-5 text-red dark:text-red/40 flex-shrink-0 mt-0.5" />
+                  <AlertCircle className="h-5 w-5 text-red/60 flex-shrink-0 mt-0.5" />
                   <div>
-                    <p className="font-semibold text-red dark:text-red/20">Error de autenticacion</p>
-                    <p className="text-sm text-red dark:text-red/30 mt-1">{error}</p>
+                    <p className="font-medium text-red/80 text-sm">Error de autenticación</p>
+                    <p className="text-xs text-red/60 mt-1">{error}</p>
                   </div>
                 </div>
               </div>
@@ -183,7 +198,7 @@ export default function SignInPage() {
             <Button
               onClick={handleGoogleSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 bg-white hover:bg-muted/5 border-2 border-muted/20 text-muted/90 hover:border-blue/30 transition-colors duration-200 dark:bg-background dark:hover:bg-muted/80 dark:border-card dark:text-white dark:hover:border-blue/50"
+              className="w-full h-12 text-base font-medium gap-3 transition-all duration-300 border border-white/10 hover:border-white/20 bg-white/5 hover:bg-white/10 text-white/90 hover:text-white"
             >
               {isLoadingGoogle ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -197,8 +212,10 @@ export default function SignInPage() {
             <Button
               onClick={handleLinkedInSignIn}
               disabled={isLoading}
-              className="w-full h-12 text-base gap-2 text-white transition-colors duration-200"
-              style={{ backgroundColor: 'rgba(14, 118, 168, 0.6)' }}
+              className="w-full h-12 text-base font-medium gap-3 text-white transition-all duration-300 hover:shadow-lg hover:shadow-blue/20"
+              style={{ 
+                backgroundColor: 'rgba(0, 119, 181, 0.7)',
+              }}
             >
               {isLoadingLinkedIn ? (
                 <Loader2 className="h-5 w-5 animate-spin" />
@@ -209,28 +226,37 @@ export default function SignInPage() {
             </Button>
 
             {/* Divider */}
-            <div className="relative my-2">
+            <div className="relative my-4">
               <div className="absolute inset-0 flex items-center">
-                <div className="w-full border-t border-muted/20 dark:border-card" />
+                <div className="w-full border-t" style={{ borderColor: 'rgba(90, 90, 150, 0.3)' }} />
               </div>
               <div className="relative flex justify-center text-xs">
-                <span className="px-2 bg-white dark:bg-background text-muted-foreground dark:text-muted-foreground">o accede como demo</span>
+                <span className="px-3 bg-black/60 text-muted-foreground dark:text-muted-foreground font-medium uppercase tracking-wide text-xs">
+                  o accede como demo
+                </span>
               </div>
             </div>
 
-            {/* Demo Login Buttons */}
-            <div className="grid grid-cols-2 gap-2">
+            {/* Demo Login Buttons - Grid with better styling */}
+            <div className="grid grid-cols-2 gap-3">
               <Button
                 variant="outline"
                 size="sm"
                 onClick={() => quickLogin("travis@nuanu.com")}
                 disabled={isLoading}
-                className="text-xs h-10"
+                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                style={{
+                  borderColor: 'rgba(80, 160, 170, 0.4)',
+                  color: 'rgba(80, 160, 170, 0.9)',
+                }}
               >
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
                 ) : (
-                  "Travis (Dev)"
+                  <>
+                    <Sparkles className="h-4 w-4 mr-1" />
+                    Travis (Dev)
+                  </>
                 )}
               </Button>
               <Button
@@ -238,7 +264,11 @@ export default function SignInPage() {
                 size="sm"
                 onClick={() => quickLogin("demo@despegaturcarrera.com")}
                 disabled={isLoading}
-                className="text-xs h-10"
+                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                style={{
+                  borderColor: 'rgba(90, 90, 150, 0.4)',
+                  color: 'rgba(90, 90, 150, 0.9)',
+                }}
               >
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -251,7 +281,11 @@ export default function SignInPage() {
                 size="sm"
                 onClick={() => quickLogin("test@dtc.com")}
                 disabled={isLoading}
-                className="text-xs h-10"
+                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                style={{
+                  borderColor: 'rgba(90, 90, 150, 0.4)',
+                  color: 'rgba(90, 90, 150, 0.9)',
+                }}
               >
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -264,7 +298,11 @@ export default function SignInPage() {
                 size="sm"
                 onClick={() => quickLogin("admin@dtc.com")}
                 disabled={isLoading}
-                className="text-xs h-10"
+                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                style={{
+                  borderColor: 'rgba(90, 90, 150, 0.4)',
+                  color: 'rgba(90, 90, 150, 0.9)',
+                }}
               >
                 {isLoadingDemo ? (
                   <Loader2 className="h-4 w-4 animate-spin" />
@@ -274,30 +312,32 @@ export default function SignInPage() {
               </Button>
             </div>
 
-            {/* Trust indicators */}
-            <div className="grid grid-cols-3 gap-3 py-2 border-t border-muted/10 pt-4" style={{ borderColor: 'rgb(80, 160, 170, 0.6)' }}>
-              <div className="text-center">
-                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>6</div>
-                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Tests</p>
+            {/* Trust indicators - improved styling */}
+            <div 
+              className="grid grid-cols-3 gap-4 py-4 border-t border-t-purple/30 pt-6"
+            >
+              <div className="text-center space-y-1">
+                <div className="text-2xl font-light" style={{ color: 'rgba(80, 160, 170, 0.9)' }}>6</div>
+                <p className="text-xs text-muted-foreground dark:text-white/60 font-medium uppercase tracking-wide">Tests</p>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>120+</div>
-                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Recursos</p>
+              <div className="text-center space-y-1">
+                <div className="text-2xl font-light" style={{ color: 'rgba(80, 160, 170, 0.9)' }}>120+</div>
+                <p className="text-xs text-muted-foreground dark:text-white/60 font-medium uppercase tracking-wide">Recursos</p>
               </div>
-              <div className="text-center">
-                <div className="text-2xl font-bold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>24/7</div>
-                <p className="text-xs text-muted-foreground dark:text-muted-foreground font-medium">Coach IA</p>
+              <div className="text-center space-y-1">
+                <div className="text-2xl font-light" style={{ color: 'rgba(80, 160, 170, 0.9)' }}>24/7</div>
+                <p className="text-xs text-muted-foreground dark:text-white/60 font-medium uppercase tracking-wide">Coach IA</p>
               </div>
             </div>
 
             {/* Terms */}
-            <p className="text-xs text-center text-muted-foreground dark:text-muted-foreground leading-relaxed pt-2">
+            <p className="text-xs text-center text-muted-foreground dark:text-white/60 leading-relaxed pt-2 font-light">
               Al ingresar, aceptas nuestros{' '}
-              <a href="/terms" className="hover:underline font-medium" style={{ color: 'rgba(80, 160, 170)' }}>
+              <a href="/terms" className="hover:underline font-medium transition-colors" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>
                 términos de servicio
               </a>
               {' '}y{' '}
-              <a href="/privacy" className="hover:underline font-medium" style={{ color: 'rgba(80, 160, 170)' }}>
+              <a href="/privacy" className="hover:underline font-medium transition-colors" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>
                 política de privacidad
               </a>
             </p>
@@ -305,7 +345,7 @@ export default function SignInPage() {
         </Card>
 
         {/* Footer note */}
-        <p className="text-center text-xs text-muted-foreground dark:text-muted-foreground">
+        <p className="text-center text-xs text-muted-foreground dark:text-white/60 mt-8 font-light">
           ¿Es tu primera vez? Crearemos tu cuenta automáticamente
         </p>
       </div>
