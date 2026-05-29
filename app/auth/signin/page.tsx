@@ -237,79 +237,90 @@ export default function SignInPage() {
               </div>
             </div>
 
-            {/* Demo Login Buttons - Grid with better styling */}
+            {/* Demo Login Buttons - Premium Grid Style */}
             <div className="grid grid-cols-2 gap-3">
-              <Button
-                variant="outline"
-                size="sm"
+              <button
                 onClick={() => quickLogin("travis@nuanu.com")}
                 disabled={isLoading}
-                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                className="group relative h-11 rounded-lg overflow-hidden font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  borderColor: 'rgba(80, 160, 170, 0.4)',
-                  color: 'rgba(80, 160, 170, 0.9)',
+                  background: 'linear-gradient(135deg, rgba(80, 160, 170, 0.15) 0%, rgba(90, 90, 150, 0.1) 100%)',
+                  border: '1px solid rgba(80, 160, 170, 0.3)',
+                  color: 'rgba(80, 160, 170, 1)',
                 }}
               >
-                {isLoadingDemo ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  <>
-                    <Sparkles className="h-4 w-4 mr-1" />
-                    Travis (Dev)
-                  </>
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan/10 to-purple/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-center gap-2 h-full">
+                  {isLoadingDemo ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    <>
+                      <Sparkles className="h-4 w-4" />
+                      <span>Travis (Dev)</span>
+                    </>
+                  )}
+                </div>
+              </button>
+
+              <button
                 onClick={() => quickLogin("demo@despegaturcarrera.com")}
                 disabled={isLoading}
-                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                className="group relative h-11 rounded-lg overflow-hidden font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  borderColor: 'rgba(90, 90, 150, 0.4)',
-                  color: 'rgba(90, 90, 150, 0.9)',
+                  background: 'linear-gradient(135deg, rgba(90, 90, 150, 0.15) 0%, rgba(80, 160, 170, 0.1) 100%)',
+                  border: '1px solid rgba(90, 90, 150, 0.3)',
+                  color: 'rgba(90, 90, 150, 1)',
                 }}
               >
-                {isLoadingDemo ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Ana (Marketing)"
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
+                <div className="absolute inset-0 bg-gradient-to-r from-purple/10 to-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-center h-full">
+                  {isLoadingDemo ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Ana (Marketing)"
+                  )}
+                </div>
+              </button>
+
+              <button
                 onClick={() => quickLogin("test@dtc.com")}
                 disabled={isLoading}
-                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                className="group relative h-11 rounded-lg overflow-hidden font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  borderColor: 'rgba(90, 90, 150, 0.4)',
-                  color: 'rgba(90, 90, 150, 0.9)',
+                  background: 'linear-gradient(135deg, rgba(80, 160, 170, 0.15) 0%, rgba(90, 90, 150, 0.1) 100%)',
+                  border: '1px solid rgba(80, 160, 170, 0.3)',
+                  color: 'rgba(80, 160, 170, 1)',
                 }}
               >
-                {isLoadingDemo ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "Carlos (PM)"
-                )}
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
+                <div className="absolute inset-0 bg-gradient-to-r from-cyan/10 to-purple/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-center h-full">
+                  {isLoadingDemo ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "Carlos (PM)"
+                  )}
+                </div>
+              </button>
+
+              <button
                 onClick={() => quickLogin("admin@dtc.com")}
                 disabled={isLoading}
-                className="h-11 text-xs font-medium border transition-all duration-300 hover:bg-purple/10 hover:border-purple/40"
+                className="group relative h-11 rounded-lg overflow-hidden font-medium text-sm transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed"
                 style={{
-                  borderColor: 'rgba(90, 90, 150, 0.4)',
-                  color: 'rgba(90, 90, 150, 0.9)',
+                  background: 'linear-gradient(135deg, rgba(90, 90, 150, 0.15) 0%, rgba(80, 160, 170, 0.1) 100%)',
+                  border: '1px solid rgba(90, 90, 150, 0.3)',
+                  color: 'rgba(90, 90, 150, 1)',
                 }}
               >
-                {isLoadingDemo ? (
-                  <Loader2 className="h-4 w-4 animate-spin" />
-                ) : (
-                  "María (Admin)"
-                )}
-              </Button>
+                <div className="absolute inset-0 bg-gradient-to-r from-purple/10 to-cyan/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+                <div className="relative flex items-center justify-center h-full">
+                  {isLoadingDemo ? (
+                    <Loader2 className="h-4 w-4 animate-spin" />
+                  ) : (
+                    "María (Admin)"
+                  )}
+                </div>
+              </button>
             </div>
 
             {/* Trust indicators - improved styling */}
