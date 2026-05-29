@@ -736,44 +736,111 @@
     </div>
 
     <!-- Print Button -->
-    <button class="print-button" onclick="descargarPDF()">📥 Descargar PDF</button>
+    <button class="print-button" onclick="handleDownloadPDF()">📥 Descargar PDF</button>
 
-    <!-- HTML2PDF Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    
+    <!-- jsPDF and html2canvas libraries -->
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script async src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
     <script>
-        function descargarPDF() {
-            const element = document.body;
-            const opt = {
-                margin: [10, 10, 10, 10],
-                filename: 'DTC_Respaldo_MVP_CORFO_2026.pdf',
-                image: { type: 'jpeg', quality: 0.98 },
-                html2canvas: { 
+        let html2canvasLoaded = false;
+        let jsPDFLoaded = false;
+
+        // Detectar cuando las librerías se cargan
+        window.addEventListener('load', function() {
+            html2canvasLoaded = typeof html2canvas !== 'undefined';
+            jsPDFLoaded = typeof jsPDF !== 'undefined';
+            console.log('[v0] html2canvas loaded:', html2canvasLoaded);
+            console.log('[v0] jsPDF loaded:', jsPDFLoaded);
+        });
+
+        async function handleDownloadPDF() {
+            const button = document.querySelector('.print-button');
+            button.disabled = true;
+            button.textContent = '⏳ Generando PDF...';
+
+            try {
+                // Esperar a que las librerías estén listas
+                let retries = 0;
+                while ((!html2canvasLoaded || !jsPDFLoaded) && retries < 50) {
+                    html2canvasLoaded = typeof html2canvas !== 'undefined';
+                    jsPDFLoaded = typeof jsPDF !== 'undefined';
+                    await new Promise(r => setTimeout(r, 100));
+                    retries++;
+                }
+
+                if (!html2canvasLoaded || !jsPDFLoaded) {
+                    console.warn('[v0] Librerías no cargadas, usando print dialog');
+                    window.print();
+                    button.disabled = false;
+                    button.textContent = '📥 Descargar PDF';
+                    return;
+                }
+
+                console.log('[v0] Iniciando generación de PDF...');
+                const element = document.body;
+                
+                // Capturar el HTML como canvas
+                const canvas = await html2canvas(element, {
                     scale: 2,
-                    logging: false,
-                    backgroundColor: '#000000',
                     useCORS: true,
-                    allowTaint: true
-                },
-                jsPDF: { 
-                    unit: 'mm', 
-                    format: 'a4', 
+                    allowTaint: true,
+                    backgroundColor: '#000000',
+                    windowHeight: Math.max(element.scrollHeight, window.innerHeight)
+                });
+
+                console.log('[v0] Canvas creado, generando PDF...');
+
+                // Crear PDF
+                const jsPDFConstructor = window.jsPDF.jsPDF || window.jspdf.jsPDF;
+                const pdf = new jsPDFConstructor({
                     orientation: 'portrait',
-                    compress: true
-                },
-                pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
-            };
-            
-            html2pdf().set(opt).from(element).save();
+                    unit: 'px',
+                    format: [canvas.width, canvas.height]
+                });
+
+                const imgData = canvas.toDataURL('image/png');
+                const imgWidth = pdf.internal.pageSize.getWidth();
+                const imgHeight = (canvas.height * imgWidth) / canvas.width;
+                
+                pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+                // Ajustar a múltiples páginas si es necesario
+                const pageHeight = pdf.internal.pageSize.getHeight();
+                let heightLeft = imgHeight;
+                let position = 0;
+
+                while (heightLeft > pageHeight) {
+                    position = heightLeft - imgHeight;
+                    pdf.addPage();
+                    pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight);
+                    heightLeft -= pageHeight;
+                }
+
+                // Guardar PDF
+                pdf.save('DTC_Respaldo_MVP_CORFO_2026.pdf');
+                console.log('[v0] PDF descargado exitosamente');
+                
+                button.disabled = false;
+                button.textContent = '📥 Descargar PDF';
+            } catch (error) {
+                console.error('[v0] Error generando PDF:', error);
+                alert('Error al generar el PDF. Usando diálogo de impresión...');
+                window.print();
+                button.disabled = false;
+                button.textContent = '📥 Descargar PDF';
+            }
         }
-        
-        // Keyboard shortcut: Ctrl+Shift+P para descargar
+
+        // Keyboard shortcut: Ctrl+Shift+P
         document.addEventListener('keydown', (e) => {
             if (e.ctrlKey && e.shiftKey && e.code === 'KeyP') {
                 e.preventDefault();
-                descargarPDF();
+                handleDownloadPDF();
             }
         });
+
+        console.log('[v0] Script PDF inicializado');
     </script>
 
 </body>
