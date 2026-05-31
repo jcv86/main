@@ -71,7 +71,6 @@ Información del usuario:
       model: gateway("openai/gpt-4o-mini"),
       system: ROUTE_GENERATOR_PROMPT,
       prompt: `Genera una ruta de desarrollo profesional personalizada para este usuario:\n${userContext}`,
-      maxTokens: 1500,
     })
 
     // Parse the JSON response

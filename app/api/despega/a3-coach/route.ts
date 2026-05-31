@@ -57,7 +57,6 @@ Información del usuario:
         ...(context || []),
         { role: "user", content: message }
       ],
-      maxTokens: 600,
     })
 
     return NextResponse.json({ response: text })
