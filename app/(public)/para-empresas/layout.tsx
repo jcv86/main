@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Para Empresas | Despega Tu Carrera",
     description: "Solución B2B de desarrollo profesional con coaching IA para empresas.",
     type: "website",
-    url: "https://despegatucarrera.com/para-empresas",
+    url: "https://www.despegatucarrera.com/para-empresas",
   },
 }
 
@@ -25,8 +25,8 @@ export default function ParaEmpresasLayout({ children }: { children: React.React
   const orgSchema = generateOrganizationSchema()
   const faqSchema = generateFAQSchema(enterpriseFaqs)
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Inicio", url: "https://despegatucarrera.com" },
-    { name: "Para Empresas", url: "https://despegatucarrera.com/para-empresas" },
+    { name: "Inicio", url: "https://www.despegatucarrera.com" },
+    { name: "Para Empresas", url: "https://www.despegatucarrera.com/para-empresas" },
   ])
   const productSchema = generateProductSchema({
     name: "DTC Enterprise - Desarrollo Profesional para Empresas",
