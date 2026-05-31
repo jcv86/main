@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",
+    "@ai-sdk/gateway": "^3.0.121",
     "@ai-sdk/react": "^3.0.148",
     "@auth/core": "latest",
     "@auth/supabase-adapter": "^1.11.1",
@@ -39,6 +40,8 @@
     "@supabase/auth-helpers-react": "^0.15.0",
     "@supabase/ssr": "0.7.0",
     "@supabase/supabase-js": "^2.39.3",
+    "@upstash/ratelimit": "^2.0.8",
+    "@upstash/redis": "^1.38.0",
     "@vercel/analytics": "^1.4.1",
     "@vercel/blob": "2.0.0",
     "@vercel/speed-insights": "^1.1.0",
