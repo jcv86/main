@@ -10,6 +10,22 @@ export function useAuthRedirect() {
   const [isInitialCheck, setIsInitialCheck] = useState(true)
 
   useEffect(() => {
+    // Guard: if supabase is not initialized, check for demo user and return
+    if (!supabase) {
+      console.warn('[v0] Supabase client not initialized, checking for demo user')
+      const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
+      if (demoUserStr) {
+        try {
+          const demoUser = JSON.parse(demoUserStr)
+          setUser(demoUser)
+        } catch (e) {
+          console.error('[v0] Failed to parse demo user:', e)
+        }
+      }
+      setLoading(false)
+      return
+    }
+
     // Subscribe to auth state changes for real users (this is the PRIMARY auth source)
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (event, session) => {

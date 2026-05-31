@@ -1,7 +1,7 @@
 'use client'
 
 import React, { createContext, useContext, useEffect, useState } from 'react'
-import { createClient } from '@/lib/supabase'
+import { createClient } from '@/lib/supabase/client'
 
 export interface CoachContextData {
   userId: string | null
@@ -95,68 +95,97 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
 
       if (!supabaseRef.current) {
         console.warn('[v0] Supabase client not available')
+        setIsLoadingCoach(false)
         return
       }
 
-      // Get user profile and stats
-      const { data: profile } = await supabaseRef.current
-        .from('despega_user_profiles')
-        .select('*')
-        .eq('user_id', uid)
-        .single()
-
-      // Get bitácora entries for stats
-      const { data: bitacora } = await supabaseRef.current
-        .from('a2_user_bitacora')
-        .select('*')
-        .eq('user_id', uid)
-        .order('created_at', { ascending: false })
-
-      // Get daily actions completed
-      const { data: dailyActions } = await supabaseRef.current
-        .from('a2_user_daily_actions')
-        .select('*')
-        .eq('user_id', uid)
-        .eq('completada', true)
-
-      // Calculate stats
-      const actionsCompleted = dailyActions?.length || 0
-      const totalActions = dailyActions?.length || 0
-      const successRate = totalActions > 0 ? Math.round((actionsCompleted / totalActions) * 100) : 0
-      const currentMood = bitacora?.[0]?.mood || 3
-      const streak = calculateStreak(dailyActions || [])
-
-      setCurrentProgress({
-        actionsCompleted,
-        streak,
-        totalActions,
-        successRate,
-        sprintProgress: profile?.a2_sprint_progress || 0,
-        currentMood,
-      })
-
-      // Generate coach message based on progress
-      const message = generateCoachMessage(
-        actionsCompleted,
-        streak,
-        successRate,
-        currentMood,
-        userName || 'Usuario'
+      // Timeout for the entire operation (5 seconds)
+      const timeoutPromise = new Promise((_, reject) =>
+        setTimeout(() => reject(new Error('Coach data load timeout')), 5000)
       )
-      setCoachMessages([message])
 
-      // COACH OMNIPRESENTE: Obtener contexto completo de A1+A2+A3+A4
-      // Disabled - endpoint moved to _disabled-rest, non-critical feature
-      // This would require creating a proper /api/coach-context endpoint
+      const loadDataPromise = async () => {
+        // Get user profile and stats
+        const { data: profile, error: profileError } = await supabaseRef.current
+          .from('despega_user_profiles')
+          .select('*')
+          .eq('user_id', uid)
+          .single()
 
-      console.log('[v0] Coach progress loaded:', {
-        actionsCompleted,
-        streak,
-        successRate,
-        currentMood,
-      })
+        // If no profile found, that's OK - just use defaults
+        if (profileError && profileError.code !== 'PGRST116') {
+          console.warn('[v0] Profile not found for user, using defaults:', profileError)
+        }
+
+        // Get bitácora entries for stats
+        const { data: bitacora, error: bitacoraError } = await supabaseRef.current
+          .from('a2_user_bitacora')
+          .select('*')
+          .eq('user_id', uid)
+          .order('created_at', { ascending: false })
+
+        if (bitacoraError) {
+          console.warn('[v0] Bitacora load error:', bitacoraError)
+        }
+
+        // Get daily actions completed
+        const { data: dailyActions, error: actionsError } = await supabaseRef.current
+          .from('a2_user_daily_actions')
+          .select('*')
+          .eq('user_id', uid)
+          .eq('completada', true)
+
+        if (actionsError) {
+          console.warn('[v0] Daily actions load error:', actionsError)
+        }
+
+        // Calculate stats with fallbacks
+        const actionsCompleted = dailyActions?.length || 0
+        const totalActions = dailyActions?.length || 0
+        const successRate = totalActions > 0 ? Math.round((actionsCompleted / totalActions) * 100) : 0
+        const currentMood = bitacora?.[0]?.mood || 3
+        const streak = calculateStreak(dailyActions || [])
+
+        setCurrentProgress({
+          actionsCompleted,
+          streak,
+          totalActions,
+          successRate,
+          sprintProgress: profile?.a2_sprint_progress || 0,
+          currentMood,
+        })
+
+        // Generate coach message based on progress
+        const message = generateCoachMessage(
+          actionsCompleted,
+          streak,
+          successRate,
+          currentMood,
+          userName || 'Usuario'
+        )
+        setCoachMessages([message])
+
+        console.log('[v0] Coach progress loaded:', {
+          actionsCompleted,
+          streak,
+          successRate,
+          currentMood,
+        })
+      }
+
+      // Race between timeout and actual load
+      await Promise.race([loadDataPromise(), timeoutPromise])
     } catch (error) {
       console.error('[v0] Error loading coach progress:', error)
+      // Set minimal state to avoid infinite loading
+      setCurrentProgress({
+        actionsCompleted: 0,
+        streak: 0,
+        totalActions: 0,
+        successRate: 0,
+        sprintProgress: 0,
+        currentMood: 3,
+      })
     } finally {
       setIsLoadingCoach(false)
     }
