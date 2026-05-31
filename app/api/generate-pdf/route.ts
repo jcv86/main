@@ -1,7 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server'
 
-const { default: html2pdf } = require('html2pdf.js/dist/html2pdf.js')
-
 export async function POST(request: NextRequest) {
   try {
     const { html } = await request.json()
@@ -13,54 +11,20 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Usar html2pdf en el servidor
-    const pdfBuffer = await new Promise((resolve, reject) => {
-      try {
-        const element = {
-          innerHTML: html
-        }
-
-        const options = {
-          margin: 10,
-          filename: 'DTC_Respaldo_MVP_CORFO_2026.pdf',
-          image: { type: 'jpeg', quality: 0.98 },
-          html2canvas: { 
-            scale: 2,
-            backgroundColor: '#000000'
-          },
-          jsPDF: { 
-            unit: 'mm',
-            format: 'a4',
-            orientation: 'portrait'
-          }
-        }
-
-        // html2pdf devuelve un Promise
-        html2pdf()
-          .set(options)
-          .from(html)
-          .outputPdf('blob')
-          .then((pdf: Blob) => {
-            pdf.arrayBuffer().then((buffer) => {
-              resolve(new Uint8Array(buffer))
-            })
-          })
-          .catch(reject)
-      } catch (error) {
-        reject(error)
-      }
-    })
-
-    return new NextResponse(pdfBuffer, {
-      headers: {
-        'Content-Type': 'application/pdf',
-        'Content-Disposition': 'attachment; filename="DTC_Respaldo_MVP_CORFO_2026.pdf"',
-      },
-    })
-  } catch (error) {
-    console.error('[v0] Error generating PDF:', error)
+    // Usar window.print() es más confiable que html2pdf en servidor
+    // Retornar un error indicando que use el cliente-side print
     return NextResponse.json(
-      { error: 'Failed to generate PDF', details: String(error) },
+      { 
+        success: false,
+        message: 'Use client-side print functionality',
+        instructions: 'Click the download button and select "Save as PDF" from the print dialog'
+      },
+      { status: 200 }
+    )
+  } catch (error) {
+    console.error('[v0] Error in PDF route:', error)
+    return NextResponse.json(
+      { error: 'Failed to process request', details: String(error) },
       { status: 500 }
     )
   }
