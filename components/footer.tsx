@@ -36,10 +36,12 @@ export default function Footer() {
             <div>
               <h4 className="font-semibold mb-4 text-sm">Producto</h4>
               <ul className="space-y-2 text-sm">
+                <li><Link href="/como-funciona" className="text-foreground/60 hover:text-foreground transition">Cómo Funciona</Link></li>
                 <li><Link href="/despega/conozcamonos-1" className="text-foreground/60 hover:text-foreground transition">El Ritual</Link></li>
                 <li><Link href="/despega/a2-routes" className="text-foreground/60 hover:text-foreground transition">Exploración</Link></li>
                 <li><Link href="/despega/a3" className="text-foreground/60 hover:text-foreground transition">Entrenamiento</Link></li>
                 <li><Link href="/despega/a4" className="text-foreground/60 hover:text-foreground transition">La Realidad</Link></li>
+                <li><Link href="/para-empresas" className="text-foreground/60 hover:text-foreground transition">Para Empresas</Link></li>
               </ul>
             </div>
 
@@ -49,14 +51,7 @@ export default function Footer() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/privacy" className="text-foreground/60 hover:text-foreground transition">Privacidad</Link></li>
                 <li><Link href="/terms" className="text-foreground/60 hover:text-foreground transition">Términos</Link></li>
-                <li>
-                  <button 
-                    onClick={() => setContactOpen(true)}
-                    className="text-foreground/60 hover:text-foreground transition cursor-pointer"
-                  >
-                    Contacto
-                  </button>
-                </li>
+                <li><Link href="/contact" className="text-foreground/60 hover:text-foreground transition">Contacto</Link></li>
               </ul>
             </div>
 
