@@ -36,7 +36,7 @@ const stages = [
     icon: Home,
     routes: [
       { label: 'Bienvenida', href: '/despega/bienvenida' },
-      { label: 'Dashboard', href: '/despega' },
+      { label: 'Área Personal', href: '/despega' },
     ]
   },
   {
@@ -75,6 +75,7 @@ const stages = [
     routes: [
       { label: 'Contexto del Mercado', href: '/despega/a4-intro' },
       { label: 'Tu Dashboard Ejecutivo', href: '/despega/a4' },
+      { label: 'DTC Documents', href: '/despega/a4-documents' },
     ]
   },
 ]
@@ -91,7 +92,7 @@ const phaseStyles: Record<string, {
   exploration: { text: 'text-exploration',        border: 'border-exploration/30',    leftBorder: 'border-l-4 border-l-exploration',     bg: 'bg-exploration/10',    activeBg: 'bg-exploration/20',     activeText: 'text-exploration',    pillBg: 'bg-exploration',    pillText: 'text-white', hoverBg: 'hover:bg-exploration/10',    hoverText: 'hover:text-exploration'    },
   training:    { text: 'text-training',       border: 'border-training/30',  leftBorder: 'border-l-4 border-l-training',   bg: 'bg-training/10',  activeBg: 'bg-training/20',   activeText: 'text-training',  pillBg: 'bg-training',  pillText: 'text-white', hoverBg: 'hover:bg-training/10',  hoverText: 'hover:text-training'  },
   reality:     { text: 'text-reality',        border: 'border-reality/30',    leftBorder: 'border-l-4 border-l-reality',     bg: 'bg-reality/10',    activeBg: 'bg-reality/20',     activeText: 'text-reality',    pillBg: 'bg-reality',    pillText: 'text-white', hoverBg: 'hover:bg-reality/10',    hoverText: 'hover:text-reality'    },
-  info:        { text: 'text-white/60',         border: 'border-white/10',   leftBorder: 'border-l-4 border-l-white/20', bg: 'bg-white/5',    activeBg: 'bg-white/10',    activeText: 'text-white',   pillBg: 'bg-white/10',pillText: 'text-white', hoverBg: 'hover:bg-white/5',    hoverText: 'hover:text-white'   },
+  info:        { text: 'text-white/60',         border: 'border-white/10',   leftBorder: 'border-l-4 border-l-white/20', bg: 'bg-purple-500/5',    activeBg: 'bg-white/10',    activeText: 'text-white',   pillBg: 'bg-white/10',pillText: 'text-white', hoverBg: 'hover:bg-purple-500/5',    hoverText: 'hover:text-white'   },
 }
 
 export function DespegaNavbar() {
@@ -180,7 +181,7 @@ export function DespegaNavbar() {
                 className={`text-sm ${
                   pathname === '/despega'
                     ? 'text-white bg-white/10'
-                    : 'text-muted-foreground hover:text-white hover:bg-white/5'
+                    : 'text-muted-foreground hover:text-white hover:bg-purple-500/5'
                 }`}
               >
                 Dashboard
@@ -206,12 +207,36 @@ export function DespegaNavbar() {
                 <div key={stage.name} className="relative">
                   <button
                     onClick={() => setOpenDropdown(isOpen ? null : stage.name)}
-                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 hover:bg-white/5"
-                    style={{ color: phaseColors[stage.phase] }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all duration-150 hover:bg-purple-500/5"
+                    style={{ 
+                      color: isActivePhase || hasActiveRoute ? phaseColors[stage.phase] : 'white',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!isActivePhase && !hasActiveRoute) {
+                        e.currentTarget.style.color = phaseColors[stage.phase]
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (!isActivePhase && !hasActiveRoute) {
+                        e.currentTarget.style.color = 'white'
+                      }
+                    }}
                   >
-                    <stage.icon className="w-3.5 h-3.5 flex-shrink-0" style={{ color: phaseColors[stage.phase] }} />
+                    <stage.icon 
+                      className="w-3.5 h-3.5 flex-shrink-0" 
+                      style={{ 
+                        color: isActivePhase || hasActiveRoute ? phaseColors[stage.phase] : 'white',
+                        transition: 'color 0.15s'
+                      }} 
+                    />
                     <span>{stage.name}</span>
-                    <ChevronDown className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} style={{ color: phaseColors[stage.phase] }} />
+                    <ChevronDown 
+                      className={`w-3.5 h-3.5 transition-transform duration-150 ${isOpen ? 'rotate-180' : ''}`} 
+                      style={{ 
+                        color: isActivePhase || hasActiveRoute ? phaseColors[stage.phase] : 'white',
+                        transition: 'color 0.15s'
+                      }} 
+                    />
                   </button>
 
                   {/* Dropdown — solid bg, left-border accent, no heavy colored header */}
@@ -323,7 +348,7 @@ export function DespegaNavbar() {
                 <div className="px-2 py-2 space-y-1">
                   {/* XP & Stats */}
                   {!xpLoading && xpData && (
-                    <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+                    <div className="px-3 py-2 rounded-lg bg-purple-500/5 border border-white/10">
                       <div className="text-xs text-white/60 mb-1">Estadísticas</div>
                       <div className="space-y-1">
                         <div className="flex items-center justify-between text-xs">
@@ -360,7 +385,7 @@ export function DespegaNavbar() {
                       setProfileOpen(false)
                       handleLogout()
                     }}
-                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                    className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-[rgb(80,160,170)]/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.6)]-500/10 transition-all"
                   >
                     <LogOut className="w-4 h-4" />
                     Salir
@@ -383,7 +408,7 @@ export function DespegaNavbar() {
         {isOpen && (
           <div className="md:hidden pb-4 space-y-1 max-h-[80vh] overflow-y-auto border-t border-white/10 pt-3">
             <Link href="/despega">
-              <Button variant="ghost" size="sm" className="w-full justify-start text-white/60 hover:text-white hover:bg-white/5">
+              <Button variant="ghost" size="sm" className="w-full justify-start text-white/60 hover:text-white hover:bg-purple-500/5">
                 Dashboard
               </Button>
             </Link>
@@ -397,7 +422,7 @@ export function DespegaNavbar() {
                   <button
                     onClick={() => setExpandedStage(expandedStage === stage.name ? null : stage.name)}
                     className={`w-full flex items-center justify-between px-3 py-2 rounded-lg text-sm font-semibold transition-colors ${
-                      isActivePhase ? `${style.pillBg} ${style.pillText}` : `${style.text} hover:bg-white/5`
+                      isActivePhase ? `${style.pillBg} ${style.pillText}` : `${style.text} hover:bg-purple-500/5`
                     }`}
                   >
                     <div className="flex items-center gap-2">
@@ -431,13 +456,13 @@ export function DespegaNavbar() {
 
             {/* Mobile Profile Section */}
             <div className="mt-4 pt-4 border-t border-white/10 space-y-2">
-              <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+              <div className="px-3 py-2 rounded-lg bg-purple-500/5 border border-white/10">
                 <p className="text-xs text-white/60 mb-1">Tu Nombre</p>
                 <p className="text-sm font-semibold text-white truncate">{user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Usuario'}</p>
               </div>
 
               {!xpLoading && xpData && (
-                <div className="px-3 py-2 rounded-lg bg-white/5 border border-white/10">
+                <div className="px-3 py-2 rounded-lg bg-purple-500/5 border border-white/10">
                   <div className="text-xs text-white/60 mb-1">Tu Nivel</div>
                   <div className="space-y-1">
                     <div className="flex items-center justify-between text-sm">
@@ -449,14 +474,14 @@ export function DespegaNavbar() {
               )}
 
               <Link href="/despega/profile">
-                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-white/5">
+                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-purple-500/5">
                   <User className="w-4 h-4" />
                   Mi Perfil
                 </Button>
               </Link>
 
               <Link href="/despega/settings">
-                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-white/5">
+                <Button variant="ghost" size="sm" className="w-full justify-start gap-2 text-white/60 hover:text-white hover:bg-purple-500/5">
                   <Settings className="w-4 h-4" />
                   Preferencias
                 </Button>
@@ -469,7 +494,7 @@ export function DespegaNavbar() {
                 }}
                 variant="outline"
                 size="sm"
-                className="w-full justify-start gap-2 border-white/20 text-red-400/80 hover:text-red-400 hover:bg-red-500/10"
+                className="w-full justify-start gap-2 border-white/20 text-[rgb(80,160,170)]/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.6)]-500/10"
               >
                 <LogOut className="w-4 h-4" />
                 Salir

@@ -225,7 +225,7 @@ export const DtcPremiumHero: React.FC<DtcPremiumHeroProps> = ({ userName, curren
           <p className="text-muted-foreground mb-8">
             Tu transformación comienza hoy. Sin condiciones. Sin promesas vacías.
           </p>
-          <button className="bg-red text-white font-semibold px-10 py-5 rounded-[20px] text-lg hover:bg-red/90 transition-colors inline-flex items-center gap-2 group">
+          <button className="bg-red text-white font-semibold px-10 py-5 rounded-[20px] text-lg hover:bg-[rgba(80,160,170,0.6)]/90 transition-colors inline-flex items-center gap-2 group">
             Inicia Tu Ruta de 90 Días
             <ArrowRight size={24} className="group-hover:translate-x-1 transition-transform" />
           </button>

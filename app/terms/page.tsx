@@ -81,8 +81,8 @@ export default function TermsPage() {
             <h2 className="text-2xl font-bold text-white mb-4">8. Contacto</h2>
             <p className="text-white/85 leading-relaxed">
               Para preguntas sobre estos términos, contáctanos en{" "}
-              <a href="mailto:contacto@despegatucarrera.cl" className="text-purple/40 hover:text-purple/30 transition-colors font-semibold">
-                contacto@despegatucarrera.cl
+              <a href="mailto:contacto@despegatucarrera.com" className="text-purple/40 hover:text-purple/30 transition-colors font-semibold">
+                contacto@despegatucarrera.com
               </a>
             </p>
           </section>

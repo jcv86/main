@@ -1,0 +1,40 @@
+
+  61: {
+    day: 61,
+    slug: 'dia-61',
+    title: 'Recruiter Mindset',
+    subtitle: 'Mentalidad de Reclutador',
+    missionType: 'market_intel',
+    estimatedMinutes: { min: 35, max: 55 },
+    phaseLabel: 'Simulation & Certification',
+    unlockRequirements: {
+      requiresDay1Passed: true,
+      requiredPreviousDay: 60,
+    },
+    userGoal: 'Learn what a recruiter screen actually tests: clarity, relevance, and low-risk profile instead of perfection',
+    whyItMatters: 'This changes mindset from "I need to impress" to "I need to be clear, coherent, and trustworthy"',
+    instructions: [
+      'Import: CV, Job Decoder, Answer Bank, Communication Score, Speaking Rules, Target Vacancy',
+      'Learn what recruiters actually screen for: clarity, coherence, confidence, risk signals, fit',
+      'Build recruiter checklist: profile clarity, CV explanation, role motivation, availability/expectations, strengths, one question',
+      'Identify one recruiter risk: unclear profile, weak motivation, nervous communication, career gap, weak CV explanation, salary uncertainty, lack of examples, too long answers',
+      'Coach creates recruiter mindset note: what recruiter needs to hear, what to avoid, what to keep simple, what to prepare',
+    ],
+    deliverable: 'Checklist de Pantalla con Reclutador',
+    dtcValidation: {
+      required: true,
+      passScore: 70,
+      criteria: [
+        'Recruiter screen checklist completed (0-25)',
+        'One recruiter risk identified (0-25)',
+        'Coach mindset note saved (0-25)',
+        'Simulation prep focus confirmed (0-25)',
+      ],
+    },
+    completionResult: {
+      onPass: 'Día 61 completado. Tu enfoque está claro. Desbloquea Día 62.',
+      onFail: 'Tu preparación todavía no está enfocada en el filtro de reclutador. Reduce complejidad y prioriza claridad.',
+    },
+    notionTemplate: 'https://notion.so/template-dia-61-recruiter-mindset',
+  },
+

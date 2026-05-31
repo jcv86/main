@@ -47,12 +47,10 @@ export function RadarEstrategico() {
 
   const loadRadarData = async () => {
     try {
-      const response = await fetch('/rest/radar-estrategico-data')
-      if (!response.ok) throw new Error('Failed to load radar data')
-
-      const data = await response.json()
-      setTesisDia(data.tesisDia)
-      setNoticias(data.noticias)
+      // TODO: Implement /api/radar-estrategico endpoint
+      // Radar data endpoint not yet implemented, skipping load
+      setTesisDia(null)
+      setNoticias([])
     } catch (error) {
       console.error('[v0] Error loading radar:', error)
     } finally {

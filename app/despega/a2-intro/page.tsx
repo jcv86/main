@@ -151,7 +151,7 @@ export default function A2IntroPage() {
               <CardDescription className="text-white/75">90 días divididos en 3 fases estratégicas</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-8 rounded-[28px] border border-white/10" style={{ borderRadius: '2px', backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
+              <div className="p-8 rounded-[28px]" style={{ borderRadius: '2px', backgroundColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                   <div>
                     <p className="text-base font-bold text-red mb-3 flex items-center gap-2">

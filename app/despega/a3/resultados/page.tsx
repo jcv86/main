@@ -116,14 +116,14 @@ export default function A3ResultadosPage() {
   if (error) {
     return (
       <ASection title="Resultados: Tu Desempeño en Entrevistas" subtitle="Análisis de tu Simulación" icon="🎬" colorClass="from-purple/50">
-        <ASectionPart title="Error" icon={<Target />}>
+        <ASectionPart title="Algo Salió Mal" icon={<Target />}>
           <div className="space-y-4">
             <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
               <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a3')} 
-              className="w-full bg-background"
+              className="w-full rounded-[20px] bg-background"
             >
               <ArrowRight className="w-5 h-5 mr-2" />
               Volver a A3

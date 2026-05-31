@@ -9,16 +9,16 @@ import { Progress } from '@/components/ui/progress'
 import Link from 'next/link'
 import { ArrowLeft, TrendingUp, Award, Target, Zap } from 'lucide-react'
 
-export default function ProgressPage() {
+export default function ProgresoPage() {
   const [loading, setLoading] = useState(true)
-  const [a3Progress, setA3Progress] = useState<any>(null)
+  const [a3Progreso, setA3Progreso] = useState<any>(null)
   const supabase = createClient()
 
   useEffect(() => {
-    loadProgress()
+    loadProgreso()
   }, [])
 
-  const loadProgress = async () => {
+  const loadProgreso = async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser()
       if (!user) return
@@ -29,7 +29,7 @@ export default function ProgressPage() {
         .eq('user_id', user.id)
         .single()
 
-      setA3Progress(data)
+      setA3Progreso(data)
     } catch (error) {
       console.log('[v0] Error loading progress:', error)
     } finally {
@@ -70,13 +70,13 @@ export default function ProgressPage() {
 
         {/* Main Stats */}
         <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          <Card className="bg-white dark:bg-card border-2 border-training/40">
+          <Card className="rounded-[2px] bg-white dark:bg-card border-2 border-training/40">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Sesiones Completadas</p>
                   <div className="text-3xl font-bold text-training">
-                    {a3Progress?.sessions_completed || 0}
+                    {a3Progreso?.sessions_completed || 0}
                   </div>
                 </div>
                 <TrendingUp className="w-8 h-8 text-purple/30" />
@@ -84,13 +84,13 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-card">
+          <Card className="rounded-[2px] bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Puntos Acumulados</p>
                   <div className="text-3xl font-bold text-green-500">
-                    {a3Progress?.total_points || 0}
+                    {a3Progreso?.total_points || 0}
                   </div>
                 </div>
                 <Award className="w-8 h-8 text-green-500/30" />
@@ -98,13 +98,13 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-card">
+          <Card className="rounded-[2px] bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Score de Empleabilidad</p>
                   <div className="text-3xl font-bold text-blue">
-                    {a3Progress?.employability_score || 0}/100
+                    {a3Progreso?.employability_score || 0}/100
                   </div>
                 </div>
                 <Target className="w-8 h-8 text-indigo-300" />
@@ -112,13 +112,13 @@ export default function ProgressPage() {
             </CardContent>
           </Card>
 
-          <Card className="bg-white dark:bg-card">
+          <Card className="rounded-[2px] bg-white dark:bg-card">
             <CardContent className="pt-6">
               <div className="flex items-center justify-between">
                 <div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground mb-1">Horas Entrenadas</p>
                   <div className="text-3xl font-bold text-blue">
-                    {a3Progress?.hours_trained || 0}h
+                    {a3Progreso?.hours_trained || 0}h
                   </div>
                 </div>
                 <Zap className="w-8 h-8 text-blue/30" />
@@ -127,8 +127,8 @@ export default function ProgressPage() {
           </Card>
         </div>
 
-        {/* Skills Progress */}
-        <Card className="border-0 shadow-md">
+        {/* Skills Progreso */}
+        <Card className="rounded-[2px] border-0 shadow-md">
           <CardHeader>
             <CardTitle>Habilidades Desarrolladas</CardTitle>
             <CardDescription>Tu progreso en cada competencia clave</CardDescription>
@@ -147,7 +147,7 @@ export default function ProgressPage() {
                   <span className="font-semibold text-muted/90 dark:text-muted/5">{item.skill}</span>
                   <span className="text-sm font-semibold text-muted-foreground dark:text-muted-foreground">{item.progress}%</span>
                 </div>
-                <div className="w-full bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
+                <div className="w-full rounded-[20px] bg-muted/20 dark:bg-muted/70 h-2 rounded-full overflow-hidden">
                   <div
                     className={`h-full ${item.color} transition-all duration-300`}
                     style={{ width: `${item.progress}%` }}
@@ -159,7 +159,7 @@ export default function ProgressPage() {
         </Card>
 
         {/* Achievements */}
-        <Card className="border-0 shadow-md">
+        <Card className="rounded-[2px] border-0 shadow-md">
           <CardHeader>
             <CardTitle>Logros Desbloqueados</CardTitle>
             <CardDescription>Badges y certificados conseguidos</CardDescription>
@@ -183,7 +183,7 @@ export default function ProgressPage() {
         </Card>
 
         {/* Tips */}
-        <Card className="bg-background">
+        <Card className="rounded-[2px] bg-background">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>

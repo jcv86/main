@@ -30,8 +30,8 @@ export default function A3AnalyticsPage() {
         simulationAttempts: 5,
         averageResponseTime: 2.3,
         trainingCompletion: 45,
-        strengths: ['Comunicación', 'STAR Method', 'Manejo de presión'],
-        improvements: ['Detalles técnicos', 'Ejemplos cuantificables', 'Cerrar con poder']
+        strengths: ['Comunicación', 'Método STAR', 'Manejo de presión'],
+        improvements: ['Detalles técnicos', 'Ejemplos cuantificables', 'X con poder']
       }
       setUserData(mockData)
     } catch (error) {
@@ -73,7 +73,7 @@ export default function A3AnalyticsPage() {
         </div>
 
         {/* Overall Score */}
-        <Card className="bg-background">
+        <Card className="rounded-[2px] bg-background">
           <CardContent className="pt-8 pb-6">
             <div className="flex items-center justify-between">
               <div>
@@ -144,7 +144,7 @@ export default function A3AnalyticsPage() {
 
         {/* Fortalezas & Mejoras */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {/* Strengths */}
+          {/* Fortalezas */}
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
@@ -212,7 +212,7 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Recommendations */}
-        <Card className="bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
+        <Card className="rounded-[2px] bg-training/5 dark:bg-training/20 border-training/30 dark:border-training/10">
           <CardHeader>
             <CardTitle className="text-training">Insights y Recomendaciones</CardTitle>
           </CardHeader>
@@ -227,14 +227,14 @@ export default function A3AnalyticsPage() {
         </Card>
 
         {/* Call to Action */}
-        <Card className="bg-gradient-to-r from-training/10 to-training/5 border-training/30">
+        <Card className="rounded-[2px] bg-gradient-to-r from-training/10 to-training/5 border-training/30">
           <CardContent className="pt-6">
             <div className="flex justify-between items-center">
               <div>
                 <p className="font-semibold text-white">Próximo desafío disponible</p>
                 <p className="text-sm text-white/70 mt-1">Avanza al siguiente nivel y desbloquea nuevas habilidades</p>
               </div>
-              <Button className="bg-training hover:bg-training/90 text-white">
+              <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white">
                 Ver Desafíos
               </Button>
             </div>

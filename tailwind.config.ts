@@ -69,6 +69,18 @@ const config: Config = {
         training: "hsl(var(--training))",    // Entrenamiento (A3)
         reality: "hsl(var(--reality))",      // La Realidad (A4)
         cyan: "hsl(var(--cyan))",           // La Realidad support
+        
+        // A2 Design System Colors
+        "a2-primary": "hsl(var(--a2-primary))",       // rgb(90, 90, 150)
+        "a2-primary-light": "hsl(var(--a2-primary-light))",
+        "a2-primary-dark": "hsl(var(--a2-primary-dark))",
+        "a2-bg-dark": "hsl(var(--a2-bg-dark))",
+        "a2-surface": "hsl(var(--a2-surface))",
+        "a2-border": "hsl(var(--a2-border))",
+        "a2-accent-cyan": "hsl(var(--a2-accent-cyan))",  // rgb(80, 160, 170)
+        "a2-text-primary": "hsl(var(--a2-text-primary))",
+        "a2-text-secondary": "hsl(var(--a2-text-secondary))",
+        "a2-text-muted": "hsl(var(--a2-text-muted))",
       },
       borderRadius: {
         DEFAULT: "20px",

@@ -22,91 +22,19 @@ export interface Module {
   icon?: string
 }
 
-export interface Skill {
-  id: string
-  name: string
-  value: number
-  maxValue: number
-  description: string
-}
-
-export interface Badge {
-  id: string
-  title: string
-  description: string
-  unlocked: boolean
-  icon: string
-}
-
 export interface DashboardState {
-  currentLevel: string
-  progressPct: number
   totalXp: number
   maxXp: number
-  totalDtc: number
-  maxDtc: number
-  nextMilestone: string
-  nextReward: string
-  completedModules: number
-  totalModules: number
-  skills: Skill[]
   modules: Module[]
-  badges: Badge[]
   moduleStates?: { [key: string]: 'locked' | 'available' | 'in_progress' | 'completed' }
   completedModuleIds?: string[]
 }
 
-// Mock data - default zeroed state; real values come from /api/a3/user-progress
+// Mock data - default state; real values come from /api/a3/user-progress
 export const mockDashboardData: DashboardState = {
-  currentLevel: 'Auditoría Inicial',
-  progressPct: 0,
   totalXp: 0,
-  maxXp: 1000,
-  totalDtc: 0,
-  maxDtc: 100,
-  nextMilestone: 'Completar Auditoría Inicial',
-  nextReward: 'Desbloqueas Herramientas de Preparación (4 herramientas)',
-  completedModules: 0,
-  totalModules: 10,
-  
-  skills: [
-    {
-      id: 'presencia',
-      name: 'Presencia',
-      value: 35,
-      maxValue: 100,
-      description: 'Cámara, luz, postura y entorno'
-    },
-    {
-      id: 'claridad',
-      name: 'Claridad',
-      value: 10,
-      maxValue: 100,
-      description: 'Capacidad de responder con foco'
-    },
-    {
-      id: 'estructura',
-      name: 'Estructura',
-      value: 0,
-      maxValue: 100,
-      description: 'Orden narrativo y Método STAR'
-    },
-    {
-      id: 'preparacion',
-      name: 'Preparación',
-      value: 25,
-      maxValue: 100,
-      description: 'CV, vacante y contexto'
-    },
-    {
-      id: 'manejo-presion',
-      name: 'Manejo de Presión',
-      value: 0,
-      maxValue: 100,
-      description: 'Preguntas difíciles y simulación'
-    }
-  ],
-  
+  maxXp: 1070, // 10 modules: 70 + 4×120 + 4×120 + 40 = 1070 XP total
+
   modules: [
     // NIVEL 1: Auditoría Inicial
     {
@@ -238,66 +166,9 @@ export const mockDashboardData: DashboardState = {
     }
   ],
   
-  badges: [
-    {
-      id: 'entorno-preparado',
-      title: 'Entorno Preparado',
-      description: 'Completaste la revisión básica de cámara, luz, audio y presencia.',
-      unlocked: true,
-      icon: 'camera'
-    },
-    {
-      id: 'respuesta-estructurada',
-      title: 'Respuesta Estructurada',
-      description: 'Creaste tu primera respuesta STAR completa.',
-      unlocked: false,
-      icon: 'star'
-    },
-    {
-      id: 'cv-modo-ats',
-      title: 'CV en Modo ATS',
-      description: 'Preparaste un CV alineado a estándares de Applicant Tracking System.',
-      unlocked: false,
-      icon: 'document'
-    },
-    {
-      id: 'preparacion-contextual',
-      title: 'Preparación Contextual',
-      description: 'Realizaste análisis profundo de empresa, cargo y vacante.',
-      unlocked: false,
-      icon: 'analyze'
-    },
-    {
-      id: 'primera-simulacion',
-      title: 'Primera Simulación',
-      description: 'Completaste tu primera simulación de entrevista.',
-      unlocked: false,
-      icon: 'play'
-    },
-    {
-      id: 'manejo-presion',
-      title: 'Manejo de Presión',
-      description: 'Superaste la entrevista desafiante con éxito.',
-      unlocked: false,
-      icon: 'fire'
-    },
-    {
-      id: 'mejora-detectada',
-      title: 'Mejora Detectada',
-      description: 'El análisis IA detectó mejora significativa en tu desempeño.',
-      unlocked: false,
-      icon: 'trending-up'
-    },
-    {
-      id: 'listo-para-real',
-      title: 'Listo para Entrevista Real',
-      description: 'Alcanzaste el umbral mínimo de preparación para entrevistas reales.',
-      unlocked: false,
-      icon: 'target'
-    }
-  ],
-
-  // Audit completed - Level 2 should now be available
+  // Audit completed - Level 2 unlocked
+  completedModuleIds: ['auditoria-inicial'],
+  
   moduleStates: {
     'auditoria-inicial': 'completed',
     'metodo-star': 'available',
@@ -310,7 +181,4 @@ export const mockDashboardData: DashboardState = {
     'entrenamiento-conversacional': 'locked',
     'simulacion-real': 'locked',
   },
-
-  // Audit completed - this triggers Level 2 unlock via buildModuleStates()
-  completedModuleIds: ['auditoria-inicial']
 }

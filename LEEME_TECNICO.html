@@ -1,0 +1,447 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>README_TECHINICAL</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+      line-height: 1.6;
+      color: #333;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 40px 20px;
+      background: #fff;
+    }
+    h1, h2, h3, h4, h5, h6 {
+      margin-top: 24px;
+      margin-bottom: 16px;
+      font-weight: 600;
+    }
+    h1 { font-size: 2em; border-bottom: 2px solid #e0e0e0; padding-bottom: 10px; }
+    h2 { font-size: 1.5em; }
+    h3 { font-size: 1.25em; }
+    code {
+      background: #f0f0f0;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-family: 'Courier New', monospace;
+    }
+    pre {
+      background: #f5f5f5;
+      padding: 16px;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+    pre code {
+      background: none;
+      padding: 0;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 16px 0;
+    }
+    table th, table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+    table th {
+      background: #f5f5f5;
+      font-weight: 600;
+    }
+    a {
+      color: #0066cc;
+      text-decoration: none;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+    ul, ol {
+      margin: 16px 0;
+      padding-left: 24px;
+    }
+    li {
+      margin: 8px 0;
+    }
+    blockquote {
+      border-left: 4px solid #ddd;
+      margin: 16px 0;
+      padding-left: 16px;
+      color: #666;
+    }
+    .page-break {
+      page-break-after: always;
+      margin-top: 40px;
+    }
+    @media print {
+      body { padding: 0; }
+      .page-break { page-break-after: always; }
+    }
+  </style>
+</head>
+<body>
+  <h1>README TÉCNICO - DTC Despega Tu Carrera</h1>
+<p><strong>Document:</strong> Technical Setup &amp; Operations<br><strong>Date:</strong> 2026-05-22<br><strong>Version:</strong> 6.0.0<br><strong>Status:</strong> ✅ Production Ready  </p>
+<hr>
+<h2>Quick Start (5 Minutes)</h2>
+<pre><code class="language-bash"># Clone repo
+git clone https://github.com/jcv86/main.git
+cd main
+
+# Install dependencies
+pnpm install
+
+# Setup environment
+cp .env.example .env.local
+# Edit .env.local with your API keys
+
+# Run development
+pnpm dev
+
+# Open browser
+open http://localhost:3000
+</code></pre>
+<hr>
+<h2>Development Setup</h2>
+<h3>Prerequisites</h3>
+<ul>
+<li><strong>Node.js</strong>: 18.17+ (check with <code>node --version</code>)</li>
+<li><strong>pnpm</strong>: 8.0+ (install: <code>npm install -g pnpm</code>)</li>
+<li><strong>Git</strong>: 2.37+</li>
+<li><strong>Text Editor</strong>: VS Code recommended</li>
+</ul>
+<h3>Environment Variables</h3>
+<p><strong>Supabase</strong></p>
+<pre><code class="language-env">NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_ROLE_KEY=your-service-role-key
+</code></pre>
+<p><strong>IA APIs</strong></p>
+<pre><code class="language-env">ANTHROPIC_API_KEY=sk-ant-xxxx
+OPENAI_API_KEY=sk-xxxx
+</code></pre>
+<p><strong>Storage</strong></p>
+<pre><code class="language-env">VERCEL_BLOB_TOKEN=your-blob-token
+</code></pre>
+<p><strong>Application</strong></p>
+<pre><code class="language-env">NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXT_PUBLIC_API_URL=http://localhost:3000/api
+</code></pre>
+<hr>
+<h2>Local Development</h2>
+<h3>Running Dev Server</h3>
+<pre><code class="language-bash"># Start with fast refresh
+pnpm dev
+
+# With debugging
+pnpm dev --inspect
+
+# Specific port
+pnpm dev -p 3001
+</code></pre>
+<h3>Code Quality</h3>
+<pre><code class="language-bash"># TypeScript check
+pnpm type-check
+
+# Linting
+pnpm lint
+
+# Format code
+pnpm format
+
+# All checks
+pnpm check-all
+</code></pre>
+<h3>Database Setup (Local)</h3>
+<pre><code class="language-bash"># Create local Supabase project (using Docker)
+# See: https://supabase.com/docs/guides/local-development
+
+# Or use cloud Supabase and run migrations manually
+# Migrations are in: scripts/migrations/
+
+# 1. Run RPC migration
+# 2. Run Cycle ID migration
+# 3. Run Progress Flags migration
+</code></pre>
+<hr>
+<h2>Project Structure</h2>
+<pre><code>dtc-project/
+├─ src/
+│  ├─ app/              (Next.js App Router)
+│  │  ├─ page.tsx       (Landing)
+│  │  ├─ dashboard/     (Main hub)
+│  │  ├─ modulos/       (A1-A4 modules)
+│  │  ├─ api/           (API routes)
+│  │  └─ layout.tsx     (Root layout)
+│  ├─ components/       (React components)
+│  │  ├─ dashboard/
+│  │  ├─ modulos/       (Module-specific)
+│  │  ├─ shared/        (Reusable)
+│  │  └─ ui/            (shadcn components)
+│  ├─ lib/              (Utilities)
+│  │  ├─ supabase.ts    (DB client)
+│  │  ├─ auth.ts        (Auth helpers)
+│  │  ├─ api.ts         (API helpers)
+│  │  └─ types.ts       (TypeScript types)
+│  ├─ styles/           (Global CSS)
+│  └─ hooks/            (React hooks)
+├─ scripts/             (Utility scripts)
+│  ├─ migrations/       (DB migrations)
+│  └─ seed.ts           (Test data)
+├─ public/              (Static files)
+├─ .env.example         (Environment template)
+├─ package.json         (Dependencies)
+├─ tsconfig.json        (TypeScript config)
+├─ tailwind.config.js   (Tailwind config)
+└─ next.config.js       (Next.js config)
+</code></pre>
+<hr>
+<h2>Database Operations</h2>
+<h3>Supabase Console</h3>
+<pre><code class="language-bash"># Open Supabase dashboard
+# URL: https://app.supabase.com/
+
+# Or use CLI
+pnpm exec supabase start  # Local
+pnpm exec supabase push   # Deploy migrations
+</code></pre>
+<h3>SQL Queries</h3>
+<pre><code class="language-bash"># Via Supabase console (SQL Editor)
+# Or via psql (if local Postgres)
+
+psql &quot;postgresql://user:password@localhost:5432/postgres&quot;
+</code></pre>
+<h3>Common Tasks</h3>
+<pre><code class="language-sql">-- Check migrations deployed
+SELECT * FROM pg_migrations;
+
+-- View user data
+SELECT id, email, created_at FROM public.users;
+
+-- Check A2 entries
+SELECT * FROM public.a2_daily_entries 
+WHERE user_id = &#39;user-id&#39;;
+
+-- View progress flags
+SELECT * FROM public.user_progress_flags 
+WHERE user_id = &#39;user-id&#39;;
+</code></pre>
+<hr>
+<h2>API Endpoints</h2>
+<h3>Authentication</h3>
+<pre><code>POST   /api/auth/login         (Email/password)
+POST   /api/auth/signup        (Create account)
+POST   /api/auth/logout        (Clear session)
+GET    /api/auth/me            (Current user)
+POST   /api/auth/refresh       (Refresh token)
+</code></pre>
+<h3>Missions (A1)</h3>
+<pre><code>POST   /api/missions/complete  (Complete A1 mission)
+GET    /api/missions/status    (Get progress)
+</code></pre>
+<h3>Daily (A2)</h3>
+<pre><code>POST   /api/daily/analyze      (Stream daily analysis)
+GET    /api/daily/[day]        (Get day info)
+</code></pre>
+<h3>IA Coach (A4)</h3>
+<pre><code>POST   /api/ia/coach           (Stream coach response)
+GET    /api/ia/history         (Chat history)
+</code></pre>
+<h3>Documents (DTC)</h3>
+<pre><code>POST   /api/documents/save     (Save document)
+GET    /api/documents/list     (List user docs)
+GET    /api/documents/[id]     (Get document)
+DELETE /api/documents/[id]     (Delete document)
+POST   /api/documents/export   (Export as PDF/TXT)
+</code></pre>
+<hr>
+<h2>Building for Production</h2>
+<h3>Production Build</h3>
+<pre><code class="language-bash"># Create optimized build
+pnpm build
+
+# Test production build locally
+pnpm start
+
+# Analysis
+pnpm analyze
+</code></pre>
+<h3>Build Optimization</h3>
+<ul>
+<li>Tree-shaking enabled</li>
+<li>Code splitting per route</li>
+<li>Image optimization</li>
+<li>CSS minification</li>
+</ul>
+<h3>Deployment</h3>
+<pre><code class="language-bash"># Deploy to Vercel
+vercel
+
+# With custom domain
+vercel --alias despega-tu-carrera.vercel.app
+
+# View logs
+vercel logs
+
+# Monitor builds
+vercel status
+</code></pre>
+<hr>
+<h2>Testing</h2>
+<h3>Manual Testing</h3>
+<p>See: <a href="./E2E-TESTING-CHECKLIST.md">E2E-TESTING-CHECKLIST.md</a></p>
+<pre><code class="language-bash"># Quick test checklist
+# 1. Auth flow (signup, login, logout)
+# 2. A1 mission completion
+# 3. A2 day navigation
+# 4. A3 module progression
+# 5. A4 IA coaching
+# 6. DTC document save/export
+</code></pre>
+<h3>Automated Testing (TODO)</h3>
+<pre><code class="language-bash"># E2E tests (Playwright)
+pnpm test:e2e
+
+# Unit tests (Vitest)
+pnpm test:unit
+
+# Coverage
+pnpm test:coverage
+</code></pre>
+<hr>
+<h2>Debugging</h2>
+<h3>Client-Side</h3>
+<pre><code class="language-typescript">// Add console logs
+console.log(&quot;[v0] Starting mission...&quot;, { userId, missionId })
+
+// Check user context
+console.log(&quot;[v0] User:&quot;, useUser())
+
+// API debugging
+fetch(&#39;/api/missions/complete&#39;, ...)
+  .then(r =&gt; r.json())
+  .then(d =&gt; console.log(&quot;[v0] Response:&quot;, d))
+</code></pre>
+<h3>Server-Side</h3>
+<pre><code class="language-typescript">// API route debugging
+export async function POST(req: Request) {
+  console.log(&quot;[API] Headers:&quot;, req.headers)
+  console.log(&quot;[API] Body:&quot;, await req.json())
+  // Process...
+}
+</code></pre>
+<h3>Database</h3>
+<pre><code class="language-sql">-- Check RLS policies
+SELECT * FROM information_schema.role_routine_grants 
+WHERE routine_name = &#39;complete_a1_mission_transaction&#39;;
+
+-- Monitor connections
+SELECT * FROM pg_stat_activity;
+
+-- Check query performance
+EXPLAIN ANALYZE 
+SELECT * FROM a2_daily_entries 
+WHERE user_id = &#39;xyz&#39;;
+</code></pre>
+<hr>
+<h2>Performance Monitoring</h2>
+<h3>Development</h3>
+<pre><code class="language-bash"># Next.js built-in analytics
+# Dashboard shows in terminal during dev
+
+# Browser DevTools
+# Chrome: F12 → Performance tab
+</code></pre>
+<h3>Production</h3>
+<p><strong>Vercel Analytics</strong></p>
+<ul>
+<li>URL: <a href="https://vercel.com/dashboard">https://vercel.com/dashboard</a></li>
+<li>Shows: LCP, FID, CLS (Core Web Vitals)</li>
+</ul>
+<p><strong>Sentry</strong> (ready to connect)</p>
+<ul>
+<li>Setup in <code>next.config.js</code></li>
+<li>Tracks frontend errors</li>
+</ul>
+<hr>
+<h2>Deployment Checklist</h2>
+<p>Before going live:</p>
+<ul>
+<li><input disabled="" type="checkbox"> All tests passing (E2E + unit)</li>
+<li><input disabled="" type="checkbox"> Environment variables configured</li>
+<li><input disabled="" type="checkbox"> Database migrations deployed</li>
+<li><input disabled="" type="checkbox"> RLS policies verified</li>
+<li><input disabled="" type="checkbox"> Backups enabled</li>
+<li><input disabled="" type="checkbox"> Monitoring configured</li>
+<li><input disabled="" type="checkbox"> Error tracking (Sentry) enabled</li>
+<li><input disabled="" type="checkbox"> Performance baseline recorded</li>
+<li><input disabled="" type="checkbox"> SSL certificate active</li>
+<li><input disabled="" type="checkbox"> CDN caching configured</li>
+</ul>
+<hr>
+<h2>Troubleshooting</h2>
+<h3>Build Errors</h3>
+<p><strong>Error: &quot;Cannot find module...&quot;</strong></p>
+<pre><code class="language-bash"># Clear cache and reinstall
+rm -rf node_modules pnpm-lock.yaml
+pnpm install
+</code></pre>
+<p><strong>Error: &quot;TypeScript compilation failed&quot;</strong></p>
+<pre><code class="language-bash"># Check types
+pnpm type-check
+
+# Fix specific file
+pnpm tsc --noEmit src/components/Example.tsx
+</code></pre>
+<h3>Runtime Errors</h3>
+<p><strong>&quot;User not authenticated&quot;</strong></p>
+<ul>
+<li>Check localStorage has JWT</li>
+<li>Verify NEXT_PUBLIC_SUPABASE_URL</li>
+<li>Check Supabase Auth settings</li>
+</ul>
+<p><strong>&quot;Database connection failed&quot;</strong></p>
+<ul>
+<li>Verify DATABASE_URL is set</li>
+<li>Check Supabase status</li>
+<li>Test connection pooling</li>
+</ul>
+<h3>Database Issues</h3>
+<p><strong>Migration didn&#39;t apply</strong></p>
+<pre><code class="language-bash"># Check migration status
+pnpm exec supabase migration list
+
+# Retry migration
+pnpm exec supabase push --dry-run
+</code></pre>
+<hr>
+<h2>Resources</h2>
+<ul>
+<li><strong>Docs</strong>: <a href="./MVP_PROGRESS_CHECKLIST.md">MVP_PROGRESS_CHECKLIST.md</a></li>
+<li><strong>Architecture</strong>: <a href="./TECHNICAL_ARCHITECTURE.md">TECHNICAL_ARCHITECTURE.md</a></li>
+<li><strong>Status</strong>: <a href="./GIT_AND_DEPLOY_STATUS.md">GIT_AND_DEPLOY_STATUS.md</a></li>
+<li><strong>Investor</strong>: <a href="./INVESTOR_BRIEF.md">INVESTOR_BRIEF.md</a></li>
+</ul>
+<h3>External Resources</h3>
+<ul>
+<li>Next.js: <a href="https://nextjs.org/docs">https://nextjs.org/docs</a></li>
+<li>Supabase: <a href="https://supabase.com/docs">https://supabase.com/docs</a></li>
+<li>Tailwind: <a href="https://tailwindcss.com">https://tailwindcss.com</a></li>
+<li>shadcn/ui: <a href="https://ui.shadcn.com">https://ui.shadcn.com</a></li>
+<li>Vercel: <a href="https://vercel.com/docs">https://vercel.com/docs</a></li>
+</ul>
+<hr>
+<p><strong>Document:</strong> README TECHINICAL<br><strong>Updated:</strong> 2026-05-22<br><strong>Status:</strong> ✅ Production Ready</p>
+
+  <div class="page-break"></div>
+  <footer style="text-align: center; color: #999; font-size: 12px; margin-top: 40px;">
+    <p>Generated on: 2026-05-22</p>
+    <p>DTC Platform - Version 6.0.0</p>
+  </footer>
+</body>
+</html>
+    

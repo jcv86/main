@@ -311,7 +311,7 @@ export default function Mision90DiasPage() {
             >
               {submitting ? (
                 <>
-                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-[rgb(80,160,170)] mr-2"></div>
                   Creando...
                 </>
               ) : (

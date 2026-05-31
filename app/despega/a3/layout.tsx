@@ -1,4 +1,6 @@
-import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
+'use client'
+
+import { CameraPermissionModal } from '@/components/a3/camera-permission-modal'
 
 export default function A3Layout({
   children,
@@ -6,10 +8,8 @@ export default function A3Layout({
   children: React.ReactNode
 }) {
   return (
-    <CoachProviderWrapper>
-      <div className="min-h-screen">
-        {children}
-      </div>
-    </CoachProviderWrapper>
+    <div className="min-h-screen">
+      {children}
+    </div>
   )
 }

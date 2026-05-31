@@ -207,7 +207,7 @@ export default function ProfileDashboard() {
         <div className="flex items-center justify-between">
           <div className="space-y-2">
             <h1 className="text-4xl font-bold text-white flex items-center gap-3">
-              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue/40 to-purple/40 border border-white/20 flex items-center justify-center">
+              <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue/40 to-purple/40 border border-[rgb(80,160,170)]/20 flex items-center justify-center">
                 <User className="w-6 h-6 text-white" />
               </div>
               Mi Perfil
@@ -215,7 +215,7 @@ export default function ProfileDashboard() {
             <p className="text-white/70">Tu resumen de progreso y logros</p>
           </div>
           <Link href="/despega/settings">
-            <Button variant="outline" size="sm" className="gap-2 border-white/20 text-white hover:bg-white/10">
+            <Button variant="outline" size="sm" className="gap-2 border-[rgb(80,160,170)]/20 text-white hover:bg-white/10">
               <Settings className="w-4 h-4" />
               Preferencias
             </Button>
@@ -223,7 +223,7 @@ export default function ProfileDashboard() {
         </div>
 
         {/* User Info Card */}
-        <Card className="border-white/10 bg-white/5">
+        <Card className="border-[rgb(80,160,170)]/10 bg-[rgba(80,160,170,0.2)]">
           <CardContent className="pt-6 pb-6">
             <div className="flex items-start justify-between">
               <div className="space-y-3">
@@ -240,7 +240,7 @@ export default function ProfileDashboard() {
               </div>
               <button
                 onClick={handleLogout}
-                className="flex items-center gap-2 px-4 py-2 rounded-lg text-red-400/80 hover:text-red-400 hover:bg-red-500/10 transition-all"
+                className="flex items-center gap-2 px-4 py-2 rounded-lg text-[rgb(80,160,170)]/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.6)]-500/10 transition-all"
               >
                 <LogOut className="w-4 h-4" />
                 Salir
@@ -389,7 +389,7 @@ export default function ProfileDashboard() {
                         >
                           {stage.name}
                         </h3>
-                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${colors.bg} border border-white/20`}
+                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${colors.bg} border border-[rgb(80,160,170)]/20`}
                           style={{
                             color: i === 0 ? 'rgb(246, 245, 244)' 
                               : i === 1 ? 'rgb(246, 245, 244)'
@@ -484,7 +484,7 @@ export default function ProfileDashboard() {
               )}
 
               {data.sections?.a4 && (
-                <Card className="border-red/30 bg-red/5 hover:border-red/50 transition-colors">
+                <Card className="border-red/30 bg-red/5 hover:border-[rgb(80,160,170)]/50 transition-colors">
                   <CardContent className="pt-6 pb-6">
                     <p className="text-sm text-red uppercase tracking-wider font-semibold mb-3">
                       {data.sections.a4.name}
@@ -516,7 +516,7 @@ export default function ProfileDashboard() {
               </h3>
               <div className="grid md:grid-cols-3 gap-3">
                 {data.badges.map((badge, idx) => (
-                  <div key={idx} className="p-3 rounded-lg bg-muted/40 text-center border border-white/10">
+                  <div key={idx} className="p-3 rounded-lg bg-muted/40 text-center border border-[rgb(80,160,170)]/10">
                     <p className="text-white font-semibold text-sm">{badge}</p>
                   </div>
                 ))}

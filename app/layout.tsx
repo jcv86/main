@@ -1,5 +1,5 @@
 import type React from "react"
-import type { Metadata } from "next"
+import type { Metadata, Viewport } from "next"
 import { Montserrat, Lora } from "next/font/google"
 import "./globals.css"
 import { Providers } from "./providers"
@@ -14,21 +14,25 @@ if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
   validateEnvironment()
 }
 
-// DTC Brand Typography
+// DTC Brand Typography - Optimized font loading
 const montserrat = Montserrat({ 
   subsets: ["latin"],
   variable: "--font-montserrat",
   weight: ["400", "500", "600", "700"],
+  display: "swap", // Prevent FOUT, swap immediately
+  preload: true,
 })
 
 const lora = Lora({ 
   subsets: ["latin"],
   variable: "--font-lora",
   weight: ["400", "500", "600", "700"],
+  display: "swap", // Prevent FOUT
+  preload: true,
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://despegatucarrera.cl"),
+  metadataBase: new URL("https://www.despegatucarrera.com"),
   title: {
     default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
     template: "%s | Despega Tu Carrera",
@@ -57,7 +61,7 @@ export const metadata: Metadata = {
     "planificación carrera",
     "empleabilidad Chile",
   ],
-  authors: [{ name: "Despega Tu Carrera", url: "https://despegatucarrera.cl" }],
+  authors: [{ name: "Despega Tu Carrera", url: "https://www.despegatucarrera.com" }],
   creator: "Despega Tu Carrera",
   publisher: "Despega Tu Carrera",
   formatDetection: {
@@ -68,14 +72,14 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://despegatucarrera.cl",
+    url: "https://www.despegatucarrera.com",
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA y Tests Psicométricos",
     description:
       "Transforma tu carrera con evaluaciones científicas, contenido especializado y coaching personalizado con inteligencia artificial.",
     images: [
       {
-        url: "/og-image.png",
+        url: "https://www.despegatucarrera.com/og-image.png",
         width: 1200,
         height: 630,
         alt: "Despega Tu Carrera - Plataforma de Desarrollo Profesional",
@@ -86,7 +90,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA",
     description: "Tests psicométricos, contenido especializado y coaching con IA. Impulsa tu carrera hoy.",
-    images: ["/twitter-image.png"],
+    images: ["https://www.despegatucarrera.com/twitter-image.png"],
     creator: "@despegatucarrera",
   },
   robots: {
@@ -101,10 +105,10 @@ export const metadata: Metadata = {
     },
   },
   alternates: {
-    canonical: "https://despegatucarrera.cl",
+    canonical: "https://www.despegatucarrera.com",
     languages: {
-      "es-CL": "https://despegatucarrera.cl",
-      es: "https://despegatucarrera.cl/es",
+      "es-CL": "https://www.despegatucarrera.com",
+      es: "https://www.despegatucarrera.com/es",
     },
   },
   verification: {
@@ -117,6 +121,14 @@ export const metadata: Metadata = {
   category: "education",
   classification: "Professional Development Platform",
   generator: 'v0.app'
+}
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  maximumScale: 1,
+  userScalable: false,
+  themeColor: "#1a1a1a",
 }
 
 export default function RootLayout({
@@ -133,22 +145,8 @@ export default function RootLayout({
         <meta name="theme-color" content="#000000" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-        <script
-          dangerouslySetInnerHTML={{
-            __html: `
-              (function() {
-                const theme = localStorage.getItem('theme-preference') || 'dark';
-                if (theme === 'dark') {
-                  document.documentElement.classList.add('dark');
-                } else {
-                  document.documentElement.classList.remove('dark');
-                }
-              })();
-            `,
-          }}
-        />
       </head>
-      <body className={`${montserrat.className} ${lora.variable}`} suppressHydrationWarning>
+      <body className={`${montserrat.className} ${lora.variable}`}>
         <Providers>
           {children}
           <LLMOOptimizedFooter />
@@ -166,8 +164,8 @@ export default function RootLayout({
               name: "Despega Tu Carrera",
               description:
                 "Plataforma líder en Chile para desarrollo profesional con IA, tests psicométricos y coaching personalizado",
-              url: "https://despegatucarrera.cl",
-              logo: "https://despegatucarrera.cl/logo.png",
+              url: "https://www.despegatucarrera.com",
+              logo: "https://www.despegatucarrera.com/logo.png",
               sameAs: [
                 "https://www.linkedin.com/company/despegatucarrera",
                 "https://twitter.com/despegatucarrera",

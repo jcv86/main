@@ -16,7 +16,7 @@ import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 
-const GUIDED_INTERVIEW_QUESTIONS = [
+const GUIDED_INTERVIEW_PREGUNTAS = [
   {
     id: 1,
     type: 'intro',
@@ -82,12 +82,12 @@ export default function GuidedInterviewPage() {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState<number | null>(null)
   const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
-  const [started, setStarted] = useState(false)
+  const [started, setComenzared] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
-  const currentQuestion = GUIDED_INTERVIEW_QUESTIONS[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+  const currentQuestion = GUIDED_INTERVIEW_PREGUNTAS[currentQuestionIndex]
+  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_PREGUNTAS.length) * 100
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -137,13 +137,13 @@ export default function GuidedInterviewPage() {
     }
   }
 
-  const handleNext = () => {
-    if (currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1) {
+  const handleSiguiente = () => {
+    if (currentQuestionIndex < GUIDED_INTERVIEW_PREGUNTAS.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  const handlePrevious = () => {
+  const handleAnterior = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
@@ -165,7 +165,7 @@ export default function GuidedInterviewPage() {
           user_id: user.id,
           simulation_type: 'guided',
           responses: responses,
-          total_questions: GUIDED_INTERVIEW_QUESTIONS.length,
+          total_questions: GUIDED_INTERVIEW_PREGUNTAS.length,
           completed_at: new Date().toISOString()
         })
 
@@ -174,7 +174,7 @@ export default function GuidedInterviewPage() {
       // Calculate score (simple heuristic based on response length and completeness)
       const totalLength = Object.values(responses).reduce((acc, r) => acc + r.length, 0)
       const avgLength = totalLength / Object.keys(responses).length
-      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_PREGUNTAS.length) * 100
       const calculatedScore = Math.round((avgLength / 200) * 50 + (completeness / 100) * 50)
 
       setScore(Math.min(calculatedScore, 100))
@@ -190,10 +190,10 @@ export default function GuidedInterviewPage() {
   if (!started) {
     return (
       <div className="min-h-screen bg-background">
-        {/* General Progress Bar */}
+        {/* General Progreso Bar */}
         <A3GeneralProgress 
           currentStep={1}
-          totalSteps={GUIDED_INTERVIEW_QUESTIONS.length + 1}
+          totalSteps={GUIDED_INTERVIEW_PREGUNTAS.length + 1}
           currentLabel="Preparación"
           completedSections={0}
           totalSections={4}
@@ -227,7 +227,7 @@ export default function GuidedInterviewPage() {
                 </p>
               </div>
 
-              <Card className="border-training/40">
+              <Card className="rounded-[2px] border-training/40">
                 <CardContent className="pt-6 space-y-4">
                   <div className="space-y-3">
                     <h3 className="font-bold text-white flex items-center gap-2">
@@ -254,15 +254,15 @@ export default function GuidedInterviewPage() {
                     </ul>
                   </div>
 
-                  <div className="bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
+                  <div className="rounded-[20px] bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
                     <p className="text-sm text-white/80">
                       <strong className="text-training">Nota:</strong> Esta práctica es más exigente. Las preguntas están diseñadas para retar tus límites y ayudarte a crecer.
                     </p>
                   </div>
 
                   <Button 
-                    onClick={() => setStarted(true)}
-                    className="w-full bg-training hover:bg-training/90 text-white h-12"
+                    onClick={() => setComenzared(true)}
+                    className="w-full rounded-[20px] bg-training hover:bg-training/90 text-white h-12"
                   >
                     Comenzar Entrevista
                   </Button>

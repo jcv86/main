@@ -210,7 +210,7 @@ function LLMOOptimizedFooter() {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-gray-800 pt-8">
+        <div className="border-t border-[rgb(80,160,170)] pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2025 Despega Tu Carrera. Todos los derechos reservados.</p>
             <div className="flex items-center gap-6">

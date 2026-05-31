@@ -75,7 +75,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
         {/* Device Status */}
         <div className="space-y-3">
           {/* Camera Status */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-purple-500/5">
             <div className="flex items-center gap-2">
               <span className="text-lg">📹</span>
               <span className="text-white font-semibold">Cámara</span>
@@ -96,7 +96,7 @@ export function AudioCameraCheck({ onComplete }: AudioCameraCheckProps) {
           </div>
 
           {/* Microphone Status */}
-          <div className="flex items-center justify-between p-3 rounded-lg bg-white/5">
+          <div className="flex items-center justify-between p-3 rounded-lg bg-purple-500/5">
             <div className="flex items-center gap-2">
               <span className="text-lg">🎤</span>
               <span className="text-white font-semibold">Micrófono</span>

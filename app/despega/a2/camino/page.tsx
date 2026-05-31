@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { useRouter } from "next/navigation"
 import { ArrowRight } from "lucide-react"
+import { RouteRecommendation } from "@/components/a2-route-recommendation"
 
 export default function A2CaminoPage() {
   const router = useRouter()
@@ -14,6 +15,12 @@ export default function A2CaminoPage() {
     if (selectedCamino) {
       router.push(`/despega/a2/recomendaciones?camino=${selectedCamino}`)
     }
+  }
+
+  const handleSelectAndContinue = (route: string) => {
+    setSelectedCamino(route)
+    // Navigate immediately
+    router.push(`/despega/a2/recomendaciones?camino=${route}`)
   }
 
   const caminoOptions = [
@@ -42,34 +49,46 @@ export default function A2CaminoPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <div className="max-w-4xl mx-auto py-12 space-y-8">
+      <div className="max-w-4xl mx-auto py-12 space-y-12">
         {/* Header */}
         <div className="text-center space-y-2">
           <h1 className="text-4xl md:text-5xl font-bold text-muted/90 dark:text-muted/5">
-            Elige Tu Camino
+            Tu Camino Personalizado
           </h1>
           <p className="text-lg text-muted-foreground dark:text-muted-foreground">
-            ¿En qué aspectos quieres enfocarte en estos 90 días?
+            Basado en tu perfil DISC, aquí está nuestra recomendación
           </p>
         </div>
 
-        {/* Camino Selection */}
-        <div className="grid md:grid-cols-3 gap-4">
+        {/* Smart Recommendation Section */}
+        <div className="space-y-4">
+          <RouteRecommendation onSelectRoute={handleSelectAndContinue} />
+        </div>
+
+        {/* Manual Selection Fallback */}
+        <div className="border-t pt-12">
+          <div className="text-center space-y-4 mb-8">
+            <h2 className="text-2xl font-bold">¿Prefieres elegir manualmente?</h2>
+            <p className="text-muted-foreground">También puedes explorar todas las opciones disponibles</p>
+          </div>
+
+          {/* Manual Selection */}
+          <div className="grid md:grid-cols-3 gap-4">
           {caminoOptions.map((camino) => (
             <div
               key={camino.id}
               onClick={() => setSelectedCamino(camino.id)}
-              className={`cursor-pointer transition-all ${`}
+              className={`cursor-pointer transition-all ${
                 selectedCamino === camino.id
                   ? "ring-2 ring-slate-900 dark:ring-slate-50"
-                  : ""`}
+                  : ""
               }`}
             >
               <Card
-                className={`h-full hover:shadow-lg transition-shadow ${`}
+                className={`h-full hover:shadow-lg transition-shadow ${
                   selectedCamino === camino.id
                     ? "bg-muted/10 dark:bg-card"
-                    : ""`}
+                    : ""
                 }`}
               >
                 <CardHeader>
@@ -97,6 +116,7 @@ export default function A2CaminoPage() {
               </Card>
             </div>
           ))}
+        </div>
         </div>
 
         {/* CTA */}

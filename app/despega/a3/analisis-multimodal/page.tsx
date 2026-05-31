@@ -8,11 +8,13 @@ import { AnalysisResults } from '@/components/multimodal/analysis-results'
 import { MultimodalAnalyticsDashboard } from '@/components/multimodal/analytics-dashboard'
 import { AdvancedAnalyticsReporting } from '@/components/multimodal/advanced-analytics'
 import { AlertCircle, Check, Zap } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
 export default function MultimodalAnalysisPage() {
   const [activeSession, setActiveSession] = useState<string | null>(null)
   const [error, setError] = useState('')
   const [entrenamillentoType, setEntrenamillentoType] = useState('entrevista-basica')
+  const [isCompleted, setIsCompleted] = useState(false)
 
   const entrenamillentoTypes = [
     { id: 'entrevista-basica', label: 'Básica', desc: 'Presentación' },
@@ -21,10 +23,14 @@ export default function MultimodalAnalysisPage() {
     { id: 'presentacion-ejecutiva', label: 'Ejecutiva', desc: 'Pitch' }
   ]
 
+  if (isCompleted) {
+    return <ModuleCompletionScreen moduleId="analisis-multimodal" moduleName="Análisis Multimodal" xpEarned={120} />
+  }
+
   return (
     <div className="max-w-6xl mx-auto space-y-6 pb-8">
       {/* Header - Enhanced with pillar color (orange) */}
-      <div className="bg-gradient-to-r from-training/10 to-training/5 border border-training/20 rounded-lg p-6 space-y-3">
+      <div className="rounded-[20px] bg-gradient-to-r from-training/10 to-training/5 border border-training/20 rounded-lg p-6 space-y-3">
         <div className="flex items-center gap-3">
           <div className="w-12 h-12 rounded-lg bg-training/20 border border-training/30 flex items-center justify-center">
             <Zap className="w-6 h-6 text-training" />
@@ -42,7 +48,7 @@ export default function MultimodalAnalysisPage() {
 
       {/* Error Alert - Training/Orange color */}
       {error && (
-        <Card className="border-training/40 bg-training/10">
+        <Card className="rounded-[2px] border-training/40 bg-training/10">
           <CardContent className="pt-4 flex gap-3">
             <AlertCircle className="w-5 h-5 text-training flex-shrink-0 mt-0.5" />
             <div className="flex-1">

@@ -14,7 +14,7 @@ export default function DespegaLayout({
         <main className="flex-1 pt-4">
           {children}
         </main>
-        <PremiumGamificationWidget />
+        {/* <PremiumGamificationWidget /> */}
       </div>
     </CoachProviderWrapper>
   )

@@ -32,23 +32,24 @@ export function A2ProgressBar() {
       {/* Header with Month and Percentage */}
       <div className="flex items-center justify-between">
         <div>
-          <p className="text-sm font-semibold text-white/60">Progreso Total</p>
+          <p className="text-sm font-semibold text-a2-text-secondary">Progreso Total</p>
           <p className="text-lg font-bold text-white">Mes {month}</p>
         </div>
         <div className="text-right">
-          <p className="text-3xl font-black bg-gradient-to-r from-purple to-cyan bg-clip-text text-transparent">
+          <p className="text-3xl font-black" style={{ color: 'rgb(90, 90, 150)' }}>
             {percentage}%
           </p>
-          <p className="text-xs text-white/60">completado</p>
+          <p className="text-xs text-a2-text-secondary">completado</p>
         </div>
       </div>
 
       {/* Progress Bar */}
-      <div className="relative h-4 bg-white/10 rounded-full overflow-hidden">
+      <div className="relative h-4 rounded-full overflow-hidden" style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)' }}>
         <div
-          className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500 ease-out rounded-full shadow-lg"
+          className="h-full transition-all duration-500 ease-out rounded-full shadow-lg"
           style={{
             width: `${displayPercentage}%`,
+            background: 'linear-gradient(to right, rgb(90, 90, 150), rgb(80, 160, 170))',
           }}
         >
           {/* Shimmer effect */}
@@ -72,8 +73,9 @@ export function A2ProgressBar() {
               className={`p-3 rounded-lg border transition-all ${
                 isActive
                   ? 'bg-purple/20 border-purple/50'
-                  : 'bg-white/5 border-white/10'
+                  : 'transition-all'
               }`}
+              style={!isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.05)', borderColor: 'rgba(90, 90, 150, 0.6)', border: '1px solid' } : {}}
             >
               <p className="text-xs font-bold text-white/70">{m.label}</p>
               <div className="mt-2 h-2 bg-white/10 rounded-full overflow-hidden">

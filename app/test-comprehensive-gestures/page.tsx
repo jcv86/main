@@ -597,7 +597,7 @@ export default function ComprehensiveGestureTestPage() {
                               className={`text-xs ${`}
                                 result.success
                                   ? "bg-green/10 text-green hover:bg-green/10"
-                                  : "bg-red/10 text-red hover:bg-red/10"`}
+                                  : "bg-red/10 text-red hover:bg-[rgba(80,160,170,0.6)]/10"`}
                               }`}
                             >
                               {gesture}: {result.responseTime}ms

@@ -56,7 +56,7 @@ export default function StructuredSimulationPage() {
   return (
     <main className="min-h-screen bg-black">
       <div className="flex flex-col h-screen">
-        {/* General Progress Bar */}
+        {/* General Progreso Bar */}
         <A3GeneralProgress 
           currentStep={1}
           totalSteps={3}

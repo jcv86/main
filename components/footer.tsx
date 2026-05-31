@@ -49,7 +49,14 @@ export default function Footer() {
               <ul className="space-y-2 text-sm">
                 <li><Link href="/privacy" className="text-foreground/60 hover:text-foreground transition">Privacidad</Link></li>
                 <li><Link href="/terms" className="text-foreground/60 hover:text-foreground transition">Términos</Link></li>
-                <li><Link href="/contact" className="text-foreground/60 hover:text-foreground transition">Contacto</Link></li>
+                <li>
+                  <button 
+                    onClick={() => setContactOpen(true)}
+                    className="text-foreground/60 hover:text-foreground transition cursor-pointer"
+                  >
+                    Contacto
+                  </button>
+                </li>
               </ul>
             </div>
 

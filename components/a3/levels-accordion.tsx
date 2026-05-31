@@ -19,7 +19,7 @@ interface LevelGroup {
 export function LevelsAccordion({ modules }: LevelsAccordionProps) {
   const [expandedLevel, setExpandedLevel] = useState<number | null>(1)
   
-  // Determine unlock conditions
+  // Determine unlock conditions based on API moduleStatus
   const getUnlockInfo = (level: number, allLevels: LevelGroup[]) => {
     if (level === 1) return { isLocked: false, reason: '' }
     
@@ -30,7 +30,9 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
     
     return {
       isLocked: !isPreviousComplete,
-      reason: `Se desbloquea tras completar: ${allLevels[level - 2]?.title}`
+      reason: `Se desbloquea tras completar: ${allLevels[level - 2]?.title}`,
+      isPreviousComplete,
+      canUnlock: false // No manual unlock - API controls this
     }
   }
   
@@ -77,7 +79,7 @@ export function LevelsAccordion({ modules }: LevelsAccordionProps) {
             key={levelGroup.level}
             className={`border rounded-lg overflow-hidden transition ${
               isLocked 
-                ? 'border-white/5 bg-white/2 opacity-60' 
+                ? 'border-purple-500/20 bg-white/2 opacity-60' 
                 : 'border-white/10 hover:border-white/20'
             }`}
           >

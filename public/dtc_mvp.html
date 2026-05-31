@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DESPEGA TU CARRERA - MVP CORFO</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        /* Color Variables - Brandbook */
+        :root {
+            --purple-primary: rgba(90, 90, 150, 1);
+            --purple-bg: rgba(90, 90, 150, 0.2);
+            --purple-border: rgba(90, 90, 150, 0.6);
+            --purple-muted: rgba(90, 90, 150, 0.4);
+            --cyan-accent: rgb(80, 160, 170);
+            --cyan-accent-hover: rgba(80, 160, 170, 0.7);
+            --cyan-accent-bg: rgba(80, 160, 170, 0.2);
+            --cyan-accent-border: rgba(80, 160, 170, 0.4);
+            --bg-dark: #0f1117;
+            --bg-darker: #000000;
+            --text-white: #ffffff;
+            --text-light: #e0e0e0;
+            --text-muted: #b0b0b0;
+        }
+        
+        html {
+            background: var(--bg-darker);
+        }
+        
+        body {
+            background: var(--bg-darker);
+            color: var(--text-white);
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+        }
+        
+        /* Page Styles */
+        .page {
+            page-break-after: always;
+            padding: 60px;
+            min-height: 100vh;
+            background: var(--bg-darker);
+            color: var(--text-white);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        /* Title Page */
+        .title-page {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, rgba(90, 90, 150, 0.3) 0%, rgba(80, 160, 170, 0.1) 100%), var(--bg-darker);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .title-page::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -10%;
+            width: 500px;
+            height: 500px;
+            border-radius: 50%;
+            background: rgba(90, 90, 150, 0.15);
+            filter: blur(40px);
+        }
+        
+        .title-page::after {
+            content: '';
+            position: absolute;
+            bottom: -20%;
+            left: 0;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: rgba(80, 160, 170, 0.1);
+            filter: blur(40px);
+        }
+        
+        .title-page-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .title-page h1 {
+            font-size: 64px;
+            font-weight: 300;
+            margin-bottom: 30px;
+            letter-spacing: -1px;
+            color: var(--text-white);
+        }
+        
+        .title-page .subtitle {
+            font-size: 28px;
+            color: var(--cyan-accent);
+            margin-bottom: 20px;
+            font-weight: 500;
+        }
+        
+        .title-page .meta {
+            font-size: 14px;
+            color: var(--text-muted);
+            margin: 15px 0;
+            letter-spacing: 1px;
+        }
+        
+        .title-page .divider {
+            width: 60px;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--cyan-accent), transparent);
+            margin: 30px auto;
+        }
+        
+        .title-page .description {
+            font-size: 16px;
+            color: var(--text-light);
+            margin-top: 40px;
+            max-width: 600px;
+            font-weight: 300;
+        }
+        
+        /* Headings */
+        h1 {
+            font-size: 32px;
+            font-weight: 400;
+            margin-bottom: 30px;
+            color: var(--text-white);
+            padding-bottom: 20px;
+            border-bottom: 2px solid var(--purple-border);
+            letter-spacing: -0.5px;
+        }
+        
+        h2 {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--cyan-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin: 30px 0 15px 0;
+        }
+        
+        h3 {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-white);
+            margin: 20px 0 10px 0;
+        }
+        
+        /* Typography */
+        p {
+            font-size: 14px;
+            line-height: 1.8;
+            color: var(--text-light);
+            margin-bottom: 15px;
+            font-weight: 300;
+        }
+        
+        strong {
+            color: var(--text-white);
+            font-weight: 500;
+        }
+        
+        /* Links */
+        .link {
+            color: var(--cyan-accent);
+            text-decoration: none;
+            border-bottom: 1px solid var(--cyan-accent);
+            transition: all 0.2s ease;
+        }
+        
+        .link:hover {
+            color: var(--cyan-accent-hover);
+        }
+        
+        /* Lists */
+        ul, ol {
+            margin-left: 30px;
+            margin-bottom: 15px;
+        }
+        
+        li {
+            margin-bottom: 10px;
+            color: var(--text-light);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        li strong {
+            color: var(--cyan-accent);
+        }
+        
+        /* Sections & Cards */
+        .section {
+            margin-bottom: 30px;
+        }
+        
+        .info-box {
+            background: var(--purple-bg);
+            border: 1px solid var(--purple-border);
+            border-radius: 12px;
+            padding: 24px;
+            margin: 25px 0;
+            transition: all 0.3s ease;
+        }
+        
+        .info-box:hover {
+            border-color: var(--cyan-accent);
+            background: var(--purple-bg);
+        }
+        
+        .info-box h3 {
+            color: var(--cyan-accent);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+        }
+        
+        .info-box p {
+            margin-bottom: 8px;
+        }
+        
+        .info-box ul {
+            margin-left: 20px;
+        }
+        
+        .info-box li {
+            font-size: 13px;
+            margin-bottom: 8px;
+        }
+        
+        /* Highlight Box */
+        .highlight-box {
+            background: linear-gradient(90deg, rgba(80, 160, 170, 0.15) 0%, rgba(80, 160, 170, 0.05) 100%);
+            border-left: 3px solid var(--cyan-accent);
+            border-radius: 8px;
+            padding: 20px;
+            margin: 25px 0;
+        }
+        
+        .highlight-box p {
+            margin-bottom: 10px;
+        }
+        
+        /* Images */
+        .image-container {
+            margin: 40px 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .image-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--cyan-accent);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .image-container img {
+            max-width: 100%;
+            height: auto;
+            border: 1px solid var(--purple-border);
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            background: rgba(90, 90, 150, 0.1);
+        }
+        
+        .image-container img:hover {
+            border-color: var(--cyan-accent);
+            box-shadow: 0 8px 32px rgba(80, 160, 170, 0.15);
+        }
+        
+        /* Badge */
+        .badge {
+            display: inline-block;
+            background: var(--cyan-accent-bg);
+            color: var(--cyan-accent);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            border: 1px solid var(--cyan-accent-border);
+            margin-right: 8px;
+            margin-bottom: 8px;
+        }
+        
+        /* Divider */
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--purple-muted), transparent);
+            margin: 30px 0;
+        }
+        
+        /* Footer */
+        .footer {
+            text-align: center;
+            font-size: 12px;
+            color: var(--text-muted);
+            margin-top: auto;
+            padding-top: 30px;
+            border-top: 1px solid var(--purple-muted);
+        }
+        
+        .footer p {
+            margin: 8px 0;
+            font-size: 11px;
+        }
+        
+        /* Metrics Display */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin: 25px 0;
+        }
+        
+        .metric-item {
+            background: var(--purple-bg);
+            border: 1px solid var(--purple-border);
+            border-radius: 12px;
+            padding: 16px;
+            text-align: center;
+        }
+        
+        .metric-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--cyan-accent);
+            margin-bottom: 8px;
+        }
+        
+        .metric-label {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        /* Page Header with Logo */
+        .page-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--purple-muted);
+        }
+        
+        .page-header img {
+            height: 50px;
+            object-fit: contain;
+        }
+        
+        .page-header .page-number {
+            font-size: 12px;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Print Styles */
+        @media print {
+            * {
+                -webkit-print-color-adjust: exact !important;
+                print-color-adjust: exact !important;
+                color-adjust: exact !important;
+            }
+            
+            html {
+                background: #000000 !important;
+            }
+            
+            body {
+                background: #000000 !important;
+                margin: 0 !important;
+                padding: 0 !important;
+            }
+            
+            .page {
+                page-break-after: always;
+                padding: 40px !important;
+                background: #000000 !important;
+                min-height: auto !important;
+                height: auto !important;
+                box-shadow: none !important;
+                margin: 0 !important;
+                color: #ffffff !important;
+                display: block !important;
+                page-break-inside: avoid;
+            }
+            
+            .page-number {
+                color: #ffffff !important;
+            }
+            
+            .page img {
+                max-width: 100% !important;
+                height: auto !important;
+            }
+            
+            .title-page {
+                page-break-after: always;
+                min-height: auto !important;
+                height: auto !important;
+                background: linear-gradient(135deg, rgba(90, 90, 150, 0.3) 0%, rgba(80, 160, 170, 0.1) 100%), #000000 !important;
+                display: flex !important;
+                flex-direction: column !important;
+                justify-content: center !important;
+                align-items: center !important;
+                padding: 40px !important;
+                page-break-inside: avoid;
+            }
+            
+            .page-header {
+                page-break-inside: avoid;
+                margin-bottom: 20px !important;
+            }
+            
+            .page-header img {
+                max-width: 40px !important;
+                height: auto !important;
+                margin-right: 10px !important;
+            }
+            
+            .info-box {
+                background: rgba(90, 90, 150, 0.2) !important;
+                border: 1px solid rgba(90, 90, 150, 0.6) !important;
+                color: #ffffff !important;
+                padding: 15px !important;
+                margin: 15px 0 !important;
+                page-break-inside: avoid;
+            }
+            
+            .image-container {
+                background: #000000 !important;
+                margin: 15px 0 !important;
+                padding: 10px !important;
+                page-break-inside: avoid;
+            }
+            
+            .image-label {
+                color: #b0b0b0 !important;
+                font-size: 12px !important;
+                margin-bottom: 10px !important;
+                font-style: italic !important;
+            }
+            
+            .image-container img {
+                max-width: 100% !important;
+                height: auto !important;
+                display: block !important;
+            }
+            
+            .highlight-box {
+                background: linear-gradient(90deg, rgba(80, 160, 170, 0.15) 0%, rgba(80, 160, 170, 0.05) 100%) !important;
+                padding: 15px !important;
+                margin: 15px 0 !important;
+                page-break-inside: avoid;
+                color: #ffffff !important;
+            }
+            
+            .metrics-grid {
+                display: grid !important;
+                grid-template-columns: repeat(4, 1fr) !important;
+                gap: 15px !important;
+                margin: 15px 0 !important;
+                page-break-inside: avoid;
+            }
+            
+            .metric-item {
+                background: rgba(90, 90, 150, 0.15) !important;
+                padding: 15px !important;
+                text-align: center !important;
+                border: 1px solid rgba(80, 160, 170, 0.3) !important;
+                color: #ffffff !important;
+            }
+            
+            .metric-value {
+                font-size: 24px !important;
+                font-weight: bold !important;
+                color: rgb(80, 160, 170) !important;
+                margin-bottom: 5px !important;
+            }
+            
+            .metric-label {
+                font-size: 12px !important;
+                color: #b0b0b0 !important;
+            }
+            
+            .badge {
+                display: inline-block !important;
+                background: rgba(80, 160, 170, 0.2) !important;
+                border: 1px solid rgba(80, 160, 170, 0.5) !important;
+                color: rgb(80, 160, 170) !important;
+                padding: 5px 10px !important;
+                margin: 5px 5px 5px 0 !important;
+                border-radius: 4px !important;
+                font-size: 11px !important;
+                font-weight: 500 !important;
+            }
+            
+            .divider {
+                border-top: 1px solid rgba(90, 90, 150, 0.3) !important;
+                margin: 20px 0 !important;
+            }
+            
+            .footer {
+                text-align: center !important;
+                font-size: 11px !important;
+                color: #b0b0b0 !important;
+                margin-top: 20px !important;
+                page-break-inside: avoid;
+            }
+            
+            h1, h2, h3 {
+                page-break-after: avoid;
+                color: #ffffff !important;
+                margin: 15px 0 10px 0 !important;
+            }
+            
+            h1 {
+                font-size: 28px !important;
+            }
+            
+            h2 {
+                font-size: 20px !important;
+            }
+            
+            h3 {
+                font-size: 16px !important;
+            }
+            
+            ul, ol {
+                margin: 10px 0 10px 20px !important;
+                color: #ffffff !important;
+            }
+            
+            li {
+                margin: 5px 0 !important;
+                color: #ffffff !important;
+            }
+            
+            .print-button {
+                display: none !important;
+            }
+            
+            p {
+                color: #ffffff !important;
+                margin: 10px 0 !important;
+                line-height: 1.6 !important;
+            }
+        }
+        
+        .print-button {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            z-index: 1000;
+            background: var(--cyan-accent);
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            box-shadow: 0 4px 12px rgba(80, 160, 170, 0.3);
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .print-button:hover {
+            background: var(--cyan-accent-hover);
+            box-shadow: 0 6px 20px rgba(80, 160, 170, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .print-button:active {
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+<!-- PORTADA -->
+<div class="page title-page">
+    <div class="title-page-content">
+        <img src="/dtc-logo.png" alt="DTC Logo" style="height: 120px; margin-bottom: 40px; object-fit: contain;">
+        <h1>DESPEGA TU CARRERA</h1>
+        <div class="divider"></div>
+        <p class="subtitle">Respaldo del MVP</p>
+        <p class="meta">CORFO SEMILLA INICIA 2026</p>
+        <p class="description">Plataforma de Inteligencia Artificial para Desarrollo Profesional y Empleabilidad</p>
+    </div>
+</div>
+
+<!-- PÁGINA 1: IDENTIFICACIÓN DEL MVP -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Identificación</span>
+    </div>
+    <h1>Identificación del MVP</h1>
+    
+    <div class="section">
+        <p><strong>Despega Tu Carrera</strong> es una plataforma digital impulsada por inteligencia artificial orientada al desarrollo personal, orientación laboral y empleabilidad. El MVP funcional incluye experiencia de usuario optimizada, módulos de diagnóstico inteligente, resultados personalizados, rutas de avance y entrenamiento práctico con coaching IA.</p>
+        
+        <p>El MVP valida la propuesta de valor principal: <strong>transformar el autoconocimiento del usuario en acciones concretas y medibles para mejorar su empleabilidad y desarrollo profesional.</strong></p>
+    </div>
+    
+    <div class="info-box">
+        <h3>Acceso a la Plataforma</h3>
+        <p>Portal Principal: <span class="link">https://www.despegatucarrera.com</span></p>
+        <p>Flujo del Programa: <span class="link">https://www.despegatucarrera.com/despega</span></p>
+    </div>
+    
+    <h2>Módulos del MVP Funcional</h2>
+    <ul>
+        <li><strong>El Ritual (C1)</strong> — Claridad de identidad profesional y autoconocimiento basado en perfil DISC</li>
+        <li><strong>La Exploración (A1)</strong> — Auditoría de fortalezas, debilidades y áreas de desarrollo</li>
+        <li><strong>La Realidad (C2)</strong> — Claridad de objetivo profesional y análisis del mercado laboral</li>
+        <li><strong>Acciones Estratégicas (A2)</strong> — Ruta personalizada de 90 días con hitos y métricas</li>
+        <li><strong>Entrenamiento (A3)</strong> — Simulaciones de entrevista con coaching IA y 3 niveles de dificultad</li>
+        <li><strong>Documentos Inteligentes (A4)</strong> — CV, LinkedIn y portafolio personalizados con IA</li>
+    </ul>
+    
+    <h2>Stack Tecnológico</h2>
+    <ul>
+        <li><strong>Frontend:</strong> Next.js 15 con React Server Components</li>
+        <li><strong>Backend:</strong> API Routes con inteligencia artificial integrada</li>
+        <li><strong>Base de Datos:</strong> Supabase (PostgreSQL con Row Level Security)</li>
+        <li><strong>Autenticación:</strong> Supabase Auth con email/password y OAuth</li>
+    </ul>
+    
+    <div class="divider"></div>
+</div>
+
+<!-- PÁGINA 2: INICIO Y AUTENTICACIÓN -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Inicio</span>
+    </div>
+    <h1>Inicio y Autenticación del Usuario</h1>
+    
+    <p>La plataforma inicia con un hero profesional que comunica la propuesta de valor inmediatamente. El usuario accede mediante autenticación moderna (Google, LinkedIn) o cuentas demo para exploración inicial del MVP.</p>
+    
+    <div class="image-container">
+        <div class="image-label">Página de Inicio — Propuesta de Valor Principal</div>
+        <img src="/corfo-mvp/ss-01-home-hero.png" alt="Home Hero" style="max-height: 500px; object-fit: cover;">
+    </div>
+    
+    <h2>Características de la Página de Inicio</h2>
+    <ul>
+        <li>Propuesta de valor clara y directa</li>
+        <li>Opciones de autenticación flexibles</li>
+        <li>Acceso a cuentas de demostración para usuarios nuevos</li>
+        <li>Diseño responsive optimizado para móvil y desktop</li>
+    </ul>
+</div>
+
+<!-- PÁGINA 3: DASHBOARD PRINCIPAL -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Dashboard</span>
+    </div>
+    <h1>Dashboard Principal — Centro de Comando</h1>
+    
+    <p>El dashboard es el corazón de la plataforma. Muestra métricas en tiempo real (Metas Activas, Libros Leídos, Puntos Totales), DEBUG INFO del usuario y acceso rápido a próximos pasos personalizados. La interfaz está diseñada siguiendo el brandbook con colores púrpura y cyan.</p>
+    
+    <div class="image-container">
+        <div class="image-label">Tu Dashboard — Bienvenida, Métricas en Vivo y Próximos Pasos</div>
+        <img src="/corfo-mvp/ss-02-dashboard.png" alt="Dashboard" style="max-height: 500px; object-fit: cover;">
+    </div>
+    
+    <div class="metrics-grid">
+        <div class="metric-item">
+            <div class="metric-value">6</div>
+            <div class="metric-label">Módulos</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-value">90</div>
+            <div class="metric-label">Días Plan</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-value">100%</div>
+            <div class="metric-label">Funcional</div>
+        </div>
+        <div class="metric-item">
+            <div class="metric-value">IA</div>
+            <div class="metric-label">Integrada</div>
+        </div>
+    </div>
+</div>
+
+<!-- PÁGINA 4: PLAN DE 90 DÍAS -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Plan 90 Días</span>
+    </div>
+    <h1>Plan de 90 Días y Próximos Pasos</h1>
+    
+    <p>El sistema presenta un plan estructurado de transformación en 90 días con próximos pasos recomendados personalizados según el perfil del usuario. Los usuarios acceden a módulos de evaluación o exploran la biblioteca de recursos de forma independiente.</p>
+    
+    <div class="image-container">
+        <div class="image-label">Plan de 90 Días con Recomendaciones Personalizadas</div>
+        <img src="/corfo-mvp/ss-03-plan-90.png" alt="Plan 90" style="max-height: 500px; object-fit: cover;">
+    </div>
+    
+    <h2>Estructura del Plan de 90 Días</h2>
+    <ul>
+        <li><strong>Semana 1-4:</strong> Diagnóstico completo y claridad de objetivo</li>
+        <li><strong>Semana 5-8:</strong> Acciones estratégicas y primeros entrenamientos</li>
+        <li><strong>Semana 9-12:</strong> Intensificación de habilidades y preparación laboral</li>
+    </ul>
+    
+    <div class="highlight-box">
+        <h3>Recomendación Personalizada</h3>
+        <p>Cada usuario recibe recomendaciones dinámicas basadas en su desempeño en diagnósticos previos y su perfil DISC. El sistema aprende en cada interacción.</p>
+    </div>
+</div>
+
+<!-- PÁGINA 5: MÓDULOS DEL PROGRAMA -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Módulos</span>
+    </div>
+    <h1>Módulos del Programa — Las 4 Fases</h1>
+    
+    <p>Despega Tu Carrera organiza el journey del usuario en 4 fases complementarias. Cada fase proporciona coaching IA contextual, retroalimentación en tiempo real y adaptación a las necesidades individuales del usuario.</p>
+    
+    <div class="image-container">
+        <div class="image-label">Opciones de Módulos — Próximos Pasos Interactivos</div>
+        <img src="/corfo-mvp/ss-04-ritual-opciones.png" alt="Módulos" style="max-height: 500px; object-fit: cover;">
+    </div>
+    
+    <div class="info-box">
+        <h3>Las 4 Fases de Transformación</h3>
+        <ul>
+            <li><strong>CLARIDAD 1 (C1):</strong> El Ritual — Autoconocimiento y perfil profesional</li>
+            <li><strong>ACCIÓN 1 (A1):</strong> La Exploración — Auditoría de competencias y fortalezas</li>
+            <li><strong>CLARIDAD 2 (C2):</strong> La Realidad — Objetivo profesional específico</li>
+            <li><strong>ACCIÓN 2-4 (A2-A4):</strong> Entrenamiento integral con IA, documentos y simulaciones</li>
+        </ul>
+    </div>
+</div>
+
+<!-- PÁGINA 6: A3 ENTREVISTAS INTELIGENTES -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">A3 Entrevistas</span>
+    </div>
+    <h1>A3 — Módulo de Entrevistas Inteligentes</h1>
+    
+    <p>El módulo A3 proporciona entrevistas simuladas con coaching IA que adapta dinámicamente las preguntas según el perfil del usuario, sector objetivo y desempeño previo. Incluye 3 niveles de dificultad (Básico, Avanzado, Pro) con retroalimentación contextual inmediata.</p>
+    
+    <div class="image-container">
+        <div class="image-label">Centro de Evaluación — Acceso a Entrevistas Simuladas</div>
+        <img src="/corfo-mvp/ss-05-modulos-expand.png" alt="A3 Módulo" style="max-height: 500px; object-fit: cover;">
+    </div>
+    
+    <h2>Características del Módulo A3</h2>
+    <ul>
+        <li><strong>3 Niveles de Dificultad:</strong> Básico, Avanzado, Pro (adaptativos según perfil DISC)</li>
+        <li><strong>Coaching IA Contextual:</strong> Feedback inmediato basado en respuestas del usuario</li>
+        <li><strong>Preparación Integral:</strong> Habilidades técnicas, blandas y comportamentales</li>
+        <li><strong>Simulación Realista:</strong> Preguntas basadas en sectores y roles específicos</li>
+    </ul>
+    
+    <div class="badge">Premium Feature</div>
+    <div class="badge">IA Contextual</div>
+    <div class="badge">Adaptativos</div>
+</div>
+
+<!-- PÁGINA 7: ESTADO ACTUAL Y FUNCIONALIDADES -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Estado Actual</span>
+    </div>
+    <h1>Estado Actual y Funcionalidades Implementadas</h1>
+    
+    <div class="image-container">
+        <div class="image-label">Vista Completa del Sistema — Footer y Acceso a Módulos</div>
+        <img src="/corfo-mvp/ss-06-a3-preview.png" alt="Vista Completa" style="max-height: 500px; object-fit: cover;">
+    </div>
+    
+    <h2>Funcionalidades Operativas</h2>
+    <ul>
+        <li><strong>Autenticación:</strong> Email/password y OAuth (Google, LinkedIn)</li>
+        <li><strong>Dashboard:</strong> Métricas en tiempo real, próximos pasos personalizados</li>
+        <li><strong>Planes Personalizados:</strong> 90 días con hitos y recomendaciones dinámicas</li>
+        <li><strong>Módulos de Evaluación:</strong> 6 módulos integrados con IA contextual</li>
+        <li><strong>Coaching IA:</strong> Sistema de retroalimentación inteligente</li>
+        <li><strong>Documentos Generados:</strong> CV, LinkedIn, portafolio personalizados</li>
+        <li><strong>Base de Datos Segura:</strong> Supabase con Row Level Security (RLS)</li>
+    </ul>
+    
+    <div class="highlight-box">
+        <h3>Validación Completada</h3>
+        <p>El MVP ha sido validado internamente para navegación, coherencia de flujo, claridad de contenidos, diseño visual e integración entre módulos. El sistema es completamente funcional y listo para producción.</p>
+    </div>
+    
+    <h2>Objetivo de la Postulación CORFO</h2>
+    <p>Avanzar desde este MVP funcional hacia validación comercial robusta, incorporando usuarios externos, instituciones educativas y organizaciones interesadas en fortalecer capital humano, empleabilidad y desarrollo profesional.</p>
+</div>
+
+<!-- PÁGINA 8: CONCLUSIÓN Y PRÓXIMOS PASOS -->
+<div class="page">
+    <div class="page-header">
+        <img src="/dtc-logo.png" alt="DTC Logo">
+        <span class="page-number">Conclusión</span>
+    </div>
+    <h1>Conclusión y Próximos Pasos</h1>
+    
+    <div class="info-box">
+        <h3>Estado del MVP</h3>
+        <ul>
+            <li>✓ 6 módulos educativos integrados y funcionales</li>
+            <li>✓ Sistema de IA adaptativo operativo</li>
+            <li>✓ Flujo de usuario validado end-to-end</li>
+            <li>✓ Base de datos segura con RLS implementado</li>
+            <li>✓ Interfaz de usuario con brandbook aplicado</li>
+            <li>✓ Stack profesional: Next.js 15 + Supabase + IA</li>
+        </ul>
+    </div>
+    
+    <h2>Próximos Pasos Estratégicos</h2>
+    <ul>
+        <li>Validación de product-market fit con cohortes externas</li>
+        <li>Expansión de módulos de entrenamiento y especialización</li>
+        <li>Integración con ecosistema de empleo (bolsas laborales, empresas reclutadoras)</li>
+        <li>Certificación y reconocimiento de competencias desarrolladas</li>
+        <li>Expansión a nuevos mercados y segmentos de usuarios</li>
+    </ul>
+    
+    <div class="highlight-box">
+        <p><strong>Despega Tu Carrera</strong> es una solución probada, funcional y lista para escalar con apoyo de CORFO Semilla Inicia.</p>
+    </div>
+    
+    <div class="divider"></div>
+    <div class="footer">
+        <p>Documento generado: Mayo 2026</p>
+        <p>Plataforma: Despega Tu Carrera | Postulación: CORFO Semilla Inicia 2026</p>
+        <p>Brandbook aplicado: Colores púrpura y cyan | Stack: Next.js 15 + Supabase</p>
+    </div>
+    </div>
+
+    <!-- Print Button -->
+    <button class="print-button" onclick="downloadPDF()">📥 Descargar PDF</button>
+
+    <script>
+        function downloadPDF() {
+            const button = document.querySelector('.print-button');
+            button.disabled = true;
+            button.textContent = '⏳ Preparando PDF...';
+
+            // Usar window.print() con un delay para que el botón actualice
+            setTimeout(() => {
+                window.print();
+                button.disabled = false;
+                button.textContent = '📥 Descargar PDF';
+            }, 200);
+        }
+
+        // Keyboard shortcut: Ctrl+Shift+P
+        document.addEventListener('keydown', (e) => {
+            if (e.ctrlKey && e.shiftKey && e.code === 'KeyP') {
+                e.preventDefault();
+                downloadPDF();
+            }
+        });
+
+        console.log('[v0] Script PDF inicializado - window.print()');
+    </script>
+
+</body>
+</html>

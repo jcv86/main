@@ -61,7 +61,7 @@ export function ProgressBar({
       </div>
       
       {/* Main progress bar */}
-      <div className="relative h-3 w-full bg-white/5 rounded-full overflow-hidden border border-white/10">
+      <div className="relative h-3 w-full bg-purple-500/5 rounded-full overflow-hidden border border-white/10">
         <div
           className="h-full bg-gradient-to-r from-training to-training/60 transition-all duration-500 ease-out rounded-full shadow-lg shadow-training/50"
           style={{ width: `${Math.min(displayPercentage, 100)}%` }}

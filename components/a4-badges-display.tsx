@@ -76,7 +76,7 @@ export function A4BadgesDisplay({ data }: A4BadgesDisplayProps) {
             </div>
           </div>
 
-          <div className="bg-white/50 dark:bg-black/20 p-4 rounded-[28px] space-y-2">
+          <div className="bg-purple-500/50 dark:bg-black/20 p-4 rounded-[28px] space-y-2">
             <div className="flex items-center justify-between">
               <span className="text-sm font-semibold">Nivel {data.level}</span>
               <span className="text-xs text-muted-foreground">

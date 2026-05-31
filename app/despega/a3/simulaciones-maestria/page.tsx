@@ -14,7 +14,7 @@ import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 
-const GUIDED_INTERVIEW_QUESTIONS = [
+const GUIDED_INTERVIEW_PREGUNTAS = [
   {
     id: 1,
     type: 'intro',
@@ -83,8 +83,8 @@ export default function GuidedInterviewPage() {
   const router = useRouter()
   const supabase = createClient()
 
-  const currentQuestion = GUIDED_INTERVIEW_QUESTIONS[currentQuestionIndex]
-  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+  const currentQuestion = GUIDED_INTERVIEW_PREGUNTAS[currentQuestionIndex]
+  const progress = ((currentQuestionIndex + 1) / GUIDED_INTERVIEW_PREGUNTAS.length) * 100
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -134,13 +134,13 @@ export default function GuidedInterviewPage() {
     }
   }
 
-  const handleNext = () => {
-    if (currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1) {
+  const handleSiguiente = () => {
+    if (currentQuestionIndex < GUIDED_INTERVIEW_PREGUNTAS.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  const handlePrevious = () => {
+  const handleAnterior = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
@@ -162,7 +162,7 @@ export default function GuidedInterviewPage() {
           user_id: user.id,
           simulation_type: 'guided',
           responses: responses,
-          total_questions: GUIDED_INTERVIEW_QUESTIONS.length,
+          total_questions: GUIDED_INTERVIEW_PREGUNTAS.length,
           completed_at: new Date().toISOString()
         })
 
@@ -171,7 +171,7 @@ export default function GuidedInterviewPage() {
       // Calculate score (simple heuristic based on response length and completeness)
       const totalLength = Object.values(responses).reduce((acc, r) => acc + r.length, 0)
       const avgLength = totalLength / Object.keys(responses).length
-      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_QUESTIONS.length) * 100
+      const completeness = (Object.keys(responses).length / GUIDED_INTERVIEW_PREGUNTAS.length) * 100
       const calculatedScore = Math.round((avgLength / 200) * 50 + (completeness / 100) * 50)
 
       setScore(Math.min(calculatedScore, 100))
@@ -201,7 +201,7 @@ export default function GuidedInterviewPage() {
             </p>
           </div>
 
-          <Card className="p-6">
+          <Card className="rounded-[2px] p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
             <ul className="space-y-3 text-muted-foreground dark:text-white/85">
               <li className="flex gap-3">
@@ -223,7 +223,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-blue/80 hover:bg-blue/70">
+            <Button onClick={() => handleSiguiente()} className="flex-1 bg-blue/80 hover:bg-blue/70">
               Ver Análisis Detallado
             </Button>
           </div>
@@ -234,10 +234,10 @@ export default function GuidedInterviewPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      {/* General Progress Bar */}
+      {/* General Progreso Bar */}
       <A3GeneralProgress 
         currentStep={currentQuestionIndex + 1}
-        totalSteps={GUIDED_INTERVIEW_QUESTIONS.length}
+        totalSteps={GUIDED_INTERVIEW_PREGUNTAS.length}
         currentLabel={`Pregunta ${currentQuestionIndex + 1}`}
         completedSections={0}
         totalSections={4}
@@ -252,21 +252,21 @@ export default function GuidedInterviewPage() {
           </Button>
         </Link>
 
-        {/* Progress */}
+        {/* Progreso */}
         <div className="space-y-2">
           <div className="flex justify-between items-center">
             <h1 className="text-3xl font-bold text-muted/90 dark:text-white">
               Entrevista Guiada - Práctica Básica
             </h1>
             <Badge variant="secondary">
-              Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_QUESTIONS.length}
+              Pregunta {currentQuestionIndex + 1}/{GUIDED_INTERVIEW_PREGUNTAS.length}
             </Badge>
           </div>
           <Progress value={progress} className="h-2" />
         </div>
 
         {/* Question Card */}
-        <Card className="p-8 border-2 border-blue/30 dark:border-blue/10">
+        <Card className="rounded-[2px] p-8 border-2 border-blue/30 dark:border-blue/10">
           <div className="space-y-6">
             {/* Question */}
             <div>
@@ -351,7 +351,7 @@ export default function GuidedInterviewPage() {
         {/* Navigation */}
         <div className="flex gap-4 justify-between">
           <Button
-            onClick={handlePrevious}
+            onClick={handleAnterior}
             disabled={currentQuestionIndex === 0}
             variant="outline"
           >
@@ -360,18 +360,18 @@ export default function GuidedInterviewPage() {
           </Button>
 
           <div className="flex gap-2">
-            {currentQuestionIndex < GUIDED_INTERVIEW_QUESTIONS.length - 1 ? (
+            {currentQuestionIndex < GUIDED_INTERVIEW_PREGUNTAS.length - 1 ? (
               <>
                 <Button
                   onClick={() => setCurrentQuestionIndex(currentQuestionIndex + 2)}
-                  disabled={currentQuestionIndex + 2 >= GUIDED_INTERVIEW_QUESTIONS.length}
+                  disabled={currentQuestionIndex + 2 >= GUIDED_INTERVIEW_PREGUNTAS.length}
                   variant="outline"
                 >
                   <SkipForward className="w-4 h-4 mr-2" />
-                  Saltar
+                  SkipForward
                 </Button>
                 <Button
-                  onClick={handleNext}
+                  onClick={handleSiguiente}
                   className="bg-blue/80 hover:bg-blue/70"
                 >
                   Siguiente
@@ -391,7 +391,7 @@ export default function GuidedInterviewPage() {
         </div>
 
         {/* Tips */}
-        <Card className="bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
+        <Card className="rounded-[2px] bg-yellow/5 dark:bg-amber-900/20 border-yellow/30 dark:border-yellow">
           <CardContent className="pt-6 text-sm text-amber-900 dark:text-amber-200 space-y-2">
             <p className="font-semibold">Consejos de la Entrevista Guiada:</p>
             <ul className="list-disc list-inside space-y-1">

@@ -1,135 +1,148 @@
-import { createClient, createAdminClient } from '@/lib/supabase/server'
+import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { executeCommand } from '@/lib/dtc-agentos/commands/execute-command'
 
-/**
- * API endpoint to save A1 Cerebral test results to Supabase
- * Expects user_id, responses, questions, and disc_profile in request body
- */
 export async function POST(request: NextRequest) {
   try {
-    const body = await request.json() as {
-      user_id: string
-      responses: unknown
-      questions: unknown
-      disc_profile: Record<string, number>
-    }
-    const { responses, questions, disc_profile, user_id } = body
+    const body = await request.json()
+    const { responses, questions, disc_profile } = body
 
     const supabase = await createClient()
-    const supabaseAdmin = createAdminClient()
+
+    // Get the authenticated user from the session
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
     
-    if (!user_id) {
-      console.error('[v0] No user_id provided')
-      return NextResponse.json({ error: 'User ID required' }, { status: 400 })
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'User must be authenticated to save assessment results' },
+        { status: 401 }
+      )
     }
 
-    // Fetch auth user details
-    const { data: authUser, error: authError } = await supabaseAdmin.auth.admin.getUserById(user_id)
-    const userEmail = authUser?.user?.email || ''
-    console.log('[v0] User email from auth:', userEmail)
-    
-    // Ensure user exists in public users table (create if missing)
-    // Use admin client to bypass RLS - this handles OAuth users who don't have a public.users record
-    try {
-      const { error: userCheckError } = await supabaseAdmin
+    // Ensure user exists in public.users (required for FK constraint)
+    const { data: existingUser } = await supabase
+      .from('users')
+      .select('id')
+      .eq('id', user.id)
+      .single()
+
+    if (!existingUser) {
+      // Create the public.users record if missing
+      const { error: userInsertError } = await supabase
         .from('users')
-        .upsert(
-          {
-            id: user_id,
-            email: userEmail,
-            full_name: authUser?.user?.user_metadata?.full_name || authUser?.user?.user_metadata?.name || '',
-            avatar_url: authUser?.user?.user_metadata?.avatar_url || authUser?.user?.user_metadata?.picture || '',
-            created_at: new Date().toISOString(),
-            updated_at: new Date().toISOString(),
-          },
-          { onConflict: 'id', ignoreDuplicates: true }
-        )
-      
-      if (userCheckError) {
-        console.error('[v0] Error ensuring user in public table:', userCheckError)
-        // Don't fail - user creation is secondary to test data persistence
-        console.log('[v0] Continuing with test save despite user creation error')
-      } else {
-        console.log('[v0] User record ensured in public users table')
+        .insert({
+          id: user.id,
+          email: user.email,
+          full_name: user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0],
+          avatar_url: user.user_metadata?.avatar_url || null,
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        })
+        .select()
+        .single()
+
+      if (userInsertError && userInsertError.code !== '23505') {
+        // 23505 = unique violation (user already exists, which is fine)
+        console.error('[v0] Failed to create public.users record:', userInsertError)
       }
-    } catch (err) {
-      console.error('[v0] Exception during user creation:', err)
-      // Continue - user record is optional for test data
     }
-    
-    // Calculate dominant and secondary patterns from scores
-    const sortedDimensions = Object.entries(disc_profile).sort((a, b) => b[1] - a[1])
-    const dominant_pattern = String(sortedDimensions[0]?.[0] || 'D')
-    const secondary_pattern = String(sortedDimensions[1]?.[0] || 'I')
-    
-    console.log('[v0] Patterns - Dominant:', dominant_pattern, 'Secondary:', secondary_pattern)
-    
-    // Prepare insert data
-    const insertData = {
-      user_id,
-      responses,
-      questions,
-      disc_profile,
-      dominant_pattern,
-      secondary_pattern,
-      completed_at: new Date().toISOString()
+
+    // Calculate dominant pattern from disc_profile scores
+    let dominant_pattern = 'D'
+    if (disc_profile && typeof disc_profile === 'object') {
+      const scores = {
+        D: disc_profile.D || 0,
+        I: disc_profile.I || 0,
+        S: disc_profile.S || 0,
+        C: disc_profile.C || 0,
+      }
+      
+      const maxScore = Math.max(...Object.values(scores))
+      const dominantLetter = Object.keys(scores).find(
+        key => scores[key as keyof typeof scores] === maxScore
+      )
+      
+      if (dominantLetter) {
+        dominant_pattern = dominantLetter
+      }
     }
-    
-    console.log('[v0] Inserting into a1_cerebral_assessment')
-    
-    // Insert with explicit error handling
+
+    const saveData = {
+      user_id: user.id,
+      responses: responses,
+      questions: questions,
+      disc_profile: disc_profile,
+      dominant_pattern: dominant_pattern,
+      completed_at: new Date().toISOString(),
+    }
+
+    // Save to a1_cerebral_assessment table
     const { data, error } = await supabase
       .from('a1_cerebral_assessment')
-      .insert([insertData])
+      .insert(saveData)
       .select()
-    
+      .single()
+
     if (error) {
-      console.error('[v0] Supabase insert error:', {
-        message: error.message,
-        code: error.code,
-        details: error.details,
-        hint: error.hint
+      console.error('[v0] Supabase insert error:', error.message, error.code)
+      throw new Error(`Database error: ${error.message}`)
+    }
+
+    // Trigger auto-detection webhook for job matching
+    try {
+      await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/webhooks/auto-detection`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'x-webhook-signature': 'internal'
+        },
+        body: JSON.stringify({
+          event: 'a1_completed',
+          userId: user.id,
+          data: { assessment_id: data?.id }
+        })
       })
-      return NextResponse.json(
-        { error: error.message || 'Failed to save test results' },
-        { status: 400 }
-      )
+      console.log('[v0] A1 completion webhook triggered')
+    } catch (webhookError) {
+      console.warn('[v0] Warning: Could not trigger auto-detection webhook:', webhookError)
     }
-    
-    console.log('[v0] [CANONICAL] Successfully saved A1 Cerebral assessment')
-    
-    // Update despega_user_profiles to mark A1 test as completed with CANONICAL FLAGS
-    console.log('[v0] [CANONICAL] Updating despega_user_profiles for user:', user_id)
-    
-    const { error: profileError } = await supabaseAdmin
-      .from('despega_user_profiles')
-      .upsert({
-        user_id,
-        a1_cerebral_completed: true,
-        a1_cerebral_completed_at: new Date().toISOString(),
-        a1_report_seen: true,
-        a1_report_seen_at: new Date().toISOString()
-      }, { onConflict: 'user_id' })
-    
-    if (profileError) {
-      console.error('[v0] [CANONICAL] Error updating user profile:', profileError)
-      return NextResponse.json(
-        { error: 'Test saved but failed to update profile: ' + profileError.message },
-        { status: 400 }
-      )
+
+    // Capture memory from A1 assessment
+    try {
+      const result = await executeCommand({
+        userId: user.id,
+        commandId: '/dtc:a1-identity-audit',
+        agentId: 'coach',
+        modeId: 'identity-audit',
+        params: {
+          testId: data?.id,
+          responses,
+          discProfile: disc_profile,
+          dominantPattern: dominant_pattern,
+        },
+      })
+
+      if (!result.success) {
+        console.error('[v0] Failed to capture A1 memory:', result.error)
+        // Don't fail the whole request if memory capture fails
+      } else {
+        console.log('[v0] A1 memory captured successfully:', result.memoryUpdates)
+      }
+    } catch (memoryError) {
+      console.error('[v0] Exception capturing A1 memory:', memoryError)
+      // Don't fail the whole request if memory capture fails
     }
-    
-    console.log('[v0] [CANONICAL] User profile updated with A1 completion flags')
-    
+
     return NextResponse.json({
       success: true,
-      data: data[0]
-    })
-    
+      assessmentId: data?.id,
+      profile: disc_profile,
+    }, { status: 200 })
   } catch (err) {
-    console.error('[v0] Unexpected error in A1 Cerebral save:', err)
+    console.error('[v0] Error in a1-cerebral-save endpoint:', err)
+    const errorMsg = err instanceof Error ? err.message : String(err)
     return NextResponse.json(
-      { error: 'Internal server error' },
+      { error: `Cerebral save error: ${errorMsg}` },
       { status: 500 }
     )
   }

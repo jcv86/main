@@ -1,133 +1,372 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { ArrowRight, Zap, Award, Rocket, Loader2, Coins } from 'lucide-react'
-import { mockDashboardData, DashboardState } from './data/mock-dashboard'
-import { A3GeneralProgress } from '@/components/a3-general-progress'
-import { ProgressBar } from '@/components/a3/progress-bar'
-import { SkillsGrid } from '@/components/a3/skills-grid'
-import { LevelsAccordion } from '@/components/a3/levels-accordion'
-import { BadgesGrid } from '@/components/a3/badges-grid'
-import { Pillar3DetailedProgress } from '@/components/pillar3-detailed-progress'
+import { Card } from '@/components/ui/card'
+import { Progress } from '@/components/ui/progress'
+import { 
+  ArrowRight, 
+  Loader2, 
+  CheckCircle2, 
+  Lock, 
+  Play, 
+  RotateCcw,
+  User,
+  Gem,
+  FileText,
+  Search,
+  MessageSquare,
+  Users,
+  Mic,
+  Video,
+  AlertTriangle,
+  Trophy,
+  MapPin
+} from 'lucide-react'
+import { A2ProgressDisplay } from '@/components/a2-progress-display'
 
-export default function A3EntrenamientoIntensivo() {
-  const searchParams = useSearchParams()
-  const refreshParam = searchParams?.get('refresh')
-  
-  const [dashboardData, setDashboardData] = useState<DashboardState>(mockDashboardData)
-  const [hoveredStat, setHoveredStat] = useState<number | null>(null)
-  const [isLoading, setIsLoading] = useState(true)
-  const [completedSections, setCompletedSections] = useState(0)
+// ============================================
+// A3 BASIC LEVEL TRAINING PATH
+// XP Total: 1,340 XP across 10 modules
+// ============================================
 
-  // Calculate completed sections (Pillar 3 has 4 sections)
-  // A section is complete when all its modules are 100% done
-  const calculateCompletedSections = (modules: typeof mockDashboardData.modules) => {
-    // Group modules by section (level)
-    const sections = [1, 2, 3, 4] // 4 sections in Pillar 3
-    let completed = 0
+// PILLAR 3 COLORS
+// Primary: rgb(170, 70, 170) - magenta/purple
+// Accent: rgb(80, 160, 170) - teal
+// Neutrals: black, white, gray shades only
 
-    sections.forEach(sectionNum => {
-      const sectionModules = modules.filter(m => m.level === sectionNum)
-      const allComplete = sectionModules.length > 0 && sectionModules.every(m => m.status === 'completed')
-      if (allComplete) completed++
-    })
+const PILLAR3_PRIMARY = 'rgb(170, 70, 170)'
+const PILLAR3_ACCENT = 'rgb(80, 160, 170)'
 
-    return completed
+interface Module {
+  id: string
+  number: number
+  title: string
+  shortDescription: string
+  format: string
+  inputMode: string
+  interviewRequirement: string
+  xp: number
+  mainOutput: string
+  cta: string
+  tags: string[]
+  requiredActivities: string[]
+  icon: React.ReactNode
+  route: string
+}
+
+const BASIC_LEVEL_MODULES: Module[] = [
+  {
+    id: 'career-mirror',
+    number: 1,
+    title: 'Espejo de Carrera',
+    shortDescription: 'Comprende tu perfil profesional, tu diagnóstico del Nivel Básico, tus fortalezas, bloqueadores, y cómo los entrevistadores pueden percibirte.',
+    format: 'Módulo de autodescubrimiento',
+    inputMode: 'Tarjetas interactivas, reflexiones breves, confirmaciones',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 80,
+    mainOutput: 'Tarjeta de Espejo de Carrera',
+    cta: 'Comenzar Espejo de Carrera',
+    tags: ['Sin Entrevista', 'Autodescubrimiento', 'Claridad de Perfil'],
+    requiredActivities: ['Revisar diagnóstico', 'Confirmarar precisión del diagnóstico', 'Seleccionar dirección principal de carrera', 'Definir identidad profesional actual', 'Save Tarjeta de Espejo de Carrera'],
+    icon: <User className="w-5 h-5" />,
+    route: '/despega/a3/career-mirror'
+  },
+  {
+    id: 'value-mining-lab',
+    number: 2,
+    title: 'Laboratorio de Minería de Valor',
+    shortDescription: 'Descubre el valor real oculto en tu experiencia laboral anterior y convierte tareas en logros.',
+    format: 'Laboratorio de descubrimiento de logros',
+    inputMode: 'Entrada de texto por defecto. Modo coach guiado opcional.',
+    interviewRequirement: 'Sin entrevista requerida. Soporte de coach opcional disponible.',
+    xp: 100,
+    mainOutput: 'Banco de Logros Básico',
+    cta: 'Abrir Laboratorio de Valor',
+    tags: ['Constructor de Texto', 'Coach Opcional', 'Laboratorio de Logros'],
+    requiredActivities: ['Escribir 5 tareas de experiencia anterior', 'Transformar tareas en declaraciones de valor', 'Completar transformación de responsabilidades', 'Crear 3 ejemplos de logros', 'Seleccionar 1 historia fuerte para respuestas futuras de entrevista'],
+    icon: <Gem className="w-5 h-5" />,
+    route: '/despega/a3/value-mining-lab'
+  },
+  {
+    id: 'cv-builder-studio',
+    number: 3,
+    title: 'Estudio Constructor de CV',
+    shortDescription: 'Crea o mejora un CV claro y atractivo para reclutadores usando el valor descubierto en módulos anteriores.',
+    format: 'Módulo de creación de documentos y escritura profesional',
+    inputMode: 'Carga de CV, entrada de texto manual, constructor guiado',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 120,
+    mainOutput: 'Borrador de CV Básico',
+    cta: 'Construir Mi CV',
+    tags: ['Constructor de CV', 'Sin Entrevista', 'Estudio de Documentos'],
+    requiredActivities: ['Cargar o crear base de CV', 'Construir resumen profesional', 'Mejorar al menos 3 puntos de experiencia', 'Organizar sección de habilidades', 'Completar lista de verificación de información faltante'],
+    icon: <FileText className="w-5 h-5" />,
+    route: '/despega/a3/cv-builder-studio'
+  },
+  {
+    id: 'job-decoder',
+    number: 4,
+    title: 'Decodificador de Ofertas',
+    shortDescription: 'Analiza ofertas de trabajo reales para identificar requisitos clave, brechas de habilidades y estrategia de aplicación personalizada.',
+    format: 'Herramienta de análisis de ofertas de trabajo',
+    inputMode: 'Pegado de ofertas de trabajo, análisis guiado, mapeo de habilidades',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 100,
+    mainOutput: 'Mapa de Correspondencia de Oferta',
+    cta: 'Decodificar Oferta de Trabajo',
+    tags: ['Análisis de Ofertas', 'Sin Entrevista', 'Correspondencia de Rol'],
+    requiredActivities: ['Pegar descripción de trabajo', 'Identificar requisitos clave', 'Categorizar obligatorios vs. opcionales', 'Mapear experiencia actual', 'Crear estrategia de aplicación personalizada'],
+    icon: <Search className="w-5 h-5" />,
+    route: '/despega/a3/job-decoder'
+  },
+  {
+    id: 'answer-architecture',
+    number: 5,
+    title: 'Arquitectura de Respuestas',
+    shortDescription: 'Domina marcos de respuesta probados (STAR, CAR) para construir respuestas de entrevista convincentes y estructuradas.',
+    format: 'Módulo de arquitectura de respuestas',
+    inputMode: 'Aprendizaje guiado, construcción de plantillas, práctica',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 120,
+    mainOutput: 'Banco de Respuestas de Entrevista',
+    cta: 'Aprender Arquitectura de Respuestas',
+    tags: ['Constructor de Respuestas', 'Voz Opcional', 'Método STAR'],
+    requiredActivities: ['Dominar marcos STAR/CAR/PAR', 'Aprender 6 tipos de preguntas comunes', 'Practicar autopresentación de 30 segundos', 'Construir respuesta de motivación', 'Crear respuestas de fortaleza y desafío'],
+    icon: <MessageSquare className="w-5 h-5" />,
+    route: '/despega/a3/answer-architecture'
+  },
+  {
+    id: 'coach-practice-room',
+    number: 6,
+    title: 'Sala de Práctica del Coach',
+    shortDescription: 'Practica preguntas de entrevista comunes con retroalimentación inmediata del coach de IA y métricas de mejora.',
+    format: 'Simulación interactiva con coach de IA',
+    inputMode: 'Práctica de preguntas rápidas, grabación de voz, escritura de respuestas',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 130,
+    mainOutput: 'Informe de Métricas de Práctica',
+    cta: 'Entrar a Sala de Práctica',
+    tags: ['Práctica Interactiva', 'Retroalimentación del Coach', 'Método STAR'],
+    requiredActivities: ['Completar preguntas rápidas', 'Practicar recorrido de CV', 'Responder preguntas conductuales', 'Recibir retroalimentación del coach', 'Monitorear métricas de mejora'],
+    icon: <Mic className="w-5 h-5" />,
+    route: '/despega/a3/coach-practice-room'
+  },
+  {
+    id: 'communication-gym',
+    number: 7,
+    title: 'Gimnasio de Comunicación',
+    shortDescription: 'Desarrolla habilidades de comunicación profesional: vocabulario, lenguaje corporal, escucha activa y generación de confianza.',
+    format: 'Módulo de desarrollo de habilidades de comunicación',
+    inputMode: 'Grabación de voz, autoevaluación, práctica guiada',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 140,
+    mainOutput: 'Perfil de Estilo de Comunicación',
+    cta: 'Desarrollar Habilidades de Comunicación',
+    tags: ['Comunicación Profesional', 'Práctica de Voz', 'Desarrollo de Habilidades'],
+    requiredActivities: ['Evaluar estilo de comunicación actual', 'Aprender vocabulario profesional', 'Practicar señales de lenguaje corporal', 'Dominar técnicas de escucha activa', 'Construir habilidades de generación de confianza'],
+    icon: <Users className="w-5 h-5" />,
+    route: '/despega/a3/communication-gym'
+  },
+  {
+    id: 'first-recruiter-simulation',
+    number: 8,
+    title: 'Primera Simulación con Reclutador',
+    shortDescription: 'Simula tu primera interacción con un reclutador de recursos humanos para practicar el diálogo inicial y generación de confianza.',
+    format: 'Simulación de reclutador virtual',
+    inputMode: 'Conversación guiada, práctica de preguntas de filtrado, manejo de salario',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 160,
+    mainOutput: 'Informe de Retroalimentación del Reclutador',
+    cta: 'Comenzar Simulación con Reclutador',
+    tags: ['Simulación Interactiva', 'Práctica de Diálogo', 'Entrevista Simulada'],
+    requiredActivities: ['Lista de verificación previa a la entrevista', 'Sección de apertura', 'Responder preguntas de filtrado', 'Navegar discusión de salario', 'Recibir informe de retroalimentación'],
+    icon: <Video className="w-5 h-5" />,
+    route: '/despega/a3/first-recruiter-simulation'
+  },
+  {
+    id: 'risk-difficult-questions-lab',
+    number: 9,
+    title: 'Laboratorio de Preguntas Difíciles y de Riesgo',
+    shortDescription: 'Identifica y maneja preguntas difíciles o de riesgo con fórmulas de respuesta segura y práctica bajo presión.',
+    format: 'Laboratorio de preguntas de riesgo',
+    inputMode: 'Análisis de riesgo, construcción de respuestas seguras, simulación de presión',
+    interviewRequirement: 'Sin entrevista requerida',
+    xp: 170,
+    mainOutput: 'Guía de Preguntas de Riesgo Preparadas',
+    cta: 'Preparar Respuestas de Riesgo',
+    tags: ['Gestión de Riesgo', 'Preguntas Difíciles', 'Práctica Bajo Presión'],
+    requiredActivities: ['Identificar áreas de riesgo personal', 'Aprender fórmulas de respuesta segura', 'Identificar frases de alerta roja a evitar', 'Construir respuestas seguras preparadas', 'Completar simulación de presión de 3 preguntas'],
+    icon: <AlertTriangle className="w-5 h-5" />,
+    route: '/despega/a3/risk-difficult-questions-lab'
+  },
+  {
+    id: 'basic-interview-mission',
+    number: 10,
+    title: 'Misión de Entrevista Básica',
+    shortDescription: 'Misión final de certificación: realiza una entrevista simulada completa que valida el dominio de todas las habilidades del Nivel Básico.',
+    format: 'Misión de certificación de entrevista completa',
+    inputMode: 'Simulación de entrevista completa de 10+ preguntas',
+    interviewRequirement: 'Entrevista simulada requerida',
+    xp: 220,
+    mainOutput: 'Certificación del Nivel Básico',
+    cta: 'Comenzar Misión de Entrevista Básica',
+    tags: ['Certificación', 'Entrevista Completa', 'Validación de Habilidades'],
+    requiredActivities: ['Briefing de misión', 'Apertura', 'Preguntas de historial de antecedentes', 'Preguntas de motivación', 'Preguntas conductuales', 'Preguntas de riesgo', 'Cierre', 'Autoevaluación en 5 criterios', 'Generar informe de preparación', 'Completar certificación del Nivel Básico'],
+    icon: <Trophy className="w-5 h-5" />,
+    route: '/despega/a3/basic-interview-mission'
   }
+]
 
-  // Fetch real user progress on mount and on route change
+const TOTAL_XP = BASIC_LEVEL_MODULES.reduce((sum, module) => sum + module.xp, 0)
+
+type ModuleStatus = 'locked' | 'available' | 'in_progress' | 'completed'
+
+interface ModuleProgreso {
+  status: ModuleStatus
+  progress: number // 0-100
+  earnedXp: number
+  completedActivities: number
+}
+
+export default function A3BasicLevelTrainingPath() {
+  const router = useRouter()
+  const [isLoading, setIsLoading] = useState(true)
+  const [moduleProgreso, setModuleProgreso] = useState<Record<string, ModuleProgreso>>({})
+  const [selectedPath, setSelectedPath] = useState<'30' | '60' | '90'>('30')
+  const [expandedModule, setExpandedModule] = useState<string | null>(null)
+  const [currentDay, setCurrentDay] = useState(1) // A2: Current day in 90-day journey
+
+  // Calculate totals
+  const earnedXp = Object.values(moduleProgreso).reduce((sum, p) => sum + p.earnedXp, 0)
+  const completedModules = Object.values(moduleProgreso).filter(p => p.status === 'completed').length
+  const progressPercentage = Math.round((earnedXp / TOTAL_XP) * 100)
+  
+  // Find current and next module
+  const currentModule = BASIC_LEVEL_MODULES.find(m => {
+    const progress = moduleProgreso[m.id]
+    return progress?.status === 'in_progress' || progress?.status === 'available'
+  })
+  const nextModule = currentModule 
+    ? BASIC_LEVEL_MODULES.find(m => m.number === currentModule.number + 1)
+    : BASIC_LEVEL_MODULES[0]
+
   useEffect(() => {
-    const fetchProgress = async () => {
+    const fetchProgreso = async () => {
       try {
-        console.log('[v0] A3 page: Fetching user progress...')
-        const response = await fetch('/api/a3/user-progress')
+        const response = await fetch('/api/a3/user-progress', {
+          credentials: 'include',
+          cache: 'no-store'
+        })
+        
         if (response.ok) {
           const { progress } = await response.json()
-          console.log('[v0] A3 page: API response received', {
-            moduleStates: progress.moduleStates,
-            completedModuleIds: progress.completedModuleIds,
-            totalXp: progress.totalXp,
+          
+          // Fetch A2 current day from database
+          if (progress?.a2CurrentDay) {
+            setCurrentDay(progress.a2CurrentDay)
+            console.log('[v0] A2 Current Day from DB:', progress.a2CurrentDay)
+          }
+          
+          // Map API response to our module structure
+          const progressMap: Record<string, ModuleProgreso> = {}
+          
+          BASIC_LEVEL_MODULES.forEach((module, index) => {
+            const apiStatus = progress?.moduleStates?.[module.id]
+            let status: ModuleStatus = 'locked'
+            
+            if (apiStatus === 'completed') {
+              status = 'completed'
+            } else if (apiStatus === 'in_progress') {
+              status = 'in_progress'
+            } else if (apiStatus === 'available' || index === 0) {
+              status = 'available'
+            } else {
+              // Check if previous module is completed
+              const prevModule = BASIC_LEVEL_MODULES[index - 1]
+              const prevStatus = progress?.moduleStates?.[prevModule.id]
+              if (prevStatus === 'completed') {
+                status = 'available'
+              }
+            }
+            
+            progressMap[module.id] = {
+              status,
+              progress: status === 'completed' ? 100 : status === 'in_progress' ? 50 : 0,
+              earnedXp: status === 'completed' ? module.xp : 0,
+              completedActivities: status === 'completed' ? module.requiredActivities.length : 0
+            }
           })
           
-          // Update dashboard data with real progress
-          setDashboardData(prev => {
-            const updated = { ...prev }
-            updated.currentLevel = progress.currentLevel
-            updated.progressPct = progress.progressPct
-            updated.totalXp = progress.totalXp
-            updated.maxXp = progress.maxXp
-            updated.totalDtc = progress.totalDtc ?? 0
-            updated.maxDtc = progress.maxDtc ?? 100
-            updated.nextMilestone = progress.nextMilestone
-            updated.nextReward = progress.nextReward
-            updated.completedModules = progress.completedModules
-            
-            // Update module statuses based on real completion data
-            updated.modules = prev.modules.map(module => {
-              const status = progress.moduleStates[module.id]
-              if (status) {
-                console.log(`[v0] Module ${module.id} status: ${module.status} -> ${status}`)
-                return {
-                  ...module,
-                  status: status as 'available' | 'in_progress' | 'completed' | 'locked',
-                  xp: status === 'completed' ? module.maxXp : module.xp,
-                  progress: status === 'completed' ? 100 : status === 'in_progress' ? 60 : 0,
-                }
-              }
-              return module
-            })
-
-            // Update module states and completed IDs for detailed progress component
-            updated.moduleStates = progress.moduleStates
-            updated.completedModuleIds = progress.completedModuleIds
-
-            // Calculate completed sections for the general progress bar
-            const sections = calculateCompletedSections(updated.modules)
-            setCompletedSections(sections)
-
-            // Update skills with real values
-            updated.skills = prev.skills.map(skill => ({
-              ...skill,
-              value: progress.skills[skill.id] || skill.value
-            }))
-
-            return updated
-          })
+          setModuleProgreso(progressMap)
         } else {
-          console.warn('[v0] A3 page: API returned non-OK status', response.status)
+          // Default: first module available, rest locked
+          const defaultProgreso: Record<string, ModuleProgreso> = {}
+          BASIC_LEVEL_MODULES.forEach((module, index) => {
+            defaultProgreso[module.id] = {
+              status: index === 0 ? 'available' : 'locked',
+              progress: 0,
+              earnedXp: 0,
+              completedActivities: 0
+            }
+          })
+          setModuleProgreso(defaultProgreso)
         }
       } catch (error) {
-        console.warn('[v0] A3 page: API fetch failed, using mock data', error)
-        // Use mock data if API fails
+        console.error('Error fetching progress:', error)
+        // Default state
+        const defaultProgreso: Record<string, ModuleProgreso> = {}
+        BASIC_LEVEL_MODULES.forEach((module, index) => {
+          defaultProgreso[module.id] = {
+            status: index === 0 ? 'available' : 'locked',
+            progress: 0,
+            earnedXp: 0,
+            completedActivities: 0
+          }
+        })
+        setModuleProgreso(defaultProgreso)
       } finally {
         setIsLoading(false)
       }
     }
+    
+    fetchProgreso()
+  }, [])
 
-    // Initial fetch on mount
-    fetchProgress()
-
-    // Refetch when page becomes visible (user returns from subpage)
-    const handleVisibilityChange = () => {
-      if (document.visibilityState === 'visible') {
-        console.log('[v0] Page visible, refreshing progress...')
-        fetchProgress()
-      }
+  const getStatusBadge = (status: ModuleStatus) => {
+    switch (status) {
+      case 'completed':
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.1)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.3)' }} className="border">Completado</Badge>
+      case 'in_progress':
+        return <Badge style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} className="border">En Progreso</Badge>
+      case 'available':
+        return <Badge style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.4)' }} className="border">Disponible</Badge>
+      case 'locked':
+        return <Badge className="bg-white/10 text-white/50 border-[rgb(80,160,170)]/20 border">Bloqueado</Badge>
     }
+  }
 
-    document.addEventListener('visibilitychange', handleVisibilityChange)
-    return () => document.removeEventListener('visibilitychange', handleVisibilityChange)
-  }, [refreshParam])
+  const getTagStyle = (tag: string) => {
+    if (tag.includes('Sin Entrevista') || tag.includes('Optional')) {
+      return { backgroundColor: 'rgba(80, 160, 170, 0.2)', color: 'rgb(80, 160, 170)' }
+    }
+    if (tag.includes('Required') || tag.includes('Live') || tag.includes('Voice') || tag.includes('Video')) {
+      return { backgroundColor: 'rgba(170, 70, 170, 0.2)', color: 'rgb(200, 130, 200)' }
+    }
+    if (tag.includes('Final')) {
+      return { backgroundColor: 'rgba(170, 70, 170, 0.3)', color: 'rgb(170, 70, 170)' }
+    }
+    return { backgroundColor: 'rgba(255, 255, 255, 0.1)', color: 'rgba(255, 255, 255, 0.7)' }
+  }
 
   if (isLoading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <div className="flex flex-col items-center gap-4">
-          <Loader2 className="w-8 h-8 text-training animate-spin" />
+          <Loader2 className="w-8 h-8 animate-spin" style={{ color: PILLAR3_PRIMARY }} />
           <p className="text-white/70">Cargando tu progreso...</p>
         </div>
       </div>
@@ -135,234 +374,433 @@ export default function A3EntrenamientoIntensivo() {
   }
 
   return (
-    <div className="min-h-screen bg-background overflow-hidden">
-      {/* Epic animated background grid */}
-      <div className="fixed inset-0 -z-10 opacity-20">
-        <div className="absolute inset-0 bg-gradient-to-br from-training/20 via-transparent to-training/10"></div>
-        <div className="absolute top-20 left-20 w-72 h-72 bg-training/30 rounded-full mix-blend-screen filter blur-3xl animate-pulse"></div>
-        <div className="absolute bottom-20 right-20 w-72 h-72 bg-training/20 rounded-full mix-blend-screen filter blur-3xl animate-pulse delay-1000"></div>
+    <div className="min-h-screen bg-background">
+      {/* Subtle background with pillar 3 color */}
+      <div className="fixed inset-0 -z-10">
+        <div 
+          className="absolute inset-0" 
+          style={{ 
+            background: `linear-gradient(to bottom, rgba(170, 70, 170, 0.08) 0%, transparent 30%, transparent 100%)` 
+          }} 
+        />
       </div>
 
-      <div className="container max-w-7xl mx-auto px-4 py-12 space-y-16 relative z-10">
-        {/* ========== EPIC HEADER ========== */}
-        <div className="space-y-8">
-          {/* Navigation */}
-          <div className="flex items-center justify-between">
-            <Link href="/despega">
-              <Button variant="ghost" size="sm" className="hover:bg-muted/20 transition-all">
-                <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
-                Volver
-              </Button>
-            </Link>
-            <Badge className="bg-training/30 text-training border border-training/50 shadow-lg shadow-training/20 animate-pulse">
-              <Rocket className="w-3 h-3 mr-2" />
-              Pilar 3: Entrenamiento Intensivo
-            </Badge>
+      <div className="container max-w-5xl mx-auto px-4 py-12 space-y-12">
+        {/* ========== HEADER ========== */}
+        <div className="space-y-6">
+          <Link href="/despega">
+            <Button variant="ghost" size="sm" className="text-white/60 hover:text-white">
+              <ArrowRight className="w-4 h-4 mr-2 rotate-180" />
+              Atrás
+            </Button>
+          </Link>
+
+          <div className="space-y-4">
+            <h1 className="text-4xl md:text-5xl font-bold text-white">
+              Ruta de Entrenamiento Nivel Básico
+            </h1>
+            <p className="text-lg text-white/70 max-w-3xl">
+              Un viaje guiado de 10 módulos para construir claridad, confianza, estructura y preparación de entrevista paso a paso.
+            </p>
+            <p className="text-white/60 leading-relaxed max-w-3xl">
+              El Nivel Básico está diseñado para usuarios que necesitan más estructura antes de enfrentar entrevistas reales. 
+              Este camino comienza con aprendizaje profundo y claridad profesional, luego se mueve hacia construcción de CV, 
+              decodificación de ofertas, preparación de respuestas, práctica con coach, ejercicios de comunicación, simulaciones con reclutadores, 
+              entrenamiento de preguntas difíciles y una misión de entrevista realista final.
+            </p>
           </div>
 
-          {/* Epic Hero Title */}
-          <div className="space-y-4 relative">
-            {/* Animated gradient background */}
-            <div className="absolute -inset-4 bg-gradient-to-r from-training/20 via-transparent to-training/20 rounded-2xl blur-2xl -z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
-            <h1 className="text-7xl md:text-8xl font-black bg-gradient-to-r from-training via-training/80 to-training/60 bg-clip-text text-transparent drop-shadow-2xl">
-              Domina Entrevistas
-            </h1>
-            <h2 className="text-4xl md:text-5xl font-bold text-white/90">en 4 Niveles Épicos</h2>
-            
-            <p className="text-lg md:text-xl text-white/80 max-w-3xl leading-relaxed font-light">
-              Desde tu primera <span className="text-training font-semibold">auditoría</span> hasta una <span className="text-training font-semibold">simulación real</span>. 
-              Cada hito desbloquea nuevas herramientas, evidencia de avance y mayor preparación para entrevistas que importan.
-            </p>
-
-            {/* Quick CTA */}
-            <Link href="/despega/a3/entrenamiento-guiado" className="inline-block">
-              <Button className="bg-gradient-to-r from-training to-training/80 hover:shadow-lg hover:shadow-training/50 transition-all transform hover:scale-105 text-white px-8 py-6 text-lg font-bold">
-                Comenzar Ahora
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
+          {/* Status Badges - using pillar 3 colors */}
+          <div className="flex flex-wrap gap-3">
+            <Badge 
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0)', color: 'rgb(80, 160, 170)', borderColor: 'rgba(80, 160, 170, 0.4)' }} 
+              className="border px-3 py-1"
+            >
+              Nivel: Básico
+            </Badge>
+            <Badge 
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0)', color: 'rgb(200, 130, 200)', borderColor: 'rgba(170, 70, 170, 0.4)' }} 
+              className="border px-3 py-1"
+            >
+              Modo de Entrenamiento: Educativo + Guiado + Simulado
+            </Badge>
+            <Badge 
+              style={{ backgroundColor: 'rgba(170, 70, 170, 0)', color: 'rgb(170, 70, 170)', borderColor: 'rgba(170, 70, 170, 0.5)' }} 
+              className="border px-3 py-1"
+            >
+              Ruta Total: {TOTAL_XP.toLocaleString()} XP
+            </Badge>
+            <Badge className="border-transparent px-3 py-1" style={{ backgroundColor: 'rgba(128, 0, 255, 0)', color: 'rgba(170, 70, 170, 0.8)', borderColor: 'rgba(170, 70, 170, 0.3)' }}>
+              Ruta Seleccionada: {selectedPath} Días
+            </Badge>
           </div>
         </div>
 
-        {/* ========== EPIC STATE CARDS ========== */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {/* Main Level Card */}
-          <div className="md:col-span-2 group relative overflow-hidden rounded-xl border border-training/40 bg-gradient-to-br from-training/20 to-training/5 p-8 hover:border-training/60 transition-all duration-300 shadow-lg shadow-training/10 hover:shadow-training/30">
-            <div className="absolute inset-0 bg-gradient-to-r from-training/0 via-training/10 to-training/0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-            
-            <div className="relative z-10">
-              <p className="text-xs text-training uppercase font-bold tracking-widest mb-4">Estado Actual</p>
-              <h2 className="text-4xl font-black text-transparent bg-gradient-to-r from-white to-white/70 bg-clip-text mb-3">
-                {dashboardData.currentLevel}
-              </h2>
-              <div className="space-y-2">
-                <p className="text-training font-bold">Próximo: {dashboardData.nextMilestone}</p>
-                <p className="text-sm text-white/60">{dashboardData.nextReward}</p>
-              </div>
+        {/* ========== A2 INTEGRATION: ROUTE PROGRESS ========== */}
+        <div className="space-y-4">
+          <div className="flex items-center gap-2 mb-4">
+            <MapPin className="w-5 h-5" style={{ color: 'rgb(170,70,170)' }} />
+            <h2 className="text-2xl font-bold text-white">Tu Progreso A2 (90 Días)</h2>
+          </div>
+          <A2ProgressDisplay />
+        </div>
+
+        {/* ========== MAIN PROGRESS BAR ========== */}
+        <Card 
+          className="bg-[rgba(80,160,170,0.2)] border p-6 space-y-4"
+          style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+        >
+          <h2 className="text-lg font-semibold text-white">Tu Progreso del Nivel Básico</h2>
+          
+          <div className="space-y-2">
+            <div className="flex justify-between text-sm">
+              <span className="text-white/70">{progressPercentage}% completado</span>
+              <span className="font-medium" style={{ color: PILLAR3_PRIMARY }}>{earnedXp.toLocaleString()} / {TOTAL_XP.toLocaleString()} XP</span>
+            </div>
+            {/* Custom progress bar with pillar 3 color */}
+            <div className="h-3 bg-white/10 rounded-full overflow-hidden">
+              <div 
+                className="h-full rounded-full transition-all duration-500"
+                style={{ 
+                  width: `${progressPercentage}%`,
+                  background: `linear-gradient(90deg, ${PILLAR3_PRIMARY}, rgba(170, 70, 170, 0.7))`
+                }}
+              />
             </div>
           </div>
 
-          {/* Epic Stats */}
-          {[
-            { icon: Zap, label: 'XP Ganados', value: `${dashboardData.totalXp}`, max: `/${dashboardData.maxXp}`, color: 'from-cyan-500/50 to-training/50' },
-            { icon: Coins, label: 'DTC Ganados', value: `${dashboardData.totalDtc}`, max: `/${dashboardData.maxDtc}`, color: 'from-yellow-500/50 to-training/50' },
-            { icon: Award, label: 'Módulos', value: `${dashboardData.completedModules}`, max: `/${dashboardData.totalModules}`, color: 'from-green-500/50 to-training/50' },
-          ].map((stat, i) => {
-            const Icon = stat.icon
-            return (
-              <div
-                key={i}
-                className="group relative overflow-hidden rounded-xl border border-white/10 bg-white/5 p-6 hover:bg-white/10 hover:border-training/50 transition-all duration-300 cursor-pointer shadow-lg hover:shadow-training/30"
-                onMouseEnter={() => setHoveredStat(i)}
-                onMouseLeave={() => setHoveredStat(null)}
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${stat.color} opacity-0 group-hover:opacity-20 transition-opacity duration-300`}></div>
-                <div className="relative z-10">
-                  <Icon className={`w-6 h-6 mb-3 transition-all duration-300 ${hoveredStat === i ? 'text-training scale-125 animate-bounce' : 'text-white/60'}`} />
-                  <p className="text-xs text-white/60 uppercase font-bold tracking-wide mb-2">{stat.label}</p>
-                  <div className="flex items-baseline gap-1">
-                    <p className="text-4xl font-black text-white">{stat.value}</p>
-                    <p className="text-sm text-white/60 font-bold">{stat.max}</p>
+          {/* Summary Cards */}
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+            <div 
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
+            >
+              <p className="text-2xl font-bold mb-1" style={{ color: 'rgb(90, 90, 150)' }}>{earnedXp}</p>
+              <p className="text-xs text-white/50">XP Ganados from {TOTAL_XP}</p>
+            </div>
+            <div 
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
+            >
+              <p className="text-2xl font-bold mb-1" style={{ color: 'rgb(90, 90, 150)' }}>{completedModules} / 10</p>
+              <p className="text-xs text-white/50">Módulos completados</p>
+            </div>
+            <div 
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
+            >
+              <p className="text-lg font-bold text-white truncate">{currentModule?.title || 'Espejo de Carrera'}</p>
+              <p className="text-xs text-white/50">Enfoque Actual</p>
+            </div>
+            <div 
+              className="rounded-[28px] border text-card-foreground shadow-sm p-4"
+              style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', borderColor: 'rgba(90, 90, 150, 0.3)' }}
+            >
+              <p className="text-lg font-bold text-white/70 truncate">{nextModule?.title || 'Complete!'}</p>
+              <p className="text-xs text-white/50">Siguiente Desbloqueo</p>
+            </div>
+          </div>
+        </Card>
+
+        {/* ========== ADVANCED LEVEL PROMOTION ========== */}
+        {progressPercentage === 100 && completedModules === 10 && (
+          <Card 
+            className="bg-gradient-to-r from-[rgba(170,70,170,0.2)] to-[rgba(170,70,170,0.1)] border-2 overflow-hidden"
+            style={{ borderColor: 'rgba(170, 70, 170, 0.6)' }}
+          >
+            <div className="p-6 space-y-4">
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="text-xl font-bold text-white mb-2">¡Felicidades! 🎉</h3>
+                  <p className="text-white/80 mb-4">Has completado exitosamente el Nivel Básico de A3. Dominas los fundamentos de las entrevistas.</p>
+                  
+                  <div className="space-y-3">
+                    <h4 className="text-sm font-semibold text-white">Próximo Paso: Nivel Avanzado</h4>
+                    <p className="text-sm text-white/70">
+                      El Nivel Avanzado incluye los mismos 10 módulos pero con casos más complejos, preguntas profundas y estrategias avanzadas de entrevista. Perfecciona tus habilidades y prepárate para las entrevistas más desafiantes.
+                    </p>
+                    
+                    <div className="grid grid-cols-2 gap-2 pt-2">
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
+                        <p className="font-semibold text-white">⬆️ Mayor Dificultad</p>
+                        <p className="text-white/60">Casos empresariales reales</p>
+                      </div>
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
+                        <p className="font-semibold text-white">🎓 Aprendizaje Profundo</p>
+                        <p className="text-white/60">Técnicas avanzadas</p>
+                      </div>
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
+                        <p className="font-semibold text-white">🏆 Más XP</p>
+                        <p className="text-white/60">1,700+ puntos</p>
+                      </div>
+                      <div className="text-xs bg-[rgba(80,160,170,0.2)] rounded p-2 border border-[rgb(80,160,170)]/10">
+                        <p className="font-semibold text-white">📊 Sofia V2</p>
+                        <p className="text-white/60">Entrevistadora mejorada</p>
+                      </div>
+                    </div>
                   </div>
                 </div>
+                
+                <div className="text-4xl">⭐</div>
               </div>
+
+              <Button 
+                className="w-full bg-gradient-to-r from-[rgba(170,70,170,0.6)] to-[rgba(170,70,170,0.4)] hover:from-[rgba(170,70,170,0.7)] hover:to-[rgba(170,70,170,0.5)] text-white font-bold py-6 rounded-full text-lg"
+                onClick={() => {
+                  // TODO: Navigate to advanced level
+                  console.log('[v0] Advanced level coming soon')
+                }}
+              >
+                Comenzar Nivel Avanzado →
+              </Button>
+            </div>
+          </Card>
+        )}
+
+        {/* ========== MODULE CARDS ========== */}
+        <div className="space-y-4">
+          {BASIC_LEVEL_MODULES.map((module) => {
+            const progress = moduleProgreso[module.id] || { status: 'locked', progress: 0, earnedXp: 0, completedActivities: 0 }
+            const isLocked = progress.status === 'locked'
+            const isExpanded = expandedModule === module.id
+            const prevModule = module.number > 1 ? BASIC_LEVEL_MODULES[module.number - 2] : null
+
+            return (
+              <Card 
+                key={module.id}
+                className={`bg-[rgba(80,160,170,0.2)] overflow-hidden transition-all border ${
+                  isLocked ? 'opacity-60 border-[rgb(80,160,170)]/10' : ''
+                }`}
+                style={{ 
+                  borderColor: isLocked ? undefined : 'rgba(170, 70, 170, 0.2)'
+                }}
+                onMouseEnter={(e) => {
+                  if (!isLocked) {
+                    e.currentTarget.style.borderColor = 'rgba(170, 70, 170, 0.5)'
+                  }
+                }}
+                onMouseLeave={(e) => {
+                  if (!isLocked) {
+                    e.currentTarget.style.borderColor = 'rgba(170, 70, 170, 0.2)'
+                  }
+                }}
+              >
+                <div 
+                  className={`p-6 ${!isLocked ? 'cursor-pointer' : ''}`}
+                  onClick={() => !isLocked && setExpandedModule(isExpanded ? null : module.id)}
+                >
+                  <div className="flex items-start gap-4">
+                    {/* Module Number & Icon */}
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center"
+                      style={{
+                        backgroundColor: progress.status === 'completed' 
+                          ? 'rgba(170, 70, 170, 0.3)' 
+                          : progress.status === 'available' || progress.status === 'in_progress'
+                            ? 'rgba(170, 70, 170, 0.2)'
+                            : 'rgba(255, 255, 255, 0.1)',
+                        color: progress.status === 'completed' || progress.status === 'available' || progress.status === 'in_progress'
+                          ? 'rgb(200, 130, 200)'
+                          : 'rgba(255, 255, 255, 0.4)'
+                      }}
+                    >
+                      {progress.status === 'completed' ? (
+                        <CheckCircle2 className="w-6 h-6" />
+                      ) : progress.status === 'locked' ? (
+                        <Lock className="w-5 h-5" />
+                      ) : (
+                        module.icon
+                      )}
+                    </div>
+
+                    {/* Module Content */}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-3 flex-wrap">
+                        <span className="text-sm text-white/50">Module {module.number}</span>
+                        {getStatusBadge(progress.status)}
+                      </div>
+                      
+                      <h3 className="text-xl font-semibold text-white mt-1">{module.title}</h3>
+                      <p className="text-white/60 text-sm mt-1 line-clamp-2">{module.shortDescription}</p>
+                      
+                      {/* Tags */}
+                      <div className="flex flex-wrap gap-2 mt-3">
+                        {module.tags.map(tag => (
+                          <span 
+                            key={tag} 
+                            className="text-xs px-2 py-1 rounded"
+                            style={getTagStyle(tag)}
+                          >
+                            {tag}
+                          </span>
+                        ))}
+                      </div>
+
+                      {/* Unlock Message */}
+                      {isLocked && prevModule && (
+                        <p className="text-sm mt-3" style={{ color: 'rgba(170, 70, 170, 0.7)' }}>
+                          Complete {prevModule.title} to unlock this step.
+                        </p>
+                      )}
+                    </div>
+
+                    {/* XP Badge */}
+                    <div className="text-right">
+                      <p className="text-lg font-bold" style={{ color: PILLAR3_PRIMARY }}>{module.xp} XP</p>
+                      <p className="text-xs text-white/50">{module.format}</p>
+                    </div>
+                  </div>
+
+                  {/* Expanded Content */}
+                  {isExpanded && !isLocked && (
+                    <div className="mt-6 pt-6 border-t" style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}>
+                      <div className="grid md:grid-cols-2 gap-6">
+                        <div>
+                          <h4 className="text-sm font-medium text-white/70 mb-2">Actividades Requeridas</h4>
+                          <ul className="space-y-2">
+                            {module.requiredActivities.map((activity, idx) => (
+                              <li key={idx} className="flex items-center gap-2 text-sm text-white/60">
+                                <div 
+                                  className="w-5 h-5 rounded-full flex items-center justify-center text-xs"
+                                  style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)', color: PILLAR3_PRIMARY }}
+                                >
+                                  {idx + 1}
+                                </div>
+                                {activity}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        <div>
+                          <h4 className="text-sm font-medium text-white/70 mb-2">Output</h4>
+                          <p className="text-sm text-white/60">{module.mainOutput}</p>
+                          
+                          <h4 className="text-sm font-medium text-white/70 mt-4 mb-2">Input Mode</h4>
+                          <p className="text-sm text-white/60">{module.inputMode}</p>
+                          
+                          <h4 className="text-sm font-medium text-white/70 mt-4 mb-2">Interview Requirement</h4>
+                          <p className="text-sm text-white/60">{module.interviewRequirement}</p>
+                        </div>
+                      </div>
+
+                      <div className="flex gap-3 mt-6">
+                        <Link href={module.route} className="flex-1">
+                          <Button 
+                            className="w-full text-white"
+                            style={{ 
+                              backgroundColor: PILLAR3_PRIMARY,
+                            }}
+                            onMouseEnter={(e) => {
+                              e.currentTarget.style.backgroundColor = 'rgba(170, 70, 170, 0.8)'
+                            }}
+                            onMouseLeave={(e) => {
+                              e.currentTarget.style.backgroundColor = PILLAR3_PRIMARY
+                            }}
+                          >
+                            {progress.status === 'completed' ? (
+                              <>
+                                <RotateCcw className="w-4 h-4 mr-2" />
+                                Revisar Módulo
+                              </>
+                            ) : (
+                              <>
+                                <Play className="w-4 h-4 mr-2" />
+                                {module.cta}
+                              </>
+                            )}
+                          </Button>
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </Card>
             )
           })}
         </div>
 
-        {/* ========== EPIC PROGRESS BAR ========== */}
-        <div className="group relative overflow-hidden rounded-xl border border-training/30 bg-gradient-to-r from-training/15 to-training/5 p-8 hover:border-training/50 transition-all duration-300 shadow-2xl shadow-training/20">
-          <div className="absolute inset-0 bg-gradient-to-r from-training/20 via-transparent to-training/10 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-          <div className="relative z-10">
-            <ProgressBar
-              percentage={dashboardData.progressPct}
-              currentXp={dashboardData.totalXp}
-              maxXp={dashboardData.maxXp}
-              label="Progreso hacia Entrevista Real"
-              animated={true}
-            />
+        {/* ========== SUMMARY TABLE ========== */}
+        <Card 
+          className="bg-[rgba(80,160,170,0.2)] border p-6"
+          style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+        >
+          <h2 className="text-lg font-semibold text-white mb-4">Module Summary</h2>
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
+              <thead>
+                <tr className="border-b" style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}>
+                  <th className="text-left py-2 text-white/50 font-medium">#</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Module</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Format</th>
+                  <th className="text-left py-2 text-white/50 font-medium">XP</th>
+                  <th className="text-left py-2 text-white/50 font-medium">Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {BASIC_LEVEL_MODULES.map(module => {
+                  const progress = moduleProgreso[module.id]
+                  return (
+                    <tr key={module.id} className="border-b" style={{ borderColor: 'rgba(170, 70, 170, 0.1)' }}>
+                      <td className="py-3 text-white/50">{module.number}</td>
+                      <td className="py-3 text-white">{module.title}</td>
+                      <td className="py-3 text-white/60">{module.format}</td>
+                      <td className="py-3" style={{ color: PILLAR3_PRIMARY }}>{module.xp} XP</td>
+                      <td className="py-3">{getStatusBadge(progress?.status || 'locked')}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+              <tfoot>
+                <tr className="border-t" style={{ borderColor: 'rgba(170, 70, 170, 0.3)' }}>
+                  <td colSpan={3} className="py-3 font-semibold text-white">Total</td>
+                  <td className="py-3 font-bold" style={{ color: PILLAR3_PRIMARY }}>{TOTAL_XP} XP</td>
+                  <td className="py-3 text-white/60">{completedModules}/10 completed</td>
+                </tr>
+              </tfoot>
+            </table>
           </div>
-        </div>
+        </Card>
 
-        {/* ========== SKILLS SECTION - EPIC ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Habilidades en Combate</h2>
-            <p className="text-white/70">Cada módulo fortalece una habilidad. Mira tu arsenal crecer.</p>
-          </div>
-          <SkillsGrid skills={dashboardData.skills} />
-        </div>
-
-        {/* ========== EPIC LEVELS SECTION ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Tu Jornada Épica</h2>
-            <p className="text-white/70">Completa cada nivel para desbloquear superpoderes y entrenamientos legendarios.</p>
-          </div>
-          
-          {/* General Progress Bar - Shows Pillar 3 completion based on sections */}
-          <A3GeneralProgress 
-            currentStep={1}
-            totalSteps={4}
-            currentLabel="Pillar 3 - Entrenamiento Intensivo"
-            completedSections={completedSections}
-            totalSections={4}
-            variant="default"
-          />
-          
-          <LevelsAccordion modules={dashboardData.modules} />
-        </div>
-
-        {/* ========== DETAILED PILLAR 3 PROGRESS ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Desglose Detallado de Progreso</h2>
-            <p className="text-white/70">Visualiza tu avance módulo por módulo en todos los 4 niveles.</p>
-          </div>
-          
-          <Pillar3DetailedProgress
-            moduleStates={dashboardData.moduleStates || {}}
-            completedModuleIds={dashboardData.completedModuleIds || []}
-            totalXp={dashboardData.totalXp}
-            totalDtc={dashboardData.totalDtc}
-          />
-        </div>
-
-        {/* ========== BADGES SECTION - EPIC ========== */}
-        <div className="space-y-6">
-          <div className="space-y-2">
-            <h2 className="text-3xl font-black text-white">Insignias & Logros</h2>
-            <p className="text-white/70">Desbloquea badges exclusivas mientras avanzas. ¡Colecciónalas todas!</p>
-          </div>
-          <BadgesGrid badges={dashboardData.badges} />
-        </div>
-
-        {/* ========== EPIC MOTIVATIONAL MESSAGE ========== */}
-        <div className="group relative overflow-hidden rounded-2xl border-2 border-training/60 bg-gradient-to-r from-training/20 via-training/10 to-training/5 p-8 md:p-12 shadow-2xl shadow-training/30 hover:shadow-training/50 transition-all duration-300">
-          <div className="absolute -inset-1 bg-gradient-to-r from-training/40 via-training/20 to-training/40 opacity-20 group-hover:opacity-40 blur transition-opacity duration-300 -z-10"></div>
-          
-          <div className="relative z-10 space-y-4">
-            <div className="flex items-start gap-4">
-              <div className="flex-1">
-                <h3 className="text-3xl md:text-4xl font-black text-transparent bg-gradient-to-r from-white to-training bg-clip-text mb-3">
-                  {dashboardData.progressPct < 25
-                    ? 'Inicia tu Viaje'
-                    : dashboardData.progressPct < 50
-                    ? 'Acelera tu Entrenamiento'
-                    : dashboardData.progressPct < 75
-                    ? 'Domina las Entrevistas'
-                    : 'Eres Prácticamente Invencible'}
-                </h3>
-                <p className="text-lg md:text-xl text-white/90 leading-relaxed">
-                  {dashboardData.progressPct < 25
-                    ? 'Comienza con la Auditoría Inicial. Este es el cimiento de todo. Revisa tu cámara, luz, audio, presencia y pitch. ¡Tu futuro se construye hoy!'
-                    : dashboardData.progressPct < 50
-                    ? 'Domina el Método STAR y prepara tu CV. Estás construyendo una base sólida que te hará destacar en cualquier entrevista.'
-                    : dashboardData.progressPct < 75
-                    ? 'Es hora de entrenar en entrevistas reales. Comienza con la Guiada y aumenta la dificultad. ¡Cada entrevista es una victoria!'
-                    : '¡Ya estás listo! Realiza la Simulación Real para verificar que estás en top form. ¡Nada puede detenerte ahora!'}
-                </p>
+        {/* ========== HOW PROGRESS WORKS ========== */}
+        <Card 
+          className="bg-[rgba(80,160,170,0.2)] border p-6"
+          style={{ borderColor: 'rgba(170, 70, 170, 0.2)' }}
+        >
+          <h2 className="text-lg font-semibold text-white mb-4">Cómo Funciona el Progreso</h2>
+          <div className="grid md:grid-cols-3 gap-6">
+            <div className="space-y-2">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)' }}
+              >
+                <span style={{ color: PILLAR3_PRIMARY }}>1</span>
               </div>
+              <h3 className="font-medium text-white">Complete modules in order</h3>
+              <p className="text-sm text-white/60">Each module unlocks the next. Complete all required activities to earn XP.</p>
             </div>
-            
-            <Link href="/despega/a3/entrenamiento-guiado" className="inline-block">
-              <Button className="bg-gradient-to-r from-training to-training/80 hover:shadow-lg hover:shadow-training/60 transition-all transform hover:scale-110 text-white px-8 py-6 text-lg font-bold mt-4">
-                {dashboardData.progressPct < 25 ? 'Comenzar Ahora' : 'Continuar Entrenando'}
-                <ArrowRight className="w-5 h-5 ml-2" />
-              </Button>
-            </Link>
+            <div className="space-y-2">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)' }}
+              >
+                <span style={{ color: PILLAR3_PRIMARY }}>2</span>
+              </div>
+              <h3 className="font-medium text-white">Build your interview toolkit</h3>
+              <p className="text-sm text-white/60">Each module produces outputs you&apos;ll use in later modules and real interviews.</p>
+            </div>
+            <div className="space-y-2">
+              <div 
+                className="w-10 h-10 rounded-lg flex items-center justify-center"
+                style={{ backgroundColor: 'rgba(170, 70, 170, 0.2)' }}
+              >
+                <span style={{ color: PILLAR3_PRIMARY }}>3</span>
+              </div>
+              <h3 className="font-medium text-white">Reach 1,340 XP</h3>
+              <p className="text-sm text-white/60">Complete all 10 modules to finish Basic Level and unlock Intermediate training.</p>
+            </div>
           </div>
-        </div>
-
-        {/* ========== EPIC FOOTER MESSAGE ========== */}
-        <div className="border-t border-white/10 pt-12 text-center space-y-4">
-          <p className="text-2xl font-black text-transparent bg-gradient-to-r from-training via-white to-training bg-clip-text">
-            La excelencia no es un destino, es un viaje.
-          </p>
-          <p className="text-white/60 text-lg">
-            Cada entrenamiento te acerca más a dominar entrevistas.
-          </p>
-        </div>
+        </Card>
       </div>
-
-      {/* Animated decorative elements */}
-      <style jsx>{`
-        @keyframes float {
-          0%, 100% { transform: translateY(0px); }
-          50% { transform: translateY(-20px); }
-        }
-        @keyframes glow {
-          0%, 100% { box-shadow: 0 0 20px rgba(170, 70, 170, 0.3); }
-          50% { box-shadow: 0 0 40px rgba(170, 70, 170, 0.6); }
-        }
-        .animate-float {
-          animation: float 3s ease-in-out infinite;
-        }
-        .animate-glow {
-          animation: glow 3s ease-in-out infinite;
-        }
-      `}</style>
     </div>
   )
 }

@@ -10,18 +10,13 @@ interface MonthProgress {
   completed: boolean
 }
 
-interface Milestone {
-  month: number
-  title: string
-  status: 'completed' | 'pending' | 'in_progress'
-}
-
 interface A2ProgressData {
   current_month: number
   progress_percentage: number
-  month_progress: MonthProgress[]
-  milestones: Milestone[]
+  completed_tasks: number
+  total_tasks: number
   status: string
+  month_progress?: MonthProgress[]
 }
 
 const fetcher = (url: string) => fetch(url).then((res) => res.json())
@@ -61,6 +56,25 @@ export function A2ProgressSidebar() {
     )
   }
 
+  // Compute month progress from actual data
+  const monthProgress = progress.month_progress || [
+    {
+      month: 1,
+      percentage: Math.min(Math.max(progress.progress_percentage, 0), 33),
+      completed: progress.current_month > 1 || progress.progress_percentage >= 33
+    },
+    {
+      month: 2,
+      percentage: progress.current_month === 2 ? Math.max(0, Math.min(progress.progress_percentage - 33, 34)) : progress.current_month > 2 ? 100 : 0,
+      completed: progress.current_month > 2 || (progress.current_month === 2 && progress.progress_percentage >= 66)
+    },
+    {
+      month: 3,
+      percentage: progress.current_month === 3 ? Math.max(0, progress.progress_percentage - 67) : progress.current_month > 3 ? 100 : 0,
+      completed: progress.current_month > 3 || progress.progress_percentage === 100
+    }
+  ]
+
   return (
     <aside className="hidden lg:block w-72 bg-muted/5 border-r border-muted/40 sticky top-0 h-screen overflow-y-auto p-6 space-y-6">
       {/* Header */}
@@ -81,7 +95,7 @@ export function A2ProgressSidebar() {
 
       {/* Months Timeline */}
       <div className="space-y-3">
-        {progress.month_progress.map((month) => {
+        {monthProgress.map((month) => {
           const isActive = month.month === progress.current_month
           const isCompleted = month.completed
           
@@ -89,20 +103,21 @@ export function A2ProgressSidebar() {
             <div key={month.month}>
               <button
                 onClick={() => setExpandedMonth(isActive ? expandedMonth : month.month)}
-                className={`w-full flex items-start gap-3 p-4 rounded-lg transition-all ${
+                className={`w-full flex items-start gap-3 p-4 rounded-lg transition-all border ${
                   isActive
-                    ? 'bg-purple/20 border border-purple/40'
+                    ? 'border'
                     : isCompleted
-                    ? 'bg-emerald-500/10 border border-emerald-500/20'
-                    : 'bg-muted/20 border border-muted/30 opacity-60'
+                    ? 'bg-emerald-500/10 border-emerald-500/20'
+                    : 'bg-muted/20 border-muted/30 opacity-60'
                 }`}
+                style={isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.6)', borderColor: 'rgba(90, 90, 150, 0.8)' } : {}}
               >
                 {/* Icon */}
                 <div className="mt-1 flex-shrink-0">
                   {isCompleted ? (
                     <CheckCircle2 className="w-5 h-5 text-emerald-500" />
                   ) : isActive ? (
-                    <Circle className="w-5 h-5 text-purple fill-purple/30" />
+                    <Circle className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)', stroke: 'rgb(90, 90, 150)', fill: 'rgba(90, 90, 150, 0.6)', strokeWidth: '2' }} />
                   ) : (
                     <Circle className="w-5 h-5 text-muted/40" />
                   )}
@@ -134,45 +149,13 @@ export function A2ProgressSidebar() {
                 </div>
               </button>
 
-              {/* Milestones */}
-              {expandedMonth === month.month && progress.milestones.length > 0 && (
-                <div className="space-y-2 pl-8 mt-2">
-                  {progress.milestones.map((milestone, idx) => (
-                    <div key={idx} className="flex items-start gap-2 text-xs">
-                      <div
-                        className={`w-1.5 h-1.5 rounded-full mt-1.5 flex-shrink-0 ${
-                          milestone.status === 'completed'
-                            ? 'bg-emerald-500'
-                            : milestone.status === 'in_progress'
-                            ? 'bg-purple'
-                            : 'bg-muted/40'
-                        }`}
-                      />
-                      <p className={milestone.status === 'completed' ? 'text-white/70' : 'text-white/50'}>
-                        {milestone.title}
-                      </p>
-                    </div>
-                  ))}
-                </div>
-              )}
+              {/* Milestones - REMOVED */}
             </div>
           )
         })}
       </div>
 
-      {/* Quick Stats */}
-      <div className="pt-4 border-t border-muted/30 space-y-3">
-        <div className="text-xs space-y-2">
-          <div className="flex justify-between text-white/60">
-            <span>Estado:</span>
-            <span className="text-white font-semibold capitalize">
-              {progress.status === 'completed' ? 'Completado' : 
-               progress.status === 'near_completion' ? 'Casi Terminado' :
-               progress.status === 'in_progress' ? 'En Progreso' : 'No Iniciado'}
-            </span>
-          </div>
-        </div>
-      </div>
+      {/* Quick Stats - REMOVED */}
     </aside>
   )
 }

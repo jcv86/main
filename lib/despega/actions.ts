@@ -39,6 +39,7 @@ export async function initializeDespegaProfile(camino_foco: "persona" | "profesi
 
   if (!user) throw new Error("Unauthorized")
 
+  const now = new Date()
   const { data, error } = await supabase
     .from("despega_user_profiles")
     .upsert({
@@ -47,25 +48,54 @@ export async function initializeDespegaProfile(camino_foco: "persona" | "profesi
       camino_persona_active: camino_foco === "persona" || camino_foco === "ambos",
       camino_profesional_active: camino_foco === "profesional" || camino_foco === "ambos",
       onboarding_completed: true,
-      ciclo_start_date: new Date().toISOString().split("T")[0],
+      ciclo_start_date: now.toISOString().split("T")[0],
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
     })
     .select()
     .single()
 
   if (error) throw error
 
-  // Initialize pilar progress for both paths
+  // Create initial cycles for each pilar (Issue #5: Initialize with timestamps)
   const pilares = ["a1_cerebral", "a2_rutas", "aterrizaje", "base"]
+  const cycles: any[] = []
   
   for (const pilar of pilares) {
+    const { data: cycleData, error: cycleError } = await supabase
+      .from("despega_cycles")
+      .insert({
+        user_id: user.id,
+        pilar,
+        cycle_number: 1,
+        status: "active",
+        start_date: now.toISOString(),
+        end_date: new Date(now.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString(), // +30 days
+        created_at: now.toISOString(),
+        updated_at: now.toISOString(),
+      })
+      .select()
+      .single()
+
+    if (cycleError) {
+      console.error(`[v0] Error creating cycle for pilar ${pilar}:`, cycleError)
+      continue
+    }
+    cycles.push(cycleData)
+
+    // Initialize pilar progress for this cycle (Issue #5: Include timestamps)
     await supabase.from("despega_pilar_progress").upsert({
       user_id: user.id,
       pilar,
-      progreso: 0,
-      score: 0,
-      ciclo_actual: 30,
-      ciclo_dia: 1,
+      cycle_id: cycleData.id,
+      diagnostic_score: 0,
+      points_accumulated: 0,
+      missions_completed: 0,
+      progress_pct: 0,
       is_unlocked: pilar === "a1_cerebral", // Only A1 starts unlocked
+      ciclo_dia: 1,
+      created_at: now.toISOString(),
+      updated_at: now.toISOString(),
     })
   }
 
@@ -73,6 +103,8 @@ export async function initializeDespegaProfile(camino_foco: "persona" | "profesi
   await supabase.from("despega_rankings").upsert({
     user_id: user.id,
     score_general: 0,
+    created_at: now.toISOString(),
+    updated_at: now.toISOString(),
   })
 
   revalidatePath("/despega")
@@ -85,87 +117,72 @@ export async function completeMision(mision_id: string, respuesta?: any, tiempo_
 
   if (!user) throw new Error("Unauthorized")
 
-  // Get mision details
-  const { data: mision } = await supabase
-    .from("despega_misiones")
-    .select("*, ruta:despega_rutas(pilar)")
-    .eq("id", mision_id)
-    .single()
+  try {
+    // Get mission points
+    const { data: mision, error: misionError } = await supabase
+      .from('despega_misiones')
+      .select('puntos')
+      .eq('id', mision_id)
+      .single()
 
-  if (!mision) throw new Error("Mision not found")
-
-  // Record mision completion
-  const { data: userMision, error: misionError } = await supabase
-    .from("despega_user_misiones")
-    .upsert({
-      user_id: user.id,
-      mision_id,
-      completed: true,
-      completed_at: new Date().toISOString(),
-      puntos_earned: mision.puntos,
-      respuesta,
-      tiempo_dedicado_minutos,
-    })
-    .select()
-    .single()
-
-  if (misionError) throw misionError
-
-  // Update pilar progress
-  const pilar = mision.ruta.pilar
-  const { data: currentProgress } = await supabase
-    .from("despega_pilar_progress")
-    .select("*")
-    .eq("user_id", user.id)
-    .eq("pilar", pilar)
-    .single()
-
-  if (currentProgress) {
-    const newScore = (currentProgress.score || 0) + mision.puntos
-    const newProgreso = Math.min(currentProgress.progreso + 2, 100)
-
-    await supabase
-      .from("despega_pilar_progress")
-      .update({
-        score: newScore,
-        progreso: newProgreso,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", user.id)
-      .eq("pilar", pilar)
-  }
-
-  // Update rankings
-  const { data: currentRanking } = await supabase
-    .from("despega_rankings")
-    .select("*")
-    .eq("user_id", user.id)
-    .single()
-
-  if (currentRanking) {
-    const scoreFieldMap: Record<string, string> = {
-      "a1_cerebral": "score_a1_cerebral",
-      "a2_rutas": "score_a2_rutas",
-      "aterrizaje": "score_aterrizaje",
-      "base": "score_base",
+    if (misionError || !mision) {
+      throw new Error(`Mission ${mision_id} not found`)
     }
 
-    const scoreField = scoreFieldMap[pilar]
-    const currentPilarScore = currentRanking[scoreField] || 0
+    // Get active cycle for A1
+    const { data: cycle, error: cycleError } = await supabase
+      .from('despega_cycles')
+      .select('id')
+      .eq('user_id', user.id)
+      .eq('pilar', 'a1_cerebral')
+      .eq('status', 'active')
+      .single()
 
-    await supabase
-      .from("despega_rankings")
-      .update({
-        [scoreField]: currentPilarScore + mision.puntos,
-        score_general: (currentRanking.score_general || 0) + mision.puntos,
-        total_misiones_completadas: (currentRanking.total_misiones_completadas || 0) + 1,
-        updated_at: new Date().toISOString(),
-      })
-      .eq("user_id", user.id)
+    if (cycleError || !cycle) {
+      throw new Error('No active cycle found for A1')
+    }
+
+    // Use atomic RPC for mission completion (Blocker #3: Idempotent + Atomic + Cycle-aware)
+    // This function handles: mission completion, progress update, scoring, all in one transaction
+    const { data, error } = await supabase.rpc('complete_a1_mission_transaction', {
+      p_user_id: user.id,
+      p_mision_id: mision_id,
+      p_cycle_id: cycle.id,
+      p_notes: respuesta || null,
+      p_puntos: mision.puntos,
+    })
+
+    if (error) {
+      console.error("[v0] RPC error in completeMision:", error)
+      throw error
+    }
+
+    if (!data || data.length === 0) {
+      throw new Error("RPC returned no data")
+    }
+
+    const result = data[0]
+    
+    console.log("[v0] Mission completion recorded via atomic RPC", {
+      mission_id: mision_id,
+      points: result.puntos_awarded,
+      progress_pct: result.progress_pct_new,
+      success: result.success,
+      message: result.message
+    })
+
+    revalidatePath("/despega")
+    
+    return {
+      success: result.success,
+      puntos_awarded: result.puntos_awarded,
+      progress_pct_new: result.progress_pct_new,
+      message: result.message
+    }
+  } catch (error) {
+    console.error("[v0] Error in completeMision:", error)
+    throw error
   }
-
-  revalidatePath("/despega")
-  return userMision
 }
 
 export async function updatePilarProgress(pilar: string, ciclo_actual: number, ciclo_dia: number) {

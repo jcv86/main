@@ -124,7 +124,7 @@ export default function FeedbackPage() {
                 >
                   <div className="flex items-center justify-between mb-2">
                     <p className="font-semibold text-muted/90 dark:text-white">{value.simulation}</p>
-                    <Badge className="bg-training text-white">{value.overallScore}%</Badge>
+                    <Badge className="rounded-[20px] bg-training text-white">{value.overallScore}%</Badge>
                   </div>
                   <p className="text-sm text-muted-foreground dark:text-muted-foreground">{value.date}</p>
                 </button>
@@ -136,7 +136,7 @@ export default function FeedbackPage() {
         {/* Feedback Content */}
         <div className="space-y-6">
           {/* Overall Score */}
-          <Card className="bg-training text-white border-0">
+          <Card className="rounded-[2px] bg-training text-white border-0">
             <CardContent className="pt-6 pb-6">
               <div className="flex items-center justify-between">
                 <div>
@@ -178,7 +178,7 @@ export default function FeedbackPage() {
                             <Badge className="bg-orange">Mejorar</Badge>
                           )}
                           {item.type === 'insight' && (
-                            <Badge className="bg-training">Insight</Badge>
+                            <Badge className="rounded-[20px] bg-training">Insight</Badge>
                           )}
                         </div>
                         <p className="text-muted-foreground dark:text-white/85 mb-3">
@@ -197,7 +197,7 @@ export default function FeedbackPage() {
           </div>
 
           {/* Action Items */}
-          <Card className="border-2 border-purple/30 dark:border-purple">
+          <Card className="rounded-[2px] border-2 border-purple/30 dark:border-purple">
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Lightbulb className="w-5 h-5 text-purple" />
@@ -221,7 +221,7 @@ export default function FeedbackPage() {
                 <p className="text-sm text-muted-foreground dark:text-white/85 mb-3">
                   Cuando estés listo, practica la siguiente dificultad:
                 </p>
-                <Button className="w-full bg-purple/80 hover:bg-purple/70">
+                <Button className="w-full rounded-[20px] bg-purple/80 hover:bg-purple/70">
                   <Volume2 className="w-4 h-4 mr-2" />
                   Iniciar Entrevista Estructurada (Siguiente Nivel)
                 </Button>

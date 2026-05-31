@@ -90,7 +90,7 @@ export function DISCWidget({ profile, userName }: DISCWidgetProps) {
           </div>
 
           {/* Preferencias de contenido */}
-          <div className="bg-white/50 dark:bg-black/20 p-3 rounded-lg space-y-2">
+          <div className="bg-purple-500/50 dark:bg-black/20 p-3 rounded-lg space-y-2">
             <p className="text-xs font-semibold text-muted-foreground">Tu preferencia de contenido</p>
             <div className="grid grid-cols-2 gap-2 text-xs">
               <div>

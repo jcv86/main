@@ -67,7 +67,7 @@ export function TrainingProgressDashboard() {
       completion_master: 'bg-green-500/20 text-green-400 border-green-500/30',
       advanced_challenger: 'bg-red-500/20 text-red-400 border-red-500/30'
     }
-    return colors[badge] || 'bg-white/5 text-white/60 border-white/10'
+    return colors[badge] || 'bg-purple-500/5 text-white/60 border-white/10'
   }
 
   const getBadgeLabel = (badge: string) => {
@@ -98,7 +98,7 @@ export function TrainingProgressDashboard() {
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             activeTab === 'overview'
               ? 'bg-purple-500/30 text-purple-400'
-              : 'bg-white/5 text-white/60 hover:bg-white/10'
+              : 'bg-purple-500/5 text-white/60 hover:bg-white/10'
           }`}
         >
           Resumen
@@ -108,7 +108,7 @@ export function TrainingProgressDashboard() {
           className={`px-4 py-2 rounded-lg font-medium transition-colors ${
             activeTab === 'history'
               ? 'bg-purple-500/30 text-purple-400'
-              : 'bg-white/5 text-white/60 hover:bg-white/10'
+              : 'bg-purple-500/5 text-white/60 hover:bg-white/10'
           }`}
         >
           Historial
@@ -266,7 +266,7 @@ export function TrainingProgressDashboard() {
                 animate={{ opacity: 1, x: 0 }}
                 transition={{ delay: idx * 0.05 }}
               >
-                <Card className="border-white/10 bg-white/5 hover:bg-white/10 transition-colors cursor-pointer">
+                <Card className="border-white/10 bg-purple-500/5 hover:bg-white/10 transition-colors cursor-pointer">
                   <CardContent className="pt-4 pb-4">
                     <div className="flex items-center justify-between gap-4">
                       <div className="flex-1">

@@ -10,9 +10,9 @@ export default function GamificationClient() {
   return (
     <div className="space-y-6 pb-12">
       <div>
-        <h1 className="text-3xl font-bold tracking-tight">Gamification Hub</h1>
+        <h1 className="text-3xl font-bold tracking-tight">Centro de Gamificación</h1>
         <p className="text-muted-foreground mt-2">
-          Track your progress, earn rewards, and compete with other users
+          Sigue tu progreso, gana recompensas y compite con otros usuarios
         </p>
       </div>
 
@@ -20,19 +20,19 @@ export default function GamificationClient() {
         <TabsList className="grid w-full grid-cols-4">
           <TabsTrigger value="profile" className="flex items-center gap-2">
             <TrendingUp className="h-4 w-4" />
-            <span className="hidden sm:inline">Profile</span>
+            <span className="hidden sm:inline">Perfil</span>
           </TabsTrigger>
           <TabsTrigger value="leaderboard" className="flex items-center gap-2">
             <Trophy className="h-4 w-4" />
-            <span className="hidden sm:inline">Leaderboard</span>
+            <span className="hidden sm:inline">Ranking</span>
           </TabsTrigger>
           <TabsTrigger value="activity" className="flex items-center gap-2">
             <Flame className="h-4 w-4" />
-            <span className="hidden sm:inline">Activity</span>
+            <span className="hidden sm:inline">Actividad</span>
           </TabsTrigger>
           <TabsTrigger value="info" className="flex items-center gap-2">
             <span className="text-lg">ℹ️</span>
-            <span className="hidden sm:inline">Info</span>
+            <span className="hidden sm:inline">Información</span>
           </TabsTrigger>
         </TabsList>
 
@@ -98,13 +98,13 @@ export default function GamificationClient() {
               <div className="bg-gradient-to-br from-green-50 to-emerald-50 border border-green-200 rounded-lg p-6">
                 <h3 className="font-bold text-lg mb-3">Streaks & Achievements</h3>
                 <p className="text-sm text-muted-foreground mb-3">
-                  Build streaks by staying active daily and unlock achievements through milestones.
+                  Crea racha manteniéndose activo diariamente y desbloquea logros en los hitos.
                 </p>
                 <ul className="text-sm space-y-1 list-disc list-inside">
-                  <li>Maintain daily activity streaks</li>
-                  <li>Unlock badges for milestones</li>
-                  <li>Share your achievements</li>
-                  <li>Compete on the leaderboard</li>
+                  <li>Mantén rachas de actividad diaria</li>
+                  <li>Desbloquea insignias en hitos</li>
+                  <li>Comparte tus logros</li>
+                  <li>Compite en la tabla de líderes</li>
                 </ul>
               </div>
             </div>

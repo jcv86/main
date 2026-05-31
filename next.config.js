@@ -5,8 +5,6 @@
 const userConfigImport = require('./next.user-config.js')
 const path = require('path')
 
-const __v0_turbopack_root = undefined ?? __dirname
-
 const userConfig = typeof userConfigImport === 'function'
   ? userConfigImport('phase-development-server', { defaultConfig: {} })
   : userConfigImport
@@ -23,14 +21,8 @@ const config = {
     fetches: { fullUrl: true, hmrRefreshes: true },
     browserToTerminal: true,
   },
-  turbopack: {
-    ...userConfig.turbopack,
-    root: __v0_turbopack_root,
-  },
   experimental: {
     ...userConfig.experimental,
-    transitionIndicator: true,
-    turbopackFileSystemCacheForDev: process.env.TURBOPACK_PERSISTENT_CACHE !== 'false' && process.env.TURBOPACK_PERSISTENT_CACHE !== '0',
     serverActions: {
       ...userConfig.experimental?.serverActions,
       allowedOrigins: [

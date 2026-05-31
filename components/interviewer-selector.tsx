@@ -120,7 +120,7 @@ export function InterviewerSelector({ value, onChange, compact = false }: Interv
                 <div className={`relative w-32 aspect-[3/4] rounded-lg overflow-hidden border-2 transition-all ${
                   value === interviewer.id
                     ? 'border-white shadow-lg shadow-white/30 scale-105'
-                    : 'border-muted/30 group-hover:border-white/50'
+                    : 'border-muted/30 group-hover:border-purple-500/200'
                 }`}>
                   <Image
                     src={interviewer.image}

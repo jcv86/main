@@ -16,7 +16,7 @@ import { ChallengeInvitation } from '@/components/a3-challenge-invitation'
 import { SofiaInterviewer } from '@/components/sofia-interviewer'
 import { A3GeneralProgress } from '@/components/a3-general-progress'
 
-const GUIDED_INTERVIEW_QUESTIONS = [
+const GUIDED_INTERVIEW_PREGUNTAS = [
   {
     id: 1,
     type: 'intro',
@@ -82,7 +82,7 @@ export default function GuidedInterviewPage() {
   const [submitted, setSubmitted] = useState(false)
   const [score, setScore] = useState<number | null>(null)
   const [validatingIds, setValidatingIds] = useState<Set<number>>(new Set())
-  const [started, setStarted] = useState(false)
+  const [started, setComenzared] = useState(false)
   const [showingFarewell, setShowingFarewell] = useState(false)
   const router = useRouter()
   const searchParams = useSearchParams()
@@ -90,11 +90,11 @@ export default function GuidedInterviewPage() {
 
   // Filter questions based on lesson type
   const lesson = searchParams.get('lesson')
-  const QUESTIONS_TO_USE = lesson === 'star' 
-    ? GUIDED_INTERVIEW_QUESTIONS.filter(q => q.id === 3 || q.id === 4) // STAR focused questions
-    : GUIDED_INTERVIEW_QUESTIONS
+  const PREGUNTAS_TO_USE = lesson === 'star' 
+    ? GUIDED_INTERVIEW_PREGUNTAS.filter(q => q.id === 3 || q.id === 4) // STAR focused questions
+    : GUIDED_INTERVIEW_PREGUNTAS
 
-  const currentQuestion = QUESTIONS_TO_USE[currentQuestionIndex]
+  const currentQuestion = PREGUNTAS_TO_USE[currentQuestionIndex]
 
   useEffect(() => {
     if (timeLeft > 0) {
@@ -144,13 +144,13 @@ export default function GuidedInterviewPage() {
     }
   }
 
-  const handleNext = () => {
-    if (currentQuestionIndex < QUESTIONS_TO_USE.length - 1) {
+  const handleSiguiente = () => {
+    if (currentQuestionIndex < PREGUNTAS_TO_USE.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1)
     }
   }
 
-  const handlePrevious = () => {
+  const handleAnterior = () => {
     if (currentQuestionIndex > 0) {
       setCurrentQuestionIndex(currentQuestionIndex - 1)
     }
@@ -172,7 +172,7 @@ export default function GuidedInterviewPage() {
           user_id: user.id,
           simulation_type: lesson === 'star' ? 'guided_star' : 'guided',
           responses: responses,
-          total_questions: QUESTIONS_TO_USE.length,
+          total_questions: PREGUNTAS_TO_USE.length,
           completed_at: new Date().toISOString()
         })
 
@@ -181,7 +181,7 @@ export default function GuidedInterviewPage() {
       // Calculate score (simple heuristic based on response length and completeness)
       const totalLength = Object.values(responses).reduce((acc, r) => acc + r.length, 0)
       const avgLength = totalLength / Object.keys(responses).length
-      const completeness = (Object.keys(responses).length / QUESTIONS_TO_USE.length) * 100
+      const completeness = (Object.keys(responses).length / PREGUNTAS_TO_USE.length) * 100
       const calculatedScore = Math.round((avgLength / 200) * 50 + (completeness / 100) * 50)
 
       setScore(Math.min(calculatedScore, 100))
@@ -197,10 +197,10 @@ export default function GuidedInterviewPage() {
   if (!started) {
     return (
       <div className="min-h-screen bg-background">
-        {/* General Progress Bar */}
+        {/* General Progreso Bar */}
         <A3GeneralProgress 
           currentStep={1}
-          totalSteps={QUESTIONS_TO_USE.length + 1}
+          totalSteps={PREGUNTAS_TO_USE.length + 1}
           currentLabel="Preparación"
           completedSections={0}
           totalSections={4}
@@ -234,7 +234,7 @@ export default function GuidedInterviewPage() {
                 </p>
               </div>
 
-              <Card className="border-training/40">
+              <Card className="rounded-[2px] border-training/40">
                 <CardContent className="pt-6 space-y-4">
                   <div className="space-y-3">
                     <h3 className="font-bold text-white flex items-center gap-2">
@@ -261,15 +261,15 @@ export default function GuidedInterviewPage() {
                     </ul>
                   </div>
 
-                  <div className="bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
+                  <div className="rounded-[20px] bg-training/10 dark:bg-training/20 rounded-[20px] p-4 border border-training/30">
                     <p className="text-sm text-white/80">
                       <strong className="text-training">Nota:</strong> Sofia te guiará en cada pregunta con consejos del coach para mejorar tu respuesta.
                     </p>
                   </div>
 
                   <Button 
-                    onClick={() => setStarted(true)}
-                    className="w-full bg-training hover:bg-training/90 text-white h-12"
+                    onClick={() => setComenzared(true)}
+                    className="w-full rounded-[20px] bg-training hover:bg-training/90 text-white h-12"
                   >
                     Comenzar Entrevista
                   </Button>
@@ -286,7 +286,7 @@ export default function GuidedInterviewPage() {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center px-4">
         <div className="max-w-md w-full space-y-6">
-          <Card className="border-training/40 overflow-hidden">
+          <Card className="rounded-[2px] border-training/40 overflow-hidden">
             <div className="relative aspect-[3/4] w-full bg-black">
               <video
                 src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-jqewmHgGSy0aNTnSXKpYDRGBDYj1rT.mov"
@@ -303,7 +303,7 @@ export default function GuidedInterviewPage() {
             </div>
           </Card>
 
-          <Card className="border-training/30 bg-training/5">
+          <Card className="rounded-[2px] border-training/30 bg-training/5">
             <CardContent className="pt-6">
               <p className="text-white/85 text-center">
                 Sofia se está despidiendo...
@@ -332,7 +332,7 @@ export default function GuidedInterviewPage() {
             </p>
           </div>
 
-          <Card className="p-6">
+          <Card className="rounded-[2px] p-6">
             <h2 className="text-xl font-bold mb-4">Próximos Pasos</h2>
             <ul className="space-y-3 text-muted-foreground dark:text-white/85">
               <li className="flex gap-3">
@@ -354,7 +354,7 @@ export default function GuidedInterviewPage() {
             <Link href="/despega/a3/simulations" className="flex-1">
               <Button variant="outline" className="w-full">Volver a Entrenamientos</Button>
             </Link>
-            <Button onClick={() => handleNext()} className="flex-1 bg-training/80 hover:bg-training/70">
+            <Button onClick={() => handleSiguiente()} className="flex-1 bg-training/80 hover:bg-training/70">
               Ver Análisis Detallado
             </Button>
           </div>

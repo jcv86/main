@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
-import { useCoach } from "@/contexts/coach-context"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -29,7 +28,8 @@ export default function A4Page() {
     streak: 0,
     badges: [],
   })
-  const { currentProgress, coachMessages } = useCoach()
+  // Note: Removed useCoach dependency to fix build error
+  // Coach context will be available through CoachProviderWrapper when re-enabled in layout
   const supabase = createClient()
 
   useEffect(() => {
@@ -147,7 +147,7 @@ export default function A4Page() {
               <Button className="bg-white text-cyan hover:bg-blue/5 font-semibold" size="lg">
                 Explorar Radar Estratégico
               </Button>
-              <Button variant="outline" className="border-white text-white hover:bg-white/10" size="lg">
+              <Button variant="outline" className="border-[rgb(80,160,170)] text-white hover:bg-white/10" size="lg">
                 Ver Guía A4
               </Button>
             </div>

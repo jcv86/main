@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
 import { QuestionProgress } from '@/components/question-progress'
+import { getDemoMode } from '@/lib/despega/demo-user'
 
 type QuestionTiming = {
   questionId: number
@@ -20,6 +21,7 @@ export default function A1CerebralPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authOk, setAuthOk] = useState(false)
+  const [userId, setUserId] = useState<string | null>(null)
   const [questionTimings, setQuestionTimings] = useState<QuestionTiming[]>([])
   const router = useRouter()
   const sb = createClient()
@@ -28,26 +30,21 @@ export default function A1CerebralPage() {
     const check = async () => {
       const { data: { user } } = await sb.auth.getUser()
       
-      // Check if user exists in Supabase or is a demo user
-      let userId = user?.id
+      // Check if user exists in Supabase or is in demo mode
+      let currentUserId = user?.id
       if (!user) {
-        // Check if demo user exists in localStorage
-        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        if (demoUserStr) {
-          try {
-            const demoUser = JSON.parse(demoUserStr)
-            userId = demoUser.id
-            console.log('[v0] Demo user found for a1-cerebral:', demoUser.email)
-          } catch (e) {
-            console.error('[v0] Error parsing demo user:', e)
-            router.push('/auth/signin')
-            return
-          }
+        // Issue #8: Check demo mode flag (no PII in localStorage)
+        const isDemoMode = getDemoMode()
+        if (isDemoMode) {
+          // In demo mode: use a placeholder ID
+          currentUserId = 'demo-user-' + Math.random().toString(36).substr(2, 9)
+          console.log('[v0] Demo mode active for a1-cerebral')
         } else {
           router.push('/auth/signin')
           return
         }
       }
+      setUserId(currentUserId || null)
       setAuthOk(true)
     }
     check()
@@ -108,25 +105,25 @@ export default function A1CerebralPage() {
       try {
         console.log('[v0] Starting test submission via API...')
         
-        // Get user first
-        const { data: { user } } = await sb.auth.getUser()
-        if (!user) {
-          console.log('[v0] No user found, redirecting to signin')
-          router.push('/auth/signin')
+        // Use the userId from state (which could be a demo user or authenticated user)
+        if (!userId) {
+          console.error('[v0] No user ID available')
+          setError('Error: usuario no identificado')
           return
         }
         
         const scores = calculateScores()
         console.log('[v0] Scores calculated:', scores)
         console.log('[v0] Response timings:', questionTimings)
+        console.log('[v0] Submitting with user_id:', userId)
         
-        // Call API endpoint to save Cerebral assessment, passing user_id and response timings
+        // Call API endpoint to save Cerebral assessment
         const response = await fetch('/api/a1-cerebral-save', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
           body: JSON.stringify({
-            user_id: user.id,
+            user_id: userId,
             responses: { more, less },
             questions: DISC_TEST_QUESTIONS.map(q => ({ id: q.id, pregunta: q.pregunta })),
             disc_profile: scores,
@@ -234,7 +231,7 @@ export default function A1CerebralPage() {
                         ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20' 
                         : more[q.id] === opt.texto 
                           ? 'border-muted/20 bg-muted/5 text-white/70 opacity-50 cursor-not-allowed' 
-                          : 'border-red/40 text-white/90 hover:border-red hover:bg-red/15 hover:text-white'
+                          : 'border-red/40 text-white/90 hover:border-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.6)]/15 hover:text-white'
                     }`}>
                     {opt.texto}
                   </button>

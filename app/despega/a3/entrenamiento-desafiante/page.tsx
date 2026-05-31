@@ -6,7 +6,6 @@ import { Badge } from '@/components/ui/badge'
 import { Card, CardContent } from '@/components/ui/card'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { TrainingResultsCard } from '@/components/training-results-card'
 import {
   ArrowLeft,
   Crown,
@@ -19,8 +18,9 @@ import {
   CheckCircle2,
   TrendingUp
 } from 'lucide-react'
+import { ModuleCompletionScreen } from '@/components/module-completion-screen'
 
-const CHALLENGING_QUESTIONS = [
+const CHALLENGING_PREGUNTAS = [
   {
     id: 1,
     number: 1,
@@ -79,6 +79,7 @@ export default function ChallensingTrainingPage() {
   const [showingFarewell, setShowingFarewell] = useState(false)
   const [showingResults, setShowingResults] = useState(false)
   const [finalScore, setFinalScore] = useState(0)
+  const [isCompleted, setIsCompleted] = useState(false)
   
   // Recording state
   const [isRecording, setIsRecording] = useState(false)
@@ -99,7 +100,7 @@ export default function ChallensingTrainingPage() {
   const videoRef = useRef<HTMLVideoElement>(null)
   const streamRef = useRef<MediaStream | null>(null)
 
-  const question = CHALLENGING_QUESTIONS[currentQuestion]
+  const question = CHALLENGING_PREGUNTAS[currentQuestion]
   const averageScore = scores && Object.values(scores).length > 0
     ? Math.round(Object.values(scores).reduce((a, b) => a + b, 0) / Object.values(scores).length)
     : 0
@@ -221,13 +222,13 @@ export default function ChallensingTrainingPage() {
     }
   }
 
-  const moveToNextQuestion = () => {
+  const moveToSiguienteQuestion = () => {
     setEvaluation(null)
     setTextResponse('')
     setHasResponse(false)
     setRecordingTime(0)
     
-    if (currentQuestion < CHALLENGING_QUESTIONS.length - 1) {
+    if (currentQuestion < CHALLENGING_PREGUNTAS.length - 1) {
       setCurrentQuestion(currentQuestion + 1)
     }
   }
@@ -241,21 +242,43 @@ export default function ChallensingTrainingPage() {
   return (
     <main className="min-h-screen bg-black">
       {showingResults ? (
-        <TrainingResultsCard
-          result={{
-            score: finalScore,
-            questionsCompleted: completedQuestions.length,
-            totalQuestions: 10,
-            timeSpent: 1800,
-            level: 'avanzado',
-            trainingType: 'Entrenamiento Desafiante'
-          }}
-          onContinue={() => router.push('/despega/a3')}
-        />
+        <div className="flex items-center justify-center px-4 min-h-screen">
+          <Card className="rounded-[2px] bg-black border-green-500/30 w-full max-w-md">
+            <CardContent className="pt-12 text-center pb-12">
+              <div className="mb-6">
+                <CheckCircle2 className="w-16 h-16 text-green-500 mx-auto mb-4" />
+                <h2 className="text-2xl font-bold mb-2">Entrenamiento Completado</h2>
+                <p className="text-white/60">Excelente trabajo en este entrenamiento desafiante</p>
+              </div>
+
+              <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 border border-green-500/30 rounded-lg p-6 mb-6">
+                <p className="text-white/60 text-sm mb-2">Puntuación Obtenida</p>
+                <p className="text-5xl font-bold text-green-400">{finalScore}/100</p>
+              </div>
+
+              <div className="space-y-2">
+                <Button
+                  onClick={() => window.location.href = '/despega/a3'}
+                  className="w-full rounded-[20px] bg-gradient-to-r from-purple-600 to-pink-600"
+                >
+                  Ir al Dashboard
+                </Button>
+                <Button
+                  onClick={() => window.location.href = '/despega/a3/entrenamiento-conversacional'}
+                  className="w-full rounded-[20px] bg-gradient-to-r from-pink-600 to-purple-600"
+                >
+                  Siguiente Práctica
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      ) : showingResults ? (
+        <ModuleCompletionScreen moduleId="entrenamiento-desafiante" moduleName="Entrenamiento Desafiante" xpEarned={120} />
       ) : showingFarewell ? (
         <div className="flex items-center justify-center px-4 min-h-screen">
           <div className="max-w-md w-full space-y-6">
-            <Card className="border-training/40 overflow-hidden">
+            <Card className="rounded-[2px] border-training/40 overflow-hidden">
               <div className="relative aspect-[3/4] w-full bg-black">
                 <video
                   src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/Sofia02ciao-JJXsroDrldJQrOQgg1lHrJzODwH1Uf.mov"
@@ -275,7 +298,7 @@ export default function ChallensingTrainingPage() {
               </div>
             </Card>
 
-            <Card className="border-training/30 bg-training/5">
+            <Card className="rounded-[2px] border-training/30 bg-training/5">
               <CardContent className="pt-6">
                 <p className="text-white/85 text-center">
                   Sofia se está despidiendo...
@@ -296,7 +319,7 @@ export default function ChallensingTrainingPage() {
             </Link>
             <div className="flex gap-4 items-center">
               <Badge style={{ backgroundColor: 'rgb(170, 70, 170, 0.6)', color: '#ffffff', border: 'none' }}>DESAFÍO MÁXIMO</Badge>
-              <Badge style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', border: 'none' }}>{completedQuestions.length}/{CHALLENGING_QUESTIONS.length} Completadas</Badge>
+              <Badge style={{ backgroundColor: 'rgb(170, 70, 170)', color: '#ffffff', border: 'none' }}>{completedQuestions.length}/{CHALLENGING_PREGUNTAS.length} Completadas</Badge>
             </div>
           </div>
         </div>
@@ -331,7 +354,7 @@ export default function ChallensingTrainingPage() {
                 <div className="space-y-2">
                     <div className="flex items-start justify-between gap-4">
                     <div>
-                      <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_QUESTIONS.length}</h3>
+                      <h3 className="text-sm font-bold text-muted-foreground mb-2">Pregunta {currentQuestion + 1} de {CHALLENGING_PREGUNTAS.length}</h3>
                       <p className="text-lg text-white font-semibold">{question.question}</p>
                     </div>
                     <Badge style={{ backgroundColor: 'rgb(170, 70, 170, 0.4)', color: '#ffffff', border: 'none' }}>{question.difficulty}</Badge>
@@ -429,7 +452,7 @@ export default function ChallensingTrainingPage() {
                       <p className="text-sm text-white/85">{evaluation.scoreExplanation}</p>
                     </div>
 
-                    {/* Strengths */}
+                    {/* Fortalezas */}
                     <div className="space-y-2">
                       <p className="text-sm font-semibold text-green/40 flex items-center gap-2">
                         <CheckCircle2 className="w-4 h-4" />
@@ -467,10 +490,10 @@ export default function ChallensingTrainingPage() {
                       <p className="text-sm text-white/85">{evaluation.feedback}</p>
                     </div>
 
-                    {/* Next Question Button */}
-                    {currentQuestion < CHALLENGING_QUESTIONS.length - 1 ? (
+                    {/* Siguiente Question Button */}
+                    {currentQuestion < CHALLENGING_PREGUNTAS.length - 1 ? (
                       <Button
-                        onClick={moveToNextQuestion}
+                        onClick={moveToSiguienteQuestion}
                         className="w-full gap-2"
                         style={{ backgroundColor: 'rgb(170, 70, 170, 0.8)', color: '#ffffff' }}
                       >
@@ -521,7 +544,7 @@ export default function ChallensingTrainingPage() {
               {/* Questions List */}
               <div className="flex-1 overflow-y-auto p-4 space-y-2">
                 <p className="text-xs font-bold text-white/70 uppercase tracking-widest mb-3">Preguntas</p>
-                {CHALLENGING_QUESTIONS.map((q, idx) => (
+                {CHALLENGING_PREGUNTAS.map((q, idx) => (
                   <button
                     key={q.id}
                     onClick={() => {
@@ -538,7 +561,7 @@ export default function ChallensingTrainingPage() {
                         ? 'text-white'
                         : completedQuestions.includes(idx)
                         ? 'bg-green/20 border border-green/40 cursor-pointer hover:bg-green/30 text-white'
-                        : 'bg-white/10 border border-white/20 text-white/80'
+                        : 'bg-white/10 border border-[rgb(80,160,170)]/20 text-white/80'
                     }`}
                     style={idx === currentQuestion ? { backgroundColor: 'rgb(170, 70, 170, 0.2)', border: '1px solid rgb(170, 70, 170, 0.6)' } : {}}
                   >

@@ -1,170 +1,171 @@
-import { createClient } from "@/lib/supabase/server"
-import { NextRequest, NextResponse } from "next/server"
-import { detectRedFlags, getPillarContext } from "@/lib/brandie-coherence-test"
+import { NextRequest, NextResponse } from 'next/server'
 
-export async function POST(request: NextRequest) {
-  try {
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+const A4_SYSTEM_PROMPT = `Eres el Coach de Contexto de Despega Tu Carrera. Tu rol es ayudar personas a entender el sistema en Chile de una manera práctica y accesible.
 
-    if (!user) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 })
-    }
+**TU IDENTIDAD:**
+- Eres un TRADUCTOR de contexto, no un informante
+- Explicasconceptos de forma clara y aplicada
+- Enfoque NO elitista
+- Buscas explicar CÓMO FUNCIONA el sistema
+- Hablas desde la perspectiva de alguien que VIVE en él
 
-    const { message, context } = await request.json()
-
-    if (!message || !context) {
-      return NextResponse.json({ error: "Missing required fields" }, { status: 400 })
-    }
-
-    const systemPrompt = `Eres el Chat Coach DTC en modo A4 – Noticias y Contexto.
-
-TU IDENTIDAD Y ROL (CANONICAL A4 v1.0):
-Tu rol es actuar como TRADUCTOR DEL CONTEXTO, explicando noticias, conceptos y fenómenos de forma clara, aplicada y no elitista.
-
-NO informas por informar. Explicas para que el usuario entienda cómo el sistema funciona.
-
-OBJETIVO CENTRAL DE A4:
-El usuario debe:
-- Entender conceptos básicos que el sistema da por obvios
+**TU OBJETIVO:**
 - Reducir brechas de cultura aplicada
-- Dejar de sentirse "fuera del sistema"
-- Ganar lenguaje y marco para moverse con más seguridad
+- Que el usuario deje de sentirse "afuera del sistema"
+- Proporcionar lenguaje y marcos para navegar con confianza
 
-A4 busca ALFABETIZACIÓN FUNCIONAL ADULTA, no erudición.
+**REGLAS OBLIGATORIAS:**
+1. Explica conceptos ANTES de opinar
+2. Reduce complejidad SIN sobre-simplificar
+3. Conecta noticias a impacto diario
+4. Traduce lenguaje técnico a lenguaje humano
+5. NUNCA ridiculices la ignorancia
 
-MARCO DE FUNCIONAMIENTO OBLIGATORIO:
-✓ Explicas conceptos antes de opinar
-✓ Bajas complejidad sin simplificar en exceso
-✓ Conectas noticias con impacto cotidiano
-✓ Traduces lenguaje técnico a lenguaje humano
-✓ NUNCA ridiculizas la ignorancia
-
-TIPOS DE CONTENIDOS (Ejemplos):
+**CONTENIDOS DONDE PUEDES AYUDAR:**
 - Noticias económicas (UF, inflación, tasas, empleo)
-- Indicadores del país (IMACEC, IPC, PIB)
+- Indicadores de país (IMACEC, IPC, PIB)
 - Reglas implícitas del mundo laboral
 - Cultura mínima para entrevistas y trabajo
 - Cambios sociales que afectan decisiones personales
 
-USO DE EJEMPLOS Y ANALOGÍAS:
-Privilegia ejemplos cotidianos, comparaciones simples, situaciones reconocibles.
-Ejemplo: "Esto funciona parecido a cuando sube el arriendo aunque tu sueldo no cambie."
+**SIEMPRE con enfoque PRÁCTICO.**
 
-USO DE PREGUNTAS:
-Las preguntas sirven para:
-- Conectar la noticia con la vida del usuario
-- Verificar comprensión
-- Abrir reflexión
-NUNCA para evaluar conocimiento.
+**NO HAGAS:**
+- Sermones o moralejas
+- Editorializaciones políticas
+- Recomendaciones financieras personalizadas
+- Asumir nivel de conocimiento previo
 
-MANEJO DE DESCONOCIMIENTO:
-Cuando el usuario no sabe algo:
-- Normaliza ("esto no se enseña formalmente")
+**EJEMPLOS QUE FUNCIONAN:**
+"Esto funciona parecido a cuando sube el arriendo aunque tu sueldo no cambie."
+"Mira, la UF es como un 'índice de inflación' que el gobierno usa para..."
+
+**CUANDO EL USUARIO NO SABE ALGO:**
+- Normaliza: "esto no se enseña formalmente"
 - Explica desde cero
 - Evita tono académico
-- NUNCA haces sentir menos
+- Nunca hagas sentir "menos-que"
 
-LÍMITES EXPLÍCITOS (BRANDIE SENSEI NIVEL 2):
-El Chat Coach en A4 NO:
-✗ Sermonea
-✗ Editorializa políticamente
-✗ Entrega recomendaciones financieras personalizadas
-✗ Asume nivel previo de conocimiento
+**RED FLAGS - BLOQUEA INMEDIATAMENTE:**
+- Recomendaciones financieras específicas
+- Análisis político editorial
+- Contenido que ridiculiza ignorancia
+- Suposiciones elitistas
+- Tono sermoneador
 
-Explica el sistema, no tomas postura.
+Responde siempre en español de Chile, de forma conversacional y empática.`
 
-INFLUENCIAS INTERNAS (No visibles):
-Tu razonamiento está influenciado por enfoques tipo "Hidden Brain":
-- Reglas invisibles del sistema
-- Contexto sobre rasgo individual
-- Comprensión antes de juicio
+interface A4CoachRequest {
+  message: string
+  context?: string
+  userId?: string
+  conversationHistory?: Array<{ role: string; content: string }>
+}
 
-Estos referentes NO se mencionan explícitamente.
+export async function POST(request: NextRequest) {
+  try {
+    const body: A4CoachRequest = await request.json()
+    const { message, context = 'noticias y contexto de Chile', conversationHistory = [] } = body
 
-ESTRUCTURA DE RESPUESTA (SIEMPRE):
-1. Contextualización en 1-2 líneas (qué sucede en el mercado/sistema)
-2. Conexión personal en 2-3 líneas (cómo afecta perfiles de carrera)
-3. Pregunta reflexiva (abre profundización futura)
+    const openaiApiKey = process.env.OPENAI_API_KEY
+    if (!openaiApiKey) {
+      console.error('[v0] Missing OPENAI_API_KEY')
+      return NextResponse.json({ error: 'API configuration missing' }, { status: 500 })
+    }
 
-CIERRE DE INTERACCIÓN:
-✓ Resume el concepto entendido
-✓ Conecta con la vida cotidiana
-✓ Deja abierta la profundización futura
-✗ No exiges memorización
-✗ No exiges acción inmediata
+    // Format conversation for OpenAI
+    const messages = [
+      ...conversationHistory.map((msg) => ({
+        role: msg.role as 'user' | 'assistant',
+        content: msg.content,
+      })),
+      {
+        role: 'user' as const,
+        content: message,
+      },
+    ]
 
-RED FLAGS (Una sola invalida):
-- "Deberías", "Tienes que", "Lo correcto es"
-- "Está mal que", "No debes"
-- Prescripción de acción personal
-- Recomendación financiera específica
-- Editorialización política
-- Tono condescendiente o elitista
-
-MÁXIMO 200 PALABRAS. LENGUAJE CHILENO NATURAL.`
-
-    // Call OpenAI API directly
-    const openaiResponse = await fetch("https://api.openai.com/v1/chat/completions", {
-      method: "POST",
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": `Bearer ${process.env.OPENAI_API_KEY}`,
+        'Authorization': `Bearer ${openaiApiKey}`,
+        'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        model: "gpt-4-turbo",
-        messages: [
-          { role: "system", content: systemPrompt },
-          { role: "user", content: message },
-        ],
+        model: 'gpt-4o-mini',
+        messages: [{ role: 'system', content: A4_SYSTEM_PROMPT }, ...messages],
         temperature: 0.7,
+        max_tokens: 500,
+        stream: true,
       }),
     })
 
-    if (!openaiResponse.ok) {
-      throw new Error(`OpenAI API error: ${openaiResponse.statusText}`)
+    if (!response.ok) {
+      const error = await response.text()
+      console.error('[v0] OpenAI API error:', error)
+      return NextResponse.json({ error: 'Failed to get coach response' }, { status: response.status })
     }
 
-    const data = await openaiResponse.json()
-    const responseText = data.choices?.[0]?.message?.content || ""
+    // Stream the response
+    const encoder = new TextEncoder()
+    const customStream = new ReadableStream({
+      async start(controller) {
+        const reader = response.body?.getReader()
+        if (!reader) {
+          controller.close()
+          return
+        }
 
-    if (!responseText || responseText.trim() === "") {
-      console.warn("[A4 Coach] Empty response from OpenAI")
-      return NextResponse.json({
-        response: "No pude procesar tu contexto en este momento. Por favor intenta de nuevo.",
-        type: "contexto",
-        coherenceCheck: {
-          redFlagsDetected: [],
-          pillarCompliant: false,
-        },
-      })
-    }
+        try {
+          const decoder = new TextDecoder()
+          let buffer = ''
 
-    // Parse structured response
-    let result: any
-    try {
-      result = JSON.parse(responseText)
-    } catch {
-      result = {
-        response: responseText,
-        type: "contexto",
-      }
-    }
+          while (true) {
+            const { done, value } = await reader.read()
+            if (done) break
 
-    // Post-generation coherence check
-    const redFlags = detectRedFlags(result.response, "a4")
-    const pillarRules = getPillarContext("a4")
+            buffer += decoder.decode(value, { stream: true })
+            const lines = buffer.split('\n')
 
-    return NextResponse.json({
-      response: result.response,
-      type: result.type || "contexto",
-      coherenceCheck: {
-        redFlagsDetected: redFlags,
-        pillarCompliant: redFlags.length === 0,
+            for (let i = 0; i < lines.length - 1; i++) {
+              const line = lines[i].trim()
+              if (line.startsWith('data: ')) {
+                const data = line.slice(6)
+
+                if (data === '[DONE]') break
+
+                try {
+                  const parsed = JSON.parse(data)
+                  const content = parsed.choices?.[0]?.delta?.content
+                  if (content) {
+                    controller.enqueue(encoder.encode(content))
+                  }
+                } catch {
+                  // Skip unparseable lines
+                }
+              }
+            }
+
+            buffer = lines[lines.length - 1]
+          }
+        } catch (error) {
+          console.error('[v0] Stream error:', error)
+          controller.error(error)
+        } finally {
+          controller.close()
+        }
+      },
+    })
+
+    return new Response(customStream, {
+      headers: {
+        'Content-Type': 'text/event-stream',
+        'Cache-Control': 'no-cache',
+        'Connection': 'keep-alive',
       },
     })
   } catch (error) {
-    console.error("Error in A4 coach endpoint:", error)
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 })
+    console.error('[v0] A4 Coach API error:', error)
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

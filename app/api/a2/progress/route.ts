@@ -20,6 +20,16 @@ export async function GET(request: NextRequest) {
           completed_tasks: 0,
           total_tasks: 90,
           status: 'not_started',
+          month_progress: [
+            { month: 1, percentage: 0, completed: false },
+            { month: 2, percentage: 0, completed: false },
+            { month: 3, percentage: 0, completed: false },
+          ],
+          milestones: [
+            { month: 1, title: '30 días - Primer milestone', status: 'pending' },
+            { month: 2, title: '60 días - Segundo milestone', status: 'pending' },
+            { month: 3, title: '90 días - Completado', status: 'pending' },
+          ],
         },
         { status: 200 }
       )
@@ -27,73 +37,38 @@ export async function GET(request: NextRequest) {
 
     const userId = user.id
 
-    // Fetch user's personalized route
-    const { data: profileData } = await supabase
-      .from('despegar_profiles')
-      .select('id, personalized_route')
-      .eq('user_id', userId)
-      .single()
-
-    if (!profileData?.personalized_route) {
-      return NextResponse.json(
-        {
-          current_month: 1,
-          progress_percentage: 0,
-          completed_tasks: 0,
-          total_tasks: 90,
-          status: 'not_started',
-        },
-        { status: 200 }
-      )
-    }
-
-    const route = profileData.personalized_route as any
-    
-    // Fetch completed tasks for this user
+    // Fetch completed days from a2_user_task_completions
     const { data: completions } = await supabase
-      .from('task_completions')
-      .select('phase_days, task_day, task_title')
+      .from('a2_user_task_completions')
+      .select('day, completed_at')
       .eq('user_id', userId)
+      .not('completed_at', 'is', null)
 
-    // Convert completions to set for fast lookup
-    const completedTasks = new Set(
-      (completions || []).map(c => `${c.phase_days}-${c.task_day}-${c.task_title}`)
+    // Get unique completed days
+    const completedDays = new Set(
+      (completions || []).map((c) => c.day)
     )
 
-    // Get all tasks from the route
-    const allTasks = [
-      ...(route.route_30days || []),
-      ...(route.route_60days || []),
-      ...(route.route_90days || [])
-    ]
+    // Calculate progress based on completed days (max 90 days)
+    const totalCompleted = completedDays.size
+    const totalDays = 90
+    const progressPercentage = Math.round((totalCompleted / totalDays) * 100)
 
-    // Calculate which tasks from each phase are completed
-    const completed30days = (route.route_30days || []).filter((task: any) =>
-      completedTasks.has(`30-${task.day}-${task.title}`)
-    ).length
-
-    const completed60days = (route.route_60days || []).filter((task: any) =>
-      completedTasks.has(`60-${task.day}-${task.title}`)
-    ).length
-
-    const completed90days = (route.route_90days || []).filter((task: any) =>
-      completedTasks.has(`90-${task.day}-${task.title}`)
-    ).length
-
-    const totalCompleted = completed30days + completed60days + completed90days
-    const totalTasks = allTasks.length
-    const progressPercentage = totalTasks > 0 ? Math.round((totalCompleted / totalTasks) * 100) : 0
-
-    // Determine current month based on which phase has most completion
+    // Determine current month based on day progression
+    // Month 1: Days 1-30
+    // Month 2: Days 31-60
+    // Month 3: Days 61-90
     let currentMonth = 1
-    if (completed30days === (route.route_30days || []).length && completed30days > 0) {
+    if (totalCompleted > 30) {
       currentMonth = 2
-      if (completed60days === (route.route_60days || []).length && completed60days > 0) {
-        currentMonth = 3
-      }
-    } else if (completed60days > 0 && completed30days < (route.route_30days || []).length) {
-      // If working on month 2
-      currentMonth = 2
+    }
+    if (totalCompleted > 60) {
+      currentMonth = 3
+    }
+
+    // If no completions yet, show month 1
+    if (totalCompleted === 0) {
+      currentMonth = 1
     }
 
     const status = 
@@ -102,13 +77,32 @@ export async function GET(request: NextRequest) {
       progressPercentage < 100 ? 'near_completion' :
       'completed'
 
+    // Calculate month percentages
+    const month1Completed = Array.from(completedDays).filter((d) => d >= 1 && d <= 30).length
+    const month2Completed = Array.from(completedDays).filter((d) => d >= 31 && d <= 60).length
+    const month3Completed = Array.from(completedDays).filter((d) => d >= 61 && d <= 90).length
+
+    const month1Percentage = Math.round((month1Completed / 30) * 100)
+    const month2Percentage = Math.round((month2Completed / 30) * 100)
+    const month3Percentage = Math.round((month3Completed / 30) * 100)
+
     return NextResponse.json(
       {
         current_month: currentMonth,
         progress_percentage: progressPercentage,
         completed_tasks: totalCompleted,
-        total_tasks: totalTasks,
+        total_tasks: totalDays,
         status,
+        month_progress: [
+          { month: 1, percentage: month1Percentage, completed: month1Percentage === 100 },
+          { month: 2, percentage: month2Percentage, completed: month2Percentage === 100 },
+          { month: 3, percentage: month3Percentage, completed: month3Percentage === 100 },
+        ],
+        milestones: [
+          { month: 1, title: '30 días - Primer milestone', status: month1Percentage === 100 ? 'completed' : month1Completed > 0 ? 'in_progress' : 'pending' },
+          { month: 2, title: '60 días - Segundo milestone', status: month2Percentage === 100 ? 'completed' : month2Completed > 0 ? 'in_progress' : 'pending' },
+          { month: 3, title: '90 días - Completado', status: month3Percentage === 100 ? 'completed' : month3Completed > 0 ? 'in_progress' : 'pending' },
+        ],
       },
       { status: 200 }
     )
@@ -123,6 +117,53 @@ export async function GET(request: NextRequest) {
         status: 'error',
       },
       { status: 200 }
+    )
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const body = await request.json()
+    const { dayNumber } = body
+
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+
+    if (authError || !user) {
+      return NextResponse.json(
+        { error: 'Not authenticated' },
+        { status: 401 }
+      )
+    }
+
+    const userId = user.id
+
+    // Mark day as completed in a2_user_task_completions
+    const { error: insertError } = await supabase
+      .from('a2_user_task_completions')
+      .insert({
+        user_id: userId,
+        day: dayNumber,
+        completed_at: new Date().toISOString(),
+      })
+
+    if (insertError && insertError.code !== '23505') { // 23505 is unique constraint violation
+      console.error('[v0] Error marking day complete:', insertError)
+      return NextResponse.json(
+        { error: 'Failed to update progress' },
+        { status: 500 }
+      )
+    }
+
+    return NextResponse.json({
+      success: true,
+      message: `Day ${dayNumber} marked as completed`,
+    })
+  } catch (error) {
+    console.error('[v0] Progress update error:', error)
+    return NextResponse.json(
+      { error: 'Failed to update progress' },
+      { status: 500 }
     )
   }
 }

@@ -55,26 +55,24 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
     const initCoach = async () => {
       try {
         if (!supabaseRef.current) {
-          console.warn('[v0] Supabase client not initialized')
-          return
+          return // Silently wait for client
         }
 
-        const { data: { user }, error } = await supabaseRef.current.auth.getUser()
+        // Check session first to avoid unnecessary auth calls
+        const { data: { session } } = await supabaseRef.current.auth.getSession()
         
-        if (error) {
-          console.warn('[v0] User not authenticated:', error.message)
+        if (!session) {
+          // No session yet - user may not be logged in or session is loading
           return
         }
 
+        const user = session.user
         if (!user) {
-          console.warn('[v0] No user session found')
           return
         }
 
         setUserId(user.id)
         setUserName(user.email?.split('@')[0] || 'Usuario')
-
-        console.log('[v0] Coach initialized for user:', user.id)
 
         // Load initial progress
         await loadProgress(user.id)
@@ -86,7 +84,7 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
     // Wait for supabase to be ready
     const timer = setTimeout(() => {
       initCoach()
-    }, 100)
+    }, 200)
 
     return () => clearTimeout(timer)
   }, [])
@@ -148,31 +146,8 @@ export function CoachProvider({ children }: { children: React.ReactNode }) {
       setCoachMessages([message])
 
       // COACH OMNIPRESENTE: Obtener contexto completo de A1+A2+A3+A4
-      // Non-blocking fetch with timeout to prevent hanging
-      console.log('[v0] Loading omnipresent coach context...')
-      try {
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 3000) // 3 second timeout
-        
-        const contextResponse = await fetch(`/rest/coach-context?user_id=${uid}`, {
-          signal: controller.signal
-        })
-        clearTimeout(timeoutId)
-        
-        if (contextResponse.ok) {
-          const contextData = await contextResponse.json()
-          if (contextData.context && contextData.context.contexto_completo) {
-            console.log('[v0] Coach context loaded:', contextData.context.contexto_completo)
-          }
-        }
-      } catch (error) {
-        // Non-critical, just log and continue
-        if (error instanceof Error && error.name === 'AbortError') {
-          console.log('[v0] Coach context fetch timeout (non-critical)')
-        } else {
-          console.warn('[v0] Could not load coach context (non-critical):', error)
-        }
-      }
+      // Disabled - endpoint moved to _disabled-rest, non-critical feature
+      // This would require creating a proper /api/coach-context endpoint
 
       console.log('[v0] Coach progress loaded:', {
         actionsCompleted,

@@ -136,7 +136,7 @@ export default function SettingsPage() {
       <div className="max-w-4xl mx-auto px-4 py-8">
         <div className="animate-pulse space-y-4">
           {[...Array(4)].map((_, i) => (
-            <div key={i} className="h-32 bg-white/5 rounded-lg" />
+            <div key={i} className="h-32 bg-[rgba(80,160,170,0.2)] rounded-lg" />
           ))}
         </div>
       </div>
@@ -165,7 +165,7 @@ export default function SettingsPage() {
       )}
 
       {error && (
-        <div className="mb-6 p-4 rounded-lg bg-red-500/10 border border-red-500/30 text-red-400 text-sm flex items-center gap-2">
+        <div className="mb-6 p-4 rounded-lg bg-[rgba(80,160,170,0.5)]/10 border border-[rgb(80,160,170)]/30 text-[rgb(80,160,170)] text-sm flex items-center gap-2">
           <AlertCircle className="w-4 h-4" />
           {error}
         </div>
@@ -220,7 +220,7 @@ export default function SettingsPage() {
               <select
                 value={preferences.language || 'es'}
                 onChange={(e) => handlePreferenceChange('language', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-blue/50"
+                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-[rgb(80,160,170)]/20 text-white focus:outline-none focus:ring-2 focus:ring-blue/50"
               >
                 {LANGUAGES.map(lang => (
                   <option key={lang.value} value={lang.value}>{lang.label}</option>
@@ -319,7 +319,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Communication Preferences - A4 Reality (Red) */}
-        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-red/50 transition-colors">
+        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-[rgb(80,160,170)]/50 transition-colors">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-red/30 border border-red/50">
               <LogIn className="w-5 h-5 text-red" />
@@ -340,7 +340,7 @@ export default function SettingsPage() {
               <select
                 value={preferences.timezone || 'America/Santiago'}
                 onChange={(e) => handlePreferenceChange('timezone', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-white/20 text-white focus:outline-none focus:ring-2 focus:ring-red/50"
+                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-[rgb(80,160,170)]/20 text-white focus:outline-none focus:ring-2 focus:ring-red/50"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -411,7 +411,7 @@ export default function SettingsPage() {
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-8 flex items-center gap-3 sticky bottom-0 bg-black/80 backdrop-blur p-4 rounded-lg border border-white/10">
+      <div className="mt-8 flex items-center gap-3 sticky bottom-0 bg-black/80 backdrop-blur p-4 rounded-lg border border-[rgb(80,160,170)]/10">
         <Button
           onClick={handleSave}
           disabled={loading}

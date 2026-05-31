@@ -1,6 +1,4 @@
-import { createClient } from '@/lib/supabase'
-
-interface Interview0Status {
+export interface Interview0Status {
   environment_check?: { passed: boolean; score: number }
   presence_check?: { passed: boolean; score: number }
   audio_check?: { passed: boolean; score: number }
@@ -12,50 +10,70 @@ interface Interview0Status {
 
 export async function saveInterview0Status(data: Interview0Status) {
   try {
-    const supabase = await createClient()
+    console.log('[v0] Attempting to save interview-0 status with data:', JSON.stringify(data))
     
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('No user authenticated')
+    const response = await fetch('/api/interview-0/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(data),
+      credentials: 'include',
+    })
 
-    const { error } = await supabase
-      .from('a3_entrevista_0')
-      .upsert({
-        user_id: user.id,
-        interview_0_completed: data.interview_0_completed ?? null,
-        interview_0_score: data.interview_0_score ?? null,
-        interview_0_status: data.interview_0_status ?? 'in_progress',
-        environment_check: data.environment_check ?? null,
-        presence_check: data.presence_check ?? null,
-        audio_check: data.audio_check ?? null,
-        preparation_check: data.preparation_check ?? null,
-        updated_at: new Date().toISOString()
-      }, {
-        onConflict: 'user_id'
+    console.log('[v0] Save response status:', response.status)
+
+    if (!response.ok) {
+      let errorData: any = { error: 'Unknown error' }
+      try {
+        errorData = await response.json()
+      } catch (parseErr) {
+        console.warn('[v0] Could not parse error response as JSON')
+        const text = await response.text()
+        errorData = { error: text || `HTTP ${response.status}` }
+      }
+      
+      console.error('[v0] Save failed:', {
+        status: response.status,
+        errorData,
+        timestamp: new Date().toISOString(),
+        sentData: data
       })
+      
+      const errorMessage = errorData.details || errorData.message || errorData.error || `HTTP ${response.status}`
+      throw new Error(errorMessage)
+    }
 
-    if (error) throw error
-    console.log('[v0] Interview 0 status saved')
+    const result = await response.json()
+    console.log('[v0] Interview 0 status saved successfully:', { 
+      timestamp: new Date().toISOString(),
+      dataFields: Object.keys(data)
+    })
+    return result
   } catch (err) {
-    console.error('[v0] Failed to save interview 0 status:', err)
-    throw err
+    const errorMessage = err instanceof Error ? err.message : String(err)
+    console.error('[v0] Failed to save interview 0 status:', {
+      error: errorMessage,
+      dataKeys: Object.keys(data),
+      timestamp: new Date().toISOString(),
+    })
+    // Fail gracefully but notify caller
+    throw new Error(`A3 Save Error: ${errorMessage}`)
   }
 }
 
 export async function getInterview0Status() {
   try {
-    const supabase = await createClient()
-    
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) return null
+    const response = await fetch('/api/interview-0/get', {
+      method: 'GET',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+    })
 
-    const { data, error } = await supabase
-      .from('a3_entrevista_0')
-      .select('*')
-      .eq('user_id', user.id)
-      .single()
+    if (!response.ok) {
+      if (response.status === 404) return null
+      throw new Error('Failed to get interview 0 status')
+    }
 
-    if (error && error.code !== 'PGRST116') throw error
-    
+    const data = await response.json()
     return data || null
   } catch (err) {
     console.error('[v0] Failed to get interview 0 status:', err)
@@ -65,26 +83,28 @@ export async function getInterview0Status() {
 
 export async function completeInterview0(finalScore: number) {
   try {
-    const supabase = await createClient()
-    
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) throw new Error('No user authenticated')
+    const response = await fetch('/api/interview-0/complete', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ finalScore }),
+      credentials: 'include',
+    })
 
-    const { error } = await supabase
-      .from('a3_entrevista_0')
-      .update({
-        interview_0_completed: true,
-        interview_0_score: finalScore,
-        interview_0_status: 'completed',
-        completed_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      })
-      .eq('user_id', user.id)
+    if (!response.ok) {
+      const errorData = await response.json().catch(() => ({ error: 'Unknown error' }))
+      console.error('[v0] Complete failed with status', response.status, errorData)
+      throw new Error(errorData.error || `HTTP ${response.status}`)
+    }
 
-    if (error) throw error
-    console.log('[v0] Interview 0 completed')
+    const result = await response.json()
+    console.log('[v0] Interview 0 completed successfully:', { finalScore, timestamp: new Date().toISOString() })
+    return result
   } catch (err) {
-    console.error('[v0] Failed to complete interview 0:', err)
+    console.error('[v0] Failed to complete interview 0:', {
+      error: err instanceof Error ? err.message : String(err),
+      finalScore,
+      timestamp: new Date().toISOString(),
+    })
     throw err
   }
 }

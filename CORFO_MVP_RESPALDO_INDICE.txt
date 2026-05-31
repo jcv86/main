@@ -1,0 +1,266 @@
+================================================================================
+              DESPEGA TU CARRERA - ÍNDICE DE DOCUMENTOS RESPALDO MVP
+                          CORFO SEMILLA INICIA 2026
+================================================================================
+
+OBJETIVO: Este índice te ayuda a encontrar rápidamente el documento PDF 
+que necesitas subir a la postulación de CORFO.
+
+================================================================================
+OPCIÓN RECOMENDADA: CREAR PDF EN 2 MINUTOS
+================================================================================
+
+PASO 1: Abre este archivo en tu navegador
+   Ubicación: /vercel/share/v0-project/dtc_mvp.html
+   
+PASO 2: Presiona Ctrl+P (Windows) o Cmd+P (Mac)
+   
+PASO 3: Selecciona "Guardar como PDF"
+   
+PASO 4: Guarda con el nombre:
+   "DTC_Respaldo_MVP_Semilla_Inicia_2026.pdf"
+
+RESULTADO: PDF profesional de 4 páginas con:
+   • Descripción del MVP
+   • 5 Screenshots en color
+   • Métricas de desarrollo
+   • Estado actual
+
+================================================================================
+ARCHIVOS DISPONIBLES (ELIGE UNO)
+================================================================================
+
+1. PARA CREAR PDF DESDE HTML (RECOMENDADO)
+   ──────────────────────────────────────────
+   Archivo: dtc_mvp.html
+   Tamaño: 11 KB
+   Ventaja: HTML estilado, fácil de convertir a PDF en navegador
+   Pasos: Abre → Ctrl+P → Guardar como PDF
+   
+2. PARA CREAR PDF DESDE MARKDOWN
+   ──────────────────────────────────────────
+   Archivo: DTC_RESPALDO_MVP_CORFO.md
+   Tamaño: 7.7 KB
+   Ventaja: Contenido puro en Markdown
+   Pasos: Usa Pandoc o herramienta online (pandoc.org/try)
+   
+3. RESUMEN EJECUTIVO EN TEXTO PLANO
+   ──────────────────────────────────────────
+   Archivo: DTC_MVP_RESUMEN_EJECUTIVO.txt
+   Tamaño: 9.4 KB
+   Ventaja: Texto plano, fácil de editar
+   Pasos: Abre en Word/Notepad → Guarda como PDF
+   
+4. DOCUMENTO HTML ALTERNATIVO
+   ──────────────────────────────────────────
+   Archivo: DTC_MVP_RESPALDO_PARA_CORFO.html
+   Tamaño: 7.5 KB
+   Ventaja: Formato HTML limpio
+   Pasos: Abre en navegador → Ctrl+P → PDF
+
+================================================================================
+SCREENSHOTS INCLUIDAS EN PDF
+================================================================================
+
+Los siguientes screenshots están incluidos en los documentos HTML/Markdown:
+
+1. dtc-01-home.png (66 KB)
+   Página de inicio - Propuesta de valor de DTC
+   
+2. dtc-02-despega.png (43 KB)
+   Acceso al programa - Pantalla de autenticación
+   
+3. dtc-03-dashboard.png (60 KB)
+   Dashboard principal - Seguimiento de progreso
+   
+4. dtc-04-ritual.png (64 KB)
+   Módulo El Ritual - Diagnóstico de identidad
+   
+5. dtc-05-exploracion.png (66 KB)
+   Módulo La Exploración - Auditoría de fortalezas
+
+Ubicación: /vercel/share/v0-project/public/corfo-mvp/
+
+================================================================================
+QUÉ CONTIENE EL PDF FINAL
+================================================================================
+
+PÁGINA 1: IDENTIFICACIÓN DEL MVP
+   • Descripción de la plataforma
+   • Propuesta de valor
+   • Links de acceso
+   • 6 módulos funcionales
+   • Tecnología utilizada
+
+PÁGINA 2: CAPTURAS DEL MVP
+   • 3 screenshots principales con descripciones
+   
+PÁGINA 3: MÁS MÓDULOS
+   • 2 screenshots adicionales
+   
+PÁGINA 4: ESTADO DE DESARROLLO
+   • Métricas de producción
+   • Estado actual: Production Ready
+   • Objetivo de la postulación
+   • Próximos pasos
+
+================================================================================
+INSTRUCCIONES PASO A PASO: CREAR PDF EN NAVEGADOR
+================================================================================
+
+SI USAS CHROME, FIREFOX O EDGE:
+
+1. Descarga o abre: /vercel/share/v0-project/dtc_mvp.html
+
+2. En tu navegador, presiona: Ctrl+P (Windows) o Cmd+P (Mac)
+
+3. Se abrirá diálogo de impresión con opciones:
+   • Destino: Selecciona "Guardar como PDF"
+   • Márgenes: Estándar o Normal
+   • Papel: Tamaño de carta (Letter) o A4
+   • Opciones: Dejar valores por defecto
+
+4. Haz clic en "Guardar"
+
+5. Elige ubicación y nombre:
+   "DTC_Respaldo_MVP_Semilla_Inicia_2026.pdf"
+
+6. Presiona "Guardar" final
+
+¡LISTO! Tu PDF está creado.
+
+================================================================================
+INSTRUCCIONES ALTERNATIVA: CONVERTIR MARKDOWN A PDF ONLINE
+================================================================================
+
+SI PREFIERES USAR HERRAMIENTA ONLINE:
+
+1. Abre: https://pandoc.org/try/
+
+2. En panel izquierdo, selecciona:
+   Input format: Markdown
+   Output format: PDF
+
+3. Copia el contenido de:
+   /vercel/share/v0-project/DTC_RESPALDO_MVP_CORFO.md
+
+4. Pégalo en el editor izquierdo
+
+5. Presiona "Convert"
+
+6. En el panel derecho, descarga el PDF generado
+
+================================================================================
+QUÉ SUBIR A CORFO
+================================================================================
+
+En la sección de "Material Complementario" o "Adjuntos" de CORFO, sube:
+
+ARCHIVO REQUERIDO:
+   • Nombre: DTC_Respaldo_MVP_Semilla_Inicia_2026.pdf
+   • Tamaño: ~2-3 MB (aprox)
+   • Páginas: 4
+   • Contenido: Descripción + screenshots + métricas
+
+INFORMACIÓN ADICIONAL EN FORMULARIO:
+   • Portal: https://www.despegatucarrera.com
+   • Demo: https://www.despegatucarrera.com/despega
+   • Usuarios de prueba: Travis, Ana, Carlos, María
+
+================================================================================
+VERIFICACIÓN ANTES DE ENVIAR A CORFO
+================================================================================
+
+Antes de subir el PDF, verifica que contenga:
+
+✓ Título y descripción del MVP
+✓ 5 screenshots en color del producto
+✓ Link de acceso a la plataforma
+✓ Descripción de módulos
+✓ Métricas de desarrollo
+✓ Estado: Production Ready
+✓ Objetivos claros
+✓ Formato profesional
+
+Si falta algo, crea el PDF nuevamente desde el HTML.
+
+================================================================================
+NOMBRES DE ARCHIVOS DISPONIBLES
+================================================================================
+
+Ubicación base: /vercel/share/v0-project/
+
+PARA PDF:
+   dtc_mvp.html
+   DTC_RESPALDO_MVP_CORFO.md
+   DTC_MVP_RESUMEN_EJECUTIVO.txt
+   DTC_MVP_RESPALDO_PARA_CORFO.html
+
+SCREENSHOTS:
+   public/corfo-mvp/dtc-01-home.png
+   public/corfo-mvp/dtc-02-despega.png
+   public/corfo-mvp/dtc-03-dashboard.png
+   public/corfo-mvp/dtc-04-ritual.png
+   public/corfo-mvp/dtc-05-exploracion.png
+
+DOCUMENTACIÓN TÉCNICA ADICIONAL:
+   PRODUCTION_RELEASE_CHECKLIST.md
+   PRODUCTION_READINESS_GUIDE.md
+   API_ARCHITECTURE_REFERENCE.md
+   scripts/release-runbook.sh
+
+================================================================================
+PREGUNTAS FRECUENTES
+================================================================================
+
+P: ¿Qué formato prefiere CORFO?
+R: PDF es el estándar. El documento tiene 4 páginas con todo lo necesario.
+
+P: ¿Puedo editar el HTML antes de convertir a PDF?
+R: Sí, abre dtc_mvp.html en un editor de texto y modifica lo que necesites.
+
+P: ¿Las imágenes se incluyen en el PDF?
+R: Sí, están embedidas en el HTML. Se mostrarán en el PDF final.
+
+P: ¿Qué tamaño debe tener el PDF?
+R: No hay límite específico, pero 2-3 MB es razonable para 4 páginas.
+
+P: ¿Puedo descargar los screenshots individualmente?
+R: Sí, están en: /vercel/share/v0-project/public/corfo-mvp/
+
+P: ¿Necesito traducir el documento al inglés?
+R: CORFO acepta español. El documento está completamente en español.
+
+================================================================================
+CONFIRMACIÓN FINAL
+================================================================================
+
+Una vez que hayas creado el PDF:
+
+1. Guarda una copia en tu computadora
+2. Abre el PDF para verificar que se vea bien
+3. Sube el PDF a la plataforma de CORFO
+4. Confirma en el formulario los links de acceso:
+   • Portal: https://www.despegatucarrera.com
+   • Demo: https://www.despegatucarrera.com/despega
+
+¡LISTO PARA ENVIAR A CORFO!
+
+================================================================================
+PLAZO IMPORTANTE
+================================================================================
+
+Cierre de postulación: 29 de mayo de 2026, 15:00 horas
+
+Tiempo restante para completar este paso: MÁS QUE SUFICIENTE
+
+Tiempo estimado para crear PDF: 2-3 minutos
+
+================================================================================
+                        DESPEGA TU CARRERA
+                     ¡Tu MVP está listo para CORFO!
+================================================================================
+
+Documento generado: Mayo 28-29, 2026
+Estado: Listo para descargar y enviar
+

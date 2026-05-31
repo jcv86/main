@@ -43,6 +43,19 @@ export interface SpeechRecognitionResultList {
   [index: number]: SpeechRecognitionResult;
 }
 
+export interface SpeechRecognitionAPI extends EventTarget {
+  continuous: boolean;
+  interimResults: boolean;
+  language: string;
+  onstart: ((this: SpeechRecognitionAPI, ev: Event) => unknown) | null;
+  onresult: ((this: SpeechRecognitionAPI, ev: SpeechRecognitionEvent) => unknown) | null;
+  onerror: ((this: SpeechRecognitionAPI, ev: SpeechRecognitionErrorEvent) => unknown) | null;
+  onend: ((this: SpeechRecognitionAPI, ev: Event) => unknown) | null;
+  start(): void;
+  stop(): void;
+  abort(): void;
+}
+
 /** Navigator Connection API Types */
 export interface NetworkInformation extends EventTarget {
   downlink?: number;
@@ -52,11 +65,11 @@ export interface NetworkInformation extends EventTarget {
   onchange?: ((this: NetworkInformation, ev: Event) => unknown) | null;
 }
 
-/** Window augmentation for Speech Recognition */
+/** Window augmentation for Speech Recognition - using optional properties to avoid conflicts */
 declare global {
   interface Window {
-    SpeechRecognition: new () => SpeechRecognitionAPI;
-    webkitSpeechRecognition: new () => SpeechRecognitionAPI;
+    SpeechRecognition?: new () => SpeechRecognitionAPI;
+    webkitSpeechRecognition?: new () => SpeechRecognitionAPI;
   }
 
   interface Navigator {
@@ -64,20 +77,6 @@ declare global {
     mozConnection?: NetworkInformation;
     webkitConnection?: NetworkInformation;
   }
-}
-
-export interface SpeechRecognitionAPI extends EventTarget {
-  continuous: boolean;
-  interimResults: boolean;
-  lang: string;
-  maxAlternatives: number;
-  start(): void;
-  stop(): void;
-  abort(): void;
-  onstart: ((this: SpeechRecognitionAPI, ev: Event) => unknown) | null;
-  onend: ((this: SpeechRecognitionAPI, ev: Event) => unknown) | null;
-  onresult: ((this: SpeechRecognitionAPI, ev: SpeechRecognitionEvent) => unknown) | null;
-  onerror: ((this: SpeechRecognitionAPI, ev: SpeechRecognitionErrorEvent) => unknown) | null;
 }
 
 export type {}; // Ensure this file is treated as a module

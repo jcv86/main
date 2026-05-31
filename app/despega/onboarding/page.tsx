@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useAuthRedirect } from "@/hooks/use-auth-redirect"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Progress } from "@/components/ui/progress"
@@ -22,9 +23,12 @@ type QuestionResponse = {
 
 export default function DespegaOnboarding() {
   const router = useRouter()
+  const { user, loading: authLoading } = useAuthRedirect()
   const supabase = createClient()
   const [step, setStep] = useState<Step>("intro")
   const [loading, setLoading] = useState(true)
+
+  const [c1Submitting, setC1Submitting] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [c1CurrentQuestion, setC1CurrentQuestion] = useState(0)
   const [c2Paso1Question, setC2Paso1Question] = useState(0)
@@ -42,10 +46,13 @@ export default function DespegaOnboarding() {
   // Check if user already completed onboarding
   useEffect(() => {
     const checkStatus = async () => {
+      if (authLoading) return // Wait for auth to load
+
       try {
-        const supabase = createClient()
-        const { data: { user } } = await supabase.auth.getUser()
-        if (!user) return
+        if (!user) {
+          setLoading(false)
+          return
+        }
 
         // Check if C2-Paso2 is completed (user fully onboarded)
         const { data: c2Data } = await supabase
@@ -65,6 +72,7 @@ export default function DespegaOnboarding() {
         // Look for existing test results (A1 completed but not C2)
         const { data: results } = await supabase
           .from("a1_tests_results")
+          .select("*")
           .eq("user_id", user.id)
           .eq("test_name", "Despega Cerebral")
           .limit(1)
@@ -98,7 +106,7 @@ export default function DespegaOnboarding() {
     }
 
     checkStatus()
-  }, [router])
+  }, [user, authLoading, router, supabase])
 
   const question = DISC_TEST_QUESTIONS[currentQuestion]
   const progress = ((currentQuestion + 1) / DISC_TEST_QUESTIONS.length) * 100
@@ -153,9 +161,6 @@ export default function DespegaOnboarding() {
     setResults(finalResults)
 
     try {
-      const supabase = createClient()
-      const { data: { user } } = await supabase.auth.getUser()
-      
       // Mark cerebral test as completed in a1_progress
       if (user) {
         const { error } = await supabase
@@ -321,7 +326,7 @@ export default function DespegaOnboarding() {
                 <span className="font-semibold text-muted-foreground dark:text-muted-foreground">Evaluación Despega Cerebral</span>
                 <span className="text-muted-foreground dark:text-muted-foreground">1/28</span>
               </div>
-              <div className="h-1 rounded-full overflow-hidden bg-slate-600 dark:bg-slate-600">
+              <div className="h-1 rounded-full overflow-hidden bg-slate-950 dark:bg-slate-950">
                 <div className="h-full rounded-full w-1 bg-cyan dark:bg-cyan"></div>
               </div>
               
@@ -352,16 +357,16 @@ export default function DespegaOnboarding() {
                   <div className="space-y-2">
                     <p className="text-sm font-semibold text-red dark:text-red/40">MENOS como yo</p>
                     <div className="space-y-2">
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Decidido y directo
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Optimista e inspirador
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Paciente y considerado
                       </button>
-                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-red/50 dark:hover:border-red/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
+                      <button className="w-full p-3 border border-muted/20 dark:border-card rounded-lg hover:border-[rgb(80,160,170)]/50 dark:hover:border-[rgb(80,160,170)]/40 transition text-left text-sm text-muted-foreground dark:text-muted-foreground">
                         Analítico y preciso
                       </button>
                     </div>
@@ -398,7 +403,10 @@ export default function DespegaOnboarding() {
                 </Button>
               </>
             ) : (
-              <Button onClick={() => setStep("conozcamonos1")} className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground">
+              <Button 
+                onClick={() => setStep("conozcamonos1")} 
+                className="w-full h-14 text-base font-semibold shadow-lg hover:shadow-xl transition-all rounded-sm bg-cyan/40 hover:bg-cyan/50 text-foreground dark:text-foreground"
+              >
                 Cuando estés listo, comienza
               </Button>
             )}
@@ -677,28 +685,28 @@ export default function DespegaOnboarding() {
             <CardContent className="pt-8">
               <h2 className="text-2xl font-bold mb-6 text-muted/90 dark:text-muted/5">Qué Obtendrás de Este Test</h2>
               <div className="space-y-4">
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Tu Perfil Personalizado</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Descubre tu estilo natural, tus fortalezas y áreas donde puedes crecer</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Insights Accionables</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Cómo comunicar mejor, trabajar más efectivamente y liderar según tu estilo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-green">
                   <div className="text-3xl min-w-fit"></div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Libros Recomendados</p>
                     <p className="text-sm text-muted-foreground dark:text-muted-foreground">Seleccionamos libros estratégicos adaptados a tu perfil para acelerar tu desarrollo</p>
                   </div>
                 </div>
-                <div className="flex gap-4 p-4 bg-white/50 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
+                <div className="flex gap-4 p-4 bg-[rgba(80,160,170,0.2)]0 dark:bg-card/50 rounded-[28px] border-l-4 border-teal-500">
                   <div className="text-3xl min-w-fit">���</div>
                   <div>
                     <p className="font-semibold text-muted/90 dark:text-muted/10">Plan de Acción</p>
@@ -738,7 +746,7 @@ export default function DespegaOnboarding() {
     const currentC1Q = c1Questions[c1CurrentQuestion]
     const c1Progress = ((c1CurrentQuestion + 1) / c1Questions.length) * 100
 
-    const handleC1Next = () => {
+    const handleC1Next = async () => {
       // Validar que si es texto, no esté vacío
       if (currentC1Q.type === "text") {
         const response = (c1Responses[currentC1Q.id] || "").trim()
@@ -756,6 +764,8 @@ export default function DespegaOnboarding() {
         setC1CurrentQuestion(c1CurrentQuestion + 1)
       } else {
         // NIVEL 4: Sanitize C1 responses before saving
+        setC1Submitting(true)
+        
         const sanitizeTextInput = (text: string, maxLength: number = 200): string => {
           if (!text) return ''
           // Remove URLs
@@ -779,48 +789,54 @@ export default function DespegaOnboarding() {
         })
 
         // Save C1 responses to BD
-        const saveC1 = async () => {
-          try {
-            const supabase = createClient()
-            const { data: { user } } = await supabase.auth.getUser()
-            if (!user) return
-
-            const { error } = await supabase
-              .from("canon_conozcamonos_1_responses")
-              .insert({
-                user_id: user.id,
-                responses: sanitizedResponses,
-                created_at: new Date().toISOString(),
-              })
-
-            if (error) {
-              console.error("[v0] Error saving C1 responses:", error)
-            } else {
-              console.log("[v0] C1 responses saved successfully (sanitized)")
-              setC1CurrentQuestion(0)
-              setStep("instructions")
-            }
-          } catch (err) {
-            console.error("[v0] Error in C1 save:", err)
+        try {
+          console.log('[v0] Attempting to save C1 responses for user:', user?.id)
+          
+          if (!user) {
+            alert("Sesión expirada. Por favor, recarga la página e intenta de nuevo.")
+            setC1Submitting(false)
+            return
           }
+
+          // Save with authenticated user
+          const { error } = await supabase
+            .from("canon_conozcamonos_1_responses")
+            .insert({
+              user_id: user.id,
+              responses: sanitizedResponses,
+              created_at: new Date().toISOString(),
+            })
+
+          if (error) {
+            console.error("[v0] Error saving C1 responses:", error)
+            alert("Error guardando respuestas: " + error.message)
+            setC1Submitting(false)
+            return
+          }
+
+          console.log('[v0] C1 responses saved successfully')
+          setStep("camino")
+        } catch (err) {
+          console.error("[v0] Error in C1 save:", err)
+          alert("Error al guardar: " + (err instanceof Error ? err.message : String(err)))
+          setC1Submitting(false)
         }
-        saveC1()
       }
     }
 
     return (
-      <div className="min-h-screen bg-background">
-        <Card className="w-full max-w-2xl">
+      <div className="min-h-screen bg-background p-4 overflow-y-auto flex items-center justify-center">
+        <Card className="w-full max-w-2xl border-[rgb(80,160,170)]/10 bg-[rgba(80,160,170,0.2)] backdrop-blur-sm">
           <CardHeader>
-            <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>Conozcámonos - Contexto Inicial</CardTitle>
-            <CardDescription>7 preguntas para personalizar tu experiencia</CardDescription>
+            <CardTitle style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }} className="text-2xl">Conozcámonos - Contexto Inicial</CardTitle>
+            <CardDescription className="text-white/70">7 preguntas para personalizar tu experiencia</CardDescription>
           </CardHeader>
-          <CardContent className="space-y-6">
-            <Progress value={c1Progress} className="h-2" />
+          <CardContent className="space-y-8 pb-6">
+            <Progress value={c1Progress} className="h-2 bg-white/10" />
             <div className="space-y-4">
               <p className="text-lg font-semibold">{currentC1Q.q}</p>
               {currentC1Q.type === "select" ? (
-                <div className="grid gap-2">
+                <div className="grid gap-3">
                   {currentC1Q.opts?.map((opt: string) => (
                     <Button 
                       key={opt}
@@ -829,27 +845,27 @@ export default function DespegaOnboarding() {
                         setC1Responses({ ...c1Responses, [currentC1Q.id]: opt })
                         handleC1Next()
                       }}
-                      className="justify-start"
+                      className="justify-start h-12 px-4 text-base border-2 border-[rgb(80,160,170)]/20 hover:border-training hover:bg-training/10 transition-all"
                     >
                       {opt}
                     </Button>
                   ))}
                 </div>
               ) : (
-                <div className="space-y-2">
+                <div className="space-y-3">
                   <input
                     type="text"
                     placeholder="Tu respuesta..."
                     value={c1Responses[currentC1Q.id] || ""}
                     onChange={(e) => setC1Responses({ ...c1Responses, [currentC1Q.id]: e.target.value })}
-                    className="w-full p-2 border rounded-md"
+                    className="w-full p-3 border-2 border-[rgb(80,160,170)]/20 rounded-lg bg-[rgba(80,160,170,0.2)] text-white placeholder:text-white/50 focus:border-training focus:outline-none transition-all"
                   />
                   <Button 
                     onClick={handleC1Next}
-                    className="w-full"
-                    disabled={!c1Responses[currentC1Q.id] || (c1Responses[currentC1Q.id] || "").trim().length < 5}
+                    className="w-full h-12 text-base"
+                    disabled={!c1Responses[currentC1Q.id] || (c1Responses[currentC1Q.id] || "").trim().length < 5 || c1Submitting}
                   >
-                    Siguiente
+                    {c1Submitting ? "Guardando..." : "Siguiente"}
                   </Button>
                   {c1Responses[currentC1Q.id] && (c1Responses[currentC1Q.id] || "").trim().length < 5 && (
                     <p className="text-sm text-red">La respuesta debe tener al menos 5 caracteres</p>
@@ -1007,7 +1023,7 @@ export default function DespegaOnboarding() {
                             ? "border-muted/20 bg-muted/10 opacity-50 cursor-not-allowed"
                             : selectedMenos === option.dimension
                             ? "border-red/50 bg-red/5"
-                            : "border-muted/20 hover:border-red/30"
+                            : "border-muted/20 hover:border-[rgb(80,160,170)]/30"
                         }`}
                       >
                         <div className="flex items-center gap-3">
@@ -1097,8 +1113,6 @@ export default function DespegaOnboarding() {
         setC2Paso1Loading(true)
         console.log("[v0] Saving C2-Paso1 responses:", c2Step1Responses)
         try {
-          const supabase = createClient()
-          const { data: { user } } = await supabase.auth.getUser()
           if (!user) {
             console.error("[v0] No user found")
             setC2Paso1Loading(false)
@@ -1258,7 +1272,6 @@ export default function DespegaOnboarding() {
         setC2Paso1Loading(true)
         console.log("[v0] Saving C2-Paso2 responses:", c2Step2Responses)
         try {
-          const { data: { user } } = await supabase.auth.getUser()
           if (!user) {
             console.error("[v0] No user found")
             setC2Paso1Loading(false)

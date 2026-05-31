@@ -33,19 +33,8 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
   const messagesEndRef = useRef<HTMLDivElement>(null)
 
   const categoryData = PROMPT_CATEGORIES[categoryId]
-  
-  if (!categoryData) {
-    return (
-      <div className="flex flex-col h-full items-center justify-center p-8 text-center">
-        <p className="text-lg text-muted-foreground mb-4">
-          Lo sentimos, esta categoría no está disponible.
-        </p>
-        <Button onClick={onBack}>Volver</Button>
-      </div>
-    )
-  }
 
-  const coach = categoryData.coach === "sofia" ? "sofia" : categoryData.coach === "dani" ? "dani" : "sofia"
+  const coach = categoryData ? (categoryData.coach === "sofia" ? "sofia" : categoryData.coach === "dani" ? "dani" : "sofia") : "sofia"
   const conversationCategory = categoryId
 
   useEffect(() => {
@@ -67,7 +56,7 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
     }
 
     initializeCoach()
-  }, [categoryId, userEmail])
+  }, [categoryId, userEmail, coach])
 
   useEffect(() => {
     if (sessionId && promptVariantId && userEmail) {
@@ -78,6 +67,17 @@ export function FloatingCoachChat({ categoryId, userEmail, onBack }: FloatingCoa
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" })
   }, [messages])
+
+  if (!categoryData) {
+    return (
+      <div className="flex flex-col h-full items-center justify-center p-8 text-center">
+        <p className="text-lg text-muted-foreground mb-4">
+          Lo sentimos, esta categoría no está disponible.
+        </p>
+        <Button onClick={onBack}>Volver</Button>
+      </div>
+    )
+  }
 
   const handleSendMessage = async () => {
     if (!inputMessage.trim() || isLoading) return

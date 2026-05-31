@@ -7,6 +7,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Brain, CheckCircle2, Zap } from 'lucide-react'
 import { StepHeader } from '@/components/step-header'
+import { getDemoMode } from '@/lib/despega/demo-user'
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -17,21 +18,14 @@ export default function A1CerebralIntroPage() {
     const check = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       
-      // Check if user exists in Supabase or is a demo user
+      // Check if user exists in Supabase or is in demo mode
       let userId = user?.id
       if (!user) {
-        // Check if demo user exists in localStorage
-        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        if (demoUserStr) {
-          try {
-            const demoUser = JSON.parse(demoUserStr)
-            userId = demoUser.id
-            console.log('[v0] Demo user found:', demoUser.email)
-          } catch (e) {
-            console.error('[v0] Error parsing demo user:', e)
-            router.push('/auth/signin')
-            return
-          }
+        // Issue #8: Check demo mode flag (no PII in localStorage)
+        const isDemoMode = getDemoMode()
+        if (isDemoMode) {
+          userId = 'demo-user-' + Math.random().toString(36).substr(2, 9)
+          console.log('[v0] Demo mode active for A1 intro')
         } else {
           router.push('/auth/signin')
           return
@@ -151,7 +145,7 @@ export default function A1CerebralIntroPage() {
               <CardDescription className="text-white/75">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-8 rounded-[28px] border border-white/10" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)' }}>
+              <div className="p-8 rounded-[28px]" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
                 <p className="text-xl font-semibold text-white mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
@@ -202,7 +196,7 @@ export default function A1CerebralIntroPage() {
                         <p className="text-white/85">Paciente y considerado</p>
                         <p className="text-xs text-white/75 mt-1">Estabilizador</p>
                       </button>
-                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-red/30 transition-all">
+                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-[rgba(80,160,170,0.6)]/30 transition-all">
                         <p className="font-medium text-white">Analítico y preciso</p>
                         <p className="text-xs text-white/75 mt-1">Arquitecto</p>
                       </button>

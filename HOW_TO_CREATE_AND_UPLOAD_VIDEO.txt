@@ -1,0 +1,288 @@
+═══════════════════════════════════════════════════════════════════════════════
+🎬 HOW TO CREATE MP4 VIDEO FROM SCREENSHOTS & UPLOAD TO YOUTUBE
+═══════════════════════════════════════════════════════════════════════════════
+
+WHAT YOU HAVE:
+✅ 8 HD screenshots (1920x1080) in ZIP file
+✅ Proper timing for each screen (total 120 seconds)
+✅ Complete documentation
+✅ Ready for video creation
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 1: EXTRACT SCREENSHOTS (1 minute)
+═══════════════════════════════════════════════════════════════════════════════
+
+Mac/Linux:
+  cd /vercel/share/v0-project/public
+  unzip mvp-video-final.zip
+  cd mvp-video-final
+
+Windows:
+  Right-click mvp-video-final.zip
+  Click "Extract All"
+  Open mvp-video-final folder
+
+You should now see 8 PNG files + README.md
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 2: CREATE MP4 VIDEO (Choose ONE option)
+═══════════════════════════════════════════════════════════════════════════════
+
+OPTION A: KAPWING (EASIEST - RECOMMENDED - NO SOFTWARE NEEDED)
+──────────────────────────────────────────────────────────────
+
+1. Go to: https://www.kapwing.com/tools/img-to-video
+2. Click "Select Images"
+3. Upload the 8 PNG files in THIS order:
+   ✓ 01-homepage.png
+   ✓ 02-login.png
+   ✓ 03-dashboard.png
+   ✓ 04-readiness-score.png
+   ✓ 05-90day-route.png
+   ✓ 06-training-modules.png
+   ✓ 07-executive-dashboard.png
+   ✓ 08-next-tasks.png
+
+4. Set Duration per Image:
+   Screen 1: 8 seconds
+   Screen 2: 10 seconds
+   Screen 3: 16 seconds
+   Screen 4: 18 seconds
+   Screen 5: 21 seconds
+   Screen 6: 20 seconds
+   Screen 7: 17 seconds
+   Screen 8: 10 seconds
+
+5. Click "Export to MP4"
+6. Download: MVP_Despega_Tu_Carrera_120s.mp4
+
+⏱️ Time: ~5 minutes, NO software installation needed
+
+
+OPTION B: FFMPEG (FOR DEVELOPERS)
+─────────────────────────────────
+
+Prerequisites: FFmpeg installed on your computer
+
+Mac (Homebrew):
+  brew install ffmpeg
+
+Linux (Ubuntu/Debian):
+  sudo apt-get install ffmpeg
+
+Windows:
+  Download from: https://ffmpeg.org/download.html
+  Add to PATH
+
+
+Command to Create Video:
+────────────────────────
+
+cd mvp-video-final
+
+Create a file called "concat.txt" with this content:
+───────────────────────────────────────────────────
+
+file '01-homepage.png'
+duration 8
+file '02-login.png'
+duration 10
+file '03-dashboard.png'
+duration 16
+file '04-readiness-score.png'
+duration 18
+file '05-90day-route.png'
+duration 21
+file '06-training-modules.png'
+duration 20
+file '07-executive-dashboard.png'
+duration 17
+file '08-next-tasks.png'
+duration 10
+
+
+Run FFmpeg:
+───────────
+
+ffmpeg -y -f concat -safe 0 -i concat.txt \
+  -c:v libx264 -pix_fmt yuv420p -r 30 \
+  "MVP_Despega_Tu_Carrera_120s.mp4"
+
+
+Output:
+───────
+✅ MVP_Despega_Tu_Carrera_120s.mp4 (ready to upload!)
+
+⏱️ Time: ~2 minutes after FFmpeg is installed
+
+
+OPTION C: ONLINE TOOLS (NO SOFTWARE)
+─────────────────────────────────────
+
+If Kapwing doesn't work, try:
+• Wave.video (https://www.wave.video)
+• Animoto (https://animoto.com)
+• Shotcut (free, downloadable video editor)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 3: VERIFY VIDEO (1 minute)
+═══════════════════════════════════════════════════════════════════════════════
+
+✓ Play MP4 file locally
+✓ Confirm duration is ~120 seconds
+✓ Verify all 8 screens appear in sequence
+✓ Check for smooth transitions
+✓ Confirm no artifacts or corruption
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 4: UPLOAD TO YOUTUBE (3 minutes)
+═══════════════════════════════════════════════════════════════════════════════
+
+1. Go to: https://www.youtube.com/upload
+
+2. Upload File:
+   Click "SELECT FILES"
+   Choose: MVP_Despega_Tu_Carrera_120s.mp4
+   Wait for upload to complete
+
+3. Fill in Details:
+
+   TITLE:
+   "Despega Tu Carrera - Sistema de Entrenamiento Personalizado"
+
+   DESCRIPTION:
+   Demostración del MVP de Despega Tu Carrera
+   
+   Viaje completo del usuario:
+   • Inicio: Plataforma de carrera personalizada
+   • Autenticación: Acceso con usuario demo
+   • Dashboard: Puntuación de preparación (85/100)
+   • Ruta de 90 días: Plan de 4 etapas personalizado
+   • Módulos de entrenamiento: Seguimiento de progreso
+   • Resultados: Panel ejecutivo con estadísticas
+   • Próximos pasos: Continuar viaje de transformación
+   
+   Tecnología: Next.js + Supabase + OpenAI
+   Duración: 120 segundos
+   Idioma: Español
+
+   TAGS:
+   despega, entrenamiento, carrera, personalizado, ia, educación
+
+   CATEGORY:
+   Education
+
+4. ⚠️ IMPORTANT - PRIVACY SETTINGS ⚠️
+
+   Privacy: PUBLIC
+   
+   ❌ DO NOT select "Unlisted" or "Private"
+   ✅ MUST be "Public" with no password
+
+5. Click "PUBLISH"
+
+6. Wait 30-60 seconds for processing
+
+7. Copy Your Video URL:
+   Format: https://www.youtube.com/watch?v=YOUR_VIDEO_ID
+   Example: https://www.youtube.com/watch?v=dQw4w9WgXcQ
+
+
+═══════════════════════════════════════════════════════════════════════════════
+STEP 5: SUBMIT TO IGNITE (2 minutes)
+═══════════════════════════════════════════════════════════════════════════════
+
+Verify Before Submitting:
+  ✓ Video is PUBLIC (no password)
+  ✓ URL is https://www.youtube.com/watch?v=...
+  ✓ Duration is 120 seconds
+  ✓ Language is Spanish
+  ✓ Upload date is visible
+
+Submit to Ignite with:
+  • Video URL (public, no password)
+  • Confirmation of duration (120 seconds)
+  • Confirmation of language (Spanish)
+  • Confirmation of type (Functional MVP Walkthrough)
+
+
+═══════════════════════════════════════════════════════════════════════════════
+FINAL CHECKLIST
+═══════════════════════════════════════════════════════════════════════════════
+
+Video Creation:
+  ☐ Extracted ZIP file
+  ☐ Created MP4 video
+  ☐ Duration verified (120 seconds)
+  ☐ All 8 screens visible
+
+YouTube Upload:
+  ☐ Uploaded MP4 to YouTube
+  ☐ Title filled in
+  ☐ Description added
+  ☐ Tags added (despega, entrenamiento, etc.)
+  ☐ Privacy set to PUBLIC
+  ☐ Published successfully
+  ☐ Public URL obtained
+
+Ignite Submission:
+  ☐ YouTube URL copied
+  ☐ Verified PUBLIC access (no password)
+  ☐ All required info confirmed
+  ☐ Submitted to Ignite program
+
+
+═══════════════════════════════════════════════════════════════════════════════
+TIMING REFERENCE
+═══════════════════════════════════════════════════════════════════════════════
+
+Frame 1 (Homepage): 0:00 - 0:08 (8s)
+Frame 2 (Login): 0:08 - 0:18 (10s)
+Frame 3 (Dashboard): 0:18 - 0:34 (16s)
+Frame 4 (Readiness): 0:34 - 0:52 (18s)
+Frame 5 (90-Day): 0:52 - 1:13 (21s)
+Frame 6 (Training): 1:13 - 1:33 (20s)
+Frame 7 (Executive): 1:33 - 1:50 (17s)
+Frame 8 (Tasks): 1:50 - 2:00 (10s)
+
+TOTAL: 120 SECONDS ✅
+
+
+═══════════════════════════════════════════════════════════════════════════════
+TROUBLESHOOTING
+═══════════════════════════════════════════════════════════════════════════════
+
+Problem: "Extract won't work"
+Solution: Use 7-Zip (Windows) or Archive Utility (Mac)
+
+Problem: "Kapwing is slow"
+Solution: Try FFmpeg locally or Wave.video instead
+
+Problem: "Can't install FFmpeg"
+Solution: Use Kapwing or online tools (no installation needed)
+
+Problem: "YouTube says video is unlisted"
+Solution: Go to YouTube Studio → Details → Change Privacy to PUBLIC
+
+Problem: "Video duration is wrong"
+Solution: Check timing in concat.txt or Kapwing settings
+
+Problem: "Some screens are missing"
+Solution: Re-upload all 8 PNG files in correct order
+
+
+═══════════════════════════════════════════════════════════════════════════════
+TOTAL TIME: ~12-15 MINUTES
+═══════════════════════════════════════════════════════════════════════════════
+
+Extract ZIP:    1 minute
+Create MP4:     2-5 minutes (Kapwing fastest)
+Upload YouTube: 3 minutes
+Verify & Submit: 2 minutes
+
+READY FOR IGNITE! 🚀
+
+═══════════════════════════════════════════════════════════════════════════════

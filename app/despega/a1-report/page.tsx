@@ -4,9 +4,8 @@ import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Phone, Sparkles } from 'lucide-react'
+import { Loader2, ArrowRight, CheckCircle2, Zap, Target, Sparkles } from 'lucide-react'
 import { PhaseTransitionHandler } from '@/components/phase-transition-handler'
 import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
 import { A1WowReport } from '@/components/a1-wow-report'
@@ -92,13 +91,13 @@ export default function A1ReportPage() {
         // Continue without C1 context
       }
       
-      // Fetch enhanced insights from the new endpoint
-      const response = await fetch('/api/despega/a1-enhanced-insights', {
+      // Fetch enhanced insights from the API endpoint
+      const response = await fetch('/api/a1/insights', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           profile,
-          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0],
+          userId: user?.id,
           c1Context
         })
       })
@@ -107,21 +106,8 @@ export default function A1ReportPage() {
       const data = await response.json()
       setInsights(data.insights)
       
-      // Save insights to database for persistence
-      try {
-        await fetch('/api/despega/save-a1-insights', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            userId: user?.id,
-            discProfile: profile,
-            insights: data.insights
-          })
-        })
-      } catch (err) {
-        console.warn('[v0] Failed to save insights to database:', err)
-        // Don't fail if persistence fails - insights are still shown
-      }
+      // Insights loaded successfully
+      setInsightsLoading(false)
     } catch (err) {
       console.error('[v0] Error loading AI insights:', err)
       // Silently fail - insights are optional
@@ -222,7 +208,7 @@ export default function A1ReportPage() {
       <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
-            <div className="p-6 border-2 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)', borderStyle: 'none', borderRadius: '2px' }}>
+            <div className="p-6 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
               <p className="text-white font-semibold text-lg">{error}</p>
               <p className="text-white/85 text-base mt-3 leading-relaxed">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
@@ -287,26 +273,26 @@ export default function A1ReportPage() {
           {/* Primary and Secondary Profile Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Primary Profile Card */}
-            <div className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 rounded-2xl p-8">
-              <p className="text-purple font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Principal</p>
+            <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+              <p className="font-bold text-sm uppercase tracking-wide mb-3" style={{ color: 'rgb(80, 160, 170)' }}>Tu Tipo Principal</p>
               <h2 className="text-5xl font-black text-white mb-2">{primaryLabel.split(' - ')[0]}</h2>
               <p className="text-white/75 text-base mb-6 leading-relaxed">{primaryLabel.split(' - ')[1]}</p>
               <div className="flex items-center gap-4">
-                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
-                  <div className="h-full bg-purple" style={{ width: `${Math.max(0, profile.primaryScore)}%` }} />
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                  <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${Math.max(0, profile.primaryScore)}%` }} />
                 </div>
                 <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.primaryScore))}%</p>
               </div>
             </div>
 
             {/* Secondary Profile Card */}
-            <div className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 rounded-2xl p-8">
-              <p className="text-blue font-bold text-sm uppercase tracking-wide mb-3">Tu Tipo Secundario</p>
+            <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+              <p className="font-bold text-sm uppercase tracking-wide mb-3" style={{ color: 'rgb(80, 160, 170)' }}>Tu Tipo Secundario</p>
               <h2 className="text-5xl font-black text-white mb-2">{secondaryLabel.split(' - ')[0]}</h2>
               <p className="text-white/75 text-base mb-6 leading-relaxed">{secondaryLabel.split(' - ')[1]}</p>
               <div className="flex items-center gap-4">
-                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden border border-white/30">
-                  <div className="h-full bg-blue" style={{ width: `${Math.max(0, profile.secondaryScore)}%` }} />
+                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                  <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${Math.max(0, profile.secondaryScore)}%` }} />
                 </div>
                 <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
               </div>
@@ -314,7 +300,7 @@ export default function A1ReportPage() {
           </div>
 
           {/* All 4 Profiles Breakdown */}
-          <div className="bg-card border border-border rounded-2xl p-8">
+          <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
             <h3 className="font-bold text-2xl text-white mb-8">Desglose Completo de Dimensiones</h3>
             <div className="space-y-5">
               {[
@@ -323,7 +309,7 @@ export default function A1ReportPage() {
                 { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️', description: 'Constante y confiable' },
                 { label: 'Arquitecto', score: profile.C, color: 'from-blue', icon: '🏗️', description: 'Analítico y preciso' }
               ].map((dim, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-4 bg-background/50 hover:bg-background transition-all rounded-xl border border-white/10 hover:border-white/20">
+                <div key={idx} className="flex items-center gap-4 p-4 hover:bg-background transition-all rounded-xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
                   <span className="text-3xl">{dim.icon}</span>
                   <div className="flex-1">
                     <div className="flex items-baseline gap-2">
@@ -332,8 +318,8 @@ export default function A1ReportPage() {
                     </div>
                   </div>
                   <div className="flex items-center gap-3 w-40">
-                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden border border-white/30">
-                      <div className={`h-full bg-gradient-to-r ${dim.color}`} style={{ width: `${(dim.score / 10) * 100}%` }} />
+                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                      <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${(dim.score / 10) * 100}%` }} />
                     </div>
                     <p className="text-lg font-bold text-white w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
                   </div>
@@ -355,7 +341,7 @@ export default function A1ReportPage() {
         ) : insights ? (
           <div className="space-y-8">
             {/* Executive Summary */}
-            <div className="bg-gradient-to-r from-purple/15 to-blue/15 border-l-4 border-purple rounded-xl p-8">
+            <div className="rounded-xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
               <h3 className="text-3xl font-bold text-white mb-4">
                 Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
               </h3>
@@ -377,9 +363,15 @@ export default function A1ReportPage() {
             />
           </div>
         ) : (
-          <div className="bg-red/20 border-2 border-red/50 rounded-xl p-8 text-center">
-            <p className="text-red font-semibold text-lg">No se pudieron generar los insights</p>
-            <p className="text-red/80 text-base mt-2">Por favor intenta de nuevo. Si el problema persiste, contacta con soporte.</p>
+          <div className="rounded-xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
+            <h3 className="text-3xl font-bold text-white mb-4">
+              Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
+            </h3>
+            <p className="text-white/85 text-lg leading-relaxed">
+              Combinas la fortaleza de ser <strong>{primaryLabel.split(' - ')[0]}</strong> con características de <strong>{secondaryLabel.split(' - ')[0]}</strong>. 
+              Esta combinación única te permite destacar tanto en análisis como en ejecución. 
+              Continúa al siguiente paso para descubrir cómo aprovechar tu perfil al máximo.
+            </p>
           </div>
         )}
       </ASectionPart>
@@ -400,50 +392,24 @@ export default function A1ReportPage() {
         ) : null}
       </ASectionPart>
 
-      {/* Next Steps */}
-      <ASectionPart title="Próximos Pasos" icon={<CheckCircle2 />}>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <Card className="bg-gradient-to-br from-purple/20 to-purple/5 border-2 border-purple/40 hover:border-purple/60 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl text-white">🔍 Patrones Profundos</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-base text-white/85 mb-6 leading-relaxed">Descubre cómo tu perfil te ayuda en entrevistas, equipos y liderazgo.</p>
-              <Button onClick={() => router.push('/despega/a1-patterns')} variant="outline" className="border-purple/40 w-full" size="sm">
-                Explorar Patrones
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-blue/20 to-blue/5 border-2 border-blue/40 hover:border-blue/60 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl text-white"> Entrena de Entrevistas</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-base text-white/85 mb-6 leading-relaxed">Practica entrevistas personalizadas según tu tipo de personalidad.</p>
-              <Button 
-                onClick={() => router.push(`/despega/a1-call-entrena?profile=${profile.primary}`)} 
-                className="w-full bg-blue/80 hover:bg-blue/70/90 text-white font-semibold" 
-                size="sm"
-              >
-                <Phone className="w-4 h-4 mr-2" />
-                Comenzar
-              </Button>
-            </CardContent>
-          </Card>
-
-          <Card className="bg-gradient-to-br from-green/20 to-green/5 border-2 border-green/40 hover:border-green/60 transition-all">
-            <CardHeader>
-              <CardTitle className="text-xl text-white"> Crea Tu Ruta</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-base text-white/85 mb-6 leading-relaxed">Diseña tu plan de 90 días personalizado para alcanzar tus objetivos.</p>
-              <Button onClick={() => router.push('/despega/conozcamonos-2')} className="w-full bg-green/80 hover:bg-green/70/90 text-white font-semibold" size="sm">
-                Siguiente Fase
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </CardContent>
-          </Card>
+      {/* Next Step - Single Button to C2 */}
+      <ASectionPart title="Siguiente Paso" icon={<CheckCircle2 />}>
+        <div className="flex flex-col items-center text-center space-y-6 py-8">
+          <div className="max-w-2xl">
+            <h3 className="text-2xl font-bold text-white mb-4">Ahora que conoces tu perfil, es hora de profundizar</h3>
+            <p className="text-lg text-white/85 leading-relaxed">
+              En el siguiente paso, exploraremos tus metas, desafíos y cómo tu perfil cerebral puede ayudarte a alcanzar tus objetivos profesionales.
+            </p>
+          </div>
+          <Button 
+            onClick={() => router.push('/despega/conozcamonos-2')} 
+            className="text-white font-bold text-lg px-12 py-6 rounded-xl hover:opacity-90 transition-opacity"
+            size="lg"
+            style={{ backgroundColor: 'rgb(80, 160, 170)' }}
+          >
+            Continuar a Conociéndonos
+            <ArrowRight className="w-5 h-5 ml-3" />
+          </Button>
         </div>
       </ASectionPart>
     </ASection>

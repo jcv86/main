@@ -130,7 +130,7 @@ export default function BienvenidaPage() {
 
                   {/* Expanded details for Pilar 1 */}
                   {expandedPilars[1] && (
-                    <div className="bg-white/5 rounded-lg p-6 mb-4 border border-white/10 space-y-5">
+                    <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-6 mb-4 border border-[rgb(80,160,170)]/10 space-y-5">
                       <div>
                         <h4 className="font-semibold text-white mb-4 text-lg">Detalles Completos del Diagnóstico Integral</h4>
                         <p className="text-sm text-muted-foreground dark:text-white/80 mb-4 leading-relaxed">
@@ -139,7 +139,7 @@ export default function BienvenidaPage() {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/5 rounded p-4 border border-teal-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-teal-400/20">
                           <h5 className="font-semibold text-teal-300 mb-2">1. Evaluación Comunicativa Profunda</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Análisis de Fortalezas:</strong> Identificamos tus puntos fuertes en presentación, capacidad de síntesis, claridad conceptual y carisma natural.</li>
@@ -149,7 +149,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-teal-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-teal-400/20">
                           <h5 className="font-semibold text-teal-300 mb-2">2. Análisis Contextual Laboral Exhaustivo</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Trayectoria Actual:</strong> Mapeamos tu carrera: decisiones clave, inflection points, y por qué tomaste cada paso.</li>
@@ -159,7 +159,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-teal-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-teal-400/20">
                           <h5 className="font-semibold text-teal-300 mb-2">3. Baseline de Desempeño Personalizado</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Puntuación Inicial:</strong> Creamos un score de "empleabilidad" que mide: confianza (1-10), claridad de pitch (1-10), preparación técnica (1-10), networking (1-10).</li>
@@ -169,7 +169,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-teal-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-teal-400/20">
                           <h5 className="font-semibold text-teal-300 mb-2">4. Documento de Estrategia Personal</h5>
                           <p className="text-sm text-muted-foreground dark:text-white/80 mb-2">Recibirás un documento PDF + acceso online con:</p>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
@@ -252,7 +252,7 @@ export default function BienvenidaPage() {
 
                   {/* Expanded details for Pilar 2 */}
                   {expandedPilars[2] && (
-                    <div className="bg-white/5 rounded-lg p-6 mb-4 border border-white/10 space-y-5">
+                    <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-6 mb-4 border border-[rgb(80,160,170)]/10 space-y-5">
                       <div>
                         <h4 className="font-semibold text-white mb-4 text-lg">Detalles del Plan Estratégico de 90 Días</h4>
                         <p className="text-sm text-muted-foreground dark:text-white/80 mb-4 leading-relaxed">
@@ -261,7 +261,7 @@ export default function BienvenidaPage() {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/5 rounded p-4 border border-purple-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-purple-400/20">
                           <h5 className="font-semibold text-purple-300 mb-2">FASE 1: Fundamentación (Días 1-30)</h5>
                           <p className="text-sm text-muted-foreground dark:text-white/80 mb-3 font-medium text-purple-300">Objetivo: Construir tus cimientos comunicativos</p>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
@@ -269,11 +269,11 @@ export default function BienvenidaPage() {
                             <li>• <strong>Semana 2-3: Propuesta de Valor</strong> - Definimos exactamente qué problema resuelves, para quién, por qué mejor que otros. Tu "elevator pitch" perfecto.</li>
                             <li>• <strong>Semana 3-4: Mentalidad Ganadora</strong> - Trabajamos creencias limitantes, ansiedades, y patrones de autosabotaje. Construimos la mentalidad de alguien que ES empleable.</li>
                             <li>• <strong>Semana 4: Mock Interview Inicial</strong> - Tu primer simulacro de entrevista para ver baseline real de performance.</li>
-                            <li className="pt-2 border-t border-white/10 mt-3 pt-3"><strong>KPI Fase 1:</strong> Tener narrativa clara, pitch de 2-3 minutos impactante, confianza mejorada 30%.</li>
+                            <li className="pt-2 border-t border-[rgb(80,160,170)]/10 mt-3 pt-3"><strong>KPI Fase 1:</strong> Tener narrativa clara, pitch de 2-3 minutos impactante, confianza mejorada 30%.</li>
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-purple-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-purple-400/20">
                           <h5 className="font-semibold text-purple-300 mb-2">FASE 2: Exploración (Días 31-60)</h5>
                           <p className="text-sm text-muted-foreground dark:text-white/80 mb-3 font-medium text-purple-300">Objetivo: Posicionarte en el mercado + descubrir oportunidades</p>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
@@ -281,11 +281,11 @@ export default function BienvenidaPage() {
                             <li>• <strong>Semana 6-7: LinkedIn Mastery</strong> - Optimizamos tu perfil para que reclutadores te encuentren. Cambio de foto, headline poderoso, descripción estratégica, endorsements correctos.</li>
                             <li>• <strong>Semana 7-8: Networking Activo</strong> - Construyes conexiones reales: informational interviews, conexiones en LinkedIn, referrals. No es contactar 1000 personas; es relaciones genuinas con 20-30.</li>
                             <li>• <strong>Semana 8: Aplicaciones Estratégicas</strong> - Comienzas a aplicar y conectar con reclutadores para conseguir tus primeras entrevistas reales.</li>
-                            <li className="pt-2 border-t border-white/10 mt-3 pt-3"><strong>KPI Fase 2:</strong> Tener 5-10 conversaciones iniciales, 2-3 entrevistas reales programadas, perfil LinkedIn optimizado.</li>
+                            <li className="pt-2 border-t border-[rgb(80,160,170)]/10 mt-3 pt-3"><strong>KPI Fase 2:</strong> Tener 5-10 conversaciones iniciales, 2-3 entrevistas reales programadas, perfil LinkedIn optimizado.</li>
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-purple-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-purple-400/20">
                           <h5 className="font-semibold text-purple-300 mb-2">FASE 3: Implementación (Días 61-90)</h5>
                           <p className="text-sm text-muted-foreground dark:text-white/80 mb-3 font-medium text-purple-300">Objetivo: Convertir entrevistas en ofertas</p>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
@@ -293,11 +293,11 @@ export default function BienvenidaPage() {
                             <li>• <strong>Semana 10-11: Perfeccionamiento</strong> - Iteramos basado en feedback real. Si pasaste a Round 2, preparamos específicamente para eso.</li>
                             <li>• <strong>Semana 11-12: Negociación + Cierre</strong> - Recibes ofertas y necesitas cerrar la mejor. Coaching en negociación salarial, benefits, rol exacto.</li>
                             <li>• <strong>Semana 13 en adelante: Continuidad</strong> - Sigues en la búsqueda si es necesario, con soporte hasta colocación confirmada.</li>
-                            <li className="pt-2 border-t border-white/10 mt-3 pt-3"><strong>KPI Fase 3:</strong> Mínimo 5 ofertas, negociación exitosa, aceptación de rol target.</li>
+                            <li className="pt-2 border-t border-[rgb(80,160,170)]/10 mt-3 pt-3"><strong>KPI Fase 3:</strong> Mínimo 5 ofertas, negociación exitosa, aceptación de rol target.</li>
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-purple-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-purple-400/20">
                           <h5 className="font-semibold text-purple-300 mb-2">Estructura Semanal (Todas las Fases)</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• 2-3 horas de training/coaching semanal (sesiones 60-90 min)</li>
@@ -379,7 +379,7 @@ export default function BienvenidaPage() {
 
                   {/* Expanded details for Pilar 3 */}
                   {expandedPilars[3] && (
-                    <div className="bg-white/5 rounded-lg p-6 mb-4 border border-white/10 space-y-5">
+                    <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-6 mb-4 border border-[rgb(80,160,170)]/10 space-y-5">
                       <div>
                         <h4 className="font-semibold text-white mb-4 text-lg">Detalles del Entrenamiento Intensivo con IA</h4>
                         <p className="text-sm text-muted-foreground dark:text-white/80 mb-4 leading-relaxed">
@@ -388,7 +388,7 @@ export default function BienvenidaPage() {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/5 rounded p-4 border border-pink-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-pink-400/20">
                           <h5 className="font-semibold text-pink-300 mb-2">Los 4 Módulos de Entrenamiento</h5>
                           <div className="space-y-3">
                             <div className="pl-4 border-l border-pink-400/50">
@@ -410,7 +410,7 @@ export default function BienvenidaPage() {
                           </div>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-pink-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-pink-400/20">
                           <h5 className="font-semibold text-pink-300 mb-2">Los 4 Niveles de Dificultad Progresiva</h5>
                           <div className="space-y-3">
                             <div className="pl-4 border-l border-pink-400/50">
@@ -432,7 +432,7 @@ export default function BienvenidaPage() {
                           </div>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-pink-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-pink-400/20">
                           <h5 className="font-semibold text-pink-300 mb-2">Feedback Multimodal IA en Tiempo Real</h5>
                           <p className="text-sm text-muted-foreground dark:text-white/80 mb-3">Después de cada simulacro, recibes análisis profundo:</p>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
@@ -445,7 +445,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-pink-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-pink-400/20">
                           <h5 className="font-semibold text-pink-300 mb-2">Estructura de Entrenamiento Semanal</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• 2-3 simulacros de entrevista por semana (módulos rotados)</li>
@@ -528,7 +528,7 @@ export default function BienvenidaPage() {
 
                   {/* Expanded details for Pilar 4 */}
                   {expandedPilars[4] && (
-                    <div className="bg-white/5 rounded-lg p-6 mb-4 border border-white/10 space-y-5">
+                    <div className="bg-[rgba(80,160,170,0.2)] rounded-lg p-6 mb-4 border border-[rgb(80,160,170)]/10 space-y-5">
                       <div>
                         <h4 className="font-semibold text-white mb-4 text-lg">Detalles de Ejecución Continua en el Mercado Real</h4>
                         <p className="text-sm text-muted-foreground dark:text-white/80 mb-4 leading-relaxed">
@@ -537,7 +537,7 @@ export default function BienvenidaPage() {
                       </div>
 
                       <div className="space-y-4">
-                        <div className="bg-white/5 rounded p-4 border border-rose-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-rose-400/20">
                           <h5 className="font-semibold text-rose-300 mb-2">1. Bolsa de Oportunidades + Matching Automático</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Job Board Exclusivo:</strong> 200+ empleos pre-vetted en tu sector y rol target. Cada semana se agregan más oportunidades.</li>
@@ -548,7 +548,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-rose-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-rose-400/20">
                           <h5 className="font-semibold text-rose-300 mb-2">2. Dashboard de Empleabilidad en Tiempo Real</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Score de Empleabilidad:</strong> Métrica 1-100 que actualiza cada semana. Basada en: cantidad de conversaciones, quality de networking, feedback positivo en entrevistas, velocidad de progreso.</li>
@@ -559,7 +559,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-rose-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-rose-400/20">
                           <h5 className="font-semibold text-rose-300 mb-2">3. Coaching Específico por Empresa/Entrevista</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Pre-Entrevista (24-48 horas antes):</strong> Coach analiza la empresa, rol, hiring manager, tendencias de preguntas, y diseña tu estrategia específica. "En Google suelen preguntar X. En Stripe suelen profundizar en Y. Acá está qué responder".</li>
@@ -569,7 +569,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-rose-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-rose-400/20">
                           <h5 className="font-semibold text-rose-300 mb-2">4. Comunidad + Mentores + Soporte Grupal</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Comunidad Privada:</strong> Grupo de Slack/Discord con 500+ personas: candidatos en búsqueda, graduados que ya tienen roles, mentores voluntarios. Espacio de aprendizaje colectivo.</li>
@@ -580,7 +580,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-rose-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-rose-400/20">
                           <h5 className="font-semibold text-rose-300 mb-2">5. Duración + Promesa de Soporte Continuo</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Indefinido Hasta Colocación:</strong> No importa si tarda 120 días o 180 días. Seguimos apoyándote. Este no es un "90 días y listo". Es "hasta que estés empleado en rol que mereces".</li>
@@ -589,7 +589,7 @@ export default function BienvenidaPage() {
                           </ul>
                         </div>
 
-                        <div className="bg-white/5 rounded p-4 border border-rose-400/20">
+                        <div className="bg-[rgba(80,160,170,0.2)] rounded p-4 border border-rose-400/20">
                           <h5 className="font-semibold text-rose-300 mb-2">Ejemplos Reales de Soporte en Ejecución</h5>
                           <ul className="space-y-2 text-sm text-muted-foreground dark:text-white/80">
                             <li>• <strong>Lunes:</strong> Graduado recibe recomendación de reclutador para rol en Stripe. Coach envía análisis: "Ideal para ti. Aquí hiring manager. Aquí 5 preguntas que típicamente hacen. Aquí tu approach".</li>

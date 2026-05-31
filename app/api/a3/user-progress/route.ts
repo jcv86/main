@@ -1,146 +1,150 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import {
-  PILLAR3_LEVELS,
-  TOTAL_PILLAR3_XP,
-  TOTAL_PILLAR3_DTC,
-  buildModuleStates,
-  calculateLevelCompletion,
-  calculateEarnedRewards,
-  resolveCanonicalId,
-} from '@/lib/pillar3-config'
+import { cookies } from 'next/headers'
+
+// New A3 module structure
+const MODULE_ORDER = [
+  'career-mirror',
+  'value-mining-lab',
+  'cv-builder-studio',
+  'job-decoder',
+  'answer-architecture',
+  'coach-practice-room',
+  'communication-gym',
+  'first-recruiter-simulation',
+  'risk-difficult-questions-lab',
+  'basic-interview-mission',
+]
+
+const MODULE_XP: Record<string, number> = {
+  'career-mirror': 80,
+  'value-mining-lab': 100,
+  'cv-builder-studio': 120,
+  'job-decoder': 100,
+  'answer-architecture': 120,
+  'coach-practice-room': 130,
+  'communication-gym': 140,
+  'first-recruiter-simulation': 160,
+  'risk-difficult-questions-lab': 170,
+  'basic-interview-mission': 220,
+}
+
+const TOTAL_XP = 1340
 
 export async function GET() {
-  const supabase = await createClient()
-  const {
-    data: { user },
-  } = await supabase.auth.getUser()
-
-  if (!user) {
-    return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-  }
-
   try {
-    // Fetch completed training modules for canonical XP/DTC calculation
-    const { data: completions } = await supabase
-      .from('a3_training_module_completions')
-      .select('training_type, xp_amount, is_first_completion')
-      .eq('user_id', user.id)
+    const supabase = createAdminClient()
+    
+    // Get user ID from demo_user cookie
+    const cookieStore = await cookies()
+    const demoUserCookie = cookieStore.get('demo_user')
+    let userId: string | null = null
+    
+    if (demoUserCookie) {
+      try {
+        const demoUser = JSON.parse(demoUserCookie.value)
+        userId = demoUser.id
+      } catch {
+        // Invalid cookie
+      }
+    }
 
-    const completedRawIds = (completions || [])
-      .filter((c) => c.is_first_completion)
-      .map((c) => c.training_type)
-
-    // Resolve to canonical IDs and calculate level/module completion
-    const { level1, level2, level3, level4, canonicalCompleted } =
-      calculateLevelCompletion(completedRawIds)
-
-    // Calculate XP and DTC earned from canonical config (single source of truth)
-    const { totalXp, totalDtc: totalDtcFromConfig } = calculateEarnedRewards(completedRawIds)
-
-    // Also fetch actual DTC balance for live total
-    const { data: dtcBalance } = await supabase
-      .from('user_dtc_balance')
-      .select('balance, lifetime_earned')
-      .eq('user_id', user.id)
-      .maybeSingle()
-
-    // Use the live DTC balance if it exists, else fall back to config-derived total
-    const totalDtc = dtcBalance?.balance ?? totalDtcFromConfig
-
-    const maxXp = TOTAL_PILLAR3_XP
-    const maxDtc = TOTAL_PILLAR3_DTC
-    const progressPct = Math.min(Math.round((totalXp / maxXp) * 100), 100)
-    const dtcPct = Math.min(Math.round((totalDtc / maxDtc) * 100), 100)
-
-    console.log('[v0] User progress (canonical):', {
-      user_id: user.id,
-      completedCanonical: canonicalCompleted,
-      level1Complete: level1,
-      level2Complete: level2,
-      level3Complete: level3,
-      totalXp,
-      totalDtc,
-      progressPct,
+    // Default module states - first module available, rest locked
+    const defaultModuleStates: Record<string, string> = {}
+    MODULE_ORDER.forEach((id, index) => {
+      defaultModuleStates[id] = index === 0 ? 'available' : 'locked'
     })
 
-    // Build moduleStates using the canonical config
-    const moduleStates = buildModuleStates(completedRawIds)
-
-    // Skill values derived from canonical level completion
-    const level2CompletedCount = PILLAR3_LEVELS[2].moduleIds.filter((id) =>
-      canonicalCompleted.includes(id)
-    ).length
-    const level3CompletedCount = PILLAR3_LEVELS[3].moduleIds.filter((id) =>
-      canonicalCompleted.includes(id)
-    ).length
-
-    const skills = {
-      presencia: level1 ? 60 : 35,
-      claridad: level2CompletedCount > 0 ? 40 + level2CompletedCount * 10 : 10,
-      estructura: canonicalCompleted.includes('metodo-star') ? 60 : 0,
-      preparacion: level2CompletedCount > 1 ? 60 + level2CompletedCount * 5 : 25,
-      'manejo-presion': canonicalCompleted.includes('entrenamiento-desafiante') ? 70 : 0,
+    if (!userId) {
+      // Return default state for unauthenticated users
+      return NextResponse.json({
+        success: true,
+        progress: {
+          totalXp: 0,
+          maxXp: TOTAL_XP,
+          progressPct: 0,
+          completedModules: 0,
+          totalModules: 10,
+          moduleStates: defaultModuleStates,
+          completedModuleIds: [],
+          a2CurrentDay: 1, // Default to day 1 if not found
+        },
+      })
     }
 
-    // Determine current level / next milestone
-    let currentLevel = PILLAR3_LEVELS[1].name
-    let nextMilestone = `Completar ${PILLAR3_LEVELS[1].name}`
-    let nextReward = `Desbloqueas ${PILLAR3_LEVELS[2].name} (4 herramientas)`
+    // Fetch A2 user progress to get current day
+    const { data: a2Data } = await supabase
+      .from('a2_user_route_progress')
+      .select('dia_actual')
+      .eq('user_id', userId)
+      .single()
 
-    if (level1 && !level2) {
-      currentLevel = PILLAR3_LEVELS[2].name
-      nextMilestone = `Completar 4 herramientas (${level2CompletedCount}/4)`
-      nextReward = `Desbloqueas ${PILLAR3_LEVELS[3].name}`
-    }
-    if (level2 && !level3) {
-      currentLevel = PILLAR3_LEVELS[3].name
-      nextMilestone = `Completar 4 entrenamientos (${level3CompletedCount}/4)`
-      nextReward = `Desbloqueas ${PILLAR3_LEVELS[4].name}`
-    }
-    if (level3 && !level4) {
-      currentLevel = PILLAR3_LEVELS[4].name
-      nextMilestone = `Completar Simulación Real`
-      nextReward = 'Badge: Listo para Entrevista Real'
-    }
-    if (level4) {
-      currentLevel = 'Pillar 3 Completado'
-      nextMilestone = 'Has completado todos los niveles'
-      nextReward = 'Listo para entrevistas reales'
+    const a2CurrentDay = a2Data?.dia_actual || 1
+
+    // Fetch user progress from database
+    const { data: progressData, error: progressError } = await supabase
+      .from('a3_user_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
+
+    if (progressError && progressError.code !== 'PGRST116') {
+      console.error('[v0] Error fetching a3_user_progress:', progressError)
     }
 
-    const completedModules = canonicalCompleted.length
+    if (progressData) {
+      // User has progress data
+      const moduleStates = progressData.module_states || defaultModuleStates
+      const completedModuleIds = progressData.completed_module_ids || []
+      const totalXp = progressData.total_xp || 0
 
-    // Convert legacy IDs to canonical for the frontend
-    const completedModuleIds = canonicalCompleted
+      // Ensure all modules have a state
+      MODULE_ORDER.forEach((id, index) => {
+        if (!moduleStates[id]) {
+          // Determine state based on previous module
+          if (index === 0) {
+            moduleStates[id] = 'available'
+          } else {
+            const prevId = MODULE_ORDER[index - 1]
+            moduleStates[id] = completedModuleIds.includes(prevId) ? 'available' : 'locked'
+          }
+        }
+      })
 
+      return NextResponse.json({
+        success: true,
+        progress: {
+          totalXp,
+          maxXp: TOTAL_XP,
+          progressPct: Math.round((totalXp / TOTAL_XP) * 100),
+          completedModules: completedModuleIds.length,
+          totalModules: 10,
+          moduleStates,
+          completedModuleIds,
+          a2CurrentDay, // Include A2 current day
+        },
+      })
+    }
+
+    // No progress data - return defaults
     return NextResponse.json({
       success: true,
       progress: {
-        currentLevel,
-        progressPct,
-        dtcPct,
-        totalXp,
-        maxXp,
-        totalDtc,
-        maxDtc,
-        nextMilestone,
-        nextReward,
-        completedModules,
+        totalXp: 0,
+        maxXp: TOTAL_XP,
+        progressPct: 0,
+        completedModules: 0,
         totalModules: 10,
-        moduleStates,
-        skills,
-        completedModuleIds,
-        levelCompletion: {
-          level1,
-          level2,
-          level3,
-          level4,
-        },
+        moduleStates: defaultModuleStates,
+        completedModuleIds: [],
+        a2CurrentDay, // Include A2 current day
       },
     })
   } catch (error) {
-    console.error('[v0] Error fetching user progress:', error)
-    return NextResponse.json({ error: 'Failed to fetch progress' }, { status: 500 })
+    console.error('[v0] Error in user-progress:', error)
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

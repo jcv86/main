@@ -164,7 +164,7 @@ export default function SimulationsPage() {
         </div>
 
         {/* Tips Card */}
-        <Card className="bg-background">
+        <Card className="rounded-[2px] bg-background">
           <CardContent className="pt-6 flex gap-3">
             <div className="w-5 h-5 flex-shrink-0 text-purple text-lg"></div>
             <div>

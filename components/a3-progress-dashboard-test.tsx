@@ -107,7 +107,7 @@ export function A3ProgressDashboardTest() {
       </div>
 
       {/* Debug Info */}
-      <div className="bg-white/5 border border-white/10 rounded-lg p-4 space-y-2 text-xs text-white/60">
+      <div className="rounded-lg p-4 space-y-2 text-xs text-white/60" style={{ backgroundColor: 'rgba(90, 90, 150, 0.05)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
         <p>Estado actual del progreso:</p>
         <pre className="text-cyan-400 text-xs overflow-auto">
           {JSON.stringify(progress, null, 2)}

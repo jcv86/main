@@ -35,14 +35,14 @@ export default function GuidedTrainingPage() {
   const [showWelcome, setShowWelcome] = useState(false)
   const [welcomeModule, setWelcomeModule] = useState<any>(null)
 
-  const handleStartModule = (module: any) => {
+  const handleComenzarModule = (module: any) => {
     if (module.status !== 'locked') {
       setWelcomeModule(module)
       setShowWelcome(true)
     }
   }
 
-  const handleContinueFromWelcome = () => {
+  const handlePlayFromWelcome = () => {
     if (welcomeModule) {
       router.push(`/despega/a3/entrenamiento-guiado/${welcomeModule.id}/1`)
       setShowWelcome(false)
@@ -55,7 +55,7 @@ export default function GuidedTrainingPage() {
         moduleId={welcomeModule.id}
         moduleName={welcomeModule.name}
         moduleLessonCount={welcomeModule.lessons.length}
-        onContinue={handleContinueFromWelcome}
+        onContinue={handlePlayFromWelcome}
       />
     )
   }
@@ -103,7 +103,7 @@ export default function GuidedTrainingPage() {
                     <div className="flex gap-2">
                       <Badge variant="secondary">{module.difficulty}</Badge>
                       {module.status === 'in-progress' && (
-                        <Badge className="bg-training">En Progreso</Badge>
+                        <Badge className="rounded-[20px] bg-training">En Progreso</Badge>
                       )}
                       {isLocked && <Lock className="w-5 h-5 text-training" />}
                     </div>
@@ -137,7 +137,7 @@ export default function GuidedTrainingPage() {
 
                   {/* Action Button */}
                   <Button
-                    onClick={() => handleStartModule(module)}
+                    onClick={() => handleComenzarModule(module)}
                     disabled={isLocked}
                     className="w-full text-white bg-training hover:bg-training/90"
                   >
@@ -149,7 +149,7 @@ export default function GuidedTrainingPage() {
                     ) : (
                       <>
                         <Play className="w-4 h-4 mr-2" />
-                        {module.status === 'in-progress' ? 'Continuar' : 'Comenzar'}
+                        {module.status === 'in-progress' ? 'Play' : 'Comenzar'}
                       </>
                     )}
                   </Button>
