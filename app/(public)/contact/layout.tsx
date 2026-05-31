@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Contacto | Despega Tu Carrera",
     description: "Contáctanos para resolver tus dudas sobre el programa de desarrollo profesional.",
     type: "website",
-    url: "https://despegatucarrera.com/contact",
+    url: "https://www.despegatucarrera.com/contact",
   },
 }
 
@@ -23,8 +23,8 @@ export default function ContactLayout({ children }: { children: React.ReactNode 
   const orgSchema = generateOrganizationSchema()
   const faqSchema = generateFAQSchema(contactFaqs)
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Inicio", url: "https://despegatucarrera.com" },
-    { name: "Contacto", url: "https://despegatucarrera.com/contact" },
+    { name: "Inicio", url: "https://www.despegatucarrera.com" },
+    { name: "Contacto", url: "https://www.despegatucarrera.com/contact" },
   ])
 
   return (

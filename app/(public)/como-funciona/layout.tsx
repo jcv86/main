@@ -8,7 +8,7 @@ export const metadata: Metadata = {
     title: "Cómo Funciona | Despega Tu Carrera",
     description: "Programa de desarrollo profesional de 90 días con coaching IA personalizado.",
     type: "website",
-    url: "https://despegatucarrera.com/como-funciona",
+    url: "https://www.despegatucarrera.com/como-funciona",
   },
 }
 
@@ -25,8 +25,8 @@ export default function ComoFuncionaLayout({ children }: { children: React.React
   const orgSchema = generateOrganizationSchema()
   const faqSchema = generateFAQSchema(howItWorksFaqs)
   const breadcrumbSchema = generateBreadcrumbSchema([
-    { name: "Inicio", url: "https://despegatucarrera.com" },
-    { name: "Cómo Funciona", url: "https://despegatucarrera.com/como-funciona" },
+    { name: "Inicio", url: "https://www.despegatucarrera.com" },
+    { name: "Cómo Funciona", url: "https://www.despegatucarrera.com/como-funciona" },
   ])
   const courseSchema = generateCourseSchema({
     name: "Programa de Desarrollo Profesional DTC",
