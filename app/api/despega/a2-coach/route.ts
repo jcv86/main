@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { generateText } from "ai"
-import { gateway } from "@ai-sdk/gateway"
+import OpenAI from "openai"
 
 const COACH_SYSTEM_PROMPT = `Eres el Coach de Entrenamiento de Despega Tu Carrera (DTC).
 
@@ -49,14 +48,27 @@ Información del usuario:
 - Tarea actual: ${currentTask || "N/A"}
 ` : ""
 
-    const { text } = await generateText({
-      model: gateway("openai/gpt-4o-mini"),
-      system: COACH_SYSTEM_PROMPT + contextInfo,
-      messages: [
-        ...(context || []),
-        { role: "user", content: message }
-      ],
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     })
+
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      max_tokens: 600,
+      messages: [
+        {
+          role: "system" as const,
+          content: COACH_SYSTEM_PROMPT + contextInfo
+        },
+        ...(context || []).map((msg: any) => ({
+          role: msg.role as "user" | "assistant",
+          content: msg.content
+        })),
+        { role: "user" as const, content: message }
+      ] as any,
+    })
+
+    const text = response.choices[0].message.content || ""
 
     return NextResponse.json({ response: text })
   } catch (error) {

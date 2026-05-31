@@ -1,7 +1,6 @@
 import { NextRequest, NextResponse } from "next/server"
 import { createClient } from "@/lib/supabase/server"
-import { generateText } from "ai"
-import { gateway } from "@ai-sdk/gateway"
+import OpenAI from "openai"
 
 const ROUTE_GENERATOR_PROMPT = `Eres el generador de rutas de desarrollo profesional de Despega Tu Carrera.
 
@@ -67,11 +66,26 @@ Información del usuario:
 - Industria objetivo: ${profile?.industry || "No especificada"}
 `
 
-    const { text } = await generateText({
-      model: gateway("openai/gpt-4o-mini"),
-      system: ROUTE_GENERATOR_PROMPT,
-      prompt: `Genera una ruta de desarrollo profesional personalizada para este usuario:\n${userContext}`,
+    const client = new OpenAI({
+      apiKey: process.env.OPENAI_API_KEY,
     })
+
+    const response = await client.chat.completions.create({
+      model: "gpt-4o-mini",
+      max_tokens: 1500,
+      messages: [
+        {
+          role: "system" as const,
+          content: ROUTE_GENERATOR_PROMPT
+        },
+        {
+          role: "user" as const,
+          content: `Genera una ruta de desarrollo profesional personalizada para este usuario:\n${userContext}`
+        }
+      ] as any,
+    })
+
+    const text = response.choices[0].message.content || ""
 
     // Parse the JSON response
     let route
