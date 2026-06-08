@@ -9,6 +9,7 @@ import VeraCircularDiagram from '@/components/vera-circular-diagram'
 import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
 import ProblemasReveal from '@/components/problemas-reveal'
 import NoventaDiasFlow from '@/components/noventa-dias-flow'
+import ComparisonTable from '@/components/comparison-table'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -178,37 +179,7 @@ export default function LandingPageOptimized() {
           <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
             Por qué DTC no se parece a "lo de siempre".
           </h2>
-          <div className="overflow-x-auto">
-            <table className="w-full text-sm">
-              <thead>
-                <tr className="border-b border-white/20">
-                  <th className="text-left py-4 px-4 text-foreground/60">Característica</th>
-                  <th className="text-center py-4 px-4 font-semibold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>DTC</th>
-                  <th className="text-center py-4 px-4 text-foreground/60">Test estándar</th>
-                  <th className="text-center py-4 px-4 text-foreground/60">Bolsa de empleos</th>
-                  <th className="text-center py-4 px-4 text-foreground/60">Coach suelto</th>
-                </tr>
-              </thead>
-              <tbody>
-                {[
-                  { feature: 'Comienza desde ti (no desde vacantes)', dtc: true, test: false, bolsa: false, coach: true },
-                  { feature: 'IA + Humano', dtc: true, test: false, bolsa: false, coach: false },
-                  { feature: 'Ruta clara de 90 días', dtc: true, test: false, bolsa: false, coach: true },
-                  { feature: 'CV ATS armado', dtc: true, test: false, bolsa: false, coach: false },
-                  { feature: 'Garantía 7 días', dtc: true, test: false, bolsa: false, coach: false },
-                  { feature: 'Transparencia de precios', dtc: true, test: true, bolsa: true, coach: false }
-                ].map((row, idx) => (
-                  <tr key={idx} className="border-b border-white/10">
-                    <td className="py-4 px-4 text-foreground/80">{row.feature}</td>
-                    <td className="text-center py-4 px-4">{row.dtc ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
-                    <td className="text-center py-4 px-4">{row.test ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
-                    <td className="text-center py-4 px-4">{row.bolsa ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
-                    <td className="text-center py-4 px-4">{row.coach ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ComparisonTable />
         </div>
       </section>
 
