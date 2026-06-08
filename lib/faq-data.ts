@@ -155,4 +155,68 @@ export const FAQ_DATA: FAQItem[] = [
     keywords: ["experiencia", "senior", "junior", "reenfoque", "carrera"],
     relatedIds: ["que-es-dtc", "para-empresas"],
   },
+  // High-intent / GEO-LLMO questions aligned with the current product (Vera, 90 días, garantía, precio)
+  {
+    id: "como-funciona-90-dias",
+    question: "¿Cómo funciona el programa de 90 días de Despega Tu Carrera?",
+    answer:
+      "El programa de 90 días de Despega Tu Carrera se estructura en cuatro fases progresivas: (1) El Ritual, donde haces un diagnóstico profundo de autoconocimiento; (2) Exploración, donde diseñas una ruta personalizada con hitos medibles; (3) Entrenamiento, donde practicas habilidades reales como entrevistas y comunicación con feedback de IA; y (4) La Realidad, donde ejecutas tu plan acompañado por Vera, tu coach con IA, las 24 horas. Cada fase desbloquea la siguiente y la memoria del sistema personaliza todo el recorrido según tu perfil.",
+    category: "general",
+    keywords: ["90 días", "cómo funciona", "fases", "programa", "ritual", "exploración", "entrenamiento", "realidad", "etapas"],
+    relatedIds: ["que-es-dtc", "quien-es-vera"],
+  },
+  {
+    id: "quien-es-vera",
+    question: "¿Quién es Vera y cómo te acompaña?",
+    answer:
+      "Vera es el coach con inteligencia artificial de Despega Tu Carrera, disponible 24/7. No es un chat genérico: Vera entiende tu perfil psicométrico, tu contexto y tus objetivos para darte respuestas personalizadas. Te acompaña con preguntas a cualquier hora, decisiones en entrevistas (qué preguntar, cómo negociar), dudas sobre tu ruta y motivación cuando tu progreso baja. Combina datos de tu diagnóstico con conocimiento del mercado laboral chileno para orientarte de forma concreta.",
+    category: "coach-ia",
+    keywords: ["vera", "coach ia", "inteligencia artificial", "24/7", "acompañamiento", "asistente"],
+    relatedIds: ["coach-ia-funciona", "como-funciona-90-dias"],
+  },
+  {
+    id: "precio-dtc",
+    question: "¿Cuánto cuesta Despega Tu Carrera y qué incluye cada plan?",
+    answer:
+      "Despega Tu Carrera tiene un plan Gratuito y un plan Pro. El plan Gratuito incluye el diagnóstico inicial (30 min), tu perfil vivo con las primeras insights, 7 días de acceso a Vera y acceso a FAQ y recursos, sin tarjeta de crédito. El plan Pro cuesta $4.390 CLP al mes e incluye los 90 días completos, Vera 24/7 ilimitado, constructor de CV ATS + portfolio, ruta personalizada, recursos y templates, y garantía de 7 días sin costo. Puedes empezar gratis y subir a Pro cuando lo necesites.",
+    category: "cuenta",
+    keywords: ["precio", "costo", "cuánto cuesta", "plan", "pro", "gratuito", "$4390", "mensualidad", "pago"],
+    relatedIds: ["garantia-7-dias", "es-gratis"],
+  },
+  {
+    id: "garantia-7-dias",
+    question: "¿Qué incluye la garantía de 7 días?",
+    answer:
+      "Si dentro de los primeros 7 días sientes que Despega Tu Carrera no es para ti, te devolvemos cada peso, sin preguntas. Es una garantía de satisfacción total pensada para que comiences sin riesgo. Según nuestros datos, 9 de cada 10 personas que empiezan el programa deciden continuar, pero la garantía existe para que la decisión de probar sea completamente libre de presión.",
+    category: "cuenta",
+    keywords: ["garantía", "devolución", "reembolso", "7 días", "sin riesgo", "satisfacción"],
+    relatedIds: ["precio-dtc", "como-empezar"],
+  },
+  {
+    id: "cv-ats-armado",
+    question: "¿Despega Tu Carrera me ayuda a crear un CV optimizado para ATS?",
+    answer:
+      "Sí. El plan Pro incluye un constructor de CV optimizado para sistemas ATS (Applicant Tracking Systems), los filtros automáticos que usan las empresas para revisar candidaturas. Despega Tu Carrera estructura tu CV con las palabras clave, el formato y las secciones que estos sistemas leen correctamente, además de ayudarte a construir un portfolio que respalde tu candidatura. El objetivo es que tu CV pase los filtros automáticos y llegue a manos de un reclutador humano.",
+    category: "general",
+    keywords: ["cv", "ats", "currículum", "resume", "filtros", "applicant tracking system", "portfolio"],
+    relatedIds: ["como-funciona-90-dias", "diferenciacion-mercado"],
+  },
+  {
+    id: "para-quien-es-dtc",
+    question: "¿Para quién está pensado Despega Tu Carrera?",
+    answer:
+      "Despega Tu Carrera está pensado para profesionales en Chile que sienten que su carrera está estancada o desalineada y quieren claridad y dirección. Sirve tanto para quienes buscan activamente un nuevo trabajo como para quienes desean crecer internamente, cambiar de rumbo o redescubrir qué quieren realmente. Funciona para personas con experiencia que necesitan reenfocarse y también para quienes recién comienzan y buscan orientación. El sistema empieza desde ti, no desde una lista de vacantes.",
+    category: "general",
+    keywords: ["para quién", "público", "audiencia", "profesionales", "chile", "estancado", "cambio de carrera"],
+    relatedIds: ["dtc-con-experiencia", "como-empezar"],
+  },
+  {
+    id: "dtc-vs-bolsa-empleos",
+    question: "¿En qué se diferencia DTC de una bolsa de empleos o un test estándar?",
+    answer:
+      "Una bolsa de empleos te muestra vacantes; un test estándar te da un resultado y termina ahí. Despega Tu Carrera es distinto: empieza desde ti (no desde las vacantes), combina IA con acompañamiento humano, te entrega una ruta clara de 90 días, arma tu CV ATS, ofrece garantía de 7 días y mantiene transparencia total de precios. No te 'encontramos' un trabajo: te preparamos integralmente para que lo consigas y para que tomes mejores decisiones de carrera a largo plazo.",
+    category: "general",
+    keywords: ["diferencia", "bolsa de empleos", "test estándar", "coach suelto", "comparación", "ventaja", "por qué"],
+    relatedIds: ["dtc-vs-test-cualquiera", "diferenciacion-mercado"],
+  },
 ]
