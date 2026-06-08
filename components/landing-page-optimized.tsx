@@ -35,10 +35,16 @@ export default function LandingPageOptimized() {
         </div>
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-light mb-8 bg-background">
-            Entiende cómo funcionas.<br />Ordena tu camino.<br />Avanza con más claridad.
+            Tienes talento, pero algo no encaja.
           </h1>
+          <p className="text-2xl md:text-3xl text-foreground/80 mb-6 leading-relaxed font-medium">
+            ¿No progresas en tu carrera?<br/>¿El rol correcto o el equipo equivocado?
+          </p>
           <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed">
-            DTC te ayuda a descubrir quién eres realmente, a ordenar tus tensiones internas y a construir una ruta clara de 90 días con coaching IA personalizado.
+            En 90 días descubrirás quién realmente eres. Diseñarás tu ruta. Y avanzarás sin dudas.
+          </p>
+          <p className="text-lg text-foreground/60 mb-8 max-w-3xl mx-auto italic">
+            Para profesionales en tech, retail, finance, consultoría que saben que pueden más pero no saben exactamente qué, hacia dónde o cómo.
           </p>
           <div className="flex flex-col sm:flex-row gap-4 justify-center">
             <Link href="/auth/signin" prefetch={true}>
@@ -47,7 +53,7 @@ export default function LandingPageOptimized() {
                 className="text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
                 style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}
               >
-                Quiero comenzar mi diagnóstico
+                Diagnóstico Gratuito (5 min)
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
@@ -58,7 +64,7 @@ export default function LandingPageOptimized() {
                 className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent border-transparent"
                 style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}
               >
-                Ver cómo funciona DTC
+                Ver cómo funciona
               </Button>
             </Link>
           </div>
@@ -149,7 +155,15 @@ export default function LandingPageOptimized() {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-2">Desorden Interno</h3>
-                <p className="text-foreground/75">No tienes claridad sobre ti mismo. Tienes potencial pero todo se siente desordenado y sin dirección clara.</p>
+                <p className="text-foreground/75">Tienes 5 pestañas abiertas en tu cabeza:</p>
+                <ul className="text-foreground/75 mt-2 space-y-1 ml-2">
+                  <li>✗ Soy bueno en esto, pero me aburre</li>
+                  <li>✗ Me encanta eso, pero no sé si pueda vivir de eso</li>
+                  <li>✗ Mis padres dicen que haga esto, pero yo quiero aquello</li>
+                  <li>✗ Mi jefe dice que soy bueno en A, pero siento que debería ser B</li>
+                  <li>✗ He estado 2 años aquí y nada ha cambiado</li>
+                </ul>
+                <p className="text-foreground/75 mt-3 font-medium">Resultado: Malhumor. Procrastinación. Inacción.</p>
               </div>
             </div>
 
@@ -209,7 +223,20 @@ export default function LandingPageOptimized() {
               </div>
               <div>
                 <h3 className="font-bold text-lg mb-2">El Resultado</h3>
-                <p className="text-foreground/75 font-medium">Tienes potencial pero no avanzas. Necesitas estructura, foco y una ruta clara. DTC está diseñado para esto.</p>
+                <p className="text-foreground/75 font-semibold mb-3">Si no haces nada:</p>
+                <ul className="text-foreground/75 space-y-1 ml-2 mb-3">
+                  <li>• En 2 años seguirás en el mismo lugar (o peor)</li>
+                  <li>• Habrás "perdido" $200-500K en oportunidades</li>
+                  <li>• Tu confianza se erosionará más</li>
+                  <li>• La frustración se convertirá en resentimiento</li>
+                </ul>
+                <p className="text-foreground/75 font-semibold mb-3">Si haces DTC:</p>
+                <ul className="text-teal-400 space-y-1 ml-2">
+                  <li>✓ En 90 días sabrás quién eres y qué quieres</li>
+                  <li>✓ Tendrás una ruta clara, validada, personalizada</li>
+                  <li>✓ Entrarás a nuevas oportunidades con confianza</li>
+                  <li>✓ Proyectarás que sabes quién eres (y eso vale dinero)</li>
+                </ul>
               </div>
             </div>
           </div>
