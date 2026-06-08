@@ -8,6 +8,7 @@ import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
 import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
 import ProblemasReveal from '@/components/problemas-reveal'
+import NoventaDiasFlow from '@/components/noventa-dias-flow'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -167,20 +168,7 @@ export default function LandingPageOptimized() {
           <p className="text-lg text-foreground/70 text-center mb-12">
             En 90 días estructurados:
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
-            {[
-              { icon: '🧠', title: 'Entiende', desc: 'Tu tipo profesional real, tus fortalezas, qué te hace estar en flow' },
-              { icon: '🗺️', title: 'Ordena', desc: 'Tu ruta clara: próximos pasos, industrias, roles que casan contigo' },
-              { icon: '🏋️', title: 'Entrena', desc: 'Skills específicas, credibilidad, portfolio armado que habla por ti' },
-              { icon: '🎯', title: 'Contextualiza', desc: 'Mercado actual, networks, oportunidades reales en tu contexto' }
-            ].map((item, idx) => (
-              <div key={idx} className="text-center">
-                <p className="text-4xl mb-3">{item.icon}</p>
-                <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
-                <p className="text-sm text-foreground/70">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+          <NoventaDiasFlow />
         </div>
       </section>
 
