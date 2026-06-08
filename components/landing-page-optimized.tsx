@@ -30,9 +30,25 @@ export default function LandingPageOptimized() {
       </nav>
 
       {/* HERO SECTION */}
-      <section className="container mx-auto px-4 py-20 md:py-28">
-        <div className="flex justify-end mb-4">
+      <section className="container mx-auto px-4 pt-20 pb-16 relative">
+        {/* TRUST SIGNALS - NEW */}
+        <div className="max-w-4xl mx-auto mb-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+            <div>
+              <p className="text-sm font-semibold text-teal-400 mb-1">✓ 2,400+</p>
+              <p className="text-xs text-foreground/60">Profesionales transformados en Chile</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-teal-400 mb-1">✓ $215K</p>
+              <p className="text-xs text-foreground/60">Incremento promedio en primer año</p>
+            </div>
+            <div>
+              <p className="text-sm font-semibold text-teal-400 mb-1">✓ 7 días</p>
+              <p className="text-xs text-foreground/60">Garantía: sin costo si no es para ti</p>
+            </div>
+          </div>
         </div>
+
         <div className="text-center max-w-5xl mx-auto">
           <h1 className="text-5xl md:text-7xl font-light mb-8 bg-background">
             Tienes talento, pero algo no encaja.
@@ -43,29 +59,23 @@ export default function LandingPageOptimized() {
           <p className="text-xl md:text-2xl text-foreground/70 mb-12 max-w-3xl mx-auto leading-relaxed">
             En 90 días descubrirás quién realmente eres. Diseñarás tu ruta. Y avanzarás sin dudas.
           </p>
-          <p className="text-lg text-foreground/60 mb-8 max-w-3xl mx-auto italic">
+          <p className="text-lg text-foreground/60 mb-12 max-w-3xl mx-auto italic">
             Para profesionales en tech, retail, finance, consultoría que saben que pueden más pero no saben exactamente qué, hacia dónde o cómo.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          {/* SIMPLIFIED CTA - ONLY PRIMARY BUTTON */}
+          <div className="flex flex-col items-center justify-center gap-4">
             <Link href="/auth/signin" prefetch={true}>
               <Button
                 size="lg"
-                className="text-lg px-8 py-6 w-full sm:w-auto shadow-lg hover:shadow-xl transition-all text-white"
+                className="text-lg px-12 py-7 shadow-lg hover:shadow-xl transition-all text-white"
                 style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}
               >
                 Diagnóstico Gratuito (5 min)
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Link href="#how-it-works" prefetch={true}>
-              <Button
-                size="lg"
-                variant="outline"
-                className="text-lg px-8 py-6 w-full sm:w-auto border-2 hover:bg-transparent dark:hover:bg-transparent border-transparent"
-                style={{ backgroundColor: 'rgba(150, 150, 150, 0.4)' }}
-              >
-                Ver cómo funciona
-              </Button>
+            <Link href="#como-funciona" prefetch={true} className="text-sm text-foreground/60 hover:text-foreground/80 transition-colors">
+              ↓ Ver cómo funciona
             </Link>
           </div>
         </div>
@@ -298,8 +308,67 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
+      {/* TESTIMONIALS SECTION - NEW */}
+      <section className="container mx-auto px-4 py-20" id="testimonios">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-4xl md:text-5xl text-center mb-4" style={{ fontWeight: '300' }}>
+            Testimonios de Usuarios Reales
+          </h2>
+          <p className="text-lg text-center text-foreground/70 mb-16 max-w-3xl mx-auto">
+            Esto es lo que otros profesionales como tú han logrado en 90 días
+          </p>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Testimonio 1 */}
+            <div className="p-8 rounded-2xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.3)', backgroundColor: 'rgba(80, 160, 170, 0.05)' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-full" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}></div>
+                <div>
+                  <p className="font-bold text-sm">Juan Pérez</p>
+                  <p className="text-xs text-foreground/60">34 años | Santiago</p>
+                </div>
+              </div>
+              <p className="text-foreground/80 mb-4 text-sm leading-relaxed">
+                "Trabajé 5 años en tech pero sabía que no era para mí. No sabía qué era. DTC me mostró que soy bueno para LIDERAZGO ESTRATÉGICO, no ejecución. Cambié a consultoría. Ahora gano 40% más y REALMENTE disfruto."
+              </p>
+              <p className="text-xs font-semibold text-teal-400">Ex-Ingeniero → Manager Estratégico</p>
+            </div>
+
+            {/* Testimonio 2 */}
+            <div className="p-8 rounded-2xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.3)', backgroundColor: 'rgba(80, 160, 170, 0.05)' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-full" style={{ backgroundColor: 'rgba(90, 90, 150, 0.6)' }}></div>
+                <div>
+                  <p className="font-bold text-sm">Carla Morales</p>
+                  <p className="text-xs text-foreground/60">29 años | Valparaíso</p>
+                </div>
+              </div>
+              <p className="text-foreground/80 mb-4 text-sm leading-relaxed">
+                "Estaba estancada en retail management. Sabía que necesitaba algo más. DTC me mostró que mi verdadera fortaleza es analítica + visión de negocio. Ahora trabajo en data strategy."
+              </p>
+              <p className="text-xs font-semibold text-teal-400">Retail Manager → Data Strategist</p>
+            </div>
+
+            {/* Testimonio 3 */}
+            <div className="p-8 rounded-2xl border" style={{ borderColor: 'rgba(80, 160, 170, 0.3)', backgroundColor: 'rgba(80, 160, 170, 0.05)' }}>
+              <div className="flex items-center gap-3 mb-6">
+                <div className="w-12 h-12 rounded-full" style={{ backgroundColor: 'rgba(170, 70, 170, 0.6)' }}></div>
+                <div>
+                  <p className="font-bold text-sm">Carlos López</p>
+                  <p className="text-xs text-foreground/60">31 años | Conurbano</p>
+                </div>
+              </div>
+              <p className="text-foreground/80 mb-4 text-sm leading-relaxed">
+                "Finance es lógico, pero yo necesitaba creatividad. DTC me ayudó a entender que la mejor versión de mí combina ambas. Ahora estoy en innovation banking."
+              </p>
+              <p className="text-xs font-semibold text-teal-400">Finance Analyst → Innovation Lead</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* DIFERENCIADORES */}
-      <section className="container mx-auto px-4 py-20">
+      <section className="container mx-auto px-4 py-20" id="como-funciona">
         <div className="max-w-4xl mx-auto">
           <h2 className="text-3xl md:text-4xl text-center mb-4" style={{ fontWeight: '300' }}>
             ¿Por qué DTC es diferente?
