@@ -44,10 +44,10 @@ export default function LandingPageOptimized() {
           </p>
           <div className="mb-12">
             <Link href="/auth/signin" prefetch={true}>
-              <Button size="lg" className="text-white px-8 py-6" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
+              <button className="inline-flex items-center gap-2 rounded-full px-8 py-6 text-lg font-semibold text-white transition-all hover:opacity-90" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
                 Quiero comenzar mi diagnóstico
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+                <ArrowRight className="h-5 w-5" />
+              </button>
             </Link>
           </div>
         </div>
