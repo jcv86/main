@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
 import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
@@ -13,6 +13,7 @@ import ComparisonTable from '@/components/comparison-table'
 import OutcomesGrid from '@/components/outcomes-grid'
 import VeraChatLive from '@/components/vera-chat-live'
 import ContrastColumns from '@/components/contrast-columns'
+import PricingCards from '@/components/pricing-cards'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -223,38 +224,7 @@ export default function LandingPageOptimized() {
           <h2 className="text-4xl md:text-5xl font-light mb-12">
             Empieza gratis. Sube cuando lo necesites.
           </h2>
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-lg border border-white/10 text-left">
-              <p className="text-2xl font-bold mb-2">Gratuito</p>
-              <p className="text-foreground/60 mb-6">Para comenzar sin riesgo</p>
-              <ul className="space-y-2 mb-6">
-                {['Diagnóstico inicial (30 min)', 'Perfil vivo (primeras insights)', 'Acceso 7 días a Vera', 'FAQ + recursos'].map((item, idx) => (
-                  <li key={idx} className="flex gap-2 text-sm">
-                    <Check className="h-4 w-4 text-teal-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <p className="text-sm text-foreground/60">Perfectamente válido para muchos</p>
-            </div>
-            <div className="p-8 rounded-lg border-2 text-left" style={{ borderColor: 'rgba(80, 160, 170, 0.5)', backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
-              <p className="text-2xl font-bold mb-2">Pro</p>
-              <p className="text-xl font-semibold text-teal-400 mb-6">$4,390/mes</p>
-              <ul className="space-y-2 mb-6">
-                {['Acceso 90 días completos', 'Vera 24/7 + ilimitado', 'CV ATS builder + portfolio', 'Ruta personalizada', 'Recursos + templates', '7 días garantía (sin costo)'].map((item, idx) => (
-                  <li key={idx} className="flex gap-2 text-sm">
-                    <Check className="h-4 w-4 text-teal-400 flex-shrink-0" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-              <Link href="/auth/signin" prefetch={true}>
-                <Button className="w-full text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
-                  Comenzar ahora
-                </Button>
-              </Link>
-            </div>
-          </div>
+          <PricingCards />
         </div>
       </section>
 
