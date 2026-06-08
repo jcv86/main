@@ -14,6 +14,7 @@ import OutcomesGrid from '@/components/outcomes-grid'
 import VeraChatLive from '@/components/vera-chat-live'
 import ContrastColumns from '@/components/contrast-columns'
 import PricingCards from '@/components/pricing-cards'
+import FinalCta from '@/components/final-cta'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -229,22 +230,7 @@ export default function LandingPageOptimized() {
       </section>
 
       {/* ===== CTA FINAL ===== */}
-      <section className="container mx-auto px-4 py-20 border-t border-white/10 text-center">
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-8">
-            Da el primer paso hacia tu claridad.
-          </h2>
-          <p className="text-lg text-foreground/70 mb-12">
-            7 días, sin costo si no es para ti. Pero basándose en nuestros datos: 9 de cada 10 continúan.
-          </p>
-          <Link href="/auth/signin" prefetch={true}>
-            <Button size="lg" className="text-white px-12 py-7" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
-              Comenzar diagnóstico
-              <ArrowRight className="ml-2 h-5 w-5" />
-            </Button>
-          </Link>
-        </div>
-      </section>
+      <FinalCta />
 
       {/* ===== FAQ ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
