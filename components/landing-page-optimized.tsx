@@ -3,7 +3,7 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Check, X } from 'lucide-react'
+import { ArrowRight, Check } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
 import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
@@ -12,6 +12,7 @@ import NoventaDiasFlow from '@/components/noventa-dias-flow'
 import ComparisonTable from '@/components/comparison-table'
 import OutcomesGrid from '@/components/outcomes-grid'
 import VeraChatLive from '@/components/vera-chat-live'
+import ContrastColumns from '@/components/contrast-columns'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -212,40 +213,7 @@ export default function LandingPageOptimized() {
           <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
             No es un test. Ni una bolsa de empleos. Ni un coach suelto.
           </h2>
-          <div className="grid md:grid-cols-2 gap-12">
-            <div>
-              <h3 className="text-2xl font-light mb-6">No es:</h3>
-              <ul className="space-y-4">
-                {[
-                  'Un test que te dice "eres extrovertido" (no, es mucho más profundo)',
-                  'Una bolsa de empleos (no encontramos trabajo, TE PREPARAMOS para encontrarlo)',
-                  'Un coach que te dice qué hacer (nosotros clarificamos, vos decides)',
-                  'Un cursito rápido (son 90 días de trabajo real en tu carrera)'
-                ].map((item, idx) => (
-                  <li key={idx} className="flex gap-3">
-                    <X className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-foreground/80">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <h3 className="text-2xl font-light mb-6">Sí es:</h3>
-              <ul className="space-y-4">
-                {[
-                  'Un sistema que te entiende: tu mente, tus miedos, tus fortalezas reales',
-                  'Un acompañamiento estructurado: diagnóstico → dirección → práctica → contexto',
-                  'IA + humano: datos que significan algo + intuición que orienta',
-                  'Garantizado: si no es para ti, devolvemos cada peso en 7 días'
-                ].map((item, idx) => (
-                  <li key={idx} className="flex gap-3">
-                    <Check className="h-5 w-5 text-teal-400 flex-shrink-0 mt-0.5" />
-                    <span className="text-foreground/80">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
+          <ContrastColumns />
         </div>
       </section>
 
