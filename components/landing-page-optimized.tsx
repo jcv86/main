@@ -2,7 +2,6 @@
 
 import React, { useState } from 'react'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
 import { ArrowRight } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
@@ -29,11 +28,6 @@ export default function LandingPageOptimized() {
             <Link href="#" className="text-sm text-foreground/70 hover:text-foreground">Producto</Link>
             <Link href="#" className="text-sm text-foreground/70 hover:text-foreground">Nosotros</Link>
             <Link href="#" className="text-sm text-foreground/70 hover:text-foreground">Contacto</Link>
-            <Link href="/auth/signin" prefetch={true}>
-              <Button size="sm" className="text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
-                Comenzar
-              </Button>
-            </Link>
           </nav>
         </div>
       </header>
@@ -48,16 +42,13 @@ export default function LandingPageOptimized() {
           <p className="text-xl text-foreground/70 mb-8 leading-relaxed max-w-3xl mx-auto">
             DTC no es un test. No es una bolsa de empleos. No es un coach suelto. Es un sistema que parte desde ti, no desde la vacante. En 90 días de diagnóstico y acompañamiento IA, descubrirás quién eres profesionalmente, qué roles casan contigo, y qué sigue.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+          <div className="mb-12">
             <Link href="/auth/signin" prefetch={true}>
               <Button size="lg" className="text-white px-8 py-6" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
                 Quiero comenzar mi diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <Button size="lg" variant="outline" className="px-8 py-6">
-              Pruébalo en vivo (demo)
-            </Button>
           </div>
         </div>
 

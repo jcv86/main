@@ -1,8 +1,7 @@
 'use client'
 
 import { useEffect, useRef, useState } from 'react'
-import Link from 'next/link'
-import { Check, ArrowRight, Sparkles } from 'lucide-react'
+import { Check, Sparkles } from 'lucide-react'
 
 type Plan = {
   name: string
@@ -10,8 +9,6 @@ type Plan = {
   period?: string
   tagline: string
   features: string[]
-  cta: string
-  href: string
   featured: boolean
   note?: string
 }
@@ -27,8 +24,6 @@ const plans: Plan[] = [
       'Acceso 7 días a Vera',
       'FAQ + recursos',
     ],
-    cta: 'Empezar gratis',
-    href: '/auth/signin',
     featured: false,
     note: 'Perfectamente válido para muchos',
   },
@@ -45,8 +40,6 @@ const plans: Plan[] = [
       'Recursos + templates',
       '7 días garantía (sin costo)',
     ],
-    cta: 'Comenzar ahora',
-    href: '/auth/signin',
     featured: true,
   },
 ]
@@ -124,20 +117,6 @@ export default function PricingCards() {
               </li>
             ))}
           </ul>
-
-          <Link href={plan.href} prefetch={true} className="block">
-            <button
-              className={`group flex w-full items-center justify-center gap-2 rounded-full px-6 py-3 text-sm font-medium transition-all ${
-                plan.featured
-                  ? 'text-white'
-                  : 'border border-teal-400/40 text-teal-300 hover:bg-teal-400/10'
-              }`}
-              style={plan.featured ? { backgroundColor: 'rgba(80, 160, 170, 0.85)' } : undefined}
-            >
-              {plan.cta}
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-1" />
-            </button>
-          </Link>
 
           {plan.note && (
             <p className="mt-4 text-center text-xs text-foreground/45">{plan.note}</p>
