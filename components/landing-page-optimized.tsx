@@ -14,219 +14,100 @@ export default function LandingPageOptimized() {
     style: 'Directo y asertivo'
   })
 
-  const faqItems = [
-    {
-      q: '¿Para quién es DTC exactamente?',
-      a: 'Para profesionales en tech, retail, finance, consultoría que saben que pueden más pero no saben exactamente qué, hacia dónde o cómo. Si tienes 2+ años de experiencia y sientes que estás atascado, DTC es para ti.'
-    },
-    {
-      q: '¿Cuánto cuesta realmente?',
-      a: 'Gratuito para diagnóstico + 30 días. Pro es $4,390/mes para acceso 90 días completos con acompañamiento IA 24/7, CV ATS y portfolio builder. Garantía 7 días: sin costo si no es para ti.'
-    },
-    {
-      q: '¿Cuánto tiempo toma?',
-      a: '90 días estructurados. Week 1-2: descubrimiento. Week 3-4: diseño de ruta. Week 5-8: ejecución. Week 9-12: lanzamiento. Pero muchos ven claridad en la primera semana.'
-    },
-    {
-      q: '¿Qué pasa si no me gusta?',
-      a: 'Te devolvemos cada peso en 7 días. Sin preguntas. Pero basándose en nuestros datos, 92% de usuarios continúan después de semana 1.'
-    },
-    {
-      q: '¿Puedo usarlo si trabajo full time?',
-      a: 'Sí. El diagnóstico toma 30 min/día. Diseño de ruta y ejecución son parcialmente asincrónico. Mucha gente lo hace en noches/fines de semana.'
-    },
-    {
-      q: '¿Es solo para IT?',
-      a: 'No. Hemos ayudado profesionales en retail, finance, consultoría, operaciones, ventas. El principio es el mismo: claridad → ruta → acción.'
-    },
-    {
-      q: '¿Necesito un mentor humano?',
-      a: 'No necesario. Nuestra IA hace 85% del trabajo. Si necesitas acompañamiento humano, lo conectamos (costo adicional), pero la mayoría no lo necesita.'
-    },
-    {
-      q: '¿Qué pasa con mis datos?',
-      a: 'Son tuyos. Nunca los vendemos. Los usamos para mejorar el diagnóstico y personalizarlo. Cifrado end-to-end. Privacy first.'
-    }
-  ]
-
-  const comparisonFeatures = [
-    { feature: 'Claridad sobre ti', dtc: true, tests: false, coaching: 'partial', ai: true },
-    { feature: 'Costo', dtc: '$$$', tests: '$', coaching: '$$$$', ai: '$$$' },
-    { feature: 'Tiempo', dtc: '90d', tests: '1d', coaching: '3-6m', ai: '90d' },
-    { feature: 'Ruta personalizada', dtc: true, tests: false, coaching: 'partial', ai: true },
-    { feature: 'Acompañamiento', dtc: true, tests: false, coaching: true, ai: true },
-    { feature: 'CV + Portfolio', dtc: true, tests: false, coaching: false, ai: true }
-  ]
-
-  const differentiators = [
-    {
-      icon: Brain,
-      title: 'Autoconocimiento Real',
-      desc: 'No test fake. Tu verdadera esencia, sin juicio.',
-      color: 'rgba(80, 160, 170, 0.6)'
-    },
-    {
-      icon: Target,
-      title: 'Ruta Personalizada',
-      desc: 'No template. La TUYA, basada en quién eres.',
-      color: 'rgba(90, 90, 150, 0.6)'
-    },
-    {
-      icon: Zap,
-      title: 'IA 24/7',
-      desc: 'Siempre disponible. Responde tus dudas al instante.',
-      color: 'rgba(170, 70, 170, 0.6)'
-    },
-    {
-      icon: FileText,
-      title: 'CV ATS Armado',
-      desc: 'Te lo construimos juntos. Validado, no fake.',
-      color: 'rgba(220, 100, 80, 0.6)'
-    },
-    {
-      icon: Award,
-      title: 'Portfolio Visible',
-      desc: 'Tu evidencia. Lo que de verdad habla.',
-      color: 'rgba(80, 170, 140, 0.6)'
-    },
-    {
-      icon: TrendingUp,
-      title: 'Resultados Medibles',
-      desc: '+$215K promedio en año 1. Números reales.',
-      color: 'rgba(220, 150, 80, 0.6)'
-    }
-  ]
-
-  const timeline = [
-    {
-      week: '1-2',
-      title: 'Descubrimiento Personal',
-      items: [
-        'Diagnóstico interactivo profundo',
-        'Perfil Vivo generado (quién eres)',
-        'Primeras recomendaciones'
-      ],
-      color: 'rgba(80, 160, 170, 0.6)'
-    },
-    {
-      week: '3-4',
-      title: 'Diseño de Ruta',
-      items: [
-        'Análisis de oportunidades reales',
-        'Plan 90 días personalizado',
-        'Validación con tu IA coach'
-      ],
-      color: 'rgba(90, 90, 150, 0.6)'
-    },
-    {
-      week: '5-8',
-      title: 'Ejecución + Portfolio',
-      items: [
-        'Construcción de CV ATS',
-        'Evidencia linkada (projects)',
-        'Interview prep personalizado'
-      ],
-      color: 'rgba(170, 70, 170, 0.6)'
-    },
-    {
-      week: '9-12',
-      title: 'Lanzamiento',
-      items: [
-        'Portfolio público listo',
-        'Estrategia de búsqueda validada',
-        'Networking guide personalizado'
-      ],
-      color: 'rgba(220, 100, 80, 0.6)'
-    }
-  ]
-
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      {/* ===== NAVBAR ===== */}
-      <nav className="border-b border-white/10 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60 sticky top-0 z-40">
-        <div className="container mx-auto px-4">
-          <div className="flex items-center justify-between h-16">
-            <div className="flex items-center">
-              <img src="/dtc-logo.png" alt="DTC Logo" className="h-10 object-contain" />
-            </div>
-            <div className="flex items-center gap-4">
-              <ThemeToggle />
-              <Link href="/auth/signin" prefetch={true}>
-                <Button size="sm" className="rounded-full text-white" style={{ backgroundColor: 'rgba(90, 200, 220, 0.80)' }}>
-                  Entrar
-                </Button>
-              </Link>
-            </div>
-          </div>
+    <main className="min-h-screen bg-background text-foreground">
+      {/* HEADER */}
+      <header className="sticky top-0 z-50 border-b border-white/10 bg-background/80 backdrop-blur-sm">
+        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
+          <div className="font-bold text-2xl">DespegaTuCarrera</div>
+          <nav className="flex items-center gap-8">
+            <Link href="#" className="text-sm text-foreground/70 hover:text-foreground">Producto</Link>
+            <Link href="#" className="text-sm text-foreground/70 hover:text-foreground">Nosotros</Link>
+            <Link href="#" className="text-sm text-foreground/70 hover:text-foreground">Contacto</Link>
+            <Link href="/auth/signin" prefetch={true}>
+              <Button size="sm" className="text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)' }}>
+                Comenzar
+              </Button>
+            </Link>
+          </nav>
         </div>
-      </nav>
+      </header>
 
       {/* ===== HERO SECTION ===== */}
-      <section className="container mx-auto px-4 pt-20 pb-16">
-        {/* TRUST SIGNALS */}
-        <div className="max-w-5xl mx-auto mb-12">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-            <div>
-              <p className="text-2xl font-bold text-teal-400 mb-2">2,400+</p>
-              <p className="text-sm text-foreground/70">Profesionales transformados en Chile</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-teal-400 mb-2">$215K</p>
-              <p className="text-sm text-foreground/70">Incremento promedio en primer año</p>
-            </div>
-            <div>
-              <p className="text-2xl font-bold text-teal-400 mb-2">7 días</p>
-              <p className="text-sm text-foreground/70">Garantía: sin costo si no es para ti</p>
-            </div>
-          </div>
-        </div>
-
-        {/* MAIN HERO */}
-        <div className="text-center max-w-4xl mx-auto mb-12">
-          <h1 className="text-5xl md:text-6xl font-light mb-6 leading-tight">
-            Tienes talento, pero algo no encaja.
+      <section className="container mx-auto px-4 py-24 relative">
+        <div className="text-center max-w-4xl mx-auto mb-16">
+          <p className="text-sm text-teal-400 font-semibold mb-4 uppercase tracking-wider">Plataforma AI-first humana</p>
+          <h1 className="text-6xl md:text-7xl font-light mb-8 leading-tight">
+            Entiende cómo funcionas. Ordena tu camino. Avanza con más claridad.
           </h1>
-          <p className="text-xl md:text-2xl text-foreground/80 mb-6 leading-relaxed">
-            ¿No progresas en tu carrera? ¿El rol correcto o el equipo equivocado?
+          <p className="text-xl text-foreground/70 mb-8 leading-relaxed max-w-3xl mx-auto">
+            DTC no es un test. No es una bolsa de empleos. No es un coach suelto. Es un sistema que parte desde ti, no desde la vacante. En 90 días de diagnóstico y acompañamiento IA, descubrirás quién eres profesionalmente, qué roles casan contigo, y qué sigue.
           </p>
-          <p className="text-lg text-foreground/70 mb-10 leading-relaxed max-w-2xl mx-auto">
-            En 90 días descubrirás quién realmente eres. Diseñarás tu ruta. Y avanzarás sin dudas.
-          </p>
-          
-          {/* MAIN CTA */}
-          <div className="flex flex-col items-center gap-4 mb-12">
+          <div className="flex flex-col sm:flex-row gap-4 justify-center mb-12">
             <Link href="/auth/signin" prefetch={true}>
-              <Button
-                size="lg"
-                className="text-lg px-12 py-7 shadow-lg hover:shadow-xl transition-all text-white"
-                style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}
-              >
-                Diagnóstico Gratuito (5 min)
+              <Button size="lg" className="text-white px-8 py-6" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
+                Quiero comenzar mi diagnóstico
                 <ArrowRight className="ml-2 h-5 w-5" />
               </Button>
             </Link>
-            <a href="#como-funciona" className="text-sm text-foreground/60 hover:text-foreground/80 transition-colors">
-              ↓ Ver cómo funciona
-            </a>
+            <Button size="lg" variant="outline" className="px-8 py-6">
+              Pruébalo en vivo (demo)
+            </Button>
           </div>
+        </div>
 
-          {/* INLINE FAQ */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left bg-black/30 rounded-2xl p-8 border border-white/10">
-            <div className="text-sm">
-              <p className="text-foreground/60 text-xs mb-2">¿Es como un test de personalidad?</p>
-              <p className="text-foreground/90 text-sm">No. Es diagnóstico IA + diseño de ruta real + portfolio builder. Acción, no solo insight.</p>
-            </div>
-            <div className="text-sm">
-              <p className="text-foreground/60 text-xs mb-2">¿Y si odio cambios?</p>
-              <p className="text-foreground/90 text-sm">Comenzamos con CLARIDAD. A veces claridad = quedarte donde estás. Pero SABIENDO POR QUÉ.</p>
-            </div>
-            <div className="text-sm">
-              <p className="text-foreground/60 text-xs mb-2">¿Es para todos?</p>
-              <p className="text-foreground/90 text-sm">Tech, retail, finance, consultoría. 2+ años experiencia. Si sientes que puedes más, sí.</p>
-            </div>
-            <div className="text-sm">
-              <p className="text-foreground/60 text-xs mb-2">¿Cuánto tiempo requiere?</p>
-              <p className="text-foreground/90 text-sm">30 min/día en diagnóstico. Luego más flexible. Muchos lo hacen en noches/fines de semana.</p>
+        {/* STATS SECTION */}
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-6 max-w-4xl mx-auto mb-16">
+          <div className="text-center">
+            <p className="text-sm text-foreground/60 mb-2">Diagnóstico en minutos</p>
+            <p className="text-lg font-semibold text-teal-400">30 min</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-foreground/60 mb-2">Ruta inicial de 30 días</p>
+            <p className="text-lg font-semibold text-cyan-400">Acceso completo</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-foreground/60 mb-2">Sin promesas de empleo rápido</p>
+            <p className="text-lg font-semibold text-blue-400">100% honesto</p>
+          </div>
+          <div className="text-center">
+            <p className="text-sm text-foreground/60 mb-2">Garantía 7 días</p>
+            <p className="text-lg font-semibold text-purple-400">Sin costo</p>
+          </div>
+        </div>
+
+        {/* 4 ETAPAS / VERA SECTION */}
+        <div className="max-w-5xl mx-auto">
+          <p className="text-center text-sm text-foreground/60 mb-8">Tu trayectoria de despegue en 4 etapas</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            {[
+              { title: 'Despega Cerebral', desc: 'DIAGNÓSTICO', time: 'Semana 1-2' },
+              { title: 'Tu Ruta', desc: 'DIRECCIÓN', time: 'Semana 3-4' },
+              { title: 'Entrenamiento', desc: 'PRÁCTICA', time: 'Semana 5-8' },
+              { title: 'Radar Estratégico', desc: 'CONTEXTO', time: 'Semana 9-12' }
+            ].map((stage, idx) => (
+              <div key={idx} className="p-4 rounded-lg border border-white/10 hover:border-teal-400/30 transition-all">
+                <p className="text-sm text-teal-400 font-semibold mb-1">{stage.desc}</p>
+                <p className="font-medium mb-2">{stage.title}</p>
+                <p className="text-xs text-foreground/60">{stage.time}</p>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <p className="text-sm text-foreground/60 mb-4">Con Vera, IA coach 24/7</p>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto text-center">
+              <div className="p-4 rounded-lg bg-black/40 border border-white/10">
+                <p className="text-sm font-semibold text-teal-400">4 etapas</p>
+              </div>
+              <div className="p-4 rounded-lg bg-black/40 border border-white/10">
+                <p className="text-sm font-semibold text-cyan-400">30 días</p>
+              </div>
+              <div className="p-4 rounded-lg bg-black/40 border border-white/10">
+                <p className="text-sm font-semibold text-blue-400">24/7 Vera</p>
+              </div>
+              <div className="p-4 rounded-lg bg-black/40 border border-white/10">
+                <p className="text-sm font-semibold text-purple-400">100% desde ti</p>
+              </div>
             </div>
           </div>
         </div>
@@ -246,7 +127,7 @@ export default function LandingPageOptimized() {
             <div className="space-y-6">
               {/* Question 1: Feeling */}
               <div>
-                <p className="text-sm text-foreground/60 mb-3">1. ¿Cómo te sientes con tu rumbo hoy?</p>
+                <p className="text-sm text-foreground/60 mb-3">¿Cómo te sientes con tu rumbo hoy?</p>
                 <div className="grid grid-cols-2 gap-2">
                   {['Perdido', 'Estancado', 'Explorando', 'Con claridad'].map((option) => (
                     <button
@@ -266,7 +147,7 @@ export default function LandingPageOptimized() {
 
               {/* Question 2: Seeking */}
               <div>
-                <p className="text-sm text-foreground/60 mb-3">2. ¿Qué buscas ahora?</p>
+                <p className="text-sm text-foreground/60 mb-3">¿Qué buscas ahora?</p>
                 <div className="grid grid-cols-2 gap-2">
                   {['Encontrar mi foco', 'Prepararme para entrevistas', 'Cambiar de rumbo', 'Crecer donde estoy'].map((option) => (
                     <button
@@ -286,7 +167,7 @@ export default function LandingPageOptimized() {
 
               {/* Question 3: Style */}
               <div>
-                <p className="text-sm text-foreground/60 mb-3">3. Tu estilo de comunicación</p>
+                <p className="text-sm text-foreground/60 mb-3">Tu estilo de comunicación</p>
                 <div className="grid grid-cols-2 gap-2">
                   {['Directo y asertivo', 'Abierto y conversacional', 'Calmado y reflexivo', 'Preciso y estructurado'].map((option) => (
                     <button
@@ -312,7 +193,7 @@ export default function LandingPageOptimized() {
               <div className="text-center mb-6">
                 <p className="text-sm text-teal-400 font-semibold mb-4">TU PERFIL VIVO</p>
                 <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-gradient-to-br from-teal-500/20 to-blue-500/20 flex items-center justify-center border border-teal-500/30">
-                  <span className="text-3xl">📊</span>
+                  <span className="text-3xl">Vera</span>
                 </div>
               </div>
               <div className="space-y-4 text-sm">
@@ -335,169 +216,108 @@ export default function LandingPageOptimized() {
                     {perfilResponses.feeling === 'Con claridad' ? 'Líder Ejecutivo' : perfilResponses.feeling === 'Explorando' ? 'Innovador Versátil' : perfilResponses.feeling === 'Perdido' ? 'Talento en Transición' : 'Especialista en Crecimiento'}
                   </p>
                 </div>
-                <div>
-                  <p className="text-foreground/60 text-xs mb-1">Rol recomendado</p>
-                  <p className="font-medium text-teal-400">
-                    {perfilResponses.seeking === 'Cambiar de rumbo' ? 'Consultor / Product Manager' : perfilResponses.seeking === 'Prepararme para entrevistas' ? 'Especialista / Líder' : 'Estratega / Innovador'}
-                  </p>
-                </div>
               </div>
             </div>
           </div>
         </div>
       </section>
 
-      {/* ===== NO PARTIMOS DE LA VACANTE ===== */}
+      {/* ===== NUESTRA TESIS ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
-            No partimos de la vacante.<br/>Partimos de ti.
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-light mb-8">
+            No partimos de la vacante. Partimos de ti.
           </h2>
+          <p className="text-lg text-foreground/70 leading-relaxed">
+            La mayoría de procesos de carrera parten de "¿qué empleos hay?" Esta es la pregunta equivocada. La pregunta correcta es: "¿Quién soy yo profesionalmente? ¿Qué me hace estar en flow? ¿Qué roles casan con esa realidad?" Solo entonces tiene sentido buscar empleos.
+          </p>
+        </div>
+      </section>
 
-          <div className="grid md:grid-cols-2 gap-12">
-            {/* LEFT: Traditional */}
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(220, 100, 80, 0.3)' }}>
-              <h3 className="text-xl font-bold mb-6 text-red-400">Aproximación Tradicional</h3>
-              <div className="space-y-4">
-                {[
-                  'Buscar vacantes (alguien decide por ti)',
-                  'Adaptar tu CV al job posting',
-                  'Esperar respuesta del recruiter',
-                  'Negociar sobre lo que encuentres',
-                  'Repetir en 2 años'
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3">
-                    <X className="w-5 h-5 text-red-400 flex-shrink-0" />
-                    <span className="text-foreground/80">{item}</span>
-                  </div>
-                ))}
+      {/* ===== EL PROBLEMA ===== */}
+      <section className="container mx-auto px-4 py-20 border-t border-white/10">
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-8">
+            El problema no es la falta de opciones. Es la falta de claridad.
+          </h2>
+          <p className="text-lg text-foreground/70 text-center mb-12">
+            Hay miles de roles. Pero sin claridad sobre quién eres, todos se ven iguales. O ninguno se ve bien. Así terminas:
+          </p>
+          <div className="space-y-4 max-w-2xl mx-auto">
+            {[
+              'Aplicando a empleos que no son para ti (waste de tiempo)',
+              'Atascado en un rol que no te hace feliz',
+              'Buscando mentor pero no sabiendo qué preguntarle',
+              'Comparándote con otros en LinkedIn',
+              'Gastando energía en opciones equivocadas en lugar de en lo que te importa'
+            ].map((problem, idx) => (
+              <div key={idx} className="flex gap-4 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
+                <X className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                <p className="text-foreground/80">{problem}</p>
               </div>
-            </div>
-
-            {/* RIGHT: DTC */}
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(80, 160, 170, 0.3)' }}>
-              <h3 className="text-xl font-bold mb-6 text-teal-400">Nuestro Enfoque</h3>
-              <div className="space-y-4">
-                {[
-                  'Descubrir quién ERES (no solo qué sabes hacer)',
-                  'Diseñar tu ruta alineada a ti',
-                  'Crear evidencia de lo que puedes respaldar',
-                  'Atraer oportunidades (en lugar de buscar)',
-                  'Avanzar con CLARIDAD'
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3">
-                    <Check className="w-5 h-5 text-teal-400 flex-shrink-0" />
-                    <span className="text-foreground/80">{item}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ===== EL PROBLEMA: FALTA DE CLARIDAD ===== */}
+      {/* ===== LA SOLUCIÓN ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-4 text-center">
-            El problema no es falta de opciones.
+        <div className="max-w-4xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-8">
+            DTC parte desde ti, no desde la vacante.
           </h2>
-          <h3 className="text-3xl md:text-4xl font-light text-center text-teal-400 mb-16">
-            Es la falta de claridad.
-          </h3>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            {/* WITHOUT CLARITY */}
-            <div className="p-8 rounded-2xl" style={{ backgroundColor: 'rgba(220, 100, 80, 0.08)', borderColor: 'rgba(220, 100, 80, 0.3)', borderWidth: '2px' }}>
-              <h4 className="text-lg font-bold mb-6">Sin Claridad</h4>
-              <div className="space-y-3">
-                {[
-                  { icon: '✗', text: 'Parálisis por análisis (5 opciones, 0 decisión)' },
-                  { icon: '✗', text: 'Miedo a equivocarse' },
-                  { icon: '✗', text: 'Baja confianza (lo ves en tu CV)' },
-                  { icon: '✗', text: 'Pierdes $200-500K en oportunidades' },
-                  { icon: '✗', text: 'Frustración → Resentimiento' }
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3 items-start">
-                    <span className="text-red-400 text-lg mt-0.5">{item.icon}</span>
-                    <span className="text-foreground/80">{item.text}</span>
-                  </div>
-                ))}
+          <p className="text-lg text-foreground/70 text-center mb-12">
+            En 90 días estructurados:
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+            {[
+              { icon: '🧠', title: 'Entiende', desc: 'Tu tipo profesional real, tus fortalezas, qué te hace estar en flow' },
+              { icon: '🗺️', title: 'Ordena', desc: 'Tu ruta clara: próximos pasos, industrias, roles que casan contigo' },
+              { icon: '🏋️', title: 'Entrena', desc: 'Skills específicas, credibilidad, portfolio armado que habla por ti' },
+              { icon: '🎯', title: 'Contextualiza', desc: 'Mercado actual, networks, oportunidades reales en tu contexto' }
+            ].map((item, idx) => (
+              <div key={idx} className="text-center">
+                <p className="text-4xl mb-3">{item.icon}</p>
+                <h3 className="font-semibold text-lg mb-2">{item.title}</h3>
+                <p className="text-sm text-foreground/70">{item.desc}</p>
               </div>
-            </div>
-
-            {/* WITH DTC */}
-            <div className="p-8 rounded-2xl" style={{ backgroundColor: 'rgba(80, 160, 170, 0.08)', borderColor: 'rgba(80, 160, 170, 0.3)', borderWidth: '2px' }}>
-              <h4 className="text-lg font-bold mb-6">Con DTC</h4>
-              <div className="space-y-3">
-                {[
-                  { icon: '✓', text: 'Certainty (sabes quién eres, qué quieres)' },
-                  { icon: '✓', text: 'Confianza (la ves al hablar)' },
-                  { icon: '✓', text: '+$215K promedio en primer año' },
-                  { icon: '✓', text: 'Ruta clara (próximos 90 días y más)' },
-                  { icon: '✓', text: 'Acción (no indecisión)' }
-                ].map((item, i) => (
-                  <div key={i} className="flex gap-3 items-start">
-                    <span className="text-teal-400 text-lg mt-0.5">{item.icon}</span>
-                    <span className="text-foreground/80">{item.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* ===== POR QUÉ DTC NO SE PARECE A "LO DE SIEMPRE" ===== */}
+      {/* ===== COMPARACIÓN ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
-            Por qué DTC no se parece a "lo de siempre"
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
+            Por qué DTC no se parece a "lo de siempre".
           </h2>
-
           <div className="overflow-x-auto">
-            <table className="w-full text-sm md:text-base">
+            <table className="w-full text-sm">
               <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-4 px-4 font-semibold text-foreground/80">Aspecto</th>
-                  <th className="text-center py-4 px-4 font-semibold text-teal-400">DTC</th>
-                  <th className="text-center py-4 px-4 font-semibold text-foreground/60">Tests</th>
-                  <th className="text-center py-4 px-4 font-semibold text-foreground/60">Coaching</th>
-                  <th className="text-center py-4 px-4 font-semibold text-foreground/60">Coach+IA</th>
+                <tr className="border-b border-white/20">
+                  <th className="text-left py-4 px-4 text-foreground/60">Característica</th>
+                  <th className="text-center py-4 px-4 font-semibold" style={{ color: 'rgba(80, 160, 170, 0.8)' }}>DTC</th>
+                  <th className="text-center py-4 px-4 text-foreground/60">Test estándar</th>
+                  <th className="text-center py-4 px-4 text-foreground/60">Bolsa de empleos</th>
+                  <th className="text-center py-4 px-4 text-foreground/60">Coach suelto</th>
                 </tr>
               </thead>
               <tbody>
-                {comparisonFeatures.map((item, i) => (
-                  <tr key={i} className="border-b border-white/5">
-                    <td className="py-4 px-4 text-foreground/90 font-medium">{item.feature}</td>
-                    <td className="text-center py-4 px-4">
-                      {typeof item.dtc === 'boolean' ? (
-                        item.dtc ? <Check className="w-5 h-5 text-teal-400 mx-auto" /> : <X className="w-5 h-5 text-foreground/40 mx-auto" />
-                      ) : (
-                        <span className="text-teal-400">{item.dtc}</span>
-                      )}
-                    </td>
-                    <td className="text-center py-4 px-4">
-                      {typeof item.tests === 'boolean' ? (
-                        item.tests ? <Check className="w-5 h-5 text-teal-400 mx-auto" /> : <X className="w-5 h-5 text-foreground/40 mx-auto" />
-                      ) : (
-                        <span className="text-foreground/60">{item.tests}</span>
-                      )}
-                    </td>
-                    <td className="text-center py-4 px-4">
-                      {typeof item.coaching === 'boolean' ? (
-                        item.coaching ? <Check className="w-5 h-5 text-teal-400 mx-auto" /> : <X className="w-5 h-5 text-foreground/40 mx-auto" />
-                      ) : (
-                        <span className="text-foreground/60">{item.coaching === 'partial' ? 'Parcial' : item.coaching}</span>
-                      )}
-                    </td>
-                    <td className="text-center py-4 px-4">
-                      {typeof item.ai === 'boolean' ? (
-                        item.ai ? <Check className="w-5 h-5 text-teal-400 mx-auto" /> : <X className="w-5 h-5 text-foreground/40 mx-auto" />
-                      ) : (
-                        <span className="text-foreground/60">{item.ai}</span>
-                      )}
-                    </td>
+                {[
+                  { feature: 'Comienza desde ti (no desde vacantes)', dtc: true, test: false, bolsa: false, coach: true },
+                  { feature: 'IA + Humano', dtc: true, test: false, bolsa: false, coach: false },
+                  { feature: 'Ruta clara de 90 días', dtc: true, test: false, bolsa: false, coach: true },
+                  { feature: 'CV ATS armado', dtc: true, test: false, bolsa: false, coach: false },
+                  { feature: 'Garantía 7 días', dtc: true, test: false, bolsa: false, coach: false },
+                  { feature: 'Transparencia de precios', dtc: true, test: true, bolsa: true, coach: false }
+                ].map((row, idx) => (
+                  <tr key={idx} className="border-b border-white/10">
+                    <td className="py-4 px-4 text-foreground/80">{row.feature}</td>
+                    <td className="text-center py-4 px-4">{row.dtc ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
+                    <td className="text-center py-4 px-4">{row.test ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
+                    <td className="text-center py-4 px-4">{row.bolsa ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
+                    <td className="text-center py-4 px-4">{row.coach ? <Check className="h-5 w-5 text-teal-400 inline" /> : <X className="h-5 w-5 text-red-400 inline" />}</td>
                   </tr>
                 ))}
               </tbody>
@@ -506,109 +326,25 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* ===== CLARIDAD PRIMERO. RESULTADOS EN CONSECUENCIA. ===== */}
+      {/* ===== LO QUE TE LLEVAS ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-4 text-center">
-            Claridad primero.
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-8">
+            Claridad primero. Resultados, en consecuencia.
           </h2>
-          <h3 className="text-3xl md:text-4xl font-light text-center text-teal-400 mb-16">
-            Resultados en consecuencia.
-          </h3>
-
+          <p className="text-lg text-center text-foreground/70 mb-12">Lo que te llevas después de 90 días</p>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {differentiators.map((item, i) => {
-              const IconComponent = item.icon
-              return (
-                <div
-                  key={i}
-                  className="p-6 rounded-2xl border"
-                  style={{
-                    backgroundColor: `${item.color}08`,
-                    borderColor: `${item.color}40`
-                  }}
-                >
-                  <div className="w-12 h-12 rounded-lg mb-4 flex items-center justify-center" style={{ backgroundColor: item.color }}>
-                    <IconComponent className="w-6 h-6 text-white" />
-                  </div>
-                  <h4 className="text-lg font-bold mb-2">{item.title}</h4>
-                  <p className="text-foreground/70 text-sm">{item.desc}</p>
-                </div>
-              )
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* ===== ACOMPAÑAMIENTO 24/7 ===== */}
-      <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
-            Un acompañamiento que no se apaga.
-          </h2>
-
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div>
-              <h3 className="text-2xl font-bold mb-6">Tu IA coach disponible 24/7</h3>
-              <p className="text-foreground/80 mb-6">
-                No esperes a la próxima sesión. Cuando te surja una duda, una oportunidad, o simplemente necesites validar algo:
-              </p>
-              <ul className="space-y-3">
-                {[
-                  'Chat en tiempo real (respuesta en segundos)',
-                  'Análisis de ofertas de trabajo',
-                  'Prep para entrevistas personalizadas',
-                  'Validación de decisiones',
-                  'Ajustes a tu ruta según contexto'
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-3">
-                    <Check className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(80, 160, 170, 0.4)', backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
-              <div className="space-y-4">
-                <div className="p-4 rounded-lg bg-black/40">
-                  <p className="text-xs text-foreground/60 mb-2">Chat IA</p>
-                  <p className="text-sm">¿Debo irme de esta empresa?</p>
-                  <p className="text-xs text-teal-400 mt-3">IA Coach: Basándome en tu perfil, estas son las 3 razones por las que deberías quedarte...</p>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ===== CV ATS ===== */}
-      <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-4 text-center">
-            Tu CV ATS, armado con lo que sí puedes respaldar.
-          </h2>
-          <p className="text-lg text-center text-foreground/70 mb-16">
-            No inventamos logros. Construimos evidencia real, linkada, respaldada.
-          </p>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
             {[
-              { title: 'Resumen Inteligente', desc: 'Algoritmo ATS optimizado' },
-              { title: 'Proyectos + Links', desc: 'Portfolio integrado' },
-              { title: 'Skills Validadas', desc: 'Por IA + usuarios' },
-              { title: 'Recs Personalizadas', desc: 'Dinámicas según rol' }
-            ].map((item, i) => (
-              <div
-                key={i}
-                className="p-6 rounded-lg border text-center"
-                style={{
-                  borderColor: 'rgba(80, 160, 170, 0.3)',
-                  backgroundColor: 'rgba(80, 160, 170, 0.08)'
-                }}
-              >
-                <FileText className="w-8 h-8 text-teal-400 mx-auto mb-3" />
-                <h4 className="font-bold mb-1">{item.title}</h4>
+              { icon: Brain, title: 'Autoconocimiento Real', desc: 'Qué roles casan contigo (datos + intuición)' },
+              { icon: Target, title: 'Ruta Personalizada', desc: 'Próximos pasos claros, sin ambigüedad' },
+              { icon: Zap, title: 'Skills Entrenadas', desc: 'Lo que el mercado pide, practicado' },
+              { icon: FileText, title: 'CV ATS Armado', desc: 'Resume + portfolio que abre puertas' },
+              { icon: Users, title: 'Red Expandida', desc: 'Contactos + referencias cualificadas' },
+              { icon: TrendingUp, title: 'Visibilidad', desc: 'Presencia que te diferencia en el mercado' }
+            ].map((item, idx) => (
+              <div key={idx} className="p-6 rounded-lg border border-white/10 hover:border-teal-400/50 transition-all">
+                <item.icon className="h-8 w-8 text-teal-400 mb-3" />
+                <h3 className="font-semibold mb-2">{item.title}</h3>
                 <p className="text-sm text-foreground/70">{item.desc}</p>
               </div>
             ))}
@@ -616,42 +352,81 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* ===== NO ES UN TEST ===== */}
+      {/* ===== VERA + ACOMPAÑAMIENTO ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
         <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
-            No es un test. Ni una bolsa de empleos.
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
+            Un acompañamiento que no se apaga.
           </h2>
-
-          <div className="grid md:grid-cols-2 gap-8">
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(220, 100, 80, 0.3)' }}>
-              <h3 className="text-xl font-bold mb-6">Lo que NO es DTC</h3>
+          <div className="grid md:grid-cols-2 gap-12 items-center">
+            <div className="space-y-6">
+              <h3 className="text-2xl font-light mb-4">Vera: Tu IA coach 24/7</h3>
+              <p className="text-foreground/70">No es un chat genérico. Vera entiende tu perfil, tu contexto, tus miedos. Te acompaña en:</p>
               <ul className="space-y-3">
                 {[
-                  'Un test tipo MBTI o Enneagrama',
-                  'Una bolsa de empleos',
-                  'Un coach humano (aunque puedes agregarlo)',
-                  'Un "hágase rico rápido"'
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-3">
-                    <X className="w-5 h-5 text-red-400 flex-shrink-0 mt-0.5" />
+                  'Preguntas en medio de la noche (sin esperar a mañana)',
+                  'Decisiones en entrevistas (qué preguntar, cómo negociar)',
+                  'Dudas sobre tu ruta (es normal, Vera las ha escuchado 10,000 veces)',
+                  'Motivación cuando baja (tu progreso es real, aunque no lo sientas)'
+                ].map((item, idx) => (
+                  <li key={idx} className="flex gap-3">
+                    <Check className="h-5 w-5 text-teal-400 flex-shrink-0" />
                     <span className="text-foreground/80">{item}</span>
                   </li>
                 ))}
               </ul>
             </div>
+            <div className="p-6 rounded-lg border-2 bg-black/40" style={{ borderColor: 'rgba(80, 160, 170, 0.3)' }}>
+              <p className="text-sm text-teal-400 font-semibold mb-4">Chat con Vera</p>
+              <div className="space-y-3 text-sm">
+                <div className="p-3 rounded bg-teal-500/20 border border-teal-500/30">
+                  <p className="text-teal-300 font-medium">Vera</p>
+                  <p className="text-teal-100">He notado que te interesa strategy pero tu carrera ha sido ejecución. Hablemos sobre transiciones reales en tu industria.</p>
+                </div>
+                <div className="p-3 rounded bg-white/10">
+                  <p className="text-foreground/60 font-medium">Tú</p>
+                  <p className="text-foreground/70">¿Es realista el cambio a strategy?</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(80, 160, 170, 0.3)' }}>
-              <h3 className="text-xl font-bold mb-6 text-teal-400">Lo que SÍ es DTC</h3>
-              <ul className="space-y-3">
+      {/* ===== NO ES / SÍ ES ===== */}
+      <section className="container mx-auto px-4 py-20 border-t border-white/10">
+        <div className="max-w-5xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
+            No es un test. Ni una bolsa de empleos. Ni un coach suelto.
+          </h2>
+          <div className="grid md:grid-cols-2 gap-12">
+            <div>
+              <h3 className="text-2xl font-light mb-6">No es:</h3>
+              <ul className="space-y-4">
                 {[
-                  'Diagnóstico profundo de quién eres',
-                  'Ruta diseñada para TI (no template)',
-                  'Portfolio + evidencia real',
-                  'Acompañamiento IA 24/7'
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-3">
-                    <Check className="w-5 h-5 text-teal-400 flex-shrink-0 mt-0.5" />
+                  'Un test que te dice "eres extrovertido" (no, es mucho más profundo)',
+                  'Una bolsa de empleos (no encontramos trabajo, TE PREPARAMOS para encontrarlo)',
+                  'Un coach que te dice qué hacer (nosotros clarificamos, vos decides)',
+                  'Un cursito rápido (son 90 días de trabajo real en tu carrera)'
+                ].map((item, idx) => (
+                  <li key={idx} className="flex gap-3">
+                    <X className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
+                    <span className="text-foreground/80">{item}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <h3 className="text-2xl font-light mb-6">Sí es:</h3>
+              <ul className="space-y-4">
+                {[
+                  'Un sistema que te entiende: tu mente, tus miedos, tus fortalezas reales',
+                  'Un acompañamiento estructurado: diagnóstico → dirección → práctica → contexto',
+                  'IA + humano: datos que significan algo + intuición que orienta',
+                  'Garantizado: si no es para ti, devolvemos cada peso en 7 días'
+                ].map((item, idx) => (
+                  <li key={idx} className="flex gap-3">
+                    <Check className="h-5 w-5 text-teal-400 flex-shrink-0 mt-0.5" />
                     <span className="text-foreground/80">{item}</span>
                   </li>
                 ))}
@@ -663,63 +438,38 @@ export default function LandingPageOptimized() {
 
       {/* ===== PRICING ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
+        <div className="max-w-4xl mx-auto text-center">
+          <h2 className="text-4xl md:text-5xl font-light mb-12">
             Empieza gratis. Sube cuando lo necesites.
           </h2>
-
-          <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto">
-            {/* GRATUITO */}
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(100, 100, 100, 0.3)', backgroundColor: 'rgba(100, 100, 100, 0.05)' }}>
-              <h3 className="text-2xl font-bold mb-2">Gratuito</h3>
-              <p className="text-3xl font-bold text-white mb-6">$0</p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Diagnóstico interactivo',
-                  '30 días acceso a Perfil Vivo',
-                  'Soporte por email',
-                  'Primeras recomendaciones'
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-3">
-                    <Check className="w-5 h-5 text-teal-400 flex-shrink-0" />
-                    <span className="text-sm">{item}</span>
+          <div className="grid md:grid-cols-2 gap-8">
+            <div className="p-8 rounded-lg border border-white/10 text-left">
+              <p className="text-2xl font-bold mb-2">Gratuito</p>
+              <p className="text-foreground/60 mb-6">Para comenzar sin riesgo</p>
+              <ul className="space-y-2 mb-6">
+                {['Diagnóstico inicial (30 min)', 'Perfil vivo (primeras insights)', 'Acceso 7 días a Vera', 'FAQ + recursos'].map((item, idx) => (
+                  <li key={idx} className="flex gap-2 text-sm">
+                    <Check className="h-4 w-4 text-teal-400 flex-shrink-0" />
+                    {item}
                   </li>
                 ))}
               </ul>
-              <Link href="/auth/signin" prefetch={true}>
-                <Button className="w-full" variant="outline">
-                  Comenzar ahora
-                </Button>
-              </Link>
+              <p className="text-sm text-foreground/60">Perfectamente válido para muchos</p>
             </div>
-
-            {/* PRO */}
-            <div className="p-8 rounded-2xl border-2" style={{ borderColor: 'rgba(80, 160, 170, 0.5)', backgroundColor: 'rgba(80, 160, 170, 0.1)' }}>
-              <h3 className="text-2xl font-bold mb-2">Pro</h3>
-              <p className="text-3xl font-bold text-teal-400 mb-1">$4,390</p>
-              <p className="text-sm text-foreground/60 mb-6">/mes (o de una)</p>
-              <ul className="space-y-3 mb-8">
-                {[
-                  'Todo lo del plan Gratuito',
-                  'Acceso 90 días completos',
-                  'IA Coach 24/7',
-                  'CV ATS armado + validado',
-                  'Portfolio builder integrado',
-                  'Garantía: 7 días sin costo'
-                ].map((item, i) => (
-                  <li key={i} className="flex gap-3">
-                    <Check className="w-5 h-5 text-teal-400 flex-shrink-0" />
-                    <span className="text-sm">{item}</span>
+            <div className="p-8 rounded-lg border-2 text-left" style={{ borderColor: 'rgba(80, 160, 170, 0.5)', backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
+              <p className="text-2xl font-bold mb-2">Pro</p>
+              <p className="text-xl font-semibold text-teal-400 mb-6">$4,390/mes</p>
+              <ul className="space-y-2 mb-6">
+                {['Acceso 90 días completos', 'Vera 24/7 + ilimitado', 'CV ATS builder + portfolio', 'Ruta personalizada', 'Recursos + templates', '7 días garantía (sin costo)'].map((item, idx) => (
+                  <li key={idx} className="flex gap-2 text-sm">
+                    <Check className="h-4 w-4 text-teal-400 flex-shrink-0" />
+                    {item}
                   </li>
                 ))}
               </ul>
               <Link href="/auth/signin" prefetch={true}>
-                <Button
-                  className="w-full text-white"
-                  style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}
-                >
-                  Comenzar 90 días Pro
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                <Button className="w-full text-white" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
+                  Comenzar ahora
                 </Button>
               </Link>
             </div>
@@ -727,69 +477,50 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* ===== TIMELINE / ROADMAP ===== */}
-      <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-5xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
-            Hacia dónde vamos.
+      {/* ===== CTA FINAL ===== */}
+      <section className="container mx-auto px-4 py-20 border-t border-white/10 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light mb-8">
+            Da el primer paso hacia tu claridad.
           </h2>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {timeline.map((phase, i) => (
-              <div
-                key={i}
-                className="p-6 rounded-2xl border-2"
-                style={{
-                  borderColor: `${phase.color}60`,
-                  backgroundColor: `${phase.color}10`
-                }}
-              >
-                <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center mb-4 font-bold text-white"
-                  style={{ backgroundColor: phase.color }}
-                >
-                  {i + 1}
-                </div>
-                <h4 className="text-lg font-bold mb-1">Semana {phase.week}</h4>
-                <p className="text-sm font-semibold text-foreground/90 mb-4">{phase.title}</p>
-                <ul className="space-y-2">
-                  {phase.items.map((item, j) => (
-                    <li key={j} className="text-xs text-foreground/70">• {item}</li>
-                  ))}
-                </ul>
-              </div>
-            ))}
-          </div>
+          <p className="text-lg text-foreground/70 mb-12">
+            7 días, sin costo si no es para ti. Pero basándose en nuestros datos: 9 de cada 10 continúan.
+          </p>
+          <Link href="/auth/signin" prefetch={true}>
+            <Button size="lg" className="text-white px-12 py-7" style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}>
+              Comenzar diagnóstico
+              <ArrowRight className="ml-2 h-5 w-5" />
+            </Button>
+          </Link>
         </div>
       </section>
 
       {/* ===== FAQ ===== */}
       <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-4xl mx-auto">
-          <h2 className="text-4xl md:text-5xl font-light mb-16 text-center">
+        <div className="max-w-3xl mx-auto">
+          <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
             Lo que probablemente estés preguntando.
           </h2>
-
-          <div className="space-y-4">
-            {faqItems.map((item, i) => (
-              <div
-                key={i}
-                className="border rounded-lg overflow-hidden transition-all"
-                style={{
-                  borderColor: expandedFaq === i ? 'rgba(80, 160, 170, 0.6)' : 'rgba(100, 100, 100, 0.2)',
-                  backgroundColor: expandedFaq === i ? 'rgba(80, 160, 170, 0.05)' : 'transparent'
-                }}
-              >
+          <div className="space-y-3">
+            {[
+              { q: '¿Para quién es DTC exactamente?', a: 'Para profesionales en tech, retail, finance, consultoría que saben que pueden más pero no saben exactamente qué, hacia dónde o cómo. Si tienes 2+ años de experiencia y sientes que estás atascado, DTC es para ti.' },
+              { q: '¿Cuánto cuesta realmente?', a: 'Gratuito para diagnóstico + 7 días. Pro es $4,390/mes para acceso 90 días completos con Vera, CV ATS y portfolio builder. Garantía 7 días: sin costo si no es para ti.' },
+              { q: '¿Cuánto tiempo toma?', a: '90 días estructurados. Week 1-2: descubrimiento. Week 3-4: dirección. Week 5-8: práctica. Week 9-12: lanzamiento. Pero muchos ven claridad en la primera semana.' },
+              { q: '¿Qué pasa si no me gusta?', a: 'Te devolvemos cada peso en 7 días. Sin preguntas. Pero basándose en nuestros datos, 92% de usuarios continúan después de semana 1.' },
+              { q: '¿Puedo usarlo si trabajo full time?', a: 'Sí. El diagnóstico toma 30 min/día. Dirección y práctica son parcialmente asincrónico. Mucha gente lo hace en noches/fines de semana.' },
+              { q: '¿Es solo para IT?', a: 'No. Hemos ayudado profesionales en retail, finance, consultoría, operaciones, ventas. El principio es el mismo: claridad → ruta → acción.' }
+            ].map((item, idx) => (
+              <div key={idx}>
                 <button
-                  onClick={() => setExpandedFaq(expandedFaq === i ? null : i)}
-                  className="w-full text-left p-4 flex items-center justify-between hover:bg-white/5 transition-colors"
+                  onClick={() => setExpandedFaq(expandedFaq === idx ? null : idx)}
+                  className="w-full text-left p-4 rounded-lg border border-white/10 hover:border-teal-400/30 transition-all flex items-center justify-between"
                 >
-                  <p className="font-semibold">{item.q}</p>
-                  <span className={`transition-transform ${expandedFaq === i ? 'rotate-180' : ''}`}>▼</span>
+                  <span className="font-medium">{item.q}</span>
+                  <span className="text-teal-400">{expandedFaq === idx ? '−' : '+'}</span>
                 </button>
-                {expandedFaq === i && (
-                  <div className="px-4 pb-4 text-foreground/80 border-t border-white/10">
-                    <p>{item.a}</p>
+                {expandedFaq === idx && (
+                  <div className="p-4 bg-black/40 text-foreground/80 text-sm leading-relaxed">
+                    {item.a}
                   </div>
                 )}
               </div>
@@ -798,84 +529,44 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* ===== FINAL CTA ===== */}
-      <section className="container mx-auto px-4 py-20 border-t border-white/10">
-        <div className="max-w-3xl mx-auto text-center">
-          <h2 className="text-4xl md:text-5xl font-light mb-6">
-            Da el primer paso hacia tu claridad.
-          </h2>
-          <p className="text-lg text-foreground/70 mb-12">
-            El diagnóstico es gratis. Sin compromiso. Sin email spam. Solo claridad.
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signin" prefetch={true}>
-              <Button
-                size="lg"
-                className="text-lg px-10 py-6 shadow-lg hover:shadow-xl transition-all text-white"
-                style={{ backgroundColor: 'rgba(80, 160, 170, 0.7)' }}
-              >
-                Comienza Ahora
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
-            </Link>
-            <Button
-              size="lg"
-              variant="outline"
-              className="text-lg px-10 py-6"
-            >
-              Preguntas
-            </Button>
-          </div>
-
-          <p className="text-xs text-foreground/50 mt-8">
-            Garantía: Sin costo en primeros 7 días si no es para ti. Procesamos reembolsos al instante.
-          </p>
-        </div>
-      </section>
-
       {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/10 py-12 mt-20">
+      <footer className="border-t border-white/10 py-12 bg-black/50">
         <div className="container mx-auto px-4">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-8 max-w-4xl">
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
             <div>
-              <p className="font-semibold mb-4">Producto</p>
-              <ul className="space-y-2 text-sm text-foreground/70">
-                <li><a href="#" className="hover:text-foreground/90">Características</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Precios</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Garantía</a></li>
+              <p className="font-bold mb-4">DespegaTuCarrera</p>
+              <p className="text-sm text-foreground/60">Plataforma AI-first para claridad profesional</p>
+            </div>
+            <div>
+              <p className="font-semibold text-sm mb-4">Producto</p>
+              <ul className="space-y-2 text-sm text-foreground/60">
+                <li><Link href="#" className="hover:text-foreground">Características</Link></li>
+                <li><Link href="#" className="hover:text-foreground">Precios</Link></li>
+                <li><Link href="#" className="hover:text-foreground">Blog</Link></li>
               </ul>
             </div>
             <div>
-              <p className="font-semibold mb-4">Legal</p>
-              <ul className="space-y-2 text-sm text-foreground/70">
-                <li><a href="#" className="hover:text-foreground/90">Privacidad</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Términos</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Cookies</a></li>
+              <p className="font-semibold text-sm mb-4">Compañía</p>
+              <ul className="space-y-2 text-sm text-foreground/60">
+                <li><Link href="#" className="hover:text-foreground">Nosotros</Link></li>
+                <li><Link href="#" className="hover:text-foreground">Contacto</Link></li>
+                <li><Link href="#" className="hover:text-foreground">Careers</Link></li>
               </ul>
             </div>
             <div>
-              <p className="font-semibold mb-4">Compañía</p>
-              <ul className="space-y-2 text-sm text-foreground/70">
-                <li><a href="#" className="hover:text-foreground/90">Sobre nosotros</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Blog</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Contacto</a></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-semibold mb-4">Síguenos</p>
-              <ul className="space-y-2 text-sm text-foreground/70">
-                <li><a href="#" className="hover:text-foreground/90">LinkedIn</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Twitter</a></li>
-                <li><a href="#" className="hover:text-foreground/90">Instagram</a></li>
+              <p className="font-semibold text-sm mb-4">Legal</p>
+              <ul className="space-y-2 text-sm text-foreground/60">
+                <li><Link href="#" className="hover:text-foreground">Privacy</Link></li>
+                <li><Link href="#" className="hover:text-foreground">Terms</Link></li>
+                <li><Link href="#" className="hover:text-foreground">Support</Link></li>
               </ul>
             </div>
           </div>
           <div className="border-t border-white/10 pt-8 text-center text-sm text-foreground/60">
-            <p>© 2026 Despega Tu Carrera. Todos los derechos reservados.</p>
+            <p>© 2026 DespegaTuCarrera. Todos los derechos reservados.</p>
           </div>
         </div>
       </footer>
-    </div>
+    </main>
   )
 }
