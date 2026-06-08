@@ -529,44 +529,7 @@ export default function LandingPageOptimized() {
         </div>
       </section>
 
-      {/* ===== FOOTER ===== */}
-      <footer className="border-t border-white/10 py-12 bg-black/50">
-        <div className="container mx-auto px-4">
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
-            <div>
-              <p className="font-bold mb-4">DespegaTuCarrera</p>
-              <p className="text-sm text-foreground/60">Plataforma AI-first para claridad profesional</p>
-            </div>
-            <div>
-              <p className="font-semibold text-sm mb-4">Producto</p>
-              <ul className="space-y-2 text-sm text-foreground/60">
-                <li><Link href="#" className="hover:text-foreground">Características</Link></li>
-                <li><Link href="#" className="hover:text-foreground">Precios</Link></li>
-                <li><Link href="#" className="hover:text-foreground">Blog</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-semibold text-sm mb-4">Compañía</p>
-              <ul className="space-y-2 text-sm text-foreground/60">
-                <li><Link href="#" className="hover:text-foreground">Nosotros</Link></li>
-                <li><Link href="#" className="hover:text-foreground">Contacto</Link></li>
-                <li><Link href="#" className="hover:text-foreground">Careers</Link></li>
-              </ul>
-            </div>
-            <div>
-              <p className="font-semibold text-sm mb-4">Legal</p>
-              <ul className="space-y-2 text-sm text-foreground/60">
-                <li><Link href="#" className="hover:text-foreground">Privacy</Link></li>
-                <li><Link href="#" className="hover:text-foreground">Terms</Link></li>
-                <li><Link href="#" className="hover:text-foreground">Support</Link></li>
-              </ul>
-            </div>
-          </div>
-          <div className="border-t border-white/10 pt-8 text-center text-sm text-foreground/60">
-            <p>© 2026 DespegaTuCarrera. Todos los derechos reservados.</p>
-          </div>
-        </div>
-      </footer>
+
     </main>
   )
 }
