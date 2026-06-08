@@ -223,7 +223,7 @@ export default function LandingPageOptimized() {
       </section>
 
       {/* ===== NUESTRA TESIS ===== */}
-      <section className="container mx-auto px-4 py-20 border-t border-white/10">
+      <section className="container mx-auto px-4 py-20 border-t border-white/10" id="nosotros">
         <div className="max-w-4xl mx-auto text-center">
           <h2 className="text-4xl md:text-5xl font-light mb-8">
             No partimos de la vacante. Partimos de ti.
