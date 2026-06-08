@@ -3,13 +3,14 @@
 import React, { useState } from 'react'
 import Link from 'next/link'
 import { Button } from '@/components/ui/button'
-import { ArrowRight, Check, X, Zap, Target, Users, Brain, FileText, Headphones, TrendingUp, Award, Lock } from 'lucide-react'
+import { ArrowRight, Check, X } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
 import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
 import ProblemasReveal from '@/components/problemas-reveal'
 import NoventaDiasFlow from '@/components/noventa-dias-flow'
 import ComparisonTable from '@/components/comparison-table'
+import OutcomesGrid from '@/components/outcomes-grid'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -190,22 +191,7 @@ export default function LandingPageOptimized() {
             Claridad primero. Resultados, en consecuencia.
           </h2>
           <p className="text-lg text-center text-foreground/70 mb-12">Lo que te llevas después de 90 días</p>
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { icon: Brain, title: 'Autoconocimiento Real', desc: 'Qué roles casan contigo (datos + intuición)' },
-              { icon: Target, title: 'Ruta Personalizada', desc: 'Próximos pasos claros, sin ambigüedad' },
-              { icon: Zap, title: 'Skills Entrenadas', desc: 'Lo que el mercado pide, practicado' },
-              { icon: FileText, title: 'CV ATS Armado', desc: 'Resume + portfolio que abre puertas' },
-              { icon: Users, title: 'Red Expandida', desc: 'Contactos + referencias cualificadas' },
-              { icon: TrendingUp, title: 'Visibilidad', desc: 'Presencia que te diferencia en el mercado' }
-            ].map((item, idx) => (
-              <div key={idx} className="p-6 rounded-lg border border-white/10 hover:border-teal-400/50 transition-all">
-                <item.icon className="h-8 w-8 text-teal-400 mb-3" />
-                <h3 className="font-semibold mb-2">{item.title}</h3>
-                <p className="text-sm text-foreground/70">{item.desc}</p>
-              </div>
-            ))}
-          </div>
+          <OutcomesGrid />
         </div>
       </section>
 
