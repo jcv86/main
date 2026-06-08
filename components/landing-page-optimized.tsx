@@ -7,6 +7,7 @@ import { ArrowRight, Check, X, Zap, Target, Users, Brain, FileText, Headphones, 
 import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
 import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
+import ProblemasReveal from '@/components/problemas-reveal'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -153,20 +154,7 @@ export default function LandingPageOptimized() {
           <p className="text-lg text-foreground/70 text-center mb-12">
             Hay miles de roles. Pero sin claridad sobre quién eres, todos se ven iguales. O ninguno se ve bien. Así terminas:
           </p>
-          <div className="space-y-4 max-w-2xl mx-auto">
-            {[
-              'Aplicando a empleos que no son para ti (waste de tiempo)',
-              'Atascado en un rol que no te hace feliz',
-              'Buscando mentor pero no sabiendo qué preguntarle',
-              'Comparándote con otros en LinkedIn',
-              'Gastando energía en opciones equivocadas en lugar de en lo que te importa'
-            ].map((problem, idx) => (
-              <div key={idx} className="flex gap-4 p-4 rounded-lg bg-red-500/10 border border-red-500/20">
-                <X className="h-5 w-5 text-red-400 flex-shrink-0 mt-0.5" />
-                <p className="text-foreground/80">{problem}</p>
-              </div>
-            ))}
-          </div>
+          <ProblemasReveal />
         </div>
       </section>
 
