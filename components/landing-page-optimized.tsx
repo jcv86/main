@@ -6,14 +6,10 @@ import { Button } from '@/components/ui/button'
 import { ArrowRight, Check, X, Zap, Target, Users, Brain, FileText, Headphones, TrendingUp, Award, Lock } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
 import VeraCircularDiagram from '@/components/vera-circular-diagram'
+import PerfilVivoInteractive from '@/components/perfil-vivo-interactive'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
-  const [perfilResponses, setPerfilResponses] = useState({
-    feeling: 'Perdido',
-    seeking: 'Encontrar mi foco',
-    style: 'Directo y asertivo'
-  })
 
   return (
     <main className="min-h-screen bg-background text-foreground">
@@ -132,102 +128,7 @@ export default function LandingPageOptimized() {
             Esto es lo que hace una plataforma AI-first humana: parte desde ti, no desde la vacante. Cambia tus respuestas y observa cómo se adapta —en tiempo real.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              {/* Question 1: Feeling */}
-              <div>
-                <p className="text-sm text-foreground/60 mb-3">¿Cómo te sientes con tu rumbo hoy?</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {['Perdido', 'Estancado', 'Explorando', 'Con claridad'].map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => setPerfilResponses({ ...perfilResponses, feeling: option })}
-                      className={`p-3 rounded-lg text-sm font-medium transition-all ${
-                        perfilResponses.feeling === option
-                          ? 'bg-teal-500/50 text-white border border-teal-400'
-                          : 'bg-black/40 text-foreground/70 border border-white/10 hover:border-white/20'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Question 2: Seeking */}
-              <div>
-                <p className="text-sm text-foreground/60 mb-3">¿Qué buscas ahora?</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {['Encontrar mi foco', 'Prepararme para entrevistas', 'Cambiar de rumbo', 'Crecer donde estoy'].map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => setPerfilResponses({ ...perfilResponses, seeking: option })}
-                      className={`p-3 rounded-lg text-sm font-medium transition-all ${
-                        perfilResponses.seeking === option
-                          ? 'bg-teal-500/50 text-white border border-teal-400'
-                          : 'bg-black/40 text-foreground/70 border border-white/10 hover:border-white/20'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              {/* Question 3: Style */}
-              <div>
-                <p className="text-sm text-foreground/60 mb-3">Tu estilo de comunicación</p>
-                <div className="grid grid-cols-2 gap-2">
-                  {['Directo y asertivo', 'Abierto y conversacional', 'Calmado y reflexivo', 'Preciso y estructurado'].map((option) => (
-                    <button
-                      key={option}
-                      onClick={() => setPerfilResponses({ ...perfilResponses, style: option })}
-                      className={`p-3 rounded-lg text-sm font-medium transition-all ${
-                        perfilResponses.style === option
-                          ? 'bg-teal-500/50 text-white border border-teal-400'
-                          : 'bg-black/40 text-foreground/70 border border-white/10 hover:border-white/20'
-                      }`}
-                    >
-                      {option}
-                    </button>
-                  ))}
-                </div>
-              </div>
-
-              <p className="text-xs text-foreground/50 pt-4">Cambia tus respuestas y observa tu Perfil Vivo →</p>
-            </div>
-
-            {/* RIGHT: Dynamic Perfil Vivo Preview */}
-            <div className="p-8 rounded-2xl border-2 h-full sticky top-32" style={{ borderColor: 'rgba(80, 160, 170, 0.4)', backgroundColor: 'rgba(80, 160, 170, 0.08)' }}>
-              <div className="text-center mb-6">
-                <p className="text-sm text-teal-400 font-semibold mb-4">TU PERFIL VIVO</p>
-                <div className="w-24 h-24 rounded-full mx-auto mb-4 bg-gradient-to-br from-teal-500/20 to-blue-500/20 flex items-center justify-center border border-teal-500/30">
-                  <span className="text-3xl">Vera</span>
-                </div>
-              </div>
-              <div className="space-y-4 text-sm">
-                <div>
-                  <p className="text-foreground/60 text-xs mb-1">Sentimiento actual</p>
-                  <p className="font-medium text-teal-300">{perfilResponses.feeling}</p>
-                </div>
-                <div>
-                  <p className="text-foreground/60 text-xs mb-1">Lo que buscas</p>
-                  <p className="font-medium text-cyan-300">{perfilResponses.seeking}</p>
-                </div>
-                <div>
-                  <p className="text-foreground/60 text-xs mb-1">Estilo de comunicación</p>
-                  <p className="font-medium text-blue-300">{perfilResponses.style}</p>
-                </div>
-                <hr className="my-3 border-white/10" />
-                <div>
-                  <p className="text-foreground/60 text-xs mb-1">Tipo de profesional</p>
-                  <p className="font-medium">
-                    {perfilResponses.feeling === 'Con claridad' ? 'Líder Ejecutivo' : perfilResponses.feeling === 'Explorando' ? 'Innovador Versátil' : perfilResponses.feeling === 'Perdido' ? 'Talento en Transición' : 'Especialista en Crecimiento'}
-                  </p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <PerfilVivoInteractive />
         </div>
       </section>
 
