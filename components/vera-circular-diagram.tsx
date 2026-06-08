@@ -40,7 +40,7 @@ export default function VeraCircularDiagram() {
     return () => clearInterval(interval)
   }, [])
 
-  const radius = 195 // orbit radius for cards
+  const radius = 172 // orbit radius for cards
 
   return (
     <div className="relative mx-auto flex items-center justify-center" style={{ width: 540, height: 540 }}>
