@@ -11,6 +11,7 @@ import ProblemasReveal from '@/components/problemas-reveal'
 import NoventaDiasFlow from '@/components/noventa-dias-flow'
 import ComparisonTable from '@/components/comparison-table'
 import OutcomesGrid from '@/components/outcomes-grid'
+import VeraChatLive from '@/components/vera-chat-live'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -201,38 +202,7 @@ export default function LandingPageOptimized() {
           <h2 className="text-4xl md:text-5xl font-light text-center mb-12">
             Un acompañamiento que no se apaga.
           </h2>
-          <div className="grid md:grid-cols-2 gap-12 items-center">
-            <div className="space-y-6">
-              <h3 className="text-2xl font-light mb-4">Vera: Tu IA coach 24/7</h3>
-              <p className="text-foreground/70">No es un chat genérico. Vera entiende tu perfil, tu contexto, tus miedos. Te acompaña en:</p>
-              <ul className="space-y-3">
-                {[
-                  'Preguntas en medio de la noche (sin esperar a mañana)',
-                  'Decisiones en entrevistas (qué preguntar, cómo negociar)',
-                  'Dudas sobre tu ruta (es normal, Vera las ha escuchado 10,000 veces)',
-                  'Motivación cuando baja (tu progreso es real, aunque no lo sientas)'
-                ].map((item, idx) => (
-                  <li key={idx} className="flex gap-3">
-                    <Check className="h-5 w-5 text-teal-400 flex-shrink-0" />
-                    <span className="text-foreground/80">{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="p-6 rounded-lg border-2 bg-black/40" style={{ borderColor: 'rgba(80, 160, 170, 0.3)' }}>
-              <p className="text-sm text-teal-400 font-semibold mb-4">Chat con Vera</p>
-              <div className="space-y-3 text-sm">
-                <div className="p-3 rounded bg-teal-500/20 border border-teal-500/30">
-                  <p className="text-teal-300 font-medium">Vera</p>
-                  <p className="text-teal-100">He notado que te interesa strategy pero tu carrera ha sido ejecución. Hablemos sobre transiciones reales en tu industria.</p>
-                </div>
-                <div className="p-3 rounded bg-white/10">
-                  <p className="text-foreground/60 font-medium">Tú</p>
-                  <p className="text-foreground/70">¿Es realista el cambio a strategy?</p>
-                </div>
-              </div>
-            </div>
-          </div>
+          <VeraChatLive />
         </div>
       </section>
 
