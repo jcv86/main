@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { ArrowRight, Check, X, Zap, Target, Users, Brain, FileText, Headphones, TrendingUp, Award, Lock } from 'lucide-react'
 import { ThemeToggle } from '@/components/theme-toggle'
+import VeraCircularDiagram from '@/components/vera-circular-diagram'
 
 export default function LandingPageOptimized() {
   const [expandedFaq, setExpandedFaq] = useState<number | null>(null)
@@ -77,9 +78,16 @@ export default function LandingPageOptimized() {
         </div>
 
         {/* 4 ETAPAS / VERA SECTION */}
-        <div className="max-w-5xl mx-auto">
+        <div className="max-w-5xl mx-auto py-12">
           <p className="text-center text-sm text-foreground/60 mb-8">Tu trayectoria de despegue en 4 etapas</p>
-          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+          
+          {/* Desktop: Show circular diagram */}
+          <div className="hidden md:block mb-12">
+            <VeraCircularDiagram />
+          </div>
+
+          {/* Mobile: Show grid layout */}
+          <div className="md:hidden grid grid-cols-1 gap-4 mb-12">
             {[
               { title: 'Despega Cerebral', desc: 'DIAGNÓSTICO', time: 'Semana 1-2' },
               { title: 'Tu Ruta', desc: 'DIRECCIÓN', time: 'Semana 3-4' },
@@ -93,6 +101,7 @@ export default function LandingPageOptimized() {
               </div>
             ))}
           </div>
+
           <div className="mt-12 text-center">
             <p className="text-sm text-foreground/60 mb-4">Con Vera, IA coach 24/7</p>
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-2xl mx-auto text-center">
