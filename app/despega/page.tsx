@@ -18,8 +18,26 @@ interface UserProgress {
 }
 
 export default function DespegazoDashboard() {
-  const [readiness, setReadiness] = useState<ReadinessScore | null>(null)
-  const [progress, setProgress] = useState<UserProgress | null>(null)
+  const defaultReadiness: ReadinessScore = {
+    overall_score: 0,
+    a1_completeness: 0,
+    a2_completeness: 0,
+    a3_completeness: 0,
+    a4_completeness: 0,
+    strengths: [],
+    gaps: [],
+    recommendations: ['Inicia tu transformación completando El Ritual']
+  }
+
+  const defaultProgress: UserProgress = {
+    a1_completed: false,
+    a2_completed: false,
+    a3_progress: { day: 0, completed: false },
+    a4_active: false
+  }
+
+  const [readiness, setReadiness] = useState<ReadinessScore>(defaultReadiness)
+  const [progress, setProgress] = useState<UserProgress>(defaultProgress)
   const [loading, setLoading] = useState(true)
   const [userName, setUserName] = useState('')
   const router = useRouter()
@@ -28,6 +46,13 @@ export default function DespegazoDashboard() {
 
   useEffect(() => {
     loadUserProgress()
+    
+    // Safety timeout: always show content after 4 seconds
+    const safetyTimer = setTimeout(() => {
+      setLoading(false)
+    }, 4000)
+    
+    return () => clearTimeout(safetyTimer)
   }, [])
 
   const loadUserProgress = async () => {
@@ -200,7 +225,7 @@ export default function DespegazoDashboard() {
     }
   }
 
-  if (loading || !progress || !readiness) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="flex flex-col items-center gap-4">
