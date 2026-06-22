@@ -38,7 +38,7 @@ export default function HeroSection() {
         .hero-diagram  { animation: heroScaleIn 1s ease 0.3s both; }
       `}</style>
 
-      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden pt-16">
+      <section className="relative min-h-screen flex flex-col justify-center overflow-hidden" style={{ paddingTop: '72px' }}>
         {/* Ambient background glows */}
         <div className="pointer-events-none absolute inset-0" aria-hidden="true">
           <div
@@ -51,7 +51,7 @@ export default function HeroSection() {
           />
         </div>
 
-        <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-20 md:py-28">
+        <div className="relative mx-auto max-w-7xl w-full px-4 sm:px-6 lg:px-8 py-12 md:py-20">
           {/* Two-column layout */}
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-8 items-center">
 

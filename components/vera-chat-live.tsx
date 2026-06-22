@@ -33,14 +33,17 @@ const BENEFITS = [
 export default function VeraChatLive() {
   const ref = useRef<HTMLDivElement>(null)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const [inView, setInView] = useState(false)
+  const [inView, setInView] = useState(true)
   const [visible, setVisible] = useState<Msg[]>([])
   const [typing, setTyping] = useState(false)
 
-  // reveal on scroll
+  // reveal on scroll — start chat animation when in view
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    // Only hide if element is below the fold initially
+    const rect = el.getBoundingClientRect()
+    if (rect.top >= window.innerHeight) setInView(false)
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -48,7 +51,7 @@ export default function VeraChatLive() {
           obs.disconnect()
         }
       },
-      { threshold: 0.3 }
+      { threshold: 0.15, rootMargin: '0px 0px -60px 0px' }
     )
     obs.observe(el)
     return () => obs.disconnect()
@@ -101,39 +104,45 @@ export default function VeraChatLive() {
   }, [visible, typing])
 
   return (
-    <div ref={ref} className="grid md:grid-cols-2 gap-12 items-center">
-      {/* LEFT: benefits */}
-      <div className="space-y-6">
-        <div>
-          <p className="text-xs font-semibold tracking-[0.2em] text-teal-400 mb-2">VERA · IA COACH 24/7</p>
-          <h3 className="text-2xl font-light">Un coach que entiende tu contexto.</h3>
-        </div>
-        <p className="text-foreground/70 leading-relaxed">
-          No es un chat genérico. Vera entiende tu perfil, tu contexto, tus miedos. Te acompaña en:
+    <div ref={ref} className="flex flex-col gap-6">
+      {/* Header */}
+      <div
+        style={{
+          opacity: inView ? 1 : 0,
+          transform: inView ? 'translateY(0)' : 'translateY(16px)',
+          transition: 'opacity 0.7s ease, transform 0.7s ease',
+        }}
+      >
+        <p className="text-xs font-semibold tracking-[0.2em] text-teal-400 mb-2">VERA · IA COACH 24/7</p>
+        <h3 className="text-2xl font-bold text-white leading-snug">Un coach que entiende tu contexto.</h3>
+        <p className="mt-2 text-sm text-white/50 leading-relaxed">
+          No es un chat genérico. Vera entiende tu perfil, tu contexto, tus miedos.
         </p>
-        <ul className="space-y-3">
-          {BENEFITS.map((b, idx) => (
-            <li
-              key={idx}
-              className="flex gap-3 items-start rounded-xl border border-white/10 bg-white/[0.02] p-3 transition-all duration-500 hover:border-teal-400/40"
-              style={{
-                opacity: inView ? 1 : 0,
-                transform: inView ? 'translateY(0)' : 'translateY(12px)',
-                transitionDelay: `${idx * 120}ms`,
-              }}
-            >
-              <span className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-teal-500/10 border border-teal-500/20">
-                <b.icon className="h-4 w-4 text-teal-400" />
-              </span>
-              <span className="text-sm text-foreground/80 leading-relaxed pt-1">{b.text}</span>
-            </li>
-          ))}
-        </ul>
       </div>
 
-      {/* RIGHT: live chat */}
+      {/* Benefit pills */}
+      <ul className="flex flex-col gap-2">
+        {BENEFITS.map((b, idx) => (
+          <li
+            key={idx}
+            className="flex gap-3 items-start rounded-xl border border-white/10 bg-white/[0.02] px-3 py-2.5 hover:border-teal-400/30 transition-colors"
+            style={{
+              opacity: inView ? 1 : 0,
+              transform: inView ? 'translateY(0)' : 'translateY(10px)',
+              transition: `opacity 0.5s ease ${idx * 80 + 200}ms, transform 0.5s ease ${idx * 80 + 200}ms`,
+            }}
+          >
+            <span className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-lg bg-teal-500/10 border border-teal-500/20">
+              <b.icon className="h-3.5 w-3.5 text-teal-400" />
+            </span>
+            <span className="text-xs text-white/70 leading-relaxed pt-0.5">{b.text}</span>
+          </li>
+        ))}
+      </ul>
+
+      {/* Live chat window */}
       <div
-        className="rounded-2xl border bg-[#0a0a0f] overflow-hidden shadow-2xl transition-all duration-700"
+        className="rounded-2xl border bg-[#0a0a0f] overflow-hidden shadow-2xl"
         style={{
           borderColor: 'rgba(80, 160, 170, 0.3)',
           boxShadow: '0 0 50px rgba(45,212,191,0.10)',
