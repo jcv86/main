@@ -25,16 +25,18 @@ const SOLUTIONS = [
 
 export default function ProblemSolution() {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    const rect = el.getBoundingClientRect()
+    if (rect.top >= window.innerHeight) setVisible(false)
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) { setVisible(true); obs.disconnect() }
       },
-      { threshold: 0.1 }
+      { threshold: 0.05, rootMargin: '0px 0px -60px 0px' }
     )
     obs.observe(el)
     return () => obs.disconnect()

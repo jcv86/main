@@ -44,11 +44,13 @@ function Cell({ on, highlight, delay, visible }: { on: boolean; highlight?: bool
 
 export default function ComparisonTable() {
   const ref = useRef<HTMLDivElement>(null)
-  const [visible, setVisible] = useState(false)
+  const [visible, setVisible] = useState(true)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
+    const rect = el.getBoundingClientRect()
+    if (rect.top >= window.innerHeight) setVisible(false)
     const obs = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -56,7 +58,7 @@ export default function ComparisonTable() {
           obs.disconnect()
         }
       },
-      { threshold: 0.2 },
+      { threshold: 0.05, rootMargin: '0px 0px -60px 0px' },
     )
     obs.observe(el)
     return () => obs.disconnect()

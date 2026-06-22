@@ -9,16 +9,28 @@ interface UseScrollRevealOptions {
 }
 
 export function useScrollReveal<T extends HTMLElement = HTMLDivElement>({
-  threshold = 0.15,
-  rootMargin = '0px',
+  threshold = 0.1,
+  rootMargin = '0px 0px -60px 0px',
   once = true,
 }: UseScrollRevealOptions = {}) {
   const ref = useRef<T>(null)
-  const [inView, setInView] = useState(false)
+  // Start as visible — IntersectionObserver will correct this only if element is off-screen
+  const [inView, setInView] = useState(true)
+  const [hasSetInitial, setHasSetInitial] = useState(false)
 
   useEffect(() => {
     const el = ref.current
     if (!el) return
+
+    // Check immediately if element is in viewport
+    const rect = el.getBoundingClientRect()
+    const alreadyVisible =
+      rect.top < window.innerHeight && rect.bottom > 0
+
+    if (!alreadyVisible) {
+      setInView(false)
+    }
+    setHasSetInitial(true)
 
     const observer = new IntersectionObserver(
       ([entry]) => {
