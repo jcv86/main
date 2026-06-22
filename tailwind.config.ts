@@ -82,6 +82,10 @@ const config: Config = {
         "a2-text-secondary": "hsl(var(--a2-text-secondary))",
         "a2-text-muted": "hsl(var(--a2-text-muted))",
       },
+      fontFamily: {
+        sans: ["var(--font-montserrat)", "system-ui", "-apple-system", "sans-serif"],
+        serif: ["var(--font-lora)", "Georgia", "serif"],
+      },
       borderRadius: {
         DEFAULT: "20px",
         lg: "var(--radius)",
