@@ -1,6 +1,7 @@
 'use client'
 
 import { Brain, Target, Zap, MessageCircle, FileText, TrendingUp } from 'lucide-react'
+import { useScrollReveal } from '@/hooks/use-scroll-reveal'
 
 const TEAL = 'rgb(80, 160, 170)'
 
@@ -9,37 +10,37 @@ const FEATURES = [
     icon: Brain,
     title: 'Diagnóstico Profundo',
     desc: 'Big Five, MBTI, DISC, inteligencia emocional y RIASEC. Un perfil vivo que evoluciona contigo.',
-    size: 'large',
+    accent: TEAL,
   },
   {
     icon: Target,
     title: 'Ruta Personalizada',
     desc: '90 días estructurados desde tu realidad, no desde la vacante.',
-    size: 'small',
+    accent: 'rgb(100, 180, 220)',
   },
   {
     icon: MessageCircle,
     title: 'Vera — Coach IA 24/7',
     desc: 'Tu coach personal con contexto completo de quién eres. Disponible cuando tú estás listo.',
-    size: 'small',
+    accent: 'rgb(167, 139, 250)',
   },
   {
     icon: Zap,
     title: 'Entrenamiento Real',
     desc: 'Simulaciones de entrevista, feedback en tiempo real, y práctica de skills que el mercado pide ahora.',
-    size: 'medium',
+    accent: 'rgb(251, 146, 60)',
   },
   {
     icon: FileText,
     title: 'CV ATS + Portfolio',
     desc: 'Resume optimizado para algoritmos ATS y portfolio profesional que abre puertas.',
-    size: 'medium',
+    accent: 'rgb(52, 211, 153)',
   },
   {
     icon: TrendingUp,
     title: 'Radar Estratégico',
     desc: 'Contexto real del mercado laboral chileno. Dónde están las oportunidades para tu perfil.',
-    size: 'small',
+    accent: 'rgb(244, 114, 182)',
   },
 ]
 
@@ -47,30 +48,31 @@ function FeatureCard({
   icon: Icon,
   title,
   desc,
-  accentIdx,
+  accent,
+  delay,
+  inView,
 }: {
   icon: React.ElementType
   title: string
   desc: string
-  accentIdx: number
+  accent: string
+  delay: number
+  inView: boolean
 }) {
-  const accents = [
-    TEAL,
-    'rgb(100, 180, 220)',
-    'rgb(90, 170, 200)',
-    TEAL,
-    'rgb(80, 190, 190)',
-    'rgb(70, 150, 160)',
-  ]
-  const accent = accents[accentIdx % accents.length]
-
   return (
-    <div className="group relative p-6 rounded-2xl border border-white/[0.07] bg-white/[0.025] overflow-hidden transition-all duration-300 hover:border-white/[0.14] hover:bg-white/[0.04] h-full">
+    <div
+      className="group relative p-6 rounded-2xl border border-white/[0.07] bg-white/[0.025] overflow-hidden h-full transition-all duration-500 hover:border-white/[0.14] hover:bg-white/[0.04]"
+      style={{
+        opacity: inView ? 1 : 0,
+        transform: inView ? 'translateY(0)' : 'translateY(28px)',
+        transition: `opacity 0.6s ease ${delay}ms, transform 0.6s ease ${delay}ms, border-color 0.3s, background-color 0.3s`,
+      }}
+    >
       {/* Hover glow */}
       <div
         className="pointer-events-none absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 rounded-2xl"
         style={{
-          background: `radial-gradient(300px circle at 20% 0%, ${accent}12, transparent 70%)`,
+          background: `radial-gradient(280px circle at 20% 10%, ${accent}15, transparent 70%)`,
         }}
       />
 
@@ -86,7 +88,7 @@ function FeatureCard({
         </div>
 
         <div>
-          <h3 className="font-semibold text-base text-white mb-2">{title}</h3>
+          <h3 className="font-semibold text-base text-white mb-2 group-hover:text-white transition-colors">{title}</h3>
           <p className="text-sm text-white/50 leading-relaxed">{desc}</p>
         </div>
       </div>
@@ -101,11 +103,20 @@ function FeatureCard({
 }
 
 export default function BentoFeatures() {
+  const { ref, inView } = useScrollReveal({ threshold: 0.1 })
+
   return (
-    <section className="relative py-24 border-t border-white/[0.06]">
+    <section ref={ref} className="relative py-24 border-t border-white/[0.06]">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         {/* Section header */}
-        <div className="max-w-2xl mb-16">
+        <div
+          className="max-w-2xl mb-16"
+          style={{
+            opacity: inView ? 1 : 0,
+            transform: inView ? 'translateY(0)' : 'translateY(20px)',
+            transition: 'opacity 0.7s ease, transform 0.7s ease',
+          }}
+        >
           <p
             className="text-xs font-semibold uppercase tracking-widest mb-4"
             style={{ color: TEAL }}
@@ -126,26 +137,26 @@ export default function BentoFeatures() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {/* Row 1: large + small + small */}
           <div className="md:col-span-1 md:row-span-2 min-h-[280px]">
-            <FeatureCard {...FEATURES[0]} accentIdx={0} />
+            <FeatureCard {...FEATURES[0]} delay={0} inView={inView} />
           </div>
           <div>
-            <FeatureCard {...FEATURES[1]} accentIdx={1} />
+            <FeatureCard {...FEATURES[1]} delay={80} inView={inView} />
           </div>
           <div>
-            <FeatureCard {...FEATURES[2]} accentIdx={2} />
+            <FeatureCard {...FEATURES[2]} delay={160} inView={inView} />
           </div>
 
           {/* Row 2: medium + medium */}
           <div>
-            <FeatureCard {...FEATURES[3]} accentIdx={3} />
+            <FeatureCard {...FEATURES[3]} delay={240} inView={inView} />
           </div>
           <div>
-            <FeatureCard {...FEATURES[4]} accentIdx={4} />
+            <FeatureCard {...FEATURES[4]} delay={320} inView={inView} />
           </div>
 
           {/* Row 3: full width */}
           <div className="md:col-span-3">
-            <FeatureCard {...FEATURES[5]} accentIdx={5} />
+            <FeatureCard {...FEATURES[5]} delay={400} inView={inView} />
           </div>
         </div>
       </div>
