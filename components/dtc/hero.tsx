@@ -27,7 +27,7 @@ const STATS = [
 
 export default function DtcHero() {
   return (
-    <section className="relative overflow-hidden" style={{ paddingTop: '120px', paddingBottom: '80px' }}>
+    <section className="relative overflow-hidden pt-24 pb-16 sm:pt-28 sm:pb-20 lg:pt-[120px] lg:pb-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="grid lg:grid-cols-[1.05fr_0.95fr] gap-12 lg:gap-8 items-center">
           {/* LEFT */}
@@ -118,6 +118,29 @@ function VeraOrbit() {
   const [angle, setAngle] = useState(0)
   const [msgIndex, setMsgIndex] = useState(0)
   const [typed, setTyped] = useState('')
+  const wrapRef = React.useRef<HTMLDivElement>(null)
+  const [scale, setScale] = useState(1)
+
+  const SIZE = 420
+  const R = 168
+  // true visual width including the orbit cards that overhang the 420px box
+  const CONTENT = 540
+
+  // scale the whole diagram to fit its container (prevents mobile overflow)
+  useEffect(() => {
+    const measure = () => {
+      const w = wrapRef.current?.clientWidth ?? CONTENT
+      setScale(Math.min(1, w / CONTENT))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    if (wrapRef.current) ro.observe(wrapRef.current)
+    window.addEventListener('resize', measure)
+    return () => {
+      ro.disconnect()
+      window.removeEventListener('resize', measure)
+    }
+  }, [])
 
   // continuous orbital rotation
   useEffect(() => {
@@ -155,11 +178,14 @@ function VeraOrbit() {
   }, [msgIndex])
 
   const focus = VERA_MESSAGES[msgIndex].focus
-  const SIZE = 420
-  const R = 168
 
   return (
-    <div className="relative" style={{ width: SIZE, height: SIZE, maxWidth: '100%' }}>
+    <div ref={wrapRef} className="w-full flex justify-center" style={{ maxWidth: CONTENT }}>
+    <div style={{ width: SIZE * scale, height: SIZE * scale, position: 'relative' }}>
+    <div
+      className="relative"
+      style={{ width: SIZE, height: SIZE, position: 'absolute', top: 0, left: 0, transformOrigin: 'top left', transform: `scale(${scale})` }}
+    >
       {/* static guide rings */}
       <div
         className="absolute inset-0 rounded-full"
@@ -235,6 +261,8 @@ function VeraOrbit() {
           </div>
         )
       })}
+    </div>
+    </div>
     </div>
   )
 }

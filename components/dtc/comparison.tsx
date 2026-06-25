@@ -42,16 +42,22 @@ export default function Comparison() {
           </Reveal>
 
           <Reveal>
-            <div className="overflow-x-auto rounded-2xl" style={{ border: `1px solid ${COLORS.border}` }}>
-              <table className="w-full min-w-[640px] border-collapse">
+            <p className="mb-2 text-center text-xs sm:hidden" style={{ color: COLORS.textFaint }}>
+              Desliza para comparar →
+            </p>
+            <div className="overflow-x-auto rounded-2xl" style={{ border: `1px solid ${COLORS.border}`, WebkitOverflowScrolling: 'touch' }}>
+              <table className="w-full min-w-[560px] border-collapse">
                 <thead>
                   <tr style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <th className="text-left p-4 text-sm font-medium" style={{ color: COLORS.textMuted }}></th>
+                    <th
+                      className="sticky left-0 z-10 text-left p-3 sm:p-4 text-sm font-medium"
+                      style={{ color: COLORS.textMuted, background: '#0a0c16' }}
+                    ></th>
                     {COLUMNS.map((c, i) => (
                       <th
                         key={c}
-                        className="p-4 text-center text-sm font-semibold"
-                        style={{ color: i === 0 ? '#fff' : COLORS.textMuted, width: '17%' }}
+                        className="p-3 sm:p-4 text-center text-xs sm:text-sm font-semibold"
+                        style={{ color: i === 0 ? '#fff' : COLORS.textMuted, width: '16%' }}
                       >
                         {i === 0 ? <GradientText>{c}</GradientText> : c}
                       </th>
@@ -59,11 +65,16 @@ export default function Comparison() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ROWS.map((row, ri) => (
+                  {ROWS.map((row) => (
                     <tr key={row.label} style={{ borderTop: `1px solid ${COLORS.border}` }}>
-                      <td className="p-4 text-sm" style={{ color: COLORS.text }}>{row.label}</td>
+                      <td
+                        className="sticky left-0 z-10 p-3 sm:p-4 text-xs sm:text-sm"
+                        style={{ color: COLORS.text, background: '#080a16' }}
+                      >
+                        {row.label}
+                      </td>
                       {row.values.map((v, ci) => (
-                        <td key={ci} className="p-4 text-center" style={{ background: ci === 0 ? 'rgba(54,224,192,0.04)' : 'transparent' }}>
+                        <td key={ci} className="p-3 sm:p-4 text-center" style={{ background: ci === 0 ? 'rgba(54,224,192,0.04)' : 'transparent' }}>
                           {v ? (
                             <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'rgba(54,224,192,0.15)' }}>
                               <Check className="h-4 w-4" style={{ color: COLORS.teal }} />
