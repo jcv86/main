@@ -41,17 +41,63 @@ export default function Comparison() {
             </p>
           </Reveal>
 
-          <Reveal>
-            <div className="overflow-x-auto rounded-2xl" style={{ border: `1px solid ${COLORS.border}` }}>
-              <table className="w-full min-w-[640px] border-collapse">
+          {/* Mobile: clean ordered grid, DTC vs 2 alternatives */}
+          <Reveal className="sm:hidden">
+            <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${COLORS.border}`, background: COLORS.cardBg }}>
+              {/* header */}
+              <div
+                className="grid items-center gap-2 px-4 py-3"
+                style={{ gridTemplateColumns: '1fr 2.4rem 2.4rem 2.4rem', background: 'rgba(255,255,255,0.03)' }}
+              >
+                <span />
+                <span className="text-center text-[11px] font-bold leading-tight"><GradientText>DTC</GradientText></span>
+                <span className="text-center text-[10px] font-medium leading-tight" style={{ color: COLORS.textMuted }}>Test</span>
+                <span className="text-center text-[10px] font-medium leading-tight" style={{ color: COLORS.textMuted }}>Coach</span>
+              </div>
+              {/* rows — DTC + columns 1 (Test) & 3 (Coach) */}
+              {ROWS.map((row) => {
+                const cells = [row.values[0], row.values[1], row.values[3]]
+                return (
+                  <div
+                    key={row.label}
+                    className="grid items-center gap-2 px-4 py-3"
+                    style={{ gridTemplateColumns: '1fr 2.4rem 2.4rem 2.4rem', borderTop: `1px solid ${COLORS.border}` }}
+                  >
+                    <span className="text-xs leading-snug text-white pr-1">{row.label}</span>
+                    {cells.map((ok, ci) => (
+                      <span key={ci} className="flex justify-center">
+                        {ok ? (
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'rgba(54,224,192,0.15)' }}>
+                            <Check className="h-3.5 w-3.5" style={{ color: COLORS.teal }} />
+                          </span>
+                        ) : (
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                            <X className="h-3.5 w-3.5" style={{ color: 'rgba(255,255,255,0.25)' }} />
+                          </span>
+                        )}
+                      </span>
+                    ))}
+                  </div>
+                )
+              })}
+            </div>
+          </Reveal>
+
+          {/* Tablet / Desktop: full table */}
+          <Reveal className="hidden sm:block">
+            <div className="overflow-hidden rounded-2xl" style={{ border: `1px solid ${COLORS.border}` }}>
+              <table className="w-full border-collapse">
                 <thead>
                   <tr style={{ background: 'rgba(255,255,255,0.03)' }}>
-                    <th className="text-left p-4 text-sm font-medium" style={{ color: COLORS.textMuted }}></th>
+                    <th
+                      className="sticky left-0 z-10 text-left p-3 sm:p-4 text-sm font-medium"
+                      style={{ color: COLORS.textMuted, background: '#0a0c16' }}
+                    ></th>
                     {COLUMNS.map((c, i) => (
                       <th
                         key={c}
-                        className="p-4 text-center text-sm font-semibold"
-                        style={{ color: i === 0 ? '#fff' : COLORS.textMuted, width: '17%' }}
+                        className="p-3 sm:p-4 text-center text-xs sm:text-sm font-semibold"
+                        style={{ color: i === 0 ? '#fff' : COLORS.textMuted, width: '16%' }}
                       >
                         {i === 0 ? <GradientText>{c}</GradientText> : c}
                       </th>
@@ -59,11 +105,16 @@ export default function Comparison() {
                   </tr>
                 </thead>
                 <tbody>
-                  {ROWS.map((row, ri) => (
+                  {ROWS.map((row) => (
                     <tr key={row.label} style={{ borderTop: `1px solid ${COLORS.border}` }}>
-                      <td className="p-4 text-sm" style={{ color: COLORS.text }}>{row.label}</td>
+                      <td
+                        className="sticky left-0 z-10 p-3 sm:p-4 text-xs sm:text-sm"
+                        style={{ color: COLORS.text, background: '#080a16' }}
+                      >
+                        {row.label}
+                      </td>
                       {row.values.map((v, ci) => (
-                        <td key={ci} className="p-4 text-center" style={{ background: ci === 0 ? 'rgba(54,224,192,0.04)' : 'transparent' }}>
+                        <td key={ci} className="p-3 sm:p-4 text-center" style={{ background: ci === 0 ? 'rgba(54,224,192,0.04)' : 'transparent' }}>
                           {v ? (
                             <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'rgba(54,224,192,0.15)' }}>
                               <Check className="h-4 w-4" style={{ color: COLORS.teal }} />
