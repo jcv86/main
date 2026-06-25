@@ -210,7 +210,6 @@ function Timeline() {
 
       <div className="space-y-7 md:space-y-3">
         {STAGES.map((s, i) => {
-          const Icon = s.icon
           const left = i % 2 === 0
           // node activates once the progress line reaches its position
           const nodePoint = (i + 0.5) / STAGES.length
@@ -218,28 +217,16 @@ function Timeline() {
           return (
             <Reveal key={s.code} delay={i * 80}>
               <div className={`relative flex items-stretch gap-5 md:gap-0 ${left ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                {/* node — numbered ring */}
+                {/* node — clean dot marker on the line */}
                 <span
-                  className="relative z-10 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
+                  className="relative z-10 mt-7 h-4 w-4 flex-shrink-0 rounded-full md:absolute md:left-1/2 md:top-1/2 md:mt-0 md:-translate-x-1/2 md:-translate-y-1/2"
                   style={{
-                    background: active
-                      ? `linear-gradient(145deg, ${s.color}3a, ${s.color}14)`
-                      : 'rgba(8,10,22,0.9)',
-                    border: `1.5px solid ${s.color}${active ? 'dd' : '3a'}`,
-                    boxShadow: active ? `0 0 40px ${s.color}88` : `0 0 0 6px rgba(5,6,14,1)`,
-                    transform: `scale(${active ? 1.06 : 1})`,
+                    background: active ? s.color : 'rgba(8,10,22,0.95)',
+                    border: `2px solid ${s.color}${active ? 'ff' : '55'}`,
+                    boxShadow: active ? `0 0 18px ${s.color}, 0 0 0 5px rgba(5,6,14,1)` : `0 0 0 5px rgba(5,6,14,1)`,
                     transition: 'all 0.45s ease',
                   }}
-                >
-                  <Icon className="h-7 w-7" style={{ color: s.color }} />
-                  {/* pulsing ring when active */}
-                  {active && (
-                    <span
-                      className="absolute inset-0 rounded-2xl"
-                      style={{ border: `1.5px solid ${s.color}`, animation: 'pulse-ring 2s ease-out infinite' }}
-                    />
-                  )}
-                </span>
+                />
 
                 {/* card */}
                 <div className={`flex-1 md:flex-none md:w-[calc(50%-2.75rem)] ${left ? 'md:text-right' : 'md:ml-auto'}`}>
