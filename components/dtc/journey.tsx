@@ -63,48 +63,7 @@ export default function Journey() {
             </p>
           </Reveal>
 
-          <div className="relative">
-            {/* vertical line */}
-            <div
-              className="absolute left-[27px] md:left-1/2 top-2 bottom-2 w-px md:-translate-x-1/2"
-              style={{ background: `linear-gradient(${COLORS.purple}, ${COLORS.blue}, ${COLORS.teal})` }}
-            />
-            <div className="space-y-8">
-              {STAGES.map((s, i) => {
-                const Icon = s.icon
-                const left = i % 2 === 0
-                return (
-                  <Reveal key={s.code} delay={i * 80}>
-                    <div className={`relative flex items-start gap-5 md:gap-0 ${left ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                      {/* node */}
-                      <span
-                        className="relative z-10 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl md:absolute md:left-1/2 md:-translate-x-1/2"
-                        style={{ background: `${s.color}1f`, border: `1px solid ${s.color}55`, boxShadow: `0 0 28px ${s.color}33` }}
-                      >
-                        <Icon className="h-6 w-6" style={{ color: s.color }} />
-                      </span>
-                      {/* card */}
-                      <div className={`flex-1 md:w-[calc(50%-3rem)] ${left ? 'md:pr-16 md:text-right' : 'md:pl-16 md:ml-auto'}`}>
-                        <div
-                          className="rounded-2xl p-5 inline-block w-full"
-                          style={{ border: `1px solid ${COLORS.border}`, background: COLORS.cardBg }}
-                        >
-                          <div className={`flex items-center gap-2 mb-2 ${left ? 'md:justify-end' : ''}`}>
-                            <span className="text-lg font-bold" style={{ color: s.color }}>{s.code}</span>
-                            <span className="text-base font-semibold text-white">{s.name}</span>
-                          </div>
-                          <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: COLORS.textFaint }}>
-                            {s.tag}
-                          </p>
-                          <p className="text-sm leading-relaxed" style={{ color: COLORS.textMuted }}>{s.desc}</p>
-                        </div>
-                      </div>
-                    </div>
-                  </Reveal>
-                )
-              })}
-            </div>
-          </div>
+          <Timeline />
 
           <Reveal delay={120}>
             <p className="mt-12 text-center text-sm max-w-2xl mx-auto" style={{ color: COLORS.textFaint }}>
@@ -175,6 +134,98 @@ export default function Journey() {
         </div>
       </section>
     </>
+  )
+}
+
+function Timeline() {
+  const ref = React.useRef<HTMLDivElement>(null)
+  const [progress, setProgress] = React.useState(0)
+
+  React.useEffect(() => {
+    const onScroll = () => {
+      const el = ref.current
+      if (!el) return
+      const rect = el.getBoundingClientRect()
+      const vh = window.innerHeight
+      const start = vh * 0.65 // line begins filling when timeline top reaches 65% down the viewport
+      const scrolled = start - rect.top
+      const p = Math.max(0, Math.min(1, scrolled / rect.height))
+      setProgress(p)
+    }
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onScroll)
+    return () => {
+      window.removeEventListener('scroll', onScroll)
+      window.removeEventListener('resize', onScroll)
+    }
+  }, [])
+
+  return (
+    <div ref={ref} className="relative">
+      {/* track line */}
+      <div
+        className="absolute left-[27px] md:left-1/2 top-2 bottom-2 w-px md:-translate-x-1/2"
+        style={{ background: 'rgba(255,255,255,0.08)' }}
+      />
+      {/* animated progress line */}
+      <div
+        className="absolute left-[27px] md:left-1/2 top-2 w-[2px] md:-translate-x-1/2 rounded-full"
+        style={{
+          height: `calc(${progress * 100}% - 4px)`,
+          background: `linear-gradient(${COLORS.purple}, ${COLORS.blue}, ${COLORS.teal})`,
+          boxShadow: `0 0 14px ${COLORS.blue}88`,
+          transition: 'height 0.15s linear',
+        }}
+      />
+      <div className="space-y-8">
+        {STAGES.map((s, i) => {
+          const Icon = s.icon
+          const left = i % 2 === 0
+          // node activates once the progress line reaches its position
+          const nodePoint = (i + 0.5) / STAGES.length
+          const active = progress >= nodePoint
+          return (
+            <Reveal key={s.code} delay={i * 80}>
+              <div className={`relative flex items-start gap-5 md:gap-0 ${left ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                {/* node */}
+                <span
+                  className="relative z-10 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl md:absolute md:left-1/2 md:-translate-x-1/2"
+                  style={{
+                    background: active ? `${s.color}33` : `${s.color}12`,
+                    border: `1px solid ${s.color}${active ? 'cc' : '44'}`,
+                    boxShadow: active ? `0 0 34px ${s.color}77` : `0 0 14px ${s.color}1f`,
+                    transform: `scale(${active ? 1.08 : 1})`,
+                    transition: 'all 0.4s ease',
+                  }}
+                >
+                  <Icon className="h-6 w-6" style={{ color: s.color }} />
+                </span>
+                {/* card */}
+                <div className={`flex-1 md:w-[calc(50%-3rem)] ${left ? 'md:pr-16 md:text-right' : 'md:pl-16 md:ml-auto'}`}>
+                  <div
+                    className="rounded-2xl p-5 inline-block w-full transition-all duration-400"
+                    style={{
+                      border: `1px solid ${active ? `${s.color}55` : COLORS.border}`,
+                      background: COLORS.cardBg,
+                    }}
+                  >
+                    <div className={`flex items-center gap-2 mb-2 ${left ? 'md:justify-end' : ''}`}>
+                      <span className="text-lg font-bold" style={{ color: s.color }}>{s.code}</span>
+                      <span className="text-base font-semibold text-white">{s.name}</span>
+                    </div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: COLORS.textFaint }}>
+                      {s.tag}
+                    </p>
+                    <p className="text-sm leading-relaxed" style={{ color: COLORS.textMuted }}>{s.desc}</p>
+                  </div>
+                </div>
+              </div>
+            </Reveal>
+          )
+        })}
+      </div>
+    </div>
   )
 }
 

@@ -93,7 +93,7 @@ export default function Narrative() {
           <Reveal className="text-center max-w-2xl mx-auto mb-14">
             <Eyebrow>La solución</Eyebrow>
             <h2 className="text-3xl md:text-4xl font-bold leading-tight tracking-tight text-balance text-white">
-              DTC parte desde ti, <GradientText>no desde la vacante.</GradientText>
+              Primero te entiende. <GradientText>Después te impulsa.</GradientText>
             </h2>
             <p className="mt-4 text-base leading-relaxed" style={{ color: COLORS.textMuted }}>
               Un sistema AI-first humano que primero te entiende, luego ordena tu avance, después te hace

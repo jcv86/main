@@ -105,64 +105,98 @@ export default function DtcHero() {
   )
 }
 
-function VeraOrbit() {
-  const [typed, setTyped] = useState('')
-  const full = 'Hola, soy Vera.'
+const VERA_MESSAGES = [
+  { text: 'Hola, soy Vera.', focus: -1 },
+  { text: 'Analizando tu perfil…', focus: 1 },
+  { text: 'Leyendo tus patrones…', focus: 0 },
+  { text: 'Trazando tu ruta…', focus: 3 },
+  { text: 'Detecto fortalezas clave.', focus: 2 },
+  { text: 'Todo listo para empezar.', focus: -1 },
+]
 
+function VeraOrbit() {
+  const [angle, setAngle] = useState(0)
+  const [msgIndex, setMsgIndex] = useState(0)
+  const [typed, setTyped] = useState('')
+
+  // continuous orbital rotation
   useEffect(() => {
-    let i = 0
-    const id = setInterval(() => {
-      i++
-      setTyped(full.slice(0, i))
-      if (i >= full.length) {
-        clearInterval(id)
-        setTimeout(() => {
-          i = 0
-        }, 1800)
-      }
-    }, 90)
-    return () => clearInterval(id)
+    let raf = 0
+    let last = performance.now()
+    const reduce = window.matchMedia?.('(prefers-reduced-motion: reduce)').matches
+    if (reduce) return
+    const tick = (now: number) => {
+      const dt = now - last
+      last = now
+      setAngle((a) => (a + dt * 0.011) % 360) // ~32s per full revolution
+      raf = requestAnimationFrame(tick)
+    }
+    raf = requestAnimationFrame(tick)
+    return () => cancelAnimationFrame(raf)
   }, [])
 
+  // typing + cycling Vera messages
+  useEffect(() => {
+    const full = VERA_MESSAGES[msgIndex].text
+    let i = 0
+    setTyped('')
+    const typeId = setInterval(() => {
+      i++
+      setTyped(full.slice(0, i))
+      if (i >= full.length) clearInterval(typeId)
+    }, 50)
+    const nextId = setTimeout(() => {
+      setMsgIndex((m) => (m + 1) % VERA_MESSAGES.length)
+    }, 2900)
+    return () => {
+      clearInterval(typeId)
+      clearTimeout(nextId)
+    }
+  }, [msgIndex])
+
+  const focus = VERA_MESSAGES[msgIndex].focus
   const SIZE = 420
   const R = 168
 
   return (
     <div className="relative" style={{ width: SIZE, height: SIZE, maxWidth: '100%' }}>
-      {/* rotating ring */}
+      {/* static guide rings */}
       <div
         className="absolute inset-0 rounded-full"
-        style={{
-          border: `1px dashed rgba(255,255,255,0.12)`,
-          animation: 'vera-spin 40s linear infinite',
-        }}
+        style={{ border: `1px dashed rgba(255,255,255,0.10)` }}
       />
       <div
         className="absolute rounded-full"
+        style={{ inset: '54px', border: `1px solid rgba(124,92,255,0.16)` }}
+      />
+
+      {/* sweeping radar beam */}
+      <div
+        className="absolute inset-0 rounded-full"
         style={{
-          inset: '54px',
-          border: `1px solid rgba(124,92,255,0.18)`,
-          animation: 'vera-spin 30s linear infinite reverse',
+          background: `conic-gradient(from ${angle}deg, transparent 0deg, ${COLORS.teal}22 28deg, transparent 56deg)`,
+          maskImage: 'radial-gradient(circle, transparent 38%, black 39%)',
+          WebkitMaskImage: 'radial-gradient(circle, transparent 38%, black 39%)',
         }}
       />
 
       {/* center disc */}
       <div className="absolute inset-0 flex items-center justify-center">
         <div
-          className="flex flex-col items-center justify-center rounded-full text-center"
+          className="flex flex-col items-center justify-center rounded-full text-center px-3"
           style={{
-            width: 150,
-            height: 150,
-            background: 'linear-gradient(150deg, rgba(124,92,255,0.22), rgba(63,169,255,0.12))',
-            border: `1px solid rgba(124,92,255,0.35)`,
-            boxShadow: '0 0 60px rgba(124,92,255,0.25)',
+            width: 154,
+            height: 154,
+            background: 'linear-gradient(150deg, rgba(124,92,255,0.24), rgba(63,169,255,0.12))',
+            border: `1px solid rgba(124,92,255,0.4)`,
+            boxShadow: '0 0 60px rgba(124,92,255,0.3)',
           }}
         >
           <span className="text-2xl font-bold text-white">Vera</span>
           <span className="mt-1 text-[9px] font-bold uppercase tracking-[0.2em]" style={{ color: COLORS.teal }}>
             Tu coach IA
           </span>
-          <span className="mt-2 text-[11px]" style={{ color: COLORS.textMuted }}>
+          <span className="mt-2 text-[11px] leading-tight min-h-[28px] flex items-center justify-center" style={{ color: COLORS.textMuted }}>
             {typed}
             <span className="inline-block w-1 animate-pulse">▍</span>
           </span>
@@ -170,11 +204,12 @@ function VeraOrbit() {
       </div>
 
       {/* orbit cards */}
-      {ORBIT.map((o) => {
-        const rad = (o.angle * Math.PI) / 180
+      {ORBIT.map((o, idx) => {
+        const rad = ((o.angle + angle) * Math.PI) / 180
         const x = Math.cos(rad) * R
         const y = Math.sin(rad) * R
         const Icon = o.icon
+        const active = focus === idx
         return (
           <div
             key={o.label}
@@ -182,11 +217,12 @@ function VeraOrbit() {
             style={{
               left: '50%',
               top: '50%',
-              transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px))`,
-              background: 'rgba(12,14,26,0.92)',
-              border: `1px solid ${o.color}55`,
-              boxShadow: `0 0 24px ${o.color}22`,
+              transform: `translate(calc(-50% + ${x}px), calc(-50% + ${y}px)) scale(${active ? 1.08 : 1})`,
+              background: active ? `${o.color}1f` : 'rgba(12,14,26,0.92)',
+              border: `1px solid ${o.color}${active ? 'aa' : '55'}`,
+              boxShadow: active ? `0 0 32px ${o.color}66` : `0 0 24px ${o.color}22`,
               backdropFilter: 'blur(6px)',
+              transition: 'background 0.4s ease, border-color 0.4s ease, box-shadow 0.4s ease, scale 0.4s ease',
             }}
           >
             <span
