@@ -18,8 +18,8 @@ if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
 const montserrat = Montserrat({ 
   subsets: ["latin"],
   variable: "--font-montserrat",
-  weight: ["400", "500", "600", "700"],
-  display: "swap", // Prevent FOUT, swap immediately
+  weight: ["400", "500", "600", "700", "800"],
+  display: "swap",
   preload: true,
 })
 
@@ -27,7 +27,7 @@ const lora = Lora({
   subsets: ["latin"],
   variable: "--font-lora",
   weight: ["400", "500", "600", "700"],
-  display: "swap", // Prevent FOUT
+  display: "swap",
   preload: true,
 })
 
@@ -137,7 +137,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es-CL" suppressHydrationWarning>
+    <html lang="es-CL" suppressHydrationWarning className="bg-background">
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -146,7 +146,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className={`${montserrat.className} ${lora.variable}`}>
+      <body className={`${montserrat.variable} ${lora.variable} font-sans`}>
         <Providers>
           {children}
           <LLMOOptimizedFooter />
