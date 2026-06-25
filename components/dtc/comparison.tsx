@@ -41,12 +41,50 @@ export default function Comparison() {
             </p>
           </Reveal>
 
-          <Reveal>
-            <p className="mb-2 text-center text-xs sm:hidden" style={{ color: COLORS.textFaint }}>
-              Desliza para comparar →
-            </p>
-            <div className="overflow-x-auto rounded-2xl" style={{ border: `1px solid ${COLORS.border}`, WebkitOverflowScrolling: 'touch' }}>
-              <table className="w-full min-w-[560px] border-collapse">
+          {/* Mobile: stacked cards (no horizontal scroll) */}
+          <div className="space-y-4 sm:hidden">
+            {ROWS.map((row, ri) => (
+              <Reveal key={row.label} delay={(ri % 3) * 70}>
+                <div className="rounded-2xl p-4" style={{ border: `1px solid ${COLORS.border}`, background: COLORS.cardBg }}>
+                  <p className="text-sm font-medium text-white mb-3 leading-snug">{row.label}</p>
+                  <div className="grid grid-cols-2 gap-2">
+                    {COLUMNS.map((c, ci) => {
+                      const ok = row.values[ci]
+                      const isDtc = ci === 0
+                      return (
+                        <div
+                          key={c}
+                          className="flex items-center gap-2 rounded-lg px-2.5 py-2"
+                          style={{
+                            background: isDtc ? 'rgba(54,224,192,0.06)' : 'rgba(255,255,255,0.02)',
+                            border: `1px solid ${isDtc ? 'rgba(54,224,192,0.25)' : COLORS.border}`,
+                          }}
+                        >
+                          {ok ? (
+                            <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: 'rgba(54,224,192,0.15)' }}>
+                              <Check className="h-3.5 w-3.5" style={{ color: COLORS.teal }} />
+                            </span>
+                          ) : (
+                            <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                              <X className="h-3.5 w-3.5" style={{ color: 'rgba(255,255,255,0.25)' }} />
+                            </span>
+                          )}
+                          <span className="text-[11px] leading-tight" style={{ color: isDtc ? '#fff' : COLORS.textMuted }}>
+                            {c}
+                          </span>
+                        </div>
+                      )
+                    })}
+                  </div>
+                </div>
+              </Reveal>
+            ))}
+          </div>
+
+          {/* Tablet / Desktop: full table */}
+          <Reveal className="hidden sm:block">
+            <div className="overflow-hidden rounded-2xl" style={{ border: `1px solid ${COLORS.border}` }}>
+              <table className="w-full border-collapse">
                 <thead>
                   <tr style={{ background: 'rgba(255,255,255,0.03)' }}>
                     <th
