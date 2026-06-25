@@ -9,6 +9,8 @@ const STAGES = [
     code: 'A1',
     name: '“Despega Cerebral”',
     tag: 'Diagnóstico',
+    duration: 'Día 0',
+    deliverable: 'Plan Ejecutivo',
     desc: 'Autoconocimiento, lectura de patrones y un punto de partida con tu Plan Ejecutivo.',
     icon: Brain,
     color: COLORS.purple,
@@ -17,6 +19,8 @@ const STAGES = [
     code: 'A2',
     name: '“Tu Ruta”',
     tag: 'Dirección',
+    duration: 'Días 1–30',
+    deliverable: 'Misión personalizada',
     desc: 'Una misión inicial de 30 días, expandible a 60 y 90 según tu avance.',
     icon: Map,
     color: COLORS.blue,
@@ -25,6 +29,8 @@ const STAGES = [
     code: 'A3',
     name: '“Entrenamiento”',
     tag: 'Práctica',
+    duration: 'Días 30–60',
+    deliverable: 'Simulaciones reales',
     desc: 'Entrevistas, habilidades y simulaciones con mejora observable.',
     icon: Dumbbell,
     color: '#f472b6',
@@ -33,6 +39,8 @@ const STAGES = [
     code: 'A4',
     name: '“Radar Estratégico”',
     tag: 'Contexto',
+    duration: 'Días 60–90',
+    deliverable: 'Señales del entorno',
     desc: 'Lectura del entorno, oportunidades y señales para decidir mejor.',
     icon: Radar,
     color: COLORS.teal,
@@ -161,24 +169,46 @@ function Timeline() {
     }
   }, [])
 
+  const reachedEnd = progress >= 0.98
+
   return (
     <div ref={ref} className="relative">
       {/* track line */}
       <div
-        className="absolute left-[27px] md:left-1/2 top-2 bottom-2 w-px md:-translate-x-1/2"
-        style={{ background: 'rgba(255,255,255,0.08)' }}
+        className="absolute left-[31px] md:left-1/2 top-0 bottom-0 w-[2px] md:-translate-x-1/2 rounded-full"
+        style={{ background: 'rgba(255,255,255,0.07)' }}
       />
       {/* animated progress line */}
       <div
-        className="absolute left-[27px] md:left-1/2 top-2 w-[2px] md:-translate-x-1/2 rounded-full"
+        className="absolute left-[31px] md:left-1/2 top-0 w-[3px] md:-translate-x-1/2 rounded-full"
         style={{
-          height: `calc(${progress * 100}% - 4px)`,
+          height: `${progress * 100}%`,
           background: `linear-gradient(${COLORS.purple}, ${COLORS.blue}, ${COLORS.teal})`,
-          boxShadow: `0 0 14px ${COLORS.blue}88`,
+          boxShadow: `0 0 18px ${COLORS.blue}aa`,
           transition: 'height 0.15s linear',
         }}
       />
-      <div className="space-y-8">
+      {/* travelling comet at the tip of the progress line */}
+      {progress > 0.01 && !reachedEnd && (
+        <div
+          className="absolute left-[31px] md:left-1/2 -translate-x-1/2 z-20 pointer-events-none"
+          style={{ top: `${progress * 100}%`, transition: 'top 0.15s linear' }}
+        >
+          <span
+            className="block h-3.5 w-3.5 rounded-full"
+            style={{
+              background: '#fff',
+              boxShadow: `0 0 10px 3px ${COLORS.teal}, 0 0 22px 6px ${COLORS.blue}aa`,
+            }}
+          />
+          <span
+            className="absolute inset-0 rounded-full"
+            style={{ animation: 'pulse-ring 1.6s ease-out infinite', background: COLORS.teal }}
+          />
+        </div>
+      )}
+
+      <div className="space-y-7 md:space-y-3">
         {STAGES.map((s, i) => {
           const Icon = s.icon
           const left = i % 2 === 0
@@ -187,37 +217,73 @@ function Timeline() {
           const active = progress >= nodePoint
           return (
             <Reveal key={s.code} delay={i * 80}>
-              <div className={`relative flex items-start gap-5 md:gap-0 ${left ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
-                {/* node */}
+              <div className={`relative flex items-stretch gap-5 md:gap-0 ${left ? 'md:flex-row' : 'md:flex-row-reverse'}`}>
+                {/* node — numbered ring */}
                 <span
-                  className="relative z-10 flex h-14 w-14 flex-shrink-0 items-center justify-center rounded-2xl md:absolute md:left-1/2 md:-translate-x-1/2"
+                  className="relative z-10 flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-2xl md:absolute md:left-1/2 md:top-1/2 md:-translate-x-1/2 md:-translate-y-1/2"
                   style={{
-                    background: active ? `${s.color}33` : `${s.color}12`,
-                    border: `1px solid ${s.color}${active ? 'cc' : '44'}`,
-                    boxShadow: active ? `0 0 34px ${s.color}77` : `0 0 14px ${s.color}1f`,
-                    transform: `scale(${active ? 1.08 : 1})`,
-                    transition: 'all 0.4s ease',
+                    background: active
+                      ? `linear-gradient(145deg, ${s.color}3a, ${s.color}14)`
+                      : 'rgba(8,10,22,0.9)',
+                    border: `1.5px solid ${s.color}${active ? 'dd' : '3a'}`,
+                    boxShadow: active ? `0 0 40px ${s.color}88` : `0 0 0 6px rgba(5,6,14,1)`,
+                    transform: `scale(${active ? 1.06 : 1})`,
+                    transition: 'all 0.45s ease',
                   }}
                 >
-                  <Icon className="h-6 w-6" style={{ color: s.color }} />
+                  <Icon className="h-7 w-7" style={{ color: s.color }} />
+                  {/* pulsing ring when active */}
+                  {active && (
+                    <span
+                      className="absolute inset-0 rounded-2xl"
+                      style={{ border: `1.5px solid ${s.color}`, animation: 'pulse-ring 2s ease-out infinite' }}
+                    />
+                  )}
                 </span>
+
                 {/* card */}
-                <div className={`flex-1 md:w-[calc(50%-3rem)] ${left ? 'md:pr-16 md:text-right' : 'md:pl-16 md:ml-auto'}`}>
+                <div className={`flex-1 md:flex-none md:w-[calc(50%-2.75rem)] ${left ? 'md:text-right' : 'md:ml-auto'}`}>
                   <div
-                    className="rounded-2xl p-5 inline-block w-full transition-all duration-400"
+                    className="group relative rounded-2xl p-6 w-full overflow-hidden transition-all duration-500"
                     style={{
-                      border: `1px solid ${active ? `${s.color}55` : COLORS.border}`,
-                      background: COLORS.cardBg,
+                      border: `1px solid ${active ? `${s.color}66` : COLORS.border}`,
+                      background: active
+                        ? `linear-gradient(150deg, ${s.color}14, rgba(255,255,255,0.02))`
+                        : COLORS.cardBg,
+                      boxShadow: active ? `0 18px 50px -20px ${s.color}55` : 'none',
+                      transform: active ? 'translateY(0)' : 'translateY(2px)',
                     }}
                   >
-                    <div className={`flex items-center gap-2 mb-2 ${left ? 'md:justify-end' : ''}`}>
-                      <span className="text-lg font-bold" style={{ color: s.color }}>{s.code}</span>
-                      <span className="text-base font-semibold text-white">{s.name}</span>
+                    {/* duration + deliverable row */}
+                    <div className={`flex flex-wrap items-center gap-2 mb-3 ${left ? 'md:justify-end' : ''}`}>
+                      <span
+                        className="rounded-full px-2.5 py-1 text-[10px] font-bold uppercase tracking-wider"
+                        style={{ background: `${s.color}1f`, color: s.color, border: `1px solid ${s.color}40` }}
+                      >
+                        {s.duration}
+                      </span>
+                      <span
+                        className="rounded-full px-2.5 py-1 text-[10px] font-semibold tracking-wide"
+                        style={{ background: 'rgba(255,255,255,0.04)', color: COLORS.textMuted, border: `1px solid ${COLORS.border}` }}
+                      >
+                        {s.deliverable}
+                      </span>
                     </div>
-                    <p className="text-[10px] font-bold uppercase tracking-widest mb-2" style={{ color: COLORS.textFaint }}>
+
+                    <div className={`flex items-baseline gap-2 mb-1 ${left ? 'md:justify-end' : ''}`}>
+                      <span className="text-2xl font-bold leading-none" style={{ color: s.color }}>{s.code}</span>
+                      <span className="text-lg font-semibold text-white">{s.name}</span>
+                    </div>
+                    <p className="text-[10px] font-bold uppercase tracking-widest mb-3" style={{ color: COLORS.textFaint }}>
                       {s.tag}
                     </p>
                     <p className="text-sm leading-relaxed" style={{ color: COLORS.textMuted }}>{s.desc}</p>
+
+                    {/* bottom accent bar that fills when active */}
+                    <span
+                      className={`absolute bottom-0 left-0 h-[2px] transition-all duration-700 ${left ? 'md:left-auto md:right-0' : ''}`}
+                      style={{ width: active ? '100%' : '0%', background: `linear-gradient(90deg, ${s.color}, transparent)` }}
+                    />
                   </div>
                 </div>
               </div>
