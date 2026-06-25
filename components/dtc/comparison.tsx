@@ -41,45 +41,47 @@ export default function Comparison() {
             </p>
           </Reveal>
 
-          {/* Mobile: stacked cards (no horizontal scroll) */}
-          <div className="space-y-4 sm:hidden">
-            {ROWS.map((row, ri) => (
-              <Reveal key={row.label} delay={(ri % 3) * 70}>
-                <div className="rounded-2xl p-4" style={{ border: `1px solid ${COLORS.border}`, background: COLORS.cardBg }}>
-                  <p className="text-sm font-medium text-white mb-3 leading-snug">{row.label}</p>
-                  <div className="grid grid-cols-2 gap-2">
-                    {COLUMNS.map((c, ci) => {
-                      const ok = row.values[ci]
-                      const isDtc = ci === 0
-                      return (
-                        <div
-                          key={c}
-                          className="flex items-center gap-2 rounded-lg px-2.5 py-2"
-                          style={{
-                            background: isDtc ? 'rgba(54,224,192,0.06)' : 'rgba(255,255,255,0.02)',
-                            border: `1px solid ${isDtc ? 'rgba(54,224,192,0.25)' : COLORS.border}`,
-                          }}
-                        >
-                          {ok ? (
-                            <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: 'rgba(54,224,192,0.15)' }}>
-                              <Check className="h-3.5 w-3.5" style={{ color: COLORS.teal }} />
-                            </span>
-                          ) : (
-                            <span className="inline-flex h-5 w-5 flex-shrink-0 items-center justify-center rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }}>
-                              <X className="h-3.5 w-3.5" style={{ color: 'rgba(255,255,255,0.25)' }} />
-                            </span>
-                          )}
-                          <span className="text-[11px] leading-tight" style={{ color: isDtc ? '#fff' : COLORS.textMuted }}>
-                            {c}
+          {/* Mobile: clean ordered grid, DTC vs 2 alternatives */}
+          <Reveal className="sm:hidden">
+            <div className="rounded-2xl overflow-hidden" style={{ border: `1px solid ${COLORS.border}`, background: COLORS.cardBg }}>
+              {/* header */}
+              <div
+                className="grid items-center gap-2 px-4 py-3"
+                style={{ gridTemplateColumns: '1fr 2.4rem 2.4rem 2.4rem', background: 'rgba(255,255,255,0.03)' }}
+              >
+                <span />
+                <span className="text-center text-[11px] font-bold leading-tight"><GradientText>DTC</GradientText></span>
+                <span className="text-center text-[10px] font-medium leading-tight" style={{ color: COLORS.textMuted }}>Test</span>
+                <span className="text-center text-[10px] font-medium leading-tight" style={{ color: COLORS.textMuted }}>Coach</span>
+              </div>
+              {/* rows — DTC + columns 1 (Test) & 3 (Coach) */}
+              {ROWS.map((row) => {
+                const cells = [row.values[0], row.values[1], row.values[3]]
+                return (
+                  <div
+                    key={row.label}
+                    className="grid items-center gap-2 px-4 py-3"
+                    style={{ gridTemplateColumns: '1fr 2.4rem 2.4rem 2.4rem', borderTop: `1px solid ${COLORS.border}` }}
+                  >
+                    <span className="text-xs leading-snug text-white pr-1">{row.label}</span>
+                    {cells.map((ok, ci) => (
+                      <span key={ci} className="flex justify-center">
+                        {ok ? (
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'rgba(54,224,192,0.15)' }}>
+                            <Check className="h-3.5 w-3.5" style={{ color: COLORS.teal }} />
                           </span>
-                        </div>
-                      )
-                    })}
+                        ) : (
+                          <span className="inline-flex h-6 w-6 items-center justify-center rounded-full" style={{ background: 'rgba(255,255,255,0.04)' }}>
+                            <X className="h-3.5 w-3.5" style={{ color: 'rgba(255,255,255,0.25)' }} />
+                          </span>
+                        )}
+                      </span>
+                    ))}
                   </div>
-                </div>
-              </Reveal>
-            ))}
-          </div>
+                )
+              })}
+            </div>
+          </Reveal>
 
           {/* Tablet / Desktop: full table */}
           <Reveal className="hidden sm:block">
