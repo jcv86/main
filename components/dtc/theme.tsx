@@ -295,7 +295,7 @@ export function ConstellationBg() {
   return (
     <div
       aria-hidden
-      className="fixed inset-0 -z-10"
+      className="fixed inset-0 z-0 pointer-events-none"
       style={{
         background: `radial-gradient(1200px 700px at 70% -10%, rgba(124,92,255,0.16), transparent 60%), radial-gradient(900px 600px at 10% 20%, rgba(63,169,255,0.10), transparent 55%), ${COLORS.bg}`,
       }}
