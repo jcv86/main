@@ -348,21 +348,20 @@ export function ConversationalInterviewSimulator({
     if (user?.id) {
       try {
         const { error } = await supabase
-          .from('user_a3_simulations')
-          .insert({
-            user_id: user.id,
-            level,
-            questions_completed: questions.length,
-            total_attempts: Object.values(attempts).flat().length,
-            average_score: averageScore,
-            results: attempts,
-            completed_at: new Date().toISOString()
-          })
-        
+          .from('a3_session_attempts')
+          .upsert(
+            {
+              user_id: user.id,
+              module_id: `conversational-${level}`,
+              status: 'completed',
+              score: averageScore,
+              created_at: new Date().toISOString(),
+            },
+            { onConflict: 'user_id,module_id' }
+          )
+
         if (error) {
           console.error('[v0] Error saving simulation results:', error)
-        } else {
-          console.log('[v0] Simulation results saved successfully')
         }
       } catch (err) {
         console.error('[v0] Error during save:', err)

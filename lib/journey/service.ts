@@ -140,3 +140,43 @@ export async function getCanonicalNextPath(profile: ProfileFlags): Promise<strin
   if (!profile.a2_route_generated) return '/despega/a2-routes'
   return MODULE_ENTRY.A2
 }
+
+export interface SharedJourneyContext {
+  state: JourneyState
+  access: JourneyAccess
+  a1: Record<string, unknown> | null
+  a2: Record<string, unknown> | null
+  a3: Array<Record<string, unknown>>
+  a4: {
+    documents: Array<Record<string, unknown>>
+    strategicScore: Record<string, unknown> | null
+  }
+}
+
+/** Canonical, user-scoped context consumed across A1–A4 and by Vera. */
+export async function getSharedJourneyContext(): Promise<SharedJourneyContext | null> {
+  const journey = await getJourneyForCurrentUser()
+  if (!journey) return null
+
+  const supabase = await createClient()
+  const userId = journey.user.id
+  const [a1Result, a2Result, a3Result, documentsResult, scoreResult] = await Promise.all([
+    supabase.from('a1_cerebral_assessment').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+    supabase.from('canon_generated_routes').select('*').eq('user_id', userId).order('created_at', { ascending: false }).limit(1).maybeSingle(),
+    supabase.from('a3_session_attempts').select('module_id,status,score,created_at').eq('user_id', userId).order('created_at', { ascending: false }),
+    supabase.from('dtc_documents').select('id,name,document_type,status,created_at').eq('user_id', userId).order('created_at', { ascending: false }).limit(20),
+    supabase.from('a4_strategic_score').select('*').eq('user_id', userId).order('updated_at', { ascending: false }).limit(1).maybeSingle(),
+  ])
+
+  return {
+    state: journey.state,
+    access: journey.access,
+    a1: (a1Result.data as Record<string, unknown> | null) ?? null,
+    a2: (a2Result.data as Record<string, unknown> | null) ?? null,
+    a3: (a3Result.data as Array<Record<string, unknown>> | null) ?? [],
+    a4: {
+      documents: (documentsResult.data as Array<Record<string, unknown>> | null) ?? [],
+      strategicScore: (scoreResult.data as Record<string, unknown> | null) ?? null,
+    },
+  }
+}

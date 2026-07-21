@@ -76,51 +76,42 @@ export default function ProfileDashboard() {
             .eq('user_id', user.id)
             .limit(1)
 
-          const { data: a2 } = await supabase
-            .from('user_a2_routes')
-            .select('*')
-            .eq('user_id', user.id)
-            .limit(1)
+          const [{ data: journey }, { data: a2 }, { data: a3Attempts }, { data: a4Documents }] = await Promise.all([
+            supabase
+              .from('despega_journey_state')
+              .select('*')
+              .eq('user_id', user.id)
+              .maybeSingle(),
+            supabase
+              .from('canon_generated_routes')
+              .select('*')
+              .eq('user_id', user.id)
+              .order('created_at', { ascending: false })
+              .limit(1),
+            supabase
+              .from('a3_session_attempts')
+              .select('module_id,status,score')
+              .eq('user_id', user.id),
+            supabase
+              .from('dtc_documents')
+              .select('id')
+              .eq('user_id', user.id)
+              .limit(1),
+          ])
 
-          const { data: interview0 } = await supabase
-            .from('user_a3_interview_0')
-            .select('id')
-            .eq('user_id', user.id)
-            .limit(1)
-
-          const { data: cv } = await supabase
-            .from('user_a3_cv')
-            .select('id')
-            .eq('user_id', user.id)
-            .limit(1)
-
-          const { data: market } = await supabase
-            .from('user_a3_market_insights')
-            .select('id')
-            .eq('user_id', user.id)
-            .limit(1)
-
-          const { data: sims } = await supabase
-            .from('user_a3_simulations')
-            .select('id')
-            .eq('user_id', user.id)
-
-          const { data: a4 } = await supabase
-            .from('user_a4_radar')
-            .select('*')
-            .eq('user_id', user.id)
-            .limit(1)
+          const completedA3 = (a3Attempts || []).filter((attempt) => attempt.status === 'completed')
+          const hasA3Module = (needle: string) => completedA3.some((attempt) => attempt.module_id?.includes(needle))
 
           const userProgress: UserProgress = {
-            a1_completed: !!a1?.length,
-            a2_completed: !!a2?.length,
+            a1_completed: Boolean(journey?.a1_completed_at || a1?.length),
+            a2_completed: Boolean(journey?.a2_completed_at),
             a3_progress: {
-              interview_0: !!interview0?.length,
-              cv_prepared: !!cv?.length,
-              market_insights: !!market?.length,
-              simulations_done: sims?.length || 0
+              interview_0: hasA3Module('auditoria') || hasA3Module('interview'),
+              cv_prepared: hasA3Module('cv'),
+              market_insights: Boolean(journey?.a4_unlocked_at),
+              simulations_done: completedA3.filter((attempt) => attempt.module_id?.includes('simulation') || attempt.module_id?.includes('conversational')).length,
             },
-            a4_active: !!a4?.length
+            a4_active: Boolean(journey?.a4_unlocked_at || a4Documents?.length),
           }
 
           setProgress(userProgress)
