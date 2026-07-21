@@ -132,8 +132,8 @@ export function ConstellationBg() {
     const DPR = Math.min(window.devicePixelRatio || 1, 2)
 
     type P = { x: number; y: number; vx: number; vy: number }
-    // Twinkling star: r = radius, tw = twinkle speed, ph = phase, hue tint
-    type Star = { x: number; y: number; r: number; tw: number; ph: number; base: number; tint: string }
+    // Twinkling star: r = radius, tw = twinkle speed, ph = phase, hue tint, vx/vy = gentle drift
+    type Star = { x: number; y: number; vx: number; vy: number; r: number; tw: number; ph: number; base: number; tint: string }
     // Shooting star
     type Shot = { x: number; y: number; vx: number; vy: number; life: number; len: number }
 
@@ -168,9 +168,14 @@ export function ConstellationBg() {
       const starCount = Math.min(320, Math.floor((w * h) / 5200))
       stars = Array.from({ length: starCount }, () => {
         const depth = Math.random()
+        // deeper (bigger) stars drift a touch faster for a subtle parallax feel
+        const drift = depth * 0.06 + 0.02
+        const dir = Math.random() * Math.PI * 2
         return {
           x: Math.random() * w,
           y: Math.random() * h,
+          vx: Math.cos(dir) * drift,
+          vy: Math.sin(dir) * drift,
           r: depth * 1.5 + 0.4,
           tw: Math.random() * 1.8 + 0.4,
           ph: Math.random() * Math.PI * 2,
@@ -201,6 +206,15 @@ export function ConstellationBg() {
 
       // ---- twinkling stars ----
       for (const s of stars) {
+        // gentle drift with wrap-around at the edges
+        if (!reduceMotion) {
+          s.x += s.vx
+          s.y += s.vy
+          if (s.x < -2) s.x = w + 2
+          else if (s.x > w + 2) s.x = -2
+          if (s.y < -2) s.y = h + 2
+          else if (s.y > h + 2) s.y = -2
+        }
         const tw = reduceMotion ? 0.8 : 0.65 + 0.35 * Math.sin(t * s.tw + s.ph)
         const op = Math.max(0, Math.min(1, s.base * tw))
         ctx.fillStyle = `rgba(${s.tint},${op})`
