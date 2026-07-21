@@ -1,258 +1,139 @@
-'use client'
-
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { DashboardHero } from '@/components/dashboard-hero'
-import { DashboardMetrics } from '@/components/dashboard-metrics'
-import { TransformationTimeline } from '@/components/transformation-timeline'
-import { PillarCard } from '@/components/pillar-card'
-import { Card } from '@/components/ui/card'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { ArrowRight, Brain, Check, Compass, Lock, Radar, Target } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
-import { BookOpen, Zap, Target, Globe, MessageCircle, ArrowRight } from 'lucide-react'
+import { Progress } from '@/components/ui/progress'
+import { getCanonicalNextPath, getJourneyForCurrentUser } from '@/lib/journey/service'
 
-export default function DashboardPage() {
-  const router = useRouter()
-  const [loading, setLoading] = useState(true)
-  const [userData, setUserData] = useState<any>(null)
+const MODULES = [
+  {
+    id: 'A1',
+    name: 'Despega Cerebral',
+    description: 'Tu diagnóstico, patrones y perfil profesional.',
+    href: '/despega/a1-report',
+    icon: Brain,
+  },
+  {
+    id: 'A2',
+    name: 'Tu Ruta',
+    description: 'Tu misión diaria y avance secuencial de 90 días.',
+    href: '/despega/a2/dashboard',
+    icon: Compass,
+  },
+  {
+    id: 'A3',
+    name: 'Entrenamiento',
+    description: 'Práctica de entrevistas y habilidades aplicadas.',
+    href: '/despega/a3',
+    icon: Target,
+  },
+  {
+    id: 'A4',
+    name: 'Radar Estratégico',
+    description: 'Señales del mercado, contexto y oportunidades.',
+    href: '/despega/a4',
+    icon: Radar,
+  },
+] as const
 
-  useEffect(() => {
-    const loadUserData = async () => {
-      try {
-        console.log('[v0] Loading user data from dashboard endpoint')
-        
-        // TODO: Implement /api/dashboard-data endpoint
-        // For now, skip loading dashboard data from REST endpoint
-        setLoading(false)
-        return
-        
-        // // Ensure demo user is in cookie for server-side access
-        // const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        // if (demoUserStr) {
-        //   document.cookie = `demo_user=${demoUserStr}; path=/; max-age=86400`
-        //   console.log('[v0] Demo user synced to cookie')
-        // }
-        
-        // // Call the dashboard data endpoint
-        // const response = await fetch('/api/dashboard-data')
-        
-        // if (!response.ok) {
-        //   console.error('[v0] Failed to fetch dashboard data:', response.status)
-        //   setLoading(false)
-        //   return
-        // }
-        
-        // const data = await response.json()
-        // console.log('[v0] Dashboard data loaded:', {
-        //   name: data.name,
-        //   progressPercent: data.progressPercent,
-        //   hasA2Mission: !!data.a2_mission,
-        //   trainingsCount: data.a3_trainings?.length || 0
-        // })
-        
-        // setUserData(data)
-      } catch (error) {
-        console.error('[v0] Error loading dashboard:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+export default async function DashboardPage() {
+  const journey = await getJourneyForCurrentUser()
+  if (!journey) redirect('/sign-in')
 
-    loadUserData()
-  }, [])
+  const { user, state, access, profile } = journey
+  const name = user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Profesional'
+  const completedDays = Math.max(0, state.highestA2DayUnlocked - 1)
+  const progress = Math.round((completedDays / 90) * 100)
+  const nextPath = await getCanonicalNextPath(profile)
+  const onboardingPending = nextPath !== '/despega/a2/dashboard'
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-yellow"></div>
-          <p className="text-muted-foreground">Cargando tu transformación...</p>
-        </div>
-      </div>
-    )
-  }
-
-  if (!userData) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center p-4">
-        <Card className="p-8 max-w-md text-center space-y-4 bg-transparent border-muted/80">
-          <h2 className="text-2xl font-bold text-white" style={{ fontFamily: 'Lora, serif' }}>No hay datos</h2>
-          <p className="text-muted-foreground">
-            Por favor, completa el onboarding primero
-          </p>
-          <Button onClick={() => router.push('/despega/onboarding')} className="w-full bg-yellow text-black hover:bg-yellow/90">
-            Ir al Onboarding
-          </Button>
-        </Card>
-      </div>
-    )
+  const moduleStatus = (id: 'A1' | 'A2' | 'A3' | 'A4') => {
+    const isAccessible = access[id.toLowerCase() as keyof typeof access]
+    if (!isAccessible) return 'locked' as const
+    if (id === 'A1' && state.a1CompletedAt) return 'completed' as const
+    if (id === 'A2' && state.a2CompletedAt) return 'completed' as const
+    if (state.currentModule === id) return 'active' as const
+    return 'available' as const
   }
 
   return (
-    <main className="min-h-screen bg-black">
-      <div className="max-w-7xl mx-auto px-4 py-12 space-y-12">
-        {/* Hero Section */}
-        <DashboardHero 
-          userName={userData.name}
-          discProfile={userData.discProfile}
-          dominantProfile={userData.dominantProfile}
-          progressPercent={userData.progressPercent}
-        />
+    <main className="min-h-screen bg-background text-foreground">
+      <div className="mx-auto flex max-w-6xl flex-col gap-8 px-4 py-10 sm:px-6 lg:py-14">
+        <header className="flex flex-col gap-5 md:flex-row md:items-end md:justify-between">
+          <div className="flex flex-col gap-2">
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-primary">Tu trayectoria</p>
+            <h1 className="text-balance text-3xl font-bold sm:text-4xl">Hola, {name}</h1>
+            <p className="max-w-2xl text-pretty text-muted-foreground">
+              Un solo recorrido conecta tu diagnóstico, tu ruta, el entrenamiento y las señales del mercado.
+            </p>
+          </div>
+          <Button asChild>
+            <Link href={onboardingPending ? nextPath : `/despega/a2/dia-${state.highestA2DayUnlocked}`}>
+              {onboardingPending ? 'Continuar configuración' : `Continuar día ${state.highestA2DayUnlocked}`}
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
+          </Button>
+        </header>
 
-        {/* Metrics */}
-        <div>
-          <h2 className="text-3xl font-bold text-white mb-6" style={{ fontFamily: 'Lora, serif' }}>
-            Tu Progreso
-          </h2>
-          <DashboardMetrics 
-            daysCompleted={userData.progressPercent}
-            trainingsCompleted={userData.a3_trainings?.length || 0}
-            articlesRead={Math.floor(userData.progressPercent / 10)}
-            currentStreak={Math.floor(userData.progressPercent / 15)}
-          />
-        </div>
-
-        {/* Timeline */}
-        <TransformationTimeline progressPercent={userData.progressPercent} />
-
-        {/* Misión Section */}
-        {userData.a2_mission ? (
-          <Card className="bg-background">
-            <div className="space-y-4">
-              <div className="space-y-2">
-                <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
-                  Tu Misión de 90 Días
-                </h2>
-                <h3 className="text-xl font-semibold text-blue dark:text-blue/40">
-                  {userData.a2_mission.titulo}
-                </h3>
-                <p className="text-muted-foreground dark:text-white/85">
-                  {userData.a2_mission.objetivo}
-                </p>
-              </div>
-              <div className="flex gap-4">
-                <Button className="bg-blue/80 hover:bg-blue/70">
-                  Ver Detalles de Misión
-                </Button>
-                <Button variant="outline">
-                  Ver Sprint {userData.a2_mission.sprint_actual}
-                </Button>
-              </div>
-            </div>
-          </Card>
-        ) : (
-          <Card className="bg-background">
-            <div className="space-y-4">
-              <h2 className="text-2xl font-bold text-muted/90 dark:text-muted/5">
-                Elige Tu Camino de Transformación
-              </h2>
-              <p className="text-muted-foreground dark:text-white/85">
-                Comienza eligiendo entre tu transformación personal o profesional
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between gap-4">
+            <div className="flex flex-col gap-1">
+              <CardTitle>Tu Ruta de 90 días</CardTitle>
+              <p className="text-sm text-muted-foreground">
+                Día {state.highestA2DayUnlocked} habilitado · {completedDays} días completados
               </p>
-              <Button className="bg-blue/80 hover:bg-blue/70" size="lg">
-                Comenzar Mi Misión
-              </Button>
             </div>
-          </Card>
-        )}
-
-        {/* Pillars Grid */}
-        <div className="space-y-4">
-          <h2 className="text-2xl font-bold text-foreground">
-            Los 3 Pilares de Tu Transformación
-          </h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <PillarCard
-              pillar="A1"
-              pillarName="El Ritual"
-              title="El Ritual"
-              status="completed"
-              description="Completaste tu Evaluación de Liderazgo y descubriste tu patrón"
-              nextStep="-"
-              href="/despega/onboarding/result"
-              icon={<Zap className="w-6 h-6" />}
-              color="teal"
-            />
-            <PillarCard
-              pillar="A2"
-              pillarName="Exploración"
-              title="Rutas"
-              status={userData.a2_mission ? 'active' : 'active'}
-              description="Elige tu camino y crea tu misión de 90 días personalizada"
-              nextStep={userData.a2_mission ? 'Continuar sprint' : 'Elegir camino'}
-              href="/despega/a2/camino"
-              icon={<Target className="w-6 h-6" />}
-              color="blue"
-            />
-            <PillarCard
-              pillar="A3"
-              pillarName="Entrenamiento"
-              title="Entrenamientos"
-              status="pending"
-              description="Entrenamientos prácticos adaptados a tu tema de sprint"
-              nextStep="Activa tu primer entrenamiento"
-              href="/despega/a3"
-              icon={<BookOpen className="w-6 h-6" />}
-              color="green"
-            />
-            <PillarCard
-              pillar="A4"
-              pillarName="La Realidad"
-              title="La Realidad"
-              status="pending"
-              description="Noticias y contexto personalizado para tu transformación"
-              nextStep="Conoce el contexto de tu tema"
-              href="/despega/a4/noticias"
-              icon={<Globe className="w-6 h-6" />}
-              color="purple"
-            />
-          </div>
-        </div>
-
-        {/* Coach Section */}
-        <Card className="bg-background">
-          <div className="flex items-start gap-6">
-            <div className="text-5xl">🤖</div>
-            <div className="flex-1 space-y-4">
-              <div>
-                <h3 className="text-xl font-bold text-muted/90 dark:text-muted/5 mb-2">
-                  Tu Coach IA: Sofía
-                </h3>
-                <p className="text-muted-foreground dark:text-white/85">
-                  "¡Hola María! Veo que eres AZUL, lo que significa que te guía la empatía y las relaciones. Tu transformación comenzará fortaleciendo estas cualidades naturales tuyas."
-                </p>
-              </div>
-              <Button className="bg-yellow hover:bg-amber-700">
-                <MessageCircle className="w-4 h-4 mr-2" />
-                Hablar con Sofía
-              </Button>
-            </div>
-          </div>
+            <span className="text-2xl font-bold text-primary">{progress}%</span>
+          </CardHeader>
+          <CardContent>
+            <Progress value={progress} aria-label={`${progress}% de la ruta completada`} />
+          </CardContent>
         </Card>
 
-        {/* Quick Actions */}
-        <div className="space-y-4">
-          <h2 className="text-xl font-bold text-muted/90 dark:text-muted/5">
-            Acciones Rápidas
-          </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center gap-2">
-              <Target className="w-6 h-6" />
-              <span className="text-xs text-center">Mi Sprint</span>
-            </Button>
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center gap-2">
-              <BookOpen className="w-6 h-6" />
-              <span className="text-xs text-center">Entrenamientos</span>
-            </Button>
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center gap-2">
-              <Globe className="w-6 h-6" />
-              <span className="text-xs text-center">Noticias</span>
-            </Button>
-            <Button variant="outline" className="h-16 flex flex-col items-center justify-center gap-2">
-              <MessageCircle className="w-6 h-6" />
-              <span className="text-xs text-center">Coach IA</span>
-            </Button>
+        <section aria-labelledby="modules-heading" className="flex flex-col gap-4">
+          <div className="flex flex-col gap-1">
+            <h2 id="modules-heading" className="text-2xl font-bold">Módulos conectados</h2>
+            <p className="text-sm text-muted-foreground">Cada módulo utiliza la evidencia producida por el anterior.</p>
           </div>
-        </div>
+
+          <div className="grid gap-4 md:grid-cols-2">
+            {MODULES.map((module) => {
+              const status = moduleStatus(module.id)
+              const Icon = module.icon
+              const locked = status === 'locked'
+              return (
+                <Card key={module.id} className={locked ? 'opacity-65' : 'border-primary/25'}>
+                  <CardContent className="flex h-full flex-col gap-5 p-6">
+                    <div className="flex items-start justify-between gap-4">
+                      <div className="flex items-center gap-3">
+                        <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
+                          <Icon className="h-5 w-5" />
+                        </span>
+                        <div>
+                          <p className="text-xs font-semibold text-muted-foreground">{module.id}</p>
+                          <h3 className="font-semibold">{module.name}</h3>
+                        </div>
+                      </div>
+                      <span className="flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
+                        {status === 'completed' ? <Check className="h-3.5 w-3.5 text-primary" /> : locked ? <Lock className="h-3.5 w-3.5" /> : null}
+                        {status === 'completed' ? 'Completado' : status === 'active' ? 'En curso' : locked ? 'Bloqueado' : 'Disponible'}
+                      </span>
+                    </div>
+                    <p className="flex-1 text-sm leading-relaxed text-muted-foreground">{module.description}</p>
+                    <Button asChild={ !locked } variant={status === 'active' ? 'default' : 'outline'} disabled={locked} className="w-full">
+                      {locked ? (
+                        <span>Completa la etapa anterior</span>
+                      ) : (
+                        <Link href={module.href}>Abrir {module.name}<ArrowRight className="ml-2 h-4 w-4" /></Link>
+                      )}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )
+            })}
+          </div>
+        </section>
       </div>
     </main>
   )
