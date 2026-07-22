@@ -37,6 +37,10 @@ declare
     'user_preferences'
   ];
 begin
+  -- These legacy policies bypass ownership and must be removed before RLS is enabled.
+  drop policy if exists "Public access" on public.calendar_events;
+  drop policy if exists system_can_create_notifications on public.notifications;
+
   foreach target_table in array private_tables loop
     if exists (
       select 1
