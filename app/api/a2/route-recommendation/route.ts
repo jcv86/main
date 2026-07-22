@@ -7,7 +7,7 @@ import { getDemoUserFromRequest } from '@/lib/auth/demo-user'
 export async function GET(request: NextRequest) {
   try {
     // Check for demo user
-    const demoUser = getDemoUserFromRequest(request)
+    const demoUser = await getDemoUserFromRequest(request)
     if (demoUser) {
       // Return mock recommendation for demo
       return NextResponse.json({

@@ -43,7 +43,9 @@ export default async function DashboardPage() {
 
   const { user, state, access, profile } = journey
   const name = user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Profesional'
-  const completedDays = Math.max(0, state.highestA2DayUnlocked - 1)
+  const completedDays = state.a2CompletedAt
+    ? 90
+    : Math.max(0, Math.min(89, state.highestA2DayUnlocked - 1))
   const progress = Math.round((completedDays / 90) * 100)
   const nextPath = await getCanonicalNextPath(profile)
   const onboardingPending = nextPath !== '/despega/a2/dashboard'

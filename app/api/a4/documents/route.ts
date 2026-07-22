@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
     const { searchParams } = new URL(request.url)
     
     // Check for demo user first
-    const demoUser = getDemoUserFromRequest(request)
+    const demoUser = await getDemoUserFromRequest(request)
     if (demoUser) {
       console.log('[v0] API documents - Demo user:', demoUser.email)
       // Return empty array for demo users (they don't have real documents)

@@ -3,6 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, rateLimiters } from '@/lib/middleware/rate-limit'
 import { logger } from '@/lib/logger'
 import { getPillarFromPath, shouldEnforcePillarAccess, getAccessDeniedRedirect } from '@/lib/pillar-access-validation'
+import { DEMO_COOKIE_NAME, demoSessionCookieOptions, verifyDemoSessionToken } from '@/lib/auth/demo-user'
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -119,38 +120,21 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  // Check for demo user in cookie (set by demo login)
-  const demoUserCookie = request.cookies.get('demo_user')?.value
-  
-  if (demoUserCookie) {
-    try {
-      const demoUser = JSON.parse(decodeURIComponent(demoUserCookie))
-      const isTravisDev = demoUser.is_dev === true || demoUser.email === 'travis@nuanu.com'
-      
+  const demoSessionToken = request.cookies.get(DEMO_COOKIE_NAME)?.value
+  if (demoSessionToken) {
+    const demoUser = await verifyDemoSessionToken(demoSessionToken)
+    if (demoUser) {
       const response = NextResponse.next()
-      // Extend cookie expiry on every request
-      response.cookies.set('demo_user', demoUserCookie, {
-        httpOnly: false,
-        secure: process.env.NODE_ENV === 'production',
-        sameSite: 'lax',
-        maxAge: 86400 * 7 // 7 days
-      })
-      
-      // Travis dev account has FULL ACCESS - no restrictions
-      if (isTravisDev) {
-        return response
-      }
-      
-      // Regular demo users: redirect to onboarding if trying to access protected routes
-      if (isProtectedRoute(pathname) && !isOnboardingRoute(pathname)) {
-        const redirectUrl = new URL('/despega/conozcamonos-1', request.nextUrl)
-        return NextResponse.redirect(redirectUrl)
-      }
-      
+      response.cookies.set(DEMO_COOKIE_NAME, demoSessionToken, demoSessionCookieOptions)
       return response
-    } catch {
-      // Invalid cookie, continue to Supabase auth
     }
+
+    const response = await updateSession(request)
+    response.cookies.set(DEMO_COOKIE_NAME, '', {
+      ...demoSessionCookieOptions,
+      maxAge: 0,
+    })
+    return response
   }
 
   // Use Supabase session management for all other routes

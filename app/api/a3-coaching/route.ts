@@ -27,7 +27,7 @@ export async function POST(request: NextRequest) {
       (await request.json()) as CoachingRequest
 
     // Check for demo user
-    const demoUser = getDemoUserFromRequest(request)
+    const demoUser = await getDemoUserFromRequest(request)
     if (demoUser) {
       // Return mock coaching for demo users
       return NextResponse.json({

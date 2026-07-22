@@ -17,7 +17,7 @@ export default async function MyLearningPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/login")
+    redirect("/auth/signin?next=/my-learning")
   }
 
   // Verificar si completó assessment

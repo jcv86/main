@@ -3,6 +3,7 @@ import 'server-only'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
+import { DEMO_COOKIE_NAME, verifyDemoSessionToken } from '@/lib/auth/demo-user'
 
 export type JourneyModule = 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
 
@@ -86,33 +87,18 @@ export function getModuleAccess(state: JourneyState, profile: ProfileFlags): Jou
   }
 }
 
-const TRAVIS_EMAIL = 'travis@nuanu.com'
-const TRAVIS_USER_ID = 'demo-travis'
-
 async function getTravisDemoUser() {
   const cookieStore = await cookies()
-  const rawCookie = cookieStore.get('demo_user')?.value
-  if (!rawCookie) return null
+  const demoUser = await verifyDemoSessionToken(cookieStore.get(DEMO_COOKIE_NAME)?.value)
+  if (!demoUser) return null
 
-  try {
-    const demoUser = JSON.parse(decodeURIComponent(rawCookie)) as {
-      id?: string
-      email?: string
-      name?: string
-      is_dev?: boolean
-    }
-    if (demoUser.is_dev !== true && demoUser.email !== TRAVIS_EMAIL) return null
-
-    return {
-      id: demoUser.id || TRAVIS_USER_ID,
-      email: demoUser.email || TRAVIS_EMAIL,
-      user_metadata: {
-        full_name: demoUser.name || 'Travis',
-        name: demoUser.name || 'Travis',
-      },
-    }
-  } catch {
-    return null
+  return {
+    id: demoUser.id,
+    email: demoUser.email,
+    user_metadata: {
+      full_name: demoUser.name,
+      name: demoUser.name,
+    },
   }
 }
 

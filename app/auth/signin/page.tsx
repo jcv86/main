@@ -98,35 +98,20 @@ export default function SignInPage() {
     setIsLoadingDemo(true)
 
     try {
-      // Check if this is the Travis dev account (has full access)
-      const isTravisDev = testEmail === 'travis@nuanu.com'
-      
-      // For demo access, create a demo session in localStorage
-      // This bypasses real Supabase auth for testing purposes
-      const demoUser = {
-        id: isTravisDev ? '64738eef-ee31-4da9-8270-9adfa46c74ba' : `demo-${testEmail.split('@')[0]}`,
-        email: testEmail,
-        aud: 'authenticated',
-        role: isTravisDev ? 'dev' : 'authenticated',
-        is_dev: isTravisDev,
+      if (testEmail !== 'travis@nuanu.com') {
+        setError('Este perfil demo no está disponible temporalmente.')
+        setIsLoadingDemo(false)
+        return
       }
 
-      // Store demo user in localStorage for client-side access
-      localStorage.setItem('demo_user', JSON.stringify(demoUser))
-      
-      // Also set a cookie so middleware can read it - with proper attributes
-      const expiryDate = new Date()
-      expiryDate.setTime(expiryDate.getTime() + (7 * 24 * 60 * 60 * 1000)) // 7 days
-      const cookieValue = encodeURIComponent(JSON.stringify(demoUser))
-      document.cookie = `demo_user=${cookieValue}; path=/; expires=${expiryDate.toUTCString()}; SameSite=Lax`
-      
-      console.log('[v0] Demo user set:', demoUser.email, isTravisDev ? '(DEV MODE)' : '')
-      
-      // Travis dev account goes directly to dashboard, others go to onboarding
-      const defaultRoute = isTravisDev ? '/dashboard' : '/despega/conozcamonos-1'
-      const next = searchParams.get('next') || defaultRoute
-      
-      // Use hard navigation to ensure cookie is sent with the request
+      const response = await fetch('/api/auth/demo', { method: 'POST' })
+      const data = await response.json()
+      if (!response.ok) throw new Error(data.error || 'No fue posible iniciar la sesión demo')
+
+      // Client-side identity hint only; authorization uses the signed HttpOnly cookie.
+      localStorage.setItem('demo_user', JSON.stringify(data.user))
+
+      const next = searchParams.get('next') || '/dashboard'
       window.location.href = next
     } catch (err) {
       console.error('[v0] Quick login error:', err)

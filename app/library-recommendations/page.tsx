@@ -17,7 +17,7 @@ export default async function RecommendedBooksPage() {
   const { data: { user } } = await supabase.auth.getUser()
 
   if (!user) {
-    redirect("/login")
+    redirect("/auth/signin?next=/library-recommendations")
   }
 
   // Obtener perfil del usuario

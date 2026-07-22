@@ -12,7 +12,7 @@ export async function POST(request: NextRequest) {
     const body = await request.json()
     
     // Check for demo user
-    const demoUser = getDemoUserFromRequest(request)
+    const demoUser = await getDemoUserFromRequest(request)
     if (demoUser) {
       console.log('[v0] Demo user - skipping A3 response save')
       return NextResponse.json({

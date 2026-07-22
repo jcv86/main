@@ -21,7 +21,7 @@ export async function verifyAuth(request: NextRequest): Promise<{
 }> {
   try {
     // Check for demo user first
-    const demoUser = getDemoUserFromRequest(request)
+    const demoUser = await getDemoUserFromRequest(request)
     if (demoUser) {
       return {
         context: {

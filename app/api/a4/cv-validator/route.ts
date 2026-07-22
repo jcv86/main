@@ -34,7 +34,7 @@ export async function POST(request: NextRequest) {
     console.log(`[v0] ATS Score calculated: ${atsScore.overallScore}`)
 
     // Check for demo user or authenticated user
-    const demoUser = getDemoUserFromRequest(request)
+    const demoUser = await getDemoUserFromRequest(request)
     let userId: string | null = null
 
     if (!demoUser) {
