@@ -39,7 +39,7 @@ const MODULES = [
 
 export default async function DashboardPage() {
   const journey = await getJourneyForCurrentUser()
-  if (!journey) redirect('/sign-in')
+  if (!journey) redirect('/auth/signin')
 
   const { user, state, access, profile } = journey
   const name = user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Profesional'

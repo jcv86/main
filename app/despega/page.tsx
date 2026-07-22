@@ -5,7 +5,7 @@ export default async function DespegaEntryPage() {
   const journey = await getJourneyForCurrentUser()
 
   if (!journey) {
-    redirect('/sign-in')
+    redirect('/auth/signin')
   }
 
   const nextRequiredPath = await getCanonicalNextPath(journey.profile)

@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 
@@ -85,7 +86,71 @@ export function getModuleAccess(state: JourneyState, profile: ProfileFlags): Jou
   }
 }
 
+const TRAVIS_EMAIL = 'travis@nuanu.com'
+const TRAVIS_USER_ID = 'demo-travis'
+
+async function getTravisDemoUser() {
+  const cookieStore = await cookies()
+  const rawCookie = cookieStore.get('demo_user')?.value
+  if (!rawCookie) return null
+
+  try {
+    const demoUser = JSON.parse(decodeURIComponent(rawCookie)) as {
+      id?: string
+      email?: string
+      name?: string
+      is_dev?: boolean
+    }
+    if (demoUser.is_dev !== true && demoUser.email !== TRAVIS_EMAIL) return null
+
+    return {
+      id: demoUser.id || TRAVIS_USER_ID,
+      email: demoUser.email || TRAVIS_EMAIL,
+      user_metadata: {
+        full_name: demoUser.name || 'Travis',
+        name: demoUser.name || 'Travis',
+      },
+    }
+  } catch {
+    return null
+  }
+}
+
+function getTravisJourney(user: NonNullable<Awaited<ReturnType<typeof getTravisDemoUser>>>) {
+  const completedAt = '2026-01-01T00:00:00.000Z'
+  const state: JourneyState = {
+    userId: user.id,
+    currentModule: 'A4',
+    currentA2Day: 90,
+    highestA2DayUnlocked: 90,
+    a1CompletedAt: completedAt,
+    a2StartedAt: completedAt,
+    a2CompletedAt: completedAt,
+    a3UnlockedAt: completedAt,
+    a4UnlockedAt: completedAt,
+    version: 1,
+  }
+  const profile: ProfileFlags = {
+    onboarding_conozcamonos_1_completed: true,
+    a1_cerebral_intro_seen: true,
+    a1_cerebral_completed: true,
+    a1_results_viewed: true,
+    a1_report_viewed: true,
+    a2_intro_seen: true,
+    onboarding_conozcamonos_2_completed: true,
+    a2_route_generated: true,
+    a2_unlocked: true,
+    a3_unlocked: true,
+    a4_unlocked: true,
+  }
+
+  return { user, state, profile, access: getModuleAccess(state, profile), isDemo: true as const }
+}
+
 export async function getJourneyForCurrentUser() {
+  const demoUser = await getTravisDemoUser()
+  if (demoUser) return getTravisJourney(demoUser)
+
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
   if (!user) return null
@@ -110,7 +175,7 @@ export async function getJourneyForCurrentUser() {
 
 export async function requireJourneyModule(module: Exclude<JourneyModule, 'COMPLETED'>) {
   const journey = await getJourneyForCurrentUser()
-  if (!journey) redirect('/sign-in')
+  if (!journey) redirect('/auth/signin')
 
   const allowed = journey.access[module.toLowerCase() as keyof JourneyAccess]
   if (!allowed) {
@@ -157,6 +222,17 @@ export interface SharedJourneyContext {
 export async function getSharedJourneyContext(): Promise<SharedJourneyContext | null> {
   const journey = await getJourneyForCurrentUser()
   if (!journey) return null
+
+  if ('isDemo' in journey && journey.isDemo) {
+    return {
+      state: journey.state,
+      access: journey.access,
+      a1: { source: 'travis-demo', status: 'completed' },
+      a2: { source: 'travis-demo', status: 'completed', highestDayUnlocked: 90 },
+      a3: [{ source: 'travis-demo', status: 'completed' }],
+      a4: { documents: [], strategicScore: { source: 'travis-demo', status: 'available' } },
+    }
+  }
 
   const supabase = await createClient()
   const userId = journey.user.id
