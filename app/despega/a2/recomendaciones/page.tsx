@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { getDemoUser } from "@/lib/auth/demo-user"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -38,17 +39,23 @@ export default function RecomendacionesPage() {
   useEffect(() => {
     const loadData = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        router.push("/auth/signin")
-        return
+
+      // Match the demo fallback used across A1/A3/A4 journey pages.
+      let userId = user?.id
+      if (!userId) {
+        const demoUser = getDemoUser()
+        if (!demoUser) {
+          router.push("/auth/signin")
+          return
+        }
+        userId = demoUser.id
       }
 
       // Load user profile
       const { data: profileData } = await supabase
         .from("despega_user_profiles")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .single()
 
       if (profileData) {
@@ -59,7 +66,7 @@ export default function RecomendacionesPage() {
       const { data: a1Data } = await supabase
         .from("despega_a1_test_results")
         .select("*")
-        .eq("user_id", user.id)
+        .eq("user_id", userId)
         .order("created_at", { ascending: false })
         .limit(1)
         .single()
