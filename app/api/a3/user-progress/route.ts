@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
 // New A3 module structure
 const MODULE_ORDER = [
@@ -35,19 +36,11 @@ export async function GET() {
   try {
     const supabase = createAdminClient()
     
-    // Get user ID from demo_user cookie
+    // Get user ID — verify signed JWT demo cookie (JSON.parse no longer works after hardening)
     const cookieStore = await cookies()
-    const demoUserCookie = cookieStore.get('demo_user')
-    let userId: string | null = null
-    
-    if (demoUserCookie) {
-      try {
-        const demoUser = JSON.parse(demoUserCookie.value)
-        userId = demoUser.id
-      } catch {
-        // Invalid cookie
-      }
-    }
+    const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
+    const demoUser = await verifyDemoSessionToken(demoToken)
+    let userId: string | null = demoUser?.id ?? null
 
     // Default module states - first module available, rest locked
     const defaultModuleStates: Record<string, string> = {}

@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
+import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
 function getSupabaseClient() {
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
@@ -35,38 +36,29 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    // Get current user ID from auth if not provided
+    // Resolve user ID: body userId > Bearer token > signed demo cookie
     const authHeader = request.headers.get('authorization')
     let currentUserId = userId
 
     if (!currentUserId && authHeader?.startsWith('Bearer ')) {
       try {
         const token = authHeader.substring(7)
-        const {
-          data: { user },
-          error: authError
-        } = await supabase.auth.getUser(token)
-
-        if (authError || !user) {
-          return NextResponse.json(
-            { error: 'Unauthorized' },
-            { status: 401 }
-          )
-        }
-        currentUserId = user.id
-      } catch (error) {
-        return NextResponse.json(
-          { error: 'Invalid token' },
-          { status: 401 }
-        )
+        const { data: { user }, error: authError } = await supabase.auth.getUser(token)
+        if (!authError && user) currentUserId = user.id
+      } catch {
+        // fall through to demo cookie
       }
     }
 
     if (!currentUserId) {
-      return NextResponse.json(
-        { error: 'User ID required' },
-        { status: 401 }
-      )
+      const cookieHeader = request.headers.get('cookie') ?? ''
+      const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${DEMO_COOKIE_NAME}=([^;]+)`))
+      const demoUser = match ? await verifyDemoSessionToken(decodeURIComponent(match[1])) : null
+      if (demoUser) currentUserId = demoUser.id
+    }
+
+    if (!currentUserId) {
+      return NextResponse.json({ error: 'User ID required' }, { status: 401 })
     }
 
     // 1. Record session attempt in a3_session_attempts

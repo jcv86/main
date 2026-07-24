@@ -1,6 +1,7 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
 // Module XP values for validation
 const MODULE_XP: Record<string, number> = {
@@ -52,22 +53,12 @@ export async function POST(request: Request) {
 
     const supabase = createAdminClient()
     
-    // Get user from session
-    const { data: { user }, error: userError } = await supabase.auth.getUser()
-    
-    // Also check demo_user cookie for demo mode
+    // Get user from session or signed JWT demo cookie
+    const { data: { user } } = await supabase.auth.getUser()
     const cookieStore = await cookies()
-    const demoUserCookie = cookieStore.get('demo_user')
-    let userId = user?.id
-    
-    if (!userId && demoUserCookie) {
-      try {
-        const demoUser = JSON.parse(demoUserCookie.value)
-        userId = demoUser.id
-      } catch {
-        // Invalid cookie
-      }
-    }
+    const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
+    const demoUser = await verifyDemoSessionToken(demoToken)
+    let userId = user?.id ?? demoUser?.id
 
     if (!userId) {
       return NextResponse.json(

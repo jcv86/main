@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { completeA3Module } from '@/lib/a3-access-control'
 import { NextResponse } from 'next/server'
 import { cookies } from 'next/headers'
+import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
 /**
  * API endpoint to mark an A3 module as completed
@@ -15,25 +16,14 @@ export async function POST(request: Request) {
   try {
     const supabase = createAdminClient()
     const cookieStore = await cookies()
-    const demoUserCookie = cookieStore.get('demo_user')
+    const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
+    const demoUser = await verifyDemoSessionToken(demoToken)
 
-    if (!demoUserCookie) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 },
-      )
+    if (!demoUser) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
     }
 
-    let userId: string | null = null
-    try {
-      const demoUser = JSON.parse(demoUserCookie.value)
-      userId = demoUser.id
-    } catch {
-      return NextResponse.json(
-        { error: 'Invalid authentication' },
-        { status: 401 },
-      )
-    }
+    const userId = demoUser.id
 
     const body = await request.json()
     const { moduleId, score } = body
