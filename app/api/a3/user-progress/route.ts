@@ -17,6 +17,24 @@ const MODULE_ORDER = [
   'basic-interview-mission',
 ]
 
+// Legacy numeric keys → slug mapping (data saved before slug migration)
+const NUMERIC_TO_SLUG: Record<string, string> = {
+  'module-1':  'career-mirror',
+  'module-2':  'value-mining-lab',
+  'module-3':  'cv-builder-studio',
+  'module-4':  'job-decoder',
+  'module-5':  'answer-architecture',
+  'module-6':  'coach-practice-room',
+  'module-7':  'communication-gym',
+  'module-8':  'first-recruiter-simulation',
+  'module-9':  'risk-difficult-questions-lab',
+  'module-10': 'basic-interview-mission',
+}
+
+function normalizeModuleId(id: string): string {
+  return NUMERIC_TO_SLUG[id] ?? id
+}
+
 const MODULE_XP: Record<string, number> = {
   'career-mirror': 80,
   'value-mining-lab': 100,
