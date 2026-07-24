@@ -17,7 +17,8 @@ import {
   Radar,
   LogOut,
   User,
-  Settings
+  Settings,
+  Trophy
 } from 'lucide-react'
 
 interface XPData {
@@ -37,6 +38,7 @@ const stages = [
     routes: [
       { label: 'Bienvenida', href: '/despega/bienvenida' },
       { label: 'Área Personal', href: '/despega' },
+      { label: 'Mis Logros', href: '/despega/gamificacion' },
     ]
   },
   {
@@ -368,6 +370,13 @@ export function DespegaNavbar() {
                     <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
                       <User className="w-4 h-4" />
                       Mi Perfil
+                    </div>
+                  </Link>
+
+                  <Link href="/despega/gamificacion" onClick={() => setProfileOpen(false)}>
+                    <div className="flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-white/60 hover:text-white hover:bg-white/10 transition-all cursor-pointer">
+                      <Trophy className="w-4 h-4" />
+                      Mis Logros
                     </div>
                   </Link>
 
