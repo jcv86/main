@@ -68,7 +68,8 @@ export default function CareerMirrorCoach() {
   const [xpEarned, setXpEarned] = useState(0)
   const [responses, setResponses] = useState<string[]>([])
   const [showCompletion, setShowCompletion] = useState(false)
-  
+  const [textMode, setTextMode] = useState(false)  // true when media devices are unavailable
+
   // Speech recognition hook
   const { isListening, isSupported, transcript, isFinal, startListening, stopListening, resetTranscript } = useSpeechRecognition({
     language: 'es-ES',
@@ -92,13 +93,12 @@ export default function CareerMirrorCoach() {
   }, [transcript, isFinal, resetTranscript])
 
   const handleCameraTestComplete = (passed: boolean) => {
-    if (passed) {
-      setShowCameraTest(false)
-      setIsReadyToContinue(true)
-      setSessionActive(true)
-      setProgress(0)
-      setResponses([])
-    }
+    setShowCameraTest(false)
+    setIsReadyToContinue(true)
+    setSessionActive(true)
+    setProgress(0)
+    setResponses([])
+    if (!passed) setTextMode(true)
   }
 
   const handleSubmitResponse = async () => {
@@ -202,12 +202,14 @@ export default function CareerMirrorCoach() {
 
   if (showCameraTest) {
     return (
-      <CameraMicrophoneTest 
-        isOpen={showCameraTest}
-        onClose={() => setShowCameraTest(false)}
-        onTestComplete={handleCameraTestComplete}
-        interviewType="Coach"
-      />
+      <div className="min-h-screen bg-black/95 flex items-center justify-center">
+        <CameraMicrophoneTest 
+          isOpen={showCameraTest}
+          onClose={() => { setShowCameraTest(false); setTextMode(true); setIsReadyToContinue(true); setSessionActive(true); }}
+          onTestComplete={handleCameraTestComplete}
+          interviewType="Coach"
+        />
+      </div>
     )
   }
 
@@ -307,22 +309,33 @@ export default function CareerMirrorCoach() {
 
           {/* Center Column: User Camera & Response Input */}
           <div className="space-y-3">
-            {/* Camera Feed */}
-            <div className="border-2 border-[rgb(170,70,170)]/40 rounded-lg overflow-hidden bg-black/40 aspect-[3/4] relative">
-              <video
-                ref={videoRef}
-                autoPlay
-                playsInline
-                muted
-                className="w-full h-full object-cover"
-              />
-              {isListening && (
-                <div className="absolute top-3 right-3 flex items-center gap-2 bg-[rgba(170,70,170,0.2)] px-3 py-1 rounded-full border border-[rgba(170,70,170,0.3)]">
-                  <div className="w-2 h-2 bg-[rgb(170,70,170)] rounded-full animate-pulse"></div>
-                  <span className="text-xs text-[rgb(170,70,170)]/70">Grabando</span>
+            {/* Camera Feed — oculto en modo texto */}
+            {!textMode && (
+              <div className="border-2 border-[rgb(170,70,170)]/40 rounded-lg overflow-hidden bg-black/40 aspect-[3/4] relative">
+                <video
+                  ref={videoRef}
+                  autoPlay
+                  playsInline
+                  muted
+                  className="w-full h-full object-cover"
+                />
+                {isListening && (
+                  <div className="absolute top-3 right-3 flex items-center gap-2 bg-[rgba(170,70,170,0.2)] px-3 py-1 rounded-full border border-[rgba(170,70,170,0.3)]">
+                    <div className="w-2 h-2 bg-[rgb(170,70,170)] rounded-full animate-pulse"></div>
+                    <span className="text-xs text-[rgb(170,70,170)]/70">Grabando</span>
+                  </div>
+                )}
+              </div>
+            )}
+            {textMode && (
+              <div className="border-2 border-white/10 rounded-lg bg-black/30 aspect-[3/4] flex items-center justify-center">
+                <div className="text-center space-y-2 p-6">
+                  <Mic className="w-10 h-10 text-white/20 mx-auto" />
+                  <p className="text-white/40 text-sm">Modo Texto</p>
+                  <p className="text-white/25 text-xs">Escribe tus respuestas abajo</p>
                 </div>
-              )}
-            </div>
+              </div>
+            )}
 
             {/* Response Input Section */}
             <div className="bg-[rgba(80,160,170,0.2)] border border-[rgb(80,160,170)]/10 rounded-lg overflow-hidden">
@@ -352,7 +365,7 @@ export default function CareerMirrorCoach() {
               )}
 
               {/* Usar micrófono Button */}
-              {isSupported && (
+              {isSupported && !textMode && (
                 <Button
                   onClick={isListening ? stopListening : startListening}
                   variant="ghost"

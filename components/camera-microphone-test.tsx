@@ -204,16 +204,29 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
 
           {/* Error State */}
           {(cameraStatus === 'error' || micStatus === 'error') && (
-            <div className="rounded-lg p-4 bg-red-500/10 border border-red-500/30">
-              <div className="flex items-start gap-3">
-                <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
-                <div>
-                  <p className="font-semibold text-red-400">Dispositivos No Disponibles</p>
-                  <p className="text-sm text-white/70 mt-2">
-                    {cameraStatus === 'error' && 'No se puede acceder a la cámara. '}
-                    {micStatus === 'error' && 'No se puede acceder al micrófono. '}
-                    Verifica que has otorgado los permisos necesarios en tu navegador.
-                  </p>
+            <div className="space-y-3">
+              <div className="rounded-lg p-4 bg-red-500/10 border border-red-500/30">
+                <div className="flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-red-400 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-red-400">Dispositivos No Disponibles</p>
+                    <p className="text-sm text-white/70 mt-2">
+                      {cameraStatus === 'error' && 'No se puede acceder a la cámara. '}
+                      {micStatus === 'error' && 'No se puede acceder al micrófono. '}
+                      Verifica que has otorgado los permisos necesarios en tu navegador.
+                    </p>
+                  </div>
+                </div>
+              </div>
+              <div className="rounded-lg p-4 bg-white/5 border border-white/10">
+                <div className="flex items-start gap-3">
+                  <Info className="w-5 h-5 text-white/50 mt-0.5 flex-shrink-0" />
+                  <div>
+                    <p className="font-semibold text-white/80">Modo Texto disponible</p>
+                    <p className="text-sm text-white/50 mt-1">
+                      Puedes continuar escribiendo tus respuestas en lugar de hablarlas. Todas las actividades son completables en modo texto.
+                    </p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -228,6 +241,14 @@ export function CameraMicrophoneTest({ isOpen, onClose, onTestComplete, intervie
             >
               Cancelar
             </Button>
+            {!allReady && (cameraStatus === 'error' || micStatus === 'error') && (
+              <Button
+                onClick={() => { onTestComplete(false); onClose() }}
+                className="flex-1 bg-white/10 hover:bg-white/15 text-white h-12 font-semibold rounded-full border border-white/20"
+              >
+                Continuar en Modo Texto
+              </Button>
+            )}
             <Button
               onClick={handleContinue}
               disabled={!allReady || isValidating}
