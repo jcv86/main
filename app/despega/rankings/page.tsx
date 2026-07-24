@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { getDemoUser } from "@/lib/auth/demo-user"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -47,30 +48,34 @@ export default function RankingsPage() {
   useEffect(() => {
     const loadData = async () => {
       const { data: { user } } = await supabase.auth.getUser()
-      if (user) setCurrentUserId(user.id)
+
+      // Match the demo fallback used across A1/A3/A4 journey pages.
+      let userId = user?.id ?? null
+      if (!userId) {
+        const demoUser = getDemoUser()
+        if (demoUser) userId = demoUser.id
+      }
+      if (userId) setCurrentUserId(userId)
 
       // Load personal history (self-comparison default)
-      const { data: historyData } = await supabase
-        .from("despega_user_progress_history")
-        .select("date, score_general")
-        .eq("user_id", user?.id)
-        .order("date", { ascending: true })
-        .limit(30)
+      if (userId) {
+        const { data: historyData } = await supabase
+          .from("despega_user_progress_history")
+          .select("date, score_general")
+          .eq("user_id", userId)
+          .order("date", { ascending: true })
+          .limit(30)
 
-      if (historyData) {
-        setUserHistory(historyData.map((h: any) => ({ date: h.date, score: h.score_general })))
+        if (historyData) {
+          setUserHistory(historyData.map((h: any) => ({ date: h.date, score: h.score_general })))
+        }
       }
 
-      // Load global rankings
+      // Load global rankings. despega_rankings has no FK to a public
+      // profiles table (user_id references auth.users), so no embed here.
       const { data: rankingsData } = await supabase
         .from("despega_rankings")
-        .select(`
-          *,
-          profiles:user_id (
-            full_name,
-            avatar_url
-          )
-        `)
+        .select("*")
         .order("score_general", { ascending: false })
         .limit(100)
 
