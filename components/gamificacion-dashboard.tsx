@@ -420,14 +420,14 @@ export function GamificacionDashboard() {
             <StatCard
               icon={Trophy}
               label="Posición global"
-              value={myRanking ? `#${myRanking.rank_general}` : '—'}
+              value={myRanking?.rank_general != null ? `#${myRanking.rank_general}` : '—'}
               sub={myRanking ? `${myRanking.score_general} puntos` : 'Sin datos aún'}
               color="rgb(255,215,0)"
             />
             <StatCard
               icon={TrendingUp}
               label="Días activos"
-              value={myRanking?.total_dias_activos ?? 0}
+              value={myRanking?.total_dias_activos ?? '—'}
               sub="en la plataforma"
               color="rgb(124,92,255)"
             />
@@ -472,7 +472,7 @@ export function GamificacionDashboard() {
                     <LeaderboardCard
                       key={entry.user_id}
                       entry={entry}
-                      rank={entry.rank_general ?? i + 1}
+                      rank={(entry.rank_general != null ? entry.rank_general : i + 1)}
                       isMe={entry.user_id === userId}
                     />
                   ))
