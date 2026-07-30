@@ -18,21 +18,44 @@ export async function GET(request: Request) {
     return NextResponse.redirect(errorUrl)
   }
 
+  // Extract invitation code from URL (passed from signin page)
+  const invitationCode = searchParams.get('code')
+
   // Exchange code for session
   if (code) {
     const supabase = await createClient()
-    const { error: exchangeError } = await supabase.auth.exchangeCodeForSession(code)
+    const { error: exchangeError, data } = await supabase.auth.exchangeCodeForSession(code)
     
-    if (!exchangeError) {
-      // Successful authentication - redirect to intended destination
+    if (!exchangeError && data.session?.user) {
+      // Successful authentication - now redeem invitation if provided
+      if (invitationCode) {
+        try {
+          const redeemRes = await fetch(`${origin}/api/auth/redeem-invitation`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${data.session.access_token}`
+            },
+            body: JSON.stringify({ code: invitationCode })
+          })
+
+          if (!redeemRes.ok) {
+            console.warn('[Auth Callback] Invitation redemption failed:', await redeemRes.text())
+            // Redemption failure is not fatal - user is authenticated but invitation wasn't recorded
+          }
+        } catch (err) {
+          console.error('[Auth Callback] Redemption error:', err)
+          // Continue regardless
+        }
+      }
+
+      // Redirect to intended destination
       const forwardedHost = request.headers.get('x-forwarded-host')
       const isLocalEnv = process.env.NODE_ENV === 'development'
       
       if (isLocalEnv) {
-        // In development, redirect directly
         return NextResponse.redirect(`${origin}${next}`)
       } else if (forwardedHost) {
-        // In production with a reverse proxy, use the forwarded host
         return NextResponse.redirect(`https://${forwardedHost}${next}`)
       } else {
         return NextResponse.redirect(`${origin}${next}`)
