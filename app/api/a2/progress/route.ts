@@ -1,5 +1,7 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextRequest, NextResponse } from 'next/server'
+import { cookies } from 'next/headers'
+import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
 /**
  * GET /api/a2/progress
@@ -11,8 +13,17 @@ export async function GET(request: NextRequest) {
     const supabase = await createClient()
 
     const { data: { user }, error: authError } = await supabase.auth.getUser()
+    
+    // Fallback to demo cookie if no session
+    let userId = user?.id
+    if (!userId) {
+      const cookieStore = await cookies()
+      const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
+      const demoUser = await verifyDemoSessionToken(demoToken)
+      userId = demoUser?.id
+    }
 
-    if (authError || !user) {
+    if (!userId) {
       return NextResponse.json(
         {
           current_month: 1,
@@ -34,8 +45,6 @@ export async function GET(request: NextRequest) {
         { status: 200 }
       )
     }
-
-    const userId = user.id
 
     // Fetch completed days from a2_user_task_completions
     const { data: completions } = await supabase
@@ -127,16 +136,23 @@ export async function POST(request: NextRequest) {
     const { dayNumber } = body
 
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    // Fallback to demo cookie if no session
+    let userId = user?.id
+    if (!userId) {
+      const cookieStore = await cookies()
+      const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
+      const demoUser = await verifyDemoSessionToken(demoToken)
+      userId = demoUser?.id
+    }
 
-    if (authError || !user) {
+    if (!userId) {
       return NextResponse.json(
         { error: 'Not authenticated' },
         { status: 401 }
       )
     }
-
-    const userId = user.id
 
     // Mark day as completed in a2_user_task_completions
     const { error: insertError } = await supabase

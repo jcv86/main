@@ -106,8 +106,11 @@ export async function GET() {
     if (progressData) {
       // User has progress data
       const moduleStates = progressData.module_states || defaultModuleStates
-      const completedModuleIds = progressData.completed_module_ids || []
+      let completedModuleIds = progressData.completed_module_ids || []
       const totalXp = progressData.total_xp || 0
+
+      // Normalize legacy numeric IDs to slugs (e.g., 'module-1' → 'career-mirror')
+      completedModuleIds = completedModuleIds.map(normalizeModuleId)
 
       // Ensure all modules have a state
       MODULE_ORDER.forEach((id, index) => {
