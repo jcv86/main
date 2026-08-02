@@ -34,6 +34,16 @@ function normalizeModuleId(id: string): string {
   return NUMERIC_TO_SLUG[id] ?? id
 }
 
+function normalizeCompletedModuleIds(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+
+  const ids = value
+    .filter((id): id is string => typeof id === 'string')
+    .map(normalizeModuleId)
+
+  return Array.from(new Set<string>(ids))
+}
+
 const TOTAL_XP = 1340
 
 export async function GET() {
@@ -87,12 +97,8 @@ export async function GET() {
 
     const progressData = progressResult.data
     if (progressData) {
-      const completedModuleIds = Array.from(
-        new Set(
-          (progressData.completed_module_ids || [])
-            .filter((id: unknown): id is string => typeof id === 'string')
-            .map(normalizeModuleId),
-        ),
+      const completedModuleIds = normalizeCompletedModuleIds(
+        progressData.completed_module_ids,
       )
       const totalXp = Math.max(0, Number(progressData.total_xp) || 0)
 
