@@ -119,9 +119,10 @@ export function validateA3ModuleSubmission(
       ? []
       : ['El entregable debe reflejar exactamente las respuestas registradas.']),
   ]
+  const allCriticalCriteriaMet = criteria.every((criterion) => criterion.met)
 
   return {
-    passed: score >= contract.passScore,
+    passed: score >= contract.passScore && allCriticalCriteriaMet,
     score,
     passScore: contract.passScore,
     errors,
