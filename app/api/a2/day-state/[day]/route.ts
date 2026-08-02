@@ -2,8 +2,12 @@ import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
-import { getA2ProgressSnapshot } from '@/lib/a2/server-progress'
+import {
+  getA2ProgressSnapshot,
+  resolveA2Route,
+} from '@/lib/a2/server-progress'
 import { normalizeA2MissionSubmission } from '@/lib/a2/day-submission'
+import { buildA2RouteAdaptation } from '@/lib/a2/route-adaptation'
 
 const NUMERIC_TO_SLUG: Record<string, string> = {
   'module-1': 'career-mirror',
@@ -69,7 +73,11 @@ export async function GET(
 
     const userId = currentUser.id
     const supabase = createAdminClient()
-    const snapshot = await getA2ProgressSnapshot(userId, supabase)
+    const [snapshot, route] = await Promise.all([
+      getA2ProgressSnapshot(userId, supabase),
+      resolveA2Route(userId, supabase),
+    ])
+    const adaptation = buildA2RouteAdaptation(route, mission)
     const previousDay = mission.unlockRequirements.requiredPreviousDay
 
     const [completionResult, previousResult, a3Result] = await Promise.all([
@@ -157,11 +165,22 @@ export async function GET(
         subtitle: mission.subtitle,
         deliverable: mission.deliverable,
       },
+      route: route
+        ? {
+            id: route.id,
+            code: route.code,
+            name: route.name,
+            description: route.description,
+            source: route.source,
+          }
+        : null,
+      adaptation,
       access: {
         canAccess,
         blockReasons,
         currentDay: snapshot.currentDay,
         highestUnlockedDay: snapshot.highestUnlockedDay,
+        activeHorizon: snapshot.activeHorizon,
         requiredPreviousDay: previousDay || null,
         previousCompleted,
       },
