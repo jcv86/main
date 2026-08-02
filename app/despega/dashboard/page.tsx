@@ -5,37 +5,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { getCanonicalNextPath, getJourneyForCurrentUser } from '@/lib/journey/service'
+import {
+  PRODUCT_STAGE_ORDER,
+  PRODUCT_STAGES,
+  type InternalJourneyStage,
+} from '@/lib/dtc/product-language'
 
-const MODULES = [
-  {
-    id: 'A1',
-    name: 'Despega Cerebral',
-    description: 'Tu diagnóstico, patrones y perfil profesional.',
-    href: '/despega/a1-report',
-    icon: Brain,
-  },
-  {
-    id: 'A2',
-    name: 'Tu Ruta',
-    description: 'Tu misión diaria y avance secuencial.',
-    href: '/despega/a2',
-    icon: Compass,
-  },
-  {
-    id: 'A3',
-    name: 'Entrenamiento',
-    description: 'Práctica de entrevistas y habilidades aplicadas.',
-    href: '/despega/a3',
-    icon: Target,
-  },
-  {
-    id: 'A4',
-    name: 'Radar Estratégico',
-    description: 'Señales del mercado, contexto y oportunidades.',
-    href: '/despega/a4',
-    icon: Radar,
-  },
-] as const
+const STAGE_ICONS = {
+  A1: Brain,
+  A2: Compass,
+  A3: Target,
+  A4: Radar,
+} as const
 
 export default async function DashboardPage() {
   const journey = await getJourneyForCurrentUser()
@@ -52,9 +33,9 @@ export default async function DashboardPage() {
     : Math.max(0, Math.min(89, state.highestA2DayUnlocked - 1))
   const progress = Math.round((completedDays / 90) * 100)
   const nextPath = await getCanonicalNextPath(profile)
-  const onboardingPending = nextPath !== '/despega/a2'
+  const onboardingPending = nextPath !== PRODUCT_STAGES.A2.href
 
-  const moduleStatus = (id: 'A1' | 'A2' | 'A3' | 'A4') => {
+  const stageStatus = (id: InternalJourneyStage) => {
     const isAccessible = access[id.toLowerCase() as keyof typeof access]
     if (!isAccessible) return 'locked' as const
     if (id === 'A1' && state.a1CompletedAt) return 'completed' as const
@@ -97,7 +78,7 @@ export default async function DashboardPage() {
         <Card>
           <CardHeader className="flex flex-row items-center justify-between gap-4">
             <div className="flex flex-col gap-1">
-              <CardTitle>Tu Ruta</CardTitle>
+              <CardTitle>{PRODUCT_STAGES.A2.name}</CardTitle>
               <p className="text-sm text-muted-foreground">
                 Día {state.highestA2DayUnlocked} habilitado · {completedDays} días completados
               </p>
@@ -109,26 +90,28 @@ export default async function DashboardPage() {
           </CardContent>
         </Card>
 
-        <section aria-labelledby="modules-heading" className="flex flex-col gap-4">
+        <section aria-labelledby="stages-heading" className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
-            <h2 id="modules-heading" className="text-2xl font-bold">
-              Módulos conectados
+            <h2 id="stages-heading" className="text-2xl font-bold">
+              Tu recorrido conectado
             </h2>
             <p className="text-sm text-muted-foreground">
-              Cada módulo utiliza la evidencia producida por el anterior.
+              Cada etapa utiliza la evidencia producida por la anterior.
             </p>
           </div>
 
           <div className="grid gap-4 md:grid-cols-2">
-            {MODULES.map((module) => {
-              const status = moduleStatus(module.id)
-              const Icon = module.icon
+            {PRODUCT_STAGE_ORDER.map((stageId) => {
+              const stage = PRODUCT_STAGES[stageId]
+              const status = stageStatus(stageId)
+              const Icon = STAGE_ICONS[stageId]
               const locked = status === 'locked'
 
               return (
                 <Card
-                  key={module.id}
+                  key={stageId}
                   className={locked ? 'opacity-65' : 'border-primary/25'}
+                  data-stage-id={stageId}
                 >
                   <CardContent className="flex h-full flex-col gap-5 p-6">
                     <div className="flex items-start justify-between gap-4">
@@ -136,12 +119,7 @@ export default async function DashboardPage() {
                         <span className="flex h-11 w-11 items-center justify-center rounded-xl bg-primary/10 text-primary">
                           <Icon className="h-5 w-5" />
                         </span>
-                        <div>
-                          <p className="text-xs font-semibold text-muted-foreground">
-                            {module.id}
-                          </p>
-                          <h3 className="font-semibold">{module.name}</h3>
-                        </div>
+                        <h3 className="font-semibold">{stage.name}</h3>
                       </div>
                       <span className="flex items-center gap-1 rounded-full border px-2.5 py-1 text-xs text-muted-foreground">
                         {status === 'completed' ? (
@@ -159,7 +137,7 @@ export default async function DashboardPage() {
                       </span>
                     </div>
                     <p className="flex-1 text-sm leading-relaxed text-muted-foreground">
-                      {module.description}
+                      {stage.shortDescription}
                     </p>
                     <Button
                       asChild={!locked}
@@ -170,8 +148,8 @@ export default async function DashboardPage() {
                       {locked ? (
                         <span>Completa la etapa anterior</span>
                       ) : (
-                        <Link href={module.href}>
-                          Abrir {module.name}
+                        <Link href={stage.href}>
+                          {stage.actionLabel}
                           <ArrowRight className="ml-2 h-4 w-4" />
                         </Link>
                       )}
