@@ -64,6 +64,9 @@ jobs:
       - name: A2 Day 1 scoring invariants
         run: npx tsx scripts/check-a2-day1-scoring.ts
 
+      - name: A2 specialized days contract
+        run: npx tsx scripts/check-a2-specialized-days-contract.ts
+
       - name: A2 90-day cycle contract
         run: npx tsx scripts/check-a2-cycle-contract.ts
 
