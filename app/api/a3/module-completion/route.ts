@@ -5,11 +5,11 @@ import {
   checkA3ModuleAccess,
   getA3AccessDenialMessage,
 } from '@/lib/a3-access-control'
-import {
-  A3_MODULES,
-  getA3Module,
-} from '@/lib/a3/module-catalog'
+import { A3_MODULES } from '@/lib/a3/module-catalog'
+import { getActiveA3Module } from '@/lib/a3/active-module'
 import { validateA3ModuleSubmission } from '@/lib/a3/module-validation'
+import { validateJobDecoderSubmission } from '@/lib/a3/job-decoder-validation'
+import { extractCvContext } from '@/lib/a3/job-decoder'
 
 interface AtomicCompletionResult {
   isFirstCompletion: boolean
@@ -48,7 +48,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Solicitud inválida' }, { status: 400 })
     }
 
-    const module = getA3Module(body.moduleId)
+    const module = getActiveA3Module(body.moduleId)
     const moduleNumber = Number(body.moduleNumber)
     if (!module || !Number.isInteger(moduleNumber) || module.number !== moduleNumber) {
       return NextResponse.json(
@@ -68,21 +68,6 @@ export async function POST(request: NextRequest) {
       )
     }
 
-    const validation = validateA3ModuleSubmission(
-      module,
-      body.responses,
-      body.deliverable || body.careerMirrorCard,
-    )
-    if (!validation.passed) {
-      return NextResponse.json(
-        {
-          error: 'El entrenamiento necesita más desarrollo antes de completarse.',
-          validation,
-        },
-        { status: 422 },
-      )
-    }
-
     const userId = currentUser.id
     const supabase = createAdminClient()
     const access = await checkA3ModuleAccess(userId, module.id, supabase)
@@ -99,6 +84,49 @@ export async function POST(request: NextRequest) {
           },
         },
         { status: 403 },
+      )
+    }
+
+    let validation
+    if (module.id === 'job-decoder') {
+      const { data: cvCompletion, error: cvContextError } = await supabase
+        .from('a3_module_completion')
+        .select('module_id, deliverable, completed_at')
+        .eq('user_id', userId)
+        .in('module_id', ['cv-builder-studio', 'module-3'])
+        .order('completed_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (cvContextError) {
+        console.error('[v0] Job decoder CV context error:', cvContextError)
+        return NextResponse.json(
+          { error: 'No pudimos contrastar la oferta con el CV aprobado.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateJobDecoderSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        { cvBuilder: extractCvContext(cvCompletion?.deliverable) },
+      )
+    } else {
+      validation = validateA3ModuleSubmission(
+        module,
+        body.responses,
+        body.deliverable || body.careerMirrorCard,
+      )
+    }
+
+    if (!validation.passed) {
+      return NextResponse.json(
+        {
+          error: 'El entrenamiento necesita más desarrollo antes de completarse.',
+          validation,
+        },
+        { status: 422 },
       )
     }
 
