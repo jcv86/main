@@ -1,10 +1,19 @@
 'use client'
 
+import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import useSWR from 'swr'
-import { CheckCircle2, Circle, ChevronDown, ChevronUp } from 'lucide-react'
-import { useState } from 'react'
+import {
+  ArrowRight,
+  CheckCircle2,
+  Circle,
+  Lock,
+  Map,
+} from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Progress } from '@/components/ui/progress'
 
-interface MonthProgress {
+interface CycleProgress {
   month: number
   percentage: number
   completed: boolean
@@ -12,150 +21,180 @@ interface MonthProgress {
 
 interface A2ProgressData {
   current_month: number
+  current_day: number
+  highest_unlocked_day: number
   progress_percentage: number
   completed_tasks: number
   total_tasks: number
   status: string
-  month_progress?: MonthProgress[]
+  month_progress: CycleProgress[]
 }
 
-const fetcher = (url: string) => fetch(url).then((res) => res.json())
+const CYCLES = [
+  {
+    number: 1,
+    name: 'Ciclo inicial',
+    range: 'Días 1–30',
+    description: 'Convierte tu diagnóstico en una primera misión concreta.',
+  },
+  {
+    number: 2,
+    name: 'Extensión a 60 días',
+    range: 'Días 31–60',
+    description: 'Profundiza lo que está funcionando y corrige fricciones.',
+  },
+  {
+    number: 3,
+    name: 'Integración a 90 días',
+    range: 'Días 61–90',
+    description: 'Integra práctica, evidencia y decisiones de largo alcance.',
+  },
+] as const
+
+async function fetcher(url: string): Promise<A2ProgressData> {
+  const response = await fetch(url, { credentials: 'include' })
+  if (!response.ok) throw new Error('No pudimos cargar el progreso de Tu Ruta.')
+  return response.json()
+}
 
 export function A2ProgressSidebar() {
-  const [expandedMonth, setExpandedMonth] = useState<number | null>(null)
-  
-  const { data: progress, isLoading } = useSWR<A2ProgressData>(
+  const [expandedCycle, setExpandedCycle] = useState(1)
+  const { data, error, isLoading } = useSWR<A2ProgressData>(
     '/api/a2/progress',
     fetcher,
     {
       revalidateOnFocus: true,
       revalidateOnReconnect: true,
-      refreshInterval: 5000, // Refresca cada 5 segundos
-      dedupingInterval: 2000,
-    }
+      refreshInterval: 0,
+      dedupingInterval: 5000,
+    },
   )
 
-  // Set default expanded month when progress loads
-  const currentMonth = progress?.current_month
-  if (currentMonth && expandedMonth === null) {
-    setExpandedMonth(currentMonth)
-  }
+  useEffect(() => {
+    if (data?.current_month) setExpandedCycle(data.current_month)
+  }, [data?.current_month])
 
-  if (isLoading || !progress) {
+  if (isLoading) {
     return (
-      <div className="w-72 bg-muted/30 border-r border-muted/40 p-6 hidden lg:block">
+      <aside className="hidden h-screen w-72 border-r bg-muted/5 p-6 lg:block">
         <div className="space-y-4 animate-pulse">
-          <div className="h-4 bg-muted/40 rounded w-3/4" />
-          <div className="space-y-3">
-            {[1, 2, 3].map((i) => (
-              <div key={i} className="h-16 bg-muted/40 rounded" />
-            ))}
-          </div>
+          <div className="h-5 w-2/3 rounded bg-muted/50" />
+          <div className="h-2 rounded bg-muted/40" />
+          {[1, 2, 3].map((cycle) => (
+            <div key={cycle} className="h-24 rounded-xl bg-muted/30" />
+          ))}
         </div>
-      </div>
+      </aside>
     )
   }
 
-  // Compute month progress from actual data
-  const monthProgress = progress.month_progress || [
-    {
-      month: 1,
-      percentage: Math.min(Math.max(progress.progress_percentage, 0), 33),
-      completed: progress.current_month > 1 || progress.progress_percentage >= 33
-    },
-    {
-      month: 2,
-      percentage: progress.current_month === 2 ? Math.max(0, Math.min(progress.progress_percentage - 33, 34)) : progress.current_month > 2 ? 100 : 0,
-      completed: progress.current_month > 2 || (progress.current_month === 2 && progress.progress_percentage >= 66)
-    },
-    {
-      month: 3,
-      percentage: progress.current_month === 3 ? Math.max(0, progress.progress_percentage - 67) : progress.current_month > 3 ? 100 : 0,
-      completed: progress.current_month > 3 || progress.progress_percentage === 100
-    }
-  ]
+  if (error || !data) {
+    return (
+      <aside className="hidden h-screen w-72 border-r bg-muted/5 p-6 lg:block">
+        <p className="text-sm font-medium">Tu Ruta</p>
+        <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+          No pudimos cargar el progreso. Puedes continuar desde el dashboard.
+        </p>
+        <Button asChild variant="outline" size="sm" className="mt-4 w-full">
+          <Link href="/despega/a2">Volver a Tu Ruta</Link>
+        </Button>
+      </aside>
+    )
+  }
 
   return (
-    <aside className="hidden lg:block w-72 bg-muted/5 border-r border-muted/40 sticky top-0 h-screen overflow-y-auto p-6 space-y-6">
-      {/* Header */}
-      <div>
-        <h3 className="text-sm uppercase tracking-wider font-semibold text-white/70 mb-2">
-          Tu Jornada de 90 Días
-        </h3>
-        <div className="relative h-2 bg-muted/40 rounded-full overflow-hidden">
-          <div
-            className="h-full bg-gradient-to-r from-purple via-blue to-cyan transition-all duration-500"
-            style={{ width: `${progress.progress_percentage}%` }}
-          />
-        </div>
-        <p className="text-xs text-white/60 mt-2">
-          {progress.progress_percentage}% Completado
-        </p>
-      </div>
+    <aside className="sticky top-0 hidden h-screen w-72 shrink-0 overflow-y-auto border-r bg-muted/5 p-6 lg:block">
+      <div className="space-y-6">
+        <header>
+          <div className="flex items-center gap-2 text-primary">
+            <Map className="h-5 w-5" />
+            <h2 className="font-semibold">Tu Ruta</h2>
+          </div>
+          <p className="mt-2 text-xs leading-relaxed text-muted-foreground">
+            Comienza con 30 días y expande el recorrido según tu avance.
+          </p>
+        </header>
 
-      {/* Months Timeline */}
-      <div className="space-y-3">
-        {monthProgress.map((month) => {
-          const isActive = month.month === progress.current_month
-          const isCompleted = month.completed
-          
-          return (
-            <div key={month.month}>
-              <button
-                onClick={() => setExpandedMonth(isActive ? expandedMonth : month.month)}
-                className={`w-full flex items-start gap-3 p-4 rounded-lg transition-all border ${
-                  isActive
-                    ? 'border'
-                    : isCompleted
-                    ? 'bg-emerald-500/10 border-emerald-500/20'
-                    : 'bg-muted/20 border-muted/30 opacity-60'
-                }`}
-                style={isActive ? { backgroundColor: 'rgba(90, 90, 150, 0.6)', borderColor: 'rgba(90, 90, 150, 0.8)' } : {}}
-              >
-                {/* Icon */}
-                <div className="mt-1 flex-shrink-0">
-                  {isCompleted ? (
-                    <CheckCircle2 className="w-5 h-5 text-emerald-500" />
-                  ) : isActive ? (
-                    <Circle className="w-5 h-5" style={{ color: 'rgb(90, 90, 150)', stroke: 'rgb(90, 90, 150)', fill: 'rgba(90, 90, 150, 0.6)', strokeWidth: '2' }} />
-                  ) : (
-                    <Circle className="w-5 h-5 text-muted/40" />
-                  )}
-                </div>
+        <section className="space-y-2" aria-label="Progreso general de Tu Ruta">
+          <div className="flex items-center justify-between text-xs">
+            <span>Día {data.current_day}</span>
+            <span className="font-semibold text-primary">
+              {data.progress_percentage}%
+            </span>
+          </div>
+          <Progress value={data.progress_percentage} />
+          <p className="text-xs text-muted-foreground">
+            {data.completed_tasks} de {data.total_tasks} días completados
+          </p>
+        </section>
 
-                {/* Content */}
-                <div className="flex-1 text-left">
-                  <p className={`text-sm font-semibold ${isActive || isCompleted ? 'text-white' : 'text-white/60'}`}>
-                    Mes {month.month}
-                  </p>
-                  <div className="h-1.5 bg-muted/40 rounded-full overflow-hidden mt-2">
-                    <div
-                      className={`h-full transition-all ${
-                        isActive ? 'bg-purple' : isCompleted ? 'bg-emerald-500' : 'bg-muted/40'
-                      }`}
-                      style={{ width: `${month.percentage}%` }}
-                    />
+        <nav className="space-y-3" aria-label="Ciclos de Tu Ruta">
+          {CYCLES.map((cycle, index) => {
+            const progress = data.month_progress?.[index] ?? {
+              month: cycle.number,
+              percentage: 0,
+              completed: false,
+            }
+            const active = data.current_month === cycle.number
+            const available = cycle.number <= data.current_month || progress.completed
+            const expanded = expandedCycle === cycle.number
+
+            return (
+              <div key={cycle.number} className="rounded-xl border bg-background/40">
+                <button
+                  type="button"
+                  onClick={() => available && setExpandedCycle(cycle.number)}
+                  className="flex w-full items-start gap-3 p-4 text-left"
+                  aria-expanded={expanded}
+                  disabled={!available}
+                >
+                  <span className="mt-0.5 text-primary">
+                    {progress.completed ? (
+                      <CheckCircle2 className="h-5 w-5" />
+                    ) : active ? (
+                      <Circle className="h-5 w-5 fill-primary/20" />
+                    ) : (
+                      <Lock className="h-5 w-5 text-muted-foreground" />
+                    )}
+                  </span>
+                  <span className="min-w-0 flex-1">
+                    <span className="block text-sm font-semibold">{cycle.name}</span>
+                    <span className="mt-0.5 block text-xs text-muted-foreground">
+                      {cycle.range}
+                    </span>
+                    <span className="mt-3 block">
+                      <Progress value={progress.percentage} className="h-1.5" />
+                    </span>
+                  </span>
+                  <span className="text-xs font-semibold text-muted-foreground">
+                    {progress.percentage}%
+                  </span>
+                </button>
+
+                {expanded && available && (
+                  <div className="border-t px-4 py-3">
+                    <p className="text-xs leading-relaxed text-muted-foreground">
+                      {cycle.description}
+                    </p>
+                    {active && (
+                      <p className="mt-2 text-xs font-medium text-primary">
+                        Ciclo actual
+                      </p>
+                    )}
                   </div>
-                  <p className="text-xs text-white/50 mt-1">{Math.round(month.percentage)}%</p>
-                </div>
+                )}
+              </div>
+            )
+          })}
+        </nav>
 
-                {/* Chevron */}
-                <div className="flex-shrink-0 mt-1">
-                  {expandedMonth === month.month ? (
-                    <ChevronUp className="w-4 h-4 text-white/40" />
-                  ) : (
-                    <ChevronDown className="w-4 h-4 text-white/40" />
-                  )}
-                </div>
-              </button>
-
-              {/* Milestones - REMOVED */}
-            </div>
-          )
-        })}
+        <Button asChild className="w-full">
+          <Link href={`/despega/a2/dia-${data.highest_unlocked_day}`}>
+            Continuar día {data.highest_unlocked_day}
+            <ArrowRight className="ml-2 h-4 w-4" />
+          </Link>
+        </Button>
       </div>
-
-      {/* Quick Stats - REMOVED */}
     </aside>
   )
 }
