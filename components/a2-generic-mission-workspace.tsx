@@ -8,17 +8,20 @@ import {
   Link2,
   ListChecks,
   MessageSquare,
+  Route,
 } from 'lucide-react'
 import type { A2DailyMission } from '@/lib/a2-mission.types'
 import type {
   A2MissionSubmission,
   A2MissionValidationResult,
 } from '@/lib/a2/day-submission'
+import type { A2RouteAdaptation } from '@/lib/a2/route-adaptation'
 
 interface A2GenericMissionWorkspaceProps {
   mission: A2DailyMission
   value: A2MissionSubmission
   validation: A2MissionValidationResult
+  adaptation?: A2RouteAdaptation
   onChange: (value: A2MissionSubmission) => void
 }
 
@@ -40,8 +43,19 @@ export function A2GenericMissionWorkspace({
   mission,
   value,
   validation,
+  adaptation,
   onChange,
 }: A2GenericMissionWorkspaceProps) {
+  const summaryPlaceholder = adaptation
+    ? `${adaptation.focusQuestion} Resume el trabajo realizado y la decisión que quedó registrada.`
+    : 'Resume el trabajo realizado, las decisiones tomadas y cómo se conecta con tu objetivo profesional.'
+  const evidencePlaceholder = adaptation
+    ? adaptation.evidencePrompt
+    : 'Pega el resultado principal, ejemplos, fragmentos, estructura, mensajes, aprendizajes o evidencia concreta producida hoy.'
+  const reflectionPlaceholder = adaptation
+    ? `${adaptation.applicationPrompt} Registra el aprendizaje central y el ajuste que aplicarás después.`
+    : 'Registra el aprendizaje central, una dificultad y el ajuste que aplicarás en el siguiente día.'
+
   return (
     <div className="space-y-6 rounded-[28px] border border-cyan-500/25 bg-slate-950/50 p-6">
       <div className="space-y-2">
@@ -54,6 +68,28 @@ export function A2GenericMissionWorkspace({
           avance como parte de tu ruta.
         </p>
       </div>
+
+      {adaptation && (
+        <section className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4">
+          <p className="flex items-center gap-2 text-sm font-semibold text-cyan-200">
+            <Route className="h-4 w-4" />
+            Evidencia para {adaptation.routeName}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-slate-400">
+            {adaptation.evidencePrompt}
+          </p>
+          <div className="mt-3 flex flex-wrap gap-2">
+            {adaptation.qualitySignals.map((signal) => (
+              <span
+                key={signal}
+                className="rounded-full border border-cyan-500/15 bg-slate-950/55 px-3 py-1 text-xs text-slate-300"
+              >
+                {signal}
+              </span>
+            ))}
+          </div>
+        </section>
+      )}
 
       <section className="space-y-3">
         <div>
@@ -103,7 +139,7 @@ export function A2GenericMissionWorkspace({
               onChange({ ...value, summary: event.target.value })
             }
             rows={5}
-            placeholder="Resume el trabajo realizado, las decisiones tomadas y cómo se conecta con tu objetivo profesional."
+            placeholder={summaryPlaceholder}
             className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-cyan-500/60"
           />
           <span className="block text-right text-xs text-slate-600">
@@ -122,7 +158,7 @@ export function A2GenericMissionWorkspace({
               onChange({ ...value, evidence: event.target.value })
             }
             rows={6}
-            placeholder="Pega el resultado principal, ejemplos, fragmentos, estructura, mensajes, aprendizajes o evidencia concreta producida hoy."
+            placeholder={evidencePlaceholder}
             className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-purple-500/60"
           />
           <span className="block text-right text-xs text-slate-600">
@@ -141,7 +177,7 @@ export function A2GenericMissionWorkspace({
               onChange({ ...value, reflection: event.target.value })
             }
             rows={4}
-            placeholder="Registra el aprendizaje central, una dificultad y el ajuste que aplicarás en el siguiente día."
+            placeholder={reflectionPlaceholder}
             className="w-full rounded-xl border border-slate-800 bg-slate-950 px-4 py-3 text-sm text-white outline-none transition placeholder:text-slate-600 focus:border-emerald-500/60"
           />
           <span className="block text-right text-xs text-slate-600">
