@@ -63,6 +63,8 @@ const a2DayTemplate = source('components/a2-day-page-template.tsx')
 const a2ClientCompletion = source('lib/a2/client-completion.ts')
 const journeyService = source('lib/journey/service.ts')
 const completeDay = source('app/api/a2/complete-day/route.ts')
+const a3ModuleCompletion = source('app/api/a3/module-completion/route.ts')
+const legacyA3Unlock = source('app/api/a3/unlock-module/route.ts')
 const xpActivity = source('app/api/gamification/xp-activity/route.ts')
 
 for (const [path, content] of [
@@ -159,6 +161,19 @@ assert.ok(completeDay.includes('analyzeA2Day1Submission'))
 assert.ok(completeDay.includes('{ status: 422 }'))
 assert.ok(!completeDay.includes('const rawStatus = submission.passStatus'))
 
+assert.ok(legacyA3Unlock.includes('{ status: 410 }'))
+assert.ok(legacyA3Unlock.includes("replacement: '/api/a3/module-completion'"))
+assert.ok(!legacyA3Unlock.includes('createAdminClient'))
+assert.ok(!legacyA3Unlock.includes('completeA3Module'))
+assert.ok(a3ModuleCompletion.includes('await checkA3ModuleAccess'))
+assert.ok(a3ModuleCompletion.includes('getA3AccessDenialMessage(access)'))
+assert.ok(a3ModuleCompletion.includes('{ status: 403 }'))
+assert.ok(
+  a3ModuleCompletion.indexOf('await checkA3ModuleAccess') <
+    a3ModuleCompletion.indexOf(".from('a3_session_attempts')"),
+  'A3 access must be verified before any completion write',
+)
+
 assert.ok(
   xpActivity.includes('status: 410') || xpActivity.includes('{ status: 410 }'),
   'Public XP write endpoint must remain disabled',
@@ -175,6 +190,8 @@ console.log(
     canonicalA2Cycles: ['30', '60', '90'],
     canonicalDayCompletion: true,
     day1ServerScoring: true,
+    a3CompletionAccessGate: true,
+    legacyA3WriterDisabled: true,
     publicXpWritesDisabled: true,
   }),
 )
