@@ -76,5 +76,8 @@ jobs:
       - name: A2 route adaptation contract
         run: npx tsx scripts/check-a2-route-adaptation-contract.ts
 
+      - name: A2 real activity continuity contract
+        run: npx tsx scripts/check-a2-activity-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
