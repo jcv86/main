@@ -137,7 +137,8 @@ assert.ok(a2ClientCompletion.includes("credentials: 'include'"))
 assert.ok(a2ClientCompletion.includes("fetch('/api/a2/complete-day'"))
 assert.ok(a2ClientCompletion.includes('payload.progression?.nextDay'))
 assert.ok(a2ClientCompletion.includes('nextDay > dayNumber'))
-assert.ok(a2DayTemplate.includes('completeA2Day(dayNumber)'))
+assert.ok(a2DayTemplate.includes('const result = await completeA2Day('))
+assert.ok(a2DayTemplate.includes('needsEvidence ? submission : undefined'))
 assert.ok(a2DayTemplate.includes('router.push(result.nextPath)'))
 assert.ok(!a2DayTemplate.includes('/despega/a2#dia-'))
 assert.ok(!a2DayTemplate.includes('Checkpoint A3'))
@@ -165,12 +166,13 @@ assert.ok(legacyA3Unlock.includes('{ status: 410 }'))
 assert.ok(legacyA3Unlock.includes("replacement: '/api/a3/module-completion'"))
 assert.ok(!legacyA3Unlock.includes('createAdminClient'))
 assert.ok(!legacyA3Unlock.includes('completeA3Module'))
-assert.ok(a3ModuleCompletion.includes('await checkA3ModuleAccess'))
+const a3AccessGateIndex = a3ModuleCompletion.indexOf('checkA3ModuleAccess(')
+const a3FirstWriteIndex = a3ModuleCompletion.indexOf(".from('a3_session_attempts')")
+assert.ok(a3AccessGateIndex >= 0)
 assert.ok(a3ModuleCompletion.includes('getA3AccessDenialMessage(access)'))
 assert.ok(a3ModuleCompletion.includes('{ status: 403 }'))
 assert.ok(
-  a3ModuleCompletion.indexOf('await checkA3ModuleAccess') <
-    a3ModuleCompletion.indexOf(".from('a3_session_attempts')"),
+  a3AccessGateIndex < a3FirstWriteIndex,
   'A3 access must be verified before any completion write',
 )
 
