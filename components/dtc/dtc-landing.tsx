@@ -10,7 +10,7 @@ import CanonicalJourney from './journey-canonical'
 import Comparison from './comparison'
 import VeraCv from './vera-cv'
 import Audience from './audience'
-import Closing from './closing'
+import CanonicalClosing from './closing-canonical'
 
 export default function DtcLanding() {
   return (
@@ -26,7 +26,7 @@ export default function DtcLanding() {
         <Comparison />
         <VeraCv />
         <Audience />
-        <Closing />
+        <CanonicalClosing />
       </main>
     </div>
   )
