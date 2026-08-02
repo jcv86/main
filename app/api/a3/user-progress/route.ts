@@ -1,7 +1,6 @@
 import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
 // New A3 module structure
 const MODULE_ORDER = [
@@ -19,15 +18,15 @@ const MODULE_ORDER = [
 
 // Legacy numeric keys → slug mapping (data saved before slug migration)
 const NUMERIC_TO_SLUG: Record<string, string> = {
-  'module-1':  'career-mirror',
-  'module-2':  'value-mining-lab',
-  'module-3':  'cv-builder-studio',
-  'module-4':  'job-decoder',
-  'module-5':  'answer-architecture',
-  'module-6':  'coach-practice-room',
-  'module-7':  'communication-gym',
-  'module-8':  'first-recruiter-simulation',
-  'module-9':  'risk-difficult-questions-lab',
+  'module-1': 'career-mirror',
+  'module-2': 'value-mining-lab',
+  'module-3': 'cv-builder-studio',
+  'module-4': 'job-decoder',
+  'module-5': 'answer-architecture',
+  'module-6': 'coach-practice-room',
+  'module-7': 'communication-gym',
+  'module-8': 'first-recruiter-simulation',
+  'module-9': 'risk-difficult-questions-lab',
   'module-10': 'basic-interview-mission',
 }
 
@@ -35,30 +34,13 @@ function normalizeModuleId(id: string): string {
   return NUMERIC_TO_SLUG[id] ?? id
 }
 
-const MODULE_XP: Record<string, number> = {
-  'career-mirror': 80,
-  'value-mining-lab': 100,
-  'cv-builder-studio': 120,
-  'job-decoder': 100,
-  'answer-architecture': 120,
-  'coach-practice-room': 130,
-  'communication-gym': 140,
-  'first-recruiter-simulation': 160,
-  'risk-difficult-questions-lab': 170,
-  'basic-interview-mission': 220,
-}
-
 const TOTAL_XP = 1340
 
 export async function GET() {
   try {
     const supabase = createAdminClient()
-    
-    // Get user ID — verify signed JWT demo cookie (JSON.parse no longer works after hardening)
-    const cookieStore = await cookies()
-    const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
-    const demoUser = await verifyDemoSessionToken(demoToken)
-    let userId: string | null = demoUser?.id ?? null
+    const currentUser = await resolveServerUser()
+    const userId = currentUser?.id ?? null
 
     // Default module states - first module available, rest locked
     const defaultModuleStates: Record<string, string> = {}
@@ -75,10 +57,10 @@ export async function GET() {
           maxXp: TOTAL_XP,
           progressPct: 0,
           completedModules: 0,
-          totalModules: 10,
+          totalModules: MODULE_ORDER.length,
           moduleStates: defaultModuleStates,
           completedModuleIds: [],
-          a2CurrentDay: 1, // Default to day 1 if not found
+          a2CurrentDay: 1,
         },
       })
     }
@@ -104,24 +86,30 @@ export async function GET() {
     }
 
     if (progressData) {
-      // User has progress data
-      const moduleStates = progressData.module_states || defaultModuleStates
-      let completedModuleIds = progressData.completed_module_ids || []
+      const moduleStates: Record<string, string> = {
+        ...defaultModuleStates,
+        ...(progressData.module_states || {}),
+      }
+      const completedModuleIds = Array.from(
+        new Set((progressData.completed_module_ids || []).map(normalizeModuleId)),
+      )
       const totalXp = progressData.total_xp || 0
 
-      // Normalize legacy numeric IDs to slugs (e.g., 'module-1' → 'career-mirror')
-      completedModuleIds = completedModuleIds.map(normalizeModuleId)
-
-      // Ensure all modules have a state
+      // Rebuild missing/unlocked state using canonical IDs.
       MODULE_ORDER.forEach((id, index) => {
-        if (!moduleStates[id]) {
-          // Determine state based on previous module
-          if (index === 0) {
-            moduleStates[id] = 'available'
-          } else {
-            const prevId = MODULE_ORDER[index - 1]
-            moduleStates[id] = completedModuleIds.includes(prevId) ? 'available' : 'locked'
-          }
+        if (completedModuleIds.includes(id)) {
+          moduleStates[id] = 'completed'
+          return
+        }
+
+        if (index === 0) {
+          moduleStates[id] = moduleStates[id] === 'completed' ? 'completed' : 'available'
+          return
+        }
+
+        const previousId = MODULE_ORDER[index - 1]
+        if (completedModuleIds.includes(previousId) && moduleStates[id] === 'locked') {
+          moduleStates[id] = 'available'
         }
       })
 
@@ -130,17 +118,16 @@ export async function GET() {
         progress: {
           totalXp,
           maxXp: TOTAL_XP,
-          progressPct: Math.round((totalXp / TOTAL_XP) * 100),
+          progressPct: Math.min(100, Math.round((totalXp / TOTAL_XP) * 100)),
           completedModules: completedModuleIds.length,
-          totalModules: 10,
+          totalModules: MODULE_ORDER.length,
           moduleStates,
           completedModuleIds,
-          a2CurrentDay, // Include A2 current day
+          a2CurrentDay,
         },
       })
     }
 
-    // No progress data - return defaults
     return NextResponse.json({
       success: true,
       progress: {
@@ -148,17 +135,14 @@ export async function GET() {
         maxXp: TOTAL_XP,
         progressPct: 0,
         completedModules: 0,
-        totalModules: 10,
+        totalModules: MODULE_ORDER.length,
         moduleStates: defaultModuleStates,
         completedModuleIds: [],
-        a2CurrentDay, // Include A2 current day
+        a2CurrentDay,
       },
     })
   } catch (error) {
     console.error('[v0] Error in user-progress:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }
