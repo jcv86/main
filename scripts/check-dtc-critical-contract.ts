@@ -81,7 +81,7 @@ assert.ok(journeyService.includes("A2: '/despega/a2'"))
 assert.ok(!journeyService.includes("A2: '/despega/a2/dashboard'"))
 assert.ok(!journeyService.includes("return '/despega/a2-routes'"))
 
-assert.ok(completeDay.includes('evaluateDay1Submission'))
+assert.ok(completeDay.includes('analyzeA2Day1Submission'))
 assert.ok(completeDay.includes('{ status: 422 }'))
 assert.ok(!completeDay.includes('const rawStatus = submission.passStatus'))
 
