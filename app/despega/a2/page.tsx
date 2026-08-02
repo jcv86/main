@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
+  ArrowRight,
   Calendar,
   CheckCircle2,
   ChevronRight,
@@ -62,6 +63,10 @@ interface A2ValidationSummary {
 interface A2ProgressResponse {
   current_day: number
   highest_unlocked_day: number
+  active_horizon: Horizon
+  next_horizon: Horizon | null
+  extension_available: boolean
+  cycle_complete: boolean
   progress_percentage: number
   completed_tasks: number
   completed_days: number[]
@@ -70,6 +75,14 @@ interface A2ProgressResponse {
   total_tasks: number
   status: string
   route: A2RouteSummary | null
+}
+
+interface ExtendHorizonResponse {
+  success?: boolean
+  activeHorizon?: Horizon
+  currentDay?: number
+  nextPath?: string
+  error?: string
 }
 
 const EMPTY_SUMMARY: A2ValidationSummary = {
@@ -85,6 +98,10 @@ const EMPTY_SUMMARY: A2ValidationSummary = {
 const EMPTY_PROGRESS: A2ProgressResponse = {
   current_day: 1,
   highest_unlocked_day: 1,
+  active_horizon: 30,
+  next_horizon: 60,
+  extension_available: false,
+  cycle_complete: false,
   progress_percentage: 0,
   completed_tasks: 0,
   completed_days: [],
@@ -170,12 +187,6 @@ function validationLabel(record: A2DayRecord | undefined): string | null {
   return 'Entregable validado'
 }
 
-function horizonForDay(day: number): Horizon {
-  if (day > 60) return 90
-  if (day > 30) return 60
-  return 30
-}
-
 export default function A2DashboardPage() {
   const router = useRouter()
   const [group, setGroup] = useState<MissionGroup>('all')
@@ -184,6 +195,8 @@ export default function A2DashboardPage() {
   const [progress, setProgress] = useState<A2ProgressResponse>(EMPTY_PROGRESS)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [extending, setExtending] = useState(false)
+  const [extensionError, setExtensionError] = useState<string | null>(null)
 
   useEffect(() => {
     let active = true
@@ -212,9 +225,7 @@ export default function A2DashboardPage() {
           },
         }
         setProgress(normalized)
-        setHorizon((current) =>
-          Math.max(current, horizonForDay(normalized.current_day)) as Horizon,
-        )
+        setHorizon(normalized.active_horizon)
         setError(null)
       } catch (loadError) {
         console.error('[v0] Error loading A2 dashboard:', loadError)
@@ -314,6 +325,38 @@ export default function A2DashboardPage() {
     },
   ]
 
+  const extendHorizon = async () => {
+    if (!progress.next_horizon || extending) return
+    setExtending(true)
+    setExtensionError(null)
+
+    try {
+      const response = await fetch('/api/a2/extend-horizon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ targetHorizon: progress.next_horizon }),
+      })
+      const payload = (await response.json().catch(() => ({}))) as ExtendHorizonResponse
+
+      if (!response.ok || !payload.nextPath) {
+        throw new Error(payload.error || 'No pudimos extender Tu Ruta.')
+      }
+
+      router.push(payload.nextPath)
+      router.refresh()
+    } catch (extendError) {
+      console.error('[v0] Error extending A2 horizon:', extendError)
+      setExtensionError(
+        extendError instanceof Error
+          ? extendError.message
+          : 'No pudimos extender Tu Ruta.',
+      )
+    } finally {
+      setExtending(false)
+    }
+  }
+
   return (
     <div className="min-h-screen bg-slate-950 p-6 text-white">
       <div className="mx-auto max-w-7xl">
@@ -326,33 +369,91 @@ export default function A2DashboardPage() {
             {progress.route?.description ||
               'Comienza con un ciclo de 30 días y extiéndelo a 60 o 90 según tu contexto y resultados.'}
           </p>
-          {progress.route && (
-            <div className="flex flex-wrap items-center gap-2 pt-2">
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {progress.route && (
               <Badge className="border-cyan-500/30 bg-cyan-500/10 text-cyan-300">
                 {progress.route.name}
               </Badge>
+            )}
+            <Badge className="border-purple-500/30 bg-purple-500/10 text-purple-300">
+              Horizonte activo · {progress.active_horizon} días
+            </Badge>
+            {progress.route && (
               <span className="text-xs text-slate-500">
                 Seleccionada desde tu diagnóstico de Despega Cerebral
               </span>
-            </div>
-          )}
+            )}
+          </div>
         </header>
 
+        {progress.extension_available && progress.next_horizon && (
+          <section className="mb-8 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-500/15 to-cyan-500/5 p-6">
+            <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                  Ciclo de {progress.active_horizon} días completado
+                </p>
+                <h2 className="mt-2 text-2xl font-bold text-white">
+                  Tú decides si Tu Ruta continúa
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-emerald-50/75">
+                  Tu avance queda guardado aquí. Extiende a {progress.next_horizon}{' '}
+                  días solo cuando quieras profundizar el trabajo con nuevas misiones,
+                  acciones reales y checkpoints de Entrenamiento.
+                </p>
+                {extensionError && (
+                  <p className="mt-3 text-sm text-amber-200">{extensionError}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => void extendHorizon()}
+                disabled={extending}
+                className="inline-flex items-center justify-center rounded-xl border border-emerald-400/60 bg-emerald-500/20 px-6 py-4 font-semibold text-emerald-100 transition hover:bg-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {extending
+                  ? 'Extendiendo…'
+                  : `Extender a ${progress.next_horizon} días`}
+                {!extending && <ArrowRight className="ml-2 h-4 w-4" />}
+              </button>
+            </div>
+          </section>
+        )}
+
+        {progress.status === 'completed' && (
+          <section className="mb-8 rounded-2xl border border-purple-500/35 bg-purple-500/10 p-6">
+            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-300">
+              Integración completada
+            </p>
+            <h2 className="mt-2 text-2xl font-bold text-white">
+              Cerraste los 90 días de Tu Ruta
+            </h2>
+            <p className="mt-2 text-sm text-purple-100/70">
+              Tus entregables, checkpoints y evidencia permanecen disponibles para
+              revisión y actualización.
+            </p>
+          </section>
+        )}
+
         <div className="mb-6 flex flex-wrap gap-2">
-          {HORIZONS.map((option) => (
-            <button
-              key={option.value}
-              type="button"
-              onClick={() => setHorizon(option.value)}
-              className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
-                horizon === option.value
-                  ? 'border-cyan-400 bg-cyan-500/15 text-cyan-200'
-                  : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
-              }`}
-            >
-              {option.label}
-            </button>
-          ))}
+          {HORIZONS.map((option) => {
+            const isPreview = option.value > progress.active_horizon
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setHorizon(option.value)}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                  horizon === option.value
+                    ? 'border-cyan-400 bg-cyan-500/15 text-cyan-200'
+                    : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
+                }`}
+              >
+                {option.label}
+                {isPreview ? ' · vista previa' : ''}
+              </button>
+            )
+          })}
         </div>
 
         <section className="mb-6 rounded-xl border border-[rgb(80,160,170)] bg-slate-950 p-6">
