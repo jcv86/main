@@ -85,6 +85,9 @@ jobs:
       - name: A3 canonical active completion contract
         run: npx tsx scripts/check-a3-active-completion-contract.ts
 
+      - name: A3 job decoder contract
+        run: npx tsx scripts/check-a3-job-decoder-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
