@@ -1,8 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { CheckCircle, AlertCircle } from 'lucide-react'
 
 interface Scores {
   clarity: number
@@ -11,10 +11,29 @@ interface Scores {
   actionability: number
 }
 
+interface ServerAnalysis {
+  totalScore: number
+  passed: boolean
+  scores: Scores
+  breakdown: string[]
+  recommendations: string[]
+}
+
 interface A2Day1ScoringProps {
-  routeData: any
-  onComplete: (scores: Scores, totalScore: number, passStatus: 'pass' | 'fail') => Promise<void>
+  routeData: object
+  onComplete: (
+    scores: Scores,
+    totalScore: number,
+    passStatus: 'pass' | 'fail',
+  ) => Promise<void>
   onRevise: () => void
+}
+
+const EMPTY_SCORES: Scores = {
+  clarity: 0,
+  logic: 0,
+  realism: 0,
+  actionability: 0,
 }
 
 export function A2Day1Scoring({
@@ -22,307 +41,241 @@ export function A2Day1Scoring({
   onComplete,
   onRevise,
 }: A2Day1ScoringProps) {
-  const [scores, setScores] = useState<Scores>({
-    clarity: 0,
-    logic: 0,
-    realism: 0,
-    actionability: 0,
-  })
+  const [analysis, setAnalysis] = useState<ServerAnalysis | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [isSubmitting, setIsSubmitting] = useState(false)
-
-  const totalScore = Object.values(scores).reduce((a, b) => a + b, 0)
-  const passStatus = totalScore >= 75 ? 'pass' : 'fail'
+  const [error, setError] = useState<string | null>(null)
 
   useEffect(() => {
-    // Simulate scoring analysis
-    const scoreRoute = async () => {
+    const controller = new AbortController()
+
+    const analyzeRoute = async () => {
       setIsLoading(true)
+      setError(null)
 
-      // Rule-based scoring (in production, this would be from an API)
-      let clarityScore = 0
-      let logicScore = 0
-      let realismScore = 0
-      let actionabilityScore = 0
+      try {
+        const response = await fetch('/api/a2/day1/analyze', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify(routeData),
+          signal: controller.signal,
+        })
+        const result = await response.json()
 
-      // Clarity (0-25 pts)
-      if (routeData.change30Days?.length > 150) clarityScore += 8
-      if (routeData.change30Days?.includes('específico')) clarityScore += 5
-      if (routeData.targetRole?.length > 100) clarityScore += 7
-      if (routeData.targetRole?.toLowerCase().includes('remoto') ||
-          routeData.targetRole?.toLowerCase().includes('híbrido')) {
-        clarityScore += 5
+        if (!response.ok || !result.analysis) {
+          throw new Error(result.error || 'No pudimos analizar tu ruta.')
+        }
+
+        setAnalysis({
+          totalScore: Number(result.analysis.totalScore) || 0,
+          passed: Boolean(result.analysis.passed),
+          scores: result.analysis.scores || EMPTY_SCORES,
+          breakdown: Array.isArray(result.analysis.breakdown)
+            ? result.analysis.breakdown
+            : [],
+          recommendations: Array.isArray(result.analysis.recommendations)
+            ? result.analysis.recommendations
+            : [],
+        })
+      } catch (analysisError) {
+        if (
+          analysisError instanceof DOMException &&
+          analysisError.name === 'AbortError'
+        ) {
+          return
+        }
+        console.error('[v0] Error analyzing Day 1:', analysisError)
+        setError(
+          analysisError instanceof Error
+            ? analysisError.message
+            : 'No pudimos analizar tu ruta.',
+        )
+      } finally {
+        if (!controller.signal.aborted) setIsLoading(false)
       }
-      clarityScore = Math.min(25, clarityScore + 8) // Base score + extra
-
-      // Logic (0-25 pts)
-      if (routeData.gates?.identity?.length > 50) logicScore += 8
-      if (routeData.gates?.evidence?.length > 70) logicScore += 8
-      if (routeData.gates?.material?.length > 60) logicScore += 8
-      if (routeData.gates?.identity && routeData.gates?.evidence && routeData.gates?.material) {
-        logicScore += 3
-      }
-      logicScore = Math.min(25, logicScore)
-
-      // Realism (0-25 pts)
-      const hasTimeframe = routeData.change30Days?.toLowerCase().includes('30') ||
-                           routeData.change30Days?.toLowerCase().includes('próximos')
-      if (hasTimeframe) realismScore += 8
-      if (routeData.targetRole?.toLowerCase().includes('startup') ||
-          routeData.targetRole?.toLowerCase().includes('empresa')) {
-        realismScore += 7
-      }
-      if (!routeData.mainBlocker?.toLowerCase().includes('imposible')) {
-        realismScore += 10
-      }
-      realismScore = Math.min(25, realismScore)
-
-      // Actionability (0-25 pts)
-      if (routeData.gates?.identity?.toLowerCase().includes('debo') ||
-          routeData.gates?.identity?.toLowerCase().includes('necesito')) {
-        actionabilityScore += 8
-      }
-      if (routeData.gates?.evidence?.toLowerCase().includes('historias') ||
-          routeData.gates?.evidence?.toLowerCase().includes('cv')) {
-        actionabilityScore += 8
-      }
-      if (routeData.gates?.material?.toLowerCase().includes('linkedin') ||
-          routeData.gates?.material?.toLowerCase().includes('portfolio')) {
-        actionabilityScore += 8
-      }
-      actionabilityScore = Math.min(25, actionabilityScore)
-
-      // Simulate delay
-      await new Promise((resolve) => setTimeout(resolve, 1500))
-
-      setScores({
-        clarity: Math.max(10, clarityScore),
-        logic: Math.max(10, logicScore),
-        realism: Math.max(10, realismScore),
-        actionability: Math.max(10, actionabilityScore),
-      })
-
-      setIsLoading(false)
     }
 
-    scoreRoute()
+    analyzeRoute()
+    return () => controller.abort()
   }, [routeData])
 
+  const scores = analysis?.scores || EMPTY_SCORES
+  const totalScore = analysis?.totalScore || 0
+  const passStatus: 'pass' | 'fail' = analysis?.passed ? 'pass' : 'fail'
+
   const handleSubmit = async () => {
+    if (!analysis?.passed || isSubmitting) return
+
     setIsSubmitting(true)
+    setError(null)
     try {
       await onComplete(scores, totalScore, passStatus)
-    } catch (error) {
-      console.error('[v0] Error submitting scores:', error)
+    } catch (submitError) {
+      console.error('[v0] Error submitting Day 1:', submitError)
+      setError(
+        submitError instanceof Error
+          ? submitError.message
+          : 'No pudimos desbloquear el Día 2.',
+      )
       setIsSubmitting(false)
     }
   }
 
   if (isLoading) {
     return (
-      <div className="max-w-3xl mx-auto px-4 space-y-6">
-        <div
-          className="rounded-lg p-8 space-y-4"
-          style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)' }}
-        >
-          <div className="flex items-center gap-3 mb-4">
-            <div className="w-5 h-5 animate-spin rounded-full border-2 border-[rgba(80,160,170,0.2)] border-t-[rgba(80,160,170,0.8)]"></div>
-            <p className="text-white font-semibold">Analizando tu ruta...</p>
+      <div className="mx-auto max-w-3xl space-y-6 px-4">
+        <div className="space-y-4 rounded-lg bg-[rgba(90,90,150,0.1)] p-8">
+          <div className="flex items-center gap-3">
+            <Loader2 className="h-5 w-5 animate-spin text-cyan-300" />
+            <p className="font-semibold text-white">DTC está analizando tu ruta…</p>
           </div>
+          <div className="h-3 overflow-hidden rounded-full bg-white/10">
+            <div className="h-full w-3/5 animate-pulse bg-gradient-to-r from-purple-500/40 to-cyan-400/80" />
+          </div>
+          <p className="text-xs text-white/50">
+            Evaluando claridad, hitos, realismo y accionabilidad.
+          </p>
+        </div>
+      </div>
+    )
+  }
 
-          <div className="space-y-2">
-            <div className="h-3 bg-white/10 rounded-full overflow-hidden">
-              <div
-                className="h-full bg-gradient-to-r"
-                style={{
-                  background: 'linear-gradient(90deg, rgba(90,90,150,0.4), rgba(90,90,150,0.8))',
-                  animation: 'pulse 2s infinite',
-                  width: '60%',
-                }}
-              ></div>
+  if (error && !analysis) {
+    return (
+      <div className="mx-auto max-w-3xl space-y-4 px-4">
+        <div className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-5">
+          <div className="flex items-start gap-3">
+            <AlertCircle className="mt-0.5 h-5 w-5 text-amber-300" />
+            <div>
+              <p className="font-semibold text-white">No pudimos evaluar tu ruta</p>
+              <p className="mt-1 text-sm text-white/70">{error}</p>
             </div>
-            <p className="text-xs text-white/50">Evaluando 4 dimensiones...</p>
           </div>
         </div>
+        <Button onClick={() => window.location.reload()} className="w-full">
+          Reintentar análisis
+        </Button>
       </div>
     )
   }
 
   const dimensions = [
     {
-      name: 'Claridad de Visión',
-      description: '¿Tu objetivo está claramente articulado?',
+      name: 'Claridad de visión',
+      description: 'Objetivo, resultado y entorno claramente definidos.',
       score: scores.clarity,
-      color: 'rgb(90, 90, 150)',
     },
     {
-      name: 'Lógica de Hitos',
-      description: '¿Las 3 puertas progresivas y coherentes?',
+      name: 'Lógica de hitos',
+      description: 'Progresión concreta entre los hitos de la ruta.',
       score: scores.logic,
-      color: 'rgb(100, 120, 160)',
     },
     {
       name: 'Realismo',
-      description: '¿Alcanzable en 30 días?',
+      description: 'Coherencia y factibilidad del ciclo inicial.',
       score: scores.realism,
-      color: 'rgb(110, 130, 170)',
     },
     {
       name: 'Accionabilidad',
-      description: '¿Puedo convertir en acciones?',
+      description: 'Contenido suficiente para convertirlo en acciones.',
       score: scores.actionability,
-      color: 'rgb(80, 160, 170)',
     },
   ]
 
   return (
-    <div className="max-w-3xl mx-auto px-4 space-y-6">
-      {/* Total Score */}
+    <div className="mx-auto max-w-3xl space-y-6 px-4">
       <div
-        className="rounded-lg p-8 text-center space-y-4"
-        style={{
-          backgroundColor: passStatus === 'pass'
-            ? 'rgba(80, 160, 170, 0.1)'
-            : 'rgba(239, 68, 68, 0.1)',
-          borderColor: passStatus === 'pass'
-            ? 'rgba(80, 160, 170, 0.2)'
-            : 'rgba(239, 68, 68, 0.2)',
-          border: '1px solid',
-        }}
+        className={`space-y-4 rounded-lg border p-8 text-center ${
+          passStatus === 'pass'
+            ? 'border-cyan-400/30 bg-cyan-400/10'
+            : 'border-amber-400/30 bg-amber-400/10'
+        }`}
       >
-        <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="flex items-center justify-center gap-2">
           {passStatus === 'pass' ? (
-            <>
-              <CheckCircle className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
-              <h2 className="text-2xl font-bold text-white">¡DÍA 1 APROBADO!</h2>
-            </>
+            <CheckCircle className="h-6 w-6 text-cyan-300" />
           ) : (
-            <>
-              <AlertCircle className="w-6 h-6" style={{ color: 'rgb(239, 68, 68)' }} />
-              <h2 className="text-2xl font-bold text-white">Tu Ruta Todavía Necesita Trabajo</h2>
-            </>
+            <AlertCircle className="h-6 w-6 text-amber-300" />
           )}
+          <h2 className="text-2xl font-bold text-white">
+            {passStatus === 'pass'
+              ? 'Día 1 aprobado'
+              : 'Tu ruta necesita una revisión'}
+          </h2>
         </div>
-
-        <div className="space-y-1">
+        <div>
           <p className="text-4xl font-bold text-white">{totalScore}</p>
-          <p className="text-sm text-white/70">/ 100 puntos</p>
-          {passStatus === 'pass' && (
-            <p className="text-sm text-white/70 mt-3">
-              Tu ruta es clara, lógica y alcanzable. ¡Desbloqueas Día 2!
-            </p>
-          )}
-          {passStatus === 'fail' && (
-            <p className="text-sm text-white/70 mt-3">
-              Necesitas {75 - totalScore} puntos más. Revisa los comentarios abajo.
-            </p>
-          )}
+          <p className="text-sm text-white/70">de 100 puntos · mínimo 75</p>
         </div>
+        <p className="text-sm text-white/70">
+          {passStatus === 'pass'
+            ? 'La evaluación del servidor habilitó el desbloqueo del Día 2.'
+            : `Faltan ${Math.max(0, 75 - totalScore)} puntos para continuar.`}
+        </p>
       </div>
 
-      {/* Score Breakdown */}
       <div className="space-y-4">
-        <p className="font-semibold text-white">Desglose por Dimensión:</p>
-
-        {dimensions.map((dim) => (
-          <div key={dim.name} className="space-y-2">
-            <div className="flex items-center justify-between">
+        <p className="font-semibold text-white">Evaluación por dimensión</p>
+        {dimensions.map((dimension) => (
+          <div key={dimension.name} className="space-y-2">
+            <div className="flex items-center justify-between gap-4">
               <div>
-                <p className="font-semibold text-white text-sm">{dim.name}</p>
-                <p className="text-xs text-white/50">{dim.description}</p>
+                <p className="text-sm font-semibold text-white">{dimension.name}</p>
+                <p className="text-xs text-white/50">{dimension.description}</p>
               </div>
-              <p className="text-lg font-bold" style={{ color: dim.color }}>
-                {dim.score}/25
+              <p className="text-lg font-bold text-cyan-300">
+                {dimension.score}/25
               </p>
             </div>
-
-            <div className="w-full h-2 bg-white/10 rounded-full overflow-hidden">
+            <div className="h-2 overflow-hidden rounded-full bg-white/10">
               <div
-                className="h-full transition-all"
-                style={{ width: `${(dim.score / 25) * 100}%`, backgroundColor: dim.color }}
-              ></div>
+                className="h-full bg-gradient-to-r from-purple-500 to-cyan-400"
+                style={{ width: `${Math.min(100, dimension.score * 4)}%` }}
+              />
             </div>
           </div>
         ))}
       </div>
 
-      {/* Coach Feedback */}
-      {passStatus === 'pass' && (
-        <div
-          className="rounded-lg p-4 space-y-3"
-          style={{
-            backgroundColor: 'rgba(80, 160, 170, 0.1)',
-            borderColor: 'rgba(80, 160, 170, 0.2)',
-            border: '1px solid',
-          }}
-        >
-          <p className="font-semibold text-white">Retroalimentación del Coach:</p>
-          <ul className="text-sm text-white/70 space-y-2 ml-4">
-            <li>✓ Tu visión está clara y es específica.</li>
-            <li>✓ Las 3 puertas crean una progresión lógica.</li>
-            <li>✓ Tu objetivo es realista para 30 días.</li>
-            <li>✓ Cada puerta es accionable y verificable.</li>
+      {analysis?.recommendations.length ? (
+        <div className="rounded-lg border border-amber-500/25 bg-amber-500/5 p-4">
+          <p className="font-semibold text-white">Puntos a fortalecer</p>
+          <ul className="mt-2 space-y-1 text-sm text-white/70">
+            {analysis.recommendations.map((recommendation) => (
+              <li key={recommendation}>• {recommendation}</li>
+            ))}
           </ul>
         </div>
-      )}
-
-      {passStatus === 'fail' && (
-        <div
-          className="rounded-lg p-4 space-y-3"
-          style={{
-            backgroundColor: 'rgba(239, 68, 68, 0.1)',
-            borderColor: 'rgba(239, 68, 68, 0.2)',
-            border: '1px solid',
-          }}
-        >
-          <p className="font-semibold text-white">Áreas a Mejorar:</p>
-          {totalScore < 20 && (
-            <p className="text-sm text-white/70">Tu ruta es demasiado abstracta. Sé más específico.</p>
-          )}
-          {scores.clarity < 15 && (
-            <p className="text-sm text-white/70">Agrega más detalles a tu visión de cambio.</p>
-          )}
-          {scores.logic < 15 && (
-            <p className="text-sm text-white/70">Las 3 puertas no son lo suficientemente progresivas.</p>
-          )}
-          {scores.realism < 15 && (
-            <p className="text-sm text-white/70">Tu objetivo podría ser más realista para 30 días.</p>
-          )}
+      ) : (
+        <div className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 p-4">
+          <p className="font-semibold text-white">Evaluación consistente</p>
+          <p className="mt-1 text-sm text-white/70">
+            La ruta contiene suficiente claridad, evidencia y progresión para iniciar.
+          </p>
         </div>
       )}
 
-      {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
-        {passStatus === 'pass' && (
+      {error && (
+        <p className="rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-200">
+          {error}
+        </p>
+      )}
+
+      <div className="space-y-3 border-t border-cyan-500/20 pt-4">
+        {passStatus === 'pass' ? (
           <Button
             onClick={handleSubmit}
             disabled={isSubmitting}
             className="w-full"
             size="lg"
-            style={{ backgroundColor: 'rgb(90, 90, 150)', color: 'white' }}
           >
-            {isSubmitting ? 'Guardando...' : 'Desbloquear Día 2 →'}
+            {isSubmitting ? 'Guardando…' : 'Desbloquear Día 2'}
           </Button>
-        )}
-
-        {passStatus === 'fail' && (
-          <div className="space-y-2">
-            <Button
-              onClick={onRevise}
-              className="w-full"
-              size="lg"
-              style={{ backgroundColor: 'rgb(90, 90, 150)', color: 'white' }}
-            >
-              Revisar con Coach
-            </Button>
-            <Button
-              onClick={() => window.location.reload()}
-              variant="outline"
-              style={{ borderColor: 'rgba(80, 160, 170, 0.2)', color: 'white' }}
-            >
-              Cargar Documento Editado
-            </Button>
-          </div>
+        ) : (
+          <Button onClick={onRevise} className="w-full" size="lg">
+            Revisar mi contrato de ruta
+          </Button>
         )}
       </div>
     </div>

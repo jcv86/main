@@ -4,6 +4,12 @@ import { resolveServerUser } from '@/lib/auth/server-user'
 import { A2_DAYS } from '@/lib/a2-days-config'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
+import {
+  analyzeA2Day1Submission,
+  buildDay1PersistencePayload,
+  type Day1Analysis,
+  type Day1Input,
+} from '@/lib/a2/day1-scoring'
 
 interface CompleteDayBody {
   dayNumber?: unknown
@@ -17,55 +23,25 @@ function phaseForDay(day: number): number {
   return 4
 }
 
-function objectValue(value: unknown): Record<string, any> {
+function objectValue(value: unknown): Day1Input {
   return value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as Record<string, any>)
+    ? (value as Day1Input)
     : {}
 }
 
-function stringValue(value: unknown): string | null {
-  return typeof value === 'string' && value.trim() ? value.trim() : null
-}
-
 async function persistDay1Submission(
-  supabase: any,
+  supabase: ReturnType<typeof createAdminClient>,
   userId: string,
-  submission: Record<string, any>,
+  submission: Day1Input,
+  analysis: Day1Analysis,
   now: string,
 ) {
-  const totalScore = Number(submission.totalScore)
-  const hasScore = Number.isFinite(totalScore)
-  const rawStatus = submission.passStatus
-  const passFailStatus =
-    rawStatus === 'pass' ? 'pass' : rawStatus === 'fail' ? 'needs_revision' : null
-
-  const payload = {
-    user_id: userId,
-    vision_role: stringValue(submission.targetRole),
-    vision_environment:
-      stringValue(submission.hypothesis) || stringValue(submission.mainBlocker),
-    vision_desired_outcome: stringValue(submission.change30Days),
-    milestone_day10: stringValue(submission.gates?.identity),
-    milestone_day20: stringValue(submission.gates?.evidence),
-    milestone_day30:
-      stringValue(submission.roadmap) || stringValue(submission.gates?.material),
-    action_plan: submission,
-    analysis_score: hasScore
-      ? Math.max(0, Math.min(100, Math.round(totalScore)))
-      : null,
-    analysis_result: {
-      scores: submission.scores || null,
-      gates: submission.gates || null,
-      roadmap: submission.roadmap || null,
-    },
-    analysis_status: hasScore ? 'completed' : 'pending',
-    pass_fail_status: passFailStatus,
-    current_step: 8,
-    completed_steps: [1, 2, 3, 4, 5, 6, 7, 8],
-    completed_at: passFailStatus === 'pass' ? now : null,
-    updated_at: now,
-  }
-
+  const payload = buildDay1PersistencePayload(
+    userId,
+    submission,
+    analysis,
+    now,
+  )
   const { data: existing, error: lookupError } = await supabase
     .from('a2_day1_submissions')
     .select('id')
@@ -74,19 +50,19 @@ async function persistDay1Submission(
     .limit(1)
     .maybeSingle()
 
-  if (lookupError) {
-    console.error('[v0] Error reading Day 1 submission:', lookupError)
-    return
-  }
+  if (lookupError) throw lookupError
 
   const { error } = existing
-    ? await supabase.from('a2_day1_submissions').update(payload).eq('id', existing.id)
+    ? await supabase
+        .from('a2_day1_submissions')
+        .update(payload)
+        .eq('id', existing.id)
     : await supabase.from('a2_day1_submissions').insert({
         ...payload,
         created_at: now,
       })
 
-  if (error) console.error('[v0] Error saving Day 1 submission:', error)
+  if (error) throw error
 }
 
 export async function POST(request: Request) {
@@ -146,6 +122,58 @@ export async function POST(request: Request) {
       )
     }
 
+    let day1Analysis: Day1Analysis | null = null
+    if (day === 1) {
+      if (Object.keys(submission).length === 0) {
+        return NextResponse.json(
+          { error: 'Completa el contrato de ruta antes de desbloquear el Día 2.' },
+          { status: 400 },
+        )
+      }
+
+      day1Analysis = analyzeA2Day1Submission(userId, submission)
+
+      if (!day1Analysis.passed) {
+        if (!existingCompletion) {
+          try {
+            await persistDay1Submission(
+              supabase,
+              userId,
+              submission,
+              day1Analysis,
+              now,
+            )
+          } catch (saveError) {
+            console.error('[v0] Error saving Day 1 revision:', saveError)
+          }
+        }
+
+        return NextResponse.json(
+          {
+            error: 'Tu contrato de ruta necesita revisión antes de avanzar.',
+            analysis: day1Analysis,
+          },
+          { status: 422 },
+        )
+      }
+
+      try {
+        await persistDay1Submission(
+          supabase,
+          userId,
+          submission,
+          day1Analysis,
+          now,
+        )
+      } catch (saveError) {
+        console.error('[v0] Error saving approved Day 1:', saveError)
+        return NextResponse.json(
+          { error: 'No pudimos guardar la evaluación del Día 1.' },
+          { status: 500 },
+        )
+      }
+    }
+
     const taskTitle = A2_DAYS[day]?.title || `Día ${day}`
     const { error: completionError } = existingCompletion
       ? await supabase
@@ -173,10 +201,6 @@ export async function POST(request: Request) {
         { error: 'No pudimos registrar el avance. Intenta nuevamente.' },
         { status: 500 },
       )
-    }
-
-    if (day === 1 && Object.keys(submission).length > 0) {
-      await persistDay1Submission(supabase, userId, submission, now)
     }
 
     const { data: completions, error: completionsError } = await supabase
@@ -305,6 +329,7 @@ export async function POST(request: Request) {
 
     return NextResponse.json({
       success: true,
+      analysis: day1Analysis,
       progression: {
         day,
         alreadyCompleted: Boolean(existingCompletion),
