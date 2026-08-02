@@ -60,3 +60,6 @@ jobs:
           fi
 
           echo "Only pre-existing TypeScript errors remain outside this pull request."
+
+      - name: A2 Day 1 scoring invariants
+        run: npx tsx scripts/check-a2-day1-scoring.ts
