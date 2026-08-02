@@ -1,7 +1,18 @@
 begin;
 
-alter table public.a3_route_progression
-  add constraint a3_route_progression_user_id_key unique (user_id);
+do $$
+begin
+  if not exists (
+    select 1
+      from pg_constraint
+     where conrelid = 'public.a3_route_progression'::regclass
+       and conname = 'a3_route_progression_user_id_key'
+  ) then
+    alter table public.a3_route_progression
+      add constraint a3_route_progression_user_id_key unique (user_id);
+  end if;
+end;
+$$;
 
 create or replace function public.complete_a3_module_atomic(
   p_user_id uuid,
@@ -37,8 +48,20 @@ declare
   v_completion_id uuid;
   v_progression_id uuid;
 begin
+  if p_user_id is null then
+    raise exception 'user id is required';
+  end if;
+
+  if nullif(btrim(p_module_id), '') is null then
+    raise exception 'module id is required';
+  end if;
+
   if p_module_number < 1 or p_module_number > 10 then
     raise exception 'invalid module number';
+  end if;
+
+  if p_checkpoint_day < 1 or p_checkpoint_day > 90 then
+    raise exception 'invalid checkpoint day';
   end if;
 
   if p_score < 0 or p_score > 100 then
@@ -102,7 +125,7 @@ begin
     'completed',
     100,
     p_score,
-    p_feedback::text,
+    coalesce(p_feedback, '{}'::jsonb)::text,
     jsonb_build_object('responses', coalesce(p_responses, '[]'::jsonb)),
     coalesce(p_deliverable, '{}'::jsonb),
     v_now,
@@ -210,7 +233,7 @@ begin
   end if;
 
   v_module_states := v_module_states || jsonb_build_object(p_module_id, 'completed');
-  if p_next_module_id is not null and p_next_module_id <> '' then
+  if nullif(btrim(coalesce(p_next_module_id, '')), '') is not null then
     if coalesce(v_module_states ->> p_next_module_id, 'locked') = 'locked' then
       v_module_states := v_module_states
         || jsonb_build_object(p_next_module_id, 'available');
@@ -232,7 +255,7 @@ begin
     v_module_states,
     v_completed_ids,
     v_total_xp,
-    coalesce(nullif(p_next_module_id, ''), p_module_id),
+    coalesce(nullif(btrim(coalesce(p_next_module_id, '')), ''), p_module_id),
     v_now,
     v_now
   )
