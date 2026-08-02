@@ -52,6 +52,8 @@ const legacyA2Dashboard = source('app/despega/a2/dashboard/page.tsx')
 const legacyJourney = source('app/despega/journey/page.tsx')
 const legacyJourneySummary = source('app/despega/journey-summary/page.tsx')
 const a2Sidebar = source('components/a2-progress-sidebar.tsx')
+const a2DayTemplate = source('components/a2-day-page-template.tsx')
+const a2ClientCompletion = source('lib/a2/client-completion.ts')
 const journeyService = source('lib/journey/service.ts')
 const completeDay = source('app/api/a2/complete-day/route.ts')
 const xpActivity = source('app/api/gamification/xp-activity/route.ts')
@@ -106,6 +108,26 @@ assert.ok(!a2Sidebar.includes('refreshInterval: 5000'))
 assert.ok(!a2Sidebar.includes('Mes {month.month}'))
 assert.ok(!a2Sidebar.includes('setExpandedMonth(currentMonth)'))
 
+assert.ok(a2ClientCompletion.includes("credentials: 'include'"))
+assert.ok(a2ClientCompletion.includes("fetch('/api/a2/complete-day'"))
+assert.ok(a2ClientCompletion.includes('payload.progression?.nextDay'))
+assert.ok(a2ClientCompletion.includes('nextDay > dayNumber'))
+assert.ok(a2DayTemplate.includes('completeA2Day(dayNumber)'))
+assert.ok(a2DayTemplate.includes('router.push(result.nextPath)'))
+assert.ok(!a2DayTemplate.includes('/despega/a2#dia-'))
+assert.ok(!a2DayTemplate.includes('Checkpoint A3'))
+
+for (let day = 1; day <= 10; day += 1) {
+  const dayPage = source(`app/despega/a2/dia-${day}/page.tsx`)
+  assert.ok(dayPage.includes("import { completeA2Day } from '@/lib/a2/client-completion'"))
+  assert.ok(dayPage.includes('await completeA2Day(DIA_NUM, submission)'))
+  assert.ok(dayPage.includes('router.push(result.nextPath)'))
+  assert.ok(!dayPage.includes('if (user?.id)'))
+  assert.ok(!dayPage.includes('/despega/a2-routes'))
+  assert.ok(!dayPage.includes('setTimeout(resolve => setTimeout'))
+  assert.ok(!dayPage.includes('500'))
+}
+
 assert.ok(journeyService.includes("A2: '/despega/a2'"))
 assert.ok(!journeyService.includes("A2: '/despega/a2/dashboard'"))
 assert.ok(!journeyService.includes("return '/despega/a2-routes'"))
@@ -127,6 +149,7 @@ console.log(
     canonicalProfile: true,
     legacyJourneyRedirects: true,
     canonicalA2Cycles: ['30', '60', '90'],
+    canonicalDayCompletion: true,
     day1ServerScoring: true,
     publicXpWritesDisabled: true,
   }),
