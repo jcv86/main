@@ -73,5 +73,8 @@ jobs:
       - name: A2 cycle review contract
         run: npx tsx scripts/check-a2-cycle-review-contract.ts
 
+      - name: A2 route adaptation contract
+        run: npx tsx scripts/check-a2-route-adaptation-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
