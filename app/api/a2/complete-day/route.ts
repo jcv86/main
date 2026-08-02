@@ -1,9 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
-import { A2_DAYS } from '@/lib/a2-days-config'
+import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
+import {
+  requiresUniversalA2Submission,
+  validateA2MissionSubmission,
+  type A2MissionValidationResult,
+} from '@/lib/a2/day-submission'
 import {
   analyzeA2Day1Submission,
   buildDay1PersistencePayload,
@@ -16,6 +21,23 @@ interface CompleteDayBody {
   submission?: unknown
 }
 
+const NUMERIC_TO_SLUG: Record<string, string> = {
+  'module-1': 'career-mirror',
+  'module-2': 'value-mining-lab',
+  'module-3': 'cv-builder-studio',
+  'module-4': 'job-decoder',
+  'module-5': 'answer-architecture',
+  'module-6': 'coach-practice-room',
+  'module-7': 'communication-gym',
+  'module-8': 'first-recruiter-simulation',
+  'module-9': 'risk-difficult-questions-lab',
+  'module-10': 'basic-interview-mission',
+}
+
+function normalizeModuleId(id: string): string {
+  return NUMERIC_TO_SLUG[id] ?? id
+}
+
 function phaseForDay(day: number): number {
   if (day <= 10) return 1
   if (day <= 30) return 2
@@ -23,10 +45,22 @@ function phaseForDay(day: number): number {
   return 4
 }
 
-function objectValue(value: unknown): Day1Input {
+function objectValue(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as Day1Input)
+    ? (value as Record<string, unknown>)
     : {}
+}
+
+function completedModuleIds(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+
+  return Array.from(
+    new Set(
+      value
+        .filter((item): item is string => typeof item === 'string')
+        .map(normalizeModuleId),
+    ),
+  )
 }
 
 async function persistDay1Submission(
@@ -88,6 +122,14 @@ export async function POST(request: Request) {
       )
     }
 
+    const mission = A2_DAILY_MISSIONS[day]
+    if (!mission) {
+      return NextResponse.json(
+        { error: 'La misión solicitada no está configurada.' },
+        { status: 404 },
+      )
+    }
+
     const submission = objectValue(body.submission)
     const userId = currentUser.id
     const supabase = createAdminClient()
@@ -105,24 +147,110 @@ export async function POST(request: Request) {
       )
     }
 
-    const { data: existingCompletion, error: completionLookupError } =
-      await supabase
+    const [completionLookup, previousCompletionsResult] = await Promise.all([
+      supabase
         .from('a2_user_task_completions')
         .select('id')
         .eq('user_id', userId)
         .eq('day', day)
         .limit(1)
-        .maybeSingle()
+        .maybeSingle(),
+      supabase
+        .from('a2_user_task_completions')
+        .select('day')
+        .eq('user_id', userId)
+        .not('completed_at', 'is', null),
+    ])
 
-    if (completionLookupError) {
-      console.error('[v0] Error checking A2 completion:', completionLookupError)
+    if (completionLookup.error) {
+      console.error('[v0] Error checking A2 completion:', completionLookup.error)
       return NextResponse.json(
         { error: 'No pudimos verificar el avance.' },
         { status: 500 },
       )
     }
+    if (previousCompletionsResult.error) {
+      console.error(
+        '[v0] Error checking A2 prerequisites:',
+        previousCompletionsResult.error,
+      )
+      return NextResponse.json(
+        { error: 'No pudimos verificar los prerrequisitos del día.' },
+        { status: 500 },
+      )
+    }
+
+    const existingCompletion = completionLookup.data
+    const completedBefore = new Set(
+      (previousCompletionsResult.data || [])
+        .map((completion) => Number(completion.day))
+        .filter((completedDay) => Number.isInteger(completedDay)),
+    )
+
+    const requiredPreviousDay = mission.unlockRequirements.requiredPreviousDay
+    if (
+      !existingCompletion &&
+      requiredPreviousDay &&
+      !completedBefore.has(requiredPreviousDay)
+    ) {
+      return NextResponse.json(
+        {
+          error: `Completa primero el Día ${requiredPreviousDay}.`,
+          requiredPreviousDay,
+        },
+        { status: 409 },
+      )
+    }
+
+    const requiredA3Modules = Array.from(
+      new Set(
+        [
+          ...(mission.unlockRequirements.requiredCompletedA3Modules || []),
+          ...(mission.a3Checkpoint ? [mission.a3Checkpoint.moduleId] : []),
+        ].map(normalizeModuleId),
+      ),
+    )
+
+    if (!existingCompletion && requiredA3Modules.length > 0) {
+      const { data: a3Progress, error: a3ProgressError } = await supabase
+        .from('a3_user_progress')
+        .select('completed_module_ids')
+        .eq('user_id', userId)
+        .maybeSingle()
+
+      if (a3ProgressError) {
+        console.error('[v0] Error checking A3 prerequisites:', a3ProgressError)
+        return NextResponse.json(
+          { error: 'No pudimos verificar tu progreso de Entrenamiento.' },
+          { status: 500 },
+        )
+      }
+
+      const completedA3Modules = completedModuleIds(
+        a3Progress?.completed_module_ids,
+      )
+      const missingA3Modules = requiredA3Modules.filter(
+        (moduleId) => !completedA3Modules.includes(moduleId),
+      )
+
+      if (missingA3Modules.length > 0) {
+        return NextResponse.json(
+          {
+            error: mission.a3Checkpoint
+              ? `Completa ${mission.a3Checkpoint.moduleTitle} antes de cerrar este día.`
+              : 'Completa los entrenamientos requeridos antes de avanzar.',
+            requiredModules: requiredA3Modules,
+            missingModules: missingA3Modules,
+            checkpoint: mission.a3Checkpoint || null,
+          },
+          { status: 409 },
+        )
+      }
+    }
 
     let day1Analysis: Day1Analysis | null = null
+    let missionValidation: A2MissionValidationResult | null = null
+
     if (day === 1) {
       if (Object.keys(submission).length === 0) {
         return NextResponse.json(
@@ -131,7 +259,10 @@ export async function POST(request: Request) {
         )
       }
 
-      day1Analysis = analyzeA2Day1Submission(userId, submission)
+      day1Analysis = analyzeA2Day1Submission(
+        userId,
+        submission as Day1Input,
+      )
 
       if (!day1Analysis.passed) {
         if (!existingCompletion) {
@@ -139,7 +270,7 @@ export async function POST(request: Request) {
             await persistDay1Submission(
               supabase,
               userId,
-              submission,
+              submission as Day1Input,
               day1Analysis,
               now,
             )
@@ -161,7 +292,7 @@ export async function POST(request: Request) {
         await persistDay1Submission(
           supabase,
           userId,
-          submission,
+          submission as Day1Input,
           day1Analysis,
           now,
         )
@@ -172,28 +303,73 @@ export async function POST(request: Request) {
           { status: 500 },
         )
       }
+    } else if (requiresUniversalA2Submission(mission)) {
+      missionValidation = validateA2MissionSubmission(mission, submission)
+
+      if (!missionValidation.passed) {
+        return NextResponse.json(
+          {
+            error: 'El entregable necesita ajustes antes de avanzar.',
+            validation: missionValidation,
+          },
+          { status: 422 },
+        )
+      }
     }
 
-    const taskTitle = A2_DAYS[day]?.title || `Día ${day}`
+    const validationStatus =
+      day === 1
+        ? 'specialized'
+        : mission.missionType === 'a3_checkpoint'
+          ? 'checkpoint'
+          : requiresUniversalA2Submission(mission)
+            ? 'structural'
+            : 'specialized'
+    const persistedSubmission = missionValidation?.normalized || submission
+    const persistedValidation =
+      missionValidation ||
+      (day1Analysis
+        ? {
+            passed: day1Analysis.passed,
+            score: day1Analysis.totalScore,
+            passScore: 75,
+            mode: 'specialized_day_1',
+            feedback: day1Analysis.feedback,
+            strengths: day1Analysis.strengths,
+            improvements: day1Analysis.improvements,
+          }
+        : {
+            passed: true,
+            score: 100,
+            passScore: 100,
+            mode:
+              mission.missionType === 'a3_checkpoint'
+                ? 'checkpoint'
+                : 'specialized_experience',
+          })
+
+    const completionPayload = {
+      phase: phaseForDay(day),
+      task_title: mission.title,
+      mission_type: mission.missionType,
+      submission: persistedSubmission,
+      validation_status: validationStatus,
+      validation_result: persistedValidation,
+      completed_at: now,
+      updated_at: now,
+    }
+
     const { error: completionError } = existingCompletion
       ? await supabase
           .from('a2_user_task_completions')
-          .update({
-            phase: phaseForDay(day),
-            task_title: taskTitle,
-            completed_at: now,
-            updated_at: now,
-          })
+          .update(completionPayload as any)
           .eq('id', existingCompletion.id)
       : await supabase.from('a2_user_task_completions').insert({
           user_id: userId,
-          phase: phaseForDay(day),
           day,
-          task_title: taskTitle,
-          completed_at: now,
           created_at: now,
-          updated_at: now,
-        })
+          ...completionPayload,
+        } as any)
 
     if (completionError) {
       console.error('[v0] Error marking A2 day complete:', completionError)
@@ -330,6 +506,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       analysis: day1Analysis,
+      validation: missionValidation,
       progression: {
         day,
         alreadyCompleted: Boolean(existingCompletion),
