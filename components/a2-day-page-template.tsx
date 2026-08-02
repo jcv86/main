@@ -33,7 +33,11 @@ interface A2DayPageTemplateProps {
   children?: React.ReactNode
   mission?: Partial<A2DailyMission>
   userId?: string
-  routeContext?: any
+  routeContext?: {
+    c1?: { targetRole?: string; industry?: string }
+    a1?: { communicationStyle?: string }
+    c2?: { achievements?: unknown[] }
+  }
 }
 
 const EMPTY_SUBMISSION: A2MissionSubmission = {
@@ -118,10 +122,15 @@ export function A2DayPageTemplate({
   const [completionError, setCompletionError] = useState<string | null>(null)
   const [submission, setSubmission] = useState<A2MissionSubmission>(EMPTY_SUBMISSION)
   const [draftReady, setDraftReady] = useState(false)
-  const configMission = A2_DAILY_MISSIONS[dayNumber]
-  const mission = configMission
-    ? ({ ...configMission, ...customMission } as A2DailyMission)
-    : null
+
+  const mission = useMemo(() => {
+    const configured = A2_DAILY_MISSIONS[dayNumber]
+    if (!configured) return null
+    return customMission
+      ? ({ ...configured, ...customMission } as A2DailyMission)
+      : configured
+  }, [customMission, dayNumber])
+
   const checkpoint = getA3CheckpointForDay(dayNumber)
   const needsEvidence = Boolean(
     mission && !children && requiresUniversalA2Submission(mission),
@@ -146,6 +155,9 @@ export function A2DayPageTemplate({
   )
 
   useEffect(() => {
+    setSubmission(EMPTY_SUBMISSION)
+    setDraftReady(false)
+
     if (!mission || !needsEvidence) {
       setDraftReady(true)
       return
@@ -164,11 +176,14 @@ export function A2DayPageTemplate({
     } finally {
       setDraftReady(true)
     }
-  }, [draftKey, mission, needsEvidence])
+    // The mission is canonically determined by dayNumber. Keeping this effect
+    // tied to the day prevents a controlled textarea edit from restoring an
+    // older draft during the same render cycle.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [dayNumber, draftKey, needsEvidence])
 
   useEffect(() => {
     if (!draftReady || !needsEvidence) return
-
     window.localStorage.setItem(draftKey, JSON.stringify(submission))
   }, [draftKey, draftReady, needsEvidence, submission])
 
@@ -180,10 +195,7 @@ export function A2DayPageTemplate({
           <p className="mb-4 text-slate-400">
             El día {dayNumber} no existe en la configuración.
           </p>
-          <Button
-            onClick={() => router.push('/despega/a2')}
-            className="border border-purple-500/80 bg-purple-600/70 text-white transition-all duration-200 hover:border-purple-500 hover:bg-purple-600/90"
-          >
+          <Button onClick={() => router.push('/despega/a2')}>
             Volver a Tu Ruta
           </Button>
         </div>
@@ -194,9 +206,11 @@ export function A2DayPageTemplate({
   const prevDay = dayNumber > 1 ? dayNumber - 1 : null
   const nextDay = dayNumber < 90 ? dayNumber + 1 : null
   const typeInfo = taskTypeLabels[mission.missionType] || taskTypeLabels.builder
+  const completionDisabled =
+    isCompleting || (needsEvidence && !liveValidation.passed)
 
   const completeGenericDay = async () => {
-    if (isCompleting) return
+    if (completionDisabled) return
     setIsCompleting(true)
     setCompletionError(null)
 
@@ -219,57 +233,34 @@ export function A2DayPageTemplate({
     }
   }
 
-  const completionDisabled =
-    isCompleting || (needsEvidence && !liveValidation.passed)
-
   return (
     <div className="min-h-screen bg-background">
-      <div
-        className="border-b"
-        style={{
-          backgroundColor: 'rgba(90, 90, 150, 0)',
-          borderColor: 'rgba(80, 160, 170, 0.2)',
-        }}
-      >
-        <div className="mx-auto max-w-4xl px-4 py-6">
-          <div className="flex items-center justify-between gap-4">
-            <div className="flex flex-wrap items-center gap-3">
-              <Badge
-                className="text-white"
-                style={{
-                  backgroundColor: 'rgba(90, 90, 150, 0.8)',
-                  borderColor: 'rgba(80, 160, 170, 0.2)',
-                }}
-              >
-                Día {dayNumber}
+      <header className="border-b border-[rgba(80,160,170,0.2)]">
+        <div className="mx-auto flex max-w-4xl items-center justify-between gap-4 px-4 py-6">
+          <div className="flex flex-wrap items-center gap-3">
+            <Badge className="bg-purple-600/80 text-white">Día {dayNumber}</Badge>
+            <Badge className={typeInfo.color}>
+              {typeInfo.icon}
+              <span className="ml-1">{typeInfo.label}</span>
+            </Badge>
+            {checkpoint && (
+              <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
+                Checkpoint de Entrenamiento
               </Badge>
-              <Badge className={typeInfo.color}>
-                {typeInfo.icon}
-                <span className="ml-1">{typeInfo.label}</span>
-              </Badge>
-              {checkpoint && (
-                <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
-                  Checkpoint de Entrenamiento
-                </Badge>
-              )}
-            </div>
-            <Button
-              onClick={() => router.push('/despega/a2')}
-              variant="ghost"
-              size="sm"
-              className="rounded-[12px] px-3 py-1 text-sm transition-all duration-200"
-              style={{
-                backgroundColor: 'rgba(90, 90, 150, 0.6)',
-                color: 'rgba(255, 255, 255, 0.8)',
-              }}
-            >
-              ← Volver a Tu Ruta
-            </Button>
+            )}
           </div>
+          <Button
+            onClick={() => router.push('/despega/a2')}
+            variant="ghost"
+            size="sm"
+            className="text-white/80"
+          >
+            ← Volver a Tu Ruta
+          </Button>
         </div>
-      </div>
+      </header>
 
-      <div className="mx-auto max-w-4xl space-y-8 px-4 py-8">
+      <main className="mx-auto max-w-4xl space-y-8 px-4 py-8">
         {children ? (
           children
         ) : (
@@ -289,37 +280,37 @@ export function A2DayPageTemplate({
             />
 
             {routeContext && (
-              <div className="space-y-4 rounded-[28px] border border-blue-500/40 bg-blue-500/5 p-6">
+              <section className="space-y-4 rounded-[28px] border border-blue-500/40 bg-blue-500/5 p-6">
                 <h3 className="text-lg font-semibold text-blue-300">
                   Tu contexto en esta misión
                 </h3>
-                <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
+                <div className="grid gap-4 md:grid-cols-3">
                   {routeContext.c1 && (
                     <div className="rounded-lg border border-[rgb(80,160,170)]/40 bg-slate-800/40 p-3">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      <p className="text-xs uppercase tracking-wider text-slate-400">
                         Tu identidad
                       </p>
                       <p className="mt-2 font-medium text-white">
-                        {routeContext.c1.targetRole}
+                        {routeContext.c1.targetRole || 'Rol en definición'}
                       </p>
                       <p className="mt-1 text-sm text-slate-400">
-                        {routeContext.c1.industry}
+                        {routeContext.c1.industry || 'Industria en definición'}
                       </p>
                     </div>
                   )}
                   {routeContext.a1 && (
                     <div className="rounded-lg border border-[rgb(80,160,170)]/40 bg-slate-800/40 p-3">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      <p className="text-xs uppercase tracking-wider text-slate-400">
                         Tu estilo
                       </p>
                       <p className="mt-2 font-medium capitalize text-white">
-                        {routeContext.a1.communicationStyle}
+                        {routeContext.a1.communicationStyle || 'En construcción'}
                       </p>
                     </div>
                   )}
                   {routeContext.c2 && (
                     <div className="rounded-lg border border-[rgb(80,160,170)]/40 bg-slate-800/40 p-3">
-                      <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
+                      <p className="text-xs uppercase tracking-wider text-slate-400">
                         Tu evidencia
                       </p>
                       <p className="mt-2 font-medium text-white">
@@ -328,15 +319,15 @@ export function A2DayPageTemplate({
                     </div>
                   )}
                 </div>
-              </div>
+              </section>
             )}
 
-            <div className="space-y-4 rounded-[28px] border border-[rgba(80,160,170,0.2)] bg-purple-500/5 p-6">
+            <section className="space-y-4 rounded-[28px] border border-[rgba(80,160,170,0.2)] bg-purple-500/5 p-6">
               <h3 className="text-lg font-semibold text-purple-300">
                 ¿Por qué es importante?
               </h3>
               <p className="leading-relaxed text-white/80">{mission.whyItMatters}</p>
-            </div>
+            </section>
 
             {needsEvidence && draftReady && (
               <A2GenericMissionWorkspace
@@ -354,37 +345,33 @@ export function A2DayPageTemplate({
             )}
 
             {checkpoint && (
-              <div className="space-y-4 rounded-[28px] border border-[rgba(80,160,170,0.2)] bg-emerald-500/5 p-6">
+              <section className="space-y-4 rounded-[28px] border border-emerald-500/30 bg-emerald-500/5 p-6">
                 <div className="flex items-start justify-between gap-4">
                   <div>
                     <h3 className="text-lg font-semibold text-emerald-300">
                       Checkpoint de Entrenamiento
                     </h3>
                     <p className="mt-2 leading-relaxed text-white/80">
-                      Completa{' '}
-                      <strong>
-                        Módulo {checkpoint.moduleNumber}: {checkpoint.moduleTitle}
-                      </strong>{' '}
-                      y vuelve para validar este día.
+                      Completa <strong>{checkpoint.moduleTitle}</strong> y vuelve
+                      para validar este día.
                     </p>
                   </div>
                   <Zap className="h-6 w-6 flex-shrink-0 text-emerald-400" />
                 </div>
-
                 <Button
                   onClick={() => router.push(checkpoint.route)}
-                  className="w-full rounded-lg border border-emerald-500/80 bg-emerald-600/80 py-6 text-base font-semibold text-white transition-all duration-200 hover:border-emerald-500 hover:bg-emerald-600"
+                  className="w-full border border-emerald-500/80 bg-emerald-600/80 py-6 text-white hover:bg-emerald-600"
                 >
                   Abrir {checkpoint.moduleTitle}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
-              </div>
+              </section>
             )}
           </>
         )}
 
         {!children && (
-          <div className="space-y-3 pt-4">
+          <footer className="space-y-3 border-t border-white/10 pt-6">
             {completionError && (
               <p className="rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-200">
                 {completionError}
@@ -399,7 +386,7 @@ export function A2DayPageTemplate({
               {prevDay && (
                 <Button
                   onClick={() => router.push(`/despega/a2/dia-${prevDay}`)}
-                  className="flex-1 rounded-full border-2 bg-slate-950/40 py-6 font-semibold text-cyan-300 transition-all duration-200"
+                  className="flex-1 border-2 bg-slate-950/40 py-6 text-cyan-300"
                 >
                   <ArrowLeft className="mr-2 h-4 w-4" />
                   Anterior
@@ -408,7 +395,7 @@ export function A2DayPageTemplate({
               <Button
                 onClick={completeGenericDay}
                 disabled={completionDisabled}
-                className="flex-1 rounded-full border border-purple-500/80 bg-purple-600/80 py-6 font-semibold text-white transition-all duration-200 hover:border-purple-500 hover:bg-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
+                className="flex-1 border border-purple-500/80 bg-purple-600/80 py-6 text-white hover:bg-purple-600 disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {isCompleting
                   ? 'Guardando…'
@@ -420,9 +407,9 @@ export function A2DayPageTemplate({
                 {!isCompleting && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
             </div>
-          </div>
+          </footer>
         )}
-      </div>
+      </main>
     </div>
   )
 }
