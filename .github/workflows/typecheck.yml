@@ -70,5 +70,8 @@ jobs:
       - name: A2 horizon extension contract
         run: npx tsx scripts/check-a2-horizon-contract.ts
 
+      - name: A2 cycle review contract
+        run: npx tsx scripts/check-a2-cycle-review-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
