@@ -3,8 +3,10 @@ import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextRequest, NextResponse } from 'next/server'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
 import { nextA2Horizon } from '@/lib/a2/horizon'
+import { buildA2CycleReview } from '@/lib/a2/cycle-review'
 
 const TOTAL_DAYS = 90
+const REVIEW_HORIZONS = [30, 60, 90] as const
 
 interface CompletionRow {
   day: unknown
@@ -57,6 +59,8 @@ function emptyProgress() {
     next_horizon: 60,
     extension_available: false,
     cycle_complete: false,
+    active_cycle_review: null,
+    cycle_reviews: [],
     progress_percentage: 0,
     completed_tasks: 0,
     completed_days: [] as number[],
@@ -108,9 +112,8 @@ function normalizeCompletion(row: CompletionRow) {
 /**
  * GET /api/a2/progress
  *
- * Returns canonical A2 progression, evidence quality and the explicit active
- * horizon. Completing Day 30/60 exposes an extension decision rather than
- * silently unlocking the next cycle.
+ * Returns canonical A2 progression, evidence quality, explicit horizon state
+ * and neutral closure summaries for 30, 60 and 90 days.
  */
 export async function GET() {
   try {
@@ -215,6 +218,21 @@ export async function GET() {
           : null,
     }
 
+    const cycleReviewRecords = dayRecords.map((record) => ({
+      day: record.day,
+      missionType: record.mission_type,
+      validationStatus: record.validation_status,
+      score: record.score,
+      hasEvidence: record.has_evidence,
+      completedAt: record.completed_at,
+    }))
+    const cycleReviews = REVIEW_HORIZONS.map((horizon) =>
+      buildA2CycleReview(horizon, cycleReviewRecords),
+    )
+    const activeCycleReview =
+      cycleReviews.find((review) => review.horizon === snapshot.activeHorizon) ||
+      null
+
     return NextResponse.json(
       {
         current_month: currentMonth,
@@ -224,6 +242,8 @@ export async function GET() {
         next_horizon: nextHorizon,
         extension_available: extensionAvailable,
         cycle_complete: cycleComplete,
+        active_cycle_review: activeCycleReview,
+        cycle_reviews: cycleReviews,
         progress_source: snapshot.source,
         progress_percentage: progressPercentage,
         completed_tasks: totalCompleted,
