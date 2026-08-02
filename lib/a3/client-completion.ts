@@ -28,7 +28,7 @@ export interface CompleteA3ModuleInput {
   moduleId: A3ModuleId
   moduleNumber: number
   responses: string[]
-  deliverable: Record<string, string>
+  deliverable: Record<string, unknown>
 }
 
 function errorMessage(payload: A3CompletionPayload): string {
