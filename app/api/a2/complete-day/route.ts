@@ -258,31 +258,28 @@ export async function POST(request: Request) {
     }
 
     if (route) {
-      const { data: existingRouteProgress } = await supabase
+      const { data: existingRouteProgress, error: routeLookupError } = await supabase
         .from('a2_user_route_progress')
-        .select(
-          'id, fecha_inicio, checkpoints_completados, experiencia_total',
-        )
+        .select('id, fecha_inicio, fecha_fin')
         .eq('user_id', userId)
         .eq('route_id', route.id)
         .maybeSingle()
 
+      if (routeLookupError) {
+        console.error('[v0] Error reading route progress:', routeLookupError)
+      }
+
       const routeProgressPayload = {
         user_id: userId,
         route_id: route.id,
-        fecha_inicio:
-          existingRouteProgress?.fecha_inicio ||
-          new Date().toISOString().slice(0, 10),
+        fecha_inicio: existingRouteProgress?.fecha_inicio || now,
         dia_actual: nextDay,
-        estado_actual: `dia_${nextDay}`,
         porcentaje_completado: progressPercentage,
-        estado: totalCompleted >= 90 ? 'completada' : 'activa',
-        misiones_completadas: totalCompleted,
-        // A checkpoint is completed by A3, not merely by reaching its A2 day.
-        checkpoints_completados:
-          existingRouteProgress?.checkpoints_completados || [],
-        experiencia_total: existingRouteProgress?.experiencia_total || 0,
-        ultima_actividad: now,
+        estado: totalCompleted >= 90 ? 'completado' : 'activo',
+        fecha_fin:
+          totalCompleted >= 90
+            ? existingRouteProgress?.fecha_fin || now
+            : existingRouteProgress?.fecha_fin || null,
         updated_at: now,
       }
 
