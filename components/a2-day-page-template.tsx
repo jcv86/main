@@ -21,6 +21,7 @@ import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import type { A2DailyMission } from '@/lib/a2-mission.types'
 import { A2DailyMissionCard } from '@/components/a2-daily-mission-card'
 import { A2GenericMissionWorkspace } from '@/components/a2-generic-mission-workspace'
+import { A2RouteContextCard } from '@/components/a2-route-context-card'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { completeA2Day } from '@/lib/a2/client-completion'
 import {
@@ -385,6 +386,9 @@ export function A2DayPageTemplate({
               {typeInfo.icon}
               <span className="ml-1">{typeInfo.label}</span>
             </Badge>
+            <Badge className="border-cyan-500/35 bg-cyan-500/10 text-cyan-200">
+              {dayState.adaptation.routeName}
+            </Badge>
             {isCompleted && (
               <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
                 <CheckCircle2 className="mr-1 h-3 w-3" />
@@ -426,6 +430,8 @@ export function A2DayPageTemplate({
             </p>
           </section>
         )}
+
+        <A2RouteContextCard adaptation={dayState.adaptation} />
 
         {children ? (
           children
@@ -500,6 +506,7 @@ export function A2DayPageTemplate({
                 mission={mission}
                 value={submission}
                 validation={liveValidation}
+                adaptation={dayState.adaptation}
                 onChange={(nextSubmission) => {
                   setSubmission(nextSubmission)
                   setCompletionNotice(null)
