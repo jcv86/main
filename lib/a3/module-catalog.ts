@@ -11,6 +11,7 @@ export type A3ModuleId =
   | 'basic-interview-mission'
 
 export type A3TrainingType = 'coach' | 'interviewer'
+export type A3ValidationMode = 'coach' | 'cv_builder'
 
 export interface A3ModuleDefinition {
   id: A3ModuleId
@@ -23,6 +24,7 @@ export interface A3ModuleDefinition {
   requiredPreviousModules: A3ModuleId[]
   completionContract: {
     enabled: boolean
+    validationMode?: A3ValidationMode
     minimumResponses: number
     minimumResponseLength: number
     requiredDeliverableKeys: string[]
@@ -42,6 +44,7 @@ export const A3_MODULES: readonly A3ModuleDefinition[] = [
     requiredPreviousModules: [],
     completionContract: {
       enabled: true,
+      validationMode: 'coach',
       minimumResponses: 4,
       minimumResponseLength: 20,
       requiredDeliverableKeys: [
@@ -64,6 +67,7 @@ export const A3_MODULES: readonly A3ModuleDefinition[] = [
     requiredPreviousModules: ['career-mirror'],
     completionContract: {
       enabled: true,
+      validationMode: 'coach',
       minimumResponses: 4,
       minimumResponseLength: 20,
       requiredDeliverableKeys: [
@@ -85,10 +89,27 @@ export const A3_MODULES: readonly A3ModuleDefinition[] = [
     trainingType: 'coach',
     requiredPreviousModules: ['career-mirror', 'value-mining-lab'],
     completionContract: {
-      enabled: false,
+      enabled: true,
+      validationMode: 'cv_builder',
       minimumResponses: 0,
       minimumResponseLength: 0,
-      requiredDeliverableKeys: [],
+      requiredDeliverableKeys: [
+        'fullName',
+        'email',
+        'phone',
+        'location',
+        'targetRole',
+        'targetKeywords',
+        'professionalSummary',
+        'experienceTitle',
+        'experienceCompany',
+        'experienceDates',
+        'achievement1',
+        'achievement2',
+        'achievement3',
+        'skills',
+        'atsChecklist',
+      ],
       passScore: 75,
     },
   },
