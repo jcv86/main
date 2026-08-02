@@ -1,83 +1,89 @@
-'use client'
+import { createClient as createServerClient } from '@/lib/supabase/server'
+import { getCurrentUser } from './auth-helper'
 
-import { createClient } from '@/lib/supabase/client'
-import type { TrainingSessionData } from '@/lib/types/training'
-
-interface TrainingRewards {
-  badges?: string[]
-  achievements?: string[]
-  [key: string]: unknown
+/** Get Supabase server client. */
+async function getSupabaseClient() {
+  return await createServerClient()
 }
 
-interface CompletionResult {
-  success: boolean
-  xpAwarded: number
-  pointsAwarded: number
-  isFirstCompletion: boolean
-  completionId?: string
+export interface TrainingSession {
+  user_id: string
+  training_type: string
+  level: 'basico' | 'intermedio' | 'avanzado'
+  score: number
+  time_spent_seconds: number
+  questions_completed: number
+  total_questions: number
+  xp_earned: number
+  points_earned: number
+  rewards_earned: string[]
+  started_at: string
+  completed_at: string
+  metadata?: Record<string, any>
 }
 
-export async function trackTrainingCompletion(
-  session: TrainingSessionData,
-): Promise<CompletionResult> {
-  const supabase = createClient()
+export interface TrainingProgress {
+  total_trainings: number
+  total_time_spent: number
+  average_score: number
+  total_xp_earned: number
+  total_points_earned: number
+  total_rewards_earned: number
+  consecutive_days: number
+  best_score: number
+  training_streak: number
+  unlocked_badges: string[]
+}
 
+export async function saveTrainingSession(session: TrainingSession) {
   try {
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
+    const supabase = await getSupabaseClient()
+    const user = await getCurrentUser()
     if (!user) throw new Error('User not authenticated')
 
-    const completionKey = `${session.training_type}_${session.level}`
-    const { data: existingCompletion, error: completionError } = await supabase
-      .from('training_completion_tracking')
-      .select('*')
-      .eq('user_id', user.id)
-      .eq('completion_key', completionKey)
-      .maybeSingle()
+    const baseXP = Math.round((session.score / 100) * 100)
+    const timeBonus = session.time_spent_seconds < 600 ? 25 : 0
+    const completionBonus =
+      session.questions_completed === session.total_questions ? 50 : 0
+    const totalXP = baseXP + timeBonus + completionBonus
+    const totalPoints = 100
 
-    if (completionError) {
-      console.error('[v0] Error checking completion:', completionError)
+    const rewards: string[] = []
+    if (session.score >= 90) rewards.push('excellent_performance')
+    if (session.score >= 80) rewards.push('strong_performance')
+    if (session.time_spent_seconds < 300) rewards.push('speed_demon')
+    if (session.questions_completed === session.total_questions) {
+      rewards.push('completion_master')
+    }
+    if (session.level === 'avanzado' && session.score >= 85) {
+      rewards.push('advanced_challenger')
     }
 
-    const isFirstCompletion = !existingCompletion
-    const baseXp = calculateXP(session.score, session.level)
-    const xpToAward = isFirstCompletion ? baseXp : 0
-    const totalPoints = calculatePoints(session.score, session.time_spent_seconds)
-    const rewards = calculateRewards(session) as TrainingRewards
+    const { data: existingCompletion } = await supabase
+      .from('a3_training_module_completions')
+      .select('*')
+      .eq('user_id', user.id)
+      .eq('training_type', session.training_type)
+      .single()
 
-    let completionId: string | undefined
+    let xpToAward = totalXP
+    let isFirstCompletion = true
+    let completionId: string | null = null
 
     if (existingCompletion) {
-      const { error: updateError } = await supabase
-        .from('training_completion_tracking')
-        .update({
-          completion_count: (existingCompletion.completion_count || 0) + 1,
-          best_score: Math.max(existingCompletion.best_score || 0, session.score),
-          last_completed_at: session.completed_at,
-          updated_at: new Date().toISOString(),
-        })
-        .eq('id', existingCompletion.id)
-
-      if (updateError) {
-        console.error('[v0] Error updating completion:', updateError)
-      } else {
-        completionId = existingCompletion.id
-      }
+      isFirstCompletion = false
+      xpToAward = 0
+      completionId = existingCompletion.id
     } else {
       const { data: newCompletion, error: insertError } = await supabase
-        .from('training_completion_tracking')
+        .from('a3_training_module_completions')
         .insert([
           {
             user_id: user.id,
-            completion_key: completionKey,
             training_type: session.training_type,
-            level: session.level,
-            completion_count: 1,
-            best_score: session.score,
-            first_completed_at: session.completed_at,
-            last_completed_at: session.completed_at,
+            xp_amount: totalXP,
+            xp_awarded_at: new Date().toISOString(),
+            is_first_completion: true,
           },
         ])
         .select()
@@ -89,7 +95,7 @@ export async function trackTrainingCompletion(
       }
     }
 
-    const { error } = await supabase
+    const { data, error } = await supabase
       .from('a3_training_sessions')
       .insert([
         {
@@ -144,80 +150,186 @@ export async function trackTrainingCompletion(
 
     return {
       success: true,
-      xpAwarded: xpToAward,
-      pointsAwarded: totalPoints,
+      data,
+      xpEarned: xpToAward,
+      pointsEarned: totalPoints,
+      rewards,
       isFirstCompletion,
-      completionId,
+      message: isFirstCompletion
+        ? `+${xpToAward} XP awarded for first completion!`
+        : 'Great practice! No additional XP this time (you already earned XP for this module)',
     }
   } catch (error) {
-    console.error('[v0] Error tracking training completion:', error)
+    console.error('[v0] Error saving training session:', error)
     throw error
   }
 }
 
-function calculateXP(score: number, level: string): number {
-  const baseXP = 100
-  const scoreMultiplier = score / 100
-  const levelMultiplier =
-    level === 'advanced' ? 1.5 : level === 'intermediate' ? 1.25 : 1
+export async function getUserTrainingProgress(): Promise<TrainingProgress> {
+  try {
+    const supabase = await getSupabaseClient()
+    const user = await getCurrentUser()
+    if (!user) throw new Error('User not authenticated')
 
-  return Math.round(baseXP * scoreMultiplier * levelMultiplier)
+    const { data: sessions, error } = await supabase
+      .from('a3_training_sessions')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('completed_at', { ascending: false })
+
+    if (error) throw error
+
+    if (!sessions || sessions.length === 0) {
+      return {
+        total_trainings: 0,
+        total_time_spent: 0,
+        average_score: 0,
+        total_xp_earned: 0,
+        total_points_earned: 0,
+        total_rewards_earned: 0,
+        consecutive_days: 0,
+        best_score: 0,
+        training_streak: 0,
+        unlocked_badges: [],
+      }
+    }
+
+    const total_trainings = sessions.length
+    const total_time_spent = sessions.reduce(
+      (sum, item) => sum + (item.time_spent_seconds || 0),
+      0,
+    )
+    const average_score = Math.round(
+      sessions.reduce((sum, item) => sum + item.score, 0) / total_trainings,
+    )
+    const total_xp_earned = sessions.reduce(
+      (sum, item) => sum + (item.xp_earned || 0),
+      0,
+    )
+    const total_points_earned = sessions.reduce(
+      (sum, item) => sum + (item.points_earned || 0),
+      0,
+    )
+    const allRewards = sessions.flatMap((item) => item.rewards_earned || [])
+    const uniqueRewards = Array.from(new Set(allRewards)) as string[]
+    const streak = calculateStreak(sessions)
+    const best_score = Math.max(...sessions.map((item) => item.score))
+
+    return {
+      total_trainings,
+      total_time_spent,
+      average_score,
+      total_xp_earned,
+      total_points_earned,
+      total_rewards_earned: uniqueRewards.length,
+      consecutive_days: streak,
+      best_score,
+      training_streak: streak,
+      unlocked_badges: uniqueRewards,
+    }
+  } catch (error) {
+    console.error('[v0] Error getting training progress:', error)
+    throw error
+  }
 }
 
-function calculatePoints(score: number, timeSpent: number): number {
-  const scorePoints = Math.round(score * 10)
-  const efficiencyBonus = timeSpent < 300 ? 100 : 0
-  return scorePoints + efficiencyBonus
-}
+export async function getTrainingHistory(limit = 10, offset = 0) {
+  try {
+    const supabase = await getSupabaseClient()
+    const user = await getCurrentUser()
+    if (!user) throw new Error('User not authenticated')
 
-function calculateRewards(session: TrainingSessionData): TrainingRewards {
-  const rewards: TrainingRewards = {}
+    const { data: sessions, error, count } = await supabase
+      .from('a3_training_sessions')
+      .select('*', { count: 'exact' })
+      .eq('user_id', user.id)
+      .order('completed_at', { ascending: false })
+      .range(offset, offset + limit - 1)
 
-  if (session.score >= 90) {
-    rewards.badges = ['high_performer']
+    if (error) throw error
+    return { sessions: sessions || [], total: count || 0 }
+  } catch (error) {
+    console.error('[v0] Error getting training history:', error)
+    throw error
   }
-
-  if (session.score === 100) {
-    rewards.achievements = ['perfect_score']
-  }
-
-  return rewards
 }
 
 async function updateGamificationProfile(
   userId: string,
-  xp: number,
-  points: number,
-  rewards: TrainingRewards,
+  xpEarned: number,
+  pointsEarned: number,
+  rewards: string[],
   score: number,
 ) {
-  const supabase = createClient()
-  const { data: profile } = await supabase
-    .from('user_gamification_profile')
-    .select('*')
-    .eq('user_id', userId)
-    .maybeSingle()
+  try {
+    const supabase = await getSupabaseClient()
+    const { data: profile, error: fetchError } = await supabase
+      .from('user_gamification_profile')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
 
-  const currentBadges = Array.isArray(profile?.badges) ? profile.badges : []
-  const nextBadges = Array.from(
-    new Set([...currentBadges, ...(rewards.badges || [])]),
-  )
+    if (fetchError && fetchError.code !== 'PGRST116') throw fetchError
 
-  const payload = {
-    user_id: userId,
-    total_xp: (profile?.total_xp || 0) + xp,
-    total_points: (profile?.total_points || 0) + points,
-    badges: nextBadges,
-    best_training_score: Math.max(profile?.best_training_score || 0, score),
-    updated_at: new Date().toISOString(),
-  }
+    const currentXP = profile?.total_xp || 0
+    const newTotalXP = currentXP + xpEarned
+    const newLevel = Math.floor(newTotalXP / 1000) + 1
 
-  const { error } = await supabase
-    .from('user_gamification_profile')
-    .upsert(payload, { onConflict: 'user_id' })
+    const { error: updateError } = await supabase
+      .from('user_gamification_profile')
+      .upsert([
+        {
+          user_id: userId,
+          current_xp: newTotalXP % 1000,
+          total_xp: newTotalXP,
+          current_level: newLevel,
+          best_interview_streak: Math.max(
+            profile?.best_interview_streak || 0,
+            1,
+          ),
+          total_interviews_completed:
+            (profile?.total_interviews_completed || 0) + 1,
+          updated_at: new Date().toISOString(),
+        },
+      ])
 
-  if (error) {
-    console.error('[v0] Error updating gamification profile:', error)
+    if (updateError) {
+      console.error('[v0] Error updating gamification profile:', updateError)
+    }
+
+    const { data: dtcBalance, error: fetchDTCError } = await supabase
+      .from('user_dtc_balance')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
+
+    if (fetchDTCError && fetchDTCError.code !== 'PGRST116') {
+      throw fetchDTCError
+    }
+
+    const currentBalance = dtcBalance?.balance || 0
+    const newBalance = currentBalance + pointsEarned
+
+    const { error: updateDTCError } = await supabase
+      .from('user_dtc_balance')
+      .upsert([
+        {
+          user_id: userId,
+          balance: newBalance,
+          lifetime_earned:
+            (dtcBalance?.lifetime_earned || 0) + pointsEarned,
+          updated_at: new Date().toISOString(),
+        },
+      ])
+
+    if (updateDTCError) {
+      console.error('[v0] Error updating DTC balance:', updateDTCError)
+    }
+
+    void rewards
+    void score
+  } catch (error) {
+    console.error('[v0] Error in updateGamificationProfile:', error)
   }
 }
 
@@ -226,19 +338,64 @@ async function trackTrainingAnalytics(
   trainingType: string,
   level: string,
   score: number,
-  isFirstCompletion: boolean,
+  isFirstCompletion = true,
 ) {
-  const supabase = createClient()
-  const { error } = await supabase.from('training_analytics').insert({
-    user_id: userId,
-    training_type: trainingType,
-    level,
-    score,
-    is_first_completion: isFirstCompletion,
-    created_at: new Date().toISOString(),
-  })
-
-  if (error) {
-    console.error('[v0] Error tracking training analytics:', error)
+  try {
+    const supabase = await getSupabaseClient()
+    await supabase.from('v1_analytics').insert([
+      {
+        user_id: userId,
+        event_type: 'training_completed',
+        stage: trainingType,
+        metadata: {
+          level,
+          score,
+          isFirstCompletion,
+          timestamp: new Date().toISOString(),
+        },
+        created_at: new Date().toISOString(),
+      },
+    ])
+  } catch (error) {
+    console.error('[v0] Error tracking analytics:', error)
   }
+}
+
+function calculateStreak(sessions: any[]): number {
+  if (!sessions || sessions.length === 0) return 0
+
+  let streak = 1
+  let currentDate = new Date(sessions[0].completed_at)
+
+  for (let index = 1; index < sessions.length; index += 1) {
+    const previousDate = new Date(sessions[index].completed_at)
+    const daysDiff = Math.floor(
+      (currentDate.getTime() - previousDate.getTime()) /
+        (1000 * 60 * 60 * 24),
+    )
+
+    if (daysDiff === 1) {
+      streak += 1
+      currentDate = previousDate
+    } else if (daysDiff > 1) {
+      break
+    }
+  }
+
+  return streak
+}
+
+export function getAchievementBadges(rewards: string[]) {
+  const badgeMap: Record<
+    string,
+    { label: string; icon: string; color: string }
+  > = {
+    excellent_performance: { label: '¡Excelente!', icon: '🏆', color: 'gold' },
+    strong_performance: { label: 'Muy Bien', icon: '⭐', color: 'blue' },
+    speed_demon: { label: 'Rápido', icon: '⚡', color: 'purple' },
+    completion_master: { label: 'Maestro', icon: '✨', color: 'green' },
+    advanced_challenger: { label: 'Campeón', icon: '👑', color: 'red' },
+  }
+
+  return rewards.map((reward) => badgeMap[reward]).filter(Boolean)
 }
