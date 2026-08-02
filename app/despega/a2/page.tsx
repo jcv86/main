@@ -16,6 +16,10 @@ import {
   Unlock,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import {
+  A2CycleReviewCard,
+  type A2CycleReviewView,
+} from '@/components/a2-cycle-review-card'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import type { A2DailyMission, A2MissionType } from '@/lib/a2-mission.types'
 
@@ -67,6 +71,8 @@ interface A2ProgressResponse {
   next_horizon: Horizon | null
   extension_available: boolean
   cycle_complete: boolean
+  active_cycle_review: A2CycleReviewView | null
+  cycle_reviews: A2CycleReviewView[]
   progress_percentage: number
   completed_tasks: number
   completed_days: number[]
@@ -102,6 +108,8 @@ const EMPTY_PROGRESS: A2ProgressResponse = {
   next_horizon: 60,
   extension_available: false,
   cycle_complete: false,
+  active_cycle_review: null,
+  cycle_reviews: [],
   progress_percentage: 0,
   completed_tasks: 0,
   completed_days: [],
@@ -219,6 +227,9 @@ export default function A2DashboardPage() {
             ? data.completed_days
             : [],
           day_records: Array.isArray(data.day_records) ? data.day_records : [],
+          cycle_reviews: Array.isArray(data.cycle_reviews)
+            ? data.cycle_reviews
+            : [],
           validation_summary: {
             ...EMPTY_SUMMARY,
             ...(data.validation_summary || {}),
@@ -268,6 +279,8 @@ export default function A2DashboardPage() {
     [group, horizon, search],
   )
 
+  const selectedCycleReview =
+    progress.cycle_reviews.find((review) => review.horizon === horizon) || null
   const recordsInHorizon = progress.day_records.filter(
     (record) => record.day <= horizon,
   )
@@ -387,7 +400,7 @@ export default function A2DashboardPage() {
         </header>
 
         {progress.extension_available && progress.next_horizon && (
-          <section className="mb-8 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-500/15 to-cyan-500/5 p-6">
+          <section className="mb-8 space-y-5 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-500/15 to-cyan-500/5 p-6">
             <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
               <div>
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
@@ -417,21 +430,33 @@ export default function A2DashboardPage() {
                 {!extending && <ArrowRight className="ml-2 h-4 w-4" />}
               </button>
             </div>
+
+            {progress.active_cycle_review && (
+              <A2CycleReviewCard
+                review={progress.active_cycle_review}
+                compact
+              />
+            )}
           </section>
         )}
 
         {progress.status === 'completed' && (
-          <section className="mb-8 rounded-2xl border border-purple-500/35 bg-purple-500/10 p-6">
-            <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-300">
-              Integración completada
-            </p>
-            <h2 className="mt-2 text-2xl font-bold text-white">
-              Cerraste los 90 días de Tu Ruta
-            </h2>
-            <p className="mt-2 text-sm text-purple-100/70">
-              Tus entregables, checkpoints y evidencia permanecen disponibles para
-              revisión y actualización.
-            </p>
+          <section className="mb-8 space-y-5 rounded-2xl border border-purple-500/35 bg-purple-500/10 p-6">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-300">
+                Integración completada
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-white">
+                Cerraste los 90 días de Tu Ruta
+              </h2>
+              <p className="mt-2 text-sm text-purple-100/70">
+                Tus entregables, checkpoints y evidencia permanecen disponibles para
+                revisión y actualización.
+              </p>
+            </div>
+            {progress.active_cycle_review && (
+              <A2CycleReviewCard review={progress.active_cycle_review} />
+            )}
           </section>
         )}
 
@@ -455,6 +480,14 @@ export default function A2DashboardPage() {
             )
           })}
         </div>
+
+        {!progress.extension_available &&
+          progress.status !== 'completed' &&
+          selectedCycleReview && (
+            <div className="mb-8">
+              <A2CycleReviewCard review={selectedCycleReview} compact />
+            </div>
+          )}
 
         <section className="mb-6 rounded-xl border border-[rgb(80,160,170)] bg-slate-950 p-6">
           <div className="mb-4 flex items-center justify-between gap-4">
