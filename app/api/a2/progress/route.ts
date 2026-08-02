@@ -5,10 +5,46 @@ import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
 
 const TOTAL_DAYS = 90
 
+interface CompletionRow {
+  day: unknown
+  mission_type?: unknown
+  validation_status?: unknown
+  validation_result?: unknown
+  submission?: unknown
+  completed_at?: unknown
+}
+
+function objectValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {}
+}
+
+function textValue(value: unknown): string {
+  return typeof value === 'string' ? value : ''
+}
+
+function numberValue(value: unknown): number | null {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? numeric : null
+}
+
 function monthStatus(completed: number) {
   if (completed >= 30) return 'completed'
   if (completed > 0) return 'in_progress'
   return 'pending'
+}
+
+function emptyValidationSummary() {
+  return {
+    validated_days: 0,
+    evidence_days: 0,
+    structural_days: 0,
+    specialized_days: 0,
+    checkpoint_days: 0,
+    legacy_days: 0,
+    average_score: null as number | null,
+  }
 }
 
 function emptyProgress() {
@@ -18,7 +54,9 @@ function emptyProgress() {
     highest_unlocked_day: 1,
     progress_percentage: 0,
     completed_tasks: 0,
-    completed_days: [],
+    completed_days: [] as number[],
+    day_records: [] as Array<Record<string, unknown>>,
+    validation_summary: emptyValidationSummary(),
     total_tasks: TOTAL_DAYS,
     status: 'not_started',
     route: null,
@@ -35,11 +73,39 @@ function emptyProgress() {
   }
 }
 
+function normalizeCompletion(row: CompletionRow) {
+  const day = Number(row.day)
+  const validation = objectValue(row.validation_result)
+  const submission = objectValue(row.submission)
+  const validationStatus = textValue(row.validation_status) || 'legacy'
+  const score = numberValue(validation.score)
+  const passScore = numberValue(validation.passScore)
+  const artifactUrl = textValue(submission.artifactUrl)
+  const hasEvidence =
+    Object.keys(submission).length > 0 &&
+    ['summary', 'evidence', 'reflection', 'metrics', 'artifactUrl'].some(
+      (key) => textValue(submission[key]).trim().length > 0,
+    )
+
+  return {
+    day,
+    mission_type: textValue(row.mission_type) || null,
+    validation_status: validationStatus,
+    score,
+    pass_score: passScore,
+    passed: validation.passed !== false,
+    has_evidence: hasEvidence,
+    artifact_url: artifactUrl || null,
+    completed_at: textValue(row.completed_at) || null,
+  }
+}
+
 /**
  * GET /api/a2/progress
  *
- * Returns the real A2 state for the verified current user. The canonical source
- * is `despega_journey_state`; task completions provide the progress history.
+ * Returns canonical A2 progression plus one normalized validation record per
+ * completed day. Existing legacy completions remain visible without being
+ * reclassified as evidence-backed work.
  */
 export async function GET() {
   try {
@@ -55,29 +121,42 @@ export async function GET() {
       resolveA2Route(userId, supabase),
       supabase
         .from('a2_user_task_completions')
-        .select('day, completed_at')
+        .select(
+          'day, mission_type, validation_status, validation_result, submission, completed_at',
+        )
         .eq('user_id', userId)
-        .not('completed_at', 'is', null),
+        .not('completed_at', 'is', null)
+        .order('completed_at', { ascending: false }),
     ])
 
     if (completionsResult.error) {
       console.error('[v0] Error fetching A2 completions:', completionsResult.error)
     }
 
-    const completedDays = Array.from(
-      new Set(
-        (completionsResult.data || [])
-          .map((completion) => Number(completion.day))
-          .filter((day) => Number.isInteger(day) && day >= 1 && day <= TOTAL_DAYS),
-      ),
-    ).sort((left, right) => left - right)
+    const recordByDay = new Map<number, ReturnType<typeof normalizeCompletion>>()
+    for (const rawRow of (completionsResult.data || []) as CompletionRow[]) {
+      const record = normalizeCompletion(rawRow)
+      if (
+        Number.isInteger(record.day) &&
+        record.day >= 1 &&
+        record.day <= TOTAL_DAYS &&
+        !recordByDay.has(record.day)
+      ) {
+        recordByDay.set(record.day, record)
+      }
+    }
 
+    const dayRecords = Array.from(recordByDay.values()).sort(
+      (left, right) => left.day - right.day,
+    )
+    const completedDays = dayRecords.map((record) => record.day)
     const totalCompleted = completedDays.length
     const progressPercentage = Math.min(
       100,
       Math.round((totalCompleted / TOTAL_DAYS) * 100),
     )
-    const currentMonth = snapshot.currentDay <= 30 ? 1 : snapshot.currentDay <= 60 ? 2 : 3
+    const currentMonth =
+      snapshot.currentDay <= 30 ? 1 : snapshot.currentDay <= 60 ? 2 : 3
     const status =
       totalCompleted === 0
         ? 'not_started'
@@ -90,6 +169,38 @@ export async function GET() {
       completedDays.filter((day) => day >= 31 && day <= 60).length,
       completedDays.filter((day) => day >= 61 && day <= 90).length,
     ]
+    const scoredRecords = dayRecords.filter(
+      (record) => record.score !== null && record.validation_status !== 'legacy',
+    )
+    const validationSummary = {
+      validated_days: dayRecords.filter((record) =>
+        ['structural', 'specialized', 'checkpoint'].includes(
+          record.validation_status,
+        ),
+      ).length,
+      evidence_days: dayRecords.filter((record) => record.has_evidence).length,
+      structural_days: dayRecords.filter(
+        (record) => record.validation_status === 'structural',
+      ).length,
+      specialized_days: dayRecords.filter(
+        (record) => record.validation_status === 'specialized',
+      ).length,
+      checkpoint_days: dayRecords.filter(
+        (record) => record.validation_status === 'checkpoint',
+      ).length,
+      legacy_days: dayRecords.filter(
+        (record) => record.validation_status === 'legacy',
+      ).length,
+      average_score:
+        scoredRecords.length > 0
+          ? Math.round(
+              scoredRecords.reduce(
+                (sum, record) => sum + (record.score || 0),
+                0,
+              ) / scoredRecords.length,
+            )
+          : null,
+    }
 
     return NextResponse.json(
       {
@@ -100,6 +211,8 @@ export async function GET() {
         progress_percentage: progressPercentage,
         completed_tasks: totalCompleted,
         completed_days: completedDays,
+        day_records: dayRecords,
+        validation_summary: validationSummary,
         total_tasks: TOTAL_DAYS,
         status,
         route,
