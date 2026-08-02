@@ -7,7 +7,7 @@ import {
   FileText,
   Link2,
   ListChecks,
-  MessageSquareText,
+  MessageSquare,
 } from 'lucide-react'
 import type { A2DailyMission } from '@/lib/a2-mission.types'
 import type {
@@ -94,7 +94,7 @@ export function A2GenericMissionWorkspace({
       <section className="grid gap-5">
         <label className="space-y-2">
           <span className="flex items-center gap-2 text-sm font-semibold text-white">
-            <MessageSquareText className="h-4 w-4 text-cyan-400" />
+            <MessageSquare className="h-4 w-4 text-cyan-400" />
             Qué hiciste y qué decisión tomaste
           </span>
           <textarea
