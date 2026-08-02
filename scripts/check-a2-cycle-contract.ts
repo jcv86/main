@@ -95,6 +95,9 @@ assert.deepEqual(
 
 const completeDayRoute = source('app/api/a2/complete-day/route.ts')
 const migration = source('migrations/03-a2-mission-evidence.sql')
+const dayTemplate = source('components/a2-day-page-template.tsx')
+const missionWorkspace = source('components/a2-generic-mission-workspace.tsx')
+const clientCompletion = source('lib/a2/client-completion.ts')
 
 assert.ok(completeDayRoute.includes("import { A2_DAILY_MISSIONS }"))
 assert.ok(completeDayRoute.includes('requiredPreviousDay'))
@@ -118,6 +121,35 @@ for (const column of [
   assert.ok(migration.includes(column), `Migration must add ${column}`)
 }
 
+assert.ok(dayTemplate.includes('A2GenericMissionWorkspace'))
+assert.ok(dayTemplate.includes('requiresUniversalA2Submission(mission)'))
+assert.ok(dayTemplate.includes('validateA2MissionSubmission(mission, submission)'))
+assert.ok(dayTemplate.includes('completeA2Day(dayNumber,'))
+assert.ok(dayTemplate.includes('needsEvidence ? submission : undefined'))
+assert.ok(dayTemplate.includes('completionDisabled'))
+assert.ok(dayTemplate.includes('!liveValidation.passed'))
+assert.ok(dayTemplate.includes('window.localStorage.setItem(draftKey'))
+assert.ok(dayTemplate.includes('window.localStorage.removeItem(draftKey)'))
+assert.ok(dayTemplate.includes('Validar checkpoint'))
+assert.ok(!dayTemplate.includes('completeA2Day(dayNumber)'))
+
+for (const requiredField of [
+  'completedInstructions',
+  'summary',
+  'evidence',
+  'reflection',
+  'artifactUrl',
+]) {
+  assert.ok(
+    missionWorkspace.includes(requiredField),
+    `Workspace must expose ${requiredField}`,
+  )
+}
+assert.ok(missionWorkspace.includes("mission.missionType === 'field_action'"))
+assert.ok(missionWorkspace.includes('validation.criteria.map'))
+assert.ok(clientCompletion.includes('submission?: unknown'))
+assert.ok(clientCompletion.includes('submission: asObject(submission)'))
+
 console.log(
   JSON.stringify({
     configuredDays: configuredDays.length,
@@ -127,5 +159,7 @@ console.log(
     ).length,
     serverPrerequisiteGate: true,
     evidencePersistence: true,
+    universalWorkspace: true,
+    localDrafts: true,
   }),
 )
