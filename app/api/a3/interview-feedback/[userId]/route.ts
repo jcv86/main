@@ -1,53 +1,85 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextRequest, NextResponse } from 'next/server'
-import { logXPActivity } from '@/lib/xp-logger'
 
-interface InterviewResponse {
-  questionId: string
-  responseText: string
-  videoDurationSeconds?: number
-}
+const MAX_RESPONSE_LENGTH = 8000
 
 export async function POST(
   request: NextRequest,
-  { params }: { params: Promise<{ userId: string }> }
+  { params }: { params: Promise<{ userId: string }> },
 ) {
   try {
     const { userId } = await params
-    const supabase = await createClient()
-    const body = await request.json()
+    const currentUser = await resolveServerUser()
 
-    // Verify user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user || user.id !== userId) {
+    if (!currentUser || currentUser.id !== userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
+    const body = await request.json()
     const {
       sessionId,
       questionId,
       responseText,
       videoDurationSeconds,
-      interviewType = 'behavioral'
+      interviewType = 'behavioral',
     } = body
 
-    console.log(`[v0] Processing A3 response from user ${userId}`)
+    if (
+      typeof sessionId !== 'string' ||
+      typeof questionId !== 'string' ||
+      typeof responseText !== 'string' ||
+      responseText.trim().length === 0 ||
+      responseText.length > MAX_RESPONSE_LENGTH
+    ) {
+      return NextResponse.json({ error: 'Invalid interview response' }, { status: 400 })
+    }
 
-    // Get the question details
-    const { data: question } = await supabase
+    const safeDuration = Math.max(
+      1,
+      Math.min(
+        3600,
+        Number.isFinite(Number(videoDurationSeconds))
+          ? Math.round(Number(videoDurationSeconds))
+          : 60,
+      ),
+    )
+    const safeInterviewType =
+      typeof interviewType === 'string' ? interviewType.slice(0, 50) : 'behavioral'
+    const supabase = createAdminClient()
+
+    // A session ID is never trusted unless it belongs to the current user.
+    const { data: session, error: sessionError } = await supabase
+      .from('a3_entrevistas_sesiones')
+      .select('*')
+      .eq('id', sessionId)
+      .eq('user_id', userId)
+      .maybeSingle()
+
+    if (sessionError) {
+      console.error('[v0] Error verifying interview session:', sessionError)
+      return NextResponse.json({ error: 'Failed to verify session' }, { status: 500 })
+    }
+
+    if (!session) {
+      return NextResponse.json({ error: 'Interview session not found' }, { status: 404 })
+    }
+
+    const { data: question, error: questionError } = await supabase
       .from('a3_preguntas_entrevista')
       .select('*')
       .eq('id', questionId)
       .maybeSingle()
 
-    if (!question) {
-      return NextResponse.json(
-        { error: 'Question not found' },
-        { status: 404 }
-      )
+    if (questionError) {
+      console.error('[v0] Error fetching interview question:', questionError)
+      return NextResponse.json({ error: 'Failed to fetch question' }, { status: 500 })
     }
 
-    // Get user DISC profile for personalized feedback
+    if (!question) {
+      return NextResponse.json({ error: 'Question not found' }, { status: 404 })
+    }
+
     const { data: a1Results } = await supabase
       .from('a1_tests_results')
       .select('result, profile_type')
@@ -57,52 +89,41 @@ export async function POST(
       .maybeSingle()
 
     const userProfile = a1Results?.profile_type || 'D'
-
-    // Call OpenAI API directly for interview feedback
-    console.log('[v0] Calling OpenAI API directly for A3 interview feedback')
-    
     const apiKey = process.env.OPENAI_API_KEY
+
     if (!apiKey) {
-      throw new Error('OPENAI_API_KEY environment variable is not set')
+      return NextResponse.json({ error: 'Interview feedback is unavailable' }, { status: 503 })
     }
 
     const openaiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${apiKey}`,
+        Authorization: `Bearer ${apiKey}`,
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
         messages: [
           {
             role: 'user',
-            content: `
-You are an expert interview coach analyzing a candidate's response to an interview question.
+            content: `You are an expert interview coach analyzing a candidate response.
 
-Interview Type: ${interviewType}
+Interview Type: ${safeInterviewType}
 Candidate DISC Profile: ${userProfile}
 Question: "${question.pregunta}"
 Suggested Answer: "${question.sugerencia_respuesta}"
-Candidate's Response: "${responseText}"
+Candidate Response: "${responseText.trim()}"
 
-Provide structured feedback in JSON format ONLY (no additional text):
+Return JSON only:
 {
-  "scores": {
-    "content": 0-100,
-    "delivery": 0-100,
-    "confidence": 0-100
-  },
+  "scores": { "content": 0-100, "delivery": 0-100, "confidence": 0-100 },
   "strengths": ["strength1", "strength2", "strength3"],
   "improvements": ["area1", "area2", "area3"],
-  "specificFeedback": "Personalized feedback based on their DISC profile",
+  "specificFeedback": "Personalized feedback based on the DISC profile",
   "nextSteps": "Recommended practice area",
   "recommendedQuestions": ["follow-up1", "follow-up2"]
-}
-
-Be specific and constructive. Consider the candidate's DISC profile (${userProfile}) in your feedback.
-`
-          }
+}`,
+          },
         ],
         max_tokens: 1000,
         temperature: 0.7,
@@ -110,180 +131,227 @@ Be specific and constructive. Consider the candidate's DISC profile (${userProfi
     })
 
     if (!openaiResponse.ok) {
-      const error = await openaiResponse.json()
-      console.error('[v0] OpenAI API error:', error)
-      throw new Error(`OpenAI API error: ${error.error?.message || openaiResponse.statusText}`)
+      const openaiError = await openaiResponse.text()
+      console.error('[v0] OpenAI API error:', openaiError)
+      return NextResponse.json({ error: 'Failed to generate interview feedback' }, { status: 502 })
     }
 
     const openaiData = await openaiResponse.json()
     const feedbackText = openaiData.choices?.[0]?.message?.content || ''
-    console.log('[v0] OpenAI feedback received:', feedbackText.substring(0, 100) + '...')
-
-    let feedback
+    let feedback: Record<string, any>
 
     try {
-      // Extract JSON from the response
       const jsonMatch = feedbackText.match(/\{[\s\S]*\}/)
       feedback = jsonMatch ? JSON.parse(jsonMatch[0]) : {}
-    } catch (e) {
-      console.error('[v0] Error parsing AI feedback:', e)
+    } catch (parseError) {
+      console.error('[v0] Error parsing AI feedback:', parseError)
       feedback = {
-        scores: { content: 75, delivery: 80, confidence: 78 },
-        strengths: ['Clear articulation', 'Relevant examples'],
-        improvements: ['More specific metrics', 'Stronger conclusion'],
+        scores: { content: 75, delivery: 75, confidence: 75 },
+        strengths: ['Respuesta completada'],
+        improvements: ['Practicar con ejemplos más específicos'],
         specificFeedback: feedbackText,
-        nextSteps: 'Practice with more examples'
+        nextSteps: 'Practicar una nueva respuesta',
       }
     }
 
-    // Calculate overall score
+    const scoreValues = [
+      Number(feedback.scores?.content),
+      Number(feedback.scores?.delivery),
+      Number(feedback.scores?.confidence),
+    ].map((value) => (Number.isFinite(value) ? Math.max(0, Math.min(100, value)) : 75))
     const overallScore = Math.round(
-      (feedback.scores?.content + feedback.scores?.delivery + feedback.scores?.confidence) / 3
+      scoreValues.reduce((sum, value) => sum + value, 0) / scoreValues.length,
     )
+    const strengths = Array.isArray(feedback.strengths) ? feedback.strengths : []
+    const improvements = Array.isArray(feedback.improvements) ? feedback.improvements : []
+    const now = new Date().toISOString()
 
-    // Save the response and feedback
-    const { data: savedResponse } = await supabase
+    const { data: savedResponse, error: responseError } = await supabase
       .from('a3_respuestas_entrevista')
       .insert({
         sesion_id: sessionId,
         pregunta_id: questionId,
-        respuesta_usuario: responseText,
+        respuesta_usuario: responseText.trim(),
         score_calidad: overallScore,
         feedback_ia: feedback,
-        areas_mejora: feedback.improvements,
-        puntos_fuertes: feedback.strengths,
-        tiempo_respuesta: videoDurationSeconds || 60,
-        created_at: new Date().toISOString()
+        areas_mejora: improvements,
+        puntos_fuertes: strengths,
+        tiempo_respuesta: safeDuration,
+        created_at: now,
       })
       .select()
 
-    // Update session progress
-    const { data: session } = await supabase
-      .from('a3_entrevistas_sesiones')
-      .select('*')
-      .eq('id', sessionId)
-      .maybeSingle()
-
-    if (session) {
-      const modulosCompletados = (session.modulos_completados || {}) as Record<string, boolean>
-      modulosCompletados[questionId] = true
-
-      await supabase
-        .from('a3_entrevistas_sesiones')
-        .update({
-          modulos_completados: modulosCompletados,
-          updated_at: new Date().toISOString()
-        })
-        .eq('id', sessionId)
+    if (responseError) {
+      console.error('[v0] Error saving interview response:', responseError)
+      return NextResponse.json({ error: 'Failed to save interview response' }, { status: 500 })
     }
 
-    // Save AI feedback entry
-    await supabase
+    const completedModules = {
+      ...((session.modulos_completados || {}) as Record<string, boolean>),
+      [questionId]: true,
+    }
+
+    const { error: sessionUpdateError } = await supabase
+      .from('a3_entrevistas_sesiones')
+      .update({
+        modulos_completados: completedModules,
+        updated_at: now,
+      })
+      .eq('id', sessionId)
+      .eq('user_id', userId)
+
+    if (sessionUpdateError) {
+      console.error('[v0] Error updating interview session:', sessionUpdateError)
+    }
+
+    const { error: feedbackError } = await supabase
       .from('a3_entrevista_feedback_ia')
       .insert({
         sesion_id: sessionId,
         pregunta: question.pregunta,
-        respuesta_usuario: responseText,
-        score_contenido: feedback.scores?.content || 75,
-        score_entrega: feedback.scores?.delivery || 75,
-        score_confianza: feedback.scores?.confidence || 75,
-        analisis_fortalezas: feedback.strengths,
-        areas_mejora: feedback.improvements,
+        respuesta_usuario: responseText.trim(),
+        score_contenido: scoreValues[0],
+        score_entrega: scoreValues[1],
+        score_confianza: scoreValues[2],
+        analisis_fortalezas: strengths,
+        areas_mejora: improvements,
         sugerencias_especificas: feedback.specificFeedback,
         recomendacion_siguiente: feedback.nextSteps,
-        creado_at: new Date().toISOString()
+        creado_at: now,
       })
 
-    // Log engagement
-    await supabase
-      .from('a4_engagement_tracking')
-      .insert({
-        user_id: userId,
-        event_type: 'interview_simulation',
-        feature: 'a3_training',
-        completed: true,
-        duration_seconds: videoDurationSeconds || 60,
-        created_at: new Date().toISOString()
-      })
+    if (feedbackError) {
+      console.error('[v0] Error saving interview feedback:', feedbackError)
+    }
 
-    // Log XP activity for A3 interview completion
-    const xpAmount = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
-    await logXPActivity({
-      section: 'A3',
-      activity_type: 'interview_completed',
-      xp_amount: xpAmount,
-      reference_id: sessionId,
-      metadata: {
-        questionId,
-        score: overallScore,
-        responseId: savedResponse?.[0]?.id,
-      },
+    const { error: engagementError } = await supabase.from('a4_engagement_tracking').insert({
+      user_id: userId,
+      event_type: 'interview_simulation',
+      feature: 'a3_training',
+      completed: true,
+      duration_seconds: safeDuration,
+      created_at: now,
     })
 
-    console.log(`[v0] A3 response processed with score: ${overallScore}, XP logged: ${xpAmount}`)
+    if (engagementError) {
+      console.error('[v0] Error saving interview engagement:', engagementError)
+    }
+
+    // Award XP internally. The public XP endpoint is read-only.
+    const xpAmount = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
+    const xpReferenceId = `${sessionId}:${questionId}`
+    const { data: existingXp, error: xpLookupError } = await supabase
+      .from('xp_activity_logs')
+      .select('id')
+      .eq('user_id', userId)
+      .eq('section', 'A3')
+      .eq('activity_type', 'interview_completed')
+      .eq('reference_id', xpReferenceId)
+      .maybeSingle()
+
+    if (xpLookupError) {
+      console.error('[v0] Error checking interview XP:', xpLookupError)
+    } else if (!existingXp) {
+      const { error: xpInsertError } = await supabase.from('xp_activity_logs').insert({
+        user_id: userId,
+        section: 'A3',
+        activity_type: 'interview_completed',
+        xp_amount: xpAmount,
+        reference_id: xpReferenceId,
+        metadata: {
+          sessionId,
+          questionId,
+          score: overallScore,
+          responseId: savedResponse?.[0]?.id,
+        },
+      })
+
+      if (xpInsertError) {
+        console.error('[v0] Error recording interview XP:', xpInsertError)
+      }
+    }
 
     return NextResponse.json({
       success: true,
       score: overallScore,
       feedback,
       sessionId,
-      responseId: savedResponse?.[0]?.id
+      responseId: savedResponse?.[0]?.id,
     })
   } catch (error) {
     console.error('[v0] Error processing A3 response:', error)
-    return NextResponse.json(
-      { error: 'Failed to process interview response' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to process interview response' }, { status: 500 })
   }
 }
 
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ userId: string }> }
+  { params }: { params: Promise<{ userId: string }> },
 ) {
   try {
     const { userId } = await params
-    const supabase = await createClient()
-    const { searchParams } = new URL(request.url)
-    const sessionId = searchParams.get('sessionId')
+    const currentUser = await resolveServerUser()
 
-    // Verify user
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    if (authError || !user || user.id !== userId) {
+    if (!currentUser || currentUser.id !== userId) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    // Get session feedback
-    let query = supabase
-      .from('a3_entrevista_feedback_ia')
-      .select('*')
+    const sessionId = request.nextUrl.searchParams.get('sessionId')
+    const supabase = createAdminClient()
 
-    if (sessionId) {
-      query = query.eq('sesion_id', sessionId)
+    const { data: sessions, error: sessionsError } = await supabase
+      .from('a3_entrevistas_sesiones')
+      .select('id')
+      .eq('user_id', userId)
+
+    if (sessionsError) {
+      console.error('[v0] Error fetching user interview sessions:', sessionsError)
+      return NextResponse.json({ error: 'Failed to fetch sessions' }, { status: 500 })
     }
 
-    const { data: feedbackHistory } = await query.order('creado_at', {
-      ascending: false
-    })
+    const sessionIds = (sessions || []).map((session) => session.id)
 
-    // Get progress stats
-    const { data: progress } = await supabase
+    if (sessionId && !sessionIds.includes(sessionId)) {
+      return NextResponse.json({ error: 'Interview session not found' }, { status: 404 })
+    }
+
+    let feedbackHistory: any[] = []
+    if (sessionIds.length > 0) {
+      let feedbackQuery = supabase
+        .from('a3_entrevista_feedback_ia')
+        .select('*')
+        .in('sesion_id', sessionIds)
+        .order('creado_at', { ascending: false })
+
+      if (sessionId) {
+        feedbackQuery = feedbackQuery.eq('sesion_id', sessionId)
+      }
+
+      const { data, error: feedbackHistoryError } = await feedbackQuery
+      if (feedbackHistoryError) {
+        console.error('[v0] Error fetching A3 feedback:', feedbackHistoryError)
+        return NextResponse.json({ error: 'Failed to fetch feedback' }, { status: 500 })
+      }
+      feedbackHistory = data || []
+    }
+
+    const { data: progress, error: progressError } = await supabase
       .from('a3_progreso_entrevistas')
       .select('*')
       .eq('user_id', userId)
       .maybeSingle()
 
+    if (progressError) {
+      console.error('[v0] Error fetching interview progress:', progressError)
+    }
+
     return NextResponse.json({
-      feedbackHistory: feedbackHistory || [],
+      feedbackHistory,
       progress,
-      timestamp: new Date().toISOString()
+      timestamp: new Date().toISOString(),
     })
   } catch (error) {
     console.error('[v0] Error fetching A3 feedback:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch feedback' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch feedback' }, { status: 500 })
   }
 }
