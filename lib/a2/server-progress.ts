@@ -1,6 +1,9 @@
+export type A2Horizon = 30 | 60 | 90
+
 export interface A2ProgressSnapshot {
   currentDay: number
   highestUnlockedDay: number
+  activeHorizon: A2Horizon
   source: 'journey' | 'route' | 'default'
 }
 
@@ -16,6 +19,31 @@ export interface A2ResolvedRoute {
 function validDay(value: unknown): number | null {
   const day = Number(value)
   return Number.isInteger(day) && day >= 1 && day <= 90 ? day : null
+}
+
+function objectValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {}
+}
+
+function explicitHorizon(metadata: unknown): A2Horizon | null {
+  const value = Number(objectValue(metadata).a2_horizon)
+  return value === 30 || value === 60 || value === 90 ? value : null
+}
+
+export function inferA2Horizon(
+  metadata: unknown,
+  highestUnlockedDay: number | null,
+): A2Horizon {
+  const configured = explicitHorizon(metadata)
+  if (configured) return configured
+
+  // Grandfather existing routes that had already advanced before explicit
+  // extension decisions were introduced.
+  if ((highestUnlockedDay || 1) > 60) return 90
+  if ((highestUnlockedDay || 1) > 30) return 60
+  return 30
 }
 
 function routeCodeForProfile(profileType: string | null, resultText: string | null): string {
@@ -152,7 +180,8 @@ export async function resolveA2Route(
 
 /**
  * Reads A2 progress from the canonical journey state, with the legacy route
- * progress table as a compatibility fallback.
+ * progress table as a compatibility fallback. New users always start with a
+ * 30-day horizon; 60 and 90 require explicit extension decisions.
  */
 export async function getA2ProgressSnapshot(
   userId: string,
@@ -160,7 +189,7 @@ export async function getA2ProgressSnapshot(
 ): Promise<A2ProgressSnapshot> {
   const { data: journey, error: journeyError } = await supabase
     .from('despega_journey_state')
-    .select('current_a2_day, highest_a2_day_unlocked')
+    .select('current_a2_day, highest_a2_day_unlocked, metadata')
     .eq('user_id', userId)
     .maybeSingle()
 
@@ -171,9 +200,20 @@ export async function getA2ProgressSnapshot(
   const journeyCurrent = validDay(journey?.current_a2_day)
   const journeyHighest = validDay(journey?.highest_a2_day_unlocked)
   if (journeyCurrent || journeyHighest) {
+    const activeHorizon = inferA2Horizon(journey?.metadata, journeyHighest)
+    const currentDay = Math.min(
+      activeHorizon,
+      journeyCurrent ?? journeyHighest ?? 1,
+    )
+    const highestUnlockedDay = Math.min(
+      activeHorizon,
+      journeyHighest ?? journeyCurrent ?? 1,
+    )
+
     return {
-      currentDay: journeyCurrent ?? journeyHighest ?? 1,
-      highestUnlockedDay: journeyHighest ?? journeyCurrent ?? 1,
+      currentDay,
+      highestUnlockedDay,
+      activeHorizon,
       source: 'journey',
     }
   }
@@ -192,12 +232,19 @@ export async function getA2ProgressSnapshot(
 
   const routeDay = validDay(routeProgress?.dia_actual)
   if (routeDay) {
+    const activeHorizon = inferA2Horizon(null, routeDay)
     return {
-      currentDay: routeDay,
-      highestUnlockedDay: routeDay,
+      currentDay: Math.min(activeHorizon, routeDay),
+      highestUnlockedDay: Math.min(activeHorizon, routeDay),
+      activeHorizon,
       source: 'route',
     }
   }
 
-  return { currentDay: 1, highestUnlockedDay: 1, source: 'default' }
+  return {
+    currentDay: 1,
+    highestUnlockedDay: 1,
+    activeHorizon: 30,
+    source: 'default',
+  }
 }
