@@ -11,7 +11,7 @@ permissions:
 jobs:
   typecheck:
     runs-on: ubuntu-latest
-    timeout-minutes: 20
+    timeout-minutes: 30
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -87,3 +87,13 @@ jobs:
 
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
+
+      - name: Next production build
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+          DEMO_SESSION_SECRET: test-demo-session-secret-for-ci
+          NEXTAUTH_SECRET: test-nextauth-secret-for-ci
+        run: npm run build
