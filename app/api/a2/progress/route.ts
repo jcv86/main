@@ -1,185 +1,156 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
+import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
+
+const TOTAL_DAYS = 90
+
+function monthStatus(completed: number) {
+  if (completed >= 30) return 'completed'
+  if (completed > 0) return 'in_progress'
+  return 'pending'
+}
+
+function emptyProgress() {
+  return {
+    current_month: 1,
+    current_day: 1,
+    highest_unlocked_day: 1,
+    progress_percentage: 0,
+    completed_tasks: 0,
+    completed_days: [],
+    total_tasks: TOTAL_DAYS,
+    status: 'not_started',
+    route: null,
+    month_progress: [
+      { month: 1, percentage: 0, completed: false },
+      { month: 2, percentage: 0, completed: false },
+      { month: 3, percentage: 0, completed: false },
+    ],
+    milestones: [
+      { month: 1, title: 'Primer ciclo de 30 días', status: 'pending' },
+      { month: 2, title: 'Extensión a 60 días', status: 'pending' },
+      { month: 3, title: 'Integración a 90 días', status: 'pending' },
+    ],
+  }
+}
 
 /**
  * GET /api/a2/progress
- * Calculate user progress through A2 (90-day journey)
- * Returns current month and overall progress percentage based on completed tasks
+ *
+ * Returns the real A2 state for the verified current user. The canonical source
+ * is `despega_journey_state`; task completions provide the progress history.
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    // Fallback to demo cookie if no session
-    let userId = user?.id
-    if (!userId) {
-      const cookieStore = await cookies()
-      const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
-      const demoUser = await verifyDemoSessionToken(demoToken)
-      userId = demoUser?.id
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json(emptyProgress(), { status: 200 })
     }
 
-    if (!userId) {
-      return NextResponse.json(
-        {
-          current_month: 1,
-          progress_percentage: 0,
-          completed_tasks: 0,
-          total_tasks: 90,
-          status: 'not_started',
-          month_progress: [
-            { month: 1, percentage: 0, completed: false },
-            { month: 2, percentage: 0, completed: false },
-            { month: 3, percentage: 0, completed: false },
-          ],
-          milestones: [
-            { month: 1, title: '30 días - Primer milestone', status: 'pending' },
-            { month: 2, title: '60 días - Segundo milestone', status: 'pending' },
-            { month: 3, title: '90 días - Completado', status: 'pending' },
-          ],
-        },
-        { status: 200 }
-      )
+    const userId = currentUser.id
+    const supabase = createAdminClient()
+    const [snapshot, route, completionsResult] = await Promise.all([
+      getA2ProgressSnapshot(userId, supabase),
+      resolveA2Route(userId, supabase),
+      supabase
+        .from('a2_user_task_completions')
+        .select('day, completed_at')
+        .eq('user_id', userId)
+        .not('completed_at', 'is', null),
+    ])
+
+    if (completionsResult.error) {
+      console.error('[v0] Error fetching A2 completions:', completionsResult.error)
     }
 
-    // Fetch completed days from a2_user_task_completions
-    const { data: completions } = await supabase
-      .from('a2_user_task_completions')
-      .select('day, completed_at')
-      .eq('user_id', userId)
-      .not('completed_at', 'is', null)
+    const completedDays = Array.from(
+      new Set(
+        (completionsResult.data || [])
+          .map((completion) => Number(completion.day))
+          .filter((day) => Number.isInteger(day) && day >= 1 && day <= TOTAL_DAYS),
+      ),
+    ).sort((left, right) => left - right)
 
-    // Get unique completed days
-    const completedDays = new Set(
-      (completions || []).map((c) => c.day)
+    const totalCompleted = completedDays.length
+    const progressPercentage = Math.min(
+      100,
+      Math.round((totalCompleted / TOTAL_DAYS) * 100),
     )
+    const currentMonth = snapshot.currentDay <= 30 ? 1 : snapshot.currentDay <= 60 ? 2 : 3
+    const status =
+      totalCompleted === 0
+        ? 'not_started'
+        : totalCompleted >= TOTAL_DAYS
+          ? 'completed'
+          : 'in_progress'
 
-    // Calculate progress based on completed days (max 90 days)
-    const totalCompleted = completedDays.size
-    const totalDays = 90
-    const progressPercentage = Math.round((totalCompleted / totalDays) * 100)
-
-    // Determine current month based on day progression
-    // Month 1: Days 1-30
-    // Month 2: Days 31-60
-    // Month 3: Days 61-90
-    let currentMonth = 1
-    if (totalCompleted > 30) {
-      currentMonth = 2
-    }
-    if (totalCompleted > 60) {
-      currentMonth = 3
-    }
-
-    // If no completions yet, show month 1
-    if (totalCompleted === 0) {
-      currentMonth = 1
-    }
-
-    const status = 
-      progressPercentage === 0 ? 'not_started' :
-      progressPercentage < 50 ? 'in_progress' :
-      progressPercentage < 100 ? 'near_completion' :
-      'completed'
-
-    // Calculate month percentages
-    const month1Completed = Array.from(completedDays).filter((d) => d >= 1 && d <= 30).length
-    const month2Completed = Array.from(completedDays).filter((d) => d >= 31 && d <= 60).length
-    const month3Completed = Array.from(completedDays).filter((d) => d >= 61 && d <= 90).length
-
-    const month1Percentage = Math.round((month1Completed / 30) * 100)
-    const month2Percentage = Math.round((month2Completed / 30) * 100)
-    const month3Percentage = Math.round((month3Completed / 30) * 100)
+    const monthCounts = [
+      completedDays.filter((day) => day >= 1 && day <= 30).length,
+      completedDays.filter((day) => day >= 31 && day <= 60).length,
+      completedDays.filter((day) => day >= 61 && day <= 90).length,
+    ]
 
     return NextResponse.json(
       {
         current_month: currentMonth,
+        current_day: snapshot.currentDay,
+        highest_unlocked_day: snapshot.highestUnlockedDay,
+        progress_source: snapshot.source,
         progress_percentage: progressPercentage,
         completed_tasks: totalCompleted,
-        total_tasks: totalDays,
+        completed_days: completedDays,
+        total_tasks: TOTAL_DAYS,
         status,
-        month_progress: [
-          { month: 1, percentage: month1Percentage, completed: month1Percentage === 100 },
-          { month: 2, percentage: month2Percentage, completed: month2Percentage === 100 },
-          { month: 3, percentage: month3Percentage, completed: month3Percentage === 100 },
-        ],
+        route,
+        month_progress: monthCounts.map((completed, index) => ({
+          month: index + 1,
+          percentage: Math.min(100, Math.round((completed / 30) * 100)),
+          completed: completed >= 30,
+        })),
         milestones: [
-          { month: 1, title: '30 días - Primer milestone', status: month1Percentage === 100 ? 'completed' : month1Completed > 0 ? 'in_progress' : 'pending' },
-          { month: 2, title: '60 días - Segundo milestone', status: month2Percentage === 100 ? 'completed' : month2Completed > 0 ? 'in_progress' : 'pending' },
-          { month: 3, title: '90 días - Completado', status: month3Percentage === 100 ? 'completed' : month3Completed > 0 ? 'in_progress' : 'pending' },
+          {
+            month: 1,
+            title: 'Primer ciclo de 30 días',
+            status: monthStatus(monthCounts[0]),
+          },
+          {
+            month: 2,
+            title: 'Extensión a 60 días',
+            status: monthStatus(monthCounts[1]),
+          },
+          {
+            month: 3,
+            title: 'Integración a 90 días',
+            status: monthStatus(monthCounts[2]),
+          },
         ],
       },
-      { status: 200 }
+      { status: 200 },
     )
   } catch (error) {
     console.error('[v0] Error fetching A2 progress:', error)
     return NextResponse.json(
-      {
-        current_month: 1,
-        progress_percentage: 0,
-        completed_tasks: 0,
-        total_tasks: 90,
-        status: 'error',
-      },
-      { status: 200 }
+      { ...emptyProgress(), status: 'error' },
+      { status: 200 },
     )
   }
 }
 
+/**
+ * Compatibility POST: all writes are delegated to the canonical complete-day
+ * endpoint so there is only one progression implementation.
+ */
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { dayNumber } = body
+  const body = await request.text()
+  const target = new URL('/api/a2/complete-day', request.url)
 
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    // Fallback to demo cookie if no session
-    let userId = user?.id
-    if (!userId) {
-      const cookieStore = await cookies()
-      const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
-      const demoUser = await verifyDemoSessionToken(demoToken)
-      userId = demoUser?.id
-    }
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    // Mark day as completed in a2_user_task_completions
-    const { error: insertError } = await supabase
-      .from('a2_user_task_completions')
-      .insert({
-        user_id: userId,
-        day: dayNumber,
-        completed_at: new Date().toISOString(),
-      })
-
-    if (insertError && insertError.code !== '23505') { // 23505 is unique constraint violation
-      console.error('[v0] Error marking day complete:', insertError)
-      return NextResponse.json(
-        { error: 'Failed to update progress' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: `Day ${dayNumber} marked as completed`,
-    })
-  } catch (error) {
-    console.error('[v0] Progress update error:', error)
-    return NextResponse.json(
-      { error: 'Failed to update progress' },
-      { status: 500 }
-    )
-  }
+  return fetch(target, {
+    method: 'POST',
+    headers: {
+      'Content-Type': request.headers.get('content-type') || 'application/json',
+      cookie: request.headers.get('cookie') || '',
+    },
+    body,
+  })
 }

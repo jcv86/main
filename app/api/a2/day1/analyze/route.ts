@@ -1,33 +1,35 @@
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 import { scoreDay1Submission, formatScoringResult } from '@/lib/a2-dtc-scoring'
 import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
+
+function stringValue(value: unknown): string {
+  return typeof value === 'string' ? value.trim() : ''
+}
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies()
-    const demoUserCookie = cookieStore.get('demo_user')
-    
-    if (!demoUserCookie) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    let userId: string | null = null
-    try {
-      const demoUser = JSON.parse(demoUserCookie.value)
-      userId = demoUser.id
-    } catch {
-      return NextResponse.json(
-        { error: 'Invalid authentication' },
-        { status: 401 }
-      )
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json({ error: 'Not authenticated' }, { status: 401 })
     }
 
     const body = await request.json()
-    const {
+    const visionRole = stringValue(body.visionRole)
+    const visionDesiredOutcome = stringValue(body.visionDesiredOutcome)
+    const visionEnvironment = stringValue(body.visionEnvironment)
+    const milestoneDay10 = stringValue(body.milestoneDay10)
+    const milestoneDay20 = stringValue(body.milestoneDay20)
+    const milestoneDay30 = stringValue(body.milestoneDay30)
+    const actionPlan =
+      body.actionPlan && typeof body.actionPlan === 'object' && !Array.isArray(body.actionPlan)
+        ? body.actionPlan
+        : {}
+
+    const userId = currentUser.id
+    const submission = {
+      userId,
+      submissionId: `dtc-${userId}-${Date.now()}`,
       visionRole,
       visionDesiredOutcome,
       visionEnvironment,
@@ -35,52 +37,56 @@ export async function POST(request: Request) {
       milestoneDay20,
       milestoneDay30,
       actionPlan,
-    } = body
-
-    // Create submission object for scoring
-    const submission = {
-      userId,
-      submissionId: `dtc-${userId}-${Date.now()}`,
-      visionRole: visionRole || '',
-      visionDesiredOutcome: visionDesiredOutcome || '',
-      visionEnvironment: visionEnvironment || '',
-      milestoneDay10: milestoneDay10 || '',
-      milestoneDay20: milestoneDay20 || '',
-      milestoneDay30: milestoneDay30 || '',
-      actionPlan: actionPlan || {},
       createdAt: new Date(),
     }
 
-    // Score the submission using real DTC scoring logic
     const scoringResult = scoreDay1Submission(submission)
-
-    console.log('[v0] Day 1 DTC Scoring:', {
-      userId,
-      totalScore: scoringResult.totalScore,
-      passed: scoringResult.passed,
-      criteria: scoringResult.criteria,
-    })
-
-    // Save to database
+    const now = new Date().toISOString()
     const supabase = createAdminClient()
-    const { error: saveError } = await supabase
+    const payload = {
+      user_id: userId,
+      vision_role: visionRole,
+      vision_environment: visionEnvironment,
+      vision_desired_outcome: visionDesiredOutcome,
+      milestone_day10: milestoneDay10,
+      milestone_day20: milestoneDay20,
+      milestone_day30: milestoneDay30,
+      action_plan: actionPlan,
+      analysis_score: scoringResult.totalScore,
+      pass_fail_status: scoringResult.passed ? 'pass' : 'needs_revision',
+      analysis_status: 'completed',
+      analysis_result: {
+        criteria: scoringResult.criteria,
+        breakdown: scoringResult.breakdown,
+        recommendations: scoringResult.recommendations,
+      },
+      updated_at: now,
+      completed_at: scoringResult.passed ? now : null,
+    }
+
+    const { data: existing, error: lookupError } = await supabase
       .from('a2_day1_submissions')
-      .update({
-        analysis_score: scoringResult.totalScore,
-        pass_fail_status: scoringResult.passed ? 'pass' : 'needs_revision',
-        analysis_result: {
-          criteria: scoringResult.criteria,
-          breakdown: scoringResult.breakdown,
-          recommendations: scoringResult.recommendations,
-        },
-        updated_at: new Date(),
-      })
+      .select('id')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(1)
+      .maybeSingle()
+
+    if (lookupError) {
+      console.error('[v0] Error finding Day 1 submission:', lookupError)
+      return NextResponse.json({ error: 'Failed to save analysis' }, { status: 500 })
+    }
+
+    const { error: saveError } = existing
+      ? await supabase.from('a2_day1_submissions').update(payload).eq('id', existing.id)
+      : await supabase.from('a2_day1_submissions').insert({
+          ...payload,
+          created_at: now,
+        })
 
     if (saveError) {
-      console.error('[v0] Error saving analysis:', saveError)
+      console.error('[v0] Error saving Day 1 analysis:', saveError)
+      return NextResponse.json({ error: 'Failed to save analysis' }, { status: 500 })
     }
 
     return NextResponse.json({
@@ -101,10 +107,7 @@ export async function POST(request: Request) {
       },
     })
   } catch (error) {
-    console.error('[v0] Analysis error:', error)
-    return NextResponse.json(
-      { error: 'Failed to analyze submission' },
-      { status: 500 }
-    )
+    console.error('[v0] Day 1 analysis error:', error)
+    return NextResponse.json({ error: 'Failed to analyze submission' }, { status: 500 })
   }
 }

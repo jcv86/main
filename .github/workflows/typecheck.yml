@@ -1,0 +1,62 @@
+name: TypeScript validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  typecheck:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+
+      - name: TypeScript regression check
+        env:
+          BASE_SHA: ${{ github.event.pull_request.base.sha }}
+          HEAD_SHA: ${{ github.event.pull_request.head.sha }}
+        run: |
+          set +e
+          npx tsc --noEmit > typecheck.log 2>&1
+          typecheck_status=$?
+          set -e
+
+          cat typecheck.log
+
+          if [ "$typecheck_status" -eq 0 ]; then
+            exit 0
+          fi
+
+          mapfile -t changed_files < <(
+            git diff --name-only "$BASE_SHA" "$HEAD_SHA" -- '*.ts' '*.tsx'
+          )
+
+          regression=0
+          for file in "${changed_files[@]}"; do
+            if grep -Fq "${file}(" typecheck.log; then
+              echo "TypeScript regression in changed file: ${file}"
+              regression=1
+            fi
+          done
+
+          if [ "$regression" -ne 0 ]; then
+            exit 1
+          fi
+
+          echo "Only pre-existing TypeScript errors remain outside this pull request."

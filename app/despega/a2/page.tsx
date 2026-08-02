@@ -1,170 +1,343 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronRight, Filter, Search, Calendar, Target, Zap, Lock, Unlock, CheckCircle2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import {
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
+  Lock,
+  Search,
+  Unlock,
+} from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { A2_DAYS } from '@/lib/a2-days-config'
+import { A2_DAYS, type A2Day } from '@/lib/a2-days-config'
 
-type PhaseFilter = 'all' | 'clarity' | 'material' | 'real-action' | 'refinement'
+type PhaseFilter = 'all' | A2Day['phase']
+type Horizon = 30 | 60 | 90
+
+interface A2RouteSummary {
+  id: string
+  code: string
+  name: string
+  description: string | null
+  durationDays: number
+  source: string
+}
+
+interface A2ProgressResponse {
+  current_day: number
+  highest_unlocked_day: number
+  progress_percentage: number
+  completed_tasks: number
+  completed_days: number[]
+  total_tasks: number
+  status: string
+  route: A2RouteSummary | null
+}
+
+const EMPTY_PROGRESS: A2ProgressResponse = {
+  current_day: 1,
+  highest_unlocked_day: 1,
+  progress_percentage: 0,
+  completed_tasks: 0,
+  completed_days: [],
+  total_tasks: 90,
+  status: 'not_started',
+  route: null,
+}
+
+const PHASE_NAME: Record<A2Day['phase'], string> = {
+  clarity: 'Claridad',
+  material: 'Material',
+  interview: 'Entrevista',
+  'real-action': 'Acción Real',
+  refinement: 'Refinamiento',
+}
+
+const PHASE_COLOR: Record<A2Day['phase'], string> = {
+  clarity: 'bg-blue-600/10 text-blue-400 border-blue-500/30',
+  material: 'bg-purple-600/10 text-purple-400 border-purple-500/30',
+  interview: 'bg-fuchsia-600/10 text-fuchsia-300 border-fuchsia-500/30',
+  'real-action': 'bg-green-600/10 text-green-400 border-green-500/30',
+  refinement: 'bg-amber-600/10 text-amber-400 border-amber-500/30',
+}
+
+const HORIZONS: Array<{ value: Horizon; label: string }> = [
+  { value: 30, label: 'Ciclo inicial · 30 días' },
+  { value: 60, label: 'Extender · 60 días' },
+  { value: 90, label: 'Ruta completa · 90 días' },
+]
 
 export default function A2DashboardPage() {
   const router = useRouter()
   const [filter, setFilter] = useState<PhaseFilter>('all')
   const [search, setSearch] = useState('')
-  const [unlockedDays, setUnlockedDays] = useState<Set<number>>(new Set([1, 2, 3]))
+  const [horizon, setHorizon] = useState<Horizon>(30)
+  const [progress, setProgress] = useState<A2ProgressResponse>(EMPTY_PROGRESS)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
 
-  const phaseName = {
-    clarity: 'Claridad',
-    material: 'Material',
-    'real-action': 'Acción Real',
-    refinement: 'Refinamiento'
-  }
+  useEffect(() => {
+    let active = true
 
-  const phaseColor = {
-    clarity: 'bg-blue-600/10 text-blue-400 border-blue-500/30',
-    material: 'bg-purple-600/10 text-purple-400 border-purple-500/30',
-    'real-action': 'bg-green-600/10 text-green-400 border-green-500/30',
-    refinement: 'bg-amber-600/10 text-amber-400 border-amber-500/30'
-  }
+    const loadProgress = async () => {
+      try {
+        const response = await fetch('/api/a2/progress', {
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        if (!response.ok) throw new Error('No pudimos cargar Tu Ruta')
 
-  const filteredDays = Object.entries(A2_DAYS)
-    .filter(([_, day]) => {
-      if (filter !== 'all' && day.phase !== filter) return false
-      if (search && !day.title.toLowerCase().includes(search.toLowerCase())) return false
-      return true
-    })
-    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
+        const data = (await response.json()) as A2ProgressResponse
+        if (!active) return
+        setProgress({
+          ...EMPTY_PROGRESS,
+          ...data,
+          completed_days: Array.isArray(data.completed_days) ? data.completed_days : [],
+        })
+        setError(null)
+      } catch (loadError) {
+        console.error('[v0] Error loading A2 dashboard:', loadError)
+        if (active) setError('No pudimos cargar tu avance. Intenta nuevamente.')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
 
-  const daysCompleted = 3
-  const progressPercent = (daysCompleted / 90) * 100
+    loadProgress()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const completedSet = useMemo(
+    () => new Set(progress.completed_days),
+    [progress.completed_days],
+  )
+
+  const filteredDays = useMemo(
+    () =>
+      Object.entries(A2_DAYS)
+        .filter(([dayNumber, day]) => {
+          const numericDay = Number(dayNumber)
+          if (numericDay > horizon) return false
+          if (filter !== 'all' && day.phase !== filter) return false
+          if (search && !day.title.toLowerCase().includes(search.toLowerCase())) return false
+          return true
+        })
+        .sort((left, right) => Number(left[0]) - Number(right[0])),
+    [filter, horizon, search],
+  )
+
+  const completedInHorizon = progress.completed_days.filter((day) => day <= horizon).length
+  const progressPercent = Math.min(100, Math.round((completedInHorizon / horizon) * 100))
+
+  const phaseSummaries = [
+    {
+      key: 'clarity',
+      days: '1–10',
+      title: 'Claridad Profesional',
+      description: 'Define dirección, foco y una hipótesis de avance concreta.',
+      color: 'from-blue-600 to-cyan-600',
+      visible: true,
+    },
+    {
+      key: 'material',
+      days: '11–30',
+      title: 'Material y práctica',
+      description: 'Convierte tu experiencia en evidencia, relato y práctica utilizable.',
+      color: 'from-purple-600 to-pink-600',
+      visible: true,
+    },
+    {
+      key: 'real-action',
+      days: '31–60',
+      title: 'Acción Real',
+      description: 'Lleva el trabajo a conversaciones, postulaciones y práctica aplicada.',
+      color: 'from-green-600 to-emerald-600',
+      visible: horizon >= 60,
+    },
+    {
+      key: 'refinement',
+      days: '61–90',
+      title: 'Refinamiento',
+      description: 'Integra resultados, fortalece brechas y consolida tu evolución.',
+      color: 'from-amber-600 to-orange-600',
+      visible: horizon >= 90,
+    },
+  ].filter((phase) => phase.visible)
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Tu Roadmap de 90 Días</h1>
-          <p className="text-slate-400">Transforma tu carrera en 90 días. Día a día.</p>
+    <div className="min-h-screen bg-slate-950 p-6 text-white">
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-8 space-y-2">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-400">
+            A2 · Tu Ruta
+          </p>
+          <h1 className="text-4xl font-bold">Tu ciclo de avance</h1>
+          <p className="max-w-3xl text-slate-400">
+            {progress.route?.description ||
+              'Comienza con un ciclo de 30 días y amplíalo cuando necesites más recorrido.'}
+          </p>
+          {progress.route && (
+            <div className="flex flex-wrap items-center gap-2 pt-2">
+              <Badge className="border-cyan-500/30 bg-cyan-500/10 text-cyan-300">
+                {progress.route.name}
+              </Badge>
+              <span className="text-xs text-slate-500">
+                Seleccionada desde tu información de A1
+              </span>
+            </div>
+          )}
+        </header>
+
+        <div className="mb-6 flex flex-wrap gap-2">
+          {HORIZONS.map((option) => (
+            <button
+              key={option.value}
+              type="button"
+              onClick={() => setHorizon(option.value)}
+              className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                horizon === option.value
+                  ? 'border-cyan-400 bg-cyan-500/15 text-cyan-200'
+                  : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
+              }`}
+            >
+              {option.label}
+            </button>
+          ))}
         </div>
 
-        {/* Progress Bar */}
-        <div className="bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-6 mb-8">
-          <div className="flex justify-between items-center mb-4">
+        <section className="mb-8 rounded-lg border border-[rgb(80,160,170)] bg-slate-950 p-6">
+          <div className="mb-4 flex items-center justify-between gap-4">
             <div>
-              <h2 className="text-xl font-bold text-white">Tu Progreso</h2>
-              <p className="text-slate-400 text-sm">{daysCompleted} de 90 días completados</p>
+              <h2 className="text-xl font-bold">Tu progreso real</h2>
+              <p className="text-sm text-slate-400">
+                {completedInHorizon} de {horizon} días completados · Día actual{' '}
+                {progress.current_day}
+              </p>
             </div>
-            <div className="text-right">
-              <p className="text-3xl font-bold text-cyan-400">{Math.round(progressPercent)}%</p>
-            </div>
+            <p className="text-3xl font-bold text-cyan-400">{progressPercent}%</p>
           </div>
-          <div className="w-full bg-slate-950 rounded-full h-3">
-            <div 
-              className="bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 h-3 rounded-full transition-all duration-300"
+          <div className="h-3 w-full rounded-full bg-slate-900">
+            <div
+              className="h-3 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
-            ></div>
+            />
           </div>
-          <div className="grid grid-cols-4 gap-2 mt-4 text-sm text-slate-400">
-            <div>Claridad: 1-10</div>
-            <div>Material: 11-30</div>
-            <div>Acción: 31-60</div>
-            <div>Refinamiento: 61-90</div>
-          </div>
-        </div>
+          {loading && <p className="mt-3 text-xs text-slate-500">Cargando avance…</p>}
+          {error && <p className="mt-3 text-sm text-amber-300">{error}</p>}
+        </section>
 
-        {/* Filters & Search */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        <div className="mb-6 grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+            <Search className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
             <input
               type="text"
-              placeholder="Buscar día..."
+              placeholder="Buscar día…"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded px-4 py-2 pl-10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              onChange={(event) => setSearch(event.target.value)}
+              className="w-full rounded border border-[rgb(80,160,170)] bg-slate-950 px-4 py-2 pl-10 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none"
             />
           </div>
 
           <div className="flex gap-2 overflow-x-auto">
-            {['all', 'clarity', 'material', 'real-action', 'refinement'].map((phase) => (
+            {(
+              [
+                'all',
+                'clarity',
+                'material',
+                'interview',
+                'real-action',
+                'refinement',
+              ] as PhaseFilter[]
+            ).map((phase) => (
               <button
                 key={phase}
-                onClick={() => setFilter(phase as PhaseFilter)}
-                className={`px-4 py-2 rounded whitespace-nowrap text-sm font-medium transition-colors ${
+                type="button"
+                onClick={() => setFilter(phase)}
+                className={`whitespace-nowrap rounded px-4 py-2 text-sm font-medium transition-colors ${
                   filter === phase
                     ? 'bg-cyan-600 text-white'
-                    : 'bg-slate-950 text-slate-300 hover:bg-slate-950'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800'
                 }`}
               >
-                {phase === 'all' ? 'Todos' : phaseName[phase as keyof typeof phaseName]}
+                {phase === 'all' ? 'Todos' : PHASE_NAME[phase]}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Days Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {filteredDays.map(([dayNum, day]) => {
-            const diaNum = parseInt(dayNum)
-            const isUnlocked = unlockedDays.has(diaNum)
-            const isCompleted = diaNum <= daysCompleted
+        <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+          {filteredDays.map(([dayNumber, day]) => {
+            const numericDay = Number(dayNumber)
+            const isUnlocked = numericDay <= progress.highest_unlocked_day
+            const isCompleted = completedSet.has(numericDay)
+            const isCurrent = numericDay === progress.current_day
 
             return (
               <button
-                key={diaNum}
-                onClick={() => isUnlocked && router.push(`/despega/a2/dia-${diaNum}`)}
+                key={numericDay}
+                id={`dia-${numericDay}`}
+                type="button"
+                onClick={() =>
+                  isUnlocked && router.push(`/despega/a2/dia-${numericDay}`)
+                }
                 disabled={!isUnlocked}
-                className={`relative group text-left transition-all duration-200 ${
+                className={`group relative text-left transition-all duration-200 ${
                   isUnlocked
-                    ? 'cursor-pointer hover:shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-1'
-                    : 'cursor-not-allowed opacity-60'
+                    ? 'cursor-pointer hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/20'
+                    : 'cursor-not-allowed opacity-55'
                 }`}
               >
-                <div className={`bg-slate-950 border rounded-lg p-4 h-full ${
-                  isUnlocked
-                    ? 'border-[rgb(80,160,170)] hover:border-cyan-500'
-                    : 'border-[rgb(80,160,170)]'
-                }`}>
-                  {/* Day number & status */}
-                  <div className="flex justify-between items-start mb-3">
+                <div
+                  className={`h-full rounded-lg border bg-slate-950 p-4 ${
+                    isCurrent
+                      ? 'border-cyan-400 ring-1 ring-cyan-400/30'
+                      : 'border-[rgb(80,160,170)]'
+                  }`}
+                >
+                  <div className="mb-3 flex items-start justify-between">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-cyan-400">Día {diaNum}</span>
-                      {isCompleted && (
-                        <CheckCircle2 className="w-5 h-5 text-green-400" />
-                      )}
+                      <span className="text-2xl font-bold text-cyan-400">
+                        Día {numericDay}
+                      </span>
+                      {isCompleted && <CheckCircle2 className="h-5 w-5 text-green-400" />}
                     </div>
-                    {!isUnlocked && <Lock className="w-4 h-4 text-slate-600" />}
+                    {!isUnlocked && <Lock className="h-4 w-4 text-slate-600" />}
                   </div>
 
-                  {/* Phase badge */}
-                  <Badge className={`mb-3 border ${phaseColor[day.phase as keyof typeof phaseColor]}`}>
-                    {phaseName[day.phase as keyof typeof phaseName]}
-                  </Badge>
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <Badge className={`border ${PHASE_COLOR[day.phase]}`}>
+                      {PHASE_NAME[day.phase]}
+                    </Badge>
+                    {isCurrent && (
+                      <Badge className="border-cyan-400/40 bg-cyan-400/10 text-cyan-200">
+                        Día actual
+                      </Badge>
+                    )}
+                  </div>
 
-                  {/* Title */}
-                  <h3 className="font-bold text-white mb-1 line-clamp-2">{day.title}</h3>
-                  <p className="text-slate-400 text-sm mb-3 line-clamp-2">{day.subtitle}</p>
+                  <h3 className="mb-1 line-clamp-2 font-bold text-white">{day.title}</h3>
+                  <p className="mb-3 line-clamp-2 text-sm text-slate-400">{day.subtitle}</p>
 
-                  {/* A3 Module Unlock */}
                   {day.unlocksA3Module && (
-                    <div className="bg-green-600/10 border border-green-600/30 rounded px-2 py-1 mb-3">
-                      <p className="text-green-400 text-xs font-medium flex items-center gap-1">
-                        <Unlock className="w-3 h-3" />
-                        Desbloquea: {day.unlocksA3Module}
+                    <div className="mb-3 rounded border border-green-600/30 bg-green-600/10 px-2 py-1">
+                      <p className="flex items-center gap-1 text-xs font-medium text-green-400">
+                        <Unlock className="h-3 w-3" />
+                        Entrenamiento: {day.unlocksA3Module}
                       </p>
                     </div>
                   )}
 
-                  {/* Time estimate */}
-                  <div className="flex justify-between items-end">
-                    <span className="text-slate-400 text-xs flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
+                  <div className="flex items-end justify-between">
+                    <span className="flex items-center gap-1 text-xs text-slate-400">
+                      <Calendar className="h-3 w-3" />
                       {day.estimatedHours}h
                     </span>
                     {isUnlocked && (
-                      <ChevronRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="h-4 w-4 text-cyan-400 transition-transform group-hover:translate-x-1" />
                     )}
                   </div>
                 </div>
@@ -173,24 +346,16 @@ export default function A2DashboardPage() {
           })}
         </div>
 
-        {/* Phase Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[
-            { phase: 'clarity', days: '1-10', title: 'Claridad Profesional', color: 'from-blue-600 to-cyan-600' },
-            { phase: 'material', days: '11-30', title: 'Material Profesional', color: 'from-purple-600 to-pink-600' },
-            { phase: 'real-action', days: '31-60', title: 'Acción Real e Interviews', color: 'from-green-600 to-emerald-600' },
-            { phase: 'refinement', days: '61-90', title: 'Refinamiento y Crecimiento', color: 'from-amber-600 to-orange-600' }
-          ].map((p) => (
-            <div key={p.phase} className="bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-4">
-              <div className={`w-full h-1 rounded-full bg-gradient-to-r ${p.color} mb-3`}></div>
-              <p className="text-slate-400 text-xs font-medium mb-1">Fase {p.days}</p>
-              <h3 className="text-white font-bold text-sm mb-2">{p.title}</h3>
-              <p className="text-slate-400 text-xs">
-                {p.phase === 'clarity' && 'Establece bases sólidas: visión, mercado, marca personal'}
-                {p.phase === 'material' && 'Construye material profesional: CV, portfolio, entrevistas'}
-                {p.phase === 'real-action' && 'Búsqueda activa: networking, aplicaciones, entrevistas reales'}
-                {p.phase === 'refinement' && 'Integración y crecimiento en nuevo rol o avance final'}
-              </p>
+        <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+          {phaseSummaries.map((phase) => (
+            <div
+              key={phase.key}
+              className="rounded-lg border border-[rgb(80,160,170)] bg-slate-950 p-4"
+            >
+              <div className={`mb-3 h-1 w-full rounded-full bg-gradient-to-r ${phase.color}`} />
+              <p className="mb-1 text-xs font-medium text-slate-400">Días {phase.days}</p>
+              <h3 className="mb-2 text-sm font-bold text-white">{phase.title}</h3>
+              <p className="text-xs text-slate-400">{phase.description}</p>
             </div>
           ))}
         </div>
