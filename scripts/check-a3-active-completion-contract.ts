@@ -48,7 +48,7 @@ const activeCases = [
       long('Valores centrales'),
       long('Marca profesional'),
     ],
-    deliverable: (responses: string[]) => ({
+    deliverable: (responses: readonly string[]) => ({
       careerDirection: responses[0],
       professionalIdentity: responses[1],
       coreValues: responses[2],
@@ -63,7 +63,7 @@ const activeCases = [
       long('Aplicación futura'),
       long('Siguiente acción'),
     ],
-    deliverable: (responses: string[]) => ({
+    deliverable: (responses: readonly string[]) => ({
       projectValue: responses[0],
       criticalValue: responses[1],
       futureApplication: responses[2],
@@ -83,7 +83,7 @@ for (const testCase of activeCases) {
 
   const valid = validateA3ModuleSubmission(
     module,
-    testCase.responses,
+    [...testCase.responses],
     testCase.deliverable(testCase.responses),
   )
   assert.equal(valid.passed, true, valid.errors.join('; '))
@@ -91,7 +91,7 @@ for (const testCase of activeCases) {
 
   const mismatched = validateA3ModuleSubmission(
     module,
-    testCase.responses,
+    [...testCase.responses],
     {
       ...testCase.deliverable(testCase.responses),
       [module.completionContract.requiredDeliverableKeys[0]]: long('Contenido distinto'),
@@ -123,6 +123,7 @@ assert.ok(completionRoute.includes('validateA3ModuleSubmission'))
 assert.ok(completionRoute.includes('score: validation.score'))
 assert.ok(completionRoute.includes('bestScore'))
 assert.ok(completionRoute.includes("code: 'A3_COMPLETION_CONTRACT_NOT_READY'"))
+assert.ok(completionRoute.includes("lead_character: 'coach'"))
 assert.ok(!completionRoute.includes('best_score: 100'))
 assert.ok(!completionRoute.includes('score: 100'))
 assert.ok(progressRoute.includes('A3_TOTAL_XP'))
