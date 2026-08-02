@@ -96,7 +96,22 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to verify completion' }, { status: 500 })
     }
 
-    const isFirstCompletion = !existingCompletion
+    const { data: existingUserProgress, error: userProgressError } = await supabase
+      .from('a3_user_progress')
+      .select('*')
+      .eq('user_id', userId)
+      .single()
+
+    if (userProgressError && userProgressError.code !== 'PGRST116') {
+      console.error('[v0] Error fetching user progress:', userProgressError)
+      return NextResponse.json({ error: 'Failed to fetch user progress' }, { status: 500 })
+    }
+
+    const existingCompletedModuleIds = Array.from(
+      new Set((existingUserProgress?.completed_module_ids || []).map(normalizeModuleId)),
+    )
+    const isFirstCompletion =
+      !existingCompletion && !existingCompletedModuleIds.includes(moduleId)
 
     const { data: sessionData, error: sessionError } = await supabase
       .from('a3_session_attempts')
@@ -195,23 +210,10 @@ export async function POST(request: NextRequest) {
       return NextResponse.json({ error: 'Failed to update route progression' }, { status: 500 })
     }
 
-    const { data: existingUserProgress, error: userProgressError } = await supabase
-      .from('a3_user_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
-
-    if (userProgressError && userProgressError.code !== 'PGRST116') {
-      console.error('[v0] Error fetching user progress:', userProgressError)
-      return NextResponse.json({ error: 'Failed to fetch user progress' }, { status: 500 })
-    }
-
     const moduleStates: Record<string, string> = {
       ...(existingUserProgress?.module_states || {}),
     }
-    const completedModuleIds = Array.from(
-      new Set((existingUserProgress?.completed_module_ids || []).map(normalizeModuleId)),
-    )
+    const completedModuleIds = [...existingCompletedModuleIds]
 
     if (!completedModuleIds.includes(moduleId)) {
       completedModuleIds.push(moduleId)
