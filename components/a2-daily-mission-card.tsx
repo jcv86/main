@@ -4,7 +4,6 @@ import { useState } from 'react'
 import { Card } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
-import { Progress } from '@/components/ui/progress'
 import {
   Clock,
   CheckCircle2,
@@ -16,7 +15,7 @@ import {
   AlertCircle,
   Trophy,
 } from 'lucide-react'
-import { A2DailyMission, A2MissionType } from '@/lib/a2-mission.types'
+import type { A2DailyMission, A2MissionType } from '@/lib/a2-mission.types'
 
 interface A2DailyMissionCardProps {
   mission: A2DailyMission
@@ -35,59 +34,71 @@ const missionTypeConfig: Record<
 > = {
   roadmap_gate: {
     color: 'bg-purple-500/20 text-purple-300 border-purple-500/40',
-    icon: <Target className="w-4 h-4" />,
+    icon: <Target className="h-4 w-4" />,
     label: 'Contrato',
   },
   mirror: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <Sparkles className="w-4 h-4" />,
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <Sparkles className="h-4 w-4" />,
     label: 'Autoconocimiento',
   },
   evidence: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <CheckCircle2 className="w-4 h-4" />,
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <CheckCircle2 className="h-4 w-4" />,
     label: 'Evidencia',
   },
   builder: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <BookOpen className="w-4 h-4" />,
-    label: 'Constructor',
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <BookOpen className="h-4 w-4" />,
+    label: 'Construcción',
   },
   market_intel: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <Target className="w-4 h-4" />,
-    label: 'Inteligencia',
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <Target className="h-4 w-4" />,
+    label: 'Mercado',
   },
   coach_forge: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <Sparkles className="w-4 h-4" />,
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <Sparkles className="h-4 w-4" />,
     label: 'Coach',
   },
   field_action: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <CheckCircle2 className="w-4 h-4" />,
-    label: 'Acción',
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <CheckCircle2 className="h-4 w-4" />,
+    label: 'Acción real',
   },
   performance_drill: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <Target className="w-4 h-4" />,
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <Target className="h-4 w-4" />,
     label: 'Práctica',
   },
   a3_checkpoint: {
     color: 'bg-emerald-500/20 text-emerald-300 border-emerald-500/40',
-    icon: <Trophy className="w-4 h-4" />,
-    label: 'Checkpoint A3',
+    icon: <Trophy className="h-4 w-4" />,
+    label: 'Entrenamiento',
   },
   debrief: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <BookOpen className="w-4 h-4" />,
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <BookOpen className="h-4 w-4" />,
     label: 'Reflexión',
   },
   milestone: {
-    color: 'bg-purple-500/20 text-white/60 border-purple-500/40',
-    icon: <Trophy className="w-4 h-4" />,
+    color: 'bg-purple-500/20 text-white/70 border-purple-500/40',
+    icon: <Trophy className="h-4 w-4" />,
     label: 'Hito',
   },
+}
+
+const phaseLabel: Record<A2DailyMission['phaseLabel'], string> = {
+  Foundation: 'Fundamentos',
+  'Role Alignment': 'Alineación con el rol',
+  'Simulation & Certification': 'Simulación y certificación',
+  'Master Difficult Questions & Return to Real Market':
+    'Preguntas difíciles y regreso al mercado',
+  'Final Applications & Offer Management':
+    'Postulaciones y gestión de ofertas',
+  'Final A3 Prep & Checkpoint': 'Preparación final de Entrenamiento',
+  'Final Review & Next Chapter': 'Cierre y siguiente capítulo',
 }
 
 export function A2DailyMissionCard({
@@ -105,20 +116,19 @@ export function A2DailyMissionCard({
 
   return (
     <Card
-      className={`transition-all duration-200 rounded-[28px] border ${
+      className={`rounded-[28px] border transition-all duration-200 ${
         isCompleted
-          ? 'bg-slate-900/20 border-green-500/40 hover:border-green-500/60'
+          ? 'border-green-500/40 bg-slate-900/20 hover:border-green-500/60'
           : isAvailable
-            ? 'bg-slate-900/20 border-purple-500/40 hover:border-purple-500/80 hover:bg-purple-500/5 cursor-pointer'
-            : 'bg-slate-900/20 border-[rgb(80,160,170)]/20 opacity-60'
+            ? 'cursor-pointer border-purple-500/40 bg-slate-900/20 hover:border-purple-500/80 hover:bg-purple-500/5'
+            : 'border-[rgb(80,160,170)]/20 bg-slate-900/20 opacity-60'
       }`}
     >
-      <div className="p-6 space-y-4">
-        {/* Header */}
+      <div className="space-y-4 p-6">
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1 space-y-2">
-            <div className="flex items-center gap-2 flex-wrap">
-              <Badge className="bg-purple-600/60 text-white border-purple-500/40">
+            <div className="flex flex-wrap items-center gap-2">
+              <Badge className="border-purple-500/40 bg-purple-600/60 text-white">
                 Día {dayNumber}
               </Badge>
               <Badge className={config.color}>
@@ -126,13 +136,13 @@ export function A2DailyMissionCard({
                 <span className="ml-1">{config.label}</span>
               </Badge>
               {isA3Checkpoint && (
-                <Badge className="bg-emerald-500/20 text-emerald-300 border-emerald-500/40">
-                  A3 Checkpoint
+                <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
+                  Checkpoint de Entrenamiento
                 </Badge>
               )}
               {isCompleted && (
-                <Badge className="bg-green-500/20 text-green-300 border-green-500/40">
-                  <CheckCircle2 className="w-3 h-3 mr-1" />
+                <Badge className="border-green-500/40 bg-green-500/20 text-green-300">
+                  <CheckCircle2 className="mr-1 h-3 w-3" />
                   Completado
                 </Badge>
               )}
@@ -144,92 +154,84 @@ export function A2DailyMissionCard({
 
           <div className="flex-shrink-0">
             {isCompleted ? (
-              <CheckCircle2 className="w-8 h-8 text-green-400" />
+              <CheckCircle2 className="h-8 w-8 text-green-400" />
             ) : isAvailable ? (
               <Button
                 size="sm"
                 onClick={onStart}
-                className="bg-purple-600/10 hover:bg-purple-600/40 border border-purple-500/60 hover:border-purple-500/100 text-purple-300 hover:text-purple-200 transition-all duration-200"
+                className="border border-purple-500/60 bg-purple-600/10 text-purple-300 transition-all hover:border-purple-500 hover:bg-purple-600/40 hover:text-purple-200"
               >
-                <ChevronRight className="w-4 h-4" />
+                <ChevronRight className="h-4 w-4" />
               </Button>
             ) : (
-              <Lock className="w-8 h-8 text-slate-500" />
+              <Lock className="h-8 w-8 text-slate-500" />
             )}
           </div>
         </div>
 
-        {/* Time & Stats */}
         <div className="flex items-center gap-4 text-sm text-slate-400">
-          <div className="flex items-center gap-1">
-            <Clock className="w-4 h-4" />
-            <span>
-              {mission.estimatedMinutes.min}-{mission.estimatedMinutes.max} min
-            </span>
-          </div>
-          <div className="text-slate-500">•</div>
-          <span className="text-slate-400">{mission.phaseLabel}</span>
+          <span className="flex items-center gap-1">
+            <Clock className="h-4 w-4" />
+            {mission.estimatedMinutes.min}-{mission.estimatedMinutes.max} min
+          </span>
+          <span className="text-slate-500">•</span>
+          <span>{phaseLabel[mission.phaseLabel]}</span>
         </div>
 
-        {/* Expandable Content */}
         {expanded && (
           <div className="space-y-4 border-t border-purple-500/20 pt-4">
-            {/* Goal */}
             <div>
-              <h4 className="text-xs uppercase tracking-wide text-purple-400 mb-2">
+              <h4 className="mb-2 text-xs uppercase tracking-wide text-purple-400">
                 Objetivo
               </h4>
               <p className="text-sm text-slate-300">{mission.userGoal}</p>
             </div>
 
-            {/* Instructions */}
-            {mission.instructions && mission.instructions.length > 0 && (
-              <div>
-                <h4 className="text-xs uppercase tracking-wide text-purple-400 mb-2">
-                  Pasos
-                </h4>
-                <ul className="text-sm text-slate-300 space-y-1 list-disc list-inside">
-                  {mission.instructions.map((instruction, idx) => (
-                    <li key={idx}>{instruction}</li>
-                  ))}
-                </ul>
-              </div>
-            )}
-
-            {/* Deliverable */}
             <div>
-              <h4 className="text-xs uppercase tracking-wide text-purple-400 mb-2">
+              <h4 className="mb-2 text-xs uppercase tracking-wide text-purple-400">
+                Pasos
+              </h4>
+              <ul className="list-inside list-disc space-y-1 text-sm text-slate-300">
+                {mission.instructions.map((instruction) => (
+                  <li key={instruction}>{instruction}</li>
+                ))}
+              </ul>
+            </div>
+
+            <div>
+              <h4 className="mb-2 text-xs uppercase tracking-wide text-purple-400">
                 Entregable
               </h4>
               <p className="text-sm text-slate-300">{mission.deliverable}</p>
             </div>
 
-            {/* A3 Module Info */}
             {isA3Checkpoint && a3ModuleName && (
-              <div className="bg-emerald-500/5 border border-emerald-500/40 rounded-lg p-3">
+              <div className="rounded-lg border border-emerald-500/40 bg-emerald-500/5 p-3">
                 <p className="text-sm text-emerald-300">
-                  <span className="font-semibold">A3 Module:</span> {a3ModuleName}
+                  <span className="font-semibold">Módulo de Entrenamiento:</span>{' '}
+                  {a3ModuleName}
                 </p>
               </div>
             )}
 
-            {/* Block Reason */}
             {blockReason && !isAvailable && (
-              <div className="bg-amber-500/5 border border-amber-500/40 rounded-lg p-3 flex gap-2">
-                <AlertCircle className="w-4 h-4 text-amber-400 flex-shrink-0 mt-0.5" />
+              <div className="flex gap-2 rounded-lg border border-amber-500/40 bg-amber-500/5 p-3">
+                <AlertCircle className="mt-0.5 h-4 w-4 flex-shrink-0 text-amber-400" />
                 <p className="text-sm text-amber-200">{blockReason}</p>
               </div>
             )}
           </div>
         )}
 
-        {/* Toggle Expand */}
         <button
-          onClick={() => setExpanded(!expanded)}
-          className="text-xs text-purple-400 hover:text-purple-300 font-medium flex items-center gap-1 mt-2"
+          type="button"
+          onClick={() => setExpanded((current) => !current)}
+          className="mt-2 flex items-center gap-1 text-xs font-medium text-purple-400 hover:text-purple-300"
         >
           {expanded ? 'Mostrar menos' : 'Mostrar detalles'}
-          <ChevronRight className={`w-3 h-3 transition-transform ${expanded ? 'rotate-90' : ''}`} />
+          <ChevronRight
+            className={`h-3 w-3 transition-transform ${expanded ? 'rotate-90' : ''}`}
+          />
         </button>
       </div>
     </Card>
