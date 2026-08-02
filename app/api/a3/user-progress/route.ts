@@ -1,8 +1,9 @@
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
+import { getA2ProgressSnapshot } from '@/lib/a2/server-progress'
+import { getA3AllModulesAccessState } from '@/lib/a3-access-control'
 import { NextResponse } from 'next/server'
 
-// New A3 module structure
 const MODULE_ORDER = [
   'career-mirror',
   'value-mining-lab',
@@ -16,7 +17,6 @@ const MODULE_ORDER = [
   'basic-interview-mission',
 ]
 
-// Legacy numeric keys → slug mapping (data saved before slug migration)
 const NUMERIC_TO_SLUG: Record<string, string> = {
   'module-1': 'career-mirror',
   'module-2': 'value-mining-lab',
@@ -42,14 +42,12 @@ export async function GET() {
     const currentUser = await resolveServerUser()
     const userId = currentUser?.id ?? null
 
-    // Default module states - first module available, rest locked
-    const defaultModuleStates: Record<string, string> = {}
-    MODULE_ORDER.forEach((id, index) => {
-      defaultModuleStates[id] = index === 0 ? 'available' : 'locked'
+    const unauthenticatedStates: Record<string, string> = {}
+    MODULE_ORDER.forEach((id) => {
+      unauthenticatedStates[id] = 'locked'
     })
 
     if (!userId) {
-      // Return default state for unauthenticated users
       return NextResponse.json({
         success: true,
         progress: {
@@ -58,59 +56,48 @@ export async function GET() {
           progressPct: 0,
           completedModules: 0,
           totalModules: MODULE_ORDER.length,
-          moduleStates: defaultModuleStates,
+          moduleStates: unauthenticatedStates,
           completedModuleIds: [],
           a2CurrentDay: 1,
         },
       })
     }
 
-    // Fetch A2 user progress to get current day
-    const { data: a2Data } = await supabase
-      .from('a2_user_route_progress')
-      .select('dia_actual')
-      .eq('user_id', userId)
-      .single()
+    const [a2Snapshot, accessStates, progressResult] = await Promise.all([
+      getA2ProgressSnapshot(userId, supabase),
+      getA3AllModulesAccessState(userId, supabase),
+      supabase
+        .from('a3_user_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle(),
+    ])
 
-    const a2CurrentDay = a2Data?.dia_actual || 1
-
-    // Fetch user progress from database
-    const { data: progressData, error: progressError } = await supabase
-      .from('a3_user_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
-
-    if (progressError && progressError.code !== 'PGRST116') {
-      console.error('[v0] Error fetching a3_user_progress:', progressError)
+    if (progressResult.error) {
+      console.error('[v0] Error fetching a3_user_progress:', progressResult.error)
     }
 
+    const moduleStates: Record<string, string> = {}
+    MODULE_ORDER.forEach((id) => {
+      moduleStates[id] = 'locked'
+    })
+    accessStates.forEach((state) => {
+      moduleStates[state.moduleId] = state.status
+    })
+
+    const progressData = progressResult.data
     if (progressData) {
-      const moduleStates: Record<string, string> = {
-        ...defaultModuleStates,
-        ...(progressData.module_states || {}),
-      }
       const completedModuleIds = Array.from(
-        new Set((progressData.completed_module_ids || []).map(normalizeModuleId)),
+        new Set(
+          (progressData.completed_module_ids || [])
+            .filter((id: unknown): id is string => typeof id === 'string')
+            .map(normalizeModuleId),
+        ),
       )
-      const totalXp = progressData.total_xp || 0
+      const totalXp = Math.max(0, Number(progressData.total_xp) || 0)
 
-      // Rebuild missing/unlocked state using canonical IDs.
-      MODULE_ORDER.forEach((id, index) => {
-        if (completedModuleIds.includes(id)) {
-          moduleStates[id] = 'completed'
-          return
-        }
-
-        if (index === 0) {
-          moduleStates[id] = moduleStates[id] === 'completed' ? 'completed' : 'available'
-          return
-        }
-
-        const previousId = MODULE_ORDER[index - 1]
-        if (completedModuleIds.includes(previousId) && moduleStates[id] === 'locked') {
-          moduleStates[id] = 'available'
-        }
+      completedModuleIds.forEach((id) => {
+        moduleStates[id] = 'completed'
       })
 
       return NextResponse.json({
@@ -123,7 +110,7 @@ export async function GET() {
           totalModules: MODULE_ORDER.length,
           moduleStates,
           completedModuleIds,
-          a2CurrentDay,
+          a2CurrentDay: a2Snapshot.currentDay,
         },
       })
     }
@@ -136,9 +123,9 @@ export async function GET() {
         progressPct: 0,
         completedModules: 0,
         totalModules: MODULE_ORDER.length,
-        moduleStates: defaultModuleStates,
+        moduleStates,
         completedModuleIds: [],
-        a2CurrentDay,
+        a2CurrentDay: a2Snapshot.currentDay,
       },
     })
   } catch (error) {
