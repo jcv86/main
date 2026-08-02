@@ -47,6 +47,7 @@ const publicJourney = source('components/dtc/journey-canonical.tsx')
 const publicClosing = source('components/dtc/closing-canonical.tsx')
 const landing = source('components/dtc/dtc-landing.tsx')
 const legacyA2Dashboard = source('app/despega/a2/dashboard/page.tsx')
+const a2Sidebar = source('components/a2-progress-sidebar.tsx')
 const journeyService = source('lib/journey/service.ts')
 const completeDay = source('app/api/a2/complete-day/route.ts')
 const xpActivity = source('app/api/gamification/xp-activity/route.ts')
@@ -77,6 +78,15 @@ assert.match(legacyA2Dashboard, /redirect\(['"]\/despega\/a2['"]\)/)
 assert.ok(!legacyA2Dashboard.includes('a3_unlocked: true'))
 assert.ok(!legacyA2Dashboard.includes('PhaseTransitionHandler'))
 
+assert.ok(a2Sidebar.includes("name: 'Ciclo inicial'"))
+assert.ok(a2Sidebar.includes("name: 'Extensión a 60 días'"))
+assert.ok(a2Sidebar.includes("name: 'Integración a 90 días'"))
+assert.ok(a2Sidebar.includes('refreshInterval: 0'))
+assert.ok(a2Sidebar.includes('useEffect(() =>'))
+assert.ok(!a2Sidebar.includes('refreshInterval: 5000'))
+assert.ok(!a2Sidebar.includes('Mes {month.month}'))
+assert.ok(!a2Sidebar.includes('setExpandedMonth(currentMonth)'))
+
 assert.ok(journeyService.includes("A2: '/despega/a2'"))
 assert.ok(!journeyService.includes("A2: '/despega/a2/dashboard'"))
 assert.ok(!journeyService.includes("return '/despega/a2-routes'"))
@@ -96,6 +106,7 @@ console.log(
     stages: PRODUCT_STAGE_ORDER.map((stageId) => PRODUCT_STAGES[stageId].name),
     canonicalRoutes: PRODUCT_STAGE_ORDER.map((stageId) => PRODUCT_STAGES[stageId].href),
     legacyA2DashboardRedirects: true,
+    canonicalA2Cycles: ['30', '60', '90'],
     day1ServerScoring: true,
     publicXpWritesDisabled: true,
   }),
