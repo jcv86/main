@@ -94,6 +94,8 @@ assert.deepEqual(
 )
 
 const completeDayRoute = source('app/api/a2/complete-day/route.ts')
+const progressRoute = source('app/api/a2/progress/route.ts')
+const dashboard = source('app/despega/a2/page.tsx')
 const migration = source('migrations/03-a2-mission-evidence.sql')
 const dayTemplate = source('components/a2-day-page-template.tsx')
 const missionWorkspace = source('components/a2-generic-mission-workspace.tsx')
@@ -119,6 +121,7 @@ for (const column of [
   'validation_result',
 ]) {
   assert.ok(migration.includes(column), `Migration must add ${column}`)
+  assert.ok(progressRoute.includes(column), `Progress API must read ${column}`)
 }
 
 assert.ok(dayTemplate.includes('A2GenericMissionWorkspace'))
@@ -151,6 +154,29 @@ assert.ok(missionWorkspace.includes('validation.criteria.map'))
 assert.ok(clientCompletion.includes('submission?: unknown'))
 assert.ok(clientCompletion.includes('submission: asObject(submission)'))
 
+assert.ok(progressRoute.includes('const recordByDay = new Map'))
+assert.ok(progressRoute.includes('day_records: dayRecords'))
+assert.ok(progressRoute.includes('validation_summary: validationSummary'))
+assert.ok(progressRoute.includes('validated_days:'))
+assert.ok(progressRoute.includes('evidence_days:'))
+assert.ok(progressRoute.includes('checkpoint_days:'))
+assert.ok(progressRoute.includes('average_score:'))
+assert.ok(progressRoute.includes("validation_status !== 'legacy'"))
+
+assert.ok(dashboard.includes("import { A2_DAILY_MISSIONS }"))
+assert.ok(!dashboard.includes("import { A2_DAYS"))
+assert.ok(dashboard.includes('new Map(progress.day_records.map'))
+assert.ok(dashboard.includes('Entregables validados'))
+assert.ok(dashboard.includes('Checkpoints completados'))
+assert.ok(dashboard.includes('Puntaje promedio'))
+assert.ok(dashboard.includes('record.validation_status'))
+assert.ok(dashboard.includes('record.has_evidence'))
+assert.ok(dashboard.includes('mission.a3Checkpoint'))
+assert.ok(dashboard.includes('mission.deliverable'))
+assert.ok(dashboard.includes('Seleccionada desde tu diagnóstico de Despega Cerebral'))
+assert.ok(!dashboard.includes('A2 · Tu Ruta'))
+assert.ok(!dashboard.includes('información de A1'))
+
 console.log(
   JSON.stringify({
     configuredDays: configuredDays.length,
@@ -162,5 +188,6 @@ console.log(
     evidencePersistence: true,
     universalWorkspace: true,
     localDrafts: true,
+    evidenceAwareDashboard: true,
   }),
 )
