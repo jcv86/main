@@ -116,16 +116,32 @@ const clientHelper = source('lib/a3/client-completion.ts')
 const coachSession = source('components/a3/verified-coach-session.tsx')
 const careerPage = source('app/despega/a3/career-mirror-coach/page.tsx')
 const valuePage = source('app/despega/a3/value-mining-lab-coach/page.tsx')
+const atomicMigration = source('migrations/05-a3-atomic-module-completion.sql')
 
 assert.ok(checkpointMap.includes('A3_MODULES.map'))
 assert.ok(!checkpointMap.includes("moduleId: 'career-mirror'"))
 assert.ok(completionRoute.includes('getA3Module(body.moduleId)'))
 assert.ok(completionRoute.includes('validateA3ModuleSubmission'))
-assert.ok(completionRoute.includes('score: validation.score'))
-assert.ok(completionRoute.includes('bestScore'))
-assert.ok(completionRoute.includes("code: 'A3_COMPLETION_CONTRACT_NOT_READY'"))
+assert.ok(completionRoute.includes("rpc(\n      'complete_a3_module_atomic'"))
+assert.ok(completionRoute.includes("code: 'A3_ATOMIC_COMPLETION_FAILED'"))
+assert.ok(completionRoute.includes('isAtomicCompletionResult(data)'))
+assert.ok(!completionRoute.includes(".from('a3_session_attempts')"))
+assert.ok(!completionRoute.includes(".from('a3_module_completion')"))
+assert.ok(!completionRoute.includes(".from('a3_route_progression')"))
+assert.ok(!completionRoute.includes(".from('a3_user_progress')"))
 assert.ok(!completionRoute.includes('best_score: 100'))
 assert.ok(!completionRoute.includes('score: 100'))
+
+assert.ok(atomicMigration.includes('create unique index if not exists a3_route_progression_user_id_key'))
+assert.ok(atomicMigration.includes('create or replace function public.complete_a3_module_atomic'))
+assert.ok(atomicMigration.includes('for update'))
+assert.ok(atomicMigration.includes('on conflict (user_id, module_id) do update'))
+assert.ok(atomicMigration.includes('on conflict (user_id) do update'))
+assert.ok(atomicMigration.includes("v_xp_awarded := case when v_is_first"))
+assert.ok(atomicMigration.includes('completed_at = public.a3_module_completion.completed_at'))
+assert.ok(atomicMigration.includes('revoke all on function public.complete_a3_module_atomic'))
+assert.ok(atomicMigration.includes('grant execute on function public.complete_a3_module_atomic'))
+
 assert.ok(progressRoute.includes('A3_TOTAL_XP'))
 assert.ok(progressRoute.includes('A3_MODULE_IDS'))
 assert.ok(clientHelper.includes("credentials: 'include'"))
@@ -145,5 +161,7 @@ console.log(
     verifiedActiveModules: activeCases.map((item) => item.id),
     fixedScoreRemoved: true,
     canonicalCatalog: true,
+    atomicCompletion: true,
+    partialWritesRemoved: true,
   }),
 )

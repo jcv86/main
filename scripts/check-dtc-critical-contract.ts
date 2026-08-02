@@ -167,14 +167,19 @@ assert.ok(legacyA3Unlock.includes("replacement: '/api/a3/module-completion'"))
 assert.ok(!legacyA3Unlock.includes('createAdminClient'))
 assert.ok(!legacyA3Unlock.includes('completeA3Module'))
 const a3AccessGateIndex = a3ModuleCompletion.indexOf('checkA3ModuleAccess(')
-const a3FirstWriteIndex = a3ModuleCompletion.indexOf(".from('a3_session_attempts')")
+const a3AtomicWriteIndex = a3ModuleCompletion.indexOf("'complete_a3_module_atomic'")
 assert.ok(a3AccessGateIndex >= 0)
+assert.ok(a3AtomicWriteIndex >= 0)
 assert.ok(a3ModuleCompletion.includes('getA3AccessDenialMessage(access)'))
 assert.ok(a3ModuleCompletion.includes('{ status: 403 }'))
 assert.ok(
-  a3AccessGateIndex < a3FirstWriteIndex,
-  'A3 access must be verified before any completion write',
+  a3AccessGateIndex < a3AtomicWriteIndex,
+  'A3 access must be verified before the atomic completion transaction',
 )
+assert.ok(!a3ModuleCompletion.includes(".from('a3_session_attempts')"))
+assert.ok(!a3ModuleCompletion.includes(".from('a3_module_completion')"))
+assert.ok(!a3ModuleCompletion.includes(".from('a3_route_progression')"))
+assert.ok(!a3ModuleCompletion.includes(".from('a3_user_progress')"))
 
 assert.ok(
   xpActivity.includes('status: 410') || xpActivity.includes('{ status: 410 }'),
@@ -193,6 +198,7 @@ console.log(
     canonicalDayCompletion: true,
     day1ServerScoring: true,
     a3CompletionAccessGate: true,
+    a3AtomicCompletion: true,
     legacyA3WriterDisabled: true,
     publicXpWritesDisabled: true,
   }),
