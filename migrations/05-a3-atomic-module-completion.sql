@@ -76,7 +76,7 @@ begin
     else 'interviewer_simulation'::public.session_type end;
   v_character := case when p_training_type = 'coach'
     then 'coach'::public.character_type
-    else 'interviewer'::public.character_type end;
+    else 'sofia'::public.character_type end;
 
   insert into public.a3_session_attempts (
     user_id, module_id, module_number, session_type, lead_character,
