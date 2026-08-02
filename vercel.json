@@ -9,9 +9,9 @@
       "schedule": "0 9 * * *"
     }
   ],
-  "buildCommand": "pnpm run build",
-  "devCommand": "pnpm run dev",
-  "installCommand": "pnpm install",
+  "buildCommand": "npm run build",
+  "devCommand": "npm run dev",
+  "installCommand": "npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false",
   "framework": "nextjs",
   "regions": ["sfo1"],
   "headers": [
