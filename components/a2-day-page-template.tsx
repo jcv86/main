@@ -17,6 +17,7 @@ import {
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { A2DailyMissionCard } from '@/components/a2-daily-mission-card'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
+import { completeA2Day } from '@/lib/a2/client-completion'
 
 interface A2DayPageTemplateProps {
   dayNumber: number
@@ -101,25 +102,10 @@ export function A2DayPageTemplate({
     setCompletionError(null)
 
     try {
-      const response = await fetch('/api/a2/complete-day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ dayNumber }),
-      })
-
-      const result = await response.json()
-      if (!response.ok) {
-        throw new Error(result.error || 'No pudimos completar el día.')
-      }
-
+      const result = await completeA2Day(dayNumber)
       onComplete?.()
-      const resolvedNextDay = result.progression?.nextDay || nextDay
-      router.push(
-        resolvedNextDay
-          ? `/despega/a2#dia-${resolvedNextDay}`
-          : '/despega/a2',
-      )
+      router.push(result.nextPath)
+      router.refresh()
     } catch (error) {
       console.error('[v0] Error completing A2 day:', error)
       setCompletionError(
@@ -157,7 +143,7 @@ export function A2DayPageTemplate({
               </Badge>
               {checkpoint && (
                 <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
-                  Checkpoint A3
+                  Checkpoint de Entrenamiento
                 </Badge>
               )}
             </div>
