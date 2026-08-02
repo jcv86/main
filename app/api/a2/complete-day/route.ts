@@ -11,6 +11,10 @@ import {
   type A2MissionValidationResult,
 } from '@/lib/a2/day-submission'
 import {
+  validateA2SpecializedDaySubmission,
+  type A2SpecializedValidationResult,
+} from '@/lib/a2/specialized-day-validation'
+import {
   analyzeA2Day1Submission,
   buildDay1PersistencePayload,
   type Day1Analysis,
@@ -246,6 +250,7 @@ export async function POST(request: Request) {
     }
 
     let day1Analysis: Day1Analysis | null = null
+    let specializedValidation: A2SpecializedValidationResult | null = null
     let missionValidation: A2MissionValidationResult | null = null
 
     if (day === 1) {
@@ -297,6 +302,18 @@ export async function POST(request: Request) {
           { status: 500 },
         )
       }
+    } else if (day >= 2 && day <= 10) {
+      specializedValidation = validateA2SpecializedDaySubmission(day, submission)
+
+      if (!specializedValidation.passed) {
+        return NextResponse.json(
+          {
+            error: 'La experiencia especializada necesita ajustes antes de avanzar.',
+            validation: specializedValidation,
+          },
+          { status: 422 },
+        )
+      }
     } else if (requiresUniversalA2Submission(mission)) {
       missionValidation = validateA2MissionSubmission(mission, submission)
 
@@ -319,8 +336,10 @@ export async function POST(request: Request) {
           : requiresUniversalA2Submission(mission)
             ? 'structural'
             : 'specialized'
-    const persistedSubmission = missionValidation?.normalized || submission
+    const persistedSubmission =
+      specializedValidation?.normalized || missionValidation?.normalized || submission
     const persistedValidation =
+      specializedValidation ||
       missionValidation ||
       (day1Analysis
         ? {
@@ -507,7 +526,7 @@ export async function POST(request: Request) {
     return NextResponse.json({
       success: true,
       analysis: day1Analysis,
-      validation: missionValidation,
+      validation: specializedValidation || missionValidation,
       progression: {
         day,
         alreadyCompleted: Boolean(existingCompletion),
