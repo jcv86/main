@@ -45,6 +45,13 @@ assert.equal(
 const dashboard = source('app/despega/dashboard/page.tsx')
 const profile = source('app/despega/profile/page.tsx')
 const signoutRoute = source('app/api/auth/signout/route.ts')
+const authRoutes = source('lib/auth/routes.ts')
+const authRoot = source('app/auth/page.tsx')
+const authLoginAlias = source('app/auth/login/page.tsx')
+const loginAlias = source('app/login/page.tsx')
+const signinAlias = source('app/signin/page.tsx')
+const authHook = source('hooks/use-auth-redirect.ts')
+const adminGuard = source('components/admin/protected-admin-route.tsx')
 const publicJourney = source('components/dtc/journey-canonical.tsx')
 const publicClosing = source('components/dtc/closing-canonical.tsx')
 const landing = source('components/dtc/dtc-landing.tsx')
@@ -89,6 +96,22 @@ assert.ok(!profile.includes('Readiness Score'))
 assert.ok(signoutRoute.includes('supabase.auth.signOut()'))
 assert.ok(signoutRoute.includes('DEMO_COOKIE_NAME'))
 
+assert.ok(authRoutes.includes("SIGN_IN_PATH = '/auth/signin'"))
+for (const [path, content] of [
+  ['app/auth/page.tsx', authRoot],
+  ['app/auth/login/page.tsx', authLoginAlias],
+  ['app/login/page.tsx', loginAlias],
+  ['app/signin/page.tsx', signinAlias],
+] as const) {
+  assert.ok(content.includes('redirect(SIGN_IN_PATH)'), `${path} must redirect to canonical signin`)
+  assert.ok(!content.includes("'use client'"), `${path} must redirect server-side`)
+}
+assert.ok(authHook.includes('router.push(SIGN_IN_PATH)'))
+assert.ok(authHook.includes("window.localStorage.removeItem('demo_user')"))
+assert.ok(!authHook.includes('isInitialCheck'))
+assert.ok(adminGuard.includes('href={SIGN_IN_PATH}'))
+assert.ok(!adminGuard.includes('/auth/login'))
+
 assert.match(legacyA2Dashboard, /redirect\(['"]\/despega\/a2['"]\)/)
 assert.ok(!legacyA2Dashboard.includes('a3_unlocked: true'))
 assert.ok(!legacyA2Dashboard.includes('PhaseTransitionHandler'))
@@ -125,6 +148,7 @@ console.log(
     stages: PRODUCT_STAGE_ORDER.map((stageId) => PRODUCT_STAGES[stageId].name),
     canonicalRoutes: PRODUCT_STAGE_ORDER.map((stageId) => PRODUCT_STAGES[stageId].href),
     canonicalProfile: true,
+    canonicalSignin: '/auth/signin',
     legacyJourneyRedirects: true,
     canonicalA2Cycles: ['30', '60', '90'],
     day1ServerScoring: true,
