@@ -20,7 +20,7 @@ interface ServerAnalysis {
 }
 
 interface A2Day1ScoringProps {
-  routeData: Record<string, unknown>
+  routeData: object
   onComplete: (
     scores: Scores,
     totalScore: number,
@@ -79,7 +79,10 @@ export function A2Day1Scoring({
             : [],
         })
       } catch (analysisError) {
-        if (analysisError instanceof DOMException && analysisError.name === 'AbortError') {
+        if (
+          analysisError instanceof DOMException &&
+          analysisError.name === 'AbortError'
+        ) {
           return
         }
         console.error('[v0] Error analyzing Day 1:', analysisError)
