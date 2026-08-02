@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
+import {
+  checkA3ModuleAccess,
+  getA3AccessDenialMessage,
+} from '@/lib/a3-access-control'
 
 const MODULE_ORDER = [
   'career-mirror',
@@ -67,48 +71,83 @@ export async function POST(request: NextRequest) {
       !Number.isInteger(moduleNumber) ||
       typeof trainingType !== 'string'
     ) {
-      return NextResponse.json({ error: 'Missing or invalid required fields' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Missing or invalid required fields' },
+        { status: 400 },
+      )
     }
 
     const expectedModuleNumber = MODULE_ORDER.indexOf(moduleId) + 1
     if (!MODULE_XP[moduleId] || expectedModuleNumber !== moduleNumber) {
-      return NextResponse.json({ error: 'Invalid module identity' }, { status: 400 })
+      return NextResponse.json(
+        { error: 'Invalid module identity' },
+        { status: 400 },
+      )
     }
 
     const userId = currentUser.id
     const supabase = createAdminClient()
+    const access = await checkA3ModuleAccess(userId, moduleId, supabase)
+
+    if (!access.canAccess) {
+      return NextResponse.json(
+        {
+          error: getA3AccessDenialMessage(access),
+          access: {
+            currentDay: access.currentDay,
+            checkpointDay: access.checkpointDay,
+            day1Status: access.day1Status,
+            blockReasons: access.blockReasons,
+          },
+        },
+        { status: 403 },
+      )
+    }
+
     const now = new Date().toISOString()
     const safeResponses = Array.isArray(responses)
       ? responses.map((value) => (typeof value === 'string' ? value : ''))
       : []
     const safeDeliverable =
-      careerMirrorCard && typeof careerMirrorCard === 'object' ? careerMirrorCard : {}
+      careerMirrorCard && typeof careerMirrorCard === 'object'
+        ? careerMirrorCard
+        : {}
 
-    const { data: existingCompletion, error: existingCompletionError } = await supabase
-      .from('a3_module_completion')
-      .select('module_id')
-      .eq('user_id', userId)
-      .eq('module_id', moduleId)
-      .maybeSingle()
+    const { data: existingCompletion, error: existingCompletionError } =
+      await supabase
+        .from('a3_module_completion')
+        .select('module_id')
+        .eq('user_id', userId)
+        .eq('module_id', moduleId)
+        .maybeSingle()
 
     if (existingCompletionError) {
       console.error('[v0] Completion lookup error:', existingCompletionError)
-      return NextResponse.json({ error: 'Failed to verify completion' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to verify completion' },
+        { status: 500 },
+      )
     }
 
-    const { data: existingUserProgress, error: userProgressError } = await supabase
-      .from('a3_user_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
+    const { data: existingUserProgress, error: userProgressError } =
+      await supabase
+        .from('a3_user_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .single()
 
     if (userProgressError && userProgressError.code !== 'PGRST116') {
       console.error('[v0] Error fetching user progress:', userProgressError)
-      return NextResponse.json({ error: 'Failed to fetch user progress' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to fetch user progress' },
+        { status: 500 },
+      )
     }
 
     const existingCompletedModuleIds = Array.from(
-      new Set((existingUserProgress?.completed_module_ids || []).map(normalizeModuleId)),
+      new Set(
+        (existingUserProgress?.completed_module_ids || []).map(normalizeModuleId),
+      ),
     )
     const isFirstCompletion =
       !existingCompletion && !existingCompletedModuleIds.includes(moduleId)
@@ -121,7 +160,9 @@ export async function POST(request: NextRequest) {
           module_id: moduleId,
           module_number: moduleNumber,
           session_type:
-            trainingType === 'coach' ? 'coach_training' : 'interviewer_simulation',
+            trainingType === 'coach'
+              ? 'coach_training'
+              : 'interviewer_simulation',
           lead_character: 'coach',
           difficulty: 'adaptive',
           is_route_checkpoint: true,
@@ -142,7 +183,10 @@ export async function POST(request: NextRequest) {
 
     if (sessionError) {
       console.error('[v0] Session recording error:', sessionError)
-      return NextResponse.json({ error: 'Failed to record session' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to record session' },
+        { status: 500 },
+      )
     }
 
     const { data: completionData, error: completionError } = await supabase
@@ -164,7 +208,10 @@ export async function POST(request: NextRequest) {
 
     if (completionError) {
       console.error('[v0] Completion recording error:', completionError)
-      return NextResponse.json({ error: 'Failed to record completion' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to record completion' },
+        { status: 500 },
+      )
     }
 
     const { data: currentProgress, error: getProgressError } = await supabase
@@ -175,10 +222,14 @@ export async function POST(request: NextRequest) {
 
     if (getProgressError && getProgressError.code !== 'PGRST116') {
       console.error('[v0] Error fetching route progression:', getProgressError)
-      return NextResponse.json({ error: 'Failed to fetch progress' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to fetch progress' },
+        { status: 500 },
+      )
     }
 
-    const nextModuleNumber = moduleNumber < MODULE_ORDER.length ? moduleNumber + 1 : moduleNumber
+    const nextModuleNumber =
+      moduleNumber < MODULE_ORDER.length ? moduleNumber + 1 : moduleNumber
     const progressionUpdates: Record<string, unknown> = {
       user_id: userId,
       current_module_number: Math.max(
@@ -197,7 +248,8 @@ export async function POST(request: NextRequest) {
 
     if (moduleNumber === MODULE_ORDER.length) {
       progressionUpdates.pro_unlocked_at = currentProgress?.pro_unlocked_at || now
-      progressionUpdates.route_completed_at = currentProgress?.route_completed_at || now
+      progressionUpdates.route_completed_at =
+        currentProgress?.route_completed_at || now
     }
 
     const { data: progressionData, error: progressionError } = await supabase
@@ -207,7 +259,10 @@ export async function POST(request: NextRequest) {
 
     if (progressionError) {
       console.error('[v0] Route progression update error:', progressionError)
-      return NextResponse.json({ error: 'Failed to update route progression' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to update route progression' },
+        { status: 500 },
+      )
     }
 
     const moduleStates: Record<string, string> = {
@@ -246,7 +301,10 @@ export async function POST(request: NextRequest) {
 
     if (canonicalProgressError) {
       console.error('[v0] Canonical progress update error:', canonicalProgressError)
-      return NextResponse.json({ error: 'Failed to update canonical progress' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'Failed to update canonical progress' },
+        { status: 500 },
+      )
     }
 
     return NextResponse.json({
@@ -264,6 +322,9 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error('[v0] Module completion error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'Internal server error' },
+      { status: 500 },
+    )
   }
 }
