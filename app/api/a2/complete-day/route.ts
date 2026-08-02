@@ -4,6 +4,7 @@ import { resolveServerUser } from '@/lib/auth/server-user'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
+import { resolveA2HorizonProgression } from '@/lib/a2/horizon'
 import {
   requiresUniversalA2Submission,
   validateA2MissionSubmission,
@@ -70,12 +71,7 @@ async function persistDay1Submission(
   analysis: Day1Analysis,
   now: string,
 ) {
-  const payload = buildDay1PersistencePayload(
-    userId,
-    submission,
-    analysis,
-    now,
-  )
+  const payload = buildDay1PersistencePayload(userId, submission, analysis, now)
   const { data: existing, error: lookupError } = await supabase
     .from('a2_day1_submissions')
     .select('id')
@@ -142,6 +138,7 @@ export async function POST(request: Request) {
           error: 'Completa el día actual antes de avanzar.',
           currentDay: snapshot.currentDay,
           highestUnlockedDay: snapshot.highestUnlockedDay,
+          activeHorizon: snapshot.activeHorizon,
         },
         { status: 409 },
       )
@@ -259,10 +256,7 @@ export async function POST(request: Request) {
         )
       }
 
-      day1Analysis = analyzeA2Day1Submission(
-        userId,
-        submission as Day1Input,
-      )
+      day1Analysis = analyzeA2Day1Submission(userId, submission as Day1Input)
 
       if (!day1Analysis.passed) {
         if (!existingCompletion) {
@@ -395,14 +389,16 @@ export async function POST(request: Request) {
       .filter((completedDay) => Number.isInteger(completedDay))
       .sort((left, right) => left - right)
     const totalCompleted = completedDays.length
-    const nextDay =
-      day >= snapshot.highestUnlockedDay
-        ? Math.min(90, day + 1)
-        : snapshot.highestUnlockedDay
-    const highestUnlockedDay = Math.max(snapshot.highestUnlockedDay, nextDay)
+    const horizonProgression = resolveA2HorizonProgression(
+      day,
+      snapshot.highestUnlockedDay,
+      snapshot.activeHorizon,
+    )
+    const { nextDay, highestUnlockedDay, extensionRequired, nextHorizon } =
+      horizonProgression
     const progressPercentage = Math.min(
       100,
-      Math.round((totalCompleted / 90) * 100),
+      Math.round((totalCompleted / snapshot.activeHorizon) * 100),
     )
     const route = await resolveA2Route(userId, supabase)
 
@@ -440,6 +436,9 @@ export async function POST(request: Request) {
         ...(existingJourney?.metadata || {}),
         route_id: route?.id || null,
         route_code: route?.code || null,
+        a2_horizon: snapshot.activeHorizon,
+        a2_extension_required: extensionRequired,
+        a2_next_horizon: nextHorizon,
       },
       updated_at: now,
       created_at: existingJourney?.created_at || now,
@@ -501,7 +500,9 @@ export async function POST(request: Request) {
       }
     }
 
-    const nextCheckpoint = getA3CheckpointForDay(nextDay)
+    const nextCheckpoint = extensionRequired
+      ? null
+      : getA3CheckpointForDay(nextDay)
 
     return NextResponse.json({
       success: true,
@@ -513,6 +514,9 @@ export async function POST(request: Request) {
         nextDay,
         currentDay: nextDay,
         highestUnlockedDay,
+        activeHorizon: snapshot.activeHorizon,
+        extensionRequired,
+        nextHorizon,
         completedDays,
         progressPercentage,
         route,

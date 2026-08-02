@@ -2,6 +2,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextRequest, NextResponse } from 'next/server'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
+import { nextA2Horizon } from '@/lib/a2/horizon'
 
 const TOTAL_DAYS = 90
 
@@ -52,6 +53,10 @@ function emptyProgress() {
     current_month: 1,
     current_day: 1,
     highest_unlocked_day: 1,
+    active_horizon: 30,
+    next_horizon: 60,
+    extension_available: false,
+    cycle_complete: false,
     progress_percentage: 0,
     completed_tasks: 0,
     completed_days: [] as number[],
@@ -103,9 +108,9 @@ function normalizeCompletion(row: CompletionRow) {
 /**
  * GET /api/a2/progress
  *
- * Returns canonical A2 progression plus one normalized validation record per
- * completed day. Existing legacy completions remain visible without being
- * reclassified as evidence-backed work.
+ * Returns canonical A2 progression, evidence quality and the explicit active
+ * horizon. Completing Day 30/60 exposes an extension decision rather than
+ * silently unlocking the next cycle.
  */
 export async function GET() {
   try {
@@ -151,18 +156,26 @@ export async function GET() {
     )
     const completedDays = dayRecords.map((record) => record.day)
     const totalCompleted = completedDays.length
+    const completedInsideHorizon = completedDays.filter(
+      (day) => day <= snapshot.activeHorizon,
+    ).length
     const progressPercentage = Math.min(
       100,
-      Math.round((totalCompleted / TOTAL_DAYS) * 100),
+      Math.round((completedInsideHorizon / snapshot.activeHorizon) * 100),
     )
     const currentMonth =
       snapshot.currentDay <= 30 ? 1 : snapshot.currentDay <= 60 ? 2 : 3
+    const nextHorizon = nextA2Horizon(snapshot.activeHorizon)
+    const cycleComplete = completedDays.includes(snapshot.activeHorizon)
+    const extensionAvailable = cycleComplete && nextHorizon !== null
     const status =
       totalCompleted === 0
         ? 'not_started'
-        : totalCompleted >= TOTAL_DAYS
+        : snapshot.activeHorizon === 90 && cycleComplete
           ? 'completed'
-          : 'in_progress'
+          : extensionAvailable
+            ? 'awaiting_extension'
+            : 'in_progress'
 
     const monthCounts = [
       completedDays.filter((day) => day >= 1 && day <= 30).length,
@@ -207,6 +220,10 @@ export async function GET() {
         current_month: currentMonth,
         current_day: snapshot.currentDay,
         highest_unlocked_day: snapshot.highestUnlockedDay,
+        active_horizon: snapshot.activeHorizon,
+        next_horizon: nextHorizon,
+        extension_available: extensionAvailable,
+        cycle_complete: cycleComplete,
         progress_source: snapshot.source,
         progress_percentage: progressPercentage,
         completed_tasks: totalCompleted,
