@@ -47,9 +47,12 @@ async function persistDay1Submission(
     vision_desired_outcome: stringValue(submission.change30Days),
     milestone_day10: stringValue(submission.gates?.identity),
     milestone_day20: stringValue(submission.gates?.evidence),
-    milestone_day30: stringValue(submission.roadmap) || stringValue(submission.gates?.material),
+    milestone_day30:
+      stringValue(submission.roadmap) || stringValue(submission.gates?.material),
     action_plan: submission,
-    analysis_score: hasScore ? Math.max(0, Math.min(100, Math.round(totalScore))) : null,
+    analysis_score: hasScore
+      ? Math.max(0, Math.min(100, Math.round(totalScore)))
+      : null,
     analysis_result: {
       scores: submission.scores || null,
       gates: submission.gates || null,
@@ -83,9 +86,7 @@ async function persistDay1Submission(
         created_at: now,
       })
 
-  if (error) {
-    console.error('[v0] Error saving Day 1 submission:', error)
-  }
+  if (error) console.error('[v0] Error saving Day 1 submission:', error)
 }
 
 export async function POST(request: Request) {
@@ -128,22 +129,24 @@ export async function POST(request: Request) {
       )
     }
 
-    const { data: existingCompletion, error: completionLookupError } = await supabase
-      .from('a2_user_task_completions')
-      .select('id')
-      .eq('user_id', userId)
-      .eq('day', day)
-      .limit(1)
-      .maybeSingle()
+    const { data: existingCompletion, error: completionLookupError } =
+      await supabase
+        .from('a2_user_task_completions')
+        .select('id')
+        .eq('user_id', userId)
+        .eq('day', day)
+        .limit(1)
+        .maybeSingle()
 
     if (completionLookupError) {
       console.error('[v0] Error checking A2 completion:', completionLookupError)
-      return NextResponse.json({ error: 'No pudimos verificar el avance.' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'No pudimos verificar el avance.' },
+        { status: 500 },
+      )
     }
 
-    const dayConfig = A2_DAYS[day]
-    const taskTitle = dayConfig?.title || `Día ${day}`
-
+    const taskTitle = A2_DAYS[day]?.title || `Día ${day}`
     const { error: completionError } = existingCompletion
       ? await supabase
           .from('a2_user_task_completions')
@@ -193,9 +196,14 @@ export async function POST(request: Request) {
       .sort((left, right) => left - right)
     const totalCompleted = completedDays.length
     const nextDay =
-      day >= snapshot.highestUnlockedDay ? Math.min(90, day + 1) : snapshot.highestUnlockedDay
+      day >= snapshot.highestUnlockedDay
+        ? Math.min(90, day + 1)
+        : snapshot.highestUnlockedDay
     const highestUnlockedDay = Math.max(snapshot.highestUnlockedDay, nextDay)
-    const progressPercentage = Math.min(100, Math.round((totalCompleted / 90) * 100))
+    const progressPercentage = Math.min(
+      100,
+      Math.round((totalCompleted / 90) * 100),
+    )
     const route = await resolveA2Route(userId, supabase)
 
     const { data: existingJourney, error: journeyLookupError } = await supabase
@@ -216,11 +224,17 @@ export async function POST(request: Request) {
       a1_completed_at: existingJourney?.a1_completed_at || null,
       a2_started_at: existingJourney?.a2_started_at || now,
       a2_completed_at:
-        day === 90 ? existingJourney?.a2_completed_at || now : existingJourney?.a2_completed_at || null,
+        day === 90
+          ? existingJourney?.a2_completed_at || now
+          : existingJourney?.a2_completed_at || null,
       a3_unlocked_at:
-        day >= 30 ? existingJourney?.a3_unlocked_at || now : existingJourney?.a3_unlocked_at || null,
+        day >= 30
+          ? existingJourney?.a3_unlocked_at || now
+          : existingJourney?.a3_unlocked_at || null,
       a4_unlocked_at:
-        day >= 60 ? existingJourney?.a4_unlocked_at || now : existingJourney?.a4_unlocked_at || null,
+        day >= 60
+          ? existingJourney?.a4_unlocked_at || now
+          : existingJourney?.a4_unlocked_at || null,
       version: (existingJourney?.version || 0) + 1,
       metadata: {
         ...(existingJourney?.metadata || {}),
@@ -237,36 +251,36 @@ export async function POST(request: Request) {
 
     if (journeyError) {
       console.error('[v0] Error updating canonical A2 journey:', journeyError)
-      return NextResponse.json({ error: 'No pudimos actualizar la ruta.' }, { status: 500 })
+      return NextResponse.json(
+        { error: 'No pudimos actualizar la ruta.' },
+        { status: 500 },
+      )
     }
 
     if (route) {
       const { data: existingRouteProgress } = await supabase
         .from('a2_user_route_progress')
-        .select('id, fecha_inicio, checkpoints_completados, experiencia_total')
+        .select(
+          'id, fecha_inicio, checkpoints_completados, experiencia_total',
+        )
         .eq('user_id', userId)
         .eq('route_id', route.id)
         .maybeSingle()
-
-      const checkpoint = getA3CheckpointForDay(nextDay)
-      const checkpointIds = new Set<string>(
-        Array.isArray(existingRouteProgress?.checkpoints_completados)
-          ? existingRouteProgress.checkpoints_completados
-          : [],
-      )
-      if (checkpoint) checkpointIds.add(checkpoint.moduleId)
 
       const routeProgressPayload = {
         user_id: userId,
         route_id: route.id,
         fecha_inicio:
-          existingRouteProgress?.fecha_inicio || new Date().toISOString().slice(0, 10),
+          existingRouteProgress?.fecha_inicio ||
+          new Date().toISOString().slice(0, 10),
         dia_actual: nextDay,
         estado_actual: `dia_${nextDay}`,
         porcentaje_completado: progressPercentage,
         estado: totalCompleted >= 90 ? 'completada' : 'activa',
         misiones_completadas: totalCompleted,
-        checkpoints_completados: Array.from(checkpointIds),
+        // A checkpoint is completed by A3, not merely by reaching its A2 day.
+        checkpoints_completados:
+          existingRouteProgress?.checkpoints_completados || [],
         experiencia_total: existingRouteProgress?.experiencia_total || 0,
         ultima_actividad: now,
         updated_at: now,
@@ -283,7 +297,10 @@ export async function POST(request: Request) {
           })
 
       if (routeProgressError) {
-        console.error('[v0] Error syncing legacy A2 route progress:', routeProgressError)
+        console.error(
+          '[v0] Error syncing compatibility A2 route progress:',
+          routeProgressError,
+        )
       }
     }
 
@@ -314,6 +331,9 @@ export async function POST(request: Request) {
     })
   } catch (error) {
     console.error('[v0] A2 complete-day error:', error)
-    return NextResponse.json({ error: 'No pudimos completar el día.' }, { status: 500 })
+    return NextResponse.json(
+      { error: 'No pudimos completar el día.' },
+      { status: 500 },
+    )
   }
 }
