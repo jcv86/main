@@ -1,48 +1,43 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextRequest, NextResponse } from 'next/server'
 
 /**
  * GET /api/gamification/a2-progress
- * 
- * Fetches gamification progress for A2 routes including XP, DTC, and milestones
+ *
+ * Returns A2 progress for the verified current user. XP/DTC projections are
+ * informational only and are never exposed as claimable rewards.
  */
 export async function GET(request: NextRequest) {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-
-    if (authError || !user) {
-      return NextResponse.json(
-        { error: 'Unauthorized' },
-        { status: 401 }
-      )
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
     }
 
-    const searchParams = request.nextUrl.searchParams
-    const routeId = searchParams.get('routeId')
-    const userId = searchParams.get('userId') || user.id
+    const routeId = request.nextUrl.searchParams.get('routeId')
+    if (!routeId) {
+      return NextResponse.json({ error: 'routeId is required' }, { status: 400 })
+    }
 
-    // Fetch A2 route progress
+    const userId = currentUser.id
+    const supabase = createAdminClient()
+
     const { data: routeProgress, error: routeError } = await supabase
       .from('a2_user_route_progress')
       .select(
-        `id, route_id, porcentaje_completado, estado, 
-         a2_learning_routes(nombre)`
+        `id, route_id, porcentaje_completado, estado,
+         a2_learning_routes(nombre)`,
       )
       .eq('user_id', userId)
-      .eq('route_id', routeId || null)
+      .eq('route_id', routeId)
       .single()
 
     if (routeError) {
       console.warn('[v0] No active route found:', routeError)
-      return NextResponse.json(
-        { error: 'No route progress found' },
-        { status: 404 }
-      )
+      return NextResponse.json({ error: 'No route progress found' }, { status: 404 })
     }
 
-    // Get mission data
     const { data: missions, error: missionsError } = await supabase
       .from('a2_user_missions')
       .select('id, estado, progreso_porcentaje')
@@ -53,10 +48,11 @@ export async function GET(request: NextRequest) {
       console.warn('[v0] Error fetching missions:', missionsError)
     }
 
-    const completedMissions = (missions || []).filter((m) => m.estado === 'completada').length
+    const completedMissions = (missions || []).filter(
+      (mission) => mission.estado === 'completada',
+    ).length
     const totalMissions = missions?.length || 0
 
-    // Get user gamification profile for XP tracking
     const { data: gamProfile, error: gamError } = await supabase
       .from('user_gamification_profile')
       .select('xp_a2_total, current_level')
@@ -67,51 +63,51 @@ export async function GET(request: NextRequest) {
       console.warn('[v0] Error fetching gamification profile:', gamError)
     }
 
-    // Calculate estimated XP/DTC earnings based on progress
-    const progressPercentage = routeProgress.porcentaje_completado || 0
-    const baseXPPerRoute = 5000 // Base XP for completing a full route
-    const baseDTCPerRoute = 500 // Base DTC for completing a full route
+    const progressPercentage = Math.max(
+      0,
+      Math.min(100, routeProgress.porcentaje_completado || 0),
+    )
+    const estimatedXP = Math.round((progressPercentage / 100) * 5000)
+    const estimatedDTC = Math.round((progressPercentage / 100) * 500)
 
-    const estimatedXP = Math.round((progressPercentage / 100) * baseXPPerRoute)
-    const estimatedDTC = Math.round((progressPercentage / 100) * baseDTCPerRoute)
-
-    // Get recent achievements/milestones for this route
-    const { data: achievements, error: achError } = await supabase
+    const { data: achievements, error: achievementsError } = await supabase
       .from('achievements')
       .select('title, description, earned_at')
       .eq('user_id', userId)
       .order('earned_at', { ascending: false })
       .limit(5)
 
-    if (achError) {
-      console.warn('[v0] Error fetching achievements:', achError)
+    if (achievementsError) {
+      console.warn('[v0] Error fetching achievements:', achievementsError)
     }
 
     return NextResponse.json({
       success: true,
-      route_name: (routeProgress?.a2_learning_routes as any)?.nombre || 'Learning Route',
+      route_name:
+        (routeProgress?.a2_learning_routes as { nombre?: string } | null)?.nombre ||
+        'Learning Route',
       progress_percentage: progressPercentage,
       missions_completed: completedMissions,
       total_missions: totalMissions,
       current_level: gamProfile?.current_level || 1,
       level_xp: gamProfile?.xp_a2_total || 0,
-      xp_earned_this_route: estimatedXP,
-      dtc_earned_this_route: estimatedDTC,
-      recent_milestones: (achievements || []).map((ach) => ({
-        name: ach.title,
-        description: ach.description,
-        xp_reward: 100, // Base reward, could be dynamic
-        dtc_reward: 50,
-        earned_at: ach.earned_at,
+      // Kept for backwards-compatible UI rendering. No manual claim is allowed.
+      xp_earned_this_route: 0,
+      dtc_earned_this_route: 0,
+      estimated_xp_at_completion: estimatedXP,
+      estimated_dtc_at_completion: estimatedDTC,
+      rewards_claimable: false,
+      recent_milestones: (achievements || []).map((achievement) => ({
+        name: achievement.title,
+        description: achievement.description,
+        xp_reward: 0,
+        dtc_reward: 0,
+        earned_at: achievement.earned_at,
       })),
       route_id: routeProgress.route_id,
-      user_id: userId,
     })
   } catch (error) {
     console.error('[v0] Error in A2 progress API:', error)
-    return NextResponse.json(
-      { error: 'Failed to fetch A2 progress' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Failed to fetch A2 progress' }, { status: 500 })
   }
 }
