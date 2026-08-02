@@ -120,7 +120,7 @@ const cvCore = {
   targetRole: 'Arquitecta de Soluciones',
   targetKeywords: 'Kubernetes, Terraform, AWS',
   professionalSummary:
-    'Profesional con experiencia articulando equipos, procesos y decisiones complejas. Ha construido soluciones claras y mantenibles para contextos de alta exigencia.',
+    'Profesional con experiencia articulando equipos, procesos y decisiones complejas. Ha construido entregables claros y mantenibles para contextos de alta exigencia.',
   experienceTitle: 'Líder de Proyectos',
   experienceCompany: 'Empresa Demo',
   experienceDates: '2022–actualidad',
