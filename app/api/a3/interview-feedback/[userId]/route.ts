@@ -4,6 +4,24 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const MAX_RESPONSE_LENGTH = 8000
 
+function parseStoredFeedback(value: unknown): Record<string, any> {
+  if (value && typeof value === 'object') return value as Record<string, any>
+  if (typeof value !== 'string' || !value.trim()) return {}
+
+  try {
+    return JSON.parse(value) as Record<string, any>
+  } catch {
+    return { specificFeedback: value }
+  }
+}
+
+function levelLabel(totalXp: number): string {
+  if (totalXp >= 10000) return 'Elite'
+  if (totalXp >= 5000) return 'Gold'
+  if (totalXp >= 2500) return 'Silver'
+  return 'Bronze'
+}
+
 export async function POST(
   request: NextRequest,
   { params }: { params: Promise<{ userId: string }> },
@@ -48,7 +66,6 @@ export async function POST(
       typeof interviewType === 'string' ? interviewType.slice(0, 50) : 'behavioral'
     const supabase = createAdminClient()
 
-    // A session ID is never trusted unless it belongs to the current user.
     const { data: session, error: sessionError } = await supabase
       .from('a3_entrevistas_sesiones')
       .select('*')
@@ -78,6 +95,33 @@ export async function POST(
 
     if (!question) {
       return NextResponse.json({ error: 'Question not found' }, { status: 404 })
+    }
+
+    // Re-sending the same question must not call the model or award XP again.
+    const { data: previousResponse, error: previousResponseError } = await supabase
+      .from('a3_respuestas_entrevista')
+      .select('id, score_calidad, feedback_ia')
+      .eq('sesion_id', sessionId)
+      .eq('pregunta_id', questionId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle()
+
+    if (previousResponseError) {
+      console.error('[v0] Error checking previous interview response:', previousResponseError)
+      return NextResponse.json({ error: 'Failed to verify previous response' }, { status: 500 })
+    }
+
+    if (previousResponse) {
+      return NextResponse.json({
+        success: true,
+        repeated: true,
+        score: previousResponse.score_calidad || 0,
+        feedback: parseStoredFeedback(previousResponse.feedback_ia),
+        sessionId,
+        responseId: previousResponse.id,
+        xpAwarded: 0,
+      })
     }
 
     const { data: a1Results } = await supabase
@@ -162,8 +206,12 @@ Return JSON only:
     const overallScore = Math.round(
       scoreValues.reduce((sum, value) => sum + value, 0) / scoreValues.length,
     )
-    const strengths = Array.isArray(feedback.strengths) ? feedback.strengths : []
-    const improvements = Array.isArray(feedback.improvements) ? feedback.improvements : []
+    const strengths = Array.isArray(feedback.strengths)
+      ? feedback.strengths.filter((value): value is string => typeof value === 'string')
+      : []
+    const improvements = Array.isArray(feedback.improvements)
+      ? feedback.improvements.filter((value): value is string => typeof value === 'string')
+      : []
     const now = new Date().toISOString()
 
     const { data: savedResponse, error: responseError } = await supabase
@@ -173,7 +221,7 @@ Return JSON only:
         pregunta_id: questionId,
         respuesta_usuario: responseText.trim(),
         score_calidad: overallScore,
-        feedback_ia: feedback,
+        feedback_ia: JSON.stringify(feedback),
         areas_mejora: improvements,
         puntos_fuertes: strengths,
         tiempo_respuesta: safeDuration,
@@ -193,10 +241,7 @@ Return JSON only:
 
     const { error: sessionUpdateError } = await supabase
       .from('a3_entrevistas_sesiones')
-      .update({
-        modulos_completados: completedModules,
-        updated_at: now,
-      })
+      .update({ modulos_completados: completedModules, updated_at: now })
       .eq('id', sessionId)
       .eq('user_id', userId)
 
@@ -215,8 +260,10 @@ Return JSON only:
         score_confianza: scoreValues[2],
         analisis_fortalezas: strengths,
         areas_mejora: improvements,
-        sugerencias_especificas: feedback.specificFeedback,
-        recomendacion_siguiente: feedback.nextSteps,
+        sugerencias_especificas:
+          typeof feedback.specificFeedback === 'string' ? feedback.specificFeedback : '',
+        recomendacion_siguiente:
+          typeof feedback.nextSteps === 'string' ? feedback.nextSteps : '',
         creado_at: now,
       })
 
@@ -237,46 +284,64 @@ Return JSON only:
       console.error('[v0] Error saving interview engagement:', engagementError)
     }
 
-    // Award XP internally. The public XP endpoint is read-only.
-    const xpAmount = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
-    const xpReferenceId = `${sessionId}:${questionId}`
-    const { data: existingXp, error: xpLookupError } = await supabase
-      .from('xp_activity_logs')
-      .select('id')
+    const calculatedXp = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
+    let xpAwarded = 0
+    let totalXp = 0
+
+    const { data: gamificationProfile, error: gamificationLookupError } = await supabase
+      .from('user_gamification_profile')
+      .select(
+        'current_xp, total_xp, interview_streak, best_interview_streak, total_interviews_completed',
+      )
       .eq('user_id', userId)
-      .eq('section', 'A3')
-      .eq('activity_type', 'interview_completed')
-      .eq('reference_id', xpReferenceId)
       .maybeSingle()
 
-    if (xpLookupError) {
-      console.error('[v0] Error checking interview XP:', xpLookupError)
-    } else if (!existingXp) {
-      const { error: xpInsertError } = await supabase.from('xp_activity_logs').insert({
-        user_id: userId,
-        section: 'A3',
-        activity_type: 'interview_completed',
-        xp_amount: xpAmount,
-        reference_id: xpReferenceId,
-        metadata: {
-          sessionId,
-          questionId,
-          score: overallScore,
-          responseId: savedResponse?.[0]?.id,
-        },
-      })
+    if (gamificationLookupError) {
+      console.error('[v0] Error fetching gamification profile:', gamificationLookupError)
+    } else {
+      const newCurrentXp = (gamificationProfile?.current_xp || 0) + calculatedXp
+      totalXp = (gamificationProfile?.total_xp || 0) + calculatedXp
+      const newStreak = (gamificationProfile?.interview_streak || 0) + 1
+      const bestStreak = Math.max(
+        gamificationProfile?.best_interview_streak || 0,
+        newStreak,
+      )
 
-      if (xpInsertError) {
-        console.error('[v0] Error recording interview XP:', xpInsertError)
+      const profilePayload = {
+        user_id: userId,
+        current_level: levelLabel(totalXp),
+        current_xp: newCurrentXp,
+        total_xp: totalXp,
+        interview_streak: newStreak,
+        best_interview_streak: bestStreak,
+        total_interviews_completed:
+          (gamificationProfile?.total_interviews_completed || 0) + 1,
+        updated_at: now,
+      }
+
+      const { error: gamificationWriteError } = gamificationProfile
+        ? await supabase
+            .from('user_gamification_profile')
+            .update(profilePayload)
+            .eq('user_id', userId)
+        : await supabase.from('user_gamification_profile').insert(profilePayload)
+
+      if (gamificationWriteError) {
+        console.error('[v0] Error awarding interview XP:', gamificationWriteError)
+      } else {
+        xpAwarded = calculatedXp
       }
     }
 
     return NextResponse.json({
       success: true,
+      repeated: false,
       score: overallScore,
       feedback,
       sessionId,
       responseId: savedResponse?.[0]?.id,
+      xpAwarded,
+      totalXp,
     })
   } catch (error) {
     console.error('[v0] Error processing A3 response:', error)
