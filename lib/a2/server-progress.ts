@@ -68,7 +68,7 @@ export async function resolveA2Route(
     .from('a2_user_route_progress')
     .select('route_id')
     .eq('user_id', userId)
-    .order('ultima_actividad', { ascending: false })
+    .order('updated_at', { ascending: false })
     .limit(1)
     .maybeSingle()
 
@@ -182,12 +182,12 @@ export async function getA2ProgressSnapshot(
     .from('a2_user_route_progress')
     .select('dia_actual')
     .eq('user_id', userId)
-    .order('ultima_actividad', { ascending: false })
+    .order('updated_at', { ascending: false })
     .limit(1)
     .maybeSingle()
 
   if (routeError) {
-    console.error('[v0] Error reading legacy A2 route progress:', routeError)
+    console.error('[v0] Error reading compatibility A2 route progress:', routeError)
   }
 
   const routeDay = validDay(routeProgress?.dia_actual)
