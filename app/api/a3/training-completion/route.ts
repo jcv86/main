@@ -3,6 +3,15 @@ import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { getModuleConfig, resolveCanonicalId } from '@/lib/pillar3-config'
 
+function normalizeTrainingLookup(value: string): string {
+  return value
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .toLowerCase()
+    .trim()
+    .replace(/[\s_]+/g, '-')
+}
+
 export async function POST(request: NextRequest) {
   try {
     const currentUser = await resolveServerUser()
@@ -45,8 +54,10 @@ export async function POST(request: NextRequest) {
       : []
 
     const rawTrainingType = (module_name || training_id).trim()
-    const moduleConfig = getModuleConfig(rawTrainingType)
-    const canonicalId = moduleConfig?.id ?? resolveCanonicalId(rawTrainingType)
+    const normalizedTrainingType = normalizeTrainingLookup(rawTrainingType)
+    const moduleConfig =
+      getModuleConfig(rawTrainingType) ?? getModuleConfig(normalizedTrainingType)
+    const canonicalId = moduleConfig?.id ?? resolveCanonicalId(normalizedTrainingType)
 
     if (!moduleConfig || !canonicalId) {
       return NextResponse.json(
