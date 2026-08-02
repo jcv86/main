@@ -11,6 +11,11 @@ export interface A2DayCompletionPayload {
     completedDays?: number[]
     progressPercentage?: number
   }
+  validation?: {
+    errors?: string[]
+    score?: number
+    passScore?: number
+  } | null
   a3_unlocks?: Array<{
     day: number
     moduleId: string
@@ -40,6 +45,18 @@ async function readPayload(response: Response): Promise<A2DayCompletionPayload> 
   }
 }
 
+function completionErrorMessage(payload: A2DayCompletionPayload): string {
+  const firstCriterion = Array.isArray(payload.validation?.errors)
+    ? payload.validation?.errors.find(
+        (error): error is string => typeof error === 'string' && error.trim().length > 0,
+      )
+    : null
+
+  return firstCriterion
+    ? `${payload.error || 'El entregable necesita ajustes.'} ${firstCriterion}`
+    : payload.error || 'No pudimos completar el día.'
+}
+
 /**
  * Completes an A2 day through the single authoritative server endpoint.
  * The caller never decides whether the user is real or demo; the signed
@@ -61,7 +78,7 @@ export async function completeA2Day(
 
   const payload = await readPayload(response)
   if (!response.ok) {
-    throw new Error(payload.error || 'No pudimos completar el día.')
+    throw new Error(completionErrorMessage(payload))
   }
 
   const candidate = Number(payload.progression?.nextDay)
