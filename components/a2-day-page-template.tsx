@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
@@ -8,7 +8,10 @@ import {
   ArrowLeft,
   ArrowRight,
   BookOpen,
+  CheckCircle2,
   ClipboardList,
+  Loader2,
+  Lock,
   Trophy,
   Users,
   Wrench,
@@ -20,6 +23,11 @@ import { A2DailyMissionCard } from '@/components/a2-daily-mission-card'
 import { A2GenericMissionWorkspace } from '@/components/a2-generic-mission-workspace'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { completeA2Day } from '@/lib/a2/client-completion'
+import {
+  fetchA2DayState,
+  type A2DayStateResponse,
+} from '@/lib/a2/client-day-state'
+import { SIGN_IN_PATH } from '@/lib/auth/routes'
 import {
   normalizeA2MissionSubmission,
   requiresUniversalA2Submission,
@@ -110,6 +118,12 @@ const taskTypeLabels: Record<
   },
 }
 
+function errorStatus(error: unknown): number | undefined {
+  return error instanceof Error && 'status' in error
+    ? Number((error as Error & { status?: number }).status)
+    : undefined
+}
+
 export function A2DayPageTemplate({
   dayNumber,
   onComplete,
@@ -120,8 +134,12 @@ export function A2DayPageTemplate({
   const router = useRouter()
   const [isCompleting, setIsCompleting] = useState(false)
   const [completionError, setCompletionError] = useState<string | null>(null)
+  const [completionNotice, setCompletionNotice] = useState<string | null>(null)
   const [submission, setSubmission] = useState<A2MissionSubmission>(EMPTY_SUBMISSION)
   const [draftReady, setDraftReady] = useState(false)
+  const [dayState, setDayState] = useState<A2DayStateResponse | null>(null)
+  const [stateLoading, setStateLoading] = useState(true)
+  const [stateError, setStateError] = useState<string | null>(null)
 
   const mission = useMemo(() => {
     const configured = A2_DAILY_MISSIONS[dayNumber]
@@ -136,6 +154,33 @@ export function A2DayPageTemplate({
     mission && !children && requiresUniversalA2Submission(mission),
   )
   const draftKey = `dtc:a2:mission-draft:${dayNumber}`
+  const isCompleted = Boolean(dayState?.completion?.isCompleted)
+
+  const loadDayState = useCallback(async () => {
+    setStateLoading(true)
+    try {
+      const nextState = await fetchA2DayState(dayNumber)
+      setDayState(nextState)
+      setStateError(null)
+    } catch (error) {
+      console.error('[v0] Error loading A2 day state:', error)
+      if (errorStatus(error) === 401) {
+        router.replace(SIGN_IN_PATH)
+        return
+      }
+      setStateError(
+        error instanceof Error
+          ? error.message
+          : 'No pudimos verificar el estado de este día.',
+      )
+    } finally {
+      setStateLoading(false)
+    }
+  }, [dayNumber, router])
+
+  useEffect(() => {
+    void loadDayState()
+  }, [loadDayState])
 
   const liveValidation = useMemo(
     () =>
@@ -155,10 +200,19 @@ export function A2DayPageTemplate({
   )
 
   useEffect(() => {
+    if (stateLoading || !dayState) return
+
     setSubmission(EMPTY_SUBMISSION)
     setDraftReady(false)
 
     if (!mission || !needsEvidence) {
+      setDraftReady(true)
+      return
+    }
+
+    const savedSubmission = dayState.completion?.submission
+    if (savedSubmission) {
+      setSubmission(normalizeA2MissionSubmission(mission, savedSubmission))
       setDraftReady(true)
       return
     }
@@ -176,11 +230,7 @@ export function A2DayPageTemplate({
     } finally {
       setDraftReady(true)
     }
-    // The mission is canonically determined by dayNumber. Keeping this effect
-    // tied to the day prevents a controlled textarea edit from restoring an
-    // older draft during the same render cycle.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dayNumber, draftKey, needsEvidence])
+  }, [dayState, draftKey, mission, needsEvidence, stateLoading])
 
   useEffect(() => {
     if (!draftReady || !needsEvidence) return
@@ -203,16 +253,101 @@ export function A2DayPageTemplate({
     )
   }
 
+  if (stateLoading) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background">
+        <div className="flex items-center gap-3 text-slate-400">
+          <Loader2 className="h-5 w-5 animate-spin text-cyan-400" />
+          Verificando el acceso al Día {dayNumber}…
+        </div>
+      </div>
+    )
+  }
+
+  if (stateError || !dayState) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
+        <div className="w-full max-w-md space-y-4 rounded-[28px] border border-amber-500/30 bg-amber-500/5 p-6 text-center">
+          <h2 className="text-xl font-semibold text-white">
+            No pudimos abrir este día
+          </h2>
+          <p className="text-sm text-amber-100">
+            {stateError || 'El estado de la misión no está disponible.'}
+          </p>
+          <div className="flex gap-3">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => router.push('/despega/a2')}
+            >
+              Volver a Tu Ruta
+            </Button>
+            <Button className="flex-1" onClick={() => void loadDayState()}>
+              Reintentar
+            </Button>
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  if (!dayState.access.canAccess) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-background p-4">
+        <div className="w-full max-w-lg space-y-5 rounded-[28px] border border-slate-700 bg-slate-950/70 p-7">
+          <div className="flex items-center gap-3">
+            <div className="rounded-full bg-slate-800 p-3">
+              <Lock className="h-6 w-6 text-slate-400" />
+            </div>
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
+                Día {dayNumber}
+              </p>
+              <h1 className="text-2xl font-bold text-white">
+                Esta misión aún está bloqueada
+              </h1>
+            </div>
+          </div>
+
+          <ul className="space-y-2 rounded-xl border border-slate-800 bg-slate-900/50 p-4 text-sm text-slate-300">
+            {dayState.access.blockReasons.map((reason) => (
+              <li key={reason} className="flex gap-2">
+                <span className="text-amber-400">•</span>
+                <span>{reason}</span>
+              </li>
+            ))}
+          </ul>
+
+          <p className="text-sm text-slate-500">
+            Tu Ruta está disponible hasta el Día{' '}
+            {dayState.access.highestUnlockedDay}.
+          </p>
+
+          <Button className="w-full" onClick={() => router.push('/despega/a2')}>
+            Volver al día disponible
+          </Button>
+        </div>
+      </div>
+    )
+  }
+
   const prevDay = dayNumber > 1 ? dayNumber - 1 : null
   const nextDay = dayNumber < 90 ? dayNumber + 1 : null
   const typeInfo = taskTypeLabels[mission.missionType] || taskTypeLabels.builder
+  const checkpointCompleted = Boolean(dayState.checkpoint?.completed)
   const completionDisabled =
     isCompleting || (needsEvidence && !liveValidation.passed)
 
   const completeGenericDay = async () => {
+    if (isCompleted && checkpoint) {
+      router.push('/despega/a2')
+      return
+    }
     if (completionDisabled) return
+
     setIsCompleting(true)
     setCompletionError(null)
+    setCompletionNotice(null)
 
     try {
       const result = await completeA2Day(
@@ -221,6 +356,13 @@ export function A2DayPageTemplate({
       )
       onComplete?.()
       if (needsEvidence) window.localStorage.removeItem(draftKey)
+
+      if (isCompleted) {
+        await loadDayState()
+        setCompletionNotice('El entregable actualizado quedó guardado.')
+        return
+      }
+
       router.push(result.nextPath)
       router.refresh()
     } catch (error) {
@@ -243,6 +385,12 @@ export function A2DayPageTemplate({
               {typeInfo.icon}
               <span className="ml-1">{typeInfo.label}</span>
             </Badge>
+            {isCompleted && (
+              <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
+                <CheckCircle2 className="mr-1 h-3 w-3" />
+                Completado
+              </Badge>
+            )}
             {checkpoint && (
               <Badge className="border-emerald-500/40 bg-emerald-500/20 text-emerald-300">
                 Checkpoint de Entrenamiento
@@ -261,6 +409,24 @@ export function A2DayPageTemplate({
       </header>
 
       <main className="mx-auto max-w-4xl space-y-8 px-4 py-8">
+        {isCompleted && (
+          <section className="rounded-xl border border-emerald-500/30 bg-emerald-500/10 p-4">
+            <p className="flex items-center gap-2 text-sm font-semibold text-emerald-200">
+              <CheckCircle2 className="h-4 w-4" />
+              Esta misión ya está registrada
+            </p>
+            <p className="mt-1 text-xs text-emerald-100/70">
+              {dayState.completion?.validationStatus === 'legacy'
+                ? 'Puedes revisarla; fue completada antes del sistema de evidencia.'
+                : `Validación: ${dayState.completion?.validationStatus || 'completada'}${
+                    typeof dayState.completion?.validation.score === 'number'
+                      ? ` · ${dayState.completion.validation.score}/100`
+                      : ''
+                  }`}
+            </p>
+          </section>
+        )}
+
         {children ? (
           children
         ) : (
@@ -268,7 +434,7 @@ export function A2DayPageTemplate({
             <A2DailyMissionCard
               mission={mission}
               dayNumber={dayNumber}
-              isCompleted={false}
+              isCompleted={isCompleted}
               isAvailable
               isA3Checkpoint={Boolean(checkpoint)}
               a3ModuleName={
@@ -334,13 +500,16 @@ export function A2DayPageTemplate({
                 mission={mission}
                 value={submission}
                 validation={liveValidation}
-                onChange={setSubmission}
+                onChange={(nextSubmission) => {
+                  setSubmission(nextSubmission)
+                  setCompletionNotice(null)
+                }}
               />
             )}
 
             {needsEvidence && !draftReady && (
               <p className="rounded-xl border border-slate-800 bg-slate-950/50 p-4 text-sm text-slate-400">
-                Recuperando tu borrador…
+                Recuperando tu entregable…
               </p>
             )}
 
@@ -352,19 +521,28 @@ export function A2DayPageTemplate({
                       Checkpoint de Entrenamiento
                     </h3>
                     <p className="mt-2 leading-relaxed text-white/80">
-                      Completa <strong>{checkpoint.moduleTitle}</strong> y vuelve
-                      para validar este día.
+                      {checkpointCompleted ? (
+                        <>El módulo <strong>{checkpoint.moduleTitle}</strong> ya está completado.</>
+                      ) : (
+                        <>Completa <strong>{checkpoint.moduleTitle}</strong> y vuelve para validar este día.</>
+                      )}
                     </p>
                   </div>
-                  <Zap className="h-6 w-6 flex-shrink-0 text-emerald-400" />
+                  {checkpointCompleted ? (
+                    <CheckCircle2 className="h-6 w-6 flex-shrink-0 text-emerald-400" />
+                  ) : (
+                    <Zap className="h-6 w-6 flex-shrink-0 text-emerald-400" />
+                  )}
                 </div>
-                <Button
-                  onClick={() => router.push(checkpoint.route)}
-                  className="w-full border border-emerald-500/80 bg-emerald-600/80 py-6 text-white hover:bg-emerald-600"
-                >
-                  Abrir {checkpoint.moduleTitle}
-                  <ArrowRight className="ml-2 h-4 w-4" />
-                </Button>
+                {!checkpointCompleted && (
+                  <Button
+                    onClick={() => router.push(checkpoint.route)}
+                    className="w-full border border-emerald-500/80 bg-emerald-600/80 py-6 text-white hover:bg-emerald-600"
+                  >
+                    Abrir {checkpoint.moduleTitle}
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </Button>
+                )}
               </section>
             )}
           </>
@@ -377,9 +555,16 @@ export function A2DayPageTemplate({
                 {completionError}
               </p>
             )}
+            {completionNotice && (
+              <p className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-200">
+                {completionNotice}
+              </p>
+            )}
             {needsEvidence && (
               <p className="text-center text-xs text-slate-500">
-                El borrador se guarda automáticamente en este dispositivo.
+                {isCompleted
+                  ? 'El entregable guardado se carga desde Tu Ruta y puede actualizarse.'
+                  : 'El borrador se guarda automáticamente en este dispositivo.'}
               </p>
             )}
             <div className="flex gap-4">
@@ -399,11 +584,15 @@ export function A2DayPageTemplate({
               >
                 {isCompleting
                   ? 'Guardando…'
-                  : checkpoint
-                    ? 'Validar checkpoint'
-                    : nextDay
-                      ? 'Registrar y continuar'
-                      : 'Completar ruta'}
+                  : isCompleted && checkpoint
+                    ? 'Volver a Tu Ruta'
+                    : isCompleted
+                      ? 'Actualizar entregable'
+                      : checkpoint
+                        ? 'Validar checkpoint'
+                        : nextDay
+                          ? 'Registrar y continuar'
+                          : 'Completar ruta'}
                 {!isCompleting && <ArrowRight className="ml-2 h-4 w-4" />}
               </Button>
             </div>

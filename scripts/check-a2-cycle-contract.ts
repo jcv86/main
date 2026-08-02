@@ -95,11 +95,13 @@ assert.deepEqual(
 
 const completeDayRoute = source('app/api/a2/complete-day/route.ts')
 const progressRoute = source('app/api/a2/progress/route.ts')
+const dayStateRoute = source('app/api/a2/day-state/[day]/route.ts')
 const dashboard = source('app/despega/a2/page.tsx')
 const migration = source('migrations/03-a2-mission-evidence.sql')
 const dayTemplate = source('components/a2-day-page-template.tsx')
 const missionWorkspace = source('components/a2-generic-mission-workspace.tsx')
 const clientCompletion = source('lib/a2/client-completion.ts')
+const clientDayState = source('lib/a2/client-day-state.ts')
 
 assert.ok(completeDayRoute.includes("import { A2_DAILY_MISSIONS }"))
 assert.ok(completeDayRoute.includes('requiredPreviousDay'))
@@ -122,7 +124,24 @@ for (const column of [
 ]) {
   assert.ok(migration.includes(column), `Migration must add ${column}`)
   assert.ok(progressRoute.includes(column), `Progress API must read ${column}`)
+  assert.ok(dayStateRoute.includes(column), `Day-state API must read ${column}`)
 }
+
+assert.ok(dayStateRoute.includes('resolveServerUser()'))
+assert.ok(dayStateRoute.includes('getA2ProgressSnapshot(userId, supabase)'))
+assert.ok(dayStateRoute.includes('requiredPreviousDay'))
+assert.ok(dayStateRoute.includes('previousCompleted'))
+assert.ok(dayStateRoute.includes('withinUnlockedRange'))
+assert.ok(dayStateRoute.includes('const canAccess = isCompleted ||'))
+assert.ok(dayStateRoute.includes('normalizeA2MissionSubmission('))
+assert.ok(dayStateRoute.includes('blockReasons'))
+assert.ok(dayStateRoute.includes('missingA3Modules'))
+assert.ok(dayStateRoute.includes('completion: completion'))
+
+assert.ok(clientDayState.includes('fetch(`/api/a2/day-state/${dayNumber}`'))
+assert.ok(clientDayState.includes("credentials: 'include'"))
+assert.ok(clientDayState.includes('error.status = response.status'))
+assert.ok(clientDayState.includes('payload.day !== dayNumber'))
 
 assert.ok(dayTemplate.includes('A2GenericMissionWorkspace'))
 assert.ok(dayTemplate.includes('requiresUniversalA2Submission(mission)'))
@@ -136,6 +155,23 @@ assert.ok(dayTemplate.includes('window.localStorage.setItem(draftKey'))
 assert.ok(dayTemplate.includes('window.localStorage.removeItem(draftKey)'))
 assert.ok(dayTemplate.includes('Validar checkpoint'))
 assert.ok(!dayTemplate.includes('completeA2Day(dayNumber)'))
+
+assert.ok(dayTemplate.includes('fetchA2DayState(dayNumber)'))
+assert.ok(dayTemplate.includes('if (stateLoading)'))
+assert.ok(dayTemplate.includes('if (!dayState.access.canAccess)'))
+assert.ok(dayTemplate.includes('Esta misión aún está bloqueada'))
+assert.ok(dayTemplate.includes('const savedSubmission = dayState.completion?.submission'))
+assert.ok(
+  dayTemplate.indexOf('const savedSubmission = dayState.completion?.submission') <
+    dayTemplate.indexOf('window.localStorage.getItem(draftKey)'),
+  'Persisted server evidence must take priority over a local draft',
+)
+assert.ok(dayTemplate.includes('El entregable guardado se carga desde Tu Ruta'))
+assert.ok(dayTemplate.includes('Actualizar entregable'))
+assert.ok(dayTemplate.includes("setCompletionNotice('El entregable actualizado quedó guardado.')"))
+assert.ok(dayTemplate.includes('await loadDayState()'))
+assert.ok(dayTemplate.includes('checkpointCompleted'))
+assert.ok(dayTemplate.includes('SIGN_IN_PATH'))
 
 for (const requiredField of [
   'completedInstructions',
@@ -189,5 +225,7 @@ console.log(
     universalWorkspace: true,
     localDrafts: true,
     evidenceAwareDashboard: true,
+    dayAccessGate: true,
+    persistedEvidenceReview: true,
   }),
 )
