@@ -22,6 +22,9 @@ export interface Day1Analysis {
   breakdown: string[]
   recommendations: string[]
   formattedResult: string
+  feedback: string
+  strengths: string[]
+  improvements: string[]
   normalized: {
     visionRole: string
     visionDesiredOutcome: string
@@ -99,6 +102,7 @@ export function analyzeA2Day1Submission(
     ...normalized,
     createdAt: new Date(),
   })
+  const formattedResult = formatScoringResult(result)
 
   return {
     totalScore: result.totalScore,
@@ -113,7 +117,10 @@ export function analyzeA2Day1Submission(
     criteria: result.criteria,
     breakdown: result.breakdown,
     recommendations: result.recommendations,
-    formattedResult: formatScoringResult(result),
+    formattedResult,
+    feedback: formattedResult,
+    strengths: result.breakdown,
+    improvements: result.recommendations,
     normalized,
   }
 }
