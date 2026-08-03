@@ -89,7 +89,7 @@ begin
   if found then
     v_inserted := true;
 
-    insert into public.user_gamification_profile (
+    insert into public.user_gamification_profile as existing_profile (
       user_id,
       current_level,
       current_xp,
@@ -116,19 +116,19 @@ begin
     )
     on conflict (user_id) do update
     set
-      current_xp = coalesce(public.user_gamification_profile.current_xp, 0) + v_safe_xp,
-      total_xp = coalesce(public.user_gamification_profile.total_xp, 0) + v_safe_xp,
-      interview_streak = coalesce(public.user_gamification_profile.interview_streak, 0) + 1,
+      current_xp = coalesce(existing_profile.current_xp, 0) + v_safe_xp,
+      total_xp = coalesce(existing_profile.total_xp, 0) + v_safe_xp,
+      interview_streak = coalesce(existing_profile.interview_streak, 0) + 1,
       best_interview_streak = greatest(
-        coalesce(public.user_gamification_profile.best_interview_streak, 0),
-        coalesce(public.user_gamification_profile.interview_streak, 0) + 1
+        coalesce(existing_profile.best_interview_streak, 0),
+        coalesce(existing_profile.interview_streak, 0) + 1
       ),
       total_interviews_completed =
-        coalesce(public.user_gamification_profile.total_interviews_completed, 0) + 1,
+        coalesce(existing_profile.total_interviews_completed, 0) + 1,
       current_level = case
-        when coalesce(public.user_gamification_profile.total_xp, 0) + v_safe_xp >= 10000 then 'Elite'
-        when coalesce(public.user_gamification_profile.total_xp, 0) + v_safe_xp >= 5000 then 'Gold'
-        when coalesce(public.user_gamification_profile.total_xp, 0) + v_safe_xp >= 2500 then 'Silver'
+        when coalesce(existing_profile.total_xp, 0) + v_safe_xp >= 10000 then 'Elite'
+        when coalesce(existing_profile.total_xp, 0) + v_safe_xp >= 5000 then 'Gold'
+        when coalesce(existing_profile.total_xp, 0) + v_safe_xp >= 2500 then 'Silver'
         else 'Bronze'
       end,
       updated_at = now()
