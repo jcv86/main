@@ -176,6 +176,9 @@ export function validateCoachPracticeSubmission(
       ? []
       : ['La respuesta de desafío debe identificar situación, tarea, acción, resultado y aprendizaje.']),
   ]
+  const persistedDeliverable: Record<string, unknown> = Object.fromEntries(
+    Object.entries(draft),
+  )
 
   return {
     passed:
@@ -190,6 +193,6 @@ export function validateCoachPracticeSubmission(
     ],
     criteria,
     responses,
-    deliverable: draft,
+    deliverable: persistedDeliverable,
   }
 }
