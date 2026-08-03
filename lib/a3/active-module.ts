@@ -66,6 +66,16 @@ const FIRST_RECRUITER_SIMULATION_DELIVERABLE_KEYS = [
   'interviewReflection',
 ]
 
+const DIFFICULT_QUESTIONS_DELIVERABLE_KEYS = [
+  'riskPlans',
+  'redFlagChecks',
+  'pressureAnswers',
+  'strongestResponse',
+  'remainingRisk',
+  'improvementAction',
+  'reflection',
+]
+
 export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
   const module = getA3Module(value)
   if (!module) return null
@@ -81,7 +91,9 @@ export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
             ? COMMUNICATION_GYM_DELIVERABLE_KEYS
             : module.id === 'first-recruiter-simulation'
               ? FIRST_RECRUITER_SIMULATION_DELIVERABLE_KEYS
-              : null
+              : module.id === 'risk-difficult-questions-lab'
+                ? DIFFICULT_QUESTIONS_DELIVERABLE_KEYS
+                : null
 
   if (!requiredDeliverableKeys) return module
 
