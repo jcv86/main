@@ -1,110 +1,78 @@
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
-import { scoreDay1Submission, formatScoringResult } from '@/lib/a2-dtc-scoring'
 import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import {
+  analyzeA2Day1Submission,
+  buildDay1PersistencePayload,
+  type Day1Input,
+} from '@/lib/a2/day1-scoring'
+
+function asInput(value: unknown): Day1Input {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Day1Input)
+    : {}
+}
 
 export async function POST(request: Request) {
   try {
-    const cookieStore = await cookies()
-    const demoUserCookie = cookieStore.get('demo_user')
-    
-    if (!demoUserCookie) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
     }
 
-    let userId: string | null = null
+    let input: Day1Input
     try {
-      const demoUser = JSON.parse(demoUserCookie.value)
-      userId = demoUser.id
+      input = asInput(await request.json())
     } catch {
-      return NextResponse.json(
-        { error: 'Invalid authentication' },
-        { status: 401 }
-      )
+      return NextResponse.json({ error: 'Solicitud inválida' }, { status: 400 })
     }
 
-    const body = await request.json()
-    const {
-      visionRole,
-      visionDesiredOutcome,
-      visionEnvironment,
-      milestoneDay10,
-      milestoneDay20,
-      milestoneDay30,
-      actionPlan,
-    } = body
-
-    // Create submission object for scoring
-    const submission = {
-      userId,
-      submissionId: `dtc-${userId}-${Date.now()}`,
-      visionRole: visionRole || '',
-      visionDesiredOutcome: visionDesiredOutcome || '',
-      visionEnvironment: visionEnvironment || '',
-      milestoneDay10: milestoneDay10 || '',
-      milestoneDay20: milestoneDay20 || '',
-      milestoneDay30: milestoneDay30 || '',
-      actionPlan: actionPlan || {},
-      createdAt: new Date(),
-    }
-
-    // Score the submission using real DTC scoring logic
-    const scoringResult = scoreDay1Submission(submission)
-
-    console.log('[v0] Day 1 DTC Scoring:', {
-      userId,
-      totalScore: scoringResult.totalScore,
-      passed: scoringResult.passed,
-      criteria: scoringResult.criteria,
-    })
-
-    // Save to database
+    const userId = currentUser.id
+    const analysis = analyzeA2Day1Submission(userId, input)
+    const now = new Date().toISOString()
     const supabase = createAdminClient()
-    const { error: saveError } = await supabase
+    const payload = buildDay1PersistencePayload(userId, input, analysis, now)
+
+    const { data: existing, error: lookupError } = await supabase
       .from('a2_day1_submissions')
-      .update({
-        analysis_score: scoringResult.totalScore,
-        pass_fail_status: scoringResult.passed ? 'pass' : 'needs_revision',
-        analysis_result: {
-          criteria: scoringResult.criteria,
-          breakdown: scoringResult.breakdown,
-          recommendations: scoringResult.recommendations,
-        },
-        updated_at: new Date(),
-      })
+      .select('id')
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
       .limit(1)
+      .maybeSingle()
 
-    if (saveError) {
-      console.error('[v0] Error saving analysis:', saveError)
+    if (lookupError) {
+      console.error('[v0] Error finding Day 1 submission:', lookupError)
+      return NextResponse.json(
+        { error: 'No pudimos guardar el análisis.' },
+        { status: 500 },
+      )
     }
 
-    return NextResponse.json({
-      success: true,
-      analysis: {
-        totalScore: scoringResult.totalScore,
-        passed: scoringResult.passed,
-        status: scoringResult.passed ? 'pass' : 'needs_revision',
-        scores: {
-          visionClarity: scoringResult.criteria.visionClarity,
-          milestoneQuality: scoringResult.criteria.milestoneQuality,
-          completeness: scoringResult.criteria.completeness,
-          realism: scoringResult.criteria.realism,
-        },
-        breakdown: scoringResult.breakdown,
-        recommendations: scoringResult.recommendations,
-        formattedResult: formatScoringResult(scoringResult),
-      },
-    })
+    const { error: saveError } = existing
+      ? await supabase
+          .from('a2_day1_submissions')
+          .update(payload)
+          .eq('id', existing.id)
+      : await supabase.from('a2_day1_submissions').insert({
+          ...payload,
+          created_at: now,
+        })
+
+    if (saveError) {
+      console.error('[v0] Error saving Day 1 analysis:', saveError)
+      return NextResponse.json(
+        { error: 'No pudimos guardar el análisis.' },
+        { status: 500 },
+      )
+    }
+
+    return NextResponse.json({ success: true, analysis })
   } catch (error) {
-    console.error('[v0] Analysis error:', error)
+    console.error('[v0] Day 1 analysis error:', error)
     return NextResponse.json(
-      { error: 'Failed to analyze submission' },
-      { status: 500 }
+      { error: 'No pudimos analizar tu ruta.' },
+      { status: 500 },
     )
   }
 }

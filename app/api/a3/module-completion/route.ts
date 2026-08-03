@@ -1,200 +1,396 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
+import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import {
+  checkA3ModuleAccess,
+  getA3AccessDenialMessage,
+} from '@/lib/a3-access-control'
+import { A3_MODULES } from '@/lib/a3/module-catalog'
+import { getActiveA3Module } from '@/lib/a3/active-module'
+import { validateA3ModuleSubmission } from '@/lib/a3/module-validation'
+import { validateJobDecoderSubmission } from '@/lib/a3/job-decoder-validation'
+import { extractCvContext } from '@/lib/a3/job-decoder'
+import { validateAnswerArchitectureSubmission } from '@/lib/a3/answer-architecture-validation'
+import { extractAnswerArchitectureContext } from '@/lib/a3/answer-architecture'
+import { validateCoachPracticeSubmission } from '@/lib/a3/coach-practice-validation'
+import { extractCoachPracticeContext } from '@/lib/a3/coach-practice'
+import { validateCommunicationGymSubmission } from '@/lib/a3/communication-gym-validation'
+import { extractCommunicationGymContext } from '@/lib/a3/communication-gym'
+import { validateFirstRecruiterSimulationSubmission } from '@/lib/a3/first-recruiter-simulation-validation'
+import { extractFirstRecruiterContext } from '@/lib/a3/first-recruiter-simulation'
 
-function getSupabaseClient() {
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+interface AtomicCompletionResult {
+  isFirstCompletion: boolean
+  xpAwarded: number
+  totalXp: number
+  bestScore: number
+  totalAttempts: number
+  session: Record<string, unknown>
+  completion: Record<string, unknown>
+  progress: Record<string, unknown>
+}
 
-  if (!supabaseUrl || !supabaseKey) {
-    throw new Error('Missing Supabase configuration')
-  }
-
-  return createClient(supabaseUrl, supabaseKey)
+function isAtomicCompletionResult(value: unknown): value is AtomicCompletionResult {
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return false
+  const result = value as Record<string, unknown>
+  return (
+    typeof result.isFirstCompletion === 'boolean' &&
+    typeof result.xpAwarded === 'number' &&
+    typeof result.totalXp === 'number' &&
+    typeof result.bestScore === 'number' &&
+    typeof result.totalAttempts === 'number'
+  )
 }
 
 export async function POST(request: NextRequest) {
   try {
-    const supabase = getSupabaseClient()
-    
-    const body = await request.json()
-    const {
-      moduleId,
-      moduleName,
-      moduleNumber,
-      trainingType,
-      responses,
-      careerMirrorCard,
-      userId
-    } = body
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+    }
 
-    // Validate required fields
-    if (!moduleId || !moduleNumber || !trainingType) {
+    let body: Record<string, unknown>
+    try {
+      body = (await request.json()) as Record<string, unknown>
+    } catch {
+      return NextResponse.json({ error: 'Solicitud inválida' }, { status: 400 })
+    }
+
+    const module = getActiveA3Module(body.moduleId)
+    const moduleNumber = Number(body.moduleNumber)
+    if (!module || !Number.isInteger(moduleNumber) || module.number !== moduleNumber) {
       return NextResponse.json(
-        { error: 'Missing required fields' },
-        { status: 400 }
+        { error: 'La identidad del módulo no es válida.' },
+        { status: 400 },
       )
     }
 
-    // Resolve user ID: body userId > Bearer token > signed demo cookie
-    const authHeader = request.headers.get('authorization')
-    let currentUserId = userId
-
-    if (!currentUserId && authHeader?.startsWith('Bearer ')) {
-      try {
-        const token = authHeader.substring(7)
-        const { data: { user }, error: authError } = await supabase.auth.getUser(token)
-        if (!authError && user) currentUserId = user.id
-      } catch {
-        // fall through to demo cookie
-      }
-    }
-
-    if (!currentUserId) {
-      const cookieHeader = request.headers.get('cookie') ?? ''
-      const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${DEMO_COOKIE_NAME}=([^;]+)`))
-      const demoUser = match ? await verifyDemoSessionToken(decodeURIComponent(match[1])) : null
-      if (demoUser) currentUserId = demoUser.id
-    }
-
-    if (!currentUserId) {
-      return NextResponse.json({ error: 'User ID required' }, { status: 401 })
-    }
-
-    // 1. Record session attempt in a3_session_attempts
-    const { data: sessionData, error: sessionError } = await supabase
-      .from('a3_session_attempts')
-      .insert([
+    if (!module.completionContract.enabled) {
+      return NextResponse.json(
         {
-          user_id: currentUserId,
-          module_id: moduleId,
-          module_number: moduleNumber,
-          session_type: trainingType === 'coach' ? 'coach_training' : 'interviewer_simulation',
-          lead_character: 'coach',
-          difficulty: 'adaptive',
-          is_route_checkpoint: true,
-          status: 'completed',
-          progress: 100,
-          score: 100, // Module 1 is pass/fail - 100 for completion
-          transcript: JSON.stringify({
-            q1_career_direction: responses[0] || '',
-            q2_professional_identity: responses[1] || '',
-            q3_core_values: responses[2] || '',
-            q4_personal_brand: responses[3] || ''
-          }),
-          deliverable: careerMirrorCard || {},
-          session_completed_at: new Date().toISOString()
-        }
+          error: 'Este entrenamiento aún no tiene una finalización verificable habilitada.',
+          code: 'A3_COMPLETION_CONTRACT_NOT_READY',
+          moduleId: module.id,
+        },
+        { status: 409 },
+      )
+    }
+
+    const userId = currentUser.id
+    const supabase = createAdminClient()
+    const access = await checkA3ModuleAccess(userId, module.id, supabase)
+
+    if (!access.canAccess) {
+      return NextResponse.json(
+        {
+          error: getA3AccessDenialMessage(access),
+          access: {
+            currentDay: access.currentDay,
+            checkpointDay: access.checkpointDay,
+            day1Status: access.day1Status,
+            blockReasons: access.blockReasons,
+          },
+        },
+        { status: 403 },
+      )
+    }
+
+    let validation
+    if (module.id === 'job-decoder') {
+      const { data: cvCompletion, error: cvContextError } = await supabase
+        .from('a3_module_completion')
+        .select('module_id, deliverable, completed_at')
+        .eq('user_id', userId)
+        .in('module_id', ['cv-builder-studio', 'module-3'])
+        .order('completed_at', { ascending: false })
+        .limit(1)
+        .maybeSingle()
+
+      if (cvContextError) {
+        console.error('[v0] Job decoder CV context error:', cvContextError)
+        return NextResponse.json(
+          { error: 'No pudimos contrastar la oferta con el CV aprobado.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateJobDecoderSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        { cvBuilder: extractCvContext(cvCompletion?.deliverable) },
+      )
+    } else if (module.id === 'answer-architecture') {
+      const [cvResult, decoderResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['cv-builder-studio', 'module-3'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
       ])
-      .select()
 
-    if (sessionError) {
-      console.error('[v0] Session recording error:', sessionError)
+      if (cvResult.error || decoderResult.error) {
+        console.error('[v0] Answer architecture context error:', {
+          cv: cvResult.error,
+          decoder: decoderResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar el CV y la oferta analizada.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateAnswerArchitectureSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractAnswerArchitectureContext(
+          cvResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+        ),
+      )
+    } else if (module.id === 'coach-practice-room') {
+      const [cvResult, decoderResult, answersResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['cv-builder-studio', 'module-3'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['answer-architecture', 'module-5'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (cvResult.error || decoderResult.error || answersResult.error) {
+        console.error('[v0] Coach practice context error:', {
+          cv: cvResult.error,
+          decoder: decoderResult.error,
+          answers: answersResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar la evidencia previa de la práctica.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateCoachPracticeSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractCoachPracticeContext(
+          cvResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+          answersResult.data?.deliverable,
+        ),
+      )
+    } else if (module.id === 'communication-gym') {
+      const [coachResult, decoderResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['coach-practice-room', 'module-6'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (coachResult.error || decoderResult.error) {
+        console.error('[v0] Communication gym context error:', {
+          coach: coachResult.error,
+          decoder: decoderResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar la práctica y la oferta previas.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateCommunicationGymSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractCommunicationGymContext(
+          coachResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+        ),
+      )
+    } else if (module.id === 'first-recruiter-simulation') {
+      const [cvResult, decoderResult, answersResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['cv-builder-studio', 'module-3'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['answer-architecture', 'module-5'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (cvResult.error || decoderResult.error || answersResult.error) {
+        console.error('[v0] First recruiter simulation context error:', {
+          cv: cvResult.error,
+          decoder: decoderResult.error,
+          answers: answersResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar el CV, la oferta y las respuestas previas.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateFirstRecruiterSimulationSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractFirstRecruiterContext(
+          cvResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+          answersResult.data?.deliverable,
+        ),
+      )
+    } else {
+      validation = validateA3ModuleSubmission(
+        module,
+        body.responses,
+        body.deliverable || body.careerMirrorCard,
+      )
+    }
+
+    if (!validation.passed) {
       return NextResponse.json(
-        { error: 'Failed to record session' },
-        { status: 500 }
+        {
+          error: 'El entrenamiento necesita más desarrollo antes de completarse.',
+          validation,
+        },
+        { status: 422 },
       )
     }
 
-    // 2. Record module completion in a3_module_completion
-    const { data: completionData, error: completionError } = await supabase
-      .from('a3_module_completion')
-      .upsert(
-        [
-          {
-            user_id: currentUserId,
-            module_id: moduleId,
-            module_number: moduleNumber,
-            completed_at: new Date().toISOString(),
-            best_score: 100,
-            deliverable: careerMirrorCard || {}
-          }
-        ],
-        { onConflict: 'user_id,module_id' }
-      )
-      .select()
+    const nextModule = A3_MODULES[module.number]
+    const feedback = {
+      passScore: validation.passScore,
+      strengths: validation.strengths,
+      criteria: validation.criteria,
+    }
 
-    if (completionError) {
-      console.error('[v0] Completion recording error:', completionError)
+    const { data, error } = await (supabase as any).rpc(
+      'complete_a3_module_atomic',
+      {
+        p_user_id: userId,
+        p_module_id: module.id,
+        p_module_number: module.number,
+        p_module_xp: module.xp,
+        p_checkpoint_day: module.checkpointDay,
+        p_training_type: module.trainingType,
+        p_score: validation.score,
+        p_pass_score: validation.passScore,
+        p_feedback: feedback,
+        p_responses: validation.responses,
+        p_deliverable: validation.deliverable,
+        p_next_module_id: nextModule?.id || module.id,
+        p_next_module_number: nextModule?.number || module.number,
+        p_total_modules: A3_MODULES.length,
+        p_unlock_advanced: module.number === 6,
+        p_complete_route: module.number === A3_MODULES.length,
+      },
+    )
+
+    if (error) {
+      console.error('[v0] A3 atomic completion error:', error)
       return NextResponse.json(
-        { error: 'Failed to record completion' },
-        { status: 500 }
+        {
+          error: 'No pudimos registrar la finalización completa. No se aplicó ningún avance parcial.',
+          code: 'A3_ATOMIC_COMPLETION_FAILED',
+        },
+        { status: 500 },
       )
     }
 
-    // 3. Update a3_route_progression
-    // First get current progression
-    const { data: currentProgress, error: getProgressError } = await supabase
-      .from('a3_route_progression')
-      .select('*')
-      .eq('user_id', currentUserId)
-      .single()
-
-    if (getProgressError && getProgressError.code !== 'PGRST116') {
-      console.error('[v0] Error fetching progress:', getProgressError)
+    if (!isAtomicCompletionResult(data)) {
+      console.error('[v0] Invalid A3 atomic completion response:', data)
       return NextResponse.json(
-        { error: 'Failed to fetch progress' },
-        { status: 500 }
+        {
+          error: 'La finalización no devolvió un resultado válido.',
+          code: 'A3_ATOMIC_COMPLETION_INVALID_RESPONSE',
+        },
+        { status: 500 },
       )
     }
 
-    // Calculate next module
-    const nextModuleNumber = moduleNumber < 10 ? moduleNumber + 1 : 10
-    const totalCompleted = (currentProgress?.total_completed || 0) + 1
-
-    // Determine unlock dates
-    const updates: any = {
-      user_id: currentUserId,
-      current_module_number: nextModuleNumber,
-      total_completed: totalCompleted,
-      updated_at: new Date().toISOString()
-    }
-
-    // First time unlocking modules 7-10, set unlock flags
-    if (moduleNumber === 6 && !currentProgress?.can_replay_modules_7_10) {
-      updates.can_replay_modules_7_10 = true
-      updates.advanced_unlocked_at = new Date().toISOString()
-    }
-
-    if (moduleNumber === 10) {
-      updates.pro_unlocked_at = new Date().toISOString()
-      updates.route_completed_at = new Date().toISOString()
-    }
-
-    const { data: progressData, error: progressError } = await supabase
-      .from('a3_route_progression')
-      .upsert(updates, { onConflict: 'user_id' })
-      .select()
-
-    if (progressError) {
-      console.error('[v0] Progress update error:', progressError)
-      return NextResponse.json(
-        { error: 'Failed to update progress' },
-        { status: 500 }
-      )
-    }
-
-    // 4. Award XP (80 for each module completion)
-    const xpAwarded = 80
-
-    // Return success with data
     return NextResponse.json({
       success: true,
-      moduleId,
-      moduleName,
-      moduleNumber,
-      xpAwarded,
-      nextModule: nextModuleNumber,
-      session: sessionData?.[0],
-      completion: completionData?.[0],
-      progress: progressData?.[0]
+      moduleId: module.id,
+      moduleName: module.title,
+      moduleNumber: module.number,
+      isFirstCompletion: data.isFirstCompletion,
+      xpAwarded: data.xpAwarded,
+      totalXp: data.totalXp,
+      score: validation.score,
+      bestScore: data.bestScore,
+      totalAttempts: data.totalAttempts,
+      validation,
+      nextModule: nextModule?.number || module.number,
+      session: data.session,
+      completion: data.completion,
+      progress: data.progress,
     })
-
   } catch (error) {
-    console.error('[v0] Module completion error:', error)
+    console.error('[v0] A3 module completion error:', error)
     return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
+      { error: 'No pudimos completar el entrenamiento.' },
+      { status: 500 },
     )
   }
 }

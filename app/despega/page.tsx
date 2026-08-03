@@ -1,5 +1,8 @@
 import { redirect } from 'next/navigation'
-import { getCanonicalNextPath, getJourneyForCurrentUser } from '@/lib/journey/service'
+import {
+  getCanonicalNextPath,
+  getJourneyForCurrentUser,
+} from '@/lib/journey/service'
 
 export default async function DespegaEntryPage() {
   const journey = await getJourneyForCurrentUser()
@@ -9,9 +12,5 @@ export default async function DespegaEntryPage() {
   }
 
   const nextRequiredPath = await getCanonicalNextPath(journey.profile)
-  const onboardingComplete = Boolean(
-    journey.profile.a2_route_generated || journey.profile.a2_unlocked,
-  )
-
-  redirect(onboardingComplete ? '/despega/dashboard' : nextRequiredPath)
+  redirect(journey.access.a2 ? '/despega/dashboard' : nextRequiredPath)
 }

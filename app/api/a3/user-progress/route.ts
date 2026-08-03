@@ -1,164 +1,183 @@
 import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import { getA2ProgressSnapshot } from '@/lib/a2/server-progress'
+import { getA3AllModulesAccessState } from '@/lib/a3-access-control'
+import {
+  A3_MODULES,
+  A3_MODULE_IDS,
+  A3_TOTAL_XP,
+  normalizeA3ModuleId,
+  type A3ModuleId,
+} from '@/lib/a3/module-catalog'
 import { NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
 
-// New A3 module structure
-const MODULE_ORDER = [
-  'career-mirror',
-  'value-mining-lab',
-  'cv-builder-studio',
-  'job-decoder',
-  'answer-architecture',
-  'coach-practice-room',
-  'communication-gym',
-  'first-recruiter-simulation',
-  'risk-difficult-questions-lab',
-  'basic-interview-mission',
-]
-
-// Legacy numeric keys → slug mapping (data saved before slug migration)
-const NUMERIC_TO_SLUG: Record<string, string> = {
-  'module-1':  'career-mirror',
-  'module-2':  'value-mining-lab',
-  'module-3':  'cv-builder-studio',
-  'module-4':  'job-decoder',
-  'module-5':  'answer-architecture',
-  'module-6':  'coach-practice-room',
-  'module-7':  'communication-gym',
-  'module-8':  'first-recruiter-simulation',
-  'module-9':  'risk-difficult-questions-lab',
-  'module-10': 'basic-interview-mission',
+function normalizeCompletedModuleIds(value: unknown): A3ModuleId[] {
+  if (!Array.isArray(value)) return []
+  return Array.from(
+    new Set(
+      value
+        .map(normalizeA3ModuleId)
+        .filter((id): id is A3ModuleId => Boolean(id)),
+    ),
+  )
 }
 
-function normalizeModuleId(id: string): string {
-  return NUMERIC_TO_SLUG[id] ?? id
+function isoValue(value: unknown): string | null {
+  return typeof value === 'string' && value.length > 0 ? value : null
 }
-
-const MODULE_XP: Record<string, number> = {
-  'career-mirror': 80,
-  'value-mining-lab': 100,
-  'cv-builder-studio': 120,
-  'job-decoder': 100,
-  'answer-architecture': 120,
-  'coach-practice-room': 130,
-  'communication-gym': 140,
-  'first-recruiter-simulation': 160,
-  'risk-difficult-questions-lab': 170,
-  'basic-interview-mission': 220,
-}
-
-const TOTAL_XP = 1340
 
 export async function GET() {
   try {
     const supabase = createAdminClient()
-    
-    // Get user ID — verify signed JWT demo cookie (JSON.parse no longer works after hardening)
-    const cookieStore = await cookies()
-    const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
-    const demoUser = await verifyDemoSessionToken(demoToken)
-    let userId: string | null = demoUser?.id ?? null
+    const currentUser = await resolveServerUser()
+    const userId = currentUser?.id ?? null
 
-    // Default module states - first module available, rest locked
-    const defaultModuleStates: Record<string, string> = {}
-    MODULE_ORDER.forEach((id, index) => {
-      defaultModuleStates[id] = index === 0 ? 'available' : 'locked'
-    })
+    const unauthenticatedStates = Object.fromEntries(
+      A3_MODULE_IDS.map((id) => [id, 'locked']),
+    )
 
     if (!userId) {
-      // Return default state for unauthenticated users
       return NextResponse.json({
         success: true,
         progress: {
           totalXp: 0,
-          maxXp: TOTAL_XP,
+          maxXp: A3_TOTAL_XP,
           progressPct: 0,
           completedModules: 0,
-          totalModules: 10,
-          moduleStates: defaultModuleStates,
+          totalModules: A3_MODULE_IDS.length,
+          moduleStates: unauthenticatedStates,
           completedModuleIds: [],
-          a2CurrentDay: 1, // Default to day 1 if not found
+          accessStates: [],
+          moduleResults: {},
+          nextAvailableModuleId: null,
+          a2CurrentDay: 1,
+          route: {
+            currentModuleNumber: 1,
+            totalCompleted: 0,
+            canReplayModules7To10: false,
+            advancedUnlockedAt: null,
+            proUnlockedAt: null,
+            routeCompletedAt: null,
+          },
         },
       })
     }
 
-    // Fetch A2 user progress to get current day
-    const { data: a2Data } = await supabase
-      .from('a2_user_route_progress')
-      .select('dia_actual')
-      .eq('user_id', userId)
-      .single()
+    const [
+      a2Snapshot,
+      accessStates,
+      progressResult,
+      routeResult,
+      completionResult,
+    ] = await Promise.all([
+      getA2ProgressSnapshot(userId, supabase),
+      getA3AllModulesAccessState(userId, supabase),
+      supabase
+        .from('a3_user_progress')
+        .select('*')
+        .eq('user_id', userId)
+        .maybeSingle(),
+      supabase
+        .from('a3_route_progression')
+        .select(
+          'current_module_number, total_completed, can_replay_modules_7_10, advanced_unlocked_at, pro_unlocked_at, route_completed_at',
+        )
+        .eq('user_id', userId)
+        .maybeSingle(),
+      supabase
+        .from('a3_module_completion')
+        .select('module_id, module_number, best_score, total_attempts, completed_at')
+        .eq('user_id', userId),
+    ])
 
-    const a2CurrentDay = a2Data?.dia_actual || 1
-
-    // Fetch user progress from database
-    const { data: progressData, error: progressError } = await supabase
-      .from('a3_user_progress')
-      .select('*')
-      .eq('user_id', userId)
-      .single()
-
-    if (progressError && progressError.code !== 'PGRST116') {
-      console.error('[v0] Error fetching a3_user_progress:', progressError)
+    if (progressResult.error) {
+      console.error('[v0] Error fetching a3_user_progress:', progressResult.error)
+    }
+    if (routeResult.error) {
+      console.error('[v0] Error fetching a3_route_progression:', routeResult.error)
+    }
+    if (completionResult.error) {
+      console.error('[v0] Error fetching a3_module_completion:', completionResult.error)
     }
 
-    if (progressData) {
-      // User has progress data
-      const moduleStates = progressData.module_states || defaultModuleStates
-      let completedModuleIds = progressData.completed_module_ids || []
-      const totalXp = progressData.total_xp || 0
+    const moduleStates: Record<string, string> = Object.fromEntries(
+      A3_MODULE_IDS.map((id) => [id, 'locked']),
+    )
+    accessStates.forEach((state) => {
+      moduleStates[state.moduleId] = state.status
+    })
 
-      // Normalize legacy numeric IDs to slugs (e.g., 'module-1' → 'career-mirror')
-      completedModuleIds = completedModuleIds.map(normalizeModuleId)
+    const progressData = progressResult.data
+    const completedModuleIds = normalizeCompletedModuleIds(
+      progressData?.completed_module_ids,
+    )
+    const totalXp = Math.max(0, Number(progressData?.total_xp) || 0)
 
-      // Ensure all modules have a state
-      MODULE_ORDER.forEach((id, index) => {
-        if (!moduleStates[id]) {
-          // Determine state based on previous module
-          if (index === 0) {
-            moduleStates[id] = 'available'
-          } else {
-            const prevId = MODULE_ORDER[index - 1]
-            moduleStates[id] = completedModuleIds.includes(prevId) ? 'available' : 'locked'
-          }
-        }
-      })
+    completedModuleIds.forEach((id) => {
+      moduleStates[id] = 'completed'
+    })
 
-      return NextResponse.json({
-        success: true,
-        progress: {
-          totalXp,
-          maxXp: TOTAL_XP,
-          progressPct: Math.round((totalXp / TOTAL_XP) * 100),
-          completedModules: completedModuleIds.length,
-          totalModules: 10,
-          moduleStates,
-          completedModuleIds,
-          a2CurrentDay, // Include A2 current day
-        },
-      })
+    const moduleResults: Partial<
+      Record<
+        A3ModuleId,
+        { bestScore: number; totalAttempts: number; completedAt: string | null }
+      >
+    > = {}
+    for (const row of completionResult.data || []) {
+      const moduleId = normalizeA3ModuleId(row.module_id)
+      if (!moduleId) continue
+      moduleResults[moduleId] = {
+        bestScore: Math.max(0, Number(row.best_score) || 0),
+        totalAttempts: Math.max(0, Number(row.total_attempts) || 0),
+        completedAt: isoValue(row.completed_at),
+      }
     }
 
-    // No progress data - return defaults
+    const nextAvailableModule = accessStates.find(
+      (state) => state.status === 'available' || state.status === 'in_progress',
+    )
+    const routeData = routeResult.data
+    const derivedCurrentModuleNumber = nextAvailableModule?.moduleNumber ||
+      (completedModuleIds.length === A3_MODULES.length ? A3_MODULES.length : 1)
+
     return NextResponse.json({
       success: true,
       progress: {
-        totalXp: 0,
-        maxXp: TOTAL_XP,
-        progressPct: 0,
-        completedModules: 0,
-        totalModules: 10,
-        moduleStates: defaultModuleStates,
-        completedModuleIds: [],
-        a2CurrentDay, // Include A2 current day
+        totalXp,
+        maxXp: A3_TOTAL_XP,
+        progressPct: Math.min(
+          100,
+          Math.round((totalXp / A3_TOTAL_XP) * 100),
+        ),
+        completedModules: completedModuleIds.length,
+        totalModules: A3_MODULE_IDS.length,
+        moduleStates,
+        completedModuleIds,
+        accessStates,
+        moduleResults,
+        nextAvailableModuleId: nextAvailableModule?.moduleId || null,
+        a2CurrentDay: a2Snapshot.currentDay,
+        route: {
+          currentModuleNumber: Math.max(
+            1,
+            Math.min(
+              A3_MODULES.length,
+              Number(routeData?.current_module_number) || derivedCurrentModuleNumber,
+            ),
+          ),
+          totalCompleted: Math.max(
+            completedModuleIds.length,
+            Number(routeData?.total_completed) || 0,
+          ),
+          canReplayModules7To10: Boolean(routeData?.can_replay_modules_7_10),
+          advancedUnlockedAt: isoValue(routeData?.advanced_unlocked_at),
+          proUnlockedAt: isoValue(routeData?.pro_unlocked_at),
+          routeCompletedAt: isoValue(routeData?.route_completed_at),
+        },
       },
     })
   } catch (error) {
     console.error('[v0] Error in user-progress:', error)
-    return NextResponse.json(
-      { error: 'Internal server error' },
-      { status: 500 }
-    )
+    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
   }
 }

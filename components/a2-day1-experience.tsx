@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { A2Day1Intro } from './a2-day1-intro'
 import { A2Day1VisionScan } from './a2-day1-vision-scan'
 import { A2Day1Hypothesis } from './a2-day1-hypothesis'
@@ -9,12 +9,15 @@ import { A2Day1Roadmap } from './a2-day1-roadmap'
 import { A2Day1Step5ExternalSave } from './a2-day1-step5-external-save'
 import { A2Day1Upload } from './a2-day1-upload'
 import { A2Day1Scoring } from './a2-day1-scoring'
-import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
+import {
+  formatDocumentContent,
+  saveDayDocument,
+} from '@/lib/supabase/dtc-documents-phase2'
 import { TRAVIS_DAY1_DATA, isTravisMode } from '@/lib/travis-form-data'
-import { 
-  autosaveDayProgress, 
-  loadDayProgressWithFallback, 
-  clearAllDrafts 
+import {
+  autosaveDayProgress,
+  clearAllDrafts,
+  loadDayProgressWithFallback,
 } from '@/lib/a2-progress-persistence'
 
 interface RouteData {
@@ -39,7 +42,7 @@ interface RouteData {
 }
 
 interface Day1ExperienceProps {
-  onComplete: (submission: any) => Promise<void>
+  onComplete: (submission: Record<string, unknown>) => Promise<void>
   userId?: string
 }
 
@@ -52,14 +55,12 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     mainBlocker: '',
   })
 
-  // Load Travis data or saved draft on mount
   useEffect(() => {
     const loadData = async () => {
       const travisMode = isTravisMode()
       setIsDevMode(travisMode)
-      
+
       if (travisMode) {
-        // Use Travis test data
         setRouteData({
           change30Days: TRAVIS_DAY1_DATA.change30Days,
           targetRole: TRAVIS_DAY1_DATA.targetRole,
@@ -68,21 +69,15 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           gates: TRAVIS_DAY1_DATA.gates,
           roadmap: TRAVIS_DAY1_DATA.roadmap,
         })
-      } else if (userId) {
-        // Try to load saved draft
-        const draft = await loadDayProgressWithFallback(userId, 1)
-        if (draft) {
-          console.log(`[v0] Resuming Day 1 from step ${draft.stepNumber}`)
-          setRouteData((prev) => ({ ...prev, ...draft.formData }))
-          setCurrentStep(draft.stepNumber)
-          
-          // Show toast/notification that we're resuming
-          if (draft.stepNumber > 1) {
-            // You can add a toast notification here
-            console.log(`[v0] Welcome back! Resuming from step ${draft.stepNumber}`)
-          }
-        }
+        return
       }
+
+      if (!userId) return
+      const draft = await loadDayProgressWithFallback(userId, 1)
+      if (!draft) return
+
+      setRouteData((previous) => ({ ...previous, ...draft.formData }))
+      setCurrentStep(draft.stepNumber)
     }
 
     loadData()
@@ -99,68 +94,76 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     'Análisis y Puntuación',
   ]
 
-  const handleStep1Next = () => {
-    setCurrentStep(2)
+  const saveDraft = (step: number, data: RouteData) => {
+    if (userId) autosaveDayProgress(userId, 1, step, data)
   }
 
   const handleVisionNext = (data: Partial<RouteData>) => {
-    const newData = { ...routeData, ...data }
-    setRouteData(newData)
-    if (userId) autosaveDayProgress(userId, 1, 3, newData)
+    const next = { ...routeData, ...data }
+    setRouteData(next)
+    saveDraft(3, next)
     setCurrentStep(3)
   }
 
   const handleHypothesisNext = (hypothesis: string) => {
-    const newData = { ...routeData, hypothesis }
-    setRouteData(newData)
-    if (userId) autosaveDayProgress(userId, 1, 4, newData)
+    const next = { ...routeData, hypothesis }
+    setRouteData(next)
+    saveDraft(4, next)
     setCurrentStep(4)
   }
 
   const handleGatesNext = (gates: RouteData['gates']) => {
-    const newData = { ...routeData, gates }
-    setRouteData(newData)
-    if (userId) autosaveDayProgress(userId, 1, 5, newData)
+    const next = { ...routeData, gates }
+    setRouteData(next)
+    saveDraft(5, next)
     setCurrentStep(5)
   }
 
   const handleRoadmapNext = (roadmap: string) => {
-    const newData = { ...routeData, roadmap }
-    setRouteData(newData)
-    if (userId) autosaveDayProgress(userId, 1, 6, newData)
+    const next = { ...routeData, roadmap }
+    setRouteData(next)
+    saveDraft(6, next)
     setCurrentStep(6)
   }
 
   const handleExternalSaveNext = async () => {
-    // Save to DTC Documents before moving to next step (skip for demo users)
-    if (userId && routeData && !userId.includes('demo-')) {
+    if (userId) {
       try {
-        const content = formatDocumentContent({
-          'Mi Cambio en 30 Días': routeData.change30Days,
-          'Mi Rol Objetivo': routeData.targetRole,
-          'Mi Bloqueador Principal': routeData.mainBlocker,
-          'Mi Hipótesis de Ruta': routeData.hypothesis || '',
-          'PUERTA 1 - IDENTIDAD': routeData.gates?.identity || '',
-          'PUERTA 2 - EVIDENCIA': routeData.gates?.evidence || '',
-          'PUERTA 3 - MATERIAL': routeData.gates?.material || '',
-          'Mi Roadmap Profesional': routeData.roadmap || '',
-        })
-        
-        await saveDayDocument(userId, 1, 'route_contract', content, 'Mi Contrato de Ruta')
-      } catch (err) {
-        console.error('[v0] Error saving Day 1 to DTC:', err)
+        await saveDayDocument(
+          userId,
+          1,
+          'route_contract',
+          formatDocumentContent({
+            'Mi Cambio en 30 Días': routeData.change30Days,
+            'Mi Rol Objetivo': routeData.targetRole,
+            'Mi Bloqueador Principal': routeData.mainBlocker,
+            'Mi Hipótesis de Ruta': routeData.hypothesis || '',
+            'PUERTA 1 - IDENTIDAD': routeData.gates?.identity || '',
+            'PUERTA 2 - EVIDENCIA': routeData.gates?.evidence || '',
+            'PUERTA 3 - MATERIAL': routeData.gates?.material || '',
+            'Mi Roadmap Profesional': routeData.roadmap || '',
+          }),
+          'Mi Contrato de Ruta',
+        )
+      } catch (saveError) {
+        console.error('[v0] Error saving Day 1 document:', saveError)
       }
     }
-    if (userId) autosaveDayProgress(userId, 1, 7, routeData)
+
+    saveDraft(7, routeData)
     setCurrentStep(7)
   }
 
   const handleUploadNext = () => {
-    if (userId) autosaveDayProgress(userId, 1, 8, routeData)
+    saveDraft(8, routeData)
     setCurrentStep(8)
   }
 
-  const handleScoringComplete = async (scores: RouteData['scores'], totalScore: number, passStatus: 'pass' | 'fail') => {
+  const handleScoringComplete = async (
+    scores: RouteData['scores'],
+    totalScore: number,
+    passStatus: 'pass' | 'fail',
+  ) => {
     const finalSubmission = {
       ...routeData,
       scores,
@@ -171,46 +174,32 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     }
 
     try {
-      // Save to DTC documents
       if (userId) {
         await saveDayDocument(
           userId,
           1,
           'route_contract',
           formatDocumentContent(finalSubmission),
-          'Mi Contrato de Ruta'
+          'Mi Contrato de Ruta',
         )
       }
 
       await onComplete(finalSubmission)
-      
-      // Clear draft after successful completion
-      if (userId) {
-        clearAllDrafts(1)
-      }
-    } catch (err) {
-      console.error('[v0] Error completing Day 1:', err)
+      if (userId) clearAllDrafts(1)
+    } catch (completionError) {
+      console.error('[v0] Error completing Day 1:', completionError)
+      throw completionError
     }
-  }
-
-  const handleBack = (stepToGoTo: number) => {
-    setCurrentStep(stepToGoTo)
-  }
-
-  const handleRevise = () => {
-    setCurrentStep(2) // Back to vision scan
   }
 
   return (
     <div className="w-full space-y-6">
-      {/* Dev Mode Badge */}
       {isDevMode && (
-        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
-          Travis Dev Mode - Datos Pre-cargados
+        <div className="fixed right-4 top-20 z-50 rounded-full bg-green-600/90 px-3 py-1.5 text-xs font-medium text-white shadow-lg">
+          Travis Dev Mode · Datos precargados
         </div>
       )}
 
-      {/* Step Header */}
       <div
         className="border-b"
         style={{
@@ -218,18 +207,20 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           borderColor: 'rgba(80, 160, 170, 0.2)',
         }}
       >
-        <div className="max-w-4xl mx-auto px-4 py-6 space-y-3">
+        <div className="mx-auto max-w-4xl space-y-3 px-4 py-6">
           <div className="space-y-2">
-            <h2 className="text-2xl font-bold text-white">{stepTitles[currentStep - 1]}</h2>
-            <p className="text-sm text-white/60">Paso {currentStep} de {stepTitles.length}</p>
+            <h2 className="text-2xl font-bold text-white">
+              {stepTitles[currentStep - 1]}
+            </h2>
+            <p className="text-sm text-white/60">
+              Paso {currentStep} de {stepTitles.length}
+            </p>
           </div>
-
-          {/* Progress Bar */}
-          <div className="flex gap-1 rounded-full h-2 bg-purple-500/15 overflow-hidden">
-            {stepTitles.map((_, index) => (
+          <div className="flex h-2 gap-1 overflow-hidden rounded-full bg-purple-500/15">
+            {stepTitles.map((title, index) => (
               <div
-                key={index}
-                className="flex-1 h-full transition-all"
+                key={title}
+                className="h-full flex-1 transition-all"
                 style={{
                   backgroundColor:
                     index + 1 <= currentStep
@@ -242,10 +233,10 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
         </div>
       </div>
 
-      {/* Content */}
       <div className="space-y-6">
-        {currentStep === 1 && <A2Day1Intro onNext={handleStep1Next} />}
-
+        {currentStep === 1 && (
+          <A2Day1Intro onNext={() => setCurrentStep(2)} />
+        )}
         {currentStep === 2 && (
           <A2Day1VisionScan
             onNext={handleVisionNext}
@@ -253,51 +244,45 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
             userId={userId}
           />
         )}
-
         {currentStep === 3 && (
           <A2Day1Hypothesis
             onNext={handleHypothesisNext}
-            onBack={() => handleBack(2)}
+            onBack={() => setCurrentStep(2)}
             visionData={routeData}
           />
         )}
-
         {currentStep === 4 && (
           <A2Day1RoutGates
             onNext={handleGatesNext}
-            onBack={() => handleBack(3)}
+            onBack={() => setCurrentStep(3)}
             initialGates={routeData.gates}
           />
         )}
-
         {currentStep === 5 && (
           <A2Day1Roadmap
             onNext={handleRoadmapNext}
-            onBack={() => handleBack(4)}
+            onBack={() => setCurrentStep(4)}
             routeData={routeData}
           />
         )}
-
         {currentStep === 6 && (
           <A2Day1Step5ExternalSave
             onNext={handleExternalSaveNext}
-            onBack={() => handleBack(5)}
+            onBack={() => setCurrentStep(5)}
           />
         )}
-
         {currentStep === 7 && (
           <A2Day1Upload
             onNext={handleUploadNext}
-            onBack={() => handleBack(6)}
+            onBack={() => setCurrentStep(6)}
             routeData={routeData}
           />
         )}
-
         {currentStep === 8 && (
           <A2Day1Scoring
             routeData={routeData}
             onComplete={handleScoringComplete}
-            onRevise={handleRevise}
+            onRevise={() => setCurrentStep(2)}
           />
         )}
       </div>

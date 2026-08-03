@@ -18,7 +18,9 @@ const nextConfig = {
           { key: "X-Frame-Options", value: "DENY" },
           { key: "X-Content-Type-Options", value: "nosniff" },
           { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
-          { key: "Permissions-Policy", value: "camera=(), microphone=(), geolocation=()" },
+          // A3 interview and coaching flows need first-party camera/microphone access.
+          // Keep both capabilities blocked for every cross-origin frame.
+          { key: "Permissions-Policy", value: "camera=(self), microphone=(self), geolocation=()" },
           {
             key: "Content-Security-Policy",
             value: [

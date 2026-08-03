@@ -1,255 +1,259 @@
-'use client'
-
-import { useState, useEffect } from 'react'
-import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { Button } from '@/components/ui/button'
+import { redirect } from 'next/navigation'
+import {
+  ArrowLeft,
+  BarChart3,
+  CheckCircle2,
+  FileText,
+  Radar,
+  ShieldCheck,
+  Target,
+} from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { ArrowLeft, Radar, Brain, BookOpen, Award, Briefcase } from 'lucide-react'
-import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { ExecutiveDashboard } from '@/components/executive-dashboard'
-import { A4GamifiedTests } from '@/components/a4-gamified-tests'
-import { A4Biblioteca } from '@/components/a4-biblioteca'
-import { LinkedInProfileCard } from '@/components/linkedin/linkedin-profile-card'
-import { JobRecommendationsCard } from '@/components/linkedin/job-recommendations-card'
-import { MarketInsightsCard } from '@/components/linkedin/market-insights-card'
-import { PersonalizedRadarSystem } from '@/components/personalized-radar-system'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { DailySnapshotHistory } from '@/components/a4/daily-snapshot-history'
+import { EvidencePulse } from '@/components/a4/evidence-pulse'
+import { StrategicRadarWorkspace } from '@/components/a4/strategic-radar-workspace'
+import {
+  normalizeA4DailySnapshot,
+  type A4DailyEvidenceSnapshot,
+} from '@/lib/a4/daily-snapshots'
+import { getJourneyForCurrentUser } from '@/lib/journey/service'
+import { createAdminClient } from '@/lib/supabase/server'
+import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
 
-export default function EjecucionContinuaPage() {
-  const { user, loading } = useAuthRedirect()
-  const [activeTab, setActiveTab] = useState('dashboard')
-  const router = useRouter()
+function numberValue(value: unknown): number | null {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? numeric : null
+}
 
-  useEffect(() => {
-    if (loading || !user?.id) return
-    console.log('[v0] Ejecución Continua page accessed by user:', user.id)
-  }, [user?.id, loading])
+function textValue(value: unknown): string {
+  return typeof value === 'string' ? value : ''
+}
 
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue"></div>
-      </div>
-    )
+function formatDate(value: unknown): string {
+  if (typeof value !== 'string' || !value) return 'Sin fecha registrada'
+  const date = new Date(value)
+  if (Number.isNaN(date.getTime())) return 'Sin fecha registrada'
+  return new Intl.DateTimeFormat('es-CL', {
+    dateStyle: 'long',
+    timeZone: 'America/Santiago',
+  }).format(date)
+}
+
+export default async function RadarEstrategicoPage() {
+  const journey = await getJourneyForCurrentUser()
+  if (!journey) redirect('/auth/signin')
+  if (!journey.access.a4) redirect('/despega/a3')
+
+  const supabase = createAdminClient()
+  const userId = journey.user.id
+  const [
+    a3Result,
+    documentsResult,
+    signalsResult,
+    decisionsResult,
+    snapshotsResult,
+  ] = await Promise.all([
+    supabase
+      .from('a3_session_attempts')
+      .select('module_id,status,score,created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('dtc_documents')
+      .select('id,title,type,status,created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(20),
+    supabase
+      .from('a4_verified_signals')
+      .select(
+        'id,title,category,classification,summary,relevance,confidence,source_type,source_name,source_url,source_reference,source_date,status,created_at,updated_at',
+      )
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(100),
+    supabase
+      .from('a4_decision_log')
+      .select(
+        'id,signal_id,decision,rationale,expected_evidence,status,review_on,outcome,reviewed_at,created_at,updated_at',
+      )
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(100),
+    supabase
+      .from('a4_daily_evidence_snapshots')
+      .select(
+        'id,snapshot_date,timezone,priority,active_signals,facts,hypotheses,recent_signals,stale_signals,low_confidence_hypotheses,covered_categories,category_counts,overdue_reviews,reviews_today,reviews_next_7_days,reviews_later,open_decisions,closed_decisions,created_at,updated_at',
+      )
+      .eq('user_id', userId)
+      .order('snapshot_date', { ascending: false })
+      .limit(31),
+  ])
+
+  if (a3Result.error) console.error('[v0] A4 A3 context error:', a3Result.error)
+  if (documentsResult.error) {
+    console.error('[v0] A4 document context error:', documentsResult.error)
+  }
+  if (signalsResult.error) console.error('[v0] A4 signal context error:', signalsResult.error)
+  if (decisionsResult.error) {
+    console.error('[v0] A4 decision context error:', decisionsResult.error)
+  }
+  if (snapshotsResult.error) {
+    console.error('[v0] A4 snapshot history error:', snapshotsResult.error)
   }
 
-  if (!user) {
-    return null
-  }
+  const completedSessions = (a3Result.data ?? []).filter(
+    (session) => session.status === 'completed',
+  )
+  const uniqueModules = new Set(
+    completedSessions
+      .map((session) => textValue(session.module_id))
+      .filter(Boolean),
+  )
+  const scores = completedSessions
+    .map((session) => numberValue(session.score))
+    .filter((score): score is number => score !== null)
+  const averageScore =
+    scores.length > 0
+      ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
+      : null
+  const documents = documentsResult.data ?? []
+  const signals = (signalsResult.data ?? []) as A4VerifiedSignal[]
+  const decisions = (decisionsResult.data ?? []) as A4Decision[]
+  const snapshots: A4DailyEvidenceSnapshot[] = (snapshotsResult.data ?? []).map(
+    (row) => normalizeA4DailySnapshot(row as Record<string, unknown>),
+  )
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-8 max-w-6xl">
-        {/* Header */}
-        <div className="flex items-center justify-between mb-8">
-          <Link href="/despega">
-            <Button variant="ghost" size="sm" className="hover:bg-muted/20 dark:hover:bg-muted/70">
-              <ArrowLeft className="w-4 h-4 mr-2" />
-              Volver
+    <main className="min-h-screen bg-slate-950 px-4 py-10 text-white">
+      <div className="mx-auto max-w-7xl space-y-8">
+        <header className="space-y-6">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <Button asChild variant="ghost" className="text-slate-300">
+              <Link href="/despega/dashboard">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Volver al panel
+              </Link>
             </Button>
-          </Link>
-          <Badge 
-            className="border-none"
-            style={{ 
-              backgroundColor: "rgba(225, 120, 130, 0.2)",
-              color: "rgba(225, 120, 130, 0.9)"
-            }}
-          >
-            Pilar 4: Ejecución Continua
-          </Badge>
-        </div>
+            <Badge className="border-rose-400/30 bg-rose-400/10 text-rose-200">
+              Radar Estratégico · A4
+            </Badge>
+          </div>
 
-        {/* Hero Section */}
-        <div className="mb-12 text-center">
-          <h1 
-            className="text-5xl md:text-6xl font-medium mb-4 text-balance"
-            style={{ color: "rgba(225, 120, 130)" }}
-          >
-            Ejecución Continua
-          </h1>
-          <p className="text-xl text-muted-foreground dark:text-white/85 mb-3">
-            Colocación laboral y acompañamiento permanente
-          </p>
-          <p 
-            className="text-base max-w-2xl mx-auto"
-            style={{ color: "rgb(150, 150, 150)" }}
-          >
-            Aquí es donde tu aprendizaje se transforma en acción. Monitoreamos tu progreso, conectamos oportunidades reales, 
-            ofrecemos coaching IA 24/7 y te proporcionamos contexto de mercado para que tomes decisiones estratégicas con criterio laboral.
-          </p>
-          
-          {/* Key Features Grid */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mt-8 mb-8">
-            <div 
-              className="p-4"
-              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}
-            >
-              <div className="text-2xl mb-2"></div>
-              <h3 
-                className="font-medium mb-1"
-                style={{ color: "rgba(225, 120, 130)" }}
-              >
-                Dashboard Ejecutivo
-              </h3>
-              <p className="text-sm text-muted-foreground">Visualiza tu desempeño y avance en tiempo real</p>
+          <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
+            <div>
+              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">
+                Evidencia antes que opinión
+              </p>
+              <h1 className="mt-3 text-4xl font-bold md:text-6xl">
+                Bitácora de Señales y Decisiones
+              </h1>
+              <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-300">
+                Registra cambios relevantes, conserva su fuente y fecha, distingue hechos
+                de hipótesis y deja cada decisión vinculada a una revisión futura. El Radar
+                no inventa noticias, puntajes ni conclusiones para completar espacios vacíos.
+              </p>
             </div>
-            <div 
-              className="p-4"
-              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}
-            >
-              <div className="text-2xl mb-2"></div>
-              <h3 
-                className="font-medium mb-1"
-                style={{ color: "rgba(225, 120, 130)" }}
-              >
-                Oportunidades Reales
-              </h3>
-              <p className="text-sm text-muted-foreground">Acceso a ofertas laborales personalizadas del mercado</p>
-            </div>
-            <div 
-              className="p-4"
-              style={{ backgroundColor: "rgba(225, 120, 130, 0.2)", borderRadius: "2px" }}
-            >
-              <div className="text-2xl mb-2"></div>
-              <h3 
-                className="font-medium mb-1"
-                style={{ color: "rgba(225, 120, 130)" }}
-              >
-                Aprendizaje Continuo
-              </h3>
-              <p className="text-sm text-muted-foreground">Recursos, tests y análisis para crecer profesionalmente</p>
+            <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 lg:min-w-72">
+              <p className="flex items-center gap-2 font-semibold text-emerald-200">
+                <CheckCircle2 className="h-5 w-5" /> Acceso verificado
+              </p>
+              <p className="mt-2 text-sm text-emerald-100/70">
+                Habilitado por el cierre persistido de Entrenamiento.
+              </p>
+              <p className="mt-3 text-xs text-emerald-100/50">
+                {formatDate(journey.state.a4UnlockedAt)}
+              </p>
             </div>
           </div>
+        </header>
+
+        <section className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {[
+            {
+              label: 'Módulos A3 verificados',
+              value: `${uniqueModules.size}/10`,
+              detail: `${completedSessions.length} sesiones persistidas`,
+              icon: <Target className="h-5 w-5 text-emerald-400" />,
+            },
+            {
+              label: 'Promedio de Entrenamiento',
+              value: averageScore === null ? '—' : `${averageScore}/100`,
+              detail: 'Calculado solo desde sesiones completadas',
+              icon: <BarChart3 className="h-5 w-5 text-cyan-400" />,
+            },
+            {
+              label: 'Documentos disponibles',
+              value: documents.length,
+              detail: 'Contexto persistido de A1, A2 y A3',
+              icon: <FileText className="h-5 w-5 text-purple-400" />,
+            },
+            {
+              label: 'Contrato de evidencia',
+              value: 'Activo',
+              detail: 'Fuente, fecha y clasificación obligatorias',
+              icon: <ShieldCheck className="h-5 w-5 text-rose-300" />,
+            },
+          ].map((item) => (
+            <Card key={item.label} className="border-slate-800 bg-slate-900/70">
+              <CardContent className="space-y-3 p-5">
+                <div className="flex items-center justify-between gap-3">
+                  <p className="text-sm text-slate-400">{item.label}</p>
+                  {item.icon}
+                </div>
+                <p className="text-3xl font-bold text-white">{item.value}</p>
+                <p className="text-xs leading-relaxed text-slate-500">{item.detail}</p>
+              </CardContent>
+            </Card>
+          ))}
+        </section>
+
+        <Card className="border-rose-400/25 bg-gradient-to-br from-rose-400/10 to-purple-500/5">
+          <CardContent className="grid gap-4 p-6 md:grid-cols-3">
+            {[
+              ['1', 'Registrar', 'Describe una señal y conserva la evidencia que permite revisarla.'],
+              ['2', 'Distinguir', 'Marca si es un hecho verificado o una hipótesis todavía abierta.'],
+              ['3', 'Revisar', 'Vincula decisiones a evidencia futura y registra el resultado observado.'],
+            ].map(([number, title, detail]) => (
+              <div key={number} className="rounded-xl border border-white/10 bg-slate-950/35 p-4">
+                <p className="text-xs font-semibold text-rose-300">PASO {number}</p>
+                <p className="mt-2 font-semibold text-white">{title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-slate-400">{detail}</p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+
+        <EvidencePulse signals={signals} decisions={decisions} />
+
+        <DailySnapshotHistory initialSnapshots={snapshots} />
+
+        <div id="a4-workspace" className="scroll-mt-6">
+          <StrategicRadarWorkspace
+            initialSignals={signals}
+            initialDecisions={decisions}
+          />
         </div>
 
-        {/* Navigation Tabs */}
-        <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList 
-            className="grid w-full grid-cols-5 mb-8 gap-1 rounded-[20px]"
-            style={{ 
-              backgroundColor: "rgba(20, 20, 20)",
-              border: "1px solid rgba(255, 120, 130, 0.4)"
-            }}
-          >
-            <TabsTrigger 
-              value="dashboard" 
-              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)]"
-              style={{}}
-            >
-              <Award className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Mi Progreso</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="oportunidades" 
-              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)]"
-              style={{}}
-            >
-              <Briefcase className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Empleos</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="tests" 
-              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)]"
-              style={{}}
-            >
-              <Brain className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Conocimiento</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="radar" 
-              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)]"
-              style={{}}
-            >
-              <Radar className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Análisis</span>
-            </TabsTrigger>
-            <TabsTrigger 
-              value="recursos" 
-              className="text-sm data-[state=active]:text-[rgba(225,120,130,0.9)]"
-              style={{}}
-            >
-              <BookOpen className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Biblioteca</span>
-            </TabsTrigger>
-          </TabsList>
-
-          {/* Mi Progreso - Dashboard */}
-          <TabsContent value="dashboard" className="space-y-6">
-            <div 
-              className="mb-6 border-l-4 pl-6"
-              style={{ borderLeftColor: "rgba(255, 120, 130, 0.4)" }}
-            >
-              <h2 
-                className="text-3xl font-medium mb-2"
-                style={{ color: "rgba(225, 120, 130)" }}
-              >
-                Tu Desempeño Ejecutivo
-              </h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">
-                Visualiza tu progreso integral en el programa, métricas clave de desempeño y recomendaciones personalizadas
+        <Card className="border-slate-800 bg-slate-900/70">
+          <CardContent className="flex flex-col gap-5 p-6 md:flex-row md:items-center md:justify-between">
+            <div>
+              <p className="flex items-center gap-2 font-semibold text-white">
+                <Radar className="h-5 w-5 text-rose-300" /> El Radar conserva el contexto
+              </p>
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300">
+                Puedes volver a Entrenamiento para revisar entregables. Las señales y
+                decisiones permanecen separadas de los XP y no alteran resultados anteriores.
               </p>
             </div>
-            <ExecutiveDashboard />
-          </TabsContent>
-
-          {/* Empleos - Oportunidades */}
-          <TabsContent value="oportunidades" className="space-y-6">
-            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
-              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130)" }}>Conecta con Oportunidades Reales</h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">
-                Tu perfil profesional sincronizado con LinkedIn, ofertas laborales personalizadas según tu perfil e insights del mercado laboral chileno en tiempo real
-              </p>
-            </div>
-            
-            <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-              <div className="lg:col-span-1">
-                <LinkedInProfileCard />
-              </div>
-              <div className="lg:col-span-2">
-                <JobRecommendationsCard />
-              </div>
-            </div>
-
-            <div className="mt-6">
-              <MarketInsightsCard />
-            </div>
-          </TabsContent>
-
-          {/* Conocimiento - Tests */}
-          <TabsContent value="tests" className="space-y-6">
-            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
-              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)" }}>Desarrolla Criterio Laboral</h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">
-                Tests sobre historia, economía, tecnología, actualidad y cultura general. Mejora tu conocimiento contextual, acumula puntos DTC y desbloquea badges de experto
-              </p>
-            </div>
-            <A4GamifiedTests />
-          </TabsContent>
-
-          {/* Análisis - Radar */}
-          <TabsContent value="radar" className="space-y-6">
-            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
-              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)" }}>Radar Estratégico de Mercado</h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">
-                Análisis en profundidad de tendencias del mercado laboral, señales débiles de cambio y contexto estratégico para tu posicionamiento profesional
-              </p>
-            </div>
-            <PersonalizedRadarSystem />
-          </TabsContent>
-
-          {/* Biblioteca - Recursos */}
-          <TabsContent value="recursos" className="space-y-6">
-            <div className="mb-6 border-l-4 pl-6" style={{ borderLeftColor: "rgba(225, 120, 130, 0.6)" }}>
-              <h2 className="text-3xl font-normal mb-2" style={{ color: "rgba(225, 120, 130, 0.8)" }}>Biblioteca de Recursos</h2>
-              <p className="text-muted-foreground dark:text-muted-foreground">
-                Acceso a libros, artículos, cursos y herramientas curadas para fortalecer tu desarrollo profesional continuo
-              </p>
-            </div>
-            <A4Biblioteca />
-          </TabsContent>
-        </Tabs>
+            <Button asChild variant="outline" className="shrink-0 border-white/20">
+              <Link href="/despega/a3">Revisar Entrenamiento</Link>
+            </Button>
+          </CardContent>
+        </Card>
       </div>
-    </div>
+    </main>
   )
 }

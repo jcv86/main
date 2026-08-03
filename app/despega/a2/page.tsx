@@ -1,199 +1,682 @@
 'use client'
 
-import { useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { ChevronRight, Filter, Search, Calendar, Target, Zap, Lock, Unlock, CheckCircle2 } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import {
+  ArrowRight,
+  Calendar,
+  CheckCircle2,
+  ChevronRight,
+  ClipboardCheck,
+  FileCheck2,
+  Gauge,
+  Lock,
+  Search,
+  Trophy,
+  Unlock,
+} from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { A2_DAYS } from '@/lib/a2-days-config'
+import {
+  A2CycleReviewCard,
+  type A2CycleReviewView,
+} from '@/components/a2-cycle-review-card'
+import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
+import type { A2DailyMission, A2MissionType } from '@/lib/a2-mission.types'
 
-type PhaseFilter = 'all' | 'clarity' | 'material' | 'real-action' | 'refinement'
+type Horizon = 30 | 60 | 90
+type MissionGroup =
+  | 'all'
+  | 'identity'
+  | 'build'
+  | 'market'
+  | 'action'
+  | 'training'
+  | 'review'
+
+interface A2RouteSummary {
+  id: string
+  code: string
+  name: string
+  description: string | null
+  durationDays: number
+  source: string
+}
+
+interface A2DayRecord {
+  day: number
+  mission_type: string | null
+  validation_status: string
+  score: number | null
+  pass_score: number | null
+  passed: boolean
+  has_evidence: boolean
+  artifact_url: string | null
+  completed_at: string | null
+}
+
+interface A2ValidationSummary {
+  validated_days: number
+  evidence_days: number
+  structural_days: number
+  specialized_days: number
+  checkpoint_days: number
+  legacy_days: number
+  average_score: number | null
+}
+
+interface A2ProgressResponse {
+  current_day: number
+  highest_unlocked_day: number
+  active_horizon: Horizon
+  next_horizon: Horizon | null
+  extension_available: boolean
+  cycle_complete: boolean
+  active_cycle_review: A2CycleReviewView | null
+  cycle_reviews: A2CycleReviewView[]
+  progress_percentage: number
+  completed_tasks: number
+  completed_days: number[]
+  day_records: A2DayRecord[]
+  validation_summary: A2ValidationSummary
+  total_tasks: number
+  status: string
+  route: A2RouteSummary | null
+}
+
+interface ExtendHorizonResponse {
+  success?: boolean
+  activeHorizon?: Horizon
+  currentDay?: number
+  nextPath?: string
+  error?: string
+}
+
+const EMPTY_SUMMARY: A2ValidationSummary = {
+  validated_days: 0,
+  evidence_days: 0,
+  structural_days: 0,
+  specialized_days: 0,
+  checkpoint_days: 0,
+  legacy_days: 0,
+  average_score: null,
+}
+
+const EMPTY_PROGRESS: A2ProgressResponse = {
+  current_day: 1,
+  highest_unlocked_day: 1,
+  active_horizon: 30,
+  next_horizon: 60,
+  extension_available: false,
+  cycle_complete: false,
+  active_cycle_review: null,
+  cycle_reviews: [],
+  progress_percentage: 0,
+  completed_tasks: 0,
+  completed_days: [],
+  day_records: [],
+  validation_summary: EMPTY_SUMMARY,
+  total_tasks: 90,
+  status: 'not_started',
+  route: null,
+}
+
+const HORIZONS: Array<{ value: Horizon; label: string }> = [
+  { value: 30, label: 'Ciclo inicial · 30 días' },
+  { value: 60, label: 'Extensión · 60 días' },
+  { value: 90, label: 'Integración · 90 días' },
+]
+
+const GROUP_LABEL: Record<MissionGroup, string> = {
+  all: 'Todas',
+  identity: 'Identidad',
+  build: 'Construcción',
+  market: 'Mercado',
+  action: 'Acción real',
+  training: 'Entrenamiento',
+  review: 'Revisión e hitos',
+}
+
+const MISSION_TYPE_LABEL: Record<A2MissionType, string> = {
+  roadmap_gate: 'Contrato',
+  mirror: 'Autoconocimiento',
+  evidence: 'Evidencia',
+  builder: 'Construcción',
+  market_intel: 'Mercado',
+  coach_forge: 'Coach',
+  field_action: 'Acción real',
+  performance_drill: 'Práctica',
+  a3_checkpoint: 'Entrenamiento',
+  debrief: 'Reflexión',
+  milestone: 'Hito',
+}
+
+const MISSION_TYPE_COLOR: Record<A2MissionType, string> = {
+  roadmap_gate: 'border-purple-500/30 bg-purple-500/10 text-purple-300',
+  mirror: 'border-blue-500/30 bg-blue-500/10 text-blue-300',
+  evidence: 'border-cyan-500/30 bg-cyan-500/10 text-cyan-300',
+  builder: 'border-purple-500/30 bg-purple-500/10 text-purple-300',
+  market_intel: 'border-blue-500/30 bg-blue-500/10 text-blue-300',
+  coach_forge: 'border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-300',
+  field_action: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+  performance_drill: 'border-amber-500/30 bg-amber-500/10 text-amber-300',
+  a3_checkpoint: 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300',
+  debrief: 'border-sky-500/30 bg-sky-500/10 text-sky-300',
+  milestone: 'border-orange-500/30 bg-orange-500/10 text-orange-300',
+}
+
+const PHASE_LABEL: Record<A2DailyMission['phaseLabel'], string> = {
+  Foundation: 'Fundamentos',
+  'Role Alignment': 'Alineación con el rol',
+  'Simulation & Certification': 'Simulación y certificación',
+  'Master Difficult Questions & Return to Real Market':
+    'Preguntas difíciles y regreso al mercado',
+  'Final Applications & Offer Management':
+    'Postulaciones y gestión de ofertas',
+  'Final A3 Prep & Checkpoint': 'Preparación final de Entrenamiento',
+  'Final Review & Next Chapter': 'Cierre y siguiente capítulo',
+}
+
+function groupForMission(type: A2MissionType): Exclude<MissionGroup, 'all'> {
+  if (type === 'mirror' || type === 'roadmap_gate') return 'identity'
+  if (type === 'evidence' || type === 'builder' || type === 'coach_forge') {
+    return 'build'
+  }
+  if (type === 'market_intel') return 'market'
+  if (type === 'field_action' || type === 'performance_drill') return 'action'
+  if (type === 'a3_checkpoint') return 'training'
+  return 'review'
+}
+
+function validationLabel(record: A2DayRecord | undefined): string | null {
+  if (!record) return null
+  if (record.validation_status === 'checkpoint') return 'Checkpoint validado'
+  if (record.validation_status === 'legacy') return 'Completado anteriormente'
+  if (record.score !== null) return `Entregable validado · ${record.score}/100`
+  return 'Entregable validado'
+}
 
 export default function A2DashboardPage() {
   const router = useRouter()
-  const [filter, setFilter] = useState<PhaseFilter>('all')
+  const [group, setGroup] = useState<MissionGroup>('all')
   const [search, setSearch] = useState('')
-  const [unlockedDays, setUnlockedDays] = useState<Set<number>>(new Set([1, 2, 3]))
+  const [horizon, setHorizon] = useState<Horizon>(30)
+  const [progress, setProgress] = useState<A2ProgressResponse>(EMPTY_PROGRESS)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState<string | null>(null)
+  const [extending, setExtending] = useState(false)
+  const [extensionError, setExtensionError] = useState<string | null>(null)
 
-  const phaseName = {
-    clarity: 'Claridad',
-    material: 'Material',
-    'real-action': 'Acción Real',
-    refinement: 'Refinamiento'
+  useEffect(() => {
+    let active = true
+
+    const loadProgress = async () => {
+      try {
+        const response = await fetch('/api/a2/progress', {
+          credentials: 'include',
+          cache: 'no-store',
+        })
+        if (!response.ok) throw new Error('No pudimos cargar Tu Ruta')
+
+        const data = (await response.json()) as Partial<A2ProgressResponse>
+        if (!active) return
+
+        const normalized: A2ProgressResponse = {
+          ...EMPTY_PROGRESS,
+          ...data,
+          completed_days: Array.isArray(data.completed_days)
+            ? data.completed_days
+            : [],
+          day_records: Array.isArray(data.day_records) ? data.day_records : [],
+          cycle_reviews: Array.isArray(data.cycle_reviews)
+            ? data.cycle_reviews
+            : [],
+          validation_summary: {
+            ...EMPTY_SUMMARY,
+            ...(data.validation_summary || {}),
+          },
+        }
+        setProgress(normalized)
+        setHorizon(normalized.active_horizon)
+        setError(null)
+      } catch (loadError) {
+        console.error('[v0] Error loading A2 dashboard:', loadError)
+        if (active) setError('No pudimos cargar tu avance. Intenta nuevamente.')
+      } finally {
+        if (active) setLoading(false)
+      }
+    }
+
+    loadProgress()
+    return () => {
+      active = false
+    }
+  }, [])
+
+  const recordByDay = useMemo(
+    () => new Map(progress.day_records.map((record) => [record.day, record])),
+    [progress.day_records],
+  )
+
+  const missions = useMemo(
+    () =>
+      Object.values(A2_DAILY_MISSIONS)
+        .filter((mission) => mission.day <= horizon)
+        .filter(
+          (mission) =>
+            group === 'all' || groupForMission(mission.missionType) === group,
+        )
+        .filter((mission) => {
+          const query = search.trim().toLowerCase()
+          if (!query) return true
+          return [
+            mission.title,
+            mission.subtitle,
+            mission.userGoal,
+            mission.deliverable,
+          ].some((value) => value.toLowerCase().includes(query))
+        })
+        .sort((left, right) => left.day - right.day),
+    [group, horizon, search],
+  )
+
+  const selectedCycleReview =
+    progress.cycle_reviews.find((review) => review.horizon === horizon) || null
+  const recordsInHorizon = progress.day_records.filter(
+    (record) => record.day <= horizon,
+  )
+  const completedInHorizon = recordsInHorizon.length
+  const validatedInHorizon = recordsInHorizon.filter((record) =>
+    ['structural', 'specialized', 'checkpoint'].includes(record.validation_status),
+  ).length
+  const evidenceInHorizon = recordsInHorizon.filter(
+    (record) => record.has_evidence,
+  ).length
+  const checkpointsInHorizon = recordsInHorizon.filter(
+    (record) => record.validation_status === 'checkpoint',
+  ).length
+  const scoredInHorizon = recordsInHorizon.filter(
+    (record) => record.score !== null && record.validation_status !== 'legacy',
+  )
+  const averageScore =
+    scoredInHorizon.length > 0
+      ? Math.round(
+          scoredInHorizon.reduce(
+            (sum, record) => sum + (record.score || 0),
+            0,
+          ) / scoredInHorizon.length,
+        )
+      : null
+  const progressPercent = Math.min(
+    100,
+    Math.round((completedInHorizon / horizon) * 100),
+  )
+
+  const stats = [
+    {
+      label: 'Días completados',
+      value: `${completedInHorizon}/${horizon}`,
+      description: `${progressPercent}% del horizonte seleccionado`,
+      icon: <CheckCircle2 className="h-5 w-5 text-emerald-400" />,
+    },
+    {
+      label: 'Entregables validados',
+      value: validatedInHorizon,
+      description: `${evidenceInHorizon} con evidencia guardada`,
+      icon: <ClipboardCheck className="h-5 w-5 text-cyan-400" />,
+    },
+    {
+      label: 'Checkpoints completados',
+      value: checkpointsInHorizon,
+      description: 'Módulos de Entrenamiento integrados',
+      icon: <Trophy className="h-5 w-5 text-amber-400" />,
+    },
+    {
+      label: 'Puntaje promedio',
+      value: averageScore === null ? '—' : `${averageScore}/100`,
+      description: 'Solo evaluaciones con puntaje',
+      icon: <Gauge className="h-5 w-5 text-purple-400" />,
+    },
+  ]
+
+  const extendHorizon = async () => {
+    if (!progress.next_horizon || extending) return
+    setExtending(true)
+    setExtensionError(null)
+
+    try {
+      const response = await fetch('/api/a2/extend-horizon', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        credentials: 'include',
+        body: JSON.stringify({ targetHorizon: progress.next_horizon }),
+      })
+      const payload = (await response.json().catch(() => ({}))) as ExtendHorizonResponse
+
+      if (!response.ok || !payload.nextPath) {
+        throw new Error(payload.error || 'No pudimos extender Tu Ruta.')
+      }
+
+      router.push(payload.nextPath)
+      router.refresh()
+    } catch (extendError) {
+      console.error('[v0] Error extending A2 horizon:', extendError)
+      setExtensionError(
+        extendError instanceof Error
+          ? extendError.message
+          : 'No pudimos extender Tu Ruta.',
+      )
+    } finally {
+      setExtending(false)
+    }
   }
-
-  const phaseColor = {
-    clarity: 'bg-blue-600/10 text-blue-400 border-blue-500/30',
-    material: 'bg-purple-600/10 text-purple-400 border-purple-500/30',
-    'real-action': 'bg-green-600/10 text-green-400 border-green-500/30',
-    refinement: 'bg-amber-600/10 text-amber-400 border-amber-500/30'
-  }
-
-  const filteredDays = Object.entries(A2_DAYS)
-    .filter(([_, day]) => {
-      if (filter !== 'all' && day.phase !== filter) return false
-      if (search && !day.title.toLowerCase().includes(search.toLowerCase())) return false
-      return true
-    })
-    .sort((a, b) => parseInt(a[0]) - parseInt(b[0]))
-
-  const daysCompleted = 3
-  const progressPercent = (daysCompleted / 90) * 100
 
   return (
-    <div className="min-h-screen bg-slate-950 text-white p-6">
-      <div className="max-w-7xl mx-auto">
-        {/* Header */}
-        <div className="mb-8">
-          <h1 className="text-4xl font-bold mb-2">Tu Roadmap de 90 Días</h1>
-          <p className="text-slate-400">Transforma tu carrera en 90 días. Día a día.</p>
-        </div>
+    <div className="min-h-screen bg-slate-950 p-6 text-white">
+      <div className="mx-auto max-w-7xl">
+        <header className="mb-8 space-y-2">
+          <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-400">
+            Tu Ruta
+          </p>
+          <h1 className="text-4xl font-bold">Tu ciclo de avance</h1>
+          <p className="max-w-3xl text-slate-400">
+            {progress.route?.description ||
+              'Comienza con un ciclo de 30 días y extiéndelo a 60 o 90 según tu contexto y resultados.'}
+          </p>
+          <div className="flex flex-wrap items-center gap-2 pt-2">
+            {progress.route && (
+              <Badge className="border-cyan-500/30 bg-cyan-500/10 text-cyan-300">
+                {progress.route.name}
+              </Badge>
+            )}
+            <Badge className="border-purple-500/30 bg-purple-500/10 text-purple-300">
+              Horizonte activo · {progress.active_horizon} días
+            </Badge>
+            {progress.route && (
+              <span className="text-xs text-slate-500">
+                Seleccionada desde tu diagnóstico de Despega Cerebral
+              </span>
+            )}
+          </div>
+        </header>
 
-        {/* Progress Bar */}
-        <div className="bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-6 mb-8">
-          <div className="flex justify-between items-center mb-4">
+        {progress.extension_available && progress.next_horizon && (
+          <section className="mb-8 space-y-5 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-500/15 to-cyan-500/5 p-6">
+            <div className="grid gap-5 lg:grid-cols-[1fr_auto] lg:items-center">
+              <div>
+                <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
+                  Ciclo de {progress.active_horizon} días completado
+                </p>
+                <h2 className="mt-2 text-2xl font-bold text-white">
+                  Tú decides si Tu Ruta continúa
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-emerald-50/75">
+                  Tu avance queda guardado aquí. Extiende a {progress.next_horizon}{' '}
+                  días solo cuando quieras profundizar el trabajo con nuevas misiones,
+                  acciones reales y checkpoints de Entrenamiento.
+                </p>
+                {extensionError && (
+                  <p className="mt-3 text-sm text-amber-200">{extensionError}</p>
+                )}
+              </div>
+              <button
+                type="button"
+                onClick={() => void extendHorizon()}
+                disabled={extending}
+                className="inline-flex items-center justify-center rounded-xl border border-emerald-400/60 bg-emerald-500/20 px-6 py-4 font-semibold text-emerald-100 transition hover:bg-emerald-500/30 disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {extending
+                  ? 'Extendiendo…'
+                  : `Extender a ${progress.next_horizon} días`}
+                {!extending && <ArrowRight className="ml-2 h-4 w-4" />}
+              </button>
+            </div>
+
+            {progress.active_cycle_review && (
+              <A2CycleReviewCard
+                review={progress.active_cycle_review}
+                compact
+              />
+            )}
+          </section>
+        )}
+
+        {progress.status === 'completed' && (
+          <section className="mb-8 space-y-5 rounded-2xl border border-purple-500/35 bg-purple-500/10 p-6">
             <div>
-              <h2 className="text-xl font-bold text-white">Tu Progreso</h2>
-              <p className="text-slate-400 text-sm">{daysCompleted} de 90 días completados</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-300">
+                Integración completada
+              </p>
+              <h2 className="mt-2 text-2xl font-bold text-white">
+                Cerraste los 90 días de Tu Ruta
+              </h2>
+              <p className="mt-2 text-sm text-purple-100/70">
+                Tus entregables, checkpoints y evidencia permanecen disponibles para
+                revisión y actualización.
+              </p>
             </div>
-            <div className="text-right">
-              <p className="text-3xl font-bold text-cyan-400">{Math.round(progressPercent)}%</p>
-            </div>
-          </div>
-          <div className="w-full bg-slate-950 rounded-full h-3">
-            <div 
-              className="bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 h-3 rounded-full transition-all duration-300"
-              style={{ width: `${progressPercent}%` }}
-            ></div>
-          </div>
-          <div className="grid grid-cols-4 gap-2 mt-4 text-sm text-slate-400">
-            <div>Claridad: 1-10</div>
-            <div>Material: 11-30</div>
-            <div>Acción: 31-60</div>
-            <div>Refinamiento: 61-90</div>
-          </div>
+            {progress.active_cycle_review && (
+              <A2CycleReviewCard review={progress.active_cycle_review} />
+            )}
+          </section>
+        )}
+
+        <div className="mb-6 flex flex-wrap gap-2">
+          {HORIZONS.map((option) => {
+            const isPreview = option.value > progress.active_horizon
+            return (
+              <button
+                key={option.value}
+                type="button"
+                onClick={() => setHorizon(option.value)}
+                className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
+                  horizon === option.value
+                    ? 'border-cyan-400 bg-cyan-500/15 text-cyan-200'
+                    : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
+                }`}
+              >
+                {option.label}
+                {isPreview ? ' · vista previa' : ''}
+              </button>
+            )
+          })}
         </div>
 
-        {/* Filters & Search */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {!progress.extension_available &&
+          progress.status !== 'completed' &&
+          selectedCycleReview && (
+            <div className="mb-8">
+              <A2CycleReviewCard review={selectedCycleReview} compact />
+            </div>
+          )}
+
+        <section className="mb-6 rounded-xl border border-[rgb(80,160,170)] bg-slate-950 p-6">
+          <div className="mb-4 flex items-center justify-between gap-4">
+            <div>
+              <h2 className="text-xl font-bold">Tu progreso verificable</h2>
+              <p className="text-sm text-slate-400">
+                Día actual {progress.current_day} · Disponible hasta el Día{' '}
+                {progress.highest_unlocked_day}
+              </p>
+            </div>
+            <p className="text-3xl font-bold text-cyan-400">{progressPercent}%</p>
+          </div>
+          <div className="h-3 w-full rounded-full bg-slate-900">
+            <div
+              className="h-3 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-300"
+              style={{ width: `${progressPercent}%` }}
+            />
+          </div>
+          {loading && <p className="mt-3 text-xs text-slate-500">Cargando avance…</p>}
+          {error && <p className="mt-3 text-sm text-amber-300">{error}</p>}
+        </section>
+
+        <section className="mb-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="rounded-xl border border-slate-800 bg-slate-900/40 p-4"
+            >
+              <div className="mb-3 flex items-center justify-between">
+                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                  {stat.label}
+                </p>
+                {stat.icon}
+              </div>
+              <p className="text-2xl font-bold text-white">{stat.value}</p>
+              <p className="mt-1 text-xs text-slate-500">{stat.description}</p>
+            </div>
+          ))}
+        </section>
+
+        <div className="mb-6 grid gap-4 lg:grid-cols-[1fr_auto]">
           <div className="relative">
-            <Search className="absolute left-3 top-3 w-5 h-5 text-slate-500" />
+            <Search className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
             <input
-              type="text"
-              placeholder="Buscar día..."
+              type="search"
+              placeholder="Buscar por misión, objetivo o entregable…"
               value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              className="w-full bg-slate-950 border border-[rgb(80,160,170)] rounded px-4 py-2 pl-10 text-white placeholder-slate-500 focus:outline-none focus:border-cyan-500"
+              onChange={(event) => setSearch(event.target.value)}
+              className="w-full rounded-lg border border-[rgb(80,160,170)] bg-slate-950 px-4 py-2 pl-10 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none"
             />
           </div>
 
           <div className="flex gap-2 overflow-x-auto">
-            {['all', 'clarity', 'material', 'real-action', 'refinement'].map((phase) => (
+            {(Object.keys(GROUP_LABEL) as MissionGroup[]).map((option) => (
               <button
-                key={phase}
-                onClick={() => setFilter(phase as PhaseFilter)}
-                className={`px-4 py-2 rounded whitespace-nowrap text-sm font-medium transition-colors ${
-                  filter === phase
+                key={option}
+                type="button"
+                onClick={() => setGroup(option)}
+                className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                  group === option
                     ? 'bg-cyan-600 text-white'
-                    : 'bg-slate-950 text-slate-300 hover:bg-slate-950'
+                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800'
                 }`}
               >
-                {phase === 'all' ? 'Todos' : phaseName[phase as keyof typeof phaseName]}
+                {GROUP_LABEL[option]}
               </button>
             ))}
           </div>
         </div>
 
-        {/* Days Grid */}
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
-          {filteredDays.map(([dayNum, day]) => {
-            const diaNum = parseInt(dayNum)
-            const isUnlocked = unlockedDays.has(diaNum)
-            const isCompleted = diaNum <= daysCompleted
+        <section className="grid gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {missions.map((mission) => {
+            const record = recordByDay.get(mission.day)
+            const isUnlocked = mission.day <= progress.highest_unlocked_day
+            const isCompleted = Boolean(record)
+            const isCurrent = mission.day === progress.current_day
+            const validation = validationLabel(record)
 
             return (
               <button
-                key={diaNum}
-                onClick={() => isUnlocked && router.push(`/despega/a2/dia-${diaNum}`)}
+                key={mission.day}
+                id={`dia-${mission.day}`}
+                type="button"
+                onClick={() =>
+                  isUnlocked && router.push(`/despega/a2/dia-${mission.day}`)
+                }
                 disabled={!isUnlocked}
-                className={`relative group text-left transition-all duration-200 ${
+                className={`group relative text-left transition-all duration-200 ${
                   isUnlocked
-                    ? 'cursor-pointer hover:shadow-lg hover:shadow-cyan-500/50 hover:-translate-y-1'
-                    : 'cursor-not-allowed opacity-60'
+                    ? 'cursor-pointer hover:-translate-y-1 hover:shadow-lg hover:shadow-cyan-500/15'
+                    : 'cursor-not-allowed opacity-55'
                 }`}
               >
-                <div className={`bg-slate-950 border rounded-lg p-4 h-full ${
-                  isUnlocked
-                    ? 'border-[rgb(80,160,170)] hover:border-cyan-500'
-                    : 'border-[rgb(80,160,170)]'
-                }`}>
-                  {/* Day number & status */}
-                  <div className="flex justify-between items-start mb-3">
+                <div
+                  className={`h-full rounded-xl border bg-slate-950 p-4 ${
+                    isCurrent
+                      ? 'border-cyan-400 ring-1 ring-cyan-400/30'
+                      : isCompleted
+                        ? 'border-emerald-500/30'
+                        : 'border-[rgb(80,160,170)]'
+                  }`}
+                >
+                  <div className="mb-3 flex items-start justify-between gap-3">
                     <div className="flex items-center gap-2">
-                      <span className="text-2xl font-bold text-cyan-400">Día {diaNum}</span>
+                      <span className="text-xl font-bold text-cyan-400">
+                        Día {mission.day}
+                      </span>
                       {isCompleted && (
-                        <CheckCircle2 className="w-5 h-5 text-green-400" />
+                        <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                       )}
                     </div>
-                    {!isUnlocked && <Lock className="w-4 h-4 text-slate-600" />}
+                    {!isUnlocked && <Lock className="h-4 w-4 text-slate-600" />}
                   </div>
 
-                  {/* Phase badge */}
-                  <Badge className={`mb-3 border ${phaseColor[day.phase as keyof typeof phaseColor]}`}>
-                    {phaseName[day.phase as keyof typeof phaseName]}
-                  </Badge>
+                  <div className="mb-3 flex flex-wrap items-center gap-2">
+                    <Badge
+                      className={`border ${MISSION_TYPE_COLOR[mission.missionType]}`}
+                    >
+                      {MISSION_TYPE_LABEL[mission.missionType]}
+                    </Badge>
+                    {isCurrent && (
+                      <Badge className="border-cyan-400/40 bg-cyan-400/10 text-cyan-200">
+                        Día actual
+                      </Badge>
+                    )}
+                  </div>
 
-                  {/* Title */}
-                  <h3 className="font-bold text-white mb-1 line-clamp-2">{day.title}</h3>
-                  <p className="text-slate-400 text-sm mb-3 line-clamp-2">{day.subtitle}</p>
+                  <h3 className="mb-1 line-clamp-2 font-bold text-white">
+                    {mission.title}
+                  </h3>
+                  <p className="mb-3 line-clamp-2 text-sm text-slate-400">
+                    {mission.subtitle}
+                  </p>
 
-                  {/* A3 Module Unlock */}
-                  {day.unlocksA3Module && (
-                    <div className="bg-green-600/10 border border-green-600/30 rounded px-2 py-1 mb-3">
-                      <p className="text-green-400 text-xs font-medium flex items-center gap-1">
-                        <Unlock className="w-3 h-3" />
-                        Desbloquea: {day.unlocksA3Module}
+                  {validation && (
+                    <div
+                      className={`mb-3 rounded-lg border px-3 py-2 ${
+                        record?.validation_status === 'legacy'
+                          ? 'border-slate-700 bg-slate-900/60 text-slate-400'
+                          : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
+                      }`}
+                    >
+                      <p className="flex items-center gap-2 text-xs font-medium">
+                        {record?.has_evidence ? (
+                          <FileCheck2 className="h-4 w-4" />
+                        ) : (
+                          <CheckCircle2 className="h-4 w-4" />
+                        )}
+                        {validation}
                       </p>
                     </div>
                   )}
 
-                  {/* Time estimate */}
-                  <div className="flex justify-between items-end">
-                    <span className="text-slate-400 text-xs flex items-center gap-1">
-                      <Calendar className="w-3 h-3" />
-                      {day.estimatedHours}h
+                  {mission.a3Checkpoint && (
+                    <div className="mb-3 rounded-lg border border-emerald-600/30 bg-emerald-600/10 px-3 py-2">
+                      <p className="flex items-center gap-1 text-xs font-medium text-emerald-300">
+                        <Unlock className="h-3 w-3" />
+                        Entrenamiento: {mission.a3Checkpoint.moduleTitle}
+                      </p>
+                    </div>
+                  )}
+
+                  <p className="mb-3 line-clamp-2 text-xs text-slate-500">
+                    Entregable: {mission.deliverable}
+                  </p>
+
+                  <div className="flex items-end justify-between gap-3">
+                    <span className="flex items-center gap-1 text-xs text-slate-400">
+                      <Calendar className="h-3 w-3" />
+                      {mission.estimatedMinutes.min}-{mission.estimatedMinutes.max} min
+                    </span>
+                    <span className="line-clamp-1 text-right text-xs text-slate-600">
+                      {PHASE_LABEL[mission.phaseLabel]}
                     </span>
                     {isUnlocked && (
-                      <ChevronRight className="w-4 h-4 text-cyan-400 group-hover:translate-x-1 transition-transform" />
+                      <ChevronRight className="h-4 w-4 flex-shrink-0 text-cyan-400 transition-transform group-hover:translate-x-1" />
                     )}
                   </div>
                 </div>
               </button>
             )
           })}
-        </div>
+        </section>
 
-        {/* Phase Summary */}
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-          {[
-            { phase: 'clarity', days: '1-10', title: 'Claridad Profesional', color: 'from-blue-600 to-cyan-600' },
-            { phase: 'material', days: '11-30', title: 'Material Profesional', color: 'from-purple-600 to-pink-600' },
-            { phase: 'real-action', days: '31-60', title: 'Acción Real e Interviews', color: 'from-green-600 to-emerald-600' },
-            { phase: 'refinement', days: '61-90', title: 'Refinamiento y Crecimiento', color: 'from-amber-600 to-orange-600' }
-          ].map((p) => (
-            <div key={p.phase} className="bg-slate-950 border border-[rgb(80,160,170)] rounded-lg p-4">
-              <div className={`w-full h-1 rounded-full bg-gradient-to-r ${p.color} mb-3`}></div>
-              <p className="text-slate-400 text-xs font-medium mb-1">Fase {p.days}</p>
-              <h3 className="text-white font-bold text-sm mb-2">{p.title}</h3>
-              <p className="text-slate-400 text-xs">
-                {p.phase === 'clarity' && 'Establece bases sólidas: visión, mercado, marca personal'}
-                {p.phase === 'material' && 'Construye material profesional: CV, portfolio, entrevistas'}
-                {p.phase === 'real-action' && 'Búsqueda activa: networking, aplicaciones, entrevistas reales'}
-                {p.phase === 'refinement' && 'Integración y crecimiento en nuevo rol o avance final'}
-              </p>
-            </div>
-          ))}
-        </div>
+        {missions.length === 0 && (
+          <p className="rounded-xl border border-slate-800 bg-slate-900/30 p-8 text-center text-slate-400">
+            No encontramos misiones con esos filtros.
+          </p>
+        )}
       </div>
     </div>
   )

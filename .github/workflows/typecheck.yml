@@ -1,0 +1,125 @@
+name: Evidence-aware validation
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+
+      - name: TypeScript full-repository check
+        run: npx tsc --noEmit
+
+      - name: Test evidence classification
+        run: npx tsx scripts/check-test-evidence-matrix.ts
+
+      - name: A2 Day 1 runtime scoring logic
+        run: npx tsx scripts/check-a2-day1-scoring.ts
+
+      - name: A2 specialized runtime validators and source contract
+        run: npx tsx scripts/check-a2-specialized-days-contract.ts
+
+      - name: A2 90-day runtime model and source contract
+        run: npx tsx scripts/check-a2-cycle-contract.ts
+
+      - name: A2 horizon runtime logic and source contract
+        run: npx tsx scripts/check-a2-horizon-contract.ts
+
+      - name: A2 cycle review runtime logic and source contract
+        run: npx tsx scripts/check-a2-cycle-review-contract.ts
+
+      - name: A2 route adaptation runtime logic and source contract
+        run: npx tsx scripts/check-a2-route-adaptation-contract.ts
+
+      - name: A2 activity runtime logic and source contract
+        run: npx tsx scripts/check-a2-activity-contract.ts
+
+      - name: A1 to A3 static journey wiring contract
+        run: npx tsx scripts/check-a1-a2-a3-journey-contract.ts
+
+      - name: A3 catalog validators and source contract
+        run: npx tsx scripts/check-a3-active-completion-contract.ts
+
+      - name: A3 job decoder runtime validator and source contract
+        run: npx tsx scripts/check-a3-job-decoder-contract.ts
+
+      - name: A3 answer architecture runtime validator and source contract
+        run: npx tsx scripts/check-a3-answer-architecture-contract.ts
+
+      - name: A3 coach practice runtime validator and source contract
+        run: npx tsx scripts/check-a3-coach-practice-contract.ts
+
+      - name: A3 communication gym runtime validator and source contract
+        run: npx tsx scripts/check-a3-communication-gym-contract.ts
+
+      - name: A3 recruiter simulation runtime validator and source contract
+        run: npx tsx scripts/check-a3-first-recruiter-simulation-contract.ts
+
+      - name: A3 difficult questions runtime validator and source contract
+        run: npx tsx scripts/check-a3-difficult-questions-contract.ts
+
+      - name: A3 final interview runtime validator and source contract
+        run: npx tsx scripts/check-a3-basic-interview-mission-contract.ts
+
+      - name: A3 overview runtime configuration and source contract
+        run: npx tsx scripts/check-a3-route-overview-contract.ts
+
+      - name: A3 to A4 static transition wiring contract
+        run: npx tsx scripts/check-a3-a4-transition-contract.ts
+
+      - name: A4 signal and decision runtime validators and source contract
+        run: npx tsx scripts/check-a4-signal-decision-contract.ts
+
+      - name: A4 evidence pulse runtime logic and source contract
+        run: npx tsx scripts/check-a4-evidence-pulse-contract.ts
+
+      - name: A4 snapshot runtime logic and source contract
+        run: npx tsx scripts/check-a4-daily-snapshot-contract.ts
+
+      - name: A4 cron clock runtime logic and source contract
+        run: npx tsx scripts/check-a4-daily-cron-contract.ts
+
+      - name: A1 through C4 runtime resolver and source continuity contract
+        run: npx tsx scripts/check-a1-c4-continuity-contract.ts
+
+      - name: DTC runtime configuration and critical source contract
+        run: npx tsx scripts/check-dtc-critical-contract.ts
+
+      - name: Next production bundle
+        env:
+          NEXT_TELEMETRY_DISABLED: '1'
+          NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+          NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+          SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+          DEMO_SESSION_SECRET: test-demo-session-secret-for-ci
+          NEXTAUTH_SECRET: test-nextauth-secret-for-ci
+          CRON_SECRET: test-cron-secret-with-32-characters
+          OPENAI_API_KEY: test-openai-key
+          UPSTASH_REDIS_REST_URL: https://example.com
+          UPSTASH_REDIS_REST_TOKEN: test-upstash-token
+        run: |
+          set -o pipefail
+          npm run build 2>&1 | tee build.log
+
+      - name: Build warning classification
+        run: npx tsx scripts/check-build-warning-contract.ts build.log

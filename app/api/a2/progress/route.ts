@@ -1,185 +1,306 @@
-import { createClient } from '@/lib/supabase/server'
+import { createAdminClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
 import { NextRequest, NextResponse } from 'next/server'
-import { cookies } from 'next/headers'
-import { verifyDemoSessionToken, DEMO_COOKIE_NAME } from '@/lib/auth/demo-user'
+import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
+import { nextA2Horizon } from '@/lib/a2/horizon'
+import { buildA2CycleReview } from '@/lib/a2/cycle-review'
+
+const TOTAL_DAYS = 90
+const REVIEW_HORIZONS = [30, 60, 90] as const
+
+interface CompletionRow {
+  day: unknown
+  mission_type?: unknown
+  validation_status?: unknown
+  validation_result?: unknown
+  submission?: unknown
+  completed_at?: unknown
+}
+
+function objectValue(value: unknown): Record<string, unknown> {
+  return value && typeof value === 'object' && !Array.isArray(value)
+    ? (value as Record<string, unknown>)
+    : {}
+}
+
+function textValue(value: unknown): string {
+  return typeof value === 'string' ? value : ''
+}
+
+function numberValue(value: unknown): number | null {
+  const numeric = Number(value)
+  return Number.isFinite(numeric) ? numeric : null
+}
+
+function monthStatus(completed: number) {
+  if (completed >= 30) return 'completed'
+  if (completed > 0) return 'in_progress'
+  return 'pending'
+}
+
+function emptyValidationSummary() {
+  return {
+    validated_days: 0,
+    evidence_days: 0,
+    structural_days: 0,
+    specialized_days: 0,
+    checkpoint_days: 0,
+    legacy_days: 0,
+    average_score: null as number | null,
+  }
+}
+
+function emptyProgress() {
+  return {
+    current_month: 1,
+    current_day: 1,
+    highest_unlocked_day: 1,
+    active_horizon: 30,
+    next_horizon: 60,
+    extension_available: false,
+    cycle_complete: false,
+    active_cycle_review: null,
+    cycle_reviews: [],
+    progress_percentage: 0,
+    completed_tasks: 0,
+    completed_days: [] as number[],
+    day_records: [] as Array<Record<string, unknown>>,
+    validation_summary: emptyValidationSummary(),
+    total_tasks: TOTAL_DAYS,
+    status: 'not_started',
+    route: null,
+    month_progress: [
+      { month: 1, percentage: 0, completed: false },
+      { month: 2, percentage: 0, completed: false },
+      { month: 3, percentage: 0, completed: false },
+    ],
+    milestones: [
+      { month: 1, title: 'Primer ciclo de 30 días', status: 'pending' },
+      { month: 2, title: 'Extensión a 60 días', status: 'pending' },
+      { month: 3, title: 'Integración a 90 días', status: 'pending' },
+    ],
+  }
+}
+
+function normalizeCompletion(row: CompletionRow) {
+  const day = Number(row.day)
+  const validation = objectValue(row.validation_result)
+  const submission = objectValue(row.submission)
+  const validationStatus = textValue(row.validation_status) || 'legacy'
+  const score = numberValue(validation.score)
+  const passScore = numberValue(validation.passScore)
+  const artifactUrl = textValue(submission.artifactUrl)
+  const hasEvidence =
+    Object.keys(submission).length > 0 &&
+    ['summary', 'evidence', 'reflection', 'metrics', 'artifactUrl'].some(
+      (key) => textValue(submission[key]).trim().length > 0,
+    )
+
+  return {
+    day,
+    mission_type: textValue(row.mission_type) || null,
+    validation_status: validationStatus,
+    score,
+    pass_score: passScore,
+    passed: validation.passed !== false,
+    has_evidence: hasEvidence,
+    artifact_url: artifactUrl || null,
+    completed_at: textValue(row.completed_at) || null,
+  }
+}
 
 /**
  * GET /api/a2/progress
- * Calculate user progress through A2 (90-day journey)
- * Returns current month and overall progress percentage based on completed tasks
+ *
+ * Returns canonical A2 progression, evidence quality, explicit horizon state
+ * and neutral closure summaries for 30, 60 and 90 days.
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
-    const supabase = await createClient()
-
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
-    // Fallback to demo cookie if no session
-    let userId = user?.id
-    if (!userId) {
-      const cookieStore = await cookies()
-      const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
-      const demoUser = await verifyDemoSessionToken(demoToken)
-      userId = demoUser?.id
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json(emptyProgress(), { status: 200 })
     }
 
-    if (!userId) {
-      return NextResponse.json(
-        {
-          current_month: 1,
-          progress_percentage: 0,
-          completed_tasks: 0,
-          total_tasks: 90,
-          status: 'not_started',
-          month_progress: [
-            { month: 1, percentage: 0, completed: false },
-            { month: 2, percentage: 0, completed: false },
-            { month: 3, percentage: 0, completed: false },
-          ],
-          milestones: [
-            { month: 1, title: '30 días - Primer milestone', status: 'pending' },
-            { month: 2, title: '60 días - Segundo milestone', status: 'pending' },
-            { month: 3, title: '90 días - Completado', status: 'pending' },
-          ],
-        },
-        { status: 200 }
-      )
+    const userId = currentUser.id
+    const supabase = createAdminClient()
+    const [snapshot, route, completionsResult] = await Promise.all([
+      getA2ProgressSnapshot(userId, supabase),
+      resolveA2Route(userId, supabase),
+      supabase
+        .from('a2_user_task_completions')
+        .select(
+          'day, mission_type, validation_status, validation_result, submission, completed_at',
+        )
+        .eq('user_id', userId)
+        .not('completed_at', 'is', null)
+        .order('completed_at', { ascending: false }),
+    ])
+
+    if (completionsResult.error) {
+      console.error('[v0] Error fetching A2 completions:', completionsResult.error)
     }
 
-    // Fetch completed days from a2_user_task_completions
-    const { data: completions } = await supabase
-      .from('a2_user_task_completions')
-      .select('day, completed_at')
-      .eq('user_id', userId)
-      .not('completed_at', 'is', null)
+    const recordByDay = new Map<number, ReturnType<typeof normalizeCompletion>>()
+    for (const rawRow of (completionsResult.data || []) as CompletionRow[]) {
+      const record = normalizeCompletion(rawRow)
+      if (
+        Number.isInteger(record.day) &&
+        record.day >= 1 &&
+        record.day <= TOTAL_DAYS &&
+        !recordByDay.has(record.day)
+      ) {
+        recordByDay.set(record.day, record)
+      }
+    }
 
-    // Get unique completed days
-    const completedDays = new Set(
-      (completions || []).map((c) => c.day)
+    const dayRecords = Array.from(recordByDay.values()).sort(
+      (left, right) => left.day - right.day,
     )
+    const completedDays = dayRecords.map((record) => record.day)
+    const totalCompleted = completedDays.length
+    const completedInsideHorizon = completedDays.filter(
+      (day) => day <= snapshot.activeHorizon,
+    ).length
+    const progressPercentage = Math.min(
+      100,
+      Math.round((completedInsideHorizon / snapshot.activeHorizon) * 100),
+    )
+    const currentMonth =
+      snapshot.currentDay <= 30 ? 1 : snapshot.currentDay <= 60 ? 2 : 3
+    const nextHorizon = nextA2Horizon(snapshot.activeHorizon)
+    const cycleComplete = completedDays.includes(snapshot.activeHorizon)
+    const extensionAvailable = cycleComplete && nextHorizon !== null
+    const status =
+      totalCompleted === 0
+        ? 'not_started'
+        : snapshot.activeHorizon === 90 && cycleComplete
+          ? 'completed'
+          : extensionAvailable
+            ? 'awaiting_extension'
+            : 'in_progress'
 
-    // Calculate progress based on completed days (max 90 days)
-    const totalCompleted = completedDays.size
-    const totalDays = 90
-    const progressPercentage = Math.round((totalCompleted / totalDays) * 100)
-
-    // Determine current month based on day progression
-    // Month 1: Days 1-30
-    // Month 2: Days 31-60
-    // Month 3: Days 61-90
-    let currentMonth = 1
-    if (totalCompleted > 30) {
-      currentMonth = 2
+    const monthCounts = [
+      completedDays.filter((day) => day >= 1 && day <= 30).length,
+      completedDays.filter((day) => day >= 31 && day <= 60).length,
+      completedDays.filter((day) => day >= 61 && day <= 90).length,
+    ]
+    const scoredRecords = dayRecords.filter(
+      (record) => record.score !== null && record.validation_status !== 'legacy',
+    )
+    const validationSummary = {
+      validated_days: dayRecords.filter((record) =>
+        ['structural', 'specialized', 'checkpoint'].includes(
+          record.validation_status,
+        ),
+      ).length,
+      evidence_days: dayRecords.filter((record) => record.has_evidence).length,
+      structural_days: dayRecords.filter(
+        (record) => record.validation_status === 'structural',
+      ).length,
+      specialized_days: dayRecords.filter(
+        (record) => record.validation_status === 'specialized',
+      ).length,
+      checkpoint_days: dayRecords.filter(
+        (record) => record.validation_status === 'checkpoint',
+      ).length,
+      legacy_days: dayRecords.filter(
+        (record) => record.validation_status === 'legacy',
+      ).length,
+      average_score:
+        scoredRecords.length > 0
+          ? Math.round(
+              scoredRecords.reduce(
+                (sum, record) => sum + (record.score || 0),
+                0,
+              ) / scoredRecords.length,
+            )
+          : null,
     }
-    if (totalCompleted > 60) {
-      currentMonth = 3
-    }
 
-    // If no completions yet, show month 1
-    if (totalCompleted === 0) {
-      currentMonth = 1
-    }
-
-    const status = 
-      progressPercentage === 0 ? 'not_started' :
-      progressPercentage < 50 ? 'in_progress' :
-      progressPercentage < 100 ? 'near_completion' :
-      'completed'
-
-    // Calculate month percentages
-    const month1Completed = Array.from(completedDays).filter((d) => d >= 1 && d <= 30).length
-    const month2Completed = Array.from(completedDays).filter((d) => d >= 31 && d <= 60).length
-    const month3Completed = Array.from(completedDays).filter((d) => d >= 61 && d <= 90).length
-
-    const month1Percentage = Math.round((month1Completed / 30) * 100)
-    const month2Percentage = Math.round((month2Completed / 30) * 100)
-    const month3Percentage = Math.round((month3Completed / 30) * 100)
+    const cycleReviewRecords = dayRecords.map((record) => ({
+      day: record.day,
+      missionType: record.mission_type,
+      validationStatus: record.validation_status,
+      score: record.score,
+      hasEvidence: record.has_evidence,
+      completedAt: record.completed_at,
+    }))
+    const cycleReviews = REVIEW_HORIZONS.map((horizon) =>
+      buildA2CycleReview(horizon, cycleReviewRecords),
+    )
+    const activeCycleReview =
+      cycleReviews.find((review) => review.horizon === snapshot.activeHorizon) ||
+      null
 
     return NextResponse.json(
       {
         current_month: currentMonth,
+        current_day: snapshot.currentDay,
+        highest_unlocked_day: snapshot.highestUnlockedDay,
+        active_horizon: snapshot.activeHorizon,
+        next_horizon: nextHorizon,
+        extension_available: extensionAvailable,
+        cycle_complete: cycleComplete,
+        active_cycle_review: activeCycleReview,
+        cycle_reviews: cycleReviews,
+        progress_source: snapshot.source,
         progress_percentage: progressPercentage,
         completed_tasks: totalCompleted,
-        total_tasks: totalDays,
+        completed_days: completedDays,
+        day_records: dayRecords,
+        validation_summary: validationSummary,
+        total_tasks: TOTAL_DAYS,
         status,
-        month_progress: [
-          { month: 1, percentage: month1Percentage, completed: month1Percentage === 100 },
-          { month: 2, percentage: month2Percentage, completed: month2Percentage === 100 },
-          { month: 3, percentage: month3Percentage, completed: month3Percentage === 100 },
-        ],
+        route,
+        month_progress: monthCounts.map((completed, index) => ({
+          month: index + 1,
+          percentage: Math.min(100, Math.round((completed / 30) * 100)),
+          completed: completed >= 30,
+        })),
         milestones: [
-          { month: 1, title: '30 días - Primer milestone', status: month1Percentage === 100 ? 'completed' : month1Completed > 0 ? 'in_progress' : 'pending' },
-          { month: 2, title: '60 días - Segundo milestone', status: month2Percentage === 100 ? 'completed' : month2Completed > 0 ? 'in_progress' : 'pending' },
-          { month: 3, title: '90 días - Completado', status: month3Percentage === 100 ? 'completed' : month3Completed > 0 ? 'in_progress' : 'pending' },
+          {
+            month: 1,
+            title: 'Primer ciclo de 30 días',
+            status: monthStatus(monthCounts[0]),
+          },
+          {
+            month: 2,
+            title: 'Extensión a 60 días',
+            status: monthStatus(monthCounts[1]),
+          },
+          {
+            month: 3,
+            title: 'Integración a 90 días',
+            status: monthStatus(monthCounts[2]),
+          },
         ],
       },
-      { status: 200 }
+      { status: 200 },
     )
   } catch (error) {
     console.error('[v0] Error fetching A2 progress:', error)
     return NextResponse.json(
-      {
-        current_month: 1,
-        progress_percentage: 0,
-        completed_tasks: 0,
-        total_tasks: 90,
-        status: 'error',
-      },
-      { status: 200 }
+      { ...emptyProgress(), status: 'error' },
+      { status: 200 },
     )
   }
 }
 
+/**
+ * Compatibility POST: all writes are delegated to the canonical complete-day
+ * endpoint so there is only one progression implementation.
+ */
 export async function POST(request: NextRequest) {
-  try {
-    const body = await request.json()
-    const { dayNumber } = body
+  const body = await request.text()
+  const target = new URL('/api/a2/complete-day', request.url)
 
-    const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
-    
-    // Fallback to demo cookie if no session
-    let userId = user?.id
-    if (!userId) {
-      const cookieStore = await cookies()
-      const demoToken = cookieStore.get(DEMO_COOKIE_NAME)?.value
-      const demoUser = await verifyDemoSessionToken(demoToken)
-      userId = demoUser?.id
-    }
-
-    if (!userId) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    // Mark day as completed in a2_user_task_completions
-    const { error: insertError } = await supabase
-      .from('a2_user_task_completions')
-      .insert({
-        user_id: userId,
-        day: dayNumber,
-        completed_at: new Date().toISOString(),
-      })
-
-    if (insertError && insertError.code !== '23505') { // 23505 is unique constraint violation
-      console.error('[v0] Error marking day complete:', insertError)
-      return NextResponse.json(
-        { error: 'Failed to update progress' },
-        { status: 500 }
-      )
-    }
-
-    return NextResponse.json({
-      success: true,
-      message: `Day ${dayNumber} marked as completed`,
-    })
-  } catch (error) {
-    console.error('[v0] Progress update error:', error)
-    return NextResponse.json(
-      { error: 'Failed to update progress' },
-      { status: 500 }
-    )
-  }
+  return fetch(target, {
+    method: 'POST',
+    headers: {
+      'Content-Type': request.headers.get('content-type') || 'application/json',
+      cookie: request.headers.get('cookie') || '',
+    },
+    body,
+  })
 }
