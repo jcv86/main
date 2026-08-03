@@ -82,6 +82,9 @@ jobs:
       - name: A2 real activity continuity contract
         run: npx tsx scripts/check-a2-activity-contract.ts
 
+      - name: A1 to A2 to A3 journey contract
+        run: npx tsx scripts/check-a1-a2-a3-journey-contract.ts
+
       - name: A3 canonical active completion contract
         run: npx tsx scripts/check-a3-active-completion-contract.ts
 
