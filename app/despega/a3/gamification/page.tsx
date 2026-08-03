@@ -1,16 +1,39 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import Link from 'next/link'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { GamificationProfile } from '@/components/gamification-profile'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Loader2 } from 'lucide-react'
-import Link from 'next/link'
+
+interface GamificationSummary {
+  totalXp: number
+  currentLevel: number
+  levelLabel: string
+  xpToNextLevel: number
+  dailyStreak: number
+  bestStreak: number
+  totalPoints: number
+  totalTipsEarned: number
+  badges: string[]
+  training: {
+    completed: number
+    total: number
+    progress: number
+    interviewsCompleted: number
+  }
+  radar: {
+    completed: number
+    total: number
+    progress: number
+  }
+}
 
 export default function GamificationPage() {
   const { user, loading: authLoading } = useAuthRedirect()
-  const [profileData, setProfileData] = useState<any>(null)
+  const [summary, setSummary] = useState<GamificationSummary | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -18,22 +41,20 @@ export default function GamificationPage() {
 
     const fetchProfile = async () => {
       try {
-        const response = await fetch(
-          `/api/gamification/profile?userId=${user.id}`
-        )
+        const response = await fetch('/api/gamification/profile')
         const data = await response.json()
 
-        if (response.ok) {
-          setProfileData(data)
+        if (response.ok && data.summary) {
+          setSummary(data.summary)
         }
       } catch (error) {
-        console.error('Error fetching gamification profile:', error)
+        console.error('[v0] Error fetching gamification profile:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchProfile()
+    void fetchProfile()
   }, [user?.id])
 
   if (authLoading || loading) {
@@ -44,96 +65,77 @@ export default function GamificationPage() {
     )
   }
 
+  if (!summary) {
+    return (
+      <main className="min-h-screen bg-muted/5 py-12">
+        <Card className="max-w-xl mx-auto p-8 text-center">
+          <p className="text-muted-foreground">
+            No fue posible cargar tu progreso en este momento.
+          </p>
+        </Card>
+      </main>
+    )
+  }
+
   return (
     <main className="min-h-screen bg-muted/5 py-12">
       <div className="max-w-6xl mx-auto px-4 space-y-8">
-        {/* Header */}
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <h1 className="text-4xl font-bold text-training">Interview Mastery</h1>
-            <p className="text-muted-foreground mt-2">Track your progress and unlock achievements</p>
+            <h1 className="text-4xl font-bold text-training">Mi progreso</h1>
+            <p className="text-muted-foreground mt-2">
+              Métricas calculadas desde evidencia persistida por el servidor.
+            </p>
           </div>
           <Link href="/despega/a3/dtc-shop">
-            <Button className="rounded-[20px] bg-training hover:bg-training/90 text-white">Obtener Consejos Premium</Button>
+            <Button variant="outline">Ver puntos DTC: {summary.totalPoints}</Button>
           </Link>
         </div>
 
-        {/* Gamification Profile */}
-        {profileData ? (
-          <GamificationProfile
-            userId={user?.id || ''}
-            level={profileData.current_level || 'Bronze'}
-            currentXp={profileData.current_xp || 0}
-            totalXp={profileData.total_xp || 0}
-            streak={profileData.interview_streak || 0}
-            bestStreak={profileData.best_interview_streak || 0}
-            interviewsCompleted={profileData.total_interviews_completed || 0}
-            badges={profileData.badges || []}
-            totalTipsEarned={profileData.total_tips_earned_free + profileData.total_tips_earned_premium || 0}
-          />
-        ) : (
-          <Card className="rounded-[2px] border-2 border-training/40">
-            <CardContent className="p-8 text-center">
-              <p className="text-muted-foreground">
-                Comenzar your first interview to unlock achievements and begin climbing the ranks!
-              </p>
-              <Link href="/despega/a3/simulaciones-estructurada">
-                <Button className="mt-4">Comenzar Interview</Button>
-              </Link>
-            </CardContent>
-          </Card>
-        )}
+        <GamificationProfile
+          userId={user?.id || ''}
+          level={summary.levelLabel}
+          currentXp={summary.totalXp % 1000}
+          totalXp={summary.totalXp}
+          streak={summary.dailyStreak}
+          bestStreak={summary.bestStreak}
+          interviewsCompleted={summary.training.interviewsCompleted}
+          badges={summary.badges}
+          totalTipsEarned={summary.totalTipsEarned}
+        />
 
-        {/* Stats Cards */}
         <div className="grid md:grid-cols-3 gap-6">
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">How It Works</CardTitle>
+              <CardTitle className="text-lg">Entrenamiento A3</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div>
-                <strong>Consejos Gratis:</strong> Obtén 3 consejos IA gratis por entrevista
-              </div>
-              <div>
-                <strong>Consejos Premium:</strong> Desbloquea 3 consejos más por 150 puntos DTC
-              </div>
-              <div>
-                <strong>XP System:</strong> Earn XP to level up from Bronze to Diamond
-              </div>
+            <CardContent className="space-y-2 text-sm">
+              <p>
+                Módulos completados: <strong>{summary.training.completed}/{summary.training.total}</strong>
+              </p>
+              <p>Avance persistido: <strong>{summary.training.progress}%</strong></p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Earn DTC Points</CardTitle>
+              <CardTitle className="text-lg">Radar A4</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div>
-                <strong>Complete Interviews:</strong> Earn free tips per interview
-              </div>
-              <div>
-                <strong>Achievements:</strong> Unlock badges for milestones
-              </div>
-              <div>
-                <strong>Streaks:</strong> Maintain daily interview streaks
-              </div>
+            <CardContent className="space-y-2 text-sm">
+              <p>
+                Registros completados: <strong>{summary.radar.completed}/{summary.radar.total}</strong>
+              </p>
+              <p>Avance persistido: <strong>{summary.radar.progress}%</strong></p>
             </CardContent>
           </Card>
 
           <Card>
             <CardHeader>
-              <CardTitle className="text-lg">Level Rewards</CardTitle>
+              <CardTitle className="text-lg">Integridad del progreso</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-3 text-sm">
-              <div>
-                <strong>Bronze:</strong> Comenzaring level
-              </div>
-              <div>
-                <strong>Diamond:</strong> Unlock all premium features
-              </div>
-              <div>
-                <strong>Leaderboards:</strong> Compete with other interviewees
-              </div>
+            <CardContent className="text-sm text-muted-foreground">
+              El navegador no puede asignar XP, alterar saldos ni declarar compras. Los
+              cambios se originan únicamente en acciones validadas por el servidor.
             </CardContent>
           </Card>
         </div>
