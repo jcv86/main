@@ -118,17 +118,30 @@ export function extractFirstRecruiterContext(
     ...stringList(decoder.priorityKeywords),
     ...stringList(decoder.mustHaveRequirements),
   ]
+  const approvedIntroduction = textValue(answers.selfIntroduction)
+  const approvedMotivation = textValue(answers.motivation)
+  const approvedStrength = textValue(answers.strengthEvidence)
+  const approvedChallenge = textValue(answers.challengeStar)
 
   return {
     fullName,
     targetRole,
     company,
     prioritySignals,
-    approvedIntroduction: textValue(answers.selfIntroduction),
-    approvedMotivation: textValue(answers.motivation),
-    approvedStrength: textValue(answers.strengthEvidence),
-    approvedChallenge: textValue(answers.challengeStar),
-    available: Boolean(fullName || targetRole || company || prioritySignals.length),
+    approvedIntroduction,
+    approvedMotivation,
+    approvedStrength,
+    approvedChallenge,
+    available: Boolean(
+      fullName ||
+      targetRole ||
+      company ||
+      prioritySignals.length ||
+      approvedIntroduction ||
+      approvedMotivation ||
+      approvedStrength ||
+      approvedChallenge
+    ),
   }
 }
 
@@ -162,7 +175,7 @@ export const SAMPLE_FIRST_RECRUITER_DRAFT: FirstRecruiterDraft = {
     experience: { text: 'En mi experiencia más reciente coordiné responsables, riesgos y seguimiento semanal. Implementé un tablero que permitió reducir 22% los atrasos y entregar mayor visibilidad a la gerencia.', durationSeconds: 44, selfRating: 4 },
     motivation: { text: 'Me interesa esta empresa porque el rol combina coordinación transversal, indicadores y mejora continua. Esa necesidad se conecta con mi experiencia y con el tipo de impacto que quiero seguir construyendo.', durationSeconds: 37, selfRating: 4 },
     strength: { text: 'Mi principal fortaleza es convertir información compleja en decisiones ejecutables. Por ejemplo, organicé un proceso con múltiples áreas y logramos reducir 22% los atrasos mediante responsables y alertas claras.', durationSeconds: 43, selfRating: 4 },
-    behavioral: { text: 'Situación: un proyecto crítico acumulaba atrasos. Tarea: recuperar control sin detener la operación. Acción: definí responsables, hitos y alertas semanales. Resultado: redujimos 22% los atrasos y mejoramos la visibilidad para la gerencia.', durationSeconds: 67, selfRating: 4 },
+    behavioral: { text: 'Situación: un proyecto crítico acumulaba atrasos y las áreas habían perdido visibilidad sobre los responsables. Tarea: recuperar control sin detener la operación. Acción: definí responsables, ordené hitos, instalé alertas semanales y facilité acuerdos entre los equipos. Resultado: redujimos 22% los atrasos, mejoramos la coordinación y entregamos a la gerencia una visión clara del avance.', durationSeconds: 72, selfRating: 4 },
     candidateQuestion: { text: '¿Cuáles son los resultados más importantes que esperan de esta posición durante los primeros seis meses?', durationSeconds: 16, selfRating: 5 },
     closing: { text: 'Gracias por la conversación. El desafío me interesa y creo que mi experiencia en coordinación e indicadores puede aportar desde el inicio.', durationSeconds: 18, selfRating: 4 },
   },
