@@ -62,6 +62,7 @@ interface JourneyEvidence {
   a2StartedAt: string | null
   a3CompletedModules: string[]
   a3UpdatedAt: string | null
+  a3RouteCompletedAt: string | null
 }
 
 const MODULE_ENTRY: Record<Exclude<JourneyModule, 'COMPLETED'>, string> = {
@@ -143,7 +144,7 @@ export function getModuleAccess(
       ),
     a4:
       a2OnboardingComplete &&
-      Boolean(state.a4UnlockedAt || profile.a4_unlocked),
+      Boolean(state.a4UnlockedAt && profile.a4_unlocked),
   }
 }
 
@@ -180,43 +181,54 @@ async function loadJourneyEvidence(
   userId: string,
   supabase: ReturnType<typeof createAdminClient>,
 ): Promise<JourneyEvidence> {
-  const [a1TestResult, a1AssessmentResult, a2CompletionResult, a2RouteResult, a3Result] =
-    await Promise.all([
-      supabase
-        .from('a1_tests_results')
-        .select('created_at, completed_at')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('a1_cerebral_assessment')
-        .select('created_at, completed_at')
-        .eq('user_id', userId)
-        .order('completed_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('a2_user_task_completions')
-        .select('day, completed_at')
-        .eq('user_id', userId)
-        .not('completed_at', 'is', null)
-        .order('day', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('a2_user_route_progress')
-        .select('dia_actual, updated_at, fecha_inicio')
-        .eq('user_id', userId)
-        .order('updated_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabase
-        .from('a3_user_progress')
-        .select('completed_module_ids, updated_at, created_at')
-        .eq('user_id', userId)
-        .maybeSingle(),
-    ])
+  const [
+    a1TestResult,
+    a1AssessmentResult,
+    a2CompletionResult,
+    a2RouteResult,
+    a3Result,
+    a3RouteResult,
+  ] = await Promise.all([
+    supabase
+      .from('a1_tests_results')
+      .select('created_at, completed_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('a1_cerebral_assessment')
+      .select('created_at, completed_at')
+      .eq('user_id', userId)
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('a2_user_task_completions')
+      .select('day, completed_at')
+      .eq('user_id', userId)
+      .not('completed_at', 'is', null)
+      .order('day', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('a2_user_route_progress')
+      .select('dia_actual, updated_at, fecha_inicio')
+      .eq('user_id', userId)
+      .order('updated_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('a3_user_progress')
+      .select('completed_module_ids, updated_at, created_at')
+      .eq('user_id', userId)
+      .maybeSingle(),
+    supabase
+      .from('a3_route_progression')
+      .select('route_completed_at, updated_at')
+      .eq('user_id', userId)
+      .maybeSingle(),
+  ])
 
   const a1CompletedAt =
     a1AssessmentResult.data?.completed_at ||
@@ -245,6 +257,7 @@ async function loadJourneyEvidence(
     ),
     a3UpdatedAt:
       a3Result.data?.updated_at || a3Result.data?.created_at || null,
+    a3RouteCompletedAt: a3RouteResult.data?.route_completed_at || null,
   }
 }
 
@@ -254,6 +267,7 @@ function hydrateProfileFlags(
 ): ProfileFlags {
   const hasA1Evidence = Boolean(evidence.a1CompletedAt)
   const hasA3Evidence = evidence.a3CompletedModules.length > 0
+  const hasA4Evidence = Boolean(evidence.a3RouteCompletedAt)
   const hasA2Evidence =
     evidence.a2HighestDay > 1 || Boolean(evidence.a2StartedAt) || hasA3Evidence
 
@@ -272,6 +286,8 @@ function hydrateProfileFlags(
       profile.conozcamonos_2_completed || hasA2Evidence,
     a2_route_generated: profile.a2_route_generated || hasA2Evidence,
     a3_unlocked: profile.a3_unlocked || hasA3Evidence,
+    // A4 is derived from the verified A3 route closure, not an isolated legacy flag.
+    a4_unlocked: hasA4Evidence,
   }
 }
 
@@ -289,12 +305,13 @@ function hydrateJourneyState(
     highestA2DayUnlocked,
   )
   const hasA3Evidence = evidence.a3CompletedModules.length > 0
+  const hasA4Evidence = Boolean(evidence.a3RouteCompletedAt)
   const hasA2Evidence =
     highestA2DayUnlocked > 1 || Boolean(evidence.a2StartedAt) || hasA3Evidence
 
   let currentModule: JourneyModule = 'A1'
   if (state.currentModule === 'COMPLETED') currentModule = 'COMPLETED'
-  else if (state.a4UnlockedAt || profile.a4_unlocked) currentModule = 'A4'
+  else if (hasA4Evidence) currentModule = 'A4'
   else if (state.a3UnlockedAt || profile.a3_unlocked || hasA3Evidence) {
     currentModule = 'A3'
   } else if (state.a2StartedAt || profile.a2_route_generated || hasA2Evidence) {
@@ -310,6 +327,10 @@ function hydrateJourneyState(
     a2StartedAt: state.a2StartedAt || evidence.a2StartedAt,
     a3UnlockedAt:
       state.a3UnlockedAt || (hasA3Evidence ? evidence.a3UpdatedAt : null),
+    // Ignore premature legacy timestamps unless the A3 route is actually closed.
+    a4UnlockedAt: hasA4Evidence
+      ? state.a4UnlockedAt || evidence.a3RouteCompletedAt
+      : null,
   }
 }
 
@@ -374,6 +395,7 @@ export async function requireJourneyModule(
 
   const allowed = journey.access[module.toLowerCase() as keyof JourneyAccess]
   if (!allowed) {
+    if (module === 'A4' && journey.access.a3) redirect(MODULE_ENTRY.A3)
     const next = await getCanonicalNextPath(journey.profile)
     redirect(next)
   }
