@@ -10,6 +10,8 @@ import { getActiveA3Module } from '@/lib/a3/active-module'
 import { validateA3ModuleSubmission } from '@/lib/a3/module-validation'
 import { validateJobDecoderSubmission } from '@/lib/a3/job-decoder-validation'
 import { extractCvContext } from '@/lib/a3/job-decoder'
+import { validateAnswerArchitectureSubmission } from '@/lib/a3/answer-architecture-validation'
+import { extractAnswerArchitectureContext } from '@/lib/a3/answer-architecture'
 
 interface AtomicCompletionResult {
   isFirstCompletion: boolean
@@ -111,6 +113,46 @@ export async function POST(request: NextRequest) {
         body.responses,
         body.deliverable,
         { cvBuilder: extractCvContext(cvCompletion?.deliverable) },
+      )
+    } else if (module.id === 'answer-architecture') {
+      const [cvResult, decoderResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['cv-builder-studio', 'module-3'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (cvResult.error || decoderResult.error) {
+        console.error('[v0] Answer architecture context error:', {
+          cv: cvResult.error,
+          decoder: decoderResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar el CV y la oferta analizada.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateAnswerArchitectureSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractAnswerArchitectureContext(
+          cvResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+        ),
       )
     } else {
       validation = validateA3ModuleSubmission(
