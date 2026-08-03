@@ -27,6 +27,9 @@ interface DailySnapshotHistoryProps {
 
 interface SnapshotResponse {
   success?: boolean
+  skipped?: boolean
+  reason?: string
+  message?: string
   snapshot?: A4DailyEvidenceSnapshot
   previousSnapshot?: A4DailyEvidenceSnapshot | null
   error?: string
@@ -101,8 +104,18 @@ export function DailySnapshotHistory({
         credentials: 'include',
       })
       const payload = (await response.json().catch(() => ({}))) as SnapshotResponse
-      if (!response.ok || !payload.snapshot) {
+      if (!response.ok) {
         throw new Error(payload.error || 'No pudimos guardar el corte de hoy.')
+      }
+      if (payload.skipped) {
+        setMessage(
+          payload.message ||
+            'El primer corte se creará cuando exista evidencia persistida.',
+        )
+        return
+      }
+      if (!payload.snapshot) {
+        throw new Error('El servidor no devolvió el corte calculado.')
       }
 
       setSnapshots((existing) =>
@@ -143,8 +156,8 @@ export function DailySnapshotHistory({
             Cortes diarios del Radar
           </h2>
           <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-400">
-            Un único corte por día resume contadores y cobertura. La comparación usa el
-            último día disponible; no interpreta por qué cambió cada número.
+            El servidor captura el corte diario a las 08:00 de Chile. También puedes
+            actualizar el corte del día después de registrar nueva evidencia.
           </p>
         </div>
         <Button
@@ -182,7 +195,7 @@ export function DailySnapshotHistory({
             ) : (
               <CalendarDays className="h-5 w-5" />
             )}
-            El primer corte aparecerá cuando termine el cálculo server-side.
+            El primer corte aparecerá cuando exista al menos una señal o decisión.
           </CardContent>
         </Card>
       ) : (
