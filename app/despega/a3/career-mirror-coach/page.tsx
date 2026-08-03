@@ -4,6 +4,7 @@ import {
   VerifiedCoachSession,
   type VerifiedCoachQuestion,
 } from '@/components/a3/verified-coach-session'
+import { A3ModuleAccessGate } from '@/components/a3-module-access-gate'
 
 const QUESTIONS: VerifiedCoachQuestion[] = [
   {
@@ -38,17 +39,23 @@ const QUESTIONS: VerifiedCoachQuestion[] = [
 
 export default function CareerMirrorCoachPage() {
   return (
-    <VerifiedCoachSession
+    <A3ModuleAccessGate
       moduleId="career-mirror"
       moduleNumber={1}
-      title="Espejo de Carrera"
-      questions={QUESTIONS}
-      buildDeliverable={(responses) => ({
-        careerDirection: responses[0] || '',
-        professionalIdentity: responses[1] || '',
-        coreValues: responses[2] || '',
-        personalBrand: responses[3] || '',
-      })}
-    />
+      moduleTitle="Espejo de Carrera"
+    >
+      <VerifiedCoachSession
+        moduleId="career-mirror"
+        moduleNumber={1}
+        title="Espejo de Carrera"
+        questions={QUESTIONS}
+        buildDeliverable={(responses) => ({
+          careerDirection: responses[0] || '',
+          professionalIdentity: responses[1] || '',
+          coreValues: responses[2] || '',
+          personalBrand: responses[3] || '',
+        })}
+      />
+    </A3ModuleAccessGate>
   )
 }
