@@ -8,7 +8,12 @@ import {
 } from '@/lib/journey/service'
 import { repairLegacyC2Completion } from '@/lib/journey/transitions'
 
-const MODULES: JourneyModule[] = ['C1', 'A1', 'A2', 'A3', 'A4']
+const MODULES: Array<Exclude<JourneyModule, 'COMPLETED'>> = [
+  'A1',
+  'A2',
+  'A3',
+  'A4',
+]
 
 export async function GET(request: Request) {
   try {
@@ -24,20 +29,24 @@ export async function GET(request: Request) {
     }
 
     const moduleValue = new URL(request.url).searchParams.get('module')
-    const module = MODULES.includes(moduleValue as JourneyModule)
-      ? (moduleValue as JourneyModule)
+    const module = MODULES.includes(
+      moduleValue as Exclude<JourneyModule, 'COMPLETED'>,
+    )
+      ? (moduleValue as Exclude<JourneyModule, 'COMPLETED'>)
       : null
     if (!module) {
       return NextResponse.json({ error: 'Módulo inválido' }, { status: 400 })
     }
 
-    const access = getModuleAccess(journey, module)
+    const access = getModuleAccess(journey.state, journey.profile)
+    const canAccess = access[module.toLowerCase() as keyof typeof access]
+
     return NextResponse.json({
       success: true,
       module,
-      canAccess: access.canAccess,
-      reason: access.reason,
-      nextPath: access.canAccess
+      canAccess,
+      reason: canAccess ? 'Acceso habilitado' : 'Recorrido anterior incompleto',
+      nextPath: canAccess
         ? null
         : await getCanonicalNextPath(journey.profile),
     })
