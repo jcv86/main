@@ -127,6 +127,9 @@ jobs:
       - name: A4 daily cron contract
         run: npx tsx scripts/check-a4-daily-cron-contract.ts
 
+      - name: A1 through C4 continuity contract
+        run: npx tsx scripts/check-a1-c4-end-to-end-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
