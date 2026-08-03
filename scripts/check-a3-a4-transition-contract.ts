@@ -63,11 +63,16 @@ assert.ok(clientCompletion.includes('window.location.assign(payload.nextPath)'))
 assert.ok(clientCompletion.includes('basic-interview-mission'))
 
 assert.ok(a4Layout.includes("requireJourneyModule('A4')"))
-assert.ok(a4Page.includes('getSharedJourneyContext'))
-assert.ok(a4Page.includes('No hay una lectura estratégica verificada todavía'))
-assert.ok(a4Page.includes('No inventa señales'))
-assert.ok(a4Page.includes('context.a4.documents'))
-assert.ok(a4Page.includes('context.a4.strategicScore'))
+assert.ok(a4Page.includes('getJourneyForCurrentUser'))
+assert.ok(a4Page.includes("if (!journey.access.a4) redirect('/despega/a3')"))
+assert.ok(a4Page.includes('journey.state.a4UnlockedAt'))
+assert.ok(a4Page.includes(".from('a4_verified_signals')"))
+assert.ok(a4Page.includes(".from('a4_decision_log')"))
+assert.ok(a4Page.includes('Evidencia antes que opinión'))
+assert.ok(a4Page.includes('no inventa noticias'))
+assert.ok(!a4Page.includes(".from('a4_noticias')"))
+assert.ok(!a4Page.includes(".from('a4_signal_history')"))
+assert.ok(!a4Page.includes(".from('a4_strategic_score')"))
 assert.ok(!a4Page.includes('PersonalizedRadarSystem'))
 assert.ok(!a4Page.includes('JobRecommendationsCard'))
 assert.ok(!a4Page.includes('LinkedInProfileCard'))
@@ -91,5 +96,6 @@ console.log(
     clientConfirmationRequired: true,
     dashboardAligned: true,
     a4UsesPersistedEvidenceOnly: true,
+    a4DirectAccessGuarded: true,
   }),
 )
