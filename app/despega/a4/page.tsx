@@ -12,6 +12,7 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { EvidencePulse } from '@/components/a4/evidence-pulse'
 import { StrategicRadarWorkspace } from '@/components/a4/strategic-radar-workspace'
 import { getJourneyForCurrentUser } from '@/lib/journey/service'
 import { createAdminClient } from '@/lib/supabase/server'
@@ -200,6 +201,8 @@ export default async function RadarEstrategicoPage() {
             ))}
           </CardContent>
         </Card>
+
+        <EvidencePulse signals={signals} decisions={decisions} />
 
         <StrategicRadarWorkspace
           initialSignals={signals}
