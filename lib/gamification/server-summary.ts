@@ -11,7 +11,9 @@ export interface GamificationSummary {
   levelLabel: string
   xpToNextLevel: number
   dailyStreak: number
+  bestStreak: number
   totalPoints: number
+  totalTipsEarned: number
   badges: string[]
   training: {
     xp: number
@@ -45,7 +47,9 @@ export function emptyGamificationSummary(): GamificationSummary {
     levelLabel: 'Bronze',
     xpToNextLevel: XP_PER_LEVEL,
     dailyStreak: 0,
+    bestStreak: 0,
     totalPoints: 0,
+    totalTipsEarned: 0,
     badges: [],
     training: {
       xp: 0,
@@ -75,7 +79,7 @@ export async function getGamificationSummary(
       supabase
         .from('user_gamification_profile')
         .select(
-          'current_level, total_xp, interview_streak, total_interviews_completed, badges, achievements',
+          'current_level, total_xp, interview_streak, best_interview_streak, total_interviews_completed, total_tips_earned_free, total_tips_earned_premium, badges, achievements',
         )
         .eq('user_id', userId)
         .maybeSingle(),
@@ -149,7 +153,11 @@ export async function getGamificationSummary(
         : `Nivel ${currentLevel}`,
     xpToNextLevel,
     dailyStreak: Math.max(0, Number(profile?.interview_streak) || 0),
+    bestStreak: Math.max(0, Number(profile?.best_interview_streak) || 0),
     totalPoints: Math.max(0, Number(balanceResult.data?.balance) || 0),
+    totalTipsEarned:
+      Math.max(0, Number(profile?.total_tips_earned_free) || 0) +
+      Math.max(0, Number(profile?.total_tips_earned_premium) || 0),
     badges: [...new Set(badges)],
     training: {
       xp: coreXp,
