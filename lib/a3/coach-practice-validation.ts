@@ -76,7 +76,8 @@ export function validateCoachPracticeSubmission(
   const draft = toDraft(deliverableValue)
 
   const originalComplete = COACH_PRACTICE_SESSIONS.every(
-    (session) => countCoachWords(draft[session.originalKey]) >= session.minimumWords,
+    (session) =>
+      countCoachWords(draft[session.originalKey]) >= session.minimumOriginalWords,
   )
   const improvedComplete = COACH_PRACTICE_SESSIONS.every(
     (session) => countCoachWords(draft[session.improvedKey]) >= session.minimumWords,
