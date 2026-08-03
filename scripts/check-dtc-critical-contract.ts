@@ -113,7 +113,8 @@ for (const [path, content] of [
 assert.ok(authHook.includes('router.push(SIGN_IN_PATH)'))
 assert.ok(authHook.includes("window.localStorage.removeItem('demo_user')"))
 assert.ok(!authHook.includes('isInitialCheck'))
-assert.ok(adminGuard.includes('href={SIGN_IN_PATH}'))
+assert.ok(adminGuard.includes('AdminUnavailable'))
+assert.ok(!adminGuard.includes('NEXT_PUBLIC_ADMIN_EMAILS'))
 assert.ok(!adminGuard.includes('/auth/login'))
 
 assert.match(legacyA2Dashboard, /redirect\(['"]\/despega\/a2['"]\)/)
@@ -195,6 +196,7 @@ console.log(
     canonicalRoutes: PRODUCT_STAGE_ORDER.map((stageId) => PRODUCT_STAGES[stageId].href),
     canonicalProfile: true,
     canonicalSignin: '/auth/signin',
+    adminSurfaceUnavailable: true,
     legacyJourneyRedirects: true,
     canonicalA2Cycles: ['30', '60', '90'],
     canonicalDayCompletion: true,
