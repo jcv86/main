@@ -29,6 +29,18 @@ const ANSWER_ARCHITECTURE_DELIVERABLE_KEYS = [
   'timing60',
 ]
 
+const COACH_PRACTICE_DELIVERABLE_KEYS = [
+  'introOriginal',
+  'introImproved',
+  'introLearning',
+  'motivationOriginal',
+  'motivationImproved',
+  'motivationLearning',
+  'challengeOriginal',
+  'challengeImproved',
+  'challengeLearning',
+]
+
 export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
   const module = getA3Module(value)
   if (!module) return null
@@ -38,7 +50,9 @@ export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
       ? JOB_DECODER_DELIVERABLE_KEYS
       : module.id === 'answer-architecture'
         ? ANSWER_ARCHITECTURE_DELIVERABLE_KEYS
-        : null
+        : module.id === 'coach-practice-room'
+          ? COACH_PRACTICE_DELIVERABLE_KEYS
+          : null
 
   if (!requiredDeliverableKeys) return module
 
