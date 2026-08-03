@@ -43,10 +43,16 @@ function errorMessage(payload: A3CompletionPayload): string {
     : payload.error || 'No pudimos completar el entrenamiento.'
 }
 
+function completionEndpoint(moduleId: A3ModuleId): string {
+  return moduleId === 'risk-difficult-questions-lab'
+    ? '/api/a3/module-completion/risk-difficult-questions-lab'
+    : '/api/a3/module-completion'
+}
+
 export async function completeA3Module(
   input: CompleteA3ModuleInput,
 ): Promise<A3CompletionPayload> {
-  const response = await fetch('/api/a3/module-completion', {
+  const response = await fetch(completionEndpoint(input.moduleId), {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     credentials: 'include',
