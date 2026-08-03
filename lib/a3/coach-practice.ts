@@ -34,6 +34,7 @@ export interface CoachPracticeSessionDefinition {
   originalKey: keyof CoachPracticeDraft
   improvedKey: keyof CoachPracticeDraft
   learningKey: keyof CoachPracticeDraft
+  minimumOriginalWords: number
   minimumWords: number
   coachFocus: string
 }
@@ -46,6 +47,7 @@ export const COACH_PRACTICE_SESSIONS: readonly CoachPracticeSessionDefinition[] 
     originalKey: 'introOriginal',
     improvedKey: 'introImproved',
     learningKey: 'introLearning',
+    minimumOriginalWords: 25,
     minimumWords: 30,
     coachFocus: 'Identidad profesional, foco del rol, evidencia y cierre claro.',
   },
@@ -56,6 +58,7 @@ export const COACH_PRACTICE_SESSIONS: readonly CoachPracticeSessionDefinition[] 
     originalKey: 'motivationOriginal',
     improvedKey: 'motivationImproved',
     learningKey: 'motivationLearning',
+    minimumOriginalWords: 25,
     minimumWords: 40,
     coachFocus: 'Conexión con empresa, rol, contribución y motivación específica.',
   },
@@ -66,6 +69,7 @@ export const COACH_PRACTICE_SESSIONS: readonly CoachPracticeSessionDefinition[] 
     originalKey: 'challengeOriginal',
     improvedKey: 'challengeImproved',
     learningKey: 'challengeLearning',
+    minimumOriginalWords: 35,
     minimumWords: 65,
     coachFocus: 'Situación, tarea, acción propia, resultado y aprendizaje.',
   },
