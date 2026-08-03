@@ -1,10 +1,8 @@
 'use client'
 
-import React from 'react'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
-import { Badge } from '@/components/ui/badge'
-import { Flame, Trophy, Star, Zap, Award } from 'lucide-react'
+import { Award, Flame, Star, Trophy } from 'lucide-react'
 
 interface GamificationProfileProps {
   userId: string
@@ -18,37 +16,31 @@ interface GamificationProfileProps {
   totalTipsEarned: number
 }
 
-const LEVEL_COLORS = {
-  Bronze: 'from-amber-600700',
-  Silver: 'from-gray-400500',
-  Gold: 'from-yellow-400600',
-  Platinum: 'from-cyan-400500',
-  Diamond: 'from-indigo-500'
-}
+const XP_PER_LEVEL = 1000
 
-const LEVEL_ICONS = {
+const LEVEL_ICONS: Record<string, string> = {
   Bronze: '🥉',
   Silver: '🥈',
   Gold: '🥇',
   Platinum: '💎',
-  Diamond: ''
+  Diamond: '🏆',
+  Elite: '👑',
 }
 
 const BADGE_ICONS: Record<string, string> = {
   'First Interview': '🎬',
-  'Interview Starter': '',
-  'Interview Master': '',
+  'Interview Starter': '🎯',
+  'Interview Master': '🏆',
   'Interview Legend': '👑',
   'Week Warrior': '🔥',
   'Monthly Master': '⚡',
   'Perfect Score': '💯',
   'Bronze Graduate': '🥉',
   'Silver Climber': '🥈',
-  'Gold Achiever': '🥇'
+  'Gold Achiever': '🥇',
 }
 
 export function GamificationProfile({
-  userId,
   level,
   currentXp,
   totalXp,
@@ -56,85 +48,84 @@ export function GamificationProfile({
   bestStreak,
   interviewsCompleted,
   badges,
-  totalTipsEarned
+  totalTipsEarned,
 }: GamificationProfileProps) {
-  const nextLevelXp = totalXp + 500
-  const xpPercentage = (currentXp / 500) * 100
+  const safeCurrentXp = Math.max(0, Math.min(XP_PER_LEVEL, currentXp))
+  const xpPercentage = (safeCurrentXp / XP_PER_LEVEL) * 100
+  const uniqueBadges = [...new Set(badges)]
 
   return (
     <div className="w-full space-y-6">
-      {/* Main Level Card */}
-      <Card className="relative overflow-hidden">
-        <div className="absolute inset-0 bg-background"></div>
-        <div className="relative p-8">
-          <div className="flex items-center justify-between mb-6">
-            <div>
-              <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">Current Level</p>
-              <div className="flex items-center gap-3">
-                <span className="text-6xl">{LEVEL_ICONS[level as keyof typeof LEVEL_ICONS]}</span>
-                <div>
-                  <h2 className="text-3xl font-bold text-foreground">{level}</h2>
-                  <p className="text-muted-foreground">Total XP: {totalXp.toLocaleString()}</p>
-                </div>
+      <Card className="p-8">
+        <div className="flex flex-col gap-6 md:flex-row md:items-center md:justify-between">
+          <div>
+            <p className="text-sm font-semibold text-muted-foreground uppercase mb-2">
+              Nivel actual
+            </p>
+            <div className="flex items-center gap-3">
+              <span className="text-5xl">{LEVEL_ICONS[level] || '🎯'}</span>
+              <div>
+                <h2 className="text-3xl font-bold text-foreground">{level}</h2>
+                <p className="text-muted-foreground">
+                  XP total: {totalXp.toLocaleString()}
+                </p>
               </div>
             </div>
-            <div className="text-right">
-              <div className="text-4xl font-bold text-blue mb-2">{interviewsCompleted}</div>
-              <p className="text-sm text-muted-foreground">Interviews Completed</p>
-            </div>
           </div>
-
-          {/* XP Progress */}
-          <div className="mb-6">
-            <div className="flex justify-between mb-2">
-              <p className="text-sm font-semibold text-muted">XP to Next Level</p>
-              <p className="text-sm font-semibold text-muted">{currentXp}/500</p>
+          <div className="text-left md:text-right">
+            <div className="text-4xl font-bold text-training mb-1">
+              {interviewsCompleted}
             </div>
-            <Progress value={xpPercentage} className="h-3" />
+            <p className="text-sm text-muted-foreground">Entrevistas completadas</p>
           </div>
+        </div>
 
-          {/* Stats Grid */}
-          <div className="grid grid-cols-4 gap-4">
-            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
-              <Flame className="w-6 h-6 text-red mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">{streak}</p>
-              <p className="text-xs text-muted-foreground">Current Streak</p>
-            </div>
-            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
-              <Trophy className="w-6 h-6 text-orange mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">{bestStreak}</p>
-              <p className="text-xs text-muted-foreground">Best Streak</p>
-            </div>
-            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
-              <Star className="w-6 h-6 text-amber-500 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">{totalTipsEarned}</p>
-              <p className="text-xs text-muted-foreground">Tips Earned</p>
-            </div>
-            <div className="bg-purple-500/50 rounded-[28px] p-4 text-center">
-              <Award className="w-6 h-6 text-purple/50 mx-auto mb-2" />
-              <p className="text-2xl font-bold text-foreground">{badges.length}</p>
-              <p className="text-xs text-muted-foreground">Badges</p>
-            </div>
+        <div className="mt-8">
+          <div className="flex justify-between mb-2">
+            <p className="text-sm font-semibold text-muted-foreground">
+              Progreso del nivel
+            </p>
+            <p className="text-sm font-semibold text-muted-foreground">
+              {safeCurrentXp}/{XP_PER_LEVEL} XP
+            </p>
+          </div>
+          <Progress value={xpPercentage} className="h-3" />
+        </div>
+
+        <div className="grid grid-cols-2 gap-4 mt-8 md:grid-cols-4">
+          <div className="rounded-[20px] bg-muted/10 p-4 text-center">
+            <Flame className="w-6 h-6 text-red mx-auto mb-2" />
+            <p className="text-2xl font-bold">{streak}</p>
+            <p className="text-xs text-muted-foreground">Racha actual</p>
+          </div>
+          <div className="rounded-[20px] bg-muted/10 p-4 text-center">
+            <Trophy className="w-6 h-6 text-orange mx-auto mb-2" />
+            <p className="text-2xl font-bold">{bestStreak}</p>
+            <p className="text-xs text-muted-foreground">Mejor racha</p>
+          </div>
+          <div className="rounded-[20px] bg-muted/10 p-4 text-center">
+            <Star className="w-6 h-6 text-amber-500 mx-auto mb-2" />
+            <p className="text-2xl font-bold">{totalTipsEarned}</p>
+            <p className="text-xs text-muted-foreground">Consejos obtenidos</p>
+          </div>
+          <div className="rounded-[20px] bg-muted/10 p-4 text-center">
+            <Award className="w-6 h-6 text-training mx-auto mb-2" />
+            <p className="text-2xl font-bold">{uniqueBadges.length}</p>
+            <p className="text-xs text-muted-foreground">Logros</p>
           </div>
         </div>
       </Card>
 
-      {/* Badges Section */}
-      {badges.length > 0 && (
+      {uniqueBadges.length > 0 && (
         <Card className="p-6">
           <h3 className="text-lg font-bold text-foreground mb-4 flex items-center gap-2">
-            <Award className="w-5 h-5 text-purple/50" />
-            Your Achievements
+            <Award className="w-5 h-5 text-training" />
+            Logros
           </h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-            {badges.map((badge) => (
-              <div
-                key={badge}
-                className="flex flex-col items-center gap-2 p-4 bg-background"
-              >
-                <span className="text-4xl">
-                  {BADGE_ICONS[badge] || '🎖️'}
-                </span>
+            {uniqueBadges.map((badge) => (
+              <div key={badge} className="flex flex-col items-center gap-2 p-4">
+                <span className="text-4xl">{BADGE_ICONS[badge] || '🎖️'}</span>
                 <p className="text-xs font-semibold text-center text-foreground">
                   {badge}
                 </p>
@@ -143,48 +134,6 @@ export function GamificationProfile({
           </div>
         </Card>
       )}
-
-      {/* Progress Path */}
-      <Card className="p-6">
-        <h3 className="text-lg font-bold text-foreground mb-4">Level Progression Path</h3>
-        <div className="flex items-center justify-between mb-6">
-          {['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].map((lvl, idx) => (
-            <div key={lvl} className="flex flex-col items-center">
-              <div
-                className={`w-12 h-12 rounded-full flex items-center justify-center text-2xl font-bold ${
-                  ['Bronze', 'Silver', 'Gold', 'Platinum', 'Diamond'].indexOf(level) >= idx
-                    ? 'bg-background'
-                    : 'bg-muted/20 text-muted-foreground'
-                }`}
-              >
-                {LEVEL_ICONS[lvl as keyof typeof LEVEL_ICONS]}
-              </div>
-              <p className="text-xs font-semibold text-muted-foreground mt-2">{lvl}</p>
-              <p className="text-xs text-muted-foreground">
-                {idx * 1000}-{(idx + 1) * 1000} XP
-              </p>
-            </div>
-          ))}
-        </div>
-      </Card>
-
-      {/* Streak Information */}
-      <Card className="p-6 bg-background">
-        <div className="flex items-start gap-4">
-          <Flame className="w-8 h-8 text-red flex-shrink-0" />
-          <div>
-            <h3 className="text-lg font-bold text-foreground">Maintain Your Streak!</h3>
-            <p className="text-sm text-muted mt-2">
-              {streak === 0
-                ? 'Complete an interview today to start your streak!'
-                : `You're on a ${streak}-day streak! Complete another interview tomorrow to keep it going.`}
-            </p>
-            <p className="text-xs text-muted-foreground mt-2">
-               Tip: Streaks are the best way to develop interview skills consistently
-            </p>
-          </div>
-        </div>
-      </Card>
     </div>
   )
 }
