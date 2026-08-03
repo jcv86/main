@@ -16,6 +16,8 @@ import { validateCoachPracticeSubmission } from '@/lib/a3/coach-practice-validat
 import { extractCoachPracticeContext } from '@/lib/a3/coach-practice'
 import { validateCommunicationGymSubmission } from '@/lib/a3/communication-gym-validation'
 import { extractCommunicationGymContext } from '@/lib/a3/communication-gym'
+import { validateFirstRecruiterSimulationSubmission } from '@/lib/a3/first-recruiter-simulation-validation'
+import { extractFirstRecruiterContext } from '@/lib/a3/first-recruiter-simulation'
 
 interface AtomicCompletionResult {
   isFirstCompletion: boolean
@@ -246,6 +248,56 @@ export async function POST(request: NextRequest) {
         extractCommunicationGymContext(
           coachResult.data?.deliverable,
           decoderResult.data?.deliverable,
+        ),
+      )
+    } else if (module.id === 'first-recruiter-simulation') {
+      const [cvResult, decoderResult, answersResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['cv-builder-studio', 'module-3'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['answer-architecture', 'module-5'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (cvResult.error || decoderResult.error || answersResult.error) {
+        console.error('[v0] First recruiter simulation context error:', {
+          cv: cvResult.error,
+          decoder: decoderResult.error,
+          answers: answersResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar el CV, la oferta y las respuestas previas.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateFirstRecruiterSimulationSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractFirstRecruiterContext(
+          cvResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+          answersResult.data?.deliverable,
         ),
       )
     } else {
