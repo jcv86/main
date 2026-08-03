@@ -20,6 +20,8 @@ export interface A3CompletionPayload {
   totalXp?: number
   score?: number
   bestScore?: number
+  routeCompleted?: boolean
+  proUnlocked?: boolean
   validation?: A3CompletionValidation
   error?: string
 }
@@ -44,9 +46,13 @@ function errorMessage(payload: A3CompletionPayload): string {
 }
 
 function completionEndpoint(moduleId: A3ModuleId): string {
-  return moduleId === 'risk-difficult-questions-lab'
-    ? '/api/a3/module-completion/risk-difficult-questions-lab'
-    : '/api/a3/module-completion'
+  if (moduleId === 'risk-difficult-questions-lab') {
+    return '/api/a3/module-completion/risk-difficult-questions-lab'
+  }
+  if (moduleId === 'basic-interview-mission') {
+    return '/api/a3/module-completion/basic-interview-mission'
+  }
+  return '/api/a3/module-completion'
 }
 
 export async function completeA3Module(

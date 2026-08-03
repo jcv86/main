@@ -76,6 +76,17 @@ const DIFFICULT_QUESTIONS_DELIVERABLE_KEYS = [
   'reflection',
 ]
 
+const BASIC_INTERVIEW_MISSION_DELIVERABLE_KEYS = [
+  'answers',
+  'evaluation',
+  'strongestAnswer',
+  'weakestAnswer',
+  'difficultQuestionLearning',
+  'nextPracticeAction',
+  'routeReflection',
+  'readinessState',
+]
+
 export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
   const module = getA3Module(value)
   if (!module) return null
@@ -93,7 +104,9 @@ export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
               ? FIRST_RECRUITER_SIMULATION_DELIVERABLE_KEYS
               : module.id === 'risk-difficult-questions-lab'
                 ? DIFFICULT_QUESTIONS_DELIVERABLE_KEYS
-                : null
+                : module.id === 'basic-interview-mission'
+                  ? BASIC_INTERVIEW_MISSION_DELIVERABLE_KEYS
+                  : null
 
   if (!requiredDeliverableKeys) return module
 
