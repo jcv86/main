@@ -16,12 +16,12 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 |---|---:|
 | Runtime only | 1 |
 | Mixed runtime + source | 21 |
-| Source only | 2 |
+| Source only | 3 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
 
-El workflow valida 24 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
+El workflow valida 25 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`. El contrato de integridad de gamificación comprueba de forma estática que los endpoints no acepten IDs, puntajes, montos ni compras controlados por el navegador, y que la migración reserve las escrituras para el servidor.
 
 ## Lo que un verde sí demuestra
 
