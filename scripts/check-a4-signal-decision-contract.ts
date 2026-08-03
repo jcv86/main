@@ -95,6 +95,9 @@ const completedReview = validateDecisionUpdate({
 assert.equal(completedReview.valid, true, completedReview.errors.join('; '))
 
 const migration = source('migrations/08-a4-signal-decision-log.sql')
+const hardeningMigration = source(
+  'migrations/10-a4-server-owned-write-hardening.sql',
+)
 const radarModel = source('lib/a4/strategic-radar.ts')
 const signalRoute = source('app/api/a4/signals/route.ts')
 const decisionRoute = source('app/api/a4/decisions/route.ts')
@@ -108,10 +111,43 @@ assert.ok(migration.includes("classification in ('fact', 'hypothesis')"))
 assert.ok(migration.includes('source_date date not null'))
 assert.ok(migration.includes('alter table public.a4_verified_signals enable row level security'))
 assert.ok(migration.includes('alter table public.a4_decision_log enable row level security'))
-assert.ok(migration.includes('to authenticated'))
-assert.ok(migration.includes('with check'))
 assert.ok(migration.includes('(user_id, created_at desc)'))
 assert.ok(!migration.includes('auth.role()'))
+
+for (const table of ['a4_verified_signals', 'a4_decision_log']) {
+  assert.ok(
+    hardeningMigration.includes(
+      `revoke all on public.${table} from anon, authenticated`,
+    ),
+  )
+  assert.ok(
+    hardeningMigration.includes(
+      `grant select on public.${table} to authenticated`,
+    ),
+  )
+  assert.ok(
+    hardeningMigration.includes(`grant all on public.${table} to service_role`),
+  )
+}
+for (const policy of [
+  'Users create own verified signals',
+  'Users update own verified signals',
+  'Users delete own verified signals',
+  'Users create own decisions',
+  'Users update own decisions',
+  'Users delete own decisions',
+]) {
+  assert.ok(hardeningMigration.includes(`drop policy if exists "${policy}"`))
+}
+assert.ok(
+  hardeningMigration.includes(
+    'revoke all on function public.set_a4_canonical_updated_at()',
+  ),
+)
+assert.ok(hardeningMigration.includes('from public, anon, authenticated'))
+assert.ok(!hardeningMigration.includes('grant insert'))
+assert.ok(!hardeningMigration.includes('grant update'))
+assert.ok(!hardeningMigration.includes('grant delete'))
 
 assert.ok(radarModel.includes('Hecho verificable'))
 assert.ok(radarModel.includes('Hipótesis por contrastar'))
@@ -124,10 +160,12 @@ assert.ok(access.includes(".select('route_completed_at')"))
 assert.ok(signalRoute.includes('resolveServerUser()'))
 assert.ok(signalRoute.includes('checkA4Access('))
 assert.ok(signalRoute.includes('validateSignalInput('))
+assert.ok(signalRoute.includes('createAdminClient()'))
 assert.ok(signalRoute.includes(".eq('user_id', resolved.currentUser!.id)"))
 assert.ok(decisionRoute.includes('resolveServerUser()'))
 assert.ok(decisionRoute.includes('checkA4Access('))
 assert.ok(decisionRoute.includes('validateDecisionInput('))
+assert.ok(decisionRoute.includes('createAdminClient()'))
 assert.ok(decisionRoute.includes(".from('a4_verified_signals')"))
 assert.ok(decisionRoute.includes(".eq('user_id', resolved.currentUser!.id)"))
 assert.ok(decisionRoute.includes('validateDecisionUpdate('))
@@ -147,13 +185,22 @@ assert.ok(!workspace.includes('action_recommended'))
 
 console.log(
   JSON.stringify({
-    canonicalSignalTable: true,
-    canonicalDecisionTable: true,
-    sourceAndDateRequired: true,
-    factHypothesisSeparation: true,
-    serverOwnedWrites: true,
-    verifiedA4Access: true,
-    explicitReviewLoop: true,
-    legacyNewsExcluded: true,
+    evidenceLevel: 'mixed_runtime_and_source_contract',
+    runtimeValidated: [
+      'signal input',
+      'future source rejection',
+      'missing source rejection',
+      'decision input',
+      'review outcome requirement',
+    ],
+    sourceContractsChecked: [
+      'canonical tables',
+      'RLS declarations',
+      'API validation wiring',
+      'server-owned write hardening migration',
+      'legacy news exclusion',
+    ],
+    liveDatabaseCheckedInThisScript: false,
+    liveHttpCheckedInThisScript: false,
   }),
 )
