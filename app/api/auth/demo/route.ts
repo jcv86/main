@@ -1,21 +1,23 @@
 import { NextResponse } from 'next/server'
 import {
-  createDemoSessionToken,
   DEMO_COOKIE_NAME,
   demoSessionCookieOptions,
-  getTravisDemoUser,
 } from '@/lib/auth/demo-user'
 
 export async function POST() {
-  try {
-    const token = await createDemoSessionToken()
-    const user = getTravisDemoUser()
-    const response = NextResponse.json({ user })
-    response.cookies.set(DEMO_COOKIE_NAME, token, demoSessionCookieOptions)
-    return response
-  } catch {
-    return NextResponse.json({ error: 'Demo access is not configured' }, { status: 503 })
-  }
+  const response = NextResponse.json(
+    {
+      error: 'El acceso demo fue retirado.',
+      code: 'DEMO_AUTH_RETIRED',
+    },
+    { status: 410 },
+  )
+
+  response.cookies.set(DEMO_COOKIE_NAME, '', {
+    ...demoSessionCookieOptions,
+    maxAge: 0,
+  })
+  return response
 }
 
 export async function DELETE() {
