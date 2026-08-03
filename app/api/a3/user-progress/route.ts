@@ -117,27 +117,21 @@ export async function GET() {
       moduleStates[id] = 'completed'
     })
 
-    const moduleResults = Object.fromEntries(
-      (completionResult.data || [])
-        .map((row: Record<string, unknown>) => {
-          const moduleId = normalizeA3ModuleId(row.module_id)
-          if (!moduleId) return null
-          return [
-            moduleId,
-            {
-              bestScore: Math.max(0, Number(row.best_score) || 0),
-              totalAttempts: Math.max(0, Number(row.total_attempts) || 0),
-              completedAt: isoValue(row.completed_at),
-            },
-          ] as const
-        })
-        .filter(
-          (entry): entry is readonly [
-            A3ModuleId,
-            { bestScore: number; totalAttempts: number; completedAt: string | null },
-          ] => Boolean(entry),
-        ),
-    )
+    const moduleResults: Partial<
+      Record<
+        A3ModuleId,
+        { bestScore: number; totalAttempts: number; completedAt: string | null }
+      >
+    > = {}
+    for (const row of completionResult.data || []) {
+      const moduleId = normalizeA3ModuleId(row.module_id)
+      if (!moduleId) continue
+      moduleResults[moduleId] = {
+        bestScore: Math.max(0, Number(row.best_score) || 0),
+        totalAttempts: Math.max(0, Number(row.total_attempts) || 0),
+        completedAt: isoValue(row.completed_at),
+      }
+    }
 
     const nextAvailableModule = accessStates.find(
       (state) => state.status === 'available' || state.status === 'in_progress',
