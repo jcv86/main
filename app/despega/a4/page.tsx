@@ -12,8 +12,13 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { DailySnapshotHistory } from '@/components/a4/daily-snapshot-history'
 import { EvidencePulse } from '@/components/a4/evidence-pulse'
 import { StrategicRadarWorkspace } from '@/components/a4/strategic-radar-workspace'
+import {
+  normalizeA4DailySnapshot,
+  type A4DailyEvidenceSnapshot,
+} from '@/lib/a4/daily-snapshots'
 import { getJourneyForCurrentUser } from '@/lib/journey/service'
 import { createAdminClient } from '@/lib/supabase/server'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
@@ -44,36 +49,49 @@ export default async function RadarEstrategicoPage() {
 
   const supabase = createAdminClient()
   const userId = journey.user.id
-  const [a3Result, documentsResult, signalsResult, decisionsResult] =
-    await Promise.all([
-      supabase
-        .from('a3_session_attempts')
-        .select('module_id,status,score,created_at')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false }),
-      supabase
-        .from('dtc_documents')
-        .select('id,title,type,status,created_at')
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(20),
-      supabase
-        .from('a4_verified_signals')
-        .select(
-          'id,title,category,classification,summary,relevance,confidence,source_type,source_name,source_url,source_reference,source_date,status,created_at,updated_at',
-        )
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(100),
-      supabase
-        .from('a4_decision_log')
-        .select(
-          'id,signal_id,decision,rationale,expected_evidence,status,review_on,outcome,reviewed_at,created_at,updated_at',
-        )
-        .eq('user_id', userId)
-        .order('created_at', { ascending: false })
-        .limit(100),
-    ])
+  const [
+    a3Result,
+    documentsResult,
+    signalsResult,
+    decisionsResult,
+    snapshotsResult,
+  ] = await Promise.all([
+    supabase
+      .from('a3_session_attempts')
+      .select('module_id,status,score,created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false }),
+    supabase
+      .from('dtc_documents')
+      .select('id,title,type,status,created_at')
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(20),
+    supabase
+      .from('a4_verified_signals')
+      .select(
+        'id,title,category,classification,summary,relevance,confidence,source_type,source_name,source_url,source_reference,source_date,status,created_at,updated_at',
+      )
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(100),
+    supabase
+      .from('a4_decision_log')
+      .select(
+        'id,signal_id,decision,rationale,expected_evidence,status,review_on,outcome,reviewed_at,created_at,updated_at',
+      )
+      .eq('user_id', userId)
+      .order('created_at', { ascending: false })
+      .limit(100),
+    supabase
+      .from('a4_daily_evidence_snapshots')
+      .select(
+        'id,snapshot_date,timezone,priority,active_signals,facts,hypotheses,recent_signals,stale_signals,low_confidence_hypotheses,covered_categories,category_counts,overdue_reviews,reviews_today,reviews_next_7_days,reviews_later,open_decisions,closed_decisions,created_at,updated_at',
+      )
+      .eq('user_id', userId)
+      .order('snapshot_date', { ascending: false })
+      .limit(31),
+  ])
 
   if (a3Result.error) console.error('[v0] A4 A3 context error:', a3Result.error)
   if (documentsResult.error) {
@@ -82,6 +100,9 @@ export default async function RadarEstrategicoPage() {
   if (signalsResult.error) console.error('[v0] A4 signal context error:', signalsResult.error)
   if (decisionsResult.error) {
     console.error('[v0] A4 decision context error:', decisionsResult.error)
+  }
+  if (snapshotsResult.error) {
+    console.error('[v0] A4 snapshot history error:', snapshotsResult.error)
   }
 
   const completedSessions = (a3Result.data ?? []).filter(
@@ -102,6 +123,9 @@ export default async function RadarEstrategicoPage() {
   const documents = documentsResult.data ?? []
   const signals = (signalsResult.data ?? []) as A4VerifiedSignal[]
   const decisions = (decisionsResult.data ?? []) as A4Decision[]
+  const snapshots: A4DailyEvidenceSnapshot[] = (snapshotsResult.data ?? []).map(
+    (row) => normalizeA4DailySnapshot(row as Record<string, unknown>),
+  )
 
   return (
     <main className="min-h-screen bg-slate-950 px-4 py-10 text-white">
@@ -203,6 +227,8 @@ export default async function RadarEstrategicoPage() {
         </Card>
 
         <EvidencePulse signals={signals} decisions={decisions} />
+
+        <DailySnapshotHistory initialSnapshots={snapshots} />
 
         <div id="a4-workspace" className="scroll-mt-6">
           <StrategicRadarWorkspace
