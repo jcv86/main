@@ -68,12 +68,11 @@ const validDecision = validateDecisionInput(
   now,
 )
 assert.equal(validDecision.valid, true, validDecision.errors.join('; '))
+assert.ok(validDecision.value)
 
 const pastDecision = validateDecisionInput(
   {
     ...validDecision.value,
-    signalId: '11111111-1111-4111-8111-111111111111',
-    expectedEvidence: validDecision.value?.expectedEvidence,
     reviewOn: '2026-08-01',
   },
   now,
