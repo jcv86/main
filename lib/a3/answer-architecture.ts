@@ -97,7 +97,7 @@ export const SAMPLE_ANSWER_ARCHITECTURE: AnswerArchitectureDraft = {
   strengthEvidence:
     'Mi principal fortaleza es transformar información dispersa en decisiones claras. En mi último equipo implementé un sistema de seguimiento con responsables, riesgos y próximos hitos, lo que redujo 22% los atrasos y mejoró la coordinación entre áreas.',
   challengeStar:
-    'Situación: un proyecto crítico acumulaba atrasos y no existía una visión compartida de las dependencias. Tarea: debía recuperar el control sin detener la operación. Acción: levanté riesgos, ordené responsables, definí hitos semanales y establecí una revisión ejecutiva breve. Resultado: el equipo recuperó el calendario, redujo 22% los atrasos y dejó un sistema reutilizable para proyectos posteriores.',
+    'Situación: un proyecto crítico acumulaba atrasos y no existía una visión compartida de las dependencias. Tarea: debía recuperar el control sin detener la operación y alinear a responsables con prioridades distintas. Acción: levanté riesgos, ordené responsables, definí hitos semanales y establecí una revisión ejecutiva breve para resolver bloqueos. Resultado: el equipo recuperó el calendario, redujo 22% los atrasos y dejó un sistema reutilizable para proyectos posteriores. El aprendizaje fue anticipar dependencias antes de que se transformen en urgencias.',
   whyHire:
     'Puedo aportar una combinación de coordinación transversal, documentación y mejora continua. Ya he convertido operaciones poco visibles en sistemas medibles y puedo aplicar esa experiencia para fortalecer el seguimiento, anticipar riesgos y acelerar la ejecución del equipo.',
   timing30:
