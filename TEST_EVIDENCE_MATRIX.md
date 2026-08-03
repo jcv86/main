@@ -16,14 +16,18 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 |---|---:|
 | Runtime only | 1 |
 | Mixed runtime + source | 21 |
-| Source only | 4 |
+| Source only | 5 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
 
-El workflow valida 26 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
+El workflow valida 27 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
 
-El contrato de integridad de gamificación comprueba de forma estática que los endpoints no acepten IDs, puntajes, montos ni compras controlados por el navegador, y que la migración reserve las escrituras para el servidor. El contrato de retiro de simulaciones A3 verifica que ocho rutas heredadas ya no ejecuten puntajes aleatorios, escrituras desde el cliente o flujos paralelos, sino que redirijan a módulos canónicos.
+Los contratos adicionales comprueban que:
+
+- los endpoints de gamificación no acepten IDs, puntajes, montos ni compras controlados por el navegador;
+- ocho rutas heredadas de A3 no ejecuten puntajes aleatorios, escrituras desde el cliente o flujos paralelos;
+- cada combinación sesión/pregunta de entrevista tenga una sola respuesta y que el guardado con la suma de XP ocurra dentro de una transacción atómica del servidor.
 
 ## Lo que un verde sí demuestra
 

@@ -4,6 +4,19 @@ import { NextRequest, NextResponse } from 'next/server'
 
 const MAX_RESPONSE_LENGTH = 8000
 
+type AtomicCompletionResult = {
+  response_id: string
+  inserted: boolean
+  stored_score: number
+  stored_feedback: string
+  current_xp: number
+  total_xp: number
+  interview_streak: number
+  best_interview_streak: number
+  total_interviews_completed: number
+  current_level: string
+}
+
 function parseStoredFeedback(value: unknown): Record<string, any> {
   if (value && typeof value === 'object') return value as Record<string, any>
   if (typeof value !== 'string' || !value.trim()) return {}
@@ -13,13 +26,6 @@ function parseStoredFeedback(value: unknown): Record<string, any> {
   } catch {
     return { specificFeedback: value }
   }
-}
-
-function levelLabel(totalXp: number): string {
-  if (totalXp >= 10000) return 'Elite'
-  if (totalXp >= 5000) return 'Gold'
-  if (totalXp >= 2500) return 'Silver'
-  return 'Bronze'
 }
 
 export async function POST(
@@ -97,14 +103,13 @@ export async function POST(
       return NextResponse.json({ error: 'Question not found' }, { status: 404 })
     }
 
-    // Re-sending the same question must not call the model or award XP again.
+    // Avoid a second model call for ordinary retries. The database function below
+    // remains the final idempotency gate for genuinely concurrent requests.
     const { data: previousResponse, error: previousResponseError } = await supabase
       .from('a3_respuestas_entrevista')
       .select('id, score_calidad, feedback_ia')
       .eq('sesion_id', sessionId)
       .eq('pregunta_id', questionId)
-      .order('created_at', { ascending: false })
-      .limit(1)
       .maybeSingle()
 
     if (previousResponseError) {
@@ -212,28 +217,51 @@ Return JSON only:
     const improvements = Array.isArray(feedback.improvements)
       ? feedback.improvements.filter((value): value is string => typeof value === 'string')
       : []
-    const now = new Date().toISOString()
+    const calculatedXp = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
 
-    const { data: savedResponse, error: responseError } = await supabase
-      .from('a3_respuestas_entrevista')
-      .insert({
-        sesion_id: sessionId,
-        pregunta_id: questionId,
-        respuesta_usuario: responseText.trim(),
-        score_calidad: overallScore,
-        feedback_ia: JSON.stringify(feedback),
-        areas_mejora: improvements,
-        puntos_fuertes: strengths,
-        tiempo_respuesta: safeDuration,
-        created_at: now,
-      })
-      .select()
+    const { data: atomicRows, error: atomicError } = await supabase.rpc(
+      'complete_a3_interview_response',
+      {
+        p_user_id: userId,
+        p_session_id: sessionId,
+        p_question_id: questionId,
+        p_response_text: responseText.trim(),
+        p_score: overallScore,
+        p_feedback: JSON.stringify(feedback),
+        p_improvements: improvements,
+        p_strengths: strengths,
+        p_duration: safeDuration,
+        p_xp: calculatedXp,
+      },
+    )
 
-    if (responseError) {
-      console.error('[v0] Error saving interview response:', responseError)
+    if (atomicError) {
+      console.error('[v0] Error completing interview response atomically:', atomicError)
       return NextResponse.json({ error: 'Failed to save interview response' }, { status: 500 })
     }
 
+    const atomicResult = (Array.isArray(atomicRows) ? atomicRows[0] : atomicRows) as
+      | AtomicCompletionResult
+      | null
+
+    if (!atomicResult) {
+      return NextResponse.json({ error: 'Interview completion returned no result' }, { status: 500 })
+    }
+
+    if (!atomicResult.inserted) {
+      return NextResponse.json({
+        success: true,
+        repeated: true,
+        score: atomicResult.stored_score,
+        feedback: parseStoredFeedback(atomicResult.stored_feedback),
+        sessionId,
+        responseId: atomicResult.response_id,
+        xpAwarded: 0,
+        totalXp: atomicResult.total_xp,
+      })
+    }
+
+    const now = new Date().toISOString()
     const completedModules = {
       ...((session.modulos_completados || {}) as Record<string, boolean>),
       [questionId]: true,
@@ -284,64 +312,15 @@ Return JSON only:
       console.error('[v0] Error saving interview engagement:', engagementError)
     }
 
-    const calculatedXp = overallScore >= 85 ? 150 : overallScore >= 70 ? 100 : 50
-    let xpAwarded = 0
-    let totalXp = 0
-
-    const { data: gamificationProfile, error: gamificationLookupError } = await supabase
-      .from('user_gamification_profile')
-      .select(
-        'current_xp, total_xp, interview_streak, best_interview_streak, total_interviews_completed',
-      )
-      .eq('user_id', userId)
-      .maybeSingle()
-
-    if (gamificationLookupError) {
-      console.error('[v0] Error fetching gamification profile:', gamificationLookupError)
-    } else {
-      const newCurrentXp = (gamificationProfile?.current_xp || 0) + calculatedXp
-      totalXp = (gamificationProfile?.total_xp || 0) + calculatedXp
-      const newStreak = (gamificationProfile?.interview_streak || 0) + 1
-      const bestStreak = Math.max(
-        gamificationProfile?.best_interview_streak || 0,
-        newStreak,
-      )
-
-      const profilePayload = {
-        user_id: userId,
-        current_level: levelLabel(totalXp),
-        current_xp: newCurrentXp,
-        total_xp: totalXp,
-        interview_streak: newStreak,
-        best_interview_streak: bestStreak,
-        total_interviews_completed:
-          (gamificationProfile?.total_interviews_completed || 0) + 1,
-        updated_at: now,
-      }
-
-      const { error: gamificationWriteError } = gamificationProfile
-        ? await supabase
-            .from('user_gamification_profile')
-            .update(profilePayload)
-            .eq('user_id', userId)
-        : await supabase.from('user_gamification_profile').insert(profilePayload)
-
-      if (gamificationWriteError) {
-        console.error('[v0] Error awarding interview XP:', gamificationWriteError)
-      } else {
-        xpAwarded = calculatedXp
-      }
-    }
-
     return NextResponse.json({
       success: true,
       repeated: false,
-      score: overallScore,
+      score: atomicResult.stored_score,
       feedback,
       sessionId,
-      responseId: savedResponse?.[0]?.id,
-      xpAwarded,
-      totalXp,
+      responseId: atomicResult.response_id,
+      xpAwarded: calculatedXp,
+      totalXp: atomicResult.total_xp,
     })
   } catch (error) {
     console.error('[v0] Error processing A3 response:', error)
