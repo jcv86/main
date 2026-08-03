@@ -141,13 +141,19 @@ for (const path of [
 
 console.log(
   JSON.stringify({
-    canonicalStages: PRODUCT_STAGE_ORDER,
-    a1OnboardingOrderVerified: true,
-    a2ContinuationVerified: true,
-    a3CompletionUnlocksA4: true,
-    legacyC1C4RoutesSafe: legacyRoutes.length,
-    legacyHubsRetired: 2,
-    clientProgressWritersRetired: 2,
-    finalDestination: '/despega/a4',
+    evidenceLevel: 'mixed_runtime_and_source_contract',
+    runtimeValidated: [
+      'legacy destination resolver states',
+      'canonical stage identifiers and routes',
+    ],
+    sourceContractsChecked: [
+      'A1 onboarding marker order',
+      'legacy route redirects',
+      'legacy hub retirement',
+      'client progress writer retirement',
+    ],
+    liveDatabaseCheckedInThisScript: false,
+    liveHttpCheckedInThisScript: false,
+    finalCanonicalDestination: '/despega/a4',
   }),
 )
