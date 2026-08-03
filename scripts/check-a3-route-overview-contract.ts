@@ -5,6 +5,7 @@ import {
   A3_MODULES,
   A3_MODULE_IDS,
   A3_TOTAL_XP,
+  type A3ModuleId,
 } from '../lib/a3/module-catalog'
 import { A3_ROUTE_OVERVIEW } from '../lib/a3/route-overview'
 
@@ -30,7 +31,10 @@ for (const module of A3_MODULES) {
 
 const page = source('app/despega/a3/page.tsx')
 const overview = source('components/a3/a3-route-overview.tsx')
+const overviewCopy = source('lib/a3/route-overview.ts')
 const progressRoute = source('app/api/a3/user-progress/route.ts')
+const accessGate = source('components/a3-module-access-gate.tsx')
+const accessRoute = source('app/api/a3/access-check/route.ts')
 
 assert.ok(page.includes("import { A3RouteOverview }"))
 assert.ok(page.includes('return <A3RouteOverview />'))
@@ -48,9 +52,10 @@ assert.ok(overview.includes('progress.route.routeCompletedAt'))
 assert.ok(overview.includes('progress.route.proUnlockedAt'))
 assert.ok(overview.includes('progress.moduleResults[module.id]'))
 assert.ok(overview.includes('Las repeticiones no vuelven a entregar XP'))
-assert.ok(overview.includes('no se almacena audio'))
 assert.ok(overview.includes('sm:flex-row'))
 assert.ok(overview.includes('lg:grid-cols-2'))
+assert.ok(overviewCopy.includes('no se almacena audio'))
+assert.ok(overviewCopy.includes('no se almacena audio ni video'))
 
 assert.ok(!overview.includes("index === 0"))
 assert.ok(!overview.includes("prevStatus === 'completed'"))
@@ -73,6 +78,49 @@ assert.ok(progressRoute.includes('proUnlockedAt'))
 assert.ok(progressRoute.includes('canReplayModules7To10'))
 assert.ok(progressRoute.includes('a2CurrentDay'))
 
+assert.ok(accessRoute.includes("searchParams.get('moduleId')"))
+assert.ok(accessGate.includes('/api/a3/access-check?moduleId='))
+assert.ok(accessGate.includes('encodeURIComponent(moduleId)'))
+assert.ok(accessGate.includes('payload.details?.currentDay'))
+assert.ok(accessGate.includes('payload.details?.checkpointDay'))
+assert.ok(accessGate.includes('payload.details?.day1Status'))
+assert.ok(accessGate.includes("cache: 'no-store'"))
+assert.ok(accessGate.includes('return <>{children}</>'))
+assert.ok(!accessGate.includes("fetch('/api/a3/access-check'"))
+assert.ok(!accessGate.includes('getA2MissionByDay'))
+
+const guardedPages: Array<[A3ModuleId, string]> = [
+  ['career-mirror', 'app/despega/a3/career-mirror-coach/page.tsx'],
+  ['value-mining-lab', 'app/despega/a3/value-mining-lab-coach/page.tsx'],
+  ['cv-builder-studio', 'app/despega/a3/cv-builder-studio/page.tsx'],
+  ['job-decoder', 'app/despega/a3/job-decoder/page.tsx'],
+  ['answer-architecture', 'app/despega/a3/answer-architecture/page.tsx'],
+  ['coach-practice-room', 'app/despega/a3/coach-practice-room/page.tsx'],
+  ['communication-gym', 'app/despega/a3/communication-gym/page.tsx'],
+  ['first-recruiter-simulation', 'app/despega/a3/first-recruiter-simulation/page.tsx'],
+  ['risk-difficult-questions-lab', 'app/despega/a3/risk-difficult-questions-lab/page.tsx'],
+  ['basic-interview-mission', 'app/despega/a3/basic-interview-mission/page.tsx'],
+]
+
+for (const [moduleId, path] of guardedPages) {
+  const guardedPage = source(path)
+  assert.ok(guardedPage.includes('A3ModuleAccessGate'), `${moduleId}: gate import`)
+  assert.ok(guardedPage.includes(`moduleId="${moduleId}"`), `${moduleId}: gate identity`)
+}
+
+const canonicalCoachRoute = "redirect('/despega/a3/value-mining-lab-coach')"
+for (const path of [
+  'app/despega/a3/value-mining-lab/page.tsx',
+  'app/despega/a3/value-mining-lab-choice/page.tsx',
+  'app/despega/a3/value-mining-lab-text/page.tsx',
+]) {
+  const legacyPage = source(path)
+  assert.ok(legacyPage.includes(canonicalCoachRoute), `${path}: canonical redirect`)
+  assert.ok(!legacyPage.includes('/api/a3/save-module-progress'), `${path}: legacy writer`)
+  assert.ok(!legacyPage.includes('bonificación de coach'), `${path}: fake bonus`)
+  assert.ok(!legacyPage.includes('Activación de cámara'), `${path}: fake camera`)
+}
+
 console.log(
   JSON.stringify({
     modules: A3_MODULES.length,
@@ -85,5 +133,7 @@ console.log(
     fakeAdvancedCtaRemoved: true,
     honestMediaLanguage: true,
     mobileResponsiveOverview: true,
+    directModuleAccessGuarded: guardedPages.length,
+    legacyValueMiningRoutesRetired: true,
   }),
 )
