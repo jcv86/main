@@ -140,6 +140,7 @@ export async function markA3JourneyVisited(userId: string): Promise<void> {
 
   if (error) throw error
   if (!data || ['A4', 'COMPLETED'].includes(String(data.current_module))) return
+  if (data.current_module === 'A3' && data.a3_unlocked_at) return
 
   const now = new Date().toISOString()
   const { error: updateError } = await supabase
