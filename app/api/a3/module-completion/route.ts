@@ -14,6 +14,8 @@ import { validateAnswerArchitectureSubmission } from '@/lib/a3/answer-architectu
 import { extractAnswerArchitectureContext } from '@/lib/a3/answer-architecture'
 import { validateCoachPracticeSubmission } from '@/lib/a3/coach-practice-validation'
 import { extractCoachPracticeContext } from '@/lib/a3/coach-practice'
+import { validateCommunicationGymSubmission } from '@/lib/a3/communication-gym-validation'
+import { extractCommunicationGymContext } from '@/lib/a3/communication-gym'
 
 interface AtomicCompletionResult {
   isFirstCompletion: boolean
@@ -204,6 +206,46 @@ export async function POST(request: NextRequest) {
           cvResult.data?.deliverable,
           decoderResult.data?.deliverable,
           answersResult.data?.deliverable,
+        ),
+      )
+    } else if (module.id === 'communication-gym') {
+      const [coachResult, decoderResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['coach-practice-room', 'module-6'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (coachResult.error || decoderResult.error) {
+        console.error('[v0] Communication gym context error:', {
+          coach: coachResult.error,
+          decoder: decoderResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar la práctica y la oferta previas.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateCommunicationGymSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractCommunicationGymContext(
+          coachResult.data?.deliverable,
+          decoderResult.data?.deliverable,
         ),
       )
     } else {
