@@ -121,6 +121,9 @@ jobs:
       - name: A4 evidence pulse contract
         run: npx tsx scripts/check-a4-evidence-pulse-contract.ts
 
+      - name: A4 daily snapshot contract
+        run: npx tsx scripts/check-a4-daily-snapshot-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
