@@ -126,6 +126,7 @@ assert.equal(compareA4DailySnapshots(current, current), null)
 
 const migration = source('migrations/09-a4-daily-evidence-snapshots.sql')
 const apiRoute = source('app/api/a4/snapshots/route.ts')
+const captureService = source('lib/a4/snapshot-capture.ts')
 const page = source('app/despega/a4/page.tsx')
 const component = source('components/a4/daily-snapshot-history.tsx')
 const library = source('lib/a4/daily-snapshots.ts')
@@ -143,24 +144,30 @@ assert.ok(!migration.includes('for insert\nto authenticated'))
 
 assert.ok(apiRoute.includes('resolveServerUser()'))
 assert.ok(apiRoute.includes('checkA4Access('))
-assert.ok(apiRoute.includes('computeA4EvidencePulse('))
-assert.ok(apiRoute.includes('dailySnapshotFromPulse('))
-assert.ok(apiRoute.includes("onConflict: 'user_id,snapshot_date'"))
-assert.ok(apiRoute.includes(".eq('user_id', userId)"))
-assert.ok(apiRoute.includes(".from('a4_verified_signals')"))
-assert.ok(apiRoute.includes(".from('a4_decision_log')"))
+assert.ok(apiRoute.includes('captureA4DailySnapshotForUser'))
+assert.ok(apiRoute.includes("reason: 'NO_EVIDENCE'"))
 assert.ok(!apiRoute.includes('request.json()'))
 assert.ok(!apiRoute.includes('OpenAI'))
+
+assert.ok(captureService.includes('computeA4EvidencePulse('))
+assert.ok(captureService.includes('dailySnapshotFromPulse('))
+assert.ok(captureService.includes("onConflict: 'user_id,snapshot_date'"))
+assert.ok(captureService.includes(".eq('user_id', userId)"))
+assert.ok(captureService.includes(".from('a4_verified_signals')"))
+assert.ok(captureService.includes(".from('a4_decision_log')"))
+assert.ok(captureService.includes('compareA4DailySnapshots'))
+assert.ok(!captureService.includes('request.json()'))
+assert.ok(!captureService.includes('OpenAI'))
 
 assert.ok(page.includes(".from('a4_daily_evidence_snapshots')"))
 assert.ok(page.includes('<DailySnapshotHistory initialSnapshots={snapshots} />'))
 assert.ok(component.includes("fetch('/api/a4/snapshots'"))
 assert.ok(component.includes("method: 'POST'"))
 assert.ok(component.includes('compareA4DailySnapshots'))
-assert.ok(component.includes('Un único corte por día'))
-assert.ok(component.includes('La comparación usa el'))
-assert.ok(component.includes('último día disponible'))
-assert.ok(library.includes('A4_SIGNAL_CATEGORIES'))
+assert.ok(component.includes('El servidor captura el corte diario a las 08:00 de Chile'))
+assert.ok(component.includes('La comparación aparecerá cuando exista'))
+assert.ok(component.includes('if (payload.skipped)'))
+assert.ok(library.includes('normalizeA4CategoryCounts'))
 assert.ok(library.includes('categoryChanges'))
 assert.ok(!component.includes('IA'))
 assert.ok(!component.includes('a4_noticias'))
@@ -174,6 +181,7 @@ console.log(
     factualDelta: true,
     categoryDelta: true,
     santiagoTimezone: true,
+    sharedCaptureService: true,
     legacyNewsExcluded: true,
   }),
 )

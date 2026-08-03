@@ -7,6 +7,14 @@
     {
       "path": "/api/cron/daily-metrics-summary",
       "schedule": "0 9 * * *"
+    },
+    {
+      "path": "/api/cron/a4-daily-snapshots-utc11",
+      "schedule": "0 11 * * *"
+    },
+    {
+      "path": "/api/cron/a4-daily-snapshots-utc12",
+      "schedule": "0 12 * * *"
     }
   ],
   "buildCommand": "npm run build",
