@@ -1,95 +1,110 @@
-import { createClient } from '@/lib/supabase/server'
-import { matchUserToJobs, filterByMatchScore } from '@/lib/algorithms/job-matching'
-import type { UserProfile, JobListing, MatchResult } from '@/lib/algorithms/job-matching'
 import { NextResponse } from 'next/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import { createAdminClient } from '@/lib/supabase/server'
+import { checkA4Access, getA4AccessDenialMessage } from '@/lib/a4/access-control'
+import { matchUserToJobs, filterByMatchScore } from '@/lib/algorithms/job-matching'
+import type { UserProfile, JobListing } from '@/lib/algorithms/job-matching'
 
 export const runtime = 'nodejs'
 
+function boundedInteger(
+  rawValue: string | null,
+  fallback: number,
+  minimum: number,
+  maximum: number,
+): number {
+  if (rawValue === null || rawValue.trim() === '') return fallback
+  const parsed = Number.parseInt(rawValue, 10)
+  if (!Number.isFinite(parsed)) return fallback
+  return Math.min(maximum, Math.max(minimum, parsed))
+}
+
 export async function GET(request: Request) {
   try {
+    const currentUser = await resolveServerUser()
+    if (!currentUser) {
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+    }
+
+    const supabase = createAdminClient()
+    const access = await checkA4Access(currentUser.id, supabase)
+    if (!access.canAccess) {
+      return NextResponse.json(
+        { error: getA4AccessDenialMessage(), code: access.reason },
+        { status: 403 },
+      )
+    }
+
     const { searchParams } = new URL(request.url)
-    const minScore = parseInt(searchParams.get('minScore') || '50')
-    const limit = parseInt(searchParams.get('limit') || '20')
+    const minScore = boundedInteger(searchParams.get('minScore'), 50, 0, 100)
+    const limit = boundedInteger(searchParams.get('limit'), 20, 1, 50)
 
-    const supabase = await createClient()
+    const { data: cvData, error: cvError } = await supabase
+      .from('cv_data')
+      .select('skills, education, languages')
+      .eq('user_id', currentUser.id)
+      .maybeSingle()
 
-    // Get authenticated user
-    const {
-      data: { user },
-    } = await supabase.auth.getUser()
-
-    if (!user) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
+    if (cvError) {
+      console.error('[v0] A4 job matching CV error:', cvError)
+      return NextResponse.json(
+        { error: 'No pudimos cargar el perfil para calcular coincidencias.' },
+        { status: 500 },
+      )
     }
 
-    // Fetch user profile (combine from multiple tables)
-    const [userProfile, userJobs, userCv] = await Promise.all([
-      supabase.from('users').select('*').eq('id', user.id).single(),
-      supabase.from('job_recommendations').select('*').eq('user_id', user.id),
-      supabase.from('cv_data').select('*').eq('user_id', user.id).single(),
-    ])
-
-    if (userProfile.error && userProfile.error.code !== 'PGRST116') {
-      throw userProfile.error
-    }
-
-    // Build user profile from available data
     const profile: UserProfile = {
-      id: user.id,
-      email: user.email || '',
-      skills: (userCv.data?.skills as string[]) || [],
+      id: currentUser.id,
+      email: '',
+      skills: Array.isArray(cvData?.skills) ? (cvData.skills as string[]) : [],
       experience_years: 0,
-      education: (userCv.data?.education as string[]) || [],
-      languages: (userCv.data?.languages as string[]) || [],
+      education: Array.isArray(cvData?.education)
+        ? (cvData.education as string[])
+        : [],
+      languages: Array.isArray(cvData?.languages)
+        ? (cvData.languages as string[])
+        : [],
     }
 
-    // Fetch all active jobs
+    const today = new Date().toISOString().slice(0, 10)
     const { data: allJobs, error: jobsError } = await supabase
       .from('job_listings')
       .select('*')
       .eq('status', 'active')
-      .is('expires_date', null)
+      .or(`expires_date.is.null,expires_date.gte.${today}`)
       .order('posted_date', { ascending: false })
       .limit(100)
 
     if (jobsError) {
-      console.error('Error fetching jobs:', jobsError)
-      return NextResponse.json({ error: 'Failed to fetch jobs' }, { status: 500 })
+      console.error('[v0] A4 job matching jobs error:', jobsError)
+      return NextResponse.json(
+        { error: 'No pudimos cargar las oportunidades disponibles.' },
+        { status: 500 },
+      )
     }
 
-    // Match user to jobs
-    const matches = matchUserToJobs(profile, allJobs as JobListing[])
-
-    // Filter by minimum score
+    const jobs = (allJobs ?? []) as JobListing[]
+    const matches = matchUserToJobs(profile, jobs)
     const filtered = filterByMatchScore(matches, minScore)
-
-    // Return top N matches
     const topMatches = filtered.slice(0, limit)
-
-    // Enrich with full job details
-    const enriched = topMatches.map((match) => {
-      const job = allJobs?.find((j: any) => j.id === match.job_id)
-      return {
-        ...match,
-        job,
-      }
-    })
+    const jobById = new Map(jobs.map((job) => [job.id, job]))
 
     return NextResponse.json({
       success: true,
-      total_jobs: allJobs?.length || 0,
+      total_jobs: jobs.length,
       total_matches: filtered.length,
-      results: enriched,
-      user_profile: profile,
+      min_score: minScore,
+      limit,
+      results: topMatches.map((match) => ({
+        ...match,
+        job: jobById.get(match.job_id) ?? null,
+      })),
     })
   } catch (error) {
-    console.error('Job matching error:', error)
+    console.error('[v0] A4 job matching error:', error)
     return NextResponse.json(
-      {
-        error: 'Internal server error',
-        details: error instanceof Error ? error.message : 'Unknown error',
-      },
-      { status: 500 }
+      { error: 'No pudimos calcular las coincidencias laborales.' },
+      { status: 500 },
     )
   }
 }
