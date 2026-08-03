@@ -112,6 +112,9 @@ jobs:
       - name: A3 route overview contract
         run: npx tsx scripts/check-a3-route-overview-contract.ts
 
+      - name: A3 to A4 canonical transition contract
+        run: npx tsx scripts/check-a3-a4-transition-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
