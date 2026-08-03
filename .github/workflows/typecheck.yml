@@ -90,6 +90,9 @@ jobs:
       - name: A3 interview response atomicity source contract
         run: npx tsx scripts/check-a3-interview-response-atomicity-contract.ts
 
+      - name: A3 unverified reward retirement source contract
+        run: npx tsx scripts/check-a3-reward-endpoint-retirement-contract.ts
+
       - name: A3 to A4 static transition wiring contract
         run: npx tsx scripts/check-a3-a4-transition-contract.ts
 
