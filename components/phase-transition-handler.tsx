@@ -1,159 +1,154 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { ArrowRight, CheckCircle2, Loader2, Trophy, Zap } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { CheckCircle2, ArrowRight, Zap, Trophy } from 'lucide-react'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 
 interface PhaseTransitionProps {
   currentPhase: 'a1' | 'a2' | 'a3' | 'a4'
   isComplete: boolean
   nextPhaseLabel: string
+  /** Compatibility only. The authoritative destination is returned by the server. */
   nextPhaseUrl: string
   onTransitionReady?: () => void
 }
+
+interface TransitionPayload {
+  success?: boolean
+  nextPath?: string
+  error?: string
+}
+
+const PHASE_CONFIG = {
+  a1: {
+    name: 'Despega Cerebral',
+    nextLabel: 'Tu Ruta',
+    step: 'a1_report',
+  },
+  a2: {
+    name: 'Tu Ruta',
+    nextLabel: 'Entrenamiento',
+    step: 'a2_intro',
+  },
+  a3: {
+    name: 'Entrenamiento',
+    nextLabel: 'Radar Estratégico',
+    step: null,
+  },
+  a4: {
+    name: 'Radar Estratégico',
+    nextLabel: 'Panel principal',
+    step: null,
+  },
+} as const
 
 export function PhaseTransitionHandler({
   currentPhase,
   isComplete,
   nextPhaseLabel,
   nextPhaseUrl,
-  onTransitionReady
+  onTransitionReady,
 }: PhaseTransitionProps) {
   const router = useRouter()
-  const supabase = createClient()
   const [updating, setUpdating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
+  const config = PHASE_CONFIG[currentPhase]
 
-  const phaseConfig = {
-    a1: {
-      name: 'El Ritual: Quién Eres Ahora',
-      completionFlag: 'a1_report_seen',
-      nextPhase: 'a2',
-      nextLabel: 'Exploración: Diseña Tu Ruta'
-    },
-    a2: {
-      name: 'Exploración: Diseña Tu Ruta',
-      completionFlag: 'a2_route_generated',
-      nextPhase: 'a3',
-      nextLabel: 'Entrenamiento: Simulación Intensiva'
-    },
-    a3: {
-      name: 'Entrenamiento: Simulación Intensiva',
-      completionFlag: 'a3_unlocked',
-      nextPhase: 'a4',
-      nextLabel: 'La Realidad: Ejecución y Contexto'
-    },
-    a4: {
-      name: 'La Realidad: Ejecución y Contexto',
-      completionFlag: 'a4_unlocked',
-      nextPhase: null,
-      nextLabel: 'Dashboard Principal'
-    }
-  }
+  if (!isComplete) return null
 
-  const handleProceedToNextPhase = async () => {
+  const proceed = async () => {
+    setUpdating(true)
+    setError(null)
     try {
-      setUpdating(true)
-      const { data: { user } } = await supabase.auth.getUser()
+      let nextPath = nextPhaseUrl
 
-      if (!user?.id) {
-        console.error('[v0] User not authenticated')
-        return
+      if (config.step) {
+        const response = await fetch('/api/journey/transition', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ step: config.step }),
+        })
+        const payload = (await response.json().catch(() => ({}))) as TransitionPayload
+        if (!response.ok || !payload.nextPath) {
+          throw new Error(payload.error || 'No pudimos registrar la transición.')
+        }
+        nextPath = payload.nextPath
       }
 
-      // Update completion flag for current phase
-      const { error: updateError } = await supabase
-        .from('despega_user_profiles')
-        .update({ [phaseConfig[currentPhase].completionFlag]: true })
-        .eq('user_id', user.id)
-
-      if (updateError) {
-        console.error('[v0] Error updating progress:', updateError)
-        return
-      }
-
-      console.log(`[v0] Phase ${currentPhase} completed, moving to ${nextPhaseLabel}`)
-      
-      // Call callback if provided
       onTransitionReady?.()
-
-      // Redirect to next phase
-      setTimeout(() => {
-        router.push(nextPhaseUrl)
-      }, 500)
-    } catch (error) {
-      console.error('[v0] Transition error:', error)
+      router.push(nextPath)
+      router.refresh()
+    } catch (transitionError) {
+      console.error('[v0] Phase transition error:', transitionError)
+      setError(
+        transitionError instanceof Error
+          ? transitionError.message
+          : 'No pudimos continuar.',
+      )
     } finally {
       setUpdating(false)
     }
   }
 
-  if (!isComplete) {
-    return null
-  }
-
-  // Phase complete - show transition card
   return (
-    <Card className="border-2 border-emerald-500/50 bg-background">
+    <Card className="border-2 border-emerald-500/40 bg-emerald-500/5">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <div>
-            <CardTitle className="text-lg flex items-center gap-2">
-              <CheckCircle2 className="w-5 h-5 text-emerald-600" />
-              {phaseConfig[currentPhase].name} - Completado
+            <CardTitle className="flex items-center gap-2 text-lg">
+              <CheckCircle2 className="h-5 w-5 text-emerald-500" />
+              {config.name} completado
             </CardTitle>
             <CardDescription>
-              Excelente progreso. Estás listo para la siguiente fase.
+              La evidencia de esta etapa quedó registrada. El siguiente paso usa ese contexto.
             </CardDescription>
           </div>
-          <Badge className="bg-emerald-600 text-white">
+          <Badge className="w-fit bg-emerald-600 text-white">
             {currentPhase.toUpperCase()}
           </Badge>
         </div>
       </CardHeader>
-      <CardContent>
-        <div className="space-y-4">
-          <div className="p-4 bg-transparent rounded-[28px] border border-muted/20 dark:border-muted/70">
-            <p className="text-sm font-semibold text-muted-foreground dark:text-white/85 mb-2">
-              Próxima fase:
-            </p>
-            <p className="text-lg font-bold text-teal-600 dark:text-teal-400 mb-4">
-              {nextPhaseLabel}
-            </p>
-            <ul className="text-sm text-muted-foreground dark:text-muted-foreground space-y-1">
-              <li className="flex items-center gap-2">
-                <Zap className="w-4 h-4 text-amber-500" />
-                Nuevas herramientas y funcionalidades
-              </li>
-              <li className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-amber-500" />
-                Próximos desafíos y objetivos
-              </li>
-            </ul>
-          </div>
-
-          <Button
-            onClick={handleProceedToNextPhase}
-            disabled={updating}
-            className="w-full bg-teal-600 hover:bg-teal-700 text-white h-12"
-            size="lg"
-          >
-            {updating ? (
-              <>
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2" />
-                Procesando...
-              </>
-            ) : (
-              <>
-                {nextPhaseLabel}
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </>
-            )}
-          </Button>
+      <CardContent className="space-y-4">
+        <div className="rounded-2xl border border-white/10 bg-black/10 p-4">
+          <p className="text-sm font-semibold text-muted-foreground">Siguiente etapa</p>
+          <p className="mt-1 text-lg font-bold text-teal-500">
+            {nextPhaseLabel || config.nextLabel}
+          </p>
+          <ul className="mt-4 space-y-2 text-sm text-muted-foreground">
+            <li className="flex items-center gap-2">
+              <Zap className="h-4 w-4 text-amber-500" />
+              Continúa desde la información ya construida
+            </li>
+            <li className="flex items-center gap-2">
+              <Trophy className="h-4 w-4 text-amber-500" />
+              Sin repetir pasos ni crear progreso paralelo
+            </li>
+          </ul>
         </div>
+
+        {error && (
+          <p className="rounded-xl border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-100">
+            {error}
+          </p>
+        )}
+
+        <Button
+          onClick={() => void proceed()}
+          disabled={updating}
+          className="h-12 w-full bg-teal-600 text-white hover:bg-teal-700"
+          size="lg"
+        >
+          {updating ? (
+            <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+          ) : (
+            <ArrowRight className="mr-2 h-4 w-4" />
+          )}
+          {nextPhaseLabel || config.nextLabel}
+        </Button>
       </CardContent>
     </Card>
   )
