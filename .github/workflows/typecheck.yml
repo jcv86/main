@@ -94,6 +94,9 @@ jobs:
       - name: A3 coach practice contract
         run: npx tsx scripts/check-a3-coach-practice-contract.ts
 
+      - name: A3 communication gym contract
+        run: npx tsx scripts/check-a3-communication-gym-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
