@@ -106,6 +106,9 @@ jobs:
       - name: A3 basic interview mission contract
         run: npx tsx scripts/check-a3-basic-interview-mission-contract.ts
 
+      - name: A3 route overview contract
+        run: npx tsx scripts/check-a3-route-overview-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 

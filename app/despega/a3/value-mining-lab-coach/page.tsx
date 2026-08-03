@@ -4,6 +4,7 @@ import {
   VerifiedCoachSession,
   type VerifiedCoachQuestion,
 } from '@/components/a3/verified-coach-session'
+import { A3ModuleAccessGate } from '@/components/a3-module-access-gate'
 
 const QUESTIONS: VerifiedCoachQuestion[] = [
   {
@@ -38,17 +39,23 @@ const QUESTIONS: VerifiedCoachQuestion[] = [
 
 export default function ValueMiningLabCoachPage() {
   return (
-    <VerifiedCoachSession
+    <A3ModuleAccessGate
       moduleId="value-mining-lab"
       moduleNumber={2}
-      title="Laboratorio de Minería de Valor"
-      questions={QUESTIONS}
-      buildDeliverable={(responses) => ({
-        projectValue: responses[0] || '',
-        criticalValue: responses[1] || '',
-        futureApplication: responses[2] || '',
-        nextAction: responses[3] || '',
-      })}
-    />
+      moduleTitle="Laboratorio de Minería de Valor"
+    >
+      <VerifiedCoachSession
+        moduleId="value-mining-lab"
+        moduleNumber={2}
+        title="Laboratorio de Minería de Valor"
+        questions={QUESTIONS}
+        buildDeliverable={(responses) => ({
+          projectValue: responses[0] || '',
+          criticalValue: responses[1] || '',
+          futureApplication: responses[2] || '',
+          nextAction: responses[3] || '',
+        })}
+      />
+    </A3ModuleAccessGate>
   )
 }
