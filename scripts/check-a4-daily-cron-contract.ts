@@ -77,19 +77,27 @@ assert.ok(manualRoute.includes('captureA4DailySnapshotForUser'))
 assert.ok(manualRoute.includes("reason: 'NO_EVIDENCE'"))
 assert.ok(history.includes('El servidor captura el corte diario a las 08:00 de Chile'))
 assert.ok(history.includes('if (payload.skipped)'))
-assert.ok(workflow.includes('A4 daily cron contract'))
+assert.ok(
+  workflow.includes('A4 cron clock runtime logic and source contract'),
+)
 
 console.log(
   JSON.stringify({
-    timezone: 'America/Santiago',
-    winterUtcHour: 12,
-    summerUtcHour: 11,
-    dualUtcTrigger: true,
-    localHourGate: 8,
-    cronSecretRequired: true,
-    serverCalculatedMetrics: true,
-    emptyCutsSkipped: true,
-    summariesOnlyWithNewEvidence: true,
-    idempotentUserDateUpsert: true,
+    evidenceLevel: 'mixed_runtime_and_source_contract',
+    runtimeValidated: [
+      'America/Santiago winter 08:00 window',
+      'America/Santiago summer 08:00 window',
+      'winter and summer off-hour rejection',
+    ],
+    sourceContractsChecked: [
+      'dual UTC Vercel schedules',
+      'CRON_SECRET and constant-time comparison wiring',
+      'A4 access gate wiring',
+      'no-evidence skip wiring',
+      'conditional summary wiring',
+      'user-date upsert wiring',
+    ],
+    liveCronInvocationInThisScript: false,
+    liveDatabaseCheckedInThisScript: false,
   }),
 )
