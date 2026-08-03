@@ -81,14 +81,17 @@ export async function POST() {
     })
 
     if (result.status === 'no_evidence') {
-      return NextResponse.json(
-        { error: 'Registra una señal o decisión antes de crear un corte diario.' },
-        { status: 409 },
-      )
+      return NextResponse.json({
+        success: true,
+        skipped: true,
+        reason: 'NO_EVIDENCE',
+        message: 'El primer corte se creará cuando registres una señal o decisión.',
+      })
     }
 
     return NextResponse.json({
       success: true,
+      skipped: false,
       snapshot: result.snapshot,
       previousSnapshot: result.previousSnapshot,
       evidenceChanged: result.evidenceChanged,
