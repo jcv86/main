@@ -4,10 +4,9 @@ import { useEffect, useState } from 'react'
 import { AlertCircle, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import type { A3ModuleId } from '@/lib/a3/module-catalog'
 
 interface A3ModuleAccessGateProps {
-  moduleId: A3ModuleId
+  moduleId: string
   moduleNumber: number
   moduleTitle: string
   onAccessGranted?: () => void
