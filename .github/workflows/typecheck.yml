@@ -117,6 +117,9 @@ jobs:
       - name: Gamification server-ownership source contract
         run: npx tsx scripts/check-gamification-integrity-contract.ts
 
+      - name: Admin surface retirement source contract
+        run: npx tsx scripts/check-admin-surface-retirement-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'
