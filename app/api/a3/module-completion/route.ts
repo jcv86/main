@@ -12,6 +12,8 @@ import { validateJobDecoderSubmission } from '@/lib/a3/job-decoder-validation'
 import { extractCvContext } from '@/lib/a3/job-decoder'
 import { validateAnswerArchitectureSubmission } from '@/lib/a3/answer-architecture-validation'
 import { extractAnswerArchitectureContext } from '@/lib/a3/answer-architecture'
+import { validateCoachPracticeSubmission } from '@/lib/a3/coach-practice-validation'
+import { extractCoachPracticeContext } from '@/lib/a3/coach-practice'
 
 interface AtomicCompletionResult {
   isFirstCompletion: boolean
@@ -152,6 +154,56 @@ export async function POST(request: NextRequest) {
         extractAnswerArchitectureContext(
           cvResult.data?.deliverable,
           decoderResult.data?.deliverable,
+        ),
+      )
+    } else if (module.id === 'coach-practice-room') {
+      const [cvResult, decoderResult, answersResult] = await Promise.all([
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['cv-builder-studio', 'module-3'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['job-decoder', 'module-4'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+        supabase
+          .from('a3_module_completion')
+          .select('module_id, deliverable, completed_at')
+          .eq('user_id', userId)
+          .in('module_id', ['answer-architecture', 'module-5'])
+          .order('completed_at', { ascending: false })
+          .limit(1)
+          .maybeSingle(),
+      ])
+
+      if (cvResult.error || decoderResult.error || answersResult.error) {
+        console.error('[v0] Coach practice context error:', {
+          cv: cvResult.error,
+          decoder: decoderResult.error,
+          answers: answersResult.error,
+        })
+        return NextResponse.json(
+          { error: 'No pudimos verificar la evidencia previa de la práctica.' },
+          { status: 500 },
+        )
+      }
+
+      validation = validateCoachPracticeSubmission(
+        module,
+        body.responses,
+        body.deliverable,
+        extractCoachPracticeContext(
+          cvResult.data?.deliverable,
+          decoderResult.data?.deliverable,
+          answersResult.data?.deliverable,
         ),
       )
     } else {
