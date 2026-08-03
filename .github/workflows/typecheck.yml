@@ -100,6 +100,9 @@ jobs:
       - name: A3 first recruiter simulation contract
         run: npx tsx scripts/check-a3-first-recruiter-simulation-contract.ts
 
+      - name: A3 difficult questions contract
+        run: npx tsx scripts/check-a3-difficult-questions-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
