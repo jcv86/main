@@ -41,6 +41,23 @@ const COACH_PRACTICE_DELIVERABLE_KEYS = [
   'challengeLearning',
 ]
 
+const COMMUNICATION_GYM_DELIVERABLE_KEYS = [
+  'introScript',
+  'introDurationSeconds',
+  'motivationScript',
+  'motivationDurationSeconds',
+  'pauseDurations',
+  'paceAssessment',
+  'clarityAssessment',
+  'fillerAssessment',
+  'confidenceAssessment',
+  'endingAssessment',
+  'improvementFocus',
+  'improvedScript',
+  'improvedDurationSeconds',
+  'reflection',
+]
+
 export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
   const module = getA3Module(value)
   if (!module) return null
@@ -52,7 +69,9 @@ export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
         ? ANSWER_ARCHITECTURE_DELIVERABLE_KEYS
         : module.id === 'coach-practice-room'
           ? COACH_PRACTICE_DELIVERABLE_KEYS
-          : null
+          : module.id === 'communication-gym'
+            ? COMMUNICATION_GYM_DELIVERABLE_KEYS
+            : null
 
   if (!requiredDeliverableKeys) return module
 
