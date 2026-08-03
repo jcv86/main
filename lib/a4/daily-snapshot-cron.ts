@@ -80,7 +80,7 @@ async function collectCandidateUserIds(supabase: AdminClient): Promise<string[]>
 
 export async function runA4DailySnapshotCron(request: Request) {
   const authorization = authorizeCron(request)
-  if (!authorization.authorized) return authorization.response
+  if ('response' in authorization) return authorization.response
 
   const now = new Date()
   const window = getSantiagoCronWindow(now)
