@@ -16,9 +16,13 @@ interface AtomicCompletionResult {
   totalXp: number
   bestScore: number
   totalAttempts: number
+  routeCompleted: boolean
+  a4Unlocked: boolean
   session: Record<string, unknown>
   completion: Record<string, unknown>
   progress: Record<string, unknown>
+  journey: Record<string, unknown> | null
+  profile: Record<string, unknown> | null
 }
 
 function isAtomicCompletionResult(value: unknown): value is AtomicCompletionResult {
@@ -29,7 +33,9 @@ function isAtomicCompletionResult(value: unknown): value is AtomicCompletionResu
     typeof result.xpAwarded === 'number' &&
     typeof result.totalXp === 'number' &&
     typeof result.bestScore === 'number' &&
-    typeof result.totalAttempts === 'number'
+    typeof result.totalAttempts === 'number' &&
+    typeof result.routeCompleted === 'boolean' &&
+    typeof result.a4Unlocked === 'boolean'
   )
 }
 
@@ -215,10 +221,25 @@ export async function POST(request: NextRequest) {
       )
     }
 
+    if (!data.routeCompleted || !data.a4Unlocked) {
+      console.error('[v0] A3 completed without canonical A4 transition:', data)
+      return NextResponse.json(
+        {
+          error: 'Entrenamiento se guardó, pero Radar Estratégico no confirmó su desbloqueo.',
+          code: 'A3_A4_TRANSITION_NOT_CONFIRMED',
+        },
+        { status: 500 },
+      )
+    }
+
+    const proUnlocked = Boolean(data.progress?.pro_unlocked_at)
+
     return NextResponse.json({
       success: true,
-      routeCompleted: true,
-      proUnlocked: true,
+      routeCompleted: data.routeCompleted,
+      a4Unlocked: data.a4Unlocked,
+      proUnlocked,
+      nextPath: '/despega/a4?unlocked=training-complete',
       moduleId: module.id,
       moduleName: module.title,
       moduleNumber: module.number,
@@ -233,6 +254,8 @@ export async function POST(request: NextRequest) {
       session: data.session,
       completion: data.completion,
       progress: data.progress,
+      journey: data.journey,
+      profile: data.profile,
     })
   } catch (error) {
     console.error('[v0] Basic interview mission completion error:', error)
