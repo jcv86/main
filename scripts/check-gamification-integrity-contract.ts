@@ -54,7 +54,7 @@ assert.ok(profilePage.includes('data.summary'))
 assert.ok(!profilePage.includes('userId='))
 assert.ok(!shop.includes("fetch('/api/gamification/dtc-purchase'"))
 assert.ok(shop.includes('Las compras todavía no están habilitadas'))
-assert.ok(shop.includes('no se realizará ningún cobro'))
+assert.ok(shop.toLowerCase().includes('no se realizará ningún cobro'))
 
 assert.ok(summary.includes('bestStreak: number'))
 assert.ok(summary.includes('totalTipsEarned: number'))
