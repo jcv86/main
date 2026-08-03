@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { DTCShop } from '@/components/dtc-shop'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Loader2 } from 'lucide-react'
 
 export default function DTCShopPage() {
@@ -16,22 +15,20 @@ export default function DTCShopPage() {
 
     const fetchBalance = async () => {
       try {
-        const response = await fetch(
-          `/api/gamification/dtc-balance?userId=${user.id}`
-        )
+        const response = await fetch('/api/gamification/dtc-balance')
         const data = await response.json()
 
         if (response.ok) {
-          setDtcBalance(data.balance)
+          setDtcBalance(data.balance || 0)
         }
       } catch (error) {
-        console.error('Error fetching DTC balance:', error)
+        console.error('[v0] Error fetching DTC balance:', error)
       } finally {
         setLoading(false)
       }
     }
 
-    fetchBalance()
+    void fetchBalance()
   }, [user?.id])
 
   if (authLoading || loading) {
@@ -44,13 +41,7 @@ export default function DTCShopPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      <DTCShop
-        userId={user?.id || ''}
-        currentBalance={dtcBalance}
-        onPurchaseComplete={(amount) => {
-          setDtcBalance(dtcBalance + amount)
-        }}
-      />
+      <DTCShop currentBalance={dtcBalance} />
     </main>
   )
 }
