@@ -1,18 +1,43 @@
 'use client'
 
 import { useEffect, useState } from 'react'
+import { AlertCircle, BookOpen, Lock } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { Alert, AlertDescription } from '@/components/ui/alert'
-import { Lock, AlertTriangle, CheckCircle2, Calendar, BookOpen } from 'lucide-react'
-import { getA2MissionByDay } from '@/lib/a2-helpers'
+import type { A3ModuleId } from '@/lib/a3/module-catalog'
 
 interface A3ModuleAccessGateProps {
-  moduleId: string
+  moduleId: A3ModuleId
   moduleNumber: number
   moduleTitle: string
   onAccessGranted?: () => void
   children?: React.ReactNode
+}
+
+interface AccessInfo {
+  canAccess: boolean
+  reason: string
+  blockReasons: string[]
+  currentDay: number
+  checkpointDay?: number
+  day1Status: string
+  day1Score?: number
+}
+
+interface AccessPayload {
+  success?: boolean
+  canAccess?: boolean
+  reason?: string
+  denialMessage?: string
+  blockReasons?: string[]
+  details?: {
+    currentDay?: number
+    checkpointDay?: number
+    day1Status?: string
+    day1Score?: number
+    requestedModuleId?: string
+  }
+  error?: string
 }
 
 export function A3ModuleAccessGate({
@@ -22,153 +47,141 @@ export function A3ModuleAccessGate({
   onAccessGranted,
   children,
 }: A3ModuleAccessGateProps) {
-  const [canAccess, setCanAccess] = useState(false)
   const [loading, setLoading] = useState(true)
-  const [accessInfo, setAccessInfo] = useState<{
-    canAccess: boolean
-    reason: string
-    blockReasons: string[]
-    currentDay: number
-    checkpointDay?: number
-    day1Status: string
-    day1Score?: number
-  } | null>(null)
+  const [accessInfo, setAccessInfo] = useState<AccessInfo | null>(null)
 
   useEffect(() => {
-    const checkAccess = async () => {
-      try {
-        const response = await fetch('/api/a3/access-check', {
-          method: 'GET',
-          headers: { 'Content-Type': 'application/json' },
-        })
+    const controller = new AbortController()
 
-        if (!response.ok) throw new Error('Access check failed')
-
-        const data = await response.json()
-        setAccessInfo(data)
-        setCanAccess(data.canAccess)
-
-        if (data.canAccess) {
-          onAccessGranted?.()
+    fetch(`/api/a3/access-check?moduleId=${encodeURIComponent(moduleId)}`, {
+      credentials: 'include',
+      cache: 'no-store',
+      signal: controller.signal,
+    })
+      .then(async (response) => {
+        const payload = (await response.json().catch(() => ({}))) as AccessPayload
+        if (!response.ok) {
+          throw new Error(payload.error || 'No pudimos verificar el acceso al módulo.')
         }
-      } catch (error) {
-        console.error('[v0] Access check error:', error)
-        setCanAccess(false)
-      } finally {
-        setLoading(false)
-      }
-    }
 
-    checkAccess()
+        const info: AccessInfo = {
+          canAccess: Boolean(payload.canAccess),
+          reason: payload.reason || '',
+          blockReasons: Array.isArray(payload.blockReasons)
+            ? payload.blockReasons
+            : payload.denialMessage
+              ? [payload.denialMessage]
+              : [],
+          currentDay: Math.max(1, Number(payload.details?.currentDay) || 1),
+          checkpointDay: Number(payload.details?.checkpointDay) || undefined,
+          day1Status: payload.details?.day1Status || 'not_started',
+          day1Score:
+            payload.details?.day1Score === undefined
+              ? undefined
+              : Math.max(0, Number(payload.details.day1Score) || 0),
+        }
+        setAccessInfo(info)
+        if (info.canAccess) onAccessGranted?.()
+      })
+      .catch((error) => {
+        if (error instanceof DOMException && error.name === 'AbortError') return
+        setAccessInfo({
+          canAccess: false,
+          reason: 'No pudimos verificar el acceso.',
+          blockReasons: [
+            error instanceof Error
+              ? error.message
+              : 'No pudimos verificar las condiciones de acceso.',
+          ],
+          currentDay: 1,
+          day1Status: 'not_started',
+        })
+      })
+      .finally(() => setLoading(false))
+
+    return () => controller.abort()
   }, [moduleId, onAccessGranted])
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center p-8">
-        <div className="text-center">
-          <div className="animate-spin mb-4">
-            <BookOpen className="w-8 h-8 text-purple-400" />
-          </div>
-          <p className="text-slate-400">Verificando acceso...</p>
+      <div className="flex min-h-[60vh] items-center justify-center p-6">
+        <div className="text-center text-muted-foreground">
+          <BookOpen className="mx-auto mb-3 h-8 w-8 animate-pulse" />
+          <p>Verificando acceso al módulo…</p>
         </div>
       </div>
     )
   }
 
-  if (!canAccess && accessInfo) {
+  if (!accessInfo?.canAccess) {
+    const reasons = accessInfo?.blockReasons.length
+      ? accessInfo.blockReasons
+      : ['Este módulo todavía no está disponible.']
+
     return (
-      <div className="max-w-2xl mx-auto p-6 space-y-6">
-        <Card className="border-red-500/30 bg-red-500/10">
-          <div className="p-6">
-            <div className="flex items-start gap-4">
-              <Lock className="w-6 h-6 text-red-400 flex-shrink-0 mt-1" />
-              <div className="flex-1">
-                <h2 className="text-xl font-bold text-white mb-2">
-                  Módulo No Disponible
-                </h2>
-                <p className="text-white/80 mb-4">
-                  Este módulo (Módulo {moduleNumber}: {moduleTitle}) aún no está disponible.
-                </p>
-
-                {/* Block Reasons */}
-                <div className="space-y-2 mb-6">
-                  {accessInfo.blockReasons.map((reason, idx) => (
-                    <Alert key={idx} className="bg-slate-900/50 border-[rgb(80,160,170)]">
-                      <AlertTriangle className="h-4 w-4 text-yellow-400" />
-                      <AlertDescription className="text-slate-300">
-                        {reason}
-                      </AlertDescription>
-                    </Alert>
-                  ))}
-                </div>
-
-                {/* Status Summary */}
-                <div className="grid grid-cols-2 gap-4 p-4 rounded-lg bg-slate-900/30 border border-[rgb(80,160,170)]">
-                  <div>
-                    <p className="text-xs text-slate-400 mb-1">Día Actual</p>
-                    <p className="text-lg font-bold text-white">{accessInfo.currentDay} / 90</p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 mb-1">Checkpoint del Módulo</p>
-                    <p className="text-lg font-bold text-purple-400">
-                      Día {accessInfo.checkpointDay || '?'}
-                    </p>
-                  </div>
-                  <div>
-                    <p className="text-xs text-slate-400 mb-1">Día 1 Completado</p>
-                    <p className="text-lg font-bold text-slate-300">
-                      {accessInfo.day1Status === 'passed' ? '✓ Aprobado' : '✗ No aprobado'}
-                    </p>
-                  </div>
-                  {accessInfo.day1Score !== undefined && (
-                    <div>
-                      <p className="text-xs text-slate-400 mb-1">Puntuación DTC</p>
-                      <p className="text-lg font-bold text-slate-300">
-                        {accessInfo.day1Score} / 100
-                      </p>
-                    </div>
-                  )}
-                </div>
-              </div>
+      <div className="container mx-auto max-w-2xl px-4 py-10">
+        <Card className="space-y-5 border-amber-500/30 bg-amber-500/5 p-6">
+          <div className="flex items-start gap-3">
+            <Lock className="mt-1 h-6 w-6 shrink-0 text-amber-300" />
+            <div>
+              <h1 className="text-xl font-bold">Módulo aún no disponible</h1>
+              <p className="mt-1 text-sm text-muted-foreground">
+                Módulo {moduleNumber}: {moduleTitle}
+              </p>
             </div>
           </div>
-        </Card>
 
-        <div className="text-center">
-          <p className="text-slate-400 mb-4">
-            Continúa con tu ruta de 90 días. Este módulo se desbloqueará automáticamente
-            cuando llegues al momento adecuado.
-          </p>
-          <Button
-            onClick={() => window.location.href = '/despega/a2-routes'}
-            className="bg-purple-600 hover:bg-purple-700"
-          >
-            Volver a Mi Ruta
-          </Button>
-        </div>
+          <div className="space-y-2">
+            {reasons.map((reason) => (
+              <div key={reason} className="flex gap-2 rounded-lg border bg-background/50 p-3 text-sm">
+                <AlertCircle className="mt-0.5 h-4 w-4 shrink-0 text-amber-300" />
+                <span>{reason}</span>
+              </div>
+            ))}
+          </div>
+
+          <div className="grid gap-3 rounded-lg border p-4 text-sm sm:grid-cols-2">
+            <div>
+              <p className="text-muted-foreground">Día actual de Tu Ruta</p>
+              <p className="mt-1 font-semibold">Día {accessInfo?.currentDay || 1}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Checkpoint del módulo</p>
+              <p className="mt-1 font-semibold">Día {accessInfo?.checkpointDay || '—'}</p>
+            </div>
+            <div>
+              <p className="text-muted-foreground">Estado del Día 1</p>
+              <p className="mt-1 font-semibold">
+                {accessInfo?.day1Status === 'passed' ? 'Aprobado' : 'Pendiente'}
+              </p>
+            </div>
+            {accessInfo?.day1Score !== undefined ? (
+              <div>
+                <p className="text-muted-foreground">Puntaje del Día 1</p>
+                <p className="mt-1 font-semibold">{accessInfo.day1Score}/100</p>
+              </div>
+            ) : null}
+          </div>
+
+          <div className="flex flex-col gap-2 sm:flex-row">
+            <Button
+              variant="outline"
+              className="sm:flex-1"
+              onClick={() => window.location.assign('/despega/a3')}
+            >
+              Volver a Entrenamiento
+            </Button>
+            <Button
+              className="sm:flex-1"
+              onClick={() => window.location.assign('/despega/a2')}
+            >
+              Continuar Tu Ruta
+            </Button>
+          </div>
+        </Card>
       </div>
     )
   }
 
-  // Access Granted
-  return (
-    <div className="space-y-6">
-      {accessInfo?.canAccess && (
-        <Card className="border-emerald-500/30 bg-emerald-500/10">
-          <div className="p-4 flex items-start gap-3">
-            <CheckCircle2 className="w-5 h-5 text-emerald-400 flex-shrink-0 mt-0.5" />
-            <div>
-              <p className="text-sm font-semibold text-emerald-300">
-                ¡Acceso Concedido!
-              </p>
-              <p className="text-xs text-emerald-200 mt-1">
-                Has desbloqueado este módulo de aprendizaje.
-              </p>
-            </div>
-          </div>
-        </Card>
-      )}
-      {children}
-    </div>
-  )
+  return <>{children}</>
 }
