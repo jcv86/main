@@ -8,7 +8,6 @@ import {
   ArrowLeft,
   CheckCircle2,
   Clock3,
-  Gauge,
   Loader2,
   Mic,
   Pause,
@@ -40,11 +39,12 @@ interface ContextPayload {
   error?: string
 }
 
-type TimedField =
+type DurationField =
   | 'introDurationSeconds'
   | 'motivationDurationSeconds'
   | 'improvedDurationSeconds'
-  | `pause-${number}`
+
+type TimedField = DurationField | `pause-${number}`
 
 const moduleDefinition = getActiveA3Module('communication-gym')
 
@@ -145,7 +145,7 @@ export function CommunicationGymStudio() {
         return { ...current, pauseDurations: pauses }
       })
     } else {
-      update(activeTimer, seconds)
+      update(activeTimer as DurationField, seconds)
     }
     setActiveTimer(null)
     setElapsedSeconds(0)
@@ -184,10 +184,7 @@ export function CommunicationGymStudio() {
   const timedPractice = (
     title: string,
     field: 'introScript' | 'motivationScript' | 'improvedScript',
-    durationField:
-      | 'introDurationSeconds'
-      | 'motivationDurationSeconds'
-      | 'improvedDurationSeconds',
+    durationField: DurationField,
     minimumWords: number,
     range: string,
   ) => {
@@ -383,7 +380,9 @@ export function CommunicationGymStudio() {
                         : 'Cierre'}
                 <select
                   value={draft[key as keyof CommunicationGymDraft] as string}
-                  onChange={(event) => update(key as keyof CommunicationGymDraft, event.target.value as never)}
+                  onChange={(event) =>
+                    setDraft((current) => ({ ...current, [key]: event.target.value }))
+                  }
                   className="w-full rounded-md border bg-background px-3 py-2"
                 >
                   <option value="">Seleccionar…</option>
