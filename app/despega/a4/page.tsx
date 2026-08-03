@@ -204,10 +204,12 @@ export default async function RadarEstrategicoPage() {
 
         <EvidencePulse signals={signals} decisions={decisions} />
 
-        <StrategicRadarWorkspace
-          initialSignals={signals}
-          initialDecisions={decisions}
-        />
+        <div id="a4-workspace" className="scroll-mt-6">
+          <StrategicRadarWorkspace
+            initialSignals={signals}
+            initialDecisions={decisions}
+          />
+        </div>
 
         <Card className="border-slate-800 bg-slate-900/70">
           <CardContent className="flex flex-col gap-5 p-6 md:flex-row md:items-center md:justify-between">
