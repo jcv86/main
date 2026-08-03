@@ -21,7 +21,9 @@ export interface A3CompletionPayload {
   score?: number
   bestScore?: number
   routeCompleted?: boolean
+  a4Unlocked?: boolean
   proUnlocked?: boolean
+  nextPath?: string
   validation?: A3CompletionValidation
   error?: string
 }
@@ -67,5 +69,20 @@ export async function completeA3Module(
 
   const payload = (await response.json().catch(() => ({}))) as A3CompletionPayload
   if (!response.ok) throw new Error(errorMessage(payload))
+
+  if (input.moduleId === 'basic-interview-mission') {
+    if (!payload.routeCompleted || !payload.a4Unlocked || !payload.nextPath) {
+      throw new Error(
+        'La misión final se registró, pero no confirmó el acceso a Radar Estratégico.',
+      )
+    }
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('dtc:a3:basic-interview-mission:draft:v1')
+      window.location.assign(payload.nextPath)
+      return await new Promise<A3CompletionPayload>(() => undefined)
+    }
+  }
+
   return payload
 }

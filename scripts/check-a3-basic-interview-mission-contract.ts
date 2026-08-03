@@ -177,8 +177,13 @@ assert.ok(completionRoute.includes('validateBasicInterviewMissionSubmission'))
 assert.ok(completionRoute.includes('extractBasicInterviewContext'))
 assert.ok(completionRoute.includes(".in('module_id', ['risk-difficult-questions-lab', 'module-9'])"))
 assert.ok(completionRoute.includes('p_complete_route: true'))
-assert.ok(completionRoute.includes('routeCompleted: true'))
-assert.ok(completionRoute.includes('proUnlocked: true'))
+assert.ok(completionRoute.includes('routeCompleted: data.routeCompleted'))
+assert.ok(completionRoute.includes('a4Unlocked: data.a4Unlocked'))
+assert.ok(completionRoute.includes('!data.routeCompleted || !data.a4Unlocked'))
+assert.ok(completionRoute.includes("code: 'A3_A4_TRANSITION_NOT_CONFIRMED'"))
+assert.ok(completionRoute.includes('const proUnlocked = Boolean'))
+assert.ok(!completionRoute.includes('routeCompleted: true'))
+assert.ok(!completionRoute.includes('proUnlocked: true'))
 const accessIndex = completionRoute.indexOf('checkA3ModuleAccess(')
 const contextIndex = completionRoute.indexOf(".from('a3_module_completion')")
 const validationIndex = completionRoute.indexOf('validateBasicInterviewMissionSubmission(')
@@ -211,7 +216,8 @@ console.log(
     twoStarAnswersRequired: true,
     finalReportRequired: true,
     atomicRouteCompletion: true,
-    proUnlockVerified: true,
+    a4UnlockVerified: true,
+    proUnlockDerivedFromPersistence: true,
     legacyWriterRemoved: true,
   }),
 )

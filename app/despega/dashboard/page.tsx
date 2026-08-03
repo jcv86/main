@@ -35,11 +35,24 @@ export default async function DashboardPage() {
   const nextPath = await getCanonicalNextPath(profile)
   const onboardingPending = nextPath !== PRODUCT_STAGES.A2.href
 
+  const continueAction = onboardingPending
+    ? { href: nextPath, label: 'Continuar configuración' }
+    : access.a4
+      ? { href: PRODUCT_STAGES.A4.href, label: 'Abrir Radar Estratégico' }
+      : state.currentModule === 'A3'
+        ? { href: PRODUCT_STAGES.A3.href, label: 'Continuar Entrenamiento' }
+        : {
+            href: `/despega/a2/dia-${state.highestA2DayUnlocked}`,
+            label: `Continuar día ${state.highestA2DayUnlocked}`,
+          }
+
   const stageStatus = (id: InternalJourneyStage) => {
     const isAccessible = access[id.toLowerCase() as keyof typeof access]
     if (!isAccessible) return 'locked' as const
     if (id === 'A1' && state.a1CompletedAt) return 'completed' as const
     if (id === 'A2' && state.a2CompletedAt) return 'completed' as const
+    if (id === 'A3' && access.a4) return 'completed' as const
+    if (id === 'A4' && access.a4) return 'active' as const
     if (state.currentModule === id) return 'active' as const
     return 'available' as const
   }
@@ -56,20 +69,12 @@ export default async function DashboardPage() {
               Hola, {name}
             </h1>
             <p className="max-w-2xl text-pretty text-muted-foreground">
-              Un solo recorrido conecta tu diagnóstico, tu ruta, el entrenamiento y las señales del mercado.
+              Un solo recorrido conecta tu diagnóstico, tu ruta, el entrenamiento y las señales verificadas del mercado.
             </p>
           </div>
           <Button asChild>
-            <Link
-              href={
-                onboardingPending
-                  ? nextPath
-                  : `/despega/a2/dia-${state.highestA2DayUnlocked}`
-              }
-            >
-              {onboardingPending
-                ? 'Continuar configuración'
-                : `Continuar día ${state.highestA2DayUnlocked}`}
+            <Link href={continueAction.href}>
+              {continueAction.label}
               <ArrowRight className="ml-2 h-4 w-4" />
             </Link>
           </Button>
@@ -89,6 +94,24 @@ export default async function DashboardPage() {
             <Progress value={progress} aria-label={`${progress}% de la ruta completada`} />
           </CardContent>
         </Card>
+
+        {access.a4 && (
+          <Card className="border-rose-400/30 bg-rose-400/5">
+            <CardContent className="flex flex-col gap-4 p-6 md:flex-row md:items-center md:justify-between">
+              <div>
+                <p className="flex items-center gap-2 font-semibold text-rose-700 dark:text-rose-200">
+                  <Radar className="h-5 w-5" /> Radar Estratégico desbloqueado
+                </p>
+                <p className="mt-2 text-sm text-muted-foreground">
+                  La ruta verificable de Entrenamiento está completa. A4 conserva y muestra únicamente evidencia persistida.
+                </p>
+              </div>
+              <Button asChild variant="outline">
+                <Link href={PRODUCT_STAGES.A4.href}>Abrir Radar</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        )}
 
         <section aria-labelledby="stages-heading" className="flex flex-col gap-4">
           <div className="flex flex-col gap-1">
