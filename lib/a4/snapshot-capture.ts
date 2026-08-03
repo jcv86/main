@@ -133,8 +133,8 @@ export async function captureA4DailySnapshotForUser({
     )
   }
 
-  const signals = (signalsResult.data ?? []) as A4VerifiedSignal[]
-  const decisions = (decisionsResult.data ?? []) as A4Decision[]
+  const signals = (signalsResult.data ?? []) as unknown as A4VerifiedSignal[]
+  const decisions = (decisionsResult.data ?? []) as unknown as A4Decision[]
   const latestEvidenceUpdatedAt = latestTimestamp([
     ...signals.map((signal) => signal.updated_at),
     ...decisions.map((decision) => decision.updated_at),
@@ -167,7 +167,9 @@ export async function captureA4DailySnapshotForUser({
   }
 
   const previousSnapshot = previousData
-    ? normalizeA4DailySnapshot(previousData as Record<string, unknown>)
+    ? normalizeA4DailySnapshot(
+        previousData as unknown as Record<string, unknown>,
+      )
     : null
   const evidenceChanged = previousSnapshot
     ? latestEvidenceUpdatedAt > previousSnapshot.updated_at
@@ -191,7 +193,9 @@ export async function captureA4DailySnapshotForUser({
     )
   }
 
-  const snapshot = normalizeA4DailySnapshot(saved as Record<string, unknown>)
+  const snapshot = normalizeA4DailySnapshot(
+    saved as unknown as Record<string, unknown>,
+  )
   const comparison = compareA4DailySnapshots(snapshot, previousSnapshot)
   const summary = evidenceChanged && comparison
     ? {
