@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { resolveLegacyContinuityDestination } from './legacy-continuity'
 import { getCanonicalNextPath, getJourneyForCurrentUser } from './service'
 
 /**
@@ -8,13 +9,19 @@ import { getCanonicalNextPath, getJourneyForCurrentUser } from './service'
  */
 export async function getLegacyJourneyDestination(): Promise<string> {
   const journey = await getJourneyForCurrentUser()
-  if (!journey) return '/auth/signin'
-
-  if (journey.access.a4) return '/despega/a4'
-  if (journey.access.a3) return '/despega/a3'
-  if (journey.access.a2) {
-    return `/despega/a2/dia-${journey.state.highestA2DayUnlocked}`
+  if (!journey) {
+    return resolveLegacyContinuityDestination({
+      authenticated: false,
+      access: { a2: false, a3: false, a4: false },
+      highestA2DayUnlocked: 1,
+      canonicalNextPath: '/despega/conozcamonos-1',
+    })
   }
 
-  return getCanonicalNextPath(journey.profile)
+  return resolveLegacyContinuityDestination({
+    authenticated: true,
+    access: journey.access,
+    highestA2DayUnlocked: journey.state.highestA2DayUnlocked,
+    canonicalNextPath: await getCanonicalNextPath(journey.profile),
+  })
 }
