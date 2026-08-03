@@ -88,6 +88,9 @@ jobs:
       - name: A3 job decoder contract
         run: npx tsx scripts/check-a3-job-decoder-contract.ts
 
+      - name: A3 answer architecture contract
+        run: npx tsx scripts/check-a3-answer-architecture-contract.ts
+
       - name: DTC critical journey contract
         run: npx tsx scripts/check-dtc-critical-contract.ts
 
