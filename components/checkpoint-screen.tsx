@@ -1,110 +1,66 @@
 'use client'
 
 import { useRouter } from 'next/navigation'
+import { Award, ChevronRight, Trophy } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
-import { getNextSequenceStep, getMainPillar } from '@/lib/learning-sequence'
-import { Award, Trophy, ChevronRight } from 'lucide-react'
-import type { PillarMainId } from '@/lib/learning-sequence'
+import { PRODUCT_STAGES } from '@/lib/dtc/product-language'
+
+export type LegacyPillarMainId = 'a1' | 'a2' | 'a3' | 'a4'
 
 interface CheckpointScreenProps {
-  completedPillarId: PillarMainId
-  xpEarned: number
-  userId: string
+  completedPillarId: LegacyPillarMainId
+  xpEarned?: number
+  userId?: string
 }
 
-export function CheckpointScreen({
-  completedPillarId,
-  xpEarned,
-  userId,
-}: CheckpointScreenProps) {
+const STAGE_LABELS: Record<LegacyPillarMainId, string> = {
+  a1: PRODUCT_STAGES.A1.name,
+  a2: PRODUCT_STAGES.A2.name,
+  a3: PRODUCT_STAGES.A3.name,
+  a4: PRODUCT_STAGES.A4.name,
+}
+
+/**
+ * Compatibility-only checkpoint.
+ * Canonical completion, XP and unlocks are persisted by the server endpoints
+ * of each active stage; this component must never write progress itself.
+ */
+export function CheckpointScreen({ completedPillarId }: CheckpointScreenProps) {
   const router = useRouter()
-  const completedPillar = getMainPillar(completedPillarId)
-  const nextStep = getNextSequenceStep(completedPillarId)
-
-  const handleAwardXpAndContinue = async () => {
-    try {
-      // Award XP
-      await fetch('/api/user/award-xp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          stepId: completedPillarId,
-          xpAmount: xpEarned,
-        }),
-      })
-
-      // Mark pillar as complete
-      await fetch('/api/user/complete-pillar', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userId,
-          pillarId: completedPillarId,
-        }),
-      })
-
-      // Navigate to hub
-      router.push('/despega/pillars-hub')
-    } catch (error) {
-      console.error('[v0] Error processing checkpoint:', error)
-      router.push('/despega/pillars-hub')
-    }
-  }
 
   return (
-    <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4 backdrop-blur-sm">
       <Card className="w-full max-w-md border-[rgb(80,160,170)] bg-neutral-900 shadow-2xl">
-        <div className="p-8 space-y-6 text-center">
-          {/* Trophy Animation */}
-          <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-yellow-500 to-orange-500 mx-auto mb-4">
-            <Trophy className="w-8 h-8 text-white" />
+        <div className="space-y-6 p-8 text-center">
+          <div className="mx-auto inline-flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-yellow-500 to-orange-500">
+            <Trophy className="h-8 w-8 text-white" />
           </div>
 
-          {/* Success Message */}
           <div>
-            <h2 className="text-2xl font-bold text-white mb-2">¡Pilar Completado!</h2>
-            <p className="text-neutral-400 text-sm">
-              Has dominado <strong>{completedPillar.name}</strong>
+            <h2 className="text-2xl font-bold text-white">Etapa completada</h2>
+            <p className="mt-2 text-sm text-neutral-400">
+              {STAGE_LABELS[completedPillarId]}
             </p>
           </div>
 
-          {/* XP Earned */}
-          <div className="bg-gradient-to-r from-purple-500/20 to-pink-500/20 border border-purple-500/30 rounded-lg p-4">
-            <div className="flex items-center justify-center gap-2 mb-1">
-              <Award className="w-5 h-5 text-yellow-400" />
-              <span className="text-sm text-neutral-400">XP Ganados</span>
+          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-4">
+            <div className="flex items-center justify-center gap-2 text-emerald-300">
+              <Award className="h-5 w-5" />
+              <span className="font-medium">Progreso verificado por el servidor</span>
             </div>
-            <div className="text-4xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-yellow-400 to-orange-400">
-              +{xpEarned}
-            </div>
+            <p className="mt-2 text-xs text-emerald-100/70">
+              Los XP, cierres y desbloqueos se derivan únicamente de evidencia persistida.
+            </p>
           </div>
 
-          {/* Stats */}
-          <div className="space-y-2 text-sm text-neutral-400">
-            <p>Tu esfuerzo se está pagando</p>
-            <p>Continúa con el siguiente pilar</p>
-          </div>
-
-          {/* Actions */}
-          <div className="pt-4 space-y-3">
-            <Button
-              onClick={handleAwardXpAndContinue}
-              className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700 text-white font-medium"
-            >
-              Ir al Siguiente Pilar
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-
-            <Button
-              onClick={() => router.push('/despega/pillars-hub')}
-              variant="outline"
-              className="w-full border-[rgb(80,160,170)] text-neutral-300 hover:bg-neutral-800"
-            >
-              Ver Progreso General
-            </Button>
-          </div>
+          <Button
+            onClick={() => router.push('/despega/dashboard')}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 text-white hover:from-purple-700 hover:to-pink-700"
+          >
+            Continuar mi recorrido
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
         </div>
       </Card>
     </div>

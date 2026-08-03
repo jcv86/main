@@ -1,116 +1,61 @@
 'use client'
 
-import React, { useState } from 'react'
 import { useRouter } from 'next/navigation'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Button } from '@/components/ui/button'
+import { ChevronRight, ShieldCheck, Trophy } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
-import { Trophy, Zap, ChevronRight } from 'lucide-react'
-import { getPillarById, getNextPillar, type PillarId } from '@/lib/pillar-structure'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PRODUCT_STAGES } from '@/lib/dtc/product-language'
+
+export type LegacyPillarId = 'c1' | 'c2' | 'c3' | 'c4'
 
 interface PillarCompletionCheckpointProps {
-  pillarId: PillarId
-  xpEarned: number
+  pillarId: LegacyPillarId
+  xpEarned?: number
 }
 
+const STAGE_LABELS: Record<LegacyPillarId, string> = {
+  c1: PRODUCT_STAGES.A1.name,
+  c2: PRODUCT_STAGES.A2.name,
+  c3: PRODUCT_STAGES.A3.name,
+  c4: PRODUCT_STAGES.A4.name,
+}
+
+/** Compatibility-only UI. Completion and rewards are always server-owned. */
 export function PillarCompletionCheckpoint({
   pillarId,
-  xpEarned,
 }: PillarCompletionCheckpointProps) {
   const router = useRouter()
-  const [isRecording, setIsRecording] = useState(false)
-  
-  const pillar = getPillarById(pillarId)
-  const nextPillar = getNextPillar(pillarId)
-
-  const handleAwardXP = async () => {
-    setIsRecording(true)
-    try {
-      // Award XP to user
-      const response = await fetch('/api/user/award-xp', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          pillarId,
-          xpAmount: xpEarned,
-        }),
-      })
-
-      if (response.ok) {
-        // Mark pillar as complete
-        const completeResponse = await fetch('/api/user/complete-pillar', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ pillarId }),
-        })
-
-        if (completeResponse.ok) {
-          // Redirect to hub
-          router.push('/despega/pillars/hub')
-        }
-      }
-    } catch (error) {
-      console.error('[v0] Error awarding XP:', error)
-    } finally {
-      setIsRecording(false)
-    }
-  }
 
   return (
-    <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-      <Card className="w-full max-w-2xl bg-gradient-to-br from-slate-900 to-slate-800 border-purple-500/50">
-        <CardHeader className="text-center border-b border-purple-500/20">
-          <Trophy className="w-12 h-12 text-yellow-400 mx-auto mb-4" />
-          <CardTitle className="text-3xl text-white">{pillar.name} Completado</CardTitle>
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+      <Card className="w-full max-w-2xl border-purple-500/50 bg-gradient-to-br from-slate-900 to-slate-800">
+        <CardHeader className="border-b border-purple-500/20 text-center">
+          <Trophy className="mx-auto mb-4 h-12 w-12 text-yellow-400" />
+          <CardTitle className="text-3xl text-white">Etapa completada</CardTitle>
+          <Badge className="mx-auto mt-3 bg-emerald-600 text-white">
+            {STAGE_LABELS[pillarId]}
+          </Badge>
         </CardHeader>
 
-        <CardContent className="pt-8 space-y-6">
-          {/* XP Reward */}
-          <div className="bg-gradient-to-r from-purple-600/20 to-pink-600/20 rounded-lg p-6 border border-purple-500/30">
-            <div className="flex items-center justify-center gap-3 mb-2">
-              <Zap className="w-6 h-6 text-yellow-400" />
-              <span className="text-4xl font-bold text-white">{xpEarned}</span>
-              <span className="text-2xl text-slate-300">XP</span>
-            </div>
-            <p className="text-center text-slate-300">Puntos ganados en este pilar</p>
-          </div>
-
-          {/* Next Pillar Info */}
-          {nextPillar && (
-            <div className="bg-slate-800/50 rounded-lg p-4 border border-[rgb(80,160,170)]">
-              <p className="text-sm text-slate-400 mb-2">Siguiente:</p>
-              <p className="text-lg font-semibold text-white">{nextPillar.name}</p>
-              <p className="text-sm text-slate-300">{nextPillar.description}</p>
-            </div>
-          )}
-
-          {/* Message */}
-          <div className="text-center">
-            <p className="text-slate-300 text-lg">
-              ¡Excelente trabajo! Has completado este pilar. 
-              {nextPillar ? ' Continúa con el siguiente.' : ' ¡Has completado todo el programa!'}
+        <CardContent className="space-y-6 pt-8">
+          <div className="rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-6 text-center">
+            <ShieldCheck className="mx-auto h-7 w-7 text-emerald-300" />
+            <p className="mt-3 font-medium text-white">
+              Cierre validado por el recorrido canónico
+            </p>
+            <p className="mt-2 text-sm text-slate-300">
+              Esta pantalla no otorga XP ni modifica progreso desde el navegador.
             </p>
           </div>
 
-          {/* Action Buttons */}
-          <div className="flex gap-3 pt-4">
-            <Button
-              onClick={() => router.push('/despega/pillars/hub')}
-              variant="outline"
-              className="flex-1 border-purple-500/30 text-white hover:bg-purple-500/10"
-              disabled={isRecording}
-            >
-              Ver Dashboard
-            </Button>
-            <Button
-              onClick={handleAwardXP}
-              className="flex-1 bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
-              disabled={isRecording}
-            >
-              {isRecording ? 'Registrando...' : 'Ir al Hub'}
-              <ChevronRight className="w-4 h-4 ml-2" />
-            </Button>
-          </div>
+          <Button
+            onClick={() => router.push('/despega/dashboard')}
+            className="w-full bg-gradient-to-r from-purple-600 to-pink-600 hover:from-purple-700 hover:to-pink-700"
+          >
+            Continuar mi recorrido
+            <ChevronRight className="ml-2 h-4 w-4" />
+          </Button>
         </CardContent>
       </Card>
     </div>
