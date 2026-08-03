@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { AlertCircle, ArrowLeft, CheckCircle2, Clock3, Loader2, Play, Pause, RotateCcw, Target, UserRound } from 'lucide-react'
+import { AlertCircle, ArrowLeft, CheckCircle2, Clock3, Loader2, Play, Pause, RotateCcw, Target, User } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
@@ -14,9 +14,9 @@ import { getActiveA3Module } from '@/lib/a3/active-module'
 import {
   EMPTY_FIRST_RECRUITER_DRAFT,
   FIRST_RECRUITER_DRAFT_KEY,
-  FIRST_RECRUITER_QUESTION_IDS,
   SAMPLE_FIRST_RECRUITER_DRAFT,
   countFirstRecruiterWords,
+  toFirstRecruiterDraft,
   type FirstRecruiterContext,
   type FirstRecruiterDraft,
   type FirstRecruiterQuestionId,
@@ -68,7 +68,7 @@ export function FirstRecruiterSimulationStudio() {
     const stored = window.localStorage.getItem(FIRST_RECRUITER_DRAFT_KEY)
     if (stored) {
       try {
-        setDraft({ ...EMPTY_FIRST_RECRUITER_DRAFT, ...JSON.parse(stored) })
+        setDraft(toFirstRecruiterDraft(JSON.parse(stored)))
       } catch {
         window.localStorage.removeItem(FIRST_RECRUITER_DRAFT_KEY)
       }
@@ -166,7 +166,7 @@ export function FirstRecruiterSimulationStudio() {
 
         <section className="space-y-3">
           <div className="flex items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"><UserRound className="h-6 w-6 text-primary" /></div>
+            <div className="flex h-12 w-12 items-center justify-center rounded-lg bg-primary/10"><User className="h-6 w-6 text-primary" /></div>
             <div><h1 className="text-3xl font-bold">Primera Simulación con Reclutador</h1><p className="text-muted-foreground">Una entrevista completa, cronometrada y verificable.</p></div>
           </div>
           <p className="max-w-3xl text-muted-foreground">No se simula una videollamada ni se guarda audio. Practica en voz alta, registra el tiempo real y deja evidencia escrita de lo que dijiste y aprendiste.</p>
