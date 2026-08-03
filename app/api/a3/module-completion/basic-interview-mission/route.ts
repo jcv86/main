@@ -187,7 +187,7 @@ export async function POST(request: NextRequest) {
           passScore: validation.passScore,
           strengths: validation.strengths,
           criteria: validation.criteria,
-          routeCompleted: true,
+          expectedTransition: 'a3-complete-to-a4',
         },
         p_responses: validation.responses,
         p_deliverable: validation.deliverable,
