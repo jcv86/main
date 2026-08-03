@@ -84,6 +84,9 @@ jobs:
       - name: A3 overview runtime configuration and source contract
         run: npx tsx scripts/check-a3-route-overview-contract.ts
 
+      - name: A3 legacy simulation retirement source contract
+        run: npx tsx scripts/check-a3-legacy-simulation-retirement-contract.ts
+
       - name: A3 to A4 static transition wiring contract
         run: npx tsx scripts/check-a3-a4-transition-contract.ts
 
