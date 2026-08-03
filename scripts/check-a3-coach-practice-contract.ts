@@ -30,13 +30,13 @@ const minimum = {
   motivationOriginal:
     'Me interesa esta oportunidad porque quiero asumir nuevos desafíos, trabajar con equipos diversos y aprender de una organización que está creciendo. Creo que mi experiencia puede ser útil y también veo espacio para seguir desarrollándome.',
   motivationImproved:
-    'Me interesa la oportunidad porque combina coordinación transversal, seguimiento de indicadores y mejora de procesos. Esa combinación se conecta con mi experiencia organizando proyectos complejos y puedo aportar estructura, documentación y continuidad desde el inicio.',
+    'Me interesa la oportunidad porque combina coordinación transversal, seguimiento de indicadores y mejora de procesos. Esa combinación se conecta con mi experiencia organizando proyectos complejos y puedo aportar estructura, documentación y continuidad desde el inicio, con una propuesta de trabajo claramente priorizada.',
   motivationLearning:
     'La segunda versión reemplaza motivaciones generales por una conexión concreta entre las necesidades del rol y la contribución que puedo realizar desde mi experiencia.',
   challengeOriginal:
     'En un proyecto importante aparecieron atrasos y varias áreas tenían prioridades distintas. Mi responsabilidad fue ayudar a ordenar el trabajo. Coordiné reuniones, registré acuerdos y acompañé al equipo hasta recuperar el calendario. Finalmente logramos continuar y mejorar la comunicación.',
   challengeImproved:
-    'Situación: un proyecto crítico acumulaba atrasos y las áreas no compartían una visión de las dependencias. Tarea: debía recuperar el control sin detener la operación. Acción: levanté riesgos, asigné responsables, definí hitos semanales y establecí una revisión ejecutiva breve. Resultado: el equipo recuperó el calendario y dejó un sistema reutilizable. Aprendizaje: hacer visibles las dependencias permite decidir antes y coordinar mejor.',
+    'Situación: un proyecto crítico acumulaba atrasos y las áreas no compartían una visión de las dependencias. Tarea: debía recuperar el control sin detener la operación. Acción: levanté riesgos, asigné responsables, definí hitos semanales y establecí una revisión ejecutiva breve. Resultado: el equipo recuperó el calendario y dejó un sistema reutilizable en futuras iniciativas de la organización. Aprendizaje: hacer visibles las dependencias permite decidir antes y coordinar mejor.',
   challengeLearning:
     'La revisión separa situación, tarea, acciones propias, resultado y aprendizaje, transformando una historia general en una respuesta que permite evaluar mi contribución.',
 }
