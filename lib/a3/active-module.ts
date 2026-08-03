@@ -58,6 +58,14 @@ const COMMUNICATION_GYM_DELIVERABLE_KEYS = [
   'reflection',
 ]
 
+const FIRST_RECRUITER_SIMULATION_DELIVERABLE_KEYS = [
+  'answers',
+  'strongestAnswer',
+  'weakestAnswer',
+  'improvementAction',
+  'interviewReflection',
+]
+
 export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
   const module = getA3Module(value)
   if (!module) return null
@@ -71,7 +79,9 @@ export function getActiveA3Module(value: unknown): A3ModuleDefinition | null {
           ? COACH_PRACTICE_DELIVERABLE_KEYS
           : module.id === 'communication-gym'
             ? COMMUNICATION_GYM_DELIVERABLE_KEYS
-            : null
+            : module.id === 'first-recruiter-simulation'
+              ? FIRST_RECRUITER_SIMULATION_DELIVERABLE_KEYS
+              : null
 
   if (!requiredDeliverableKeys) return module
 
