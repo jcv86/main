@@ -7,7 +7,7 @@ const service = readFileSync("lib/career/supabase-career-service.ts", "utf8")
 
 for (const table of [
   "career_identities",
-  "career_goals",
+  "career_identity_goals",
   "career_skills",
   "career_skill_edges",
   "career_evidence",
@@ -19,10 +19,14 @@ for (const table of [
   assert.match(migration, new RegExp(`alter table public\\.${table} enable row level security`))
 }
 
+assert.doesNotMatch(migration, /create table if not exists public\.career_goals\b/)
+assert.doesNotMatch(service, /\.from\("career_goals"\)/)
+assert.match(service, /\.from\("career_identity_goals"\)/)
 assert.match(migration, /career_agent_events_owner_select/)
 assert.match(migration, /career_agent_events_owner_insert/)
 assert.doesNotMatch(migration, /career_agent_events_owner_all/)
-assert.match(migration, /auth\.uid\(\) = user_id/g)
+assert.match(migration, /to authenticated/)
+assert.match(migration, /select auth\.uid\(\)/)
 assert.match(migration, /check \(confidence between 0 and 100\)/)
 assert.match(migration, /check \(weight between -1 and 1\)/)
 assert.match(migration, /check \(expires_at is null or expires_at > observed_at\)/)
