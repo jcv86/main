@@ -40,6 +40,7 @@ const DOMAIN_TESTS: Record<string, EvidenceLevel> = {
   'scripts/check-admin-surface-retirement-contract.ts': 'source_only',
   'scripts/check-demo-auth-retirement-contract.ts': 'source_only',
   'scripts/check-public-agentos-command-retirement-contract.ts': 'source_only',
+  'scripts/check-auto-detection-webhook-retirement-contract.ts': 'source_only',
 }
 
 const root = process.cwd()
@@ -100,11 +101,11 @@ for (const [path, level] of Object.entries(DOMAIN_TESTS)) {
   counts[level] += 1
 }
 
-assert.equal(Object.keys(DOMAIN_TESTS).length, 35)
+assert.equal(Object.keys(DOMAIN_TESTS).length, 36)
 assert.deepEqual(counts, {
   runtime_only: 1,
   mixed_runtime_and_source: 21,
-  source_only: 13,
+  source_only: 14,
 })
 
 console.log(
