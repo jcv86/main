@@ -72,7 +72,7 @@ assert.ok(!a1Page.includes('user_id: userId'))
 assert.ok(!a1Page.includes('disc_profile: scores'))
 assert.ok(!a1Page.includes('questions: DISC_TEST_QUESTIONS'))
 
-assert.ok(a1SaveRoute.includes('validateAndScoreDiscResponses(payload.responses)'))
+assert.ok(a1SaveRoute.includes('validateAndScoreDiscResponses(body.responses)'))
 assert.ok(a1SaveRoute.includes("code: 'client_owned_a1_field_rejected'"))
 assert.ok(a1SaveRoute.includes("code: 'invalid_disc_responses'"))
 assert.ok(a1SaveRoute.includes('p_responses: scoring.value.responses'))
