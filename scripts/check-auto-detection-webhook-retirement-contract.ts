@@ -30,7 +30,8 @@ assert.ok(!a1Save.includes('/api/webhooks/auto-detection'))
 assert.ok(!a1Save.includes('x-webhook-signature'))
 assert.ok(!a1Save.includes("event: 'a1_completed'"))
 assert.ok(a1Save.includes('supabase.auth.getUser()'))
-assert.ok(a1Save.includes('user_id: user.id'))
+assert.ok(a1Save.includes("'save_a1_cerebral_with_career_identity'"))
+assert.ok(!a1Save.includes(".from('a1_cerebral_assessment')"))
 
 assert.ok(jobMatching.includes('resolveServerUser()'))
 assert.ok(jobMatching.includes('checkA4Access(currentUser.id'))
@@ -44,6 +45,7 @@ console.log(
     manualGetTriggerRetired: true,
     weakSignatureAcceptanceRetired: true,
     a1PrematureJobMatchingRemoved: true,
+    a1AtomicCareerIdentityWrite: true,
     replacementAuthenticated: true,
     replacementA4Gated: true,
     liveHttpCheckedInThisScript: false,
