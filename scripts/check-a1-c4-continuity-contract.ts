@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
+import { existsSync, readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import { PRODUCT_STAGE_ORDER, PRODUCT_STAGES } from '../lib/dtc/product-language'
 import { resolveLegacyContinuityDestination } from '../lib/journey/legacy-continuity'
@@ -114,6 +114,26 @@ for (const path of legacyRoutes) {
   assert.ok(!route.includes('fetch('))
 }
 
+const parallelOnboarding = source('app/despega/onboarding/page.tsx')
+assert.ok(parallelOnboarding.includes("redirect('/despega/conozcamonos-1')"))
+assert.ok(!parallelOnboarding.includes("'use client'"))
+assert.ok(!parallelOnboarding.includes('DISC_TEST_QUESTIONS'))
+assert.ok(!parallelOnboarding.includes('/api/despega/save-test-results'))
+assert.equal(
+  existsSync(join(process.cwd(), 'app/despega/onboarding/page.tsx.backup')),
+  false,
+)
+
+const legacyTestWriter = source('app/api/despega/save-test-results/route.ts')
+assert.ok(legacyTestWriter.includes("code: 'LEGACY_TEST_RESULTS_API_RETIRED'"))
+assert.ok(legacyTestWriter.includes("replacement: '/api/a1-cerebral-save'"))
+assert.ok(legacyTestWriter.includes('status: 410'))
+assert.ok(legacyTestWriter.includes('export async function POST()'))
+assert.ok(legacyTestWriter.includes('export async function GET()'))
+assert.ok(!legacyTestWriter.includes('request.json()'))
+assert.ok(!legacyTestWriter.includes('Results acknowledged'))
+assert.ok(!legacyTestWriter.includes(".from('despega_test_results')"))
+
 for (const path of [
   'app/despega/pillars-hub/page.tsx',
   'app/despega/pillars/hub/page.tsx',
@@ -149,6 +169,8 @@ console.log(
     sourceContractsChecked: [
       'A1 onboarding marker order',
       'legacy route redirects',
+      'parallel onboarding retirement',
+      'false-success test writer retirement',
       'legacy hub retirement',
       'client progress writer retirement',
     ],
