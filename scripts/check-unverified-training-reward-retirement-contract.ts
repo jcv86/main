@@ -45,6 +45,14 @@ for (const path of [...executableFiles('app'), ...executableFiles('lib')]) {
   assert.ok(!content.includes('saveTrainingSession('), `${path} exposes the retired parallel training writer.`)
 }
 
+const legacyCompletion = source('app/api/a3/module-complete/route.ts')
+assert.ok(legacyCompletion.includes("code: 'A3_LEGACY_MODULE_COMPLETE_RETIRED'"))
+assert.ok(legacyCompletion.includes("replacement: '/api/a3/module-completion'"))
+assert.ok(legacyCompletion.includes('status: 410'))
+assert.ok(!legacyCompletion.includes('jwtDecode'))
+assert.ok(!legacyCompletion.includes('a3_completed_modules'))
+assert.ok(!legacyCompletion.includes('xp_earned'))
+
 const canonicalCompletion = source('app/api/a3/module-completion/route.ts')
 assert.ok(canonicalCompletion.includes('resolveServerUser()'))
 assert.ok(canonicalCompletion.includes('checkA3ModuleAccess('))
@@ -62,6 +70,7 @@ console.log(
     evidenceLevel: 'source_only',
     unsignedJwtIdentityHelperRetired: true,
     parallelTrainingRewardTrackerRetired: true,
+    legacyModuleCompletionRetired: true,
     canonicalA3IdentityServerVerified: true,
     canonicalA3SubmissionValidated: true,
     canonicalA3CompletionAtomic: true,
