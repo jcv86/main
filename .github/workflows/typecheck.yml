@@ -69,6 +69,9 @@ jobs:
       - name: A3 coach practice runtime validator and source contract
         run: npx tsx scripts/check-a3-coach-practice-contract.ts
 
+      - name: A2 and A3 coaching authentication and privacy source contract
+        run: npx tsx scripts/check-coaching-api-auth-contract.ts
+
       - name: A3 communication gym runtime validator and source contract
         run: npx tsx scripts/check-a3-communication-gym-contract.ts
 
