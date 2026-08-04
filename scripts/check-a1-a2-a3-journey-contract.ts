@@ -75,12 +75,14 @@ assert.ok(!a1Page.includes('questions: DISC_TEST_QUESTIONS'))
 assert.ok(a1SaveRoute.includes('validateAndScoreDiscResponses(payload.responses)'))
 assert.ok(a1SaveRoute.includes("code: 'client_owned_a1_field_rejected'"))
 assert.ok(a1SaveRoute.includes("code: 'invalid_disc_responses'"))
-assert.ok(a1SaveRoute.includes('responses: scoring.value.responses'))
-assert.ok(a1SaveRoute.includes('questions: scoring.value.questions'))
-assert.ok(a1SaveRoute.includes('disc_profile: scoring.value.scores'))
-assert.ok(a1SaveRoute.includes('dominant_pattern: scoring.value.dominantPattern'))
-assert.ok(a1SaveRoute.includes('user_id: user.id'))
-assert.ok(a1SaveRoute.includes('secondaryPattern: scoring.value.secondaryPattern'))
+assert.ok(a1SaveRoute.includes('p_responses: scoring.value.responses'))
+assert.ok(a1SaveRoute.includes('p_questions: scoring.value.questions'))
+assert.ok(a1SaveRoute.includes('p_disc_profile: scoring.value.scores'))
+assert.ok(a1SaveRoute.includes('p_dominant_pattern: scoring.value.dominantPattern'))
+assert.ok(a1SaveRoute.includes('p_secondary_pattern: scoring.value.secondaryPattern'))
+assert.ok(a1SaveRoute.includes("'save_a1_cerebral_with_career_identity'"))
+assert.ok(a1SaveRoute.includes('crypto.randomUUID()'))
+assert.ok(!a1SaveRoute.includes(".from('a1_cerebral_assessment')"))
 assert.ok(!a1SaveRoute.includes('const { responses, questions, disc_profile }'))
 assert.ok(!a1SaveRoute.includes('disc_profile.D || 0'))
 assert.ok(!a1SaveRoute.includes('errorMsg'))
@@ -193,7 +195,7 @@ console.log(
     ],
     sourceContractsChecked: [
       'server-owned A1 identity and scoring',
-      'canonical A1 payload',
+      'atomic A1 Career Identity dual-write',
       'A1 to A3 journey wiring',
     ],
     canonicalOrder: [
