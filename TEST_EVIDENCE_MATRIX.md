@@ -16,12 +16,12 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 |---|---:|
 | Runtime only | 1 |
 | Mixed runtime + source | 21 |
-| Source only | 10 |
+| Source only | 11 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
 
-El workflow valida 32 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
+El workflow valida 33 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
 
 Los contratos adicionales comprueban que:
 
@@ -29,6 +29,7 @@ Los contratos adicionales comprueban que:
 - las rutas heredadas de A3 no ejecuten puntajes aleatorios, escrituras desde el cliente o flujos paralelos;
 - cada combinación sesión/pregunta de entrevista tenga una sola respuesta y que el guardado con la suma de XP ocurra dentro de una transacción atómica del servidor;
 - los endpoints heredados de progreso y recompensas no puedan marcar módulos completos ni entregar XP/DTC sin evidencia validada;
+- ningún helper acepte identidad decodificando JWT sin verificar firma ni exista un tracker paralelo que calcule recompensas desde puntajes autorreportados;
 - el job matching de A4 respete el acceso persistido A3 → A4 y acote sus parámetros;
 - el seed público de ofertas A4 no pueda usar `service_role`, insertar datos ficticios ni reemplazar el job matching autenticado;
 - la superficie administrativa no consulte tablas inexistentes, no use correos públicos como autorización ni permita desbloqueos o reinicios destructivos;
