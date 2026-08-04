@@ -78,7 +78,12 @@ assert.equal(
   'The credential-bearing authenticated-flow script must remain deleted.',
 )
 
-const forbiddenPasswords = ['travis123', 'demo123', 'test123', 'admin123']
+const forbiddenPasswords = [
+  ['travis', '123'].join(''),
+  ['demo', '123'].join(''),
+  ['test', '123'].join(''),
+  ['admin', '123'].join(''),
+]
 const scannedFiles = [
   ...executableFiles('app'),
   ...executableFiles('components'),
