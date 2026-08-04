@@ -135,6 +135,9 @@ jobs:
       - name: Demo authentication retirement source contract
         run: npx tsx scripts/check-demo-auth-retirement-contract.ts
 
+      - name: Public AgentOS command execution retirement source contract
+        run: npx tsx scripts/check-public-agentos-command-retirement-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'
