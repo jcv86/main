@@ -15,8 +15,8 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 | Nivel | Cantidad |
 |---|---:|
 | Runtime only | 1 |
-| Mixed runtime + source | 21 |
-| Source only | 19 |
+| Mixed runtime + source | 22 |
+| Source only | 18 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
@@ -25,6 +25,7 @@ El workflow valida 41 contratos de dominio. La lista exacta y su clasificación 
 
 Los contratos adicionales comprueban que:
 
+- el cuestionario Despega Cerebral se valide y puntúe en servidor usando preguntas y opciones canónicas, rechazando selecciones duplicadas, incompletas, inventadas o adicionales;
 - los endpoints de gamificación no acepten IDs, puntajes, montos ni compras controlados por el navegador;
 - las rutas heredadas de A3 no ejecuten puntajes aleatorios, escrituras desde el cliente o flujos paralelos;
 - cada combinación sesión/pregunta de entrevista tenga una sola respuesta y que el guardado con la suma de XP ocurra dentro de una transacción atómica del servidor;
