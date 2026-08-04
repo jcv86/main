@@ -212,7 +212,7 @@ export class SupabaseCareerService {
     if (!identity) throw new Error("Career Identity has not been initialized")
 
     const [goals, skills, skillEdges, memories, recentEvidence] = await Promise.all([
-      this.supabase.from("career_goals").select("*").eq("user_id", userId).neq("status", "archived"),
+      this.supabase.from("career_identity_goals").select("*").eq("user_id", userId).neq("status", "archived"),
       this.supabase.from("career_skills").select("*").eq("user_id", userId),
       this.supabase.from("career_skill_edges").select("*").eq("user_id", userId),
       this.supabase.from("career_memories").select("*").eq("user_id", userId).is("superseded_by", null).order("importance", { ascending: false }),

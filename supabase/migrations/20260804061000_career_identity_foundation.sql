@@ -1,4 +1,4 @@
--- Additive Career Identity foundation. Existing A1-A4 tables remain untouched.
+-- Additive Career Identity foundation. Existing A1-A4 and legacy career_goals tables remain untouched.
 create extension if not exists pgcrypto;
 
 create table if not exists public.career_identities (
@@ -23,7 +23,7 @@ create table if not exists public.career_identities (
   updated_at timestamptz not null default now()
 );
 
-create table if not exists public.career_goals (
+create table if not exists public.career_identity_goals (
   id uuid primary key default gen_random_uuid(),
   user_id uuid not null references auth.users(id) on delete cascade,
   identity_id uuid not null references public.career_identities(id) on delete cascade,
@@ -131,7 +131,7 @@ create table if not exists public.career_agent_events (
   created_at timestamptz not null default now()
 );
 
-create index if not exists career_goals_user_status_idx on public.career_goals(user_id, status);
+create index if not exists career_identity_goals_user_status_idx on public.career_identity_goals(user_id, status);
 create index if not exists career_skills_user_idx on public.career_skills(user_id);
 create index if not exists career_skill_edges_user_idx on public.career_skill_edges(user_id);
 create index if not exists career_evidence_user_observed_idx on public.career_evidence(user_id, observed_at desc);
@@ -139,19 +139,27 @@ create index if not exists career_memories_user_key_idx on public.career_memorie
 create index if not exists career_snapshots_identity_idx on public.career_profile_snapshots(identity_id, version desc);
 create index if not exists career_agent_events_correlation_idx on public.career_agent_events(user_id, correlation_id, created_at desc);
 
-create or replace function public.set_career_updated_at() returns trigger
-language plpgsql security invoker set search_path = public as $$
-begin new.updated_at = now(); return new; end; $$;
+create or replace function public.set_career_updated_at()
+returns trigger
+language plpgsql
+security invoker
+set search_path = public
+as $$
+begin
+  new.updated_at = now();
+  return new;
+end;
+$$;
 
 drop trigger if exists set_career_identities_updated_at on public.career_identities;
 create trigger set_career_identities_updated_at before update on public.career_identities for each row execute function public.set_career_updated_at();
-drop trigger if exists set_career_goals_updated_at on public.career_goals;
-create trigger set_career_goals_updated_at before update on public.career_goals for each row execute function public.set_career_updated_at();
+drop trigger if exists set_career_identity_goals_updated_at on public.career_identity_goals;
+create trigger set_career_identity_goals_updated_at before update on public.career_identity_goals for each row execute function public.set_career_updated_at();
 drop trigger if exists set_career_skills_updated_at on public.career_skills;
 create trigger set_career_skills_updated_at before update on public.career_skills for each row execute function public.set_career_updated_at();
 
 alter table public.career_identities enable row level security;
-alter table public.career_goals enable row level security;
+alter table public.career_identity_goals enable row level security;
 alter table public.career_skills enable row level security;
 alter table public.career_skill_edges enable row level security;
 alter table public.career_evidence enable row level security;
@@ -159,14 +167,18 @@ alter table public.career_memories enable row level security;
 alter table public.career_profile_snapshots enable row level security;
 alter table public.career_agent_events enable row level security;
 
-create policy "career_identities_owner_all" on public.career_identities for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_goals_owner_all" on public.career_goals for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_skills_owner_all" on public.career_skills for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_skill_edges_owner_all" on public.career_skill_edges for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_evidence_owner_all" on public.career_evidence for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_memories_owner_all" on public.career_memories for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_profile_snapshots_owner_all" on public.career_profile_snapshots for all using (auth.uid() = user_id) with check (auth.uid() = user_id);
-create policy "career_agent_events_owner_select" on public.career_agent_events for select using (auth.uid() = user_id);
-create policy "career_agent_events_owner_insert" on public.career_agent_events for insert with check (auth.uid() = user_id);
+create policy career_identities_owner_all on public.career_identities for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_identity_goals_owner_all on public.career_identity_goals for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_skills_owner_all on public.career_skills for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_skill_edges_owner_all on public.career_skill_edges for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_evidence_owner_all on public.career_evidence for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_memories_owner_all on public.career_memories for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_profile_snapshots_owner_all on public.career_profile_snapshots for all to authenticated using ((select auth.uid()) = user_id) with check ((select auth.uid()) = user_id);
+create policy career_agent_events_owner_select on public.career_agent_events for select to authenticated using ((select auth.uid()) = user_id);
+create policy career_agent_events_owner_insert on public.career_agent_events for insert to authenticated with check ((select auth.uid()) = user_id);
 
+grant select, insert, update, delete on public.career_identities, public.career_identity_goals, public.career_skills, public.career_skill_edges, public.career_evidence, public.career_memories, public.career_profile_snapshots to authenticated;
+grant select, insert on public.career_agent_events to authenticated;
+
+comment on table public.career_identity_goals is 'Career Identity goals isolated from the legacy public.career_goals table.';
 comment on table public.career_agent_events is 'Append-only audit trail for Career Identity agent writes and rejected operations.';
