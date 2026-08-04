@@ -22,6 +22,25 @@ export default function SignInPage() {
   const [invitationCode, setInvitationCode] = useState('')
   const [isValidatingCode, setIsValidatingCode] = useState(false)
   const [showWaitlist, setShowWaitlist] = useState(false)
+  const [isPreview, setIsPreview] = useState(false)
+
+  useEffect(() => {
+    const hostname = window.location.hostname
+    setIsPreview(
+      searchParams.get('preview') === '1' ||
+      hostname === 'localhost' ||
+      hostname === '127.0.0.1' ||
+      hostname.endsWith('.vercel.app') ||
+      hostname.endsWith('.v0.dev')
+    )
+  }, [])
+
+  const handlePreviewAccess = async () => {
+    const response = await fetch('/api/auth/demo', { method: 'POST' })
+    if (!response.ok) return
+    const nextPath = searchParams.get('next') || '/despega/conozcamonos-1'
+    router.push(nextPath)
+  }
 
   // Fetch invitation status
   useEffect(() => {
@@ -220,6 +239,17 @@ export default function SignInPage() {
               )}
               {isValidatingCode ? 'Validando...' : 'Continuar con LinkedIn'}
             </Button>
+
+            {isPreview && (
+              <Button
+                type="button"
+                onClick={handlePreviewAccess}
+                variant="outline"
+                className="w-full h-11 text-base font-medium border-cyan/40 text-cyan/80 hover:text-cyan hover:bg-cyan/10"
+              >
+                Entrar en modo Preview
+              </Button>
+            )}
 
             {/* Divider */}
             <div className="relative my-4">
