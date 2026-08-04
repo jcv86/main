@@ -1,53 +1,20 @@
-import { put } from '@vercel/blob'
-import { cookies } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-export async function POST(request: Request) {
-  try {
-    const cookieStore = await cookies()
-    const demoUserCookie = cookieStore.get('demo_user')
-    
-    if (!demoUserCookie) {
-      return NextResponse.json(
-        { error: 'Not authenticated' },
-        { status: 401 }
-      )
-    }
-
-    const demoUser = JSON.parse(demoUserCookie.value)
-    const userId = demoUser.id
-
-    // Get form data
-    const formData = await request.formData()
-    const file = formData.get('file') as File
-    const fileName = formData.get('fileName') as string
-
-    if (!file) {
-      return NextResponse.json(
-        { error: 'No file provided' },
-        { status: 400 }
-      )
-    }
-
-    // Upload to Vercel Blob
-    const filename = `day1/${userId}/${Date.now()}-${fileName}`
-    const blob = await put(filename, file, {
-      access: 'public',
-    })
-
-    return NextResponse.json({
-      success: true,
-      blob: {
-        url: blob.url,
-        pathname: blob.pathname,
-        fileName: fileName,
+export async function POST() {
+  return NextResponse.json(
+    {
+      error: 'La carga pública legacy de documentos del Día 1 fue retirada.',
+      code: 'A2_DAY1_PUBLIC_UPLOAD_RETIRED',
+      replacement: '/api/a2/day1/analyze',
+      message:
+        'El Día 1 canónico guarda evidencia estructurada. Los archivos personales no se publicarán hasta disponer de almacenamiento privado verificado.',
+    },
+    {
+      status: 410,
+      headers: {
+        'Cache-Control': 'no-store',
+        'X-Content-Type-Options': 'nosniff',
       },
-    })
-  } catch (error) {
-    console.error('[v0] Upload error:', error)
-    return NextResponse.json(
-      { error: 'Failed to upload file' },
-      { status: 500 }
-    )
-  }
+    },
+  )
 }
