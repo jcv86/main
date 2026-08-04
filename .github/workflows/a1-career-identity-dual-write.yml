@@ -20,7 +20,7 @@ jobs:
         with:
           node-version: 24
           cache: npm
-      - run: npm ci --legacy-peer-deps
+      - run: npm install --legacy-peer-deps
       - name: A1 atomic dual-write contract
         run: npx tsx scripts/check-a1-career-identity-dual-write-contract.ts
       - name: TypeScript full-repository check
