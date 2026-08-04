@@ -1,0 +1,29 @@
+name: A3 Career Identity trigger
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/20260804150000_a3_career_identity_module_completion.sql'
+      - 'scripts/test-a3-career-identity-trigger.mjs'
+      - '.github/workflows/a3-career-identity-trigger.yml'
+  workflow_dispatch:
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: A3 Career Identity trigger contract
+        run: node scripts/test-a3-career-identity-trigger.mjs
+      - name: TypeScript full-repository check
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
