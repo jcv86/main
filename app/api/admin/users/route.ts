@@ -1,24 +1,17 @@
-import { NextRequest, NextResponse } from 'next/server'
-import { getAllUsersForAdmin } from '@/lib/dtc-agentos/admin/platform-management'
+import { adminUnavailableResponse } from '@/lib/admin/unconfigured'
 
-export async function GET(request: NextRequest) {
-  try {
-    const limit = parseInt(request.nextUrl.searchParams.get('limit') || '50')
-    const offset = parseInt(request.nextUrl.searchParams.get('offset') || '0')
+export async function GET() {
+  return adminUnavailableResponse()
+}
 
-    const result = await getAllUsersForAdmin(limit, offset)
+export async function POST() {
+  return adminUnavailableResponse()
+}
 
-    if (!result.success) {
-      return NextResponse.json({ error: result.error }, { status: 403 })
-    }
+export async function PUT() {
+  return adminUnavailableResponse()
+}
 
-    return NextResponse.json({
-      success: true,
-      users: result.users,
-      total: result.total,
-    })
-  } catch (error) {
-    console.error('[v0] Error getting users:', error)
-    return NextResponse.json({ error: 'Failed to get users' }, { status: 500 })
-  }
+export async function DELETE() {
+  return adminUnavailableResponse()
 }
