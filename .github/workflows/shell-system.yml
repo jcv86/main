@@ -1,0 +1,29 @@
+name: Shell system
+
+on:
+  pull_request:
+    paths:
+      - 'app/despega/layout.tsx'
+      - 'components/layout/**'
+      - 'scripts/test-shell-system.mjs'
+      - '.github/workflows/shell-system.yml'
+
+jobs:
+  shell:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Shell contract
+        run: node scripts/test-shell-system.mjs
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
