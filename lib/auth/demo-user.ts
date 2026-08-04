@@ -21,15 +21,20 @@ export function getTravisDemoUser(): never {
   throw new Error('Demo authentication has been retired')
 }
 
+/**
+ * Compatibility stub. The broad return type keeps legacy callers type-safe,
+ * while the implementation always rejects demo identities.
+ */
 export async function getDemoUserFromRequest(
   _request: NextRequest,
-): Promise<null> {
+): Promise<DemoUser | null> {
   return null
 }
 
+/** Compatibility stub: legacy demo tokens are never accepted. */
 export async function verifyDemoSessionToken(
   _token?: string | null,
-): Promise<null> {
+): Promise<DemoUser | null> {
   return null
 }
 
@@ -41,10 +46,12 @@ export const demoSessionCookieOptions = {
   maxAge: 0,
 }
 
-export function getDemoUser(): null {
+/** Compatibility stub: no demo user is exposed at runtime. */
+export function getDemoUser(): DemoUser | null {
   return null
 }
 
-export function isDemoUser(_userId?: string | null): false {
+/** Compatibility stub: no user ID is treated as a demo identity. */
+export function isDemoUser(_userId?: string | null): boolean {
   return false
 }
