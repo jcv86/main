@@ -1,0 +1,21 @@
+name: Public documentation links
+
+on:
+  pull_request:
+    paths:
+      - 'app/comenzar/page.tsx'
+      - 'public/TESTING_GUIDE.md'
+      - 'public/PRODUCTION_READY_CHECKLIST.md'
+      - 'public/TESTING_LINKS.md'
+      - 'scripts/contracts/public-doc-links-contract.mjs'
+      - '.github/workflows/public-doc-links.yml'
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+      - run: node scripts/contracts/public-doc-links-contract.mjs
