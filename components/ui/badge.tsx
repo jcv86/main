@@ -4,14 +4,16 @@ import { cva, type VariantProps } from "class-variance-authority"
 import { cn } from "@/lib/utils"
 
 const badgeVariants = cva(
-  "inline-flex items-center rounded-[16px] border px-3 py-1.5 text-xs font-semibold transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2",
+  "inline-flex items-center gap-1 rounded-full border px-2.5 py-1 text-[11px] font-semibold leading-none tracking-[0.02em] transition-colors focus:outline-none focus:ring-2 focus:ring-ring focus:ring-offset-2 focus:ring-offset-background",
   {
     variants: {
       variant: {
-        default: "border-transparent bg-purple text-purple-foreground hover:bg-purple/80",
-        secondary: "border-transparent bg-secondary text-secondary-foreground hover:bg-secondary/80",
-        destructive: "border-transparent bg-destructive text-destructive-foreground hover:bg-destructive/80",
-        outline: "text-foreground",
+        default: "border-[hsl(var(--primary)/0.28)] bg-[hsl(var(--primary)/0.12)] text-[hsl(var(--dtc-indigo-300))]",
+        secondary: "border-border bg-muted/60 text-muted-foreground",
+        destructive: "border-[hsl(var(--destructive)/0.28)] bg-[hsl(var(--destructive)/0.12)] text-[hsl(var(--dtc-error-text))]",
+        success: "border-[hsl(var(--dtc-teal-500)/0.28)] bg-[hsl(var(--dtc-success-bg))] text-[hsl(var(--dtc-success-text))]",
+        warning: "border-[hsl(var(--dtc-amber-500)/0.28)] bg-[hsl(var(--dtc-warning-bg))] text-[hsl(var(--dtc-warning-text))]",
+        outline: "border-border bg-transparent text-foreground",
       },
     },
     defaultVariants: {

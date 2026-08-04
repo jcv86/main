@@ -6,22 +6,31 @@ import * as ProgressPrimitive from "@radix-ui/react-progress"
 import { cn } from "@/lib/utils"
 
 interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
-  indicatorColor?: string
+  indicatorClassName?: string
+  indicatorColor?: React.CSSProperties["backgroundColor"]
 }
 
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   ProgressProps
->(({ className, value, indicatorColor = 'rgb(0, 190, 200)', ...props }, ref) => (
+>(({ className, value = 0, indicatorClassName, indicatorColor, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
-    className={cn("relative h-4 w-full overflow-hidden rounded-[20px]", className)}
-    style={{ backgroundColor: 'rgb(70, 90, 110)' }}
+    className={cn(
+      "relative h-2.5 w-full overflow-hidden rounded-full bg-[hsl(var(--dtc-ink-700)/0.72)] shadow-[var(--dtc-shadow-inset)]",
+      className,
+    )}
     {...props}
   >
     <ProgressPrimitive.Indicator
-      className="h-full w-full flex-1 transition-all"
-      style={{ transform: `translateX(-${100 - (value || 0)}%)`, backgroundColor: indicatorColor }}
+      className={cn(
+        "h-full w-full flex-1 rounded-full bg-primary shadow-[0_0_18px_hsl(var(--primary)/0.28)] transition-transform duration-300 ease-out",
+        indicatorClassName,
+      )}
+      style={{
+        transform: `translateX(-${100 - Math.min(100, Math.max(0, value))}%)`,
+        ...(indicatorColor ? { backgroundColor: indicatorColor } : {}),
+      }}
     />
   </ProgressPrimitive.Root>
 ))
