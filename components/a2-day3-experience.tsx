@@ -2,14 +2,13 @@
 
 import { useState, useEffect } from 'react'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, Sparkles, Loader, AlertCircle } from 'lucide-react'
+import { ChevronRight, AlertCircle } from 'lucide-react'
 import { Day3JobSearch } from './a2-day3-job-search'
 import { Day3SignalExtraction } from './a2-day3-signal-extraction'
 import { Day3CoachAnalysis } from './a2-day3-coach-analysis'
 import { saveDayDocument, formatDocumentContent } from '@/lib/supabase/dtc-documents-phase2'
 import {
   createMarketSignal,
-  createExtractedSignal,
   getMarketSignals,
   getExtractedSignals,
   type MarketSignal,
@@ -19,7 +18,7 @@ import { ensureTravisDataForDay } from '@/lib/travis-seed-supabase'
 import { isTravisMode } from '@/lib/travis-form-data'
 
 interface Day3ExperienceProps {
-  onComplete: (submission: any) => Promise<void>
+  onComplete: (submission: unknown) => Promise<void>
   userId?: string
 }
 
@@ -32,26 +31,24 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [isDevMode, setIsDevMode] = useState(false)
 
-  // Load existing data on mount (with Travis auto-seed)
   useEffect(() => {
     const travisMode = isTravisMode()
     setIsDevMode(travisMode)
-    
+
     if (userId) {
-      initializeDay3(travisMode)
+      void initializeDay3(travisMode)
     }
   }, [userId])
 
   const initializeDay3 = async (travisMode: boolean) => {
     if (!userId) return
     setIsLoading(true)
-    
+
     try {
-      // Auto-seed Travis data if in dev mode
       if (travisMode) {
         await ensureTravisDataForDay(userId, 3)
       }
-      
+
       await loadDay3Data()
     } catch (err) {
       console.error('[v0] Error initializing Day 3:', err)
@@ -90,15 +87,16 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
     if (!userId) return
 
     setIsLoading(true)
+    setError(null)
     try {
-      const { data: newSignal, error } = await createMarketSignal(userId, {
+      const { data: newSignal, error: saveError } = await createMarketSignal(userId, {
         day_number: 3,
         ...jobData,
       })
 
-      if (error) throw error
+      if (saveError) throw saveError
       if (newSignal) {
-        setMarketSignals((prev) => [newSignal, ...prev])
+        setMarketSignals((previous) => [newSignal, ...previous])
       }
     } catch (err) {
       console.error('[v0] Error adding job posting:', err)
@@ -109,29 +107,34 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
   }
 
   const handleExtractSignals = async () => {
-    if (!userId || marketSignals.length === 0) return
+    if (marketSignals.length < 3) {
+      setError('Guarda al menos 3 vacantes reales antes de extraer señales.')
+      return
+    }
 
     setIsLoading(true)
+    setError(null)
     try {
-      // Call API to extract signals using OpenAI
       const response = await fetch('/api/a2/extract-signals', {
         method: 'POST',
+        credentials: 'include',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          marketSignals,
-          userId,
-          dayNumber: 3,
-        }),
+        body: JSON.stringify({ dayNumber: 3 }),
       })
 
-      if (!response.ok) throw new Error('Failed to extract signals')
+      const payload = (await response.json().catch(() => ({}))) as {
+        signals?: ExtractedSignal[]
+        error?: string
+      }
+      if (!response.ok) {
+        throw new Error(payload.error || 'No pudimos extraer las señales.')
+      }
 
-      const { signals: extracted } = await response.json()
-      setExtractedSignals(extracted)
+      setExtractedSignals(payload.signals || [])
       setStep(3)
     } catch (err) {
       console.error('[v0] Error extracting signals:', err)
-      setError('Error extrayendo señales del mercado.')
+      setError(err instanceof Error ? err.message : 'Error extrayendo señales del mercado.')
       setStep(2)
     } finally {
       setIsLoading(false)
@@ -140,21 +143,22 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
 
   const handleCompleteDay = async () => {
     setIsSubmitting(true)
+    setError(null)
     const submission = {
       dayNumber: 3,
       marketSignals,
       extractedSignals,
       completedAt: new Date().toISOString(),
     }
+
     try {
-      // Save to DTC documents
       if (userId) {
         await saveDayDocument(
           userId,
           3,
           'market_signal',
           formatDocumentContent(submission),
-          'Señales del Mercado - Day 3'
+          'Señales del Mercado - Día 3',
         )
       }
 
@@ -169,7 +173,6 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
 
   return (
     <div className="max-w-4xl mx-auto space-y-6 px-4">
-      {/* Dev Mode Badge */}
       {isDevMode && (
         <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
           Travis Dev Mode - Datos Auto-cargados
@@ -205,11 +208,11 @@ export function Day3Experience({ onComplete, userId }: Day3ExperienceProps) {
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Generar reporte de señales del mercado (skills repetidas, tools, soft skills)</span>
+                <span>Generar un reporte de señales repetidas en el mercado</span>
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Recibir feedback de Coach sobre brecha real</span>
+                <span>Contrastar tu evidencia con esas señales</span>
               </li>
             </ul>
           </div>
