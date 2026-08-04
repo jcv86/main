@@ -23,7 +23,10 @@ const bannedPatterns = [
   { label: 'retired saturated color', regex: /#(?:0000ff|8000ff|3b82f6|8b5cf6|00bec8)\b/gi },
   { label: 'retired rgb color', regex: /rgb\(\s*(?:170\s*,\s*70\s*,\s*170|0\s*,\s*190\s*,\s*200)\s*\)/gi },
   { label: 'non-Montserrat product font', regex: /\b(?:Lora|Poppins|Inter)\b/g },
-  { label: 'arbitrary Tailwind shadow', regex: /\bshadow-(?:sm|md|lg|xl|2xl)\b/g },
+  {
+    label: 'arbitrary Tailwind shadow',
+    regex: /(?:^|[\s"'`])shadow-(?:sm|md|lg|xl|2xl)(?=$|[\s"'`])/gm,
+  },
 ]
 
 function collectFiles(relativePath) {
@@ -53,7 +56,11 @@ for (const absolutePath of files) {
     violations.push(`${relativePath}: literal inline color`)
   }
 
-  if (relativePath.startsWith('components/ui/') && /focus:(?:ring|border)/.test(source) && !/focus-visible:(?:ring|border)/.test(source)) {
+  if (
+    relativePath.startsWith('components/ui/') &&
+    /(?:^|[\s"'`])focus:(?:ring|border)/m.test(source) &&
+    !/(?:^|[\s"'`])focus-visible:(?:ring|border)/m.test(source)
+  ) {
     violations.push(`${relativePath}: focus styling must use focus-visible`)
   }
 }
