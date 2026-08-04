@@ -7,12 +7,13 @@ import { cn } from "@/lib/utils"
 
 interface ProgressProps extends React.ComponentPropsWithoutRef<typeof ProgressPrimitive.Root> {
   indicatorClassName?: string
+  indicatorColor?: React.CSSProperties["backgroundColor"]
 }
 
 const Progress = React.forwardRef<
   React.ElementRef<typeof ProgressPrimitive.Root>,
   ProgressProps
->(({ className, value = 0, indicatorClassName, ...props }, ref) => (
+>(({ className, value = 0, indicatorClassName, indicatorColor, ...props }, ref) => (
   <ProgressPrimitive.Root
     ref={ref}
     className={cn(
@@ -26,7 +27,10 @@ const Progress = React.forwardRef<
         "h-full w-full flex-1 rounded-full bg-primary shadow-[0_0_18px_hsl(var(--primary)/0.28)] transition-transform duration-300 ease-out",
         indicatorClassName,
       )}
-      style={{ transform: `translateX(-${100 - Math.min(100, Math.max(0, value))}%)` }}
+      style={{
+        transform: `translateX(-${100 - Math.min(100, Math.max(0, value))}%)`,
+        ...(indicatorColor ? { backgroundColor: indicatorColor } : {}),
+      }}
     />
   </ProgressPrimitive.Root>
 ))
