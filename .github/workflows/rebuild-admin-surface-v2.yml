@@ -1,0 +1,134 @@
+name: Rebuild admin retirement on current main
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/rebuild-admin-surface-v2.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  rebuild:
+    if: github.event_name == 'workflow_dispatch' || github.actor != 'github-actions[bot]'
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - name: Checkout clean branch
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref || github.ref_name }}
+          fetch-depth: 0
+
+      - name: Fetch source and current main
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin main agent/retire-unconfigured-admin-surface
+
+      - name: Copy validated admin retirement files
+        shell: bash
+        run: |
+          set -euo pipefail
+          SOURCE_REF='origin/agent/retire-unconfigured-admin-surface'
+
+          files=(
+            'app/admin/page.tsx'
+            'app/admin/users/page.tsx'
+            'app/api/admin/export/route.ts'
+            'app/api/admin/metrics/route.ts'
+            'app/api/admin/pillar-access/route.ts'
+            'app/api/admin/pillar-unlock/route.ts'
+            'app/api/admin/user-status/route.ts'
+            'app/api/admin/users/route.ts'
+            'app/api/auth/demo/route.ts'
+            'components/admin/admin-unavailable.tsx'
+            'components/admin/protected-admin-route.tsx'
+            'lib/admin/unconfigured.ts'
+            'lib/auth/demo-user.ts'
+            'lib/auth/middleware.ts'
+            'lib/auth/server-user.ts'
+            'lib/dtc-agentos/admin/platform-management.ts'
+            'middleware.ts'
+            'scripts/check-admin-surface-retirement-contract.ts'
+            'scripts/check-demo-auth-retirement-contract.ts'
+            'scripts/check-dtc-critical-contract.ts'
+          )
+
+          for path in "${files[@]}"; do
+            mkdir -p "$(dirname "$path")"
+            git show "$SOURCE_REF:$path" > "$path"
+          done
+
+          rm -f \
+            components/auth-bypass.tsx \
+            scripts/999-create-demo-users.sql \
+            test-a2-authenticated-flow.sh
+
+      - name: Merge current evidence inventory
+        shell: bash
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          from pathlib import Path
+
+          workflow_path = Path('.github/workflows/typecheck.yml')
+          workflow = workflow_path.read_text(encoding='utf-8')
+          admin_step = """      - name: Admin surface retirement source contract
+        run: npx tsx scripts/check-admin-surface-retirement-contract.ts
+
+"""
+          anchor = """      - name: Gamification server-ownership source contract
+        run: npx tsx scripts/check-gamification-integrity-contract.ts
+
+"""
+          if 'check-admin-surface-retirement-contract.ts' not in workflow:
+              if anchor not in workflow:
+                  raise SystemExit('Gamification workflow anchor not found')
+              workflow = workflow.replace(anchor, anchor + admin_step)
+          workflow_path.write_text(workflow, encoding='utf-8')
+
+          matrix_path = Path('scripts/check-test-evidence-matrix.ts')
+          matrix = matrix_path.read_text(encoding='utf-8')
+          manifest_anchor = "  'scripts/check-gamification-integrity-contract.ts': 'source_only',\n"
+          manifest_entry = "  'scripts/check-admin-surface-retirement-contract.ts': 'source_only',\n"
+          if manifest_entry not in matrix:
+              if manifest_anchor not in matrix:
+                  raise SystemExit('Evidence manifest anchor not found')
+              matrix = matrix.replace(manifest_anchor, manifest_anchor + manifest_entry)
+          matrix = matrix.replace(
+              'assert.equal(Object.keys(DOMAIN_TESTS).length, 29)',
+              'assert.equal(Object.keys(DOMAIN_TESTS).length, 30)',
+          )
+          matrix = matrix.replace('  source_only: 7,', '  source_only: 8,')
+          matrix_path.write_text(matrix, encoding='utf-8')
+
+          docs_path = Path('TEST_EVIDENCE_MATRIX.md')
+          docs = docs_path.read_text(encoding='utf-8')
+          docs = docs.replace('| Source only | 7 |', '| Source only | 8 |')
+          docs = docs.replace(
+              'El workflow valida 29 contratos de dominio.',
+              'El workflow valida 30 contratos de dominio.',
+          )
+          admin_bullet = '- la superficie administrativa no consulte tablas inexistentes, no use correos públicos como autorización ni permita desbloqueos o reinicios destructivos.'
+          if admin_bullet not in docs:
+              job_bullet = '- el job matching de A4 respete el acceso persistido A3 → A4 y acote sus parámetros;'
+              if job_bullet not in docs:
+                  raise SystemExit('A4 evidence bullet anchor not found')
+              docs = docs.replace(job_bullet, job_bullet + '\n' + admin_bullet)
+          docs_path.write_text(docs, encoding='utf-8')
+          PY
+
+      - name: Remove temporary workflow and commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git rm .github/workflows/rebuild-admin-surface-v2.yml
+          git add -A
+          git commit -m 'fix(admin): reconstruir retiro seguro sobre main actual'
+          git push origin HEAD:${{ github.head_ref || github.ref_name }}
