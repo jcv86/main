@@ -16,19 +16,21 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 |---|---:|
 | Runtime only | 1 |
 | Mixed runtime + source | 21 |
-| Source only | 6 |
+| Source only | 8 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
 
-El workflow valida 28 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
+El workflow valida 30 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
 
 Los contratos adicionales comprueban que:
 
 - los endpoints de gamificación no acepten IDs, puntajes, montos ni compras controlados por el navegador;
 - las rutas heredadas de A3 no ejecuten puntajes aleatorios, escrituras desde el cliente o flujos paralelos;
 - cada combinación sesión/pregunta de entrevista tenga una sola respuesta y que el guardado con la suma de XP ocurra dentro de una transacción atómica del servidor;
-- los endpoints heredados de progreso y recompensas no puedan marcar módulos completos ni entregar XP/DTC sin evidencia validada.
+- los endpoints heredados de progreso y recompensas no puedan marcar módulos completos ni entregar XP/DTC sin evidencia validada;
+- el job matching de A4 respete el acceso persistido A3 → A4 y acote sus parámetros;
+- la superficie administrativa no consulte tablas inexistentes, no use correos públicos como autorización ni permita desbloqueos o reinicios destructivos.
 
 ## Lo que un verde sí demuestra
 
