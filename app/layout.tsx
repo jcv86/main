@@ -1,7 +1,8 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Montserrat, Lora } from "next/font/google"
+import { Montserrat } from "next/font/google"
 import "./globals.css"
+import "./design-system.css"
 import { Providers } from "./providers"
 import { Toaster } from "@/components/ui/toaster"
 import { Analytics } from "@vercel/analytics/next"
@@ -14,18 +15,10 @@ if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
   validateEnvironment()
 }
 
-// DTC Brand Typography - Optimized font loading
-const montserrat = Montserrat({ 
+// DESIGN.md: Montserrat is the only product typeface.
+const montserrat = Montserrat({
   subsets: ["latin"],
   variable: "--font-montserrat",
-  weight: ["400", "500", "600", "700", "800"],
-  display: "swap",
-  preload: true,
-})
-
-const lora = Lora({ 
-  subsets: ["latin"],
-  variable: "--font-lora",
   weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
@@ -120,7 +113,7 @@ export const metadata: Metadata = {
   },
   category: "education",
   classification: "Professional Development Platform",
-  generator: 'v0.app'
+  generator: "v0.app",
 }
 
 export const viewport: Viewport = {
@@ -128,7 +121,7 @@ export const viewport: Viewport = {
   initialScale: 1,
   maximumScale: 1,
   userScalable: false,
-  themeColor: "#1a1a1a",
+  themeColor: "#080B14",
 }
 
 export default function RootLayout({
@@ -142,11 +135,11 @@ export default function RootLayout({
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
         <link rel="manifest" href="/manifest.json" />
-        <meta name="theme-color" content="#000000" />
+        <meta name="theme-color" content="#080B14" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className={`${montserrat.variable} ${lora.variable} font-sans`}>
+      <body className={`${montserrat.variable} font-sans`}>
         <Providers>
           {children}
           <LLMOOptimizedFooter />

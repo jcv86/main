@@ -1,0 +1,253 @@
+/*
+ * DTC Design System v2 — canonical runtime foundation.
+ * Source of truth: /DESIGN.md
+ *
+ * This layer intentionally overrides legacy variables after globals.css so
+ * existing screens inherit the new brand without a risky big-bang rewrite.
+ */
+
+:root,
+.dark {
+  color-scheme: dark;
+
+  /* Foundation */
+  --dtc-ink-950: #080b14;
+  --dtc-ink-900: #0d1220;
+  --dtc-ink-850: #121827;
+  --dtc-ink-800: #182033;
+  --dtc-ink-700: #263149;
+  --dtc-ink-600: #3b4863;
+  --dtc-stone-50: #f7f5f0;
+  --dtc-stone-200: #ddd9d0;
+  --dtc-stone-400: #a7a39b;
+  --dtc-stone-600: #716f6a;
+
+  /* Brand */
+  --dtc-indigo-300: #a8b4ff;
+  --dtc-indigo-400: #7e8dff;
+  --dtc-indigo-500: #5c6ff0;
+  --dtc-indigo-600: #4658d4;
+  --dtc-indigo-700: #3544a8;
+  --dtc-teal-300: #79d5c8;
+  --dtc-teal-500: #2faf9e;
+  --dtc-teal-700: #18776d;
+  --dtc-amber-300: #f8d58a;
+  --dtc-amber-500: #d99b32;
+  --dtc-amber-700: #93631c;
+
+  /* Pillars: contextual accents only */
+  --dtc-a1: #9b7cf6;
+  --dtc-a2: #5c6ff0;
+  --dtc-a3: #e7836f;
+  --dtc-a4: #2faf9e;
+
+  /* Semantic */
+  --dtc-success: #2faf9e;
+  --dtc-success-bg: #102c2a;
+  --dtc-warning: #d99b32;
+  --dtc-warning-bg: #302514;
+  --dtc-error: #e0656f;
+  --dtc-error-bg: #32181d;
+  --dtc-info: #5c8fef;
+  --dtc-info-bg: #14233d;
+
+  /* Geometry and elevation */
+  --dtc-radius-sm: 8px;
+  --dtc-radius-md: 12px;
+  --dtc-radius-lg: 16px;
+  --dtc-radius-xl: 20px;
+  --dtc-shadow-sm: 0 1px 2px rgb(0 0 0 / 0.18);
+  --dtc-shadow-md: 0 10px 30px rgb(0 0 0 / 0.22);
+  --dtc-shadow-lg: 0 22px 64px rgb(0 0 0 / 0.30);
+  --dtc-focus: 0 0 0 3px rgb(126 141 255 / 0.34);
+
+  /* Motion */
+  --dtc-motion-fast: 120ms;
+  --dtc-motion-base: 180ms;
+  --dtc-motion-slow: 240ms;
+  --dtc-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+  /* shadcn/Tailwind compatibility — HSL channels */
+  --background: 224 43% 5%;
+  --foreground: 42 30% 95%;
+  --card: 222 36% 11%;
+  --card-foreground: 42 30% 95%;
+  --popover: 222 36% 11%;
+  --popover-foreground: 42 30% 95%;
+  --primary: 233 82% 65%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 222 27% 15%;
+  --secondary-foreground: 42 21% 84%;
+  --muted: 222 24% 15%;
+  --muted-foreground: 42 6% 64%;
+  --accent: 173 58% 44%;
+  --accent-foreground: 222 43% 5%;
+  --destructive: 354 67% 64%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 220 29% 22%;
+  --input: 220 29% 22%;
+  --ring: 233 100% 75%;
+  --radius: 16px;
+
+  /* Legacy aliases. New code must use semantic tokens, not these names. */
+  --purple: 233 82% 65%;
+  --blue: 233 82% 65%;
+  --cyan: 173 58% 44%;
+  --green: 173 58% 44%;
+  --orange: 10 67% 67%;
+  --red: 354 67% 64%;
+  --yellow: 38 68% 52%;
+  --ritual: 257 86% 73%;
+  --exploration: 233 82% 65%;
+  --training: 10 67% 67%;
+  --reality: 173 58% 44%;
+
+  --a2-primary: 233 82% 65%;
+  --a2-primary-light: 233 100% 75%;
+  --a2-primary-dark: 233 52% 43%;
+  --a2-bg-dark: 224 43% 5%;
+  --a2-surface: 222 36% 11%;
+  --a2-border: 220 29% 22%;
+  --a2-accent-cyan: 173 58% 44%;
+  --a2-text-primary: 42 30% 95%;
+  --a2-text-secondary: 42 21% 84%;
+  --a2-text-muted: 42 6% 64%;
+
+  --chart-1: 257 86% 73%;
+  --chart-2: 233 82% 65%;
+  --chart-3: 10 67% 67%;
+  --chart-4: 173 58% 44%;
+  --chart-5: 38 68% 52%;
+}
+
+html {
+  background: var(--dtc-ink-950);
+  font-family: var(--font-montserrat), Montserrat, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  background:
+    radial-gradient(circle at 12% -8%, rgb(92 111 240 / 0.12), transparent 32rem),
+    radial-gradient(circle at 92% 8%, rgb(47 175 158 / 0.07), transparent 28rem),
+    var(--dtc-ink-950);
+  color: var(--dtc-stone-50);
+  font-family: inherit;
+  font-feature-settings: "kern" 1, "liga" 1;
+  text-rendering: optimizeLegibility;
+}
+
+::selection {
+  background: rgb(92 111 240 / 0.42);
+  color: var(--dtc-stone-50);
+}
+
+:focus-visible {
+  outline: 2px solid var(--dtc-indigo-300) !important;
+  outline-offset: 3px !important;
+  box-shadow: var(--dtc-focus);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+button,
+input,
+textarea,
+select {
+  font-family: inherit;
+}
+
+h1,
+.h1 {
+  font-size: clamp(2.75rem, 6vw, 4.5rem);
+  line-height: 0.98;
+  letter-spacing: -0.035em;
+  font-weight: 700;
+}
+
+h2,
+.h2 {
+  font-size: clamp(2rem, 4.2vw, 3.5rem);
+  line-height: 1.02;
+  letter-spacing: -0.025em;
+  font-weight: 700;
+}
+
+h3,
+.h3 {
+  font-size: clamp(1.375rem, 2vw, 1.5rem);
+  line-height: 1.2;
+  letter-spacing: -0.015em;
+  font-weight: 600;
+}
+
+p,
+.body {
+  line-height: 1.6;
+}
+
+label,
+.label {
+  letter-spacing: 0.06em;
+}
+
+a {
+  transition:
+    color var(--dtc-motion-base) var(--dtc-ease-standard),
+    opacity var(--dtc-motion-base) var(--dtc-ease-standard);
+}
+
+a:hover {
+  color: var(--dtc-indigo-300);
+}
+
+/* Reusable surfaces for progressive migration */
+.dtc-surface {
+  border: 1px solid rgb(59 72 99 / 0.72);
+  border-radius: var(--dtc-radius-lg);
+  background: linear-gradient(180deg, rgb(24 32 51 / 0.96), rgb(18 24 39 / 0.96));
+  box-shadow: var(--dtc-shadow-sm);
+}
+
+.dtc-surface-elevated {
+  border: 1px solid rgb(59 72 99 / 0.82);
+  border-radius: var(--dtc-radius-xl);
+  background: linear-gradient(180deg, rgb(24 32 51 / 0.98), rgb(13 18 32 / 0.98));
+  box-shadow: var(--dtc-shadow-md);
+}
+
+.dtc-brand-gradient {
+  background: linear-gradient(135deg, #5c6ff0 0%, #7a5ce5 52%, #2faf9e 120%);
+}
+
+.dtc-text-gradient {
+  background: linear-gradient(110deg, #f7f5f0 0%, #a8b4ff 52%, #79d5c8 110%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+}
+
+.dtc-pillar-a1 { --dtc-pillar: var(--dtc-a1); }
+.dtc-pillar-a2 { --dtc-pillar: var(--dtc-a2); }
+.dtc-pillar-a3 { --dtc-pillar: var(--dtc-a3); }
+.dtc-pillar-a4 { --dtc-pillar: var(--dtc-a4); }
+
+.dtc-pillar-accent {
+  border-inline-start: 3px solid var(--dtc-pillar, var(--dtc-indigo-500));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
