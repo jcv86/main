@@ -21,13 +21,13 @@ export interface A3ModuleDefinition {
   checkpointDay: number
   route: string
   trainingType: A3TrainingType
-  requiredPreviousModules: A3ModuleId[]
+  requiredPreviousModules: readonly A3ModuleId[]
   completionContract: {
     enabled: boolean
     validationMode?: A3ValidationMode
     minimumResponses: number
     minimumResponseLength: number
-    requiredDeliverableKeys: string[]
+    requiredDeliverableKeys: readonly string[]
     passScore: number
   }
 }
