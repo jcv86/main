@@ -6,6 +6,7 @@ on:
       - 'supabase/migrations/20260804160000_a4_career_identity_strategic_evidence.sql'
       - 'scripts/check-a4-career-identity-contract.ts'
       - '.github/workflows/a4-career-identity.yml'
+  workflow_dispatch:
 
 jobs:
   contract:
@@ -13,9 +14,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
       - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - name: A4 Career Identity strategic evidence contract
