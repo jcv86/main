@@ -18,10 +18,7 @@ function normalizeResponseTimings(value: unknown) {
   if (!Array.isArray(value)) return []
 
   const seen = new Set<number>()
-  const timings: Array<{
-    questionId: number
-    responseTime: number
-  }> = []
+  const timings: Array<{ questionId: number; responseTime: number }> = []
 
   for (const item of value.slice(0, 28)) {
     if (!isRecord(item)) continue
@@ -30,7 +27,6 @@ function normalizeResponseTimings(value: unknown) {
     if (!Number.isInteger(questionId) || questionId < 1 || questionId > 28) continue
     if (!Number.isFinite(responseTime) || responseTime < 0 || responseTime > 3_600) continue
     if (seen.has(questionId)) continue
-
     seen.add(questionId)
     timings.push({ questionId, responseTime: Math.round(responseTime) })
   }
@@ -41,10 +37,7 @@ function normalizeResponseTimings(value: unknown) {
 export async function POST(request: Request) {
   try {
     const supabase = await createClient()
-    const {
-      data: { user },
-      error: authError,
-    } = await supabase.auth.getUser()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
 
     if (authError || !user) {
       return NextResponse.json(
@@ -70,7 +63,8 @@ export async function POST(request: Request) {
       )
     }
 
-    const forbiddenField = CLIENT_OWNED_FIELDS.find((field) => field in payload)
+    const body: Record<string, unknown> = payload
+    const forbiddenField = CLIENT_OWNED_FIELDS.find((field) => field in body)
     if (forbiddenField) {
       return NextResponse.json(
         {
@@ -81,7 +75,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const scoring = validateAndScoreDiscResponses(payload.responses)
+    const scoring = validateAndScoreDiscResponses(body.responses)
     if (!scoring.valid || !scoring.value) {
       return NextResponse.json(
         {
@@ -93,7 +87,7 @@ export async function POST(request: Request) {
       )
     }
 
-    const responseTimings = normalizeResponseTimings(payload.response_timings)
+    const responseTimings = normalizeResponseTimings(body.response_timings)
     const completedAt = new Date().toISOString()
 
     const { data: existingUser, error: userLookupError } = await supabase
@@ -104,10 +98,7 @@ export async function POST(request: Request) {
 
     if (userLookupError) {
       console.error('[a1] Failed to inspect public.users record:', userLookupError)
-      return NextResponse.json(
-        { error: 'No pudimos verificar tu perfil.' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'No pudimos verificar tu perfil.' }, { status: 500 })
     }
 
     if (!existingUser) {
@@ -125,10 +116,7 @@ export async function POST(request: Request) {
 
       if (userInsertError && userInsertError.code !== '23505') {
         console.error('[a1] Failed to create public.users record:', userInsertError)
-        return NextResponse.json(
-          { error: 'No pudimos preparar tu perfil.' },
-          { status: 500 },
-        )
+        return NextResponse.json({ error: 'No pudimos preparar tu perfil.' }, { status: 500 })
       }
     }
 
@@ -147,10 +135,7 @@ export async function POST(request: Request) {
 
     if (saveError) {
       console.error('[a1] Atomic assessment dual-write failed:', saveError)
-      return NextResponse.json(
-        { error: 'No pudimos guardar la evaluación.' },
-        { status: 500 },
-      )
+      return NextResponse.json({ error: 'No pudimos guardar la evaluación.' }, { status: 500 })
     }
 
     const saved = Array.isArray(data) ? data[0] : data
@@ -185,8 +170,6 @@ export async function POST(request: Request) {
         console.error('[a1] Failed to capture supplemental A1 memory:', memoryResult.error)
       }
     } catch (memoryError) {
-      // AgentOS memory remains supplemental. The canonical A1 assessment and
-      // Career Identity evidence were already committed atomically by the RPC.
       console.error('[a1] Exception capturing supplemental A1 memory:', memoryError)
     }
 
@@ -200,9 +183,7 @@ export async function POST(request: Request) {
         careerIdentityVersion: saved?.identity_version,
         correlationId,
       },
-      {
-        headers: { 'Cache-Control': 'private, no-store' },
-      },
+      { headers: { 'Cache-Control': 'private, no-store' } },
     )
   } catch (error) {
     console.error('[a1] Unexpected A1 assessment error:', error)
