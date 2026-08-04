@@ -141,6 +141,9 @@ jobs:
       - name: A4 auto-detection webhook retirement source contract
         run: npx tsx scripts/check-auto-detection-webhook-retirement-contract.ts
 
+      - name: Legacy C1 and C2 response endpoint retirement source contract
+        run: npx tsx scripts/check-legacy-onboarding-endpoint-retirement-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'
