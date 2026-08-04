@@ -103,7 +103,7 @@ export async function POST(request: Request) {
       .maybeSingle()
 
     if (userLookupError) {
-      console.error('[v0] Failed to inspect public.users record:', userLookupError)
+      console.error('[a1] Failed to inspect public.users record:', userLookupError)
       return NextResponse.json(
         { error: 'No pudimos verificar tu perfil.' },
         { status: 500 },
@@ -124,7 +124,7 @@ export async function POST(request: Request) {
       })
 
       if (userInsertError && userInsertError.code !== '23505') {
-        console.error('[v0] Failed to create public.users record:', userInsertError)
+        console.error('[a1] Failed to create public.users record:', userInsertError)
         return NextResponse.json(
           { error: 'No pudimos preparar tu perfil.' },
           { status: 500 },
@@ -132,23 +132,34 @@ export async function POST(request: Request) {
       }
     }
 
-    const { data, error: saveError } = await supabase
-      .from('a1_cerebral_assessment')
-      .insert({
-        user_id: user.id,
-        responses: scoring.value.responses,
-        questions: scoring.value.questions,
-        disc_profile: scoring.value.scores,
-        dominant_pattern: scoring.value.dominantPattern,
-        completed_at: completedAt,
-      })
-      .select('id')
-      .single()
+    const correlationId = crypto.randomUUID()
+    const { data, error: saveError } = await supabase.rpc(
+      'save_a1_cerebral_with_career_identity',
+      {
+        p_responses: scoring.value.responses,
+        p_questions: scoring.value.questions,
+        p_disc_profile: scoring.value.scores,
+        p_dominant_pattern: scoring.value.dominantPattern,
+        p_secondary_pattern: scoring.value.secondaryPattern,
+        p_correlation_id: correlationId,
+      },
+    )
 
     if (saveError) {
-      console.error('[v0] Failed to save canonical A1 assessment:', saveError)
+      console.error('[a1] Atomic assessment dual-write failed:', saveError)
       return NextResponse.json(
         { error: 'No pudimos guardar la evaluación.' },
+        { status: 500 },
+      )
+    }
+
+    const saved = Array.isArray(data) ? data[0] : data
+    const assessmentId = saved?.assessment_id
+
+    if (!assessmentId) {
+      console.error('[a1] Dual-write returned no assessment id', { correlationId })
+      return NextResponse.json(
+        { error: 'No pudimos confirmar la evaluación guardada.' },
         { status: 500 },
       )
     }
@@ -160,36 +171,41 @@ export async function POST(request: Request) {
         agentId: 'coach',
         modeId: 'identity-audit',
         params: {
-          testId: data.id,
+          testId: assessmentId,
           responses: scoring.value.responses,
           discProfile: scoring.value.scores,
           dominantPattern: scoring.value.dominantPattern,
           secondaryPattern: scoring.value.secondaryPattern,
           responseTimings,
+          correlationId,
         },
       })
 
       if (!memoryResult.success) {
-        console.error('[v0] Failed to capture A1 memory:', memoryResult.error)
+        console.error('[a1] Failed to capture supplemental A1 memory:', memoryResult.error)
       }
     } catch (memoryError) {
-      console.error('[v0] Exception capturing A1 memory:', memoryError)
+      // AgentOS memory remains supplemental. The canonical A1 assessment and
+      // Career Identity evidence were already committed atomically by the RPC.
+      console.error('[a1] Exception capturing supplemental A1 memory:', memoryError)
     }
 
     return NextResponse.json(
       {
         success: true,
-        assessmentId: data.id,
+        assessmentId,
         profile: scoring.value.scores,
         dominantPattern: scoring.value.dominantPattern,
         secondaryPattern: scoring.value.secondaryPattern,
+        careerIdentityVersion: saved?.identity_version,
+        correlationId,
       },
       {
         headers: { 'Cache-Control': 'private, no-store' },
       },
     )
   } catch (error) {
-    console.error('[v0] Unexpected A1 assessment error:', error)
+    console.error('[a1] Unexpected A1 assessment error:', error)
     return NextResponse.json(
       { error: 'No pudimos procesar la evaluación.' },
       { status: 500 },
