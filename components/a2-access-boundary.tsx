@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { Fragment, useEffect, useState } from 'react'
 import { usePathname, useRouter } from 'next/navigation'
 import { Loader2 } from 'lucide-react'
 
@@ -64,5 +64,5 @@ export function A2AccessBoundary({ children }: { children: React.ReactNode }) {
     )
   }
 
-  return children
+  return <Fragment>{children}</Fragment>
 }
