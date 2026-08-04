@@ -147,6 +147,9 @@ jobs:
       - name: Legacy A2 Day 1 modal surface retirement source contract
         run: npx tsx scripts/check-legacy-a2-day1-modal-retirement-contract.ts
 
+      - name: Global route authentication boundary source contract
+        run: npx tsx scripts/check-global-auth-boundary-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'

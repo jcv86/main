@@ -16,12 +16,12 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 |---|---:|
 | Runtime only | 1 |
 | Mixed runtime + source | 21 |
-| Source only | 16 |
+| Source only | 17 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
 
-El workflow valida 38 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
+El workflow valida 39 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
 
 Los contratos adicionales comprueban que:
 
@@ -35,6 +35,7 @@ Los contratos adicionales comprueban que:
 - el webhook público de auto-detección no acepte firmas débiles, no permita disparos manuales por `userId` y no ejecute job matching antes del gate A3 → A4;
 - los endpoints legacy de Conozcámonos 1 y 2 no acepten `user_id` del navegador ni dupliquen la persistencia canónica basada en sesión;
 - el modal legacy del Día 1 no publique documentos personales, no acepte cookies demo sin firma ni presente coaching mock como una capacidad real;
+- toda ruta `/despega`, `/dashboard` y `/a4-dashboard` exija una sesión verificada y falle de forma cerrada si la autenticación no puede comprobarse;
 - el job matching de A4 respete el acceso persistido A3 → A4 y acote sus parámetros;
 - el seed público de ofertas A4 no pueda usar `service_role`, insertar datos ficticios ni reemplazar el job matching autenticado;
 - la superficie administrativa no consulte tablas inexistentes, no use correos públicos como autorización ni permita desbloqueos o reinicios destructivos;

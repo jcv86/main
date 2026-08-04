@@ -110,7 +110,7 @@ for (const [path, content] of [
   assert.ok(content.includes('redirect(SIGN_IN_PATH)'), `${path} must redirect to canonical signin`)
   assert.ok(!content.includes("'use client'"), `${path} must redirect server-side`)
 }
-assert.ok(authHook.includes('router.push(SIGN_IN_PATH)'))
+assert.ok(authHook.includes('router.replace(SIGN_IN_PATH)'))
 assert.ok(authHook.includes("window.localStorage.removeItem('demo_user')"))
 assert.ok(!authHook.includes('isInitialCheck'))
 assert.ok(adminGuard.includes('AdminUnavailable'))
