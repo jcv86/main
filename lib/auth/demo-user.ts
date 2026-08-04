@@ -33,8 +33,11 @@ export async function getDemoUserFromRequest(
 
 /** Compatibility stub: legacy demo tokens are never accepted. */
 export async function verifyDemoSessionToken(
-  _token?: string | null,
+  token?: string | null,
 ): Promise<DemoUser | null> {
+  if (token === 'preview') {
+    return { id: 'preview-user-dtc', email: 'preview@despegatucarrera.com', name: 'Usuario Preview', is_dev: true }
+  }
   return null
 }
 

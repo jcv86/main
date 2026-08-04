@@ -35,17 +35,11 @@ export default function SignInPage() {
     )
   }, [])
 
-  const handlePreviewAccess = () => {
-    localStorage.setItem('demo_user', JSON.stringify({
-      id: 'preview-user-dtc',
-      email: 'preview@despegatucarrera.com',
-      name: 'Usuario Preview',
-      is_dev: true,
-    }))
-    document.cookie = 'dtc_preview_access=1; path=/; max-age=86400; SameSite=Lax'
+  const handlePreviewAccess = async () => {
+    const response = await fetch('/api/auth/demo', { method: 'POST' })
+    if (!response.ok) return
     const nextPath = searchParams.get('next') || '/despega/conozcamonos-1'
-    const separator = nextPath.includes('?') ? '&' : '?'
-    router.push(`${nextPath}${separator}preview=1`)
+    router.push(nextPath)
   }
 
   // Fetch invitation status
