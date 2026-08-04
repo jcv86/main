@@ -12,6 +12,7 @@ interface A2EnhancedInputProps {
   label: string
   icon?: React.ReactNode
   minRows?: number
+  /** @deprecated La identidad se resuelve exclusivamente desde la sesión del servidor. */
   userId?: string
 }
 
@@ -22,7 +23,6 @@ export function A2EnhancedInput({
   label,
   icon,
   minRows = 3,
-  userId,
 }: A2EnhancedInputProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [coachSuggestion, setCoachSuggestion] = useState<{ suggestion: string; tips: string[] } | null>(null)
@@ -33,13 +33,12 @@ export function A2EnhancedInput({
       const response = await fetch('/api/a2/coach-assist', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
+        body: JSON.stringify({
           question: label,
           currentAnswer: value,
-          userId: userId
         }),
       })
-      
+
       if (response.ok) {
         const data = await response.json()
         setCoachSuggestion(data)
@@ -47,7 +46,7 @@ export function A2EnhancedInput({
         alert('No se pudo obtener asistencia del coach. Intenta de nuevo.')
       }
     } catch (error) {
-      console.error('[v0] Coach assist error:', error)
+      console.error('[a2-enhanced-input] Coach assist error:', error)
       alert('Error al conectar con el coach.')
     } finally {
       setIsLoading(false)
@@ -110,7 +109,7 @@ export function A2EnhancedInput({
             <div className="flex-1 space-y-2">
               <p className="text-sm font-semibold" style={{ color: 'rgba(90, 90, 150, 0.8)' }}>Sugerencia del Coach:</p>
               <p className="text-sm text-white/80">{coachSuggestion.suggestion}</p>
-              
+
               {coachSuggestion.tips && coachSuggestion.tips.length > 0 && (
                 <div className="mt-2 space-y-1">
                   <p className="text-xs font-semibold uppercase" style={{ color: 'rgba(90, 90, 150, 0.7)' }}>Tips:</p>
@@ -124,7 +123,7 @@ export function A2EnhancedInput({
                   </ul>
                 </div>
               )}
-              
+
               <Button
                 onClick={() => setCoachSuggestion(null)}
                 variant="ghost"
