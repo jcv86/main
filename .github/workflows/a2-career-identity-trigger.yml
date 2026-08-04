@@ -1,0 +1,32 @@
+name: A2 Career Identity trigger
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/a2/complete-day/route.ts'
+      - 'supabase/migrations/20260804140000_a2_career_identity_atomic_completion.sql'
+      - 'scripts/check-a2-career-identity-trigger-contract.ts'
+      - '.github/workflows/a2-career-identity-trigger.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: A2 Career Identity trigger contract
+        run: pnpm exec tsx scripts/check-a2-career-identity-trigger-contract.ts
+      - name: TypeScript full-repository check
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
