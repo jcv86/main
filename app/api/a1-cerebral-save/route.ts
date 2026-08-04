@@ -9,17 +9,15 @@ export async function POST(request: NextRequest) {
 
     const supabase = await createClient()
 
-    // Get the authenticated user from the session
     const { data: { user }, error: authError } = await supabase.auth.getUser()
-    
+
     if (authError || !user) {
       return NextResponse.json(
         { error: 'User must be authenticated to save assessment results' },
-        { status: 401 }
+        { status: 401 },
       )
     }
 
-    // Ensure user exists in public.users (required for FK constraint)
     const { data: existingUser } = await supabase
       .from('users')
       .select('id')
@@ -27,7 +25,6 @@ export async function POST(request: NextRequest) {
       .single()
 
     if (!existingUser) {
-      // Create the public.users record if missing
       const { error: userInsertError } = await supabase
         .from('users')
         .insert({
@@ -42,12 +39,10 @@ export async function POST(request: NextRequest) {
         .single()
 
       if (userInsertError && userInsertError.code !== '23505') {
-        // 23505 = unique violation (user already exists, which is fine)
         console.error('[v0] Failed to create public.users record:', userInsertError)
       }
     }
 
-    // Calculate dominant pattern from disc_profile scores
     let dominant_pattern = 'D'
     if (disc_profile && typeof disc_profile === 'object') {
       const scores = {
@@ -56,12 +51,12 @@ export async function POST(request: NextRequest) {
         S: disc_profile.S || 0,
         C: disc_profile.C || 0,
       }
-      
+
       const maxScore = Math.max(...Object.values(scores))
       const dominantLetter = Object.keys(scores).find(
-        key => scores[key as keyof typeof scores] === maxScore
+        key => scores[key as keyof typeof scores] === maxScore,
       )
-      
+
       if (dominantLetter) {
         dominant_pattern = dominantLetter
       }
@@ -69,14 +64,13 @@ export async function POST(request: NextRequest) {
 
     const saveData = {
       user_id: user.id,
-      responses: responses,
-      questions: questions,
-      disc_profile: disc_profile,
-      dominant_pattern: dominant_pattern,
+      responses,
+      questions,
+      disc_profile,
+      dominant_pattern,
       completed_at: new Date().toISOString(),
     }
 
-    // Save to a1_cerebral_assessment table
     const { data, error } = await supabase
       .from('a1_cerebral_assessment')
       .insert(saveData)
@@ -88,26 +82,6 @@ export async function POST(request: NextRequest) {
       throw new Error(`Database error: ${error.message}`)
     }
 
-    // Trigger auto-detection webhook for job matching
-    try {
-      await fetch(`${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/api/webhooks/auto-detection`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'x-webhook-signature': 'internal'
-        },
-        body: JSON.stringify({
-          event: 'a1_completed',
-          userId: user.id,
-          data: { assessment_id: data?.id }
-        })
-      })
-      console.log('[v0] A1 completion webhook triggered')
-    } catch (webhookError) {
-      console.warn('[v0] Warning: Could not trigger auto-detection webhook:', webhookError)
-    }
-
-    // Capture memory from A1 assessment
     try {
       const result = await executeCommand({
         userId: user.id,
@@ -124,26 +98,24 @@ export async function POST(request: NextRequest) {
 
       if (!result.success) {
         console.error('[v0] Failed to capture A1 memory:', result.error)
-        // Don't fail the whole request if memory capture fails
       } else {
         console.log('[v0] A1 memory captured successfully:', result.memoryUpdates)
       }
     } catch (memoryError) {
       console.error('[v0] Exception capturing A1 memory:', memoryError)
-      // Don't fail the whole request if memory capture fails
     }
 
     return NextResponse.json({
       success: true,
       assessmentId: data?.id,
       profile: disc_profile,
-    }, { status: 200 })
+    })
   } catch (err) {
     console.error('[v0] Error in a1-cerebral-save endpoint:', err)
     const errorMsg = err instanceof Error ? err.message : String(err)
     return NextResponse.json(
       { error: `Cerebral save error: ${errorMsg}` },
-      { status: 500 }
+      { status: 500 },
     )
   }
 }
