@@ -23,6 +23,13 @@ export function useAuthRedirect() {
       if (!sessionUser) router.replace(SIGN_IN_PATH)
     }
 
+    if (!supabase) {
+      applySession(null)
+      return () => {
+        active = false
+      }
+    }
+
     const initialize = async () => {
       const {
         data: { user: verifiedUser },
