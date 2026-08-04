@@ -111,6 +111,9 @@ jobs:
       - name: A4 job matching access and parameter source contract
         run: npx tsx scripts/check-a4-job-matching-contract.ts
 
+      - name: A4 public job seed retirement source contract
+        run: npx tsx scripts/check-a4-public-job-seed-retirement-contract.ts
+
       - name: A1 through C4 runtime resolver and source continuity contract
         run: npx tsx scripts/check-a1-c4-continuity-contract.ts
 
