@@ -6,6 +6,8 @@ import type { AgentActor, CareerIdentityPatch } from "@/lib/career/agent-contrac
 
 const IDENTITY_SELECT = "*"
 
+type AuditOutcome = "accepted" | "rejected" | "failed"
+
 function toIdentity(row: Record<string, any>): CareerIdentity {
   return {
     id: row.id,
@@ -61,14 +63,54 @@ export class SupabaseCareerService {
 
   private async assertAuthenticatedUser(userId: string): Promise<void> {
     const { data, error } = await this.supabase.auth.getUser()
-    if (error || !data.user || data.user.id !== userId) {
-      throw new CareerAccessError()
-    }
+    if (error || !data.user || data.user.id !== userId) throw new CareerAccessError()
   }
 
   private validateActor(actor: AgentActor): void {
-    if (!actor.agentId || !actor.agentVersion || !actor.correlationId) {
+    if (!actor.agentId.trim() || !actor.agentVersion.trim() || !actor.correlationId.trim()) {
       throw new TypeError("Agent actor metadata is incomplete")
+    }
+  }
+
+  private async audit(
+    userId: string,
+    identityId: string | null,
+    actor: AgentActor,
+    operation: string,
+    outcome: AuditOutcome,
+    entityId: string | null,
+    payload: Record<string, unknown> = {},
+    errorCode: string | null = null,
+  ): Promise<void> {
+    const { error } = await this.supabase.from("career_agent_events").insert({
+      user_id: userId,
+      identity_id: identityId,
+      agent_id: actor.agentId,
+      agent_version: actor.agentVersion,
+      source_module: actor.module,
+      correlation_id: actor.correlationId,
+      operation,
+      entity_type: "career_identity",
+      entity_id: entityId,
+      outcome,
+      payload,
+      error_code: errorCode,
+    })
+    if (error) throw error
+  }
+
+  private async auditFailure(
+    userId: string,
+    identityId: string | null,
+    actor: AgentActor,
+    operation: string,
+    error: unknown,
+  ): Promise<void> {
+    const errorCode = error instanceof Error ? error.name : "UNKNOWN_ERROR"
+    try {
+      await this.audit(userId, identityId, actor, operation, "failed", identityId, {}, errorCode)
+    } catch {
+      // Preserve the original failure; infrastructure telemetry can capture audit insertion failures.
     }
   }
 
@@ -79,7 +121,6 @@ export class SupabaseCareerService {
       .select(IDENTITY_SELECT)
       .eq("user_id", userId)
       .maybeSingle()
-
     if (error) throw error
     return data ? toIdentity(data) : null
   }
@@ -91,22 +132,38 @@ export class SupabaseCareerService {
     const existing = await this.getIdentity(userId)
     if (existing) return existing
 
-    const { data, error } = await this.supabase
-      .from("career_identities")
-      .insert({
-        user_id: userId,
-        metadata: {
-          createdBy: actor.agentId,
-          agentVersion: actor.agentVersion,
-          module: actor.module,
-          correlationId: actor.correlationId,
-        },
-      })
-      .select(IDENTITY_SELECT)
-      .single()
+    try {
+      const { data, error } = await this.supabase
+        .from("career_identities")
+        .upsert(
+          {
+            user_id: userId,
+            metadata: {
+              createdBy: actor.agentId,
+              agentVersion: actor.agentVersion,
+              module: actor.module,
+              correlationId: actor.correlationId,
+            },
+          },
+          { onConflict: "user_id", ignoreDuplicates: true },
+        )
+        .select(IDENTITY_SELECT)
+        .maybeSingle()
+      if (error) throw error
 
-    if (error) throw error
-    return toIdentity(data)
+      const identity = data ? toIdentity(data) : await this.getIdentity(userId)
+      if (!identity) throw new Error("Career Identity initialization failed")
+
+      if (data) {
+        await this.audit(userId, identity.id, actor, "identity.ensure", "accepted", identity.id, {
+          created: true,
+        })
+      }
+      return identity
+    } catch (error) {
+      await this.auditFailure(userId, null, actor, "identity.ensure", error)
+      throw error
+    }
   }
 
   async patchIdentity(
@@ -116,43 +173,50 @@ export class SupabaseCareerService {
   ): Promise<CareerIdentity> {
     await this.assertAuthenticatedUser(userId)
     this.validateActor(actor)
-    await this.ensureIdentity(userId, actor)
-
+    const identity = await this.ensureIdentity(userId, actor)
     const dbPatch = toDbPatch(patch)
-    const { data, error } = await this.supabase
-      .from("career_identities")
-      .update(dbPatch)
-      .eq("user_id", userId)
-      .select(IDENTITY_SELECT)
-      .single()
 
-    if (error) throw error
-    return toIdentity(data)
+    if (Object.keys(dbPatch).length === 0) {
+      await this.audit(userId, identity.id, actor, "identity.patch", "rejected", identity.id, {
+        reason: "empty_patch",
+      })
+      throw new TypeError("Career Identity patch cannot be empty")
+    }
+
+    try {
+      const { data, error } = await this.supabase
+        .from("career_identities")
+        .update({ ...dbPatch, version: identity.version + 1 })
+        .eq("user_id", userId)
+        .eq("version", identity.version)
+        .select(IDENTITY_SELECT)
+        .single()
+      if (error) throw error
+
+      const updated = toIdentity(data)
+      await this.audit(userId, updated.id, actor, "identity.patch", "accepted", updated.id, {
+        fields: Object.keys(dbPatch),
+        fromVersion: identity.version,
+        toVersion: updated.version,
+      })
+      return updated
+    } catch (error) {
+      await this.auditFailure(userId, identity.id, actor, "identity.patch", error)
+      throw error
+    }
   }
 
   async getContext(userId: string): Promise<CareerContext> {
     await this.assertAuthenticatedUser(userId)
     const identity = await this.getIdentity(userId)
-    if (!identity) {
-      throw new Error("Career Identity has not been initialized")
-    }
+    if (!identity) throw new Error("Career Identity has not been initialized")
 
     const [goals, skills, skillEdges, memories, recentEvidence] = await Promise.all([
       this.supabase.from("career_goals").select("*").eq("user_id", userId).neq("status", "archived"),
       this.supabase.from("career_skills").select("*").eq("user_id", userId),
       this.supabase.from("career_skill_edges").select("*").eq("user_id", userId),
-      this.supabase
-        .from("career_memories")
-        .select("*")
-        .eq("user_id", userId)
-        .is("superseded_by", null)
-        .order("importance", { ascending: false }),
-      this.supabase
-        .from("career_evidence")
-        .select("*")
-        .eq("user_id", userId)
-        .order("observed_at", { ascending: false })
-        .limit(100),
+      this.supabase.from("career_memories").select("*").eq("user_id", userId).is("superseded_by", null).order("importance", { ascending: false }),
+      this.supabase.from("career_evidence").select("*").eq("user_id", userId).order("observed_at", { ascending: false }).limit(100),
     ])
 
     for (const result of [goals, skills, skillEdges, memories, recentEvidence]) {
