@@ -1,185 +1,267 @@
-import { NextRequest, NextResponse } from 'next/server'
-import {
-  createExtractedSignal,
-  type MarketSignal,
-} from '@/lib/supabase/a2-market-and-board'
+import { NextResponse } from 'next/server'
+import { z } from 'zod'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import { createAdminClient } from '@/lib/supabase/server'
 
-interface ExtractSignalsRequest {
-  marketSignals: MarketSignal[]
-  userId: string
-  dayNumber: number
+const requestSchema = z.object({
+  dayNumber: z.literal(3),
+})
+
+const extractedSignalSchema = z.object({
+  signal_type: z.enum(['skill', 'tool', 'soft_skill', 'framework']),
+  signal_text: z.string().trim().min(2).max(160),
+  frequency: z.number().int().min(1).max(20),
+  importance: z.number().int().min(1).max(5),
+})
+
+const aiResponseSchema = z.object({
+  signals: z.array(extractedSignalSchema).min(1).max(12),
+})
+
+type SignalType = z.infer<typeof extractedSignalSchema>['signal_type']
+
+type MarketSignalRow = {
+  job_title: string | null
+  company_name: string | null
+  requirements: unknown
+  strengths_needed: unknown
+  fears_skills: unknown
 }
 
-export async function POST(request: NextRequest) {
-  try {
-    const body: ExtractSignalsRequest = await request.json()
-    const { marketSignals, userId, dayNumber } = body
-
-    if (!marketSignals || !userId) {
-      return NextResponse.json({ error: 'Missing required fields' }, { status: 400 })
-    }
-
-    const apiKey = process.env.OPENAI_API_KEY
-
-    if (!apiKey) {
-      console.error('[v0] Missing OPENAI_API_KEY')
-      return NextResponse.json({ error: 'API configuration missing' }, { status: 500 })
-    }
-
-    // Format market signals for AI analysis
-    const jobPostingsText = marketSignals
-      .map(
-        (signal, idx) =>
-          `Job ${idx + 1}: ${signal.job_title || 'Title TBD'} at ${signal.company_name || 'Company TBD'}
-        Requirements: ${signal.requirements.join(', ')}
-        Strengths Needed: ${signal.strengths_needed.join(', ')}
-        Potential Challenges: ${signal.fears_skills.join(', ')}`
-      )
-      .join('\n\n')
-
-    const systemPrompt = `You are an expert career market analyst. Analyze job postings to extract market signals.
-For each signal, determine type (skill/tool/soft_skill/framework), frequency, and importance.
-Return JSON with: { signals: [{signal_type, signal_text, frequency, importance}, ...], market_insights: "..." }`
-
-    const userPrompt = `Analyze these ${marketSignals.length} job postings and extract the top 10-12 market signals.
-Focus on signals appearing in multiple postings. Prioritize by frequency and importance.
-
-${jobPostingsText}
-
-Return structured JSON.`
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${apiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4o-mini',
-        messages: [
-          { role: 'system', content: systemPrompt },
-          { role: 'user', content: userPrompt },
-        ],
-        temperature: 0.5,
-        max_tokens: 1000,
-      }),
-    })
-
-    if (!response.ok) {
-      const error = await response.text()
-      console.error('[v0] OpenAI API error:', error)
-      // Fallback to basic extraction
-      const extracted = extractSignalsBasic(marketSignals)
-      return saveSignals(userId, dayNumber, extracted)
-    }
-
-    const data = await response.json()
-    const content = data.choices[0]?.message?.content || ''
-
-    // Parse AI response
-    let aiSignals = []
-    try {
-      const parsed = JSON.parse(content)
-      aiSignals = parsed.signals || []
-    } catch {
-      aiSignals = extractSignalsBasic(marketSignals)
-    }
-
-    return saveSignals(userId, dayNumber, aiSignals)
-  } catch (error) {
-    console.error('[v0] Error extracting signals:', error)
-    return NextResponse.json({ error: 'Failed to extract signals' }, { status: 500 })
-  }
+function boundedStrings(value: unknown): string[] {
+  if (!Array.isArray(value)) return []
+  return value
+    .filter((item): item is string => typeof item === 'string')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .slice(0, 20)
+    .map((item) => item.slice(0, 160))
 }
 
-// Fallback basic extraction
-function extractSignalsBasic(marketSignals: MarketSignal[]) {
-  const signals: {
-    signal_type: 'skill' | 'tool' | 'soft_skill' | 'framework'
-    signal_text: string
-    frequency: number
-    importance: number
-  }[] = []
-
+function basicExtraction(marketSignals: MarketSignalRow[]) {
   const signalMap = new Map<
     string,
-    { type: 'skill' | 'tool' | 'soft_skill' | 'framework'; importance: number; count: number }
+    { signal_type: SignalType; signal_text: string; frequency: number; importance: number }
   >()
 
+  const collect = (
+    values: string[],
+    signalType: SignalType,
+    importance: number,
+  ) => {
+    for (const raw of values) {
+      const normalized = raw.toLocaleLowerCase('es-CL')
+      const key = `${signalType}:${normalized}`
+      const existing = signalMap.get(key)
+      if (existing) {
+        existing.frequency += 1
+        continue
+      }
+      signalMap.set(key, {
+        signal_type: signalType,
+        signal_text: raw,
+        frequency: 1,
+        importance,
+      })
+    }
+  }
+
   for (const signal of marketSignals) {
-    for (const req of signal.requirements) {
-      const key = `skill:${req.toLowerCase()}`
-      if (!signalMap.has(key)) {
-        signalMap.set(key, { type: 'skill', importance: 4, count: 0 })
-      }
-      signalMap.get(key)!.count++
-    }
-
-    for (const soft of signal.strengths_needed) {
-      const key = `soft:${soft.toLowerCase()}`
-      if (!signalMap.has(key)) {
-        signalMap.set(key, { type: 'soft_skill', importance: 3, count: 0 })
-      }
-      signalMap.get(key)!.count++
-    }
-
-    for (const fear of signal.fears_skills) {
-      const key = `blocker:${fear.toLowerCase()}`
-      if (!signalMap.has(key)) {
-        signalMap.set(key, { type: 'framework', importance: 5, count: 0 })
-      }
-      signalMap.get(key)!.count++
-    }
+    collect(boundedStrings(signal.requirements), 'skill', 4)
+    collect(boundedStrings(signal.strengths_needed), 'soft_skill', 3)
+    collect(boundedStrings(signal.fears_skills), 'framework', 5)
   }
 
-  for (const [key, metadata] of signalMap.entries()) {
-    const [, text] = key.split(':')
-    signals.push({
-      signal_type: metadata.type,
-      signal_text: text.charAt(0).toUpperCase() + text.slice(1),
-      frequency: metadata.count,
-      importance: metadata.importance,
-    })
-  }
-
-  return signals.sort((a, b) => b.frequency - a.frequency).slice(0, 12)
+  return [...signalMap.values()]
+    .sort((a, b) => b.frequency - a.frequency || b.importance - a.importance)
+    .slice(0, 12)
 }
 
-// Save signals to database
-async function saveSignals(
-  userId: string,
-  dayNumber: number,
-  signals: Array<{
-    signal_type: 'skill' | 'tool' | 'soft_skill' | 'framework'
-    signal_text: string
-    frequency: number
-    importance: number
-  }>
+function stripJsonFence(value: string): string {
+  return value
+    .trim()
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '')
+}
+
+async function generateSignalsWithOpenAI(
+  apiKey: string,
+  marketSignals: MarketSignalRow[],
 ) {
-  const savedSignals = []
-  for (const signal of signals) {
-    const { data, error } = await createExtractedSignal(userId, {
-      day_number: dayNumber,
-      signal_type: signal.signal_type,
-      signal_text: signal.signal_text,
-      frequency: signal.frequency,
-      importance: signal.importance,
-      related_jobs_count: signal.frequency,
-      category: signal.signal_type === 'skill' ? 'technical' : 'professional',
+  const jobPostingsText = marketSignals
+    .map((signal, index) => {
+      const requirements = boundedStrings(signal.requirements)
+      const strengths = boundedStrings(signal.strengths_needed)
+      const challenges = boundedStrings(signal.fears_skills)
+      return [
+        `Vacante ${index + 1}: ${(signal.job_title || 'Cargo no indicado').slice(0, 160)}`,
+        `Empresa: ${(signal.company_name || 'Empresa no indicada').slice(0, 160)}`,
+        `Requisitos: ${requirements.join(', ')}`,
+        `Fortalezas: ${strengths.join(', ')}`,
+        `Brechas o desafíos: ${challenges.join(', ')}`,
+      ].join('\n')
     })
+    .join('\n\n')
+    .slice(0, 14_000)
 
-    if (!error && data) {
-      savedSignals.push(data)
-    }
-  }
-
-  console.log('[v0] Extracted', savedSignals.length, 'signals for user', userId)
-
-  return NextResponse.json({
-    success: true,
-    signals: savedSignals,
-    count: savedSignals.length,
+  const response = await fetch('https://api.openai.com/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      Authorization: `Bearer ${apiKey}`,
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({
+      model: 'gpt-4o-mini',
+      store: false,
+      response_format: { type: 'json_object' },
+      messages: [
+        {
+          role: 'system',
+          content:
+            'Analiza vacantes reales y devuelve JSON con la forma {"signals":[{"signal_type":"skill|tool|soft_skill|framework","signal_text":"...","frequency":1,"importance":1}]}. Entrega entre 1 y 12 señales, sin inventar datos y priorizando repeticiones observables.',
+        },
+        {
+          role: 'user',
+          content: `Extrae señales verificables de estas vacantes:\n\n${jobPostingsText}`,
+        },
+      ],
+      temperature: 0.2,
+      max_tokens: 1_200,
+    }),
   })
+
+  if (!response.ok) return null
+
+  const payload = (await response.json()) as {
+    choices?: Array<{ message?: { content?: string } }>
+  }
+  const content = payload.choices?.[0]?.message?.content
+  if (!content) return null
+
+  try {
+    const parsedJson = JSON.parse(stripJsonFence(content))
+    const parsed = aiResponseSchema.safeParse(parsedJson)
+    return parsed.success ? parsed.data.signals : null
+  } catch {
+    return null
+  }
 }
 
+export async function POST(request: Request) {
+  const currentUser = await resolveServerUser()
+  if (!currentUser) {
+    return NextResponse.json(
+      { error: 'No autenticado', code: 'authentication_required' },
+      { status: 401 },
+    )
+  }
 
+  let payload: unknown
+  try {
+    payload = await request.json()
+  } catch {
+    return NextResponse.json(
+      { error: 'Solicitud inválida', code: 'invalid_json' },
+      { status: 400 },
+    )
+  }
+
+  const parsedRequest = requestSchema.safeParse(payload)
+  if (!parsedRequest.success) {
+    return NextResponse.json(
+      { error: 'Solo se admite la extracción canónica del Día 3.' },
+      { status: 400 },
+    )
+  }
+
+  const supabase = createAdminClient()
+  const { data: marketSignals, error: marketError } = await supabase
+    .from('a2_market_signals')
+    .select('job_title, company_name, requirements, strengths_needed, fears_skills')
+    .eq('user_id', currentUser.id)
+    .eq('day_number', parsedRequest.data.dayNumber)
+    .order('created_at', { ascending: false })
+    .limit(10)
+
+  if (marketError) {
+    console.error('[v0] Error loading Day 3 market signals:', marketError)
+    return NextResponse.json(
+      { error: 'No pudimos cargar las vacantes guardadas.' },
+      { status: 500 },
+    )
+  }
+
+  const boundedMarketSignals = (marketSignals || []) as MarketSignalRow[]
+  if (boundedMarketSignals.length < 3) {
+    return NextResponse.json(
+      { error: 'Guarda al menos 3 vacantes reales antes de extraer señales.' },
+      { status: 422 },
+    )
+  }
+
+  const fallbackSignals = basicExtraction(boundedMarketSignals)
+  const apiKey = process.env.OPENAI_API_KEY
+  const aiSignals = apiKey
+    ? await generateSignalsWithOpenAI(apiKey, boundedMarketSignals)
+    : null
+  const validatedSignals = aiSignals || fallbackSignals
+
+  if (validatedSignals.length === 0) {
+    return NextResponse.json(
+      { error: 'No encontramos señales suficientes en las vacantes guardadas.' },
+      { status: 422 },
+    )
+  }
+
+  const rows = validatedSignals.map((signal) => ({
+    user_id: currentUser.id,
+    day_number: 3,
+    signal_type: signal.signal_type,
+    signal_text: signal.signal_text,
+    frequency: signal.frequency,
+    importance: signal.importance,
+    related_jobs_count: signal.frequency,
+    category: signal.signal_type === 'skill' || signal.signal_type === 'tool'
+      ? 'technical'
+      : 'professional',
+  }))
+
+  const { error: deleteError } = await supabase
+    .from('a2_extracted_signals')
+    .delete()
+    .eq('user_id', currentUser.id)
+    .eq('day_number', 3)
+
+  if (deleteError) {
+    console.error('[v0] Error replacing Day 3 signals:', deleteError)
+    return NextResponse.json(
+      { error: 'No pudimos actualizar las señales anteriores.' },
+      { status: 500 },
+    )
+  }
+
+  const { data: savedSignals, error: insertError } = await supabase
+    .from('a2_extracted_signals')
+    .insert(rows)
+    .select('*')
+
+  if (insertError) {
+    console.error('[v0] Error saving Day 3 signals:', insertError)
+    return NextResponse.json(
+      { error: 'No pudimos guardar las señales extraídas.' },
+      { status: 500 },
+    )
+  }
+
+  return NextResponse.json(
+    {
+      success: true,
+      signals: savedSignals || [],
+      count: savedSignals?.length || 0,
+      source: aiSignals ? 'openai_validated' : 'deterministic_fallback',
+    },
+    {
+      headers: { 'Cache-Control': 'private, no-store' },
+    },
+  )
+}
