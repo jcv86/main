@@ -15,10 +15,7 @@ for (const question of DISC_TEST_QUESTIONS) {
   validLess[String(question.id)] = question.opciones[1].texto
 }
 
-const validScoring = validateAndScoreDiscResponses({
-  more: validMore,
-  less: validLess,
-})
+const validScoring = validateAndScoreDiscResponses({ more: validMore, less: validLess })
 assert.equal(validScoring.valid, true, validScoring.errors.join('; '))
 assert.ok(validScoring.value)
 assert.equal(validScoring.value.scores.D, DISC_TEST_QUESTIONS.length)
@@ -30,33 +27,19 @@ assert.equal(validScoring.value.secondaryPattern, 'S')
 assert.equal(validScoring.value.questions.length, DISC_TEST_QUESTIONS.length)
 
 const firstQuestionId = String(DISC_TEST_QUESTIONS[0].id)
-const duplicatedSelection = validateAndScoreDiscResponses({
-  more: validMore,
-  less: { ...validLess, [firstQuestionId]: validMore[firstQuestionId] },
-})
+const duplicatedSelection = validateAndScoreDiscResponses({ more: validMore, less: { ...validLess, [firstQuestionId]: validMore[firstQuestionId] } })
 assert.equal(duplicatedSelection.valid, false)
 assert.ok(duplicatedSelection.errors.some((error) => error.includes('misma opción')))
 
-const missingQuestion = validateAndScoreDiscResponses({
-  more: Object.fromEntries(
-    Object.entries(validMore).filter(([id]) => id !== firstQuestionId),
-  ),
-  less: validLess,
-})
+const missingQuestion = validateAndScoreDiscResponses({ more: Object.fromEntries(Object.entries(validMore).filter(([id]) => id !== firstQuestionId)), less: validLess })
 assert.equal(missingQuestion.valid, false)
 assert.ok(missingQuestion.errors.some((error) => error.includes('Falta la selección MÁS')))
 
-const forgedOption = validateAndScoreDiscResponses({
-  more: { ...validMore, [firstQuestionId]: 'Perfil ejecutivo inventado' },
-  less: validLess,
-})
+const forgedOption = validateAndScoreDiscResponses({ more: { ...validMore, [firstQuestionId]: 'Perfil ejecutivo inventado' }, less: validLess })
 assert.equal(forgedOption.valid, false)
 assert.ok(forgedOption.errors.some((error) => error.includes('no es válida')))
 
-const extraQuestion = validateAndScoreDiscResponses({
-  more: { ...validMore, '999': 'Opción extra' },
-  less: { ...validLess, '999': 'Otra opción extra' },
-})
+const extraQuestion = validateAndScoreDiscResponses({ more: { ...validMore, '999': 'Opción extra' }, less: { ...validLess, '999': 'Otra opción extra' } })
 assert.equal(extraQuestion.valid, false)
 assert.ok(extraQuestion.errors.some((error) => error.includes('no pertenece')))
 
@@ -72,15 +55,17 @@ assert.ok(!a1Page.includes('user_id: userId'))
 assert.ok(!a1Page.includes('disc_profile: scores'))
 assert.ok(!a1Page.includes('questions: DISC_TEST_QUESTIONS'))
 
-assert.ok(a1SaveRoute.includes('validateAndScoreDiscResponses(payload.responses)'))
+assert.ok(a1SaveRoute.includes('validateAndScoreDiscResponses(body.responses)'))
 assert.ok(a1SaveRoute.includes("code: 'client_owned_a1_field_rejected'"))
 assert.ok(a1SaveRoute.includes("code: 'invalid_disc_responses'"))
-assert.ok(a1SaveRoute.includes('responses: scoring.value.responses'))
-assert.ok(a1SaveRoute.includes('questions: scoring.value.questions'))
-assert.ok(a1SaveRoute.includes('disc_profile: scoring.value.scores'))
-assert.ok(a1SaveRoute.includes('dominant_pattern: scoring.value.dominantPattern'))
-assert.ok(a1SaveRoute.includes('user_id: user.id'))
-assert.ok(a1SaveRoute.includes('secondaryPattern: scoring.value.secondaryPattern'))
+assert.ok(a1SaveRoute.includes('p_responses: scoring.value.responses'))
+assert.ok(a1SaveRoute.includes('p_questions: scoring.value.questions'))
+assert.ok(a1SaveRoute.includes('p_disc_profile: scoring.value.scores'))
+assert.ok(a1SaveRoute.includes('p_dominant_pattern: scoring.value.dominantPattern'))
+assert.ok(a1SaveRoute.includes('p_secondary_pattern: scoring.value.secondaryPattern'))
+assert.ok(a1SaveRoute.includes("'save_a1_cerebral_with_career_identity'"))
+assert.ok(a1SaveRoute.includes('crypto.randomUUID()'))
+assert.ok(!a1SaveRoute.includes(".from('a1_cerebral_assessment')"))
 assert.ok(!a1SaveRoute.includes('const { responses, questions, disc_profile }'))
 assert.ok(!a1SaveRoute.includes('disc_profile.D || 0'))
 assert.ok(!a1SaveRoute.includes('errorMsg'))
@@ -110,7 +95,6 @@ assert.ok(a1ReportLayout.includes("redirect('/despega/conozcamonos-2')"))
 assert.ok(a1ReportLayout.includes('recordJourneyTransition'))
 assert.ok(a1ReportLayout.includes('<A1CanonicalReport'))
 assert.ok(!a1ReportLayout.includes('return children'))
-
 assert.ok(a1Report.includes('A1 diagnostica'))
 assert.ok(a1Report.includes('A2 traduce'))
 assert.ok(a1Report.includes('A3 entrena'))
@@ -119,7 +103,6 @@ assert.ok(a1Report.includes('Día 7'))
 assert.equal((a1Report.match(/PhaseTransitionHandler/g) || []).length, 2)
 assert.ok(a1Report.includes('nextPhaseUrl="/despega/a2/intro"'))
 assert.ok(!a1Report.includes('90 días de acciones'))
-
 assert.ok(phaseTransition.includes("fetch('/api/journey/transition'"))
 assert.ok(phaseTransition.includes("credentials: 'include'"))
 assert.ok(!phaseTransition.includes('createClient'))
@@ -127,19 +110,14 @@ assert.ok(!phaseTransition.includes(".from('despega_user_profiles')"))
 assert.ok(transitionRoute.includes('resolveServerUser'))
 assert.ok(transitionRoute.includes('recordJourneyTransition'))
 
-const c2Requirement = transitionService.indexOf(
-  "throw new Error('Completa Conozcámonos 2 antes de abrir tu informe final.')",
-)
-const reportRequirement = transitionService.indexOf(
-  "throw new Error('Completa A1 y revisa tu informe antes de iniciar Tu Ruta.')",
-)
+const c2Requirement = transitionService.indexOf("throw new Error('Completa Conozcámonos 2 antes de abrir tu informe final.')")
+const reportRequirement = transitionService.indexOf("throw new Error('Completa A1 y revisa tu informe antes de iniciar Tu Ruta.')")
 assert.ok(c2Requirement >= 0)
 assert.ok(reportRequirement > c2Requirement)
 assert.ok(transitionService.includes("return { nextPath: '/despega/a2/intro' }"))
 assert.ok(transitionService.includes("return { nextPath: '/despega/a2' }"))
 assert.ok(transitionService.includes('repairLegacyC2Completion'))
 assert.ok(transitionService.includes('markA3JourneyVisited'))
-
 assert.ok(c2Page.includes("fetch('/api/journey/complete-c2'"))
 assert.ok(c2Page.includes('Generar informe A1'))
 assert.ok(!c2Page.includes('createClient'))
@@ -152,7 +130,6 @@ assert.ok(c2Route.includes('conozcamonos_2_completed: true'))
 assert.ok(c2Route.includes('onboarding_conozcamonos_2_completed: true'))
 assert.ok(c2Route.includes("nextPath: '/despega/a1-report'"))
 assert.ok(!c2Route.includes('a2_route_generated: true'))
-
 assert.ok(a2IntroPage.includes('<A2CanonicalIntro'))
 assert.ok(!a2IntroPage.includes('createClient'))
 assert.ok(a2IntroLayout.includes("redirect('/despega/conozcamonos-2')"))
@@ -162,7 +139,6 @@ assert.ok(a2Intro.includes('Comenzar Tu Ruta de 30 días'))
 assert.ok(a2Intro.includes('ampliable a 60 y'))
 assert.ok(a2Intro.includes('checkpoints desde'))
 assert.ok(a2Intro.includes('el Día 7'))
-
 assert.ok(legacyA2Bridge.includes('repairLegacyC2Completion'))
 assert.ok(legacyA2Bridge.includes("redirect('/despega/a1-report')"))
 assert.ok(legacyA2Bridge.includes("redirect('/despega/a2/intro')"))
@@ -171,7 +147,6 @@ assert.ok(a2Boundary.includes("pathname === '/despega/a2/intro'"))
 assert.ok(a2Boundary.includes("module-access?module=A2"))
 assert.ok(moduleAccessRoute.includes('getModuleAccess'))
 assert.ok(moduleAccessRoute.includes('getCanonicalNextPath'))
-
 assert.ok(day7Bridge.includes("includes('career-mirror')"))
 assert.ok(day7Bridge.includes("'/despega/a3/career-mirror'"))
 assert.ok(day7Bridge.includes('!checkpointCompleted'))
@@ -181,39 +156,4 @@ assert.ok(a3Layout.includes('repairLegacyC2Completion'))
 assert.ok(a3Layout.includes('markA3JourneyVisited'))
 assert.ok(a3Layout.includes("requireJourneyModule('A3')"))
 
-console.log(
-  JSON.stringify({
-    evidenceLevel: 'mixed_runtime_and_source_contract',
-    runtimeValidated: [
-      'canonical DISC scoring',
-      'duplicate selection rejection',
-      'missing answer rejection',
-      'forged option rejection',
-      'extra question rejection',
-    ],
-    sourceContractsChecked: [
-      'server-owned A1 identity and scoring',
-      'canonical A1 payload',
-      'A1 to A3 journey wiring',
-    ],
-    canonicalOrder: [
-      'Conozcámonos 1',
-      'Despega Cerebral',
-      'Conozcámonos 2',
-      'Informe A1',
-      'Introducción A2',
-      'Tu Ruta',
-      'Checkpoint A3 Día 7',
-    ],
-    a1ServerScoring: true,
-    a1IncludesC2AndReport: true,
-    a2StartsAt30Days: true,
-    serverTransitions: true,
-    canonicalC2Flag: true,
-    directA2AccessGuarded: true,
-    realA3CheckpointRequired: true,
-    legacyCompatibilityRepaired: true,
-    liveHttpCheckedInThisScript: false,
-    liveDatabaseCheckedInThisScript: false,
-  }),
-)
+console.log(JSON.stringify({ evidenceLevel: 'mixed_runtime_and_source_contract', runtimeValidated: ['canonical DISC scoring','duplicate selection rejection','missing answer rejection','forged option rejection','extra question rejection'], sourceContractsChecked: ['server-owned A1 identity and scoring','atomic A1 Career Identity dual-write','A1 to A3 journey wiring'], canonicalOrder: ['Conozcámonos 1','Despega Cerebral','Conozcámonos 2','Informe A1','Introducción A2','Tu Ruta','Checkpoint A3 Día 7'], a1ServerScoring: true, a1IncludesC2AndReport: true, a2StartsAt30Days: true, serverTransitions: true, canonicalC2Flag: true, directA2AccessGuarded: true, realA3CheckpointRequired: true, legacyCompatibilityRepaired: true, liveHttpCheckedInThisScript: false, liveDatabaseCheckedInThisScript: false }))
