@@ -1,8 +1,4 @@
 -- Transactional A3 module completion -> Career Identity dual-write.
--- The canonical application writer appends verified module IDs to
--- a3_user_progress.completed_module_ids. This trigger detects only newly added
--- modules and writes identity, evidence and audit in the same transaction.
-
 create or replace function public.sync_a3_progress_to_career_identity()
 returns trigger
 language plpgsql
@@ -10,6 +6,7 @@ security invoker
 set search_path = public
 as $$
 declare
+  v_user_id uuid;
   v_module_id text;
   v_identity_id uuid;
   v_identity_version integer;
@@ -19,9 +16,15 @@ declare
   v_module_title text;
   v_evidence_type text;
 begin
-  if new.user_id is null then
+  if new.user_id is null or btrim(new.user_id) = '' then
     raise exception using errcode = '23502', message = 'A3 progress requires user_id';
   end if;
+
+  begin
+    v_user_id := new.user_id::uuid;
+  exception when invalid_text_representation then
+    raise exception using errcode = '22023', message = 'A3 progress user_id must be a UUID';
+  end;
 
   v_completed_count := coalesce(array_length(new.completed_module_ids, 1), 0);
 
@@ -30,12 +33,9 @@ begin
     from unnest(coalesce(new.completed_module_ids, array[]::text[])) as module_id
     except
     select module_id
-    from unnest(
-      case when tg_op = 'UPDATE'
-        then coalesce(old.completed_module_ids, array[]::text[])
-        else array[]::text[]
-      end
-    ) as module_id
+    from unnest(case when tg_op = 'UPDATE'
+      then coalesce(old.completed_module_ids, array[]::text[])
+      else array[]::text[] end) as module_id
   loop
     select
       case v_module_id
@@ -78,99 +78,40 @@ begin
 
     v_correlation_id := gen_random_uuid()::text;
 
-    insert into public.career_identities (
-      user_id,
-      interview_profile,
-      communication_profile,
-      learning_profile,
-      metadata
-    ) values (
-      new.user_id,
-      case when v_module_id in (
-        'answer-architecture', 'coach-practice-room',
-        'first-recruiter-simulation', 'risk-difficult-questions-lab',
-        'basic-interview-mission'
-      ) then v_profile_patch else '{}'::jsonb end,
-      case when v_module_id = 'communication-gym'
-        then v_profile_patch else '{}'::jsonb end,
-      jsonb_build_object(
-        'a3CompletedModules', v_completed_count,
-        'a3LastCompletedModule', v_module_id,
-        'a3LastCompletedAt', coalesce(new.updated_at, now())
-      ) || case when v_module_id not in (
-        'answer-architecture', 'coach-practice-room',
-        'first-recruiter-simulation', 'risk-difficult-questions-lab',
-        'basic-interview-mission', 'communication-gym'
-      ) then v_profile_patch else '{}'::jsonb end,
+    insert into public.career_identities (user_id, interview_profile, communication_profile, learning_profile, metadata)
+    values (
+      v_user_id,
+      case when v_module_id in ('answer-architecture','coach-practice-room','first-recruiter-simulation','risk-difficult-questions-lab','basic-interview-mission') then v_profile_patch else '{}'::jsonb end,
+      case when v_module_id = 'communication-gym' then v_profile_patch else '{}'::jsonb end,
+      jsonb_build_object('a3CompletedModules', v_completed_count, 'a3LastCompletedModule', v_module_id, 'a3LastCompletedAt', coalesce(new.updated_at, now()))
+        || case when v_module_id not in ('answer-architecture','coach-practice-room','first-recruiter-simulation','risk-difficult-questions-lab','basic-interview-mission','communication-gym') then v_profile_patch else '{}'::jsonb end,
       jsonb_build_object('a3Connected', true, 'a3ProgressId', new.id)
     )
     on conflict (user_id) do update set
-      interview_profile = coalesce(public.career_identities.interview_profile, '{}'::jsonb)
-        || excluded.interview_profile,
-      communication_profile = coalesce(public.career_identities.communication_profile, '{}'::jsonb)
-        || excluded.communication_profile,
-      learning_profile = coalesce(public.career_identities.learning_profile, '{}'::jsonb)
-        || excluded.learning_profile,
-      metadata = coalesce(public.career_identities.metadata, '{}'::jsonb)
-        || excluded.metadata,
+      interview_profile = coalesce(public.career_identities.interview_profile, '{}'::jsonb) || excluded.interview_profile,
+      communication_profile = coalesce(public.career_identities.communication_profile, '{}'::jsonb) || excluded.communication_profile,
+      learning_profile = coalesce(public.career_identities.learning_profile, '{}'::jsonb) || excluded.learning_profile,
+      metadata = coalesce(public.career_identities.metadata, '{}'::jsonb) || excluded.metadata,
       version = public.career_identities.version + 1,
       updated_at = now()
     returning id, version into v_identity_id, v_identity_version;
 
-    insert into public.career_evidence (
-      user_id, identity_id, source_module, source_type, source_ref,
-      assertion, value, confidence, observed_at, metadata
-    ) values (
-      new.user_id,
-      v_identity_id,
-      'a3',
-      v_evidence_type,
-      'a3-module-' || v_module_id,
+    insert into public.career_evidence (user_id, identity_id, source_module, source_type, source_ref, assertion, value, confidence, observed_at, metadata)
+    values (
+      v_user_id, v_identity_id, 'a3', v_evidence_type, 'a3-module-' || v_module_id,
       format('A3 training module completed: %s', v_module_title),
-      jsonb_build_object(
-        'progressId', new.id,
-        'moduleId', v_module_id,
-        'moduleTitle', v_module_title,
-        'completedModuleCount', v_completed_count,
-        'moduleState', coalesce(new.module_states -> v_module_id, '"completed"'::jsonb)
-      ),
-      80,
-      coalesce(new.updated_at, now()),
-      jsonb_build_object(
-        'identityVersion', v_identity_version,
-        'correlationId', v_correlation_id
-      )
+      jsonb_build_object('progressId', new.id, 'moduleId', v_module_id, 'moduleTitle', v_module_title, 'completedModuleCount', v_completed_count, 'moduleState', coalesce(new.module_states -> v_module_id, '"completed"'::jsonb)),
+      80, coalesce(new.updated_at, now()),
+      jsonb_build_object('identityVersion', v_identity_version, 'correlationId', v_correlation_id)
     )
-    on conflict (user_id, source_module, source_type, source_ref)
-      where source_ref is not null
-    do update set
-      identity_id = excluded.identity_id,
-      assertion = excluded.assertion,
-      value = excluded.value,
-      confidence = excluded.confidence,
-      observed_at = excluded.observed_at,
-      metadata = excluded.metadata;
+    on conflict (user_id, source_module, source_type, source_ref) where source_ref is not null
+    do update set identity_id = excluded.identity_id, assertion = excluded.assertion, value = excluded.value, confidence = excluded.confidence, observed_at = excluded.observed_at, metadata = excluded.metadata;
 
-    insert into public.career_agent_events (
-      user_id, identity_id, agent_id, agent_version, source_module,
-      correlation_id, operation, entity_type, entity_id, outcome, payload
-    ) values (
-      new.user_id,
-      v_identity_id,
-      'a3-completion-writer',
-      '1.0.0',
-      'a3',
-      v_correlation_id,
-      'complete_module_dual_write',
-      'a3_user_progress',
-      new.id,
-      'accepted',
-      jsonb_build_object(
-        'moduleId', v_module_id,
-        'moduleTitle', v_module_title,
-        'completedModuleCount', v_completed_count,
-        'identityVersion', v_identity_version
-      )
+    insert into public.career_agent_events (user_id, identity_id, agent_id, agent_version, source_module, correlation_id, operation, entity_type, entity_id, outcome, payload)
+    values (
+      v_user_id, v_identity_id, 'a3-completion-writer', '1.0.0', 'a3', v_correlation_id,
+      'complete_module_dual_write', 'a3_user_progress', new.id, 'accepted',
+      jsonb_build_object('moduleId', v_module_id, 'moduleTitle', v_module_title, 'completedModuleCount', v_completed_count, 'identityVersion', v_identity_version)
     );
   end loop;
 
@@ -182,11 +123,7 @@ revoke all on function public.sync_a3_progress_to_career_identity() from public;
 revoke all on function public.sync_a3_progress_to_career_identity() from anon;
 revoke all on function public.sync_a3_progress_to_career_identity() from authenticated;
 
-drop trigger if exists a3_progress_career_identity_sync
-  on public.a3_user_progress;
-
+drop trigger if exists a3_progress_career_identity_sync on public.a3_user_progress;
 create trigger a3_progress_career_identity_sync
-after insert or update of completed_module_ids
-on public.a3_user_progress
-for each row
-execute function public.sync_a3_progress_to_career_identity();
+after insert or update of completed_module_ids on public.a3_user_progress
+for each row execute function public.sync_a3_progress_to_career_identity();
