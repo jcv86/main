@@ -138,6 +138,9 @@ jobs:
       - name: Public AgentOS command execution retirement source contract
         run: npx tsx scripts/check-public-agentos-command-retirement-contract.ts
 
+      - name: A4 auto-detection webhook retirement source contract
+        run: npx tsx scripts/check-auto-detection-webhook-retirement-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'
