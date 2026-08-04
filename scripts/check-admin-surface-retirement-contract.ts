@@ -1,3 +1,4 @@
+// Contrato fuente permanente: la administración permanece retirada hasta existir roles y auditoría reales.
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
