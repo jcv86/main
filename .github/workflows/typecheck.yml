@@ -150,6 +150,9 @@ jobs:
       - name: Global route authentication boundary source contract
         run: npx tsx scripts/check-global-auth-boundary-contract.ts
 
+      - name: A2 task and Day 3 signal writer source contract
+        run: npx tsx scripts/check-a2-task-signal-writer-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'
