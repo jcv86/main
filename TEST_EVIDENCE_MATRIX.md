@@ -16,12 +16,12 @@ Los checks del repositorio no tienen todos el mismo alcance. Un resultado verde 
 |---|---:|
 | Runtime only | 1 |
 | Mixed runtime + source | 21 |
-| Source only | 18 |
+| Source only | 19 |
 | Live HTTP | 0 |
 | Live database | 0 |
 | Browser end-to-end | 0 |
 
-El workflow valida 40 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
+El workflow valida 41 contratos de dominio. La lista exacta y su clasificación se controlan automáticamente en `scripts/check-test-evidence-matrix.ts`.
 
 Los contratos adicionales comprueban que:
 
@@ -32,6 +32,7 @@ Los contratos adicionales comprueban que:
 - ningún helper acepte identidad decodificando JWT sin verificar firma ni exista un tracker paralelo que calcule recompensas desde puntajes autorreportados;
 - las rutas de coaching A2/A3 verifiquen sesión Supabase, acoten el payload, no usen `service_role`, no acepten `userId` del navegador y desactiven almacenamiento de respuestas del proveedor;
 - la ejecución genérica de AgentOS no esté expuesta por HTTP ni permita invocar comandos internos con parámetros arbitrarios;
+- el seed de desarrollo de AgentOS no pueda generar respuestas, progreso, memoria ni documentos ficticios dentro de las tablas reales;
 - el webhook público de auto-detección no acepte firmas débiles, no permita disparos manuales por `userId` y no ejecute job matching antes del gate A3 → A4;
 - los endpoints legacy de Conozcámonos 1 y 2 no acepten `user_id` del navegador ni dupliquen la persistencia canónica basada en sesión;
 - el modal legacy del Día 1 no publique documentos personales, no acepte cookies demo sin firma ni presente coaching mock como una capacidad real;

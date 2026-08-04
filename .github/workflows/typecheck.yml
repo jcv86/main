@@ -153,6 +153,9 @@ jobs:
       - name: A2 task and Day 3 signal writer source contract
         run: npx tsx scripts/check-a2-task-signal-writer-contract.ts
 
+      - name: AgentOS development seed retirement source contract
+        run: npx tsx scripts/check-agentos-dev-seed-retirement-contract.ts
+
       - name: Next production bundle
         env:
           NEXT_TELEMETRY_DISABLED: '1'
