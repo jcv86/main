@@ -12,11 +12,11 @@ const buttonVariants = cva(
         default:
           "border border-transparent bg-primary text-primary-foreground shadow-[0_8px_24px_rgba(92,111,240,0.22)] hover:bg-[hsl(233_63%_55%)] hover:shadow-[0_10px_30px_rgba(92,111,240,0.28)]",
         destructive:
-          "border border-transparent bg-destructive text-destructive-foreground shadow-sm hover:bg-destructive/88",
+          "border border-transparent bg-destructive text-destructive-foreground shadow-[var(--dtc-shadow-sm)] hover:bg-destructive/88",
         outline:
-          "border border-border bg-[rgba(18,24,39,0.72)] text-foreground shadow-sm hover:border-[rgba(126,141,255,0.72)] hover:bg-[rgba(38,49,73,0.72)] hover:text-foreground",
+          "border border-border bg-[rgba(18,24,39,0.72)] text-foreground shadow-[var(--dtc-shadow-sm)] hover:border-[rgba(126,141,255,0.72)] hover:bg-[rgba(38,49,73,0.72)] hover:text-foreground",
         secondary:
-          "border border-border bg-secondary text-secondary-foreground shadow-sm hover:bg-[rgba(38,49,73,0.86)] hover:text-foreground",
+          "border border-border bg-secondary text-secondary-foreground shadow-[var(--dtc-shadow-sm)] hover:bg-[rgba(38,49,73,0.86)] hover:text-foreground",
         ghost:
           "border border-transparent text-muted-foreground hover:bg-[rgba(38,49,73,0.62)] hover:text-foreground",
         link: "h-auto rounded-none p-0 text-[hsl(var(--ring))] underline-offset-4 hover:text-[var(--dtc-indigo-300)] hover:underline",
