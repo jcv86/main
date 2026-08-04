@@ -1,0 +1,28 @@
+name: Design system foundation
+
+on:
+  pull_request:
+    paths:
+      - "DESIGN.md"
+      - "app/design-system.css"
+      - "app/layout.tsx"
+      - "components/ui/button.tsx"
+      - "components/ui/card.tsx"
+      - "components/ui/input.tsx"
+      - "scripts/test-design-system-foundation.mjs"
+      - ".github/workflows/design-system-foundation.yml"
+
+jobs:
+  design-contract:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Validate DTC design foundation
+        run: node scripts/test-design-system-foundation.mjs
