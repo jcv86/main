@@ -1,6 +1,11 @@
 name: Rebuild admin retirement on current main
 
 on:
+  push:
+    branches:
+      - agent/retire-unconfigured-admin-surface-v2
+    paths:
+      - '.github/workflows/rebuild-admin-surface-v2.yml'
   pull_request:
     branches:
       - main
@@ -132,5 +137,3 @@ jobs:
           git add -A
           git commit -m 'fix(admin): reconstruir retiro seguro sobre main actual'
           git push origin HEAD:${{ github.head_ref || github.ref_name }}
-
-# Segunda publicación para registrar el workflow en GitHub Actions.
