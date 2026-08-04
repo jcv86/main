@@ -1,87 +1,110 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
-import OpenAI from 'openai'
+import { z } from 'zod'
+import { resolveServerUser } from '@/lib/auth/server-user'
 
-// Initialize Supabase only if environment variables are available
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
-const supabase = supabaseUrl && supabaseServiceKey 
-  ? createClient(supabaseUrl, supabaseServiceKey)
-  : null
-
-// Initialize OpenAI only if API key is available
-const openaiApiKey = process.env.OPENAI_API_KEY
-const openai = openaiApiKey ? new OpenAI({ apiKey: openaiApiKey }) : null
+const requestSchema = z.object({
+  question: z.string().trim().min(2).max(1_000),
+  answer: z.string().trim().min(1).max(8_000),
+  context: z.string().trim().max(4_000).optional().default(''),
+})
 
 export async function POST(request: NextRequest) {
+  const resolvedUser = await resolveServerUser()
+  if (!resolvedUser) {
+    return NextResponse.json(
+      { error: 'Unauthorized', code: 'authentication_required' },
+      { status: 401 },
+    )
+  }
+
+  let payload: unknown
   try {
-    const { question, answer, context } = await request.json()
+    payload = await request.json()
+  } catch {
+    return NextResponse.json(
+      { error: 'Invalid JSON', code: 'invalid_json' },
+      { status: 400 },
+    )
+  }
 
-    // Get user ID from session
-    const authHeader = request.headers.get('authorization')
-    if (!authHeader) {
-      return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
-    }
+  const parsed = requestSchema.safeParse(payload)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Invalid coaching request', code: 'invalid_coaching_request' },
+      { status: 400 },
+    )
+  }
 
-    // Check if OpenAI is configured
-    if (!openai) {
+  const openaiApiKey = process.env.OPENAI_API_KEY
+  if (!openaiApiKey) {
+    return NextResponse.json(
+      { error: 'AI coaching is not configured', code: 'coaching_not_configured' },
+      { status: 503 },
+    )
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${openaiApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Eres un coach de práctica de entrevistas. No aconsejes ni decidas por la persona. Devuelve una observación breve en español que ayude a hacer la respuesta más clara, específica, verificable y relevante. Máximo tres oraciones.',
+          },
+          {
+            role: 'user',
+            content: [
+              `Pregunta: ${parsed.data.question}`,
+              `Respuesta: ${parsed.data.answer}`,
+              parsed.data.context ? `Contexto: ${parsed.data.context}` : '',
+            ]
+              .filter(Boolean)
+              .join('\n\n'),
+          },
+        ],
+        temperature: 0.4,
+        max_tokens: 180,
+        store: false,
+      }),
+      signal: AbortSignal.timeout(20_000),
+    })
+
+    if (!response.ok) {
+      console.error('[a3/coach-suggestion] OpenAI request failed', response.status)
       return NextResponse.json(
-        { error: 'AI coaching not available - OpenAI API key not configured' },
-        { status: 503 }
+        { error: 'Coach suggestion unavailable', code: 'coach_generation_failed' },
+        { status: 502 },
       )
     }
 
-    // Call OpenAI to generate coaching suggestion
-    const completion = await openai.chat.completions.create({
-      model: 'gpt-4-turbo-preview',
-      messages: [
-        {
-          role: 'system',
-          content: `You are an expert career coach helping candidates improve their interview answers and professional development. 
-Provide brief, actionable suggestions in Spanish to help them improve their response. 
-Keep suggestions concise (2-3 sentences max).
-Focus on clarity, impact, and relevance to the role.`
-        },
-        {
-          role: 'user',
-          content: `Question: ${question}\n\nCandidate's Answer: ${answer}\n\nContext: ${context}\n\nProvide a brief coaching suggestion to improve this answer.`
-        }
-      ],
-      temperature: 0.7,
-      max_tokens: 150
-    })
-
-    const suggestion = completion.choices[0]?.message?.content || 'No suggestion available'
-
-    // Log coaching interaction for analytics (optional if Supabase is available)
-    if (supabase) {
-      try {
-        const { data: { user } } = await supabase.auth.getUser()
-        if (user) {
-          const { error } = await supabase
-            .from('coaching_interactions')
-            .insert({
-              user_id: user.id,
-              question,
-              user_answer: answer,
-              coach_suggestion: suggestion,
-              created_at: new Date().toISOString()
-            })
-          if (error) {
-            console.error('[v0] Error logging coaching interaction:', error)
-          }
-        }
-      } catch (logError) {
-        console.error('[v0] Error in coaching interaction logging:', logError)
-      }
+    const data = await response.json()
+    const suggestion = data.choices?.[0]?.message?.content
+    if (typeof suggestion !== 'string' || !suggestion.trim()) {
+      return NextResponse.json(
+        { error: 'Coach suggestion unavailable', code: 'empty_coach_response' },
+        { status: 502 },
+      )
     }
 
-    return NextResponse.json({ suggestion })
-  } catch (error) {
-    console.error('[v0] Coach suggestion error:', error)
     return NextResponse.json(
-      { error: 'Failed to generate suggestion' },
-      { status: 500 }
+      { suggestion: suggestion.trim().slice(0, 2_000) },
+      { headers: { 'Cache-Control': 'private, no-store' } },
+    )
+  } catch (error) {
+    console.error(
+      '[a3/coach-suggestion] generation failed',
+      error instanceof Error ? error.message : 'unknown_error',
+    )
+    return NextResponse.json(
+      { error: 'Coach suggestion unavailable', code: 'coach_generation_failed' },
+      { status: 502 },
     )
   }
 }
