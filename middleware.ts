@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { checkRateLimit, rateLimiters } from '@/lib/middleware/rate-limit'
 import { logger } from '@/lib/logger'
 import { getPillarFromPath, shouldEnforcePillarAccess, getAccessDeniedRedirect } from '@/lib/pillar-access-validation'
-import { DEMO_COOKIE_NAME, demoSessionCookieOptions, verifyDemoSessionToken } from '@/lib/auth/demo-user'
+import { DEMO_COOKIE_NAME, demoSessionCookieOptions } from '@/lib/auth/demo-user'
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -120,25 +120,14 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
-  const demoSessionToken = request.cookies.get(DEMO_COOKIE_NAME)?.value
-  if (demoSessionToken) {
-    const demoUser = await verifyDemoSessionToken(demoSessionToken)
-    if (demoUser) {
-      const response = NextResponse.next()
-      response.cookies.set(DEMO_COOKIE_NAME, demoSessionToken, demoSessionCookieOptions)
-      return response
-    }
-
-    const response = await updateSession(request)
+  const response = await updateSession(request)
+  if (request.cookies.get(DEMO_COOKIE_NAME)?.value) {
     response.cookies.set(DEMO_COOKIE_NAME, '', {
       ...demoSessionCookieOptions,
       maxAge: 0,
     })
-    return response
   }
-
-  // Use Supabase session management for all other routes
-  return await updateSession(request)
+  return response
 }
 
 export const config = {
