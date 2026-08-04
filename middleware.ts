@@ -120,6 +120,16 @@ export async function middleware(request: NextRequest) {
     return response
   }
 
+  const hostname = request.headers.get('host')?.split(':')[0] || ''
+  const isPreviewHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.vercel.app') || hostname.endsWith('.v0.dev')
+  const hasPreviewAccess = request.cookies.get('dtc_preview_access')?.value === '1'
+  const hasPreviewQuery = request.nextUrl.searchParams.get('preview') === '1'
+
+  // Preview-only bypass for QA. Production domains never satisfy isPreviewHost.
+  if (isPreviewHost && (hasPreviewAccess || hasPreviewQuery)) {
+    return NextResponse.next()
+  }
+
   const response = await updateSession(request)
   if (request.cookies.get(DEMO_COOKIE_NAME)?.value) {
     response.cookies.set(DEMO_COOKIE_NAME, '', {
