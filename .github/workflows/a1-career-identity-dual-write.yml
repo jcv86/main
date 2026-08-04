@@ -1,0 +1,29 @@
+name: A1 Career Identity dual-write
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/a1-cerebral-save/route.ts'
+      - 'supabase/migrations/20260804070000_a1_career_identity_dual_write.sql'
+      - 'scripts/check-a1-career-identity-dual-write-contract.ts'
+      - '.github/workflows/a1-career-identity-dual-write.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  contract:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+      - run: npm ci
+      - name: A1 atomic dual-write contract
+        run: npx tsx scripts/check-a1-career-identity-dual-write-contract.ts
+      - name: TypeScript full-repository check
+        run: npx tsc --noEmit
+      - name: Production build
+        run: npm run build
