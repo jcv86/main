@@ -3,19 +3,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { SIGN_IN_PATH } from '@/lib/auth/routes'
 
-function readDemoUser() {
-  if (typeof window === 'undefined') return null
-
-  try {
-    const stored = window.localStorage.getItem('demo_user')
-    return stored ? JSON.parse(stored) : null
-  } catch (error) {
-    console.error('[v0] Failed to parse demo user:', error)
-    window.localStorage.removeItem('demo_user')
-    return null
-  }
-}
-
 export function useAuthRedirect() {
   const router = useRouter()
   const supabase = createClient()
@@ -23,47 +10,59 @@ export function useAuthRedirect() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    if (!supabase) {
-      setUser(readDemoUser())
-      setLoading(false)
-      return
+    let active = true
+
+    if (typeof window !== 'undefined') {
+      window.localStorage.removeItem('demo_user')
     }
+
+    const applySession = (sessionUser: any | null) => {
+      if (!active) return
+      setUser(sessionUser)
+      setLoading(false)
+      if (!sessionUser) router.replace(SIGN_IN_PATH)
+    }
+
+    const initialize = async () => {
+      const {
+        data: { user: verifiedUser },
+        error,
+      } = await supabase.auth.getUser()
+
+      if (!active) return
+      if (error || !verifiedUser) {
+        applySession(null)
+        return
+      }
+      applySession(verifiedUser)
+    }
+
+    void initialize()
 
     const {
       data: { subscription },
     } = supabase.auth.onAuthStateChange((event, session) => {
-      if (event === 'INITIAL_SESSION') {
-        if (session?.user) {
-          window.localStorage.removeItem('demo_user')
-          setUser(session.user)
-        } else {
-          setUser(readDemoUser())
-        }
-        setLoading(false)
-        return
-      }
+      if (!active) return
 
       if (event === 'SIGNED_OUT') {
-        setUser(null)
-        setLoading(false)
-        router.push(SIGN_IN_PATH)
+        applySession(null)
         return
       }
 
       if (
-        (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') &&
-        session?.user
+        event === 'INITIAL_SESSION' ||
+        event === 'SIGNED_IN' ||
+        event === 'TOKEN_REFRESHED' ||
+        event === 'USER_UPDATED'
       ) {
-        window.localStorage.removeItem('demo_user')
-        setUser(session.user)
-        setLoading(false)
-        return
+        applySession(session?.user ?? null)
       }
-
-      setLoading(false)
     })
 
-    return () => subscription?.unsubscribe()
+    return () => {
+      active = false
+      subscription?.unsubscribe()
+    }
   }, [router, supabase])
 
   return { user, loading }
