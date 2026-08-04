@@ -1,155 +1,181 @@
 import { NextRequest, NextResponse } from 'next/server'
-import { createClient } from '@supabase/supabase-js'
+import { z } from 'zod'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import { createClient } from '@/lib/supabase/server'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
-const openaiApiKey = process.env.OPENAI_API_KEY || ''
+const requestSchema = z.object({
+  question: z.string().trim().min(2).max(600),
+  currentAnswer: z.string().trim().max(6_000).default(''),
+})
 
-export async function POST(request: NextRequest) {
-  try {
-    const { question, currentAnswer, userId } = await request.json()
+const responseSchema = z.object({
+  suggestion: z.string().trim().min(1).max(2_000),
+  tips: z.array(z.string().trim().min(1).max(500)).min(1).max(5),
+})
 
-    if (!question) {
-      return NextResponse.json(
-        { error: 'Question is required' },
-        { status: 400 }
-      )
-    }
-
-    // Try to get Conozcamonos 1 context if userId is provided
-    let c1Context = ''
-    if (userId && supabaseUrl && supabaseKey) {
-      try {
-        const supabase = createClient(supabaseUrl, supabaseKey)
-        const { data: c1Data } = await supabase
-          .from('conozcamonos_1_responses')
-          .select('*')
-          .eq('user_id', userId)
-          .single()
-        
-        if (c1Data) {
-          c1Context = `Contexto del usuario desde Conozcamonos 1:
-- Rol buscado: ${c1Data.role || 'No especificado'}
-- Ambiente ideal: ${c1Data.environment || 'No especificado'}
-- Objetivo 30 días: ${c1Data.desired_outcome || 'No especificado'}`
-        }
-      } catch (e) {
-        console.log('[v0] Could not fetch Conozcamonos 1 context, continuing without it')
-      }
-    }
-
-    // If OpenAI API key is available, use it for intelligent suggestions
-    if (openaiApiKey) {
-      try {
-        const prompt = `Eres un coach profesional experto en desarrollo de carrera. 
-        
-${c1Context}
-
-El usuario está respondiendo a esta pregunta: "${question}"
-Su respuesta actual: "${currentAnswer}"
-
-Proporciona:
-1. Una sugerencia concisa pero profunda (2-3 oraciones) que mejore su respuesta
-2. 3-4 tips específicos para mejorar su respuesta
-
-Responde en formato JSON con esta estructura:
-{
-  "suggestion": "tu sugerencia aquí",
-  "tips": ["tip 1", "tip 2", "tip 3"]
+const fallbackSuggestions: Record<string, { suggestion: string; tips: string[] }> = {
+  'rol profesional': {
+    suggestion:
+      'Especifica el nivel de responsabilidad, el sector y el tipo de problemas que quieres resolver en ese rol.',
+    tips: ['Incluye dos o tres cargos concretos', 'Menciona el tipo de industria', 'Conecta el rol con evidencia propia'],
+  },
+  'ambiente de trabajo': {
+    suggestion:
+      'Describe las condiciones en que rindes mejor y qué tipo de equipo o liderazgo facilita ese desempeño.',
+    tips: ['Distingue remoto, híbrido o presencial', 'Describe el tamaño de equipo', 'Explica qué necesitas del liderazgo'],
+  },
+  '30 días': {
+    suggestion:
+      'Define un cambio observable para los próximos 30 días y una evidencia concreta que permita verificarlo.',
+    tips: ['Usa una meta medible', 'Divide el objetivo en hitos', 'Define una señal de avance'],
+  },
+  visión: {
+    suggestion:
+      'Conecta tu dirección de largo plazo con una decisión concreta que puedas comenzar a ejecutar ahora.',
+    tips: ['Acota el horizonte', 'Nombra las capacidades necesarias', 'Identifica la siguiente decisión'],
+  },
+  default: {
+    suggestion:
+      'Haz la respuesta más específica y verificable: explica qué quieres cambiar, por qué importa y qué evidencia mostraría avance.',
+    tips: ['Usa un ejemplo concreto', 'Evita conceptos demasiado amplios', 'Revisa que exista una acción observable'],
+  },
 }
 
-Sé específico, práctico y motivador.`
+function fallbackFor(question: string) {
+  const normalized = question.toLowerCase()
+  for (const [key, value] of Object.entries(fallbackSuggestions)) {
+    if (key !== 'default' && normalized.includes(key)) return value
+  }
+  return fallbackSuggestions.default
+}
 
-        const response = await fetch('https://api.openai.com/v1/chat/completions', {
-          method: 'POST',
-          headers: {
-            'Authorization': `Bearer ${openaiApiKey}`,
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            model: 'gpt-4o-mini',
-            messages: [
-              {
-                role: 'system',
-                content: 'You are a career coaching AI assistant that provides helpful, specific advice.'
-              },
-              {
-                role: 'user',
-                content: prompt
-              }
-            ],
-            temperature: 0.7,
-            max_tokens: 500,
-          }),
-        })
+function extractJson(text: string) {
+  const trimmed = text.trim()
+  const withoutFence = trimmed
+    .replace(/^```(?:json)?\s*/i, '')
+    .replace(/\s*```$/, '')
+  return JSON.parse(withoutFence)
+}
 
-        if (response.ok) {
-          const data = await response.json()
-          const content = data.choices?.[0]?.message?.content || ''
-          
-          try {
-            const parsed = JSON.parse(content)
-            return NextResponse.json({
-              suggestion: parsed.suggestion || 'Continúa reflexionando sobre tu respuesta.',
-              tips: Array.isArray(parsed.tips) ? parsed.tips : ['Sé específico', 'Alinea con tus objetivos']
-            })
-          } catch {
-            // If JSON parsing fails, return the content as-is
-            return NextResponse.json({
-              suggestion: content,
-              tips: ['Considera esta sugerencia del coach', 'Refina tu respuesta con estos puntos']
-            })
-          }
-        }
-      } catch (error) {
-        console.error('[v0] OpenAI API error:', error)
-        // Fall through to default suggestions
-      }
-    }
-
-    // Fallback to default suggestions if OpenAI is not available
-    const coachSuggestions: Record<string, { suggestion: string; tips: string[] }> = {
-      'rol profesional': {
-        suggestion: 'Especifica el nivel de seniority y el tipo de industria que te atrae. Sé claro sobre qué tipo de responsabilidades buscas.',
-        tips: ['Incluye 2-3 títulos específicos', 'Menciona el rango salarial esperado', 'Conecta con tus fortalezas actuales']
-      },
-      'ambiente de trabajo': {
-        suggestion: 'Describe la cultura que valoras (remoto, híbrido, flexible) y el tamaño de empresa que prefieres.',
-        tips: ['Sé honesto sobre tus preferencias', 'Considera el balance vida-trabajo', 'Piensa en el equipo y liderazgo']
-      },
-      '30 días': {
-        suggestion: 'Define un objetivo medible y específico que puedas lograr en este mes. Conecta con las acciones que tomas hoy.',
-        tips: ['Haz que sea SMART (Específico, Medible, Alcanzable)', 'Desglosa en pequeños hitos', 'Incluye métricas de éxito']
-      },
-      'visión': {
-        suggestion: 'Clarifica tu visión a largo plazo y cómo se conecta con tus habilidades únicas. Sé ambicioso pero realista.',
-        tips: ['Visualiza dónde te ves en 2-3 años', 'Alinea con tus valores core', 'Identifica las brechas de skills a cerrar']
-      },
-      'default': {
-        suggestion: 'Reflexiona profundamente sobre esta pregunta. Tómate tiempo para ser específico y honesto en tu respuesta.',
-        tips: ['Sé conciso pero completo', 'Proporciona ejemplos concretos', 'Revisa tu respuesta antes de continuar']
-      }
-    }
-
-    let suggestion = coachSuggestions['default']
-    const questionLower = question.toLowerCase()
-    
-    for (const [key, value] of Object.entries(coachSuggestions)) {
-      if (key !== 'default' && questionLower.includes(key)) {
-        suggestion = value
-        break
-      }
-    }
-
-    return NextResponse.json(suggestion)
-  } catch (error) {
-    console.error('[v0] Coach assist error:', error)
+export async function POST(request: NextRequest) {
+  const resolvedUser = await resolveServerUser()
+  if (!resolvedUser) {
     return NextResponse.json(
-      { 
-        suggestion: 'Continúa reflexionando sobre tu pregunta con detalle y honestidad.',
-        tips: ['Sé específico en tu respuesta', 'Alinea con tus objetivos profesionales', 'Revisa y mejora iterativamente']
-      },
-      { status: 200 }
+      { error: 'Unauthorized', code: 'authentication_required' },
+      { status: 401 },
     )
+  }
+
+  let payload: unknown
+  try {
+    payload = await request.json()
+  } catch {
+    return NextResponse.json(
+      { error: 'Invalid JSON', code: 'invalid_json' },
+      { status: 400 },
+    )
+  }
+
+  const parsed = requestSchema.safeParse(payload)
+  if (!parsed.success) {
+    return NextResponse.json(
+      { error: 'Invalid coaching request', code: 'invalid_coaching_request' },
+      { status: 400 },
+    )
+  }
+
+  const fallback = fallbackFor(parsed.data.question)
+  const openaiApiKey = process.env.OPENAI_API_KEY
+  if (!openaiApiKey) {
+    return NextResponse.json(fallback, {
+      headers: { 'Cache-Control': 'private, no-store' },
+    })
+  }
+
+  let c1Context = ''
+  try {
+    const supabase = await createClient()
+    const { data } = await supabase
+      .from('conozcamonos_1_responses')
+      .select('role, environment, desired_outcome')
+      .eq('user_id', resolvedUser.id)
+      .maybeSingle()
+
+    if (data) {
+      c1Context = [
+        `Rol buscado: ${String(data.role || 'No especificado').slice(0, 300)}`,
+        `Ambiente ideal: ${String(data.environment || 'No especificado').slice(0, 300)}`,
+        `Objetivo: ${String(data.desired_outcome || 'No especificado').slice(0, 500)}`,
+      ].join('\n')
+    }
+  } catch (contextError) {
+    console.warn(
+      '[a2/coach-assist] context unavailable',
+      contextError instanceof Error ? contextError.message : 'unknown_error',
+    )
+  }
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${openaiApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4o-mini',
+        messages: [
+          {
+            role: 'system',
+            content:
+              'Eres un coach de desarrollo profesional. No aconsejes ni decidas por la persona. Formula observaciones breves que ayuden a volver su respuesta más específica, verificable y conectada con evidencia. Responde solo JSON válido con suggestion y tips.',
+          },
+          {
+            role: 'user',
+            content: [
+              c1Context ? `Contexto verificado del usuario:\n${c1Context}` : '',
+              `Pregunta: ${parsed.data.question}`,
+              `Respuesta actual: ${parsed.data.currentAnswer || 'Sin respuesta todavía'}`,
+              'Devuelve una sugerencia breve y entre 2 y 4 tips concretos.',
+            ]
+              .filter(Boolean)
+              .join('\n\n'),
+          },
+        ],
+        response_format: { type: 'json_object' },
+        temperature: 0.4,
+        max_tokens: 500,
+        store: false,
+      }),
+      signal: AbortSignal.timeout(20_000),
+    })
+
+    if (!response.ok) {
+      console.error('[a2/coach-assist] OpenAI request failed', response.status)
+      return NextResponse.json(fallback, {
+        headers: { 'Cache-Control': 'private, no-store' },
+      })
+    }
+
+    const data = await response.json()
+    const content = data.choices?.[0]?.message?.content
+    if (typeof content !== 'string') {
+      return NextResponse.json(fallback, {
+        headers: { 'Cache-Control': 'private, no-store' },
+      })
+    }
+
+    const validated = responseSchema.safeParse(extractJson(content))
+    return NextResponse.json(validated.success ? validated.data : fallback, {
+      headers: { 'Cache-Control': 'private, no-store' },
+    })
+  } catch (error) {
+    console.error(
+      '[a2/coach-assist] generation failed',
+      error instanceof Error ? error.message : 'unknown_error',
+    )
+    return NextResponse.json(fallback, {
+      headers: { 'Cache-Control': 'private, no-store' },
+    })
   }
 }
