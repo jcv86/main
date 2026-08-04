@@ -1,10 +1,89 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { validateAndScoreDiscResponses } from '../lib/a1/disc-scoring'
+import { DISC_TEST_QUESTIONS } from '../lib/disc-test-questions'
 
 function source(path: string): string {
   return readFileSync(join(process.cwd(), path), 'utf8')
 }
+
+const validMore: Record<string, string> = {}
+const validLess: Record<string, string> = {}
+for (const question of DISC_TEST_QUESTIONS) {
+  validMore[String(question.id)] = question.opciones[0].texto
+  validLess[String(question.id)] = question.opciones[1].texto
+}
+
+const validScoring = validateAndScoreDiscResponses({
+  more: validMore,
+  less: validLess,
+})
+assert.equal(validScoring.valid, true, validScoring.errors.join('; '))
+assert.ok(validScoring.value)
+assert.equal(validScoring.value.scores.D, DISC_TEST_QUESTIONS.length)
+assert.equal(validScoring.value.scores.I, -DISC_TEST_QUESTIONS.length)
+assert.equal(validScoring.value.scores.S, 0)
+assert.equal(validScoring.value.scores.C, 0)
+assert.equal(validScoring.value.dominantPattern, 'D')
+assert.equal(validScoring.value.secondaryPattern, 'S')
+assert.equal(validScoring.value.questions.length, DISC_TEST_QUESTIONS.length)
+
+const firstQuestionId = String(DISC_TEST_QUESTIONS[0].id)
+const duplicatedSelection = validateAndScoreDiscResponses({
+  more: validMore,
+  less: { ...validLess, [firstQuestionId]: validMore[firstQuestionId] },
+})
+assert.equal(duplicatedSelection.valid, false)
+assert.ok(duplicatedSelection.errors.some((error) => error.includes('misma opción')))
+
+const missingQuestion = validateAndScoreDiscResponses({
+  more: Object.fromEntries(
+    Object.entries(validMore).filter(([id]) => id !== firstQuestionId),
+  ),
+  less: validLess,
+})
+assert.equal(missingQuestion.valid, false)
+assert.ok(missingQuestion.errors.some((error) => error.includes('Falta la selección MÁS')))
+
+const forgedOption = validateAndScoreDiscResponses({
+  more: { ...validMore, [firstQuestionId]: 'Perfil ejecutivo inventado' },
+  less: validLess,
+})
+assert.equal(forgedOption.valid, false)
+assert.ok(forgedOption.errors.some((error) => error.includes('no es válida')))
+
+const extraQuestion = validateAndScoreDiscResponses({
+  more: { ...validMore, '999': 'Opción extra' },
+  less: { ...validLess, '999': 'Otra opción extra' },
+})
+assert.equal(extraQuestion.valid, false)
+assert.ok(extraQuestion.errors.some((error) => error.includes('no pertenece')))
+
+const a1Page = source('app/despega/a1-cerebral/page.tsx')
+const a1SaveRoute = source('app/api/a1-cerebral-save/route.ts')
+assert.ok(a1Page.includes("fetch('/api/a1-cerebral-save'"))
+assert.ok(a1Page.includes('responses: { more, less }'))
+assert.ok(a1Page.includes('response_timings: updatedTimings'))
+assert.ok(a1Page.includes("router.replace('/auth/signin')"))
+assert.ok(!a1Page.includes('getDemoMode'))
+assert.ok(!a1Page.includes('calculateScores'))
+assert.ok(!a1Page.includes('user_id: userId'))
+assert.ok(!a1Page.includes('disc_profile: scores'))
+assert.ok(!a1Page.includes('questions: DISC_TEST_QUESTIONS'))
+
+assert.ok(a1SaveRoute.includes('validateAndScoreDiscResponses(payload.responses)'))
+assert.ok(a1SaveRoute.includes("code: 'client_owned_a1_field_rejected'"))
+assert.ok(a1SaveRoute.includes("code: 'invalid_disc_responses'"))
+assert.ok(a1SaveRoute.includes('responses: scoring.value.responses'))
+assert.ok(a1SaveRoute.includes('questions: scoring.value.questions'))
+assert.ok(a1SaveRoute.includes('disc_profile: scoring.value.scores'))
+assert.ok(a1SaveRoute.includes('dominant_pattern: scoring.value.dominantPattern'))
+assert.ok(a1SaveRoute.includes('user_id: user.id'))
+assert.ok(a1SaveRoute.includes('secondaryPattern: scoring.value.secondaryPattern'))
+assert.ok(!a1SaveRoute.includes('const { responses, questions, disc_profile }'))
+assert.ok(!a1SaveRoute.includes('disc_profile.D || 0'))
+assert.ok(!a1SaveRoute.includes('errorMsg'))
 
 const legacyA1Result = source('app/despega/a1/resultado/page.tsx')
 const a1ReportLayout = source('app/despega/a1-report/layout.tsx')
@@ -104,6 +183,19 @@ assert.ok(a3Layout.includes("requireJourneyModule('A3')"))
 
 console.log(
   JSON.stringify({
+    evidenceLevel: 'mixed_runtime_and_source_contract',
+    runtimeValidated: [
+      'canonical DISC scoring',
+      'duplicate selection rejection',
+      'missing answer rejection',
+      'forged option rejection',
+      'extra question rejection',
+    ],
+    sourceContractsChecked: [
+      'server-owned A1 identity and scoring',
+      'canonical A1 payload',
+      'A1 to A3 journey wiring',
+    ],
     canonicalOrder: [
       'Conozcámonos 1',
       'Despega Cerebral',
@@ -113,6 +205,7 @@ console.log(
       'Tu Ruta',
       'Checkpoint A3 Día 7',
     ],
+    a1ServerScoring: true,
     a1IncludesC2AndReport: true,
     a2StartsAt30Days: true,
     serverTransitions: true,
@@ -120,5 +213,7 @@ console.log(
     directA2AccessGuarded: true,
     realA3CheckpointRequired: true,
     legacyCompatibilityRepaired: true,
+    liveHttpCheckedInThisScript: false,
+    liveDatabaseCheckedInThisScript: false,
   }),
 )
