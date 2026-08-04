@@ -31,12 +31,13 @@ assert.ok(!a1Save.includes('x-webhook-signature'))
 assert.ok(!a1Save.includes("event: 'a1_completed'"))
 assert.ok(a1Save.includes('supabase.auth.getUser()'))
 assert.ok(a1Save.includes("'save_a1_cerebral_with_career_identity'"))
+assert.ok(a1Save.includes('p_correlation_id: correlationId'))
 assert.ok(!a1Save.includes(".from('a1_cerebral_assessment')"))
 
 assert.ok(jobMatching.includes('resolveServerUser()'))
 assert.ok(jobMatching.includes('checkA4Access(currentUser.id'))
 assert.ok(jobMatching.includes(".eq('user_id', currentUser.id)"))
-assert.ok(!jobMatching.includes('searchParams.get(\'userId\')'))
+assert.ok(!jobMatching.includes("searchParams.get('userId')"))
 
 console.log(
   JSON.stringify({
@@ -46,6 +47,7 @@ console.log(
     weakSignatureAcceptanceRetired: true,
     a1PrematureJobMatchingRemoved: true,
     a1AtomicCareerIdentityWrite: true,
+    a1CorrelationIdRequired: true,
     replacementAuthenticated: true,
     replacementA4Gated: true,
     liveHttpCheckedInThisScript: false,
