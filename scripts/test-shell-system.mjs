@@ -12,7 +12,8 @@ const requirements = [
   ['accessible current route', shell.includes("aria-current={active ? 'page' : undefined}")],
   ['router replace on logout', shell.includes("router.replace('/auth/signin')")],
   ['canonical shadows', shell.includes('var(--dtc-shadow-')],
-  ['layout uses AppShell', layout.includes('<AppShell>{children}</AppShell>')],
+  ['layout imports AppShell', layout.includes("import { AppShell } from '@/components/layout/app-shell'")],
+  ['layout renders AppShell', /<AppShell>[\s\S]*?<\/AppShell>/.test(layout)],
   ['legacy navbar removed from layout', !layout.includes('DespegaNavbar')],
 ]
 
