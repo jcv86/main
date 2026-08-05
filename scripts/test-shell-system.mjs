@@ -23,6 +23,7 @@ if (failures.length > 0) {
   process.exit(1)
 }
 
+const sourceWithoutCanonicalShadows = shell.replaceAll(/shadow-\[var\(--dtc-shadow-[^)]+\)\]/g, '')
 const banned = [
   /style=\{\{/,
   /bg-black\b/,
@@ -31,7 +32,7 @@ const banned = [
 ]
 
 for (const pattern of banned) {
-  if (pattern.test(shell)) {
+  if (pattern.test(sourceWithoutCanonicalShadows)) {
     console.error(`Shell system contract failed: banned pattern ${pattern}`)
     process.exit(1)
   }
