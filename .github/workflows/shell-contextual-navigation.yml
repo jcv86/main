@@ -1,0 +1,28 @@
+name: Shell contextual navigation
+
+on:
+  pull_request:
+    paths:
+      - 'components/layout/app-shell.tsx'
+      - 'scripts/test-shell-contextual-navigation.mjs'
+      - '.github/workflows/shell-contextual-navigation.yml'
+
+jobs:
+  navigation:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Contextual navigation contract
+        run: node scripts/test-shell-contextual-navigation.mjs
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
