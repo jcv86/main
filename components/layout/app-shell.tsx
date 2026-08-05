@@ -8,7 +8,9 @@ import {
   BarChart3,
   Brain,
   Briefcase,
+  Check,
   ChevronRight,
+  Circle,
   Compass,
   FileText,
   Home,
@@ -32,6 +34,7 @@ type NavItem = {
   href: string
   icon: React.ComponentType<{ className?: string }>
   match?: (pathname: string) => boolean
+  journeyIndex?: number
 }
 
 type NavGroup = {
@@ -44,6 +47,12 @@ type XPData = {
   current_level: number
   xp_to_next_level: number
   daily_streak: number
+}
+
+type RouteContext = {
+  eyebrow: string
+  title: string
+  description: string
 }
 
 const fetcher = (url: string) => fetch(url).then((response) => response.json())
@@ -63,6 +72,7 @@ const navigation: NavGroup[] = [
         label: 'A1 · Despega Cerebral',
         href: '/despega/a1-cerebral-intro',
         icon: Brain,
+        journeyIndex: 0,
         match: (pathname) =>
           pathname.includes('conozcamonos-1') || pathname.includes('a1-cerebral') || pathname.includes('a1-report'),
       },
@@ -70,18 +80,21 @@ const navigation: NavGroup[] = [
         label: 'A2 · Tu Ruta',
         href: '/despega/conozcamonos-2',
         icon: Compass,
+        journeyIndex: 1,
         match: (pathname) => pathname.includes('conozcamonos-2') || pathname.includes('/a2'),
       },
       {
         label: 'A3 · Entrenamiento',
         href: '/despega/a3-intro',
         icon: Target,
+        journeyIndex: 2,
         match: (pathname) => pathname.includes('/a3') || pathname.includes('interview'),
       },
       {
         label: 'A4 · Radar Estratégico',
         href: '/despega/a4-intro',
         icon: Radar,
+        journeyIndex: 3,
         match: (pathname) => pathname.includes('/a4'),
       },
     ],
@@ -96,11 +109,96 @@ const navigation: NavGroup[] = [
   },
 ]
 
+const routeContexts: Array<{ match: (pathname: string) => boolean; context: RouteContext }> = [
+  {
+    match: (pathname) => pathname === '/despega',
+    context: {
+      eyebrow: 'Inicio',
+      title: 'Tu centro de evolución profesional',
+      description: 'Revisa tu avance y continúa desde el siguiente paso relevante.',
+    },
+  },
+  {
+    match: (pathname) =>
+      pathname.includes('conozcamonos-1') || pathname.includes('a1-cerebral') || pathname.includes('a1-report'),
+    context: {
+      eyebrow: 'A1 · Despega Cerebral',
+      title: 'Comprende cómo piensas y trabajas',
+      description: 'Convierte autoconocimiento en evidencia útil para tu desarrollo.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('conozcamonos-2') || pathname.includes('/a2'),
+    context: {
+      eyebrow: 'A2 · Tu Ruta',
+      title: 'Construye una ruta con dirección',
+      description: 'Organiza prioridades, hábitos y acciones conectadas con tu objetivo.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('/a3') || pathname.includes('interview'),
+    context: {
+      eyebrow: 'A3 · Entrenamiento',
+      title: 'Practica antes del momento decisivo',
+      description: 'Entrena respuestas, criterio y confianza con situaciones profesionales reales.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('/a4'),
+    context: {
+      eyebrow: 'A4 · Radar Estratégico',
+      title: 'Observa el mercado con contexto',
+      description: 'Conecta señales externas con decisiones concretas para tu carrera.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('career-identity'),
+    context: {
+      eyebrow: 'Career Identity',
+      title: 'Tu identidad profesional en evolución',
+      description: 'Reúne habilidades, evidencia, decisiones y progreso en un solo lugar.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('gamificacion'),
+    context: {
+      eyebrow: 'Mi evolución',
+      title: 'Mide avance, no actividad vacía',
+      description: 'Observa consistencia, evidencia y progreso acumulado en tu recorrido.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('settings'),
+    context: {
+      eyebrow: 'Configuración',
+      title: 'Administra tu experiencia',
+      description: 'Controla tu perfil y las preferencias asociadas a tu recorrido.',
+    },
+  },
+]
+
 function isActive(item: NavItem, pathname: string) {
   return item.match ? item.match(pathname) : pathname === item.href || pathname.startsWith(`${item.href}/`)
 }
 
+function getJourneyIndex(pathname: string) {
+  const journeyItems = navigation[1].items
+  return journeyItems.findIndex((item) => isActive(item, pathname))
+}
+
+function getRouteContext(pathname: string): RouteContext {
+  return (
+    routeContexts.find((entry) => entry.match(pathname))?.context ?? {
+      eyebrow: 'DespegaTuCarrera',
+      title: 'Tu sistema de evolución profesional',
+      description: 'Avanza con dirección, práctica y evidencia conectada.',
+    }
+  )
+}
+
 function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+  const currentJourneyIndex = getJourneyIndex(pathname)
+
   return (
     <nav aria-label="Navegación principal" className="space-y-7">
       {navigation.map((group) => (
@@ -114,6 +212,8 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
           <div className="space-y-1">
             {group.items.map((item) => {
               const active = isActive(item, pathname)
+              const completed =
+                item.journeyIndex !== undefined && currentJourneyIndex >= 0 && item.journeyIndex < currentJourneyIndex
               const Icon = item.icon
 
               return (
@@ -134,18 +234,34 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
                       'flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--dtc-radius-sm)] border transition-colors',
                       active
                         ? 'border-[hsl(var(--primary)/0.32)] bg-[hsl(var(--primary)/0.14)] text-[hsl(var(--dtc-indigo-300))]'
-                        : 'border-transparent bg-muted/50 text-muted-foreground group-hover:border-border group-hover:text-foreground',
+                        : completed
+                          ? 'border-[hsl(var(--success)/0.28)] bg-[hsl(var(--success)/0.1)] text-success'
+                          : 'border-transparent bg-muted/50 text-muted-foreground group-hover:border-border group-hover:text-foreground',
                     )}
                   >
                     <Icon className="h-4 w-4" />
                   </span>
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                  <ChevronRight
-                    className={cn(
-                      'h-4 w-4 shrink-0 transition-transform duration-180',
-                      active ? 'translate-x-0 text-[hsl(var(--dtc-indigo-300))]' : '-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100',
-                    )}
-                  />
+                  {item.journeyIndex !== undefined ? (
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={active ? 'En progreso' : completed ? 'Etapa anterior' : 'Pendiente'}>
+                      {active ? (
+                        <Circle className="h-2.5 w-2.5 fill-current text-[hsl(var(--dtc-indigo-300))]" />
+                      ) : completed ? (
+                        <Check className="h-3.5 w-3.5 text-success" />
+                      ) : (
+                        <Circle className="h-2.5 w-2.5 text-muted-foreground/55" />
+                      )}
+                    </span>
+                  ) : (
+                    <ChevronRight
+                      className={cn(
+                        'h-4 w-4 shrink-0 transition-transform duration-180',
+                        active
+                          ? 'translate-x-0 text-[hsl(var(--dtc-indigo-300))]'
+                          : '-translate-x-1 opacity-0 group-hover:translate-x-0 group-hover:opacity-100',
+                      )}
+                    />
+                  )}
                 </Link>
               )
             })}
@@ -161,6 +277,9 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   const router = useRouter()
   const { user } = useAuthRedirect()
   const [mobileOpen, setMobileOpen] = React.useState(false)
+  const menuButtonRef = React.useRef<HTMLButtonElement>(null)
+  const closeButtonRef = React.useRef<HTMLButtonElement>(null)
+  const routeContext = getRouteContext(pathname)
 
   const isDemoUser = typeof window !== 'undefined' && localStorage.getItem('demo_user') !== null
   const { data: xpData } = useSWR<XPData>(isDemoUser ? null : '/api/gamification/global', fetcher, {
@@ -171,6 +290,25 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   })
 
   React.useEffect(() => setMobileOpen(false), [pathname])
+
+  React.useEffect(() => {
+    if (!mobileOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = 'hidden'
+    closeButtonRef.current?.focus()
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') setMobileOpen(false)
+    }
+
+    document.addEventListener('keydown', handleKeyDown)
+    return () => {
+      document.body.style.overflow = previousOverflow
+      document.removeEventListener('keydown', handleKeyDown)
+      menuButtonRef.current?.focus()
+    }
+  }, [mobileOpen])
 
   const progress = xpData?.xp_to_next_level
     ? Math.min(100, Math.round((xpData.total_xp / xpData.xp_to_next_level) * 100))
@@ -196,21 +334,26 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </a>
 
       <header className="sticky top-0 z-40 border-b border-border bg-background/88 backdrop-blur-xl lg:pl-72">
-        <div className="flex h-16 items-center gap-3 px-4 sm:px-6 lg:px-8">
+        <div className="flex min-h-16 items-center gap-3 px-4 py-2 sm:px-6 lg:px-8">
           <Button
+            ref={menuButtonRef}
             variant="ghost"
             size="icon"
             className="lg:hidden"
             onClick={() => setMobileOpen(true)}
             aria-label="Abrir navegación"
             aria-expanded={mobileOpen}
+            aria-controls="mobile-navigation"
           >
             <Menu className="h-5 w-5" />
           </Button>
 
           <div className="min-w-0 flex-1">
-            <p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">DespegaTuCarrera</p>
-            <p className="truncate text-sm font-semibold text-foreground">Tu sistema de evolución profesional</p>
+            <p className="truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground">
+              {routeContext.eyebrow}
+            </p>
+            <p className="truncate text-sm font-semibold text-foreground sm:text-base">{routeContext.title}</p>
+            <p className="hidden truncate text-xs text-muted-foreground xl:block">{routeContext.description}</p>
           </div>
 
           <div className="hidden min-w-48 items-center gap-3 sm:flex">
@@ -257,7 +400,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       </aside>
 
       {mobileOpen && (
-        <div className="fixed inset-0 z-50 lg:hidden" role="dialog" aria-modal="true" aria-label="Navegación móvil">
+        <div
+          id="mobile-navigation"
+          className="fixed inset-0 z-50 lg:hidden"
+          role="dialog"
+          aria-modal="true"
+          aria-label="Navegación móvil"
+        >
           <button
             className="absolute inset-0 bg-background/80 backdrop-blur-sm"
             aria-label="Cerrar navegación"
@@ -269,7 +418,13 @@ export function AppShell({ children }: { children: React.ReactNode }) {
                 <p className="text-sm font-bold">DespegaTuCarrera</p>
                 <p className="text-xs text-muted-foreground">Tu recorrido</p>
               </div>
-              <Button variant="ghost" size="icon" onClick={() => setMobileOpen(false)} aria-label="Cerrar navegación">
+              <Button
+                ref={closeButtonRef}
+                variant="ghost"
+                size="icon"
+                onClick={() => setMobileOpen(false)}
+                aria-label="Cerrar navegación"
+              >
                 <X className="h-5 w-5" />
               </Button>
             </div>
