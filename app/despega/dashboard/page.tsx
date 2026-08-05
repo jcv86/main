@@ -175,7 +175,7 @@ export default async function DashboardPage() {
                   <Radar className="h-5 w-5" aria-hidden="true" />
                 </span>
                 <p className="mt-5 text-lg font-bold">Radar Estratégico</p>
-                <p className="mt-1 text-sm font-semibold">{access.a4 ? 'Disponible' : 'Se habilita al avanzar'}</p>
+                <p className="mt-1 text-sm font-semibold">{access.a4 ? 'Radar Estratégico desbloqueado' : 'Se habilita al avanzar'}</p>
                 <p className="mt-2 text-sm leading-6 text-muted-foreground">
                   {access.a4
                     ? 'Ya puedes contrastar tu recorrido con señales verificadas del mercado.'
