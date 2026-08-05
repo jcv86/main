@@ -28,9 +28,10 @@ if (failures.length > 0) {
 }
 
 const source = `${breadcrumbs}\n${pageFoundation}\n${asyncState}`
+const sourceWithoutCanonicalShadows = source.replaceAll(/shadow-\[var\(--dtc-shadow-[^)]+\)\]/g, '')
 const banned = [/style=\{\{/, /bg-black\b/, /bg-purple-/, /shadow-(?:sm|md|lg|xl|2xl)\b/, /\bLora\b/]
 for (const pattern of banned) {
-  if (pattern.test(source)) {
+  if (pattern.test(sourceWithoutCanonicalShadows)) {
     console.error(`Shell page foundation contract failed: banned pattern ${pattern}`)
     process.exit(1)
   }
