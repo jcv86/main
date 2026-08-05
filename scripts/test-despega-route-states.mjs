@@ -7,7 +7,7 @@ const notFound = fs.readFileSync('app/despega/not-found.tsx', 'utf8')
 const requirements = [
   ['loading uses LoadingState', loading.includes('<LoadingState')],
   ['loading uses PageContainer', loading.includes('<PageContainer>')],
-  ['error is client component', error.startsWith("'use client'"))],
+  ['error is client component', error.startsWith("'use client'")],
   ['error exposes reset', error.includes('reset: () => void')],
   ['error wires retry', error.includes('onRetry={reset}')],
   ['not-found uses EmptyState', notFound.includes('<EmptyState')],
