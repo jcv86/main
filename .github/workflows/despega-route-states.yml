@@ -1,0 +1,30 @@
+name: Despega route states
+
+on:
+  pull_request:
+    paths:
+      - 'app/despega/loading.tsx'
+      - 'app/despega/error.tsx'
+      - 'app/despega/not-found.tsx'
+      - 'scripts/test-despega-route-states.mjs'
+      - '.github/workflows/despega-route-states.yml'
+
+jobs:
+  route-states:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Route states contract
+        run: node scripts/test-despega-route-states.mjs
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
