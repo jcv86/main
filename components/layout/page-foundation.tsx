@@ -10,8 +10,36 @@ export function PageStack({ className, ...props }: React.HTMLAttributes<HTMLDivE
   return <div className={cn('space-y-8 sm:space-y-10', className)} {...props} />
 }
 
-export function PageSection({ className, ...props }: React.HTMLAttributes<HTMLElement>) {
-  return <section className={cn('space-y-5', className)} {...props} />
+type PageSectionProps = Omit<React.HTMLAttributes<HTMLElement>, 'title'> & {
+  title?: React.ReactNode
+  description?: React.ReactNode
+  actions?: React.ReactNode
+}
+
+export function PageSection({
+  title,
+  description,
+  actions,
+  className,
+  children,
+  ...props
+}: PageSectionProps) {
+  const hasHeader = title || description || actions
+
+  return (
+    <section className={cn('space-y-5', className)} {...props}>
+      {hasHeader ? (
+        <div className="flex flex-col gap-3 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-3xl space-y-1.5">
+            {title ? <h2 className="text-xl font-semibold tracking-tight text-foreground sm:text-2xl">{title}</h2> : null}
+            {description ? <p className="text-sm leading-6 text-muted-foreground">{description}</p> : null}
+          </div>
+          {actions ? <div className="flex shrink-0 flex-wrap items-center gap-3">{actions}</div> : null}
+        </div>
+      ) : null}
+      {children}
+    </section>
+  )
 }
 
 type PageHeaderProps = React.HTMLAttributes<HTMLElement> & {
