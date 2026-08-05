@@ -1,0 +1,28 @@
+name: Dashboard priority
+
+on:
+  pull_request:
+    paths:
+      - 'app/despega/dashboard/page.tsx'
+      - 'scripts/test-dashboard-priority.mjs'
+      - '.github/workflows/dashboard-priority.yml'
+
+jobs:
+  dashboard:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Dashboard priority contract
+        run: node scripts/test-dashboard-priority.mjs
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
