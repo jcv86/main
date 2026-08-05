@@ -1,5 +1,6 @@
 import { CoachProviderWrapper } from '@/components/coach-provider-wrapper'
 import { AppShell } from '@/components/layout/app-shell'
+import { ShellBreadcrumbs } from '@/components/layout/shell-breadcrumbs'
 
 export default function DespegaLayout({
   children,
@@ -8,7 +9,10 @@ export default function DespegaLayout({
 }) {
   return (
     <CoachProviderWrapper>
-      <AppShell>{children}</AppShell>
+      <AppShell>
+        <ShellBreadcrumbs />
+        {children}
+      </AppShell>
     </CoachProviderWrapper>
   )
 }
