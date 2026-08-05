@@ -1,5 +1,5 @@
 import * as React from 'react'
-import { AlertCircle, Inbox, LoaderCircle, RefreshCw, WifiOff } from 'lucide-react'
+import { AlertCircle, Inbox, Loader2, RefreshCw, WifiOff } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import { cn } from '@/lib/utils'
@@ -34,7 +34,7 @@ function StateFrame({ icon: Icon, title, description, action, className }: State
 export function LoadingState({ label = 'Preparando tu información…', className }: { label?: string; className?: string }) {
   return (
     <StateFrame
-      icon={({ className: iconClassName }) => <LoaderCircle className={cn(iconClassName, 'animate-spin')} />}
+      icon={({ className: iconClassName }) => <Loader2 className={cn(iconClassName, 'animate-spin')} />}
       title={label}
       description="Esto puede tardar unos segundos. Tu progreso se mantiene guardado."
       className={className}
