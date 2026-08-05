@@ -7,9 +7,8 @@ import useSWR from 'swr'
 import {
   BarChart3,
   Brain,
-  BriefcaseBusiness,
+  Briefcase,
   ChevronRight,
-  CircleUserRound,
   Compass,
   FileText,
   Home,
@@ -19,6 +18,7 @@ import {
   Settings,
   Sparkles,
   Target,
+  UserCircle,
   X,
 } from 'lucide-react'
 
@@ -225,7 +225,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
 
           <Button variant="ghost" size="icon" aria-label="Perfil" asChild>
             <Link href="/despega/settings">
-              <CircleUserRound className="h-5 w-5" />
+              <UserCircle className="h-5 w-5" />
             </Link>
           </Button>
         </div>
@@ -234,7 +234,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
       <aside className="fixed inset-y-0 left-0 z-50 hidden w-72 border-r border-border bg-card/92 backdrop-blur-xl lg:flex lg:flex-col">
         <div className="flex h-16 items-center gap-3 border-b border-border px-5">
           <span className="flex h-9 w-9 items-center justify-center rounded-[var(--dtc-radius-md)] bg-primary text-primary-foreground shadow-[var(--dtc-shadow-sm)]">
-            <BriefcaseBusiness className="h-4 w-4" />
+            <Briefcase className="h-4 w-4" />
           </span>
           <div>
             <p className="text-sm font-bold tracking-tight">DespegaTuCarrera</p>
