@@ -1,0 +1,31 @@
+name: Pilot access
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+      PILOT_INVITATION_COOKIE_SECRET: test-only-secret-with-at-least-32-characters
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:pilot-access
+      - run: pnpm check:pilot-access
+      - run: pnpm exec tsx scripts/check-global-auth-boundary-contract.ts
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm build
