@@ -1,5 +1,5 @@
 import Link from 'next/link'
-import { ArrowRight, KeyRound, Rocket, UserRound } from 'lucide-react'
+import { ArrowRight, KeyRound, Rocket, User } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
@@ -21,7 +21,7 @@ export default function ComenzarPage() {
 
         <div className="mx-auto mt-14 grid max-w-5xl gap-6 md:grid-cols-3">
           <Card className="border-purple/30">
-            <CardHeader><UserRound className="mb-2 h-7 w-7 text-purple" /><CardTitle>Ya tengo cuenta</CardTitle></CardHeader>
+            <CardHeader><User className="mb-2 h-7 w-7 text-purple" /><CardTitle>Ya tengo cuenta</CardTitle></CardHeader>
             <CardContent className="space-y-5">
               <p className="text-sm text-muted-foreground">Continúa con Google o LinkedIn sin perder tus respuestas ni tu avance.</p>
               <Button asChild className="w-full bg-purple text-white"><Link href="/auth/signin?next=%2Fdespega">Ingresar <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
