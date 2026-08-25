@@ -1,5 +1,7 @@
 import { createServerClient } from '@supabase/ssr'
+import { createClient as createAdminClient } from '@supabase/supabase-js'
 import { NextResponse, type NextRequest } from 'next/server'
+import { classifyAuthState } from '@/lib/auth/pilot-access'
 
 const SIGN_IN_PATH = '/auth/signin'
 const PROTECTED_PATH_PREFIXES = ['/despega', '/dashboard', '/a4-dashboard'] as const
@@ -10,12 +12,13 @@ function isProtectedPath(pathname: string): boolean {
   )
 }
 
-function redirectToSignIn(request: NextRequest, reason?: string) {
+function redirectToSignIn(request: NextRequest, reason?: string, error?: string) {
   const url = request.nextUrl.clone()
   url.pathname = SIGN_IN_PATH
   url.search = ''
   url.searchParams.set('next', request.nextUrl.pathname)
   if (reason) url.searchParams.set('reason', reason)
+  if (error) url.searchParams.set('error', error)
   return NextResponse.redirect(url)
 }
 
@@ -24,6 +27,7 @@ export async function updateSession(request: NextRequest) {
   const protectedPath = isProtectedPath(pathname)
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
 
   let supabaseResponse = NextResponse.next({ request })
 
@@ -57,15 +61,32 @@ export async function updateSession(request: NextRequest) {
       error: authError,
     } = await supabase.auth.getUser()
 
-    if (authError) {
-      if (protectedPath) {
-        return redirectToSignIn(request, 'authentication_verification_failed')
-      }
-      return supabaseResponse
+    const authErrorCode = authError?.name === 'AuthSessionMissingError'
+      ? undefined
+      : authError?.code ?? authError?.name
+    const state = classifyAuthState({ hasUser: Boolean(user), authErrorCode })
+
+    if (protectedPath && state === 'signed_out') {
+      return redirectToSignIn(request)
     }
 
-    if (protectedPath && !user) {
-      return redirectToSignIn(request)
+    if (protectedPath && state === 'invalid_session') {
+      return redirectToSignIn(request, 'authentication_verification_failed')
+    }
+
+    if (protectedPath && user) {
+      if (!supabaseServiceKey) return redirectToSignIn(request, 'authentication_unavailable')
+      const admin = createAdminClient(supabaseUrl, supabaseServiceKey, {
+        auth: { autoRefreshToken: false, persistSession: false },
+      })
+      const { data: accessData, error: accessError } = await admin.rpc('resolve_pilot_access', {
+        p_user_id: user.id,
+        p_claim_id: null,
+      })
+      const access = Array.isArray(accessData) ? accessData[0] : accessData
+      if (accessError || !access?.allowed) {
+        return redirectToSignIn(request, undefined, 'access_required')
+      }
     }
 
     const isDespegaRoute = pathname === '/despega' || pathname.startsWith('/despega/')

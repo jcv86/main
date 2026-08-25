@@ -1,80 +1,40 @@
-import { NextResponse } from 'next/server'
-import { createClient } from '@/lib/supabase/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { createAdminClient, createClient } from '@/lib/supabase/server'
+import { normalizeNextPath } from '@/lib/auth/pilot-access'
+import { PILOT_CLAIM_COOKIE, verifyInvitationCookieValue } from '@/lib/auth/invitation-cookie'
 
-export async function GET(request: Request) {
-  const { searchParams, origin } = new URL(request.url)
-  const code = searchParams.get('code')
-  const next = searchParams.get('next') ?? '/despega/conozcamonos-1'
-  const error = searchParams.get('error')
-  const errorDescription = searchParams.get('error_description')
+function signInRedirect(request: NextRequest, error: string) {
+  const url = new URL('/auth/signin', request.url)
+  url.searchParams.set('error', error)
+  return NextResponse.redirect(url)
+}
 
-  // Handle OAuth errors from provider
-  if (error) {
-    const errorUrl = new URL('/auth/signin', origin)
-    errorUrl.searchParams.set('error', error)
-    if (errorDescription) {
-      errorUrl.searchParams.set('error_description', errorDescription)
-    }
-    return NextResponse.redirect(errorUrl)
+export async function GET(request: NextRequest) {
+  const code = request.nextUrl.searchParams.get('code')
+  const next = normalizeNextPath(request.nextUrl.searchParams.get('next'))
+  if (!code || request.nextUrl.searchParams.get('error')) return signInRedirect(request, 'oauth_failed')
+
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.exchangeCodeForSession(code)
+  if (error || !data.user) return signInRedirect(request, 'exchange_failed')
+
+  const secret = process.env.PILOT_INVITATION_COOKIE_SECRET ?? ''
+  const claimId = verifyInvitationCookieValue(request.cookies.get(PILOT_CLAIM_COOKIE)?.value, secret)
+  const admin = createAdminClient()
+  const { data: accessData, error: accessError } = await admin.rpc('resolve_pilot_access', {
+    p_user_id: data.user.id,
+    p_claim_id: claimId,
+  })
+  const access = Array.isArray(accessData) ? accessData[0] : accessData
+
+  if (accessError || !access?.allowed) {
+    await supabase.auth.signOut()
+    const denied = signInRedirect(request, 'access_required')
+    denied.cookies.delete(PILOT_CLAIM_COOKIE)
+    return denied
   }
 
-  // Extract invitation code from URL (passed from signin page)
-  const invitationCode = searchParams.get('code')
-
-  // Exchange code for session
-  if (code) {
-    const supabase = await createClient()
-    const { error: exchangeError, data } = await supabase.auth.exchangeCodeForSession(code)
-    
-    if (!exchangeError && data.session?.user) {
-      // Successful authentication - now redeem invitation if provided
-      if (invitationCode) {
-        try {
-          const redeemRes = await fetch(`${origin}/api/auth/redeem-invitation`, {
-            method: 'POST',
-            headers: {
-              'Content-Type': 'application/json',
-              'Authorization': `Bearer ${data.session.access_token}`
-            },
-            body: JSON.stringify({ code: invitationCode })
-          })
-
-          if (!redeemRes.ok) {
-            console.warn('[Auth Callback] Invitation redemption failed:', await redeemRes.text())
-            // Redemption failure is not fatal - user is authenticated but invitation wasn't recorded
-          }
-        } catch (err) {
-          console.error('[Auth Callback] Redemption error:', err)
-          // Continue regardless
-        }
-      }
-
-      // Redirect to intended destination
-      const forwardedHost = request.headers.get('x-forwarded-host')
-      const isLocalEnv = process.env.NODE_ENV === 'development'
-      
-      if (isLocalEnv) {
-        return NextResponse.redirect(`${origin}${next}`)
-      } else if (forwardedHost) {
-        return NextResponse.redirect(`https://${forwardedHost}${next}`)
-      } else {
-        return NextResponse.redirect(`${origin}${next}`)
-      }
-    }
-
-    // Log the exchange error for debugging
-    console.error('[Auth Callback] Code exchange failed:', exchangeError.message)
-    
-    // Redirect to signin with error
-    const errorUrl = new URL('/auth/signin', origin)
-    errorUrl.searchParams.set('error', 'exchange_failed')
-    errorUrl.searchParams.set('error_description', exchangeError.message)
-    return NextResponse.redirect(errorUrl)
-  }
-
-  // No code provided - redirect to signin with error
-  const errorUrl = new URL('/auth/signin', origin)
-  errorUrl.searchParams.set('error', 'no_code')
-  errorUrl.searchParams.set('error_description', 'No se recibio codigo de autorizacion')
-  return NextResponse.redirect(errorUrl)
+  const response = NextResponse.redirect(new URL(next, request.url))
+  response.cookies.delete(PILOT_CLAIM_COOKIE)
+  return response
 }
