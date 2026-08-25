@@ -15,10 +15,11 @@ for (const file of requiredFiles) {
 }
 
 const comenzar = await readFile('app/comenzar/page.tsx', 'utf8')
+for (const label of ['Ya tengo cuenta', 'Tengo una invitación', 'Solicitar acceso']) {
+  if (!comenzar.includes(label)) throw new Error(`Falta la acción pública ${label} en /comenzar`)
+}
 for (const href of ['/TESTING_GUIDE.md', '/PRODUCTION_READY_CHECKLIST.md', '/TESTING_LINKS.md']) {
-  if (!comenzar.includes(`href="${href}"`)) {
-    throw new Error(`Falta el enlace público ${href} en /comenzar`)
-  }
+  if (comenzar.includes(`href="${href}"`)) throw new Error(`El enlace interno ${href} no debe publicarse en /comenzar`)
 }
 
 console.log('Public documentation links contract passed')

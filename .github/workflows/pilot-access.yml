@@ -16,13 +16,16 @@ jobs:
       PILOT_INVITATION_COOKIE_SECRET: test-only-secret-with-at-least-32-characters
     steps:
       - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
       - uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-      - run: npm ci
-      - run: npm run test:pilot-access
-      - run: npm run check:pilot-access
-      - run: npx tsx scripts/check-global-auth-boundary-contract.ts
-      - run: npx tsc --noEmit
-      - run: npm run build
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm test:pilot-access
+      - run: pnpm check:pilot-access
+      - run: pnpm exec tsx scripts/check-global-auth-boundary-contract.ts
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm build
