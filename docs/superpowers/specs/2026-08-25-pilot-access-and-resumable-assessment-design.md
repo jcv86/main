@@ -30,7 +30,7 @@ C1 and the 28-question A1 assessment keep answers only in React state and write 
 
 ## Chosen approach
 
-Use a signed, single-use invitation link. The link establishes a short-lived invitation session, then enables LinkedIn OAuth. The server remains the authority for invitation validity, redemption, seat capacity, assessment drafts, and completion.
+Use a signed, single-use invitation link for new pilot users. The link establishes a short-lived invitation session, then enables Google or LinkedIn OAuth. Existing verified DTC users are grandfathered into pilot access and can sign in with an identity already linked to their account without obtaining a new invitation. The server remains the authority for invitation validity, legacy eligibility, redemption, seat capacity, assessment drafts, and completion.
 
 Alternatives rejected:
 
@@ -54,7 +54,15 @@ An invitation URL contains an opaque token, not a raw database ID or email. Only
 
 Opening the link calls a server route that validates the hash, expiry, status, and remaining pilot capacity. A valid token creates an encrypted, HTTP-only, same-site invitation cookie and redirects to `/auth/signin`. The browser URL is cleaned so the token does not remain in history or analytics.
 
-The sign-in screen enables LinkedIn when the invitation cookie is valid. OAuth state carries a server-generated correlation identifier, not the invitation token. The callback binds the authenticated user to the claimed invitation in a transaction and consumes one seat exactly once. Replaying a redeemed token never creates another membership.
+The sign-in screen always offers Google and LinkedIn to returning users. New users must first arrive with a valid invitation cookie. OAuth state carries a server-generated correlation identifier, not the invitation token. The callback first resolves the authenticated identity:
+
+- A returning user with an existing pilot membership continues immediately.
+- A verified legacy user created before the rollout cutoff and already holding a DTC profile or canonical assessment continues immediately and receives an idempotent grandfathered membership record.
+- A genuinely new user must have a valid claimed invitation; redemption and seat allocation occur transactionally.
+
+Replaying a redeemed token never creates another membership. Signing in through another provider is allowed only when Supabase resolves it to the same verified account; this flow does not perform automatic account merging by email.
+
+Joaquín's designated canonical returning account is email-confirmed, has Google and LinkedIn identities, a DTC profile, canonical C1 history, and A1 history. Its exact email and internal user identifier remain operational data in Supabase and must not be committed to the repository. The account must be grandfathered without creating a replacement user or copying assessment rows.
 
 ### 2. Authentication states
 
@@ -63,9 +71,10 @@ Middleware treats these cases separately:
 - No session on a protected route: normal sign-in redirect with `next` only.
 - Expired or unverifiable session: sign-in redirect with `reason=authentication_verification_failed`.
 - Missing Supabase configuration: `reason=authentication_unavailable`.
-- Authenticated user without redeemed pilot access: access-request screen, not the assessment.
+- Authenticated returning or grandfathered user: canonical next-route resolution from existing progress.
+- Authenticated new user without redeemed pilot access: access-request screen, not the assessment.
 
-The public CTA must reflect the access model. Users without an invitation see “Solicitar acceso”; invited users arriving through a valid link see “Continuar con LinkedIn”. Internal QA routes and “Listo para Producción” copy are removed from the public `/comenzar` experience.
+The public CTA must reflect the access model. Users without an invitation can choose “Ya tengo cuenta” and sign in with Google or LinkedIn, or “Solicitar acceso” if they are new. Invited users arriving through a valid link see both OAuth providers. Internal QA routes and “Listo para Producción” copy are removed from the public `/comenzar` experience.
 
 ### 3. Assessment drafts
 
@@ -106,6 +115,7 @@ A1 completion continues through `/api/a1-cerebral-save` and `save_a1_cerebral_wi
 - Invitation tokens are random, high entropy, short-lived, single-use, and stored only as hashes.
 - Cookies are HTTP-only, secure in production, same-site Lax, path-scoped where practical, and expire quickly.
 - OAuth callback validates state and the invitation claim before redemption.
+- Grandfathering requires an email-confirmed account plus server-verified pre-cutoff profile or canonical assessment evidence; client metadata cannot grant access.
 - Seat allocation and redemption occur atomically in PostgreSQL.
 - Draft endpoints use the authenticated user from Supabase, never a client-supplied user ID.
 - RLS and payload validation are mandatory before rollout.
@@ -116,6 +126,7 @@ A1 completion continues through `/api/a1-cerebral-save` and `save_a1_cerebral_wi
 
 - Invitation schema and atomic claim/redemption functions.
 - Signed-link entry route and invitation cookie.
+- Returning-user Google and LinkedIn sign-in, plus idempotent legacy grandfathering.
 - Correct authentication-state classification.
 - Coherent sign-in and public CTA copy.
 - Contract and integration tests for valid, expired, revoked, replayed, and full-capacity cases.
@@ -139,15 +150,16 @@ Each PR is independently reversible and must pass TypeScript, production build, 
 ## Acceptance criteria
 
 1. An invited pilot user reaches C1 through the invitation link and LinkedIn without manually copying a code.
-2. An uninvited user cannot enter protected assessment routes and receives a clear access-request path.
-3. A missing session is not labeled as an authentication verification failure.
-4. Refreshing after any C1 or A1 answer resumes with all prior answers intact.
-5. Two users cannot read or overwrite each other’s drafts.
-6. Completing C1 and A1 creates exactly one canonical completion per assessment attempt.
-7. A1 insights consume the canonical C1 response table.
-8. Replaying an invitation does not consume another seat or create another pilot membership.
-9. The isolated end-to-end test completes the full journey, including a forced reload mid-A1.
-10. No known P0/P1 failure remains in the invited-user entry and A1 completion path.
+2. Joaquín can sign in with Google through his designated canonical account and continue from existing canonical progress without a new invitation or a replacement user.
+3. An uninvited new user cannot enter protected assessment routes and receives a clear access-request path.
+4. A missing session is not labeled as an authentication verification failure.
+5. Refreshing after any C1 or A1 answer resumes with all prior answers intact.
+6. Two users cannot read or overwrite each other’s drafts.
+7. Completing C1 and A1 creates exactly one canonical completion per assessment attempt.
+8. A1 insights consume the canonical C1 response table.
+9. Replaying an invitation does not consume another seat or create another pilot membership.
+10. The isolated end-to-end test completes the full journey, including returning Google login and a forced reload mid-A1.
+11. No known P0/P1 failure remains in returning-user or invited-user entry and A1 completion.
 
 ## Rollout and rollback
 
