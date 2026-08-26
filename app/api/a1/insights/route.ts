@@ -67,7 +67,7 @@ export async function POST(req: NextRequest) {
       try {
         const supabase = await createClient()
         const { data: c1Data } = await supabase
-          .from('conozcamonos_1_responses')
+          .from('canon_conozcamonos_1_responses')
           .select('responses')
           .eq('user_id', userId)
           .single()

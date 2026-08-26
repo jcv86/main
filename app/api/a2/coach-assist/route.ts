@@ -96,7 +96,7 @@ export async function POST(request: NextRequest) {
   try {
     const supabase = await createClient()
     const { data } = await supabase
-      .from('conozcamonos_1_responses')
+      .from('canon_conozcamonos_1_responses')
       .select('role, environment, desired_outcome')
       .eq('user_id', resolvedUser.id)
       .maybeSingle()
