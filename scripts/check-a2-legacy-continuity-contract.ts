@@ -1,5 +1,8 @@
 import assert from 'node:assert/strict'
-import { reconcileA2Progress } from '../lib/a2/server-progress'
+import {
+  inferA2Horizon,
+  reconcileA2Progress,
+} from '../lib/a2/server-progress'
 
 assert.deepEqual(
   reconcileA2Progress({
@@ -10,6 +13,10 @@ assert.deepEqual(
   }),
   { currentDay: 6, highestUnlockedDay: 6 },
 )
+
+assert.equal(inferA2Horizon(null, 31), 60)
+assert.equal(inferA2Horizon(null, 61), 90)
+assert.equal(inferA2Horizon({ a2_horizon: 30 }, 61), 30)
 
 assert.deepEqual(
   reconcileA2Progress({
@@ -47,5 +54,6 @@ console.log(
     sparseCompletionCannotSkipDays: true,
     canonicalProgressNeverRegresses: true,
     horizonBoundaryPreserved: true,
+    legacyExtendedHorizonRecovered: true,
   }),
 )
