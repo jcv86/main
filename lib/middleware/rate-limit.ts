@@ -75,10 +75,19 @@ export const rateLimiters = {
     maxRequests: 5,
   }),
 
-  // Standard limit for API endpoints
-  api: createRateLimiter({
+  // Read-heavy authenticated product journeys legitimately issue several API
+  // requests per screen (day state, progress, evidence and gamification).
+  // Keep reads isolated from mutations so normal navigation cannot exhaust the
+  // budget needed to save a completed mission.
+  apiRead: createRateLimiter({
     windowMs: 15 * 60 * 1000,
-    maxRequests: 100,
+    maxRequests: 600,
+  }),
+
+  // Mutations retain a tighter abuse boundary, but have their own counter.
+  apiWrite: createRateLimiter({
+    windowMs: 15 * 60 * 1000,
+    maxRequests: 120,
   }),
 
   // Generous limit for public endpoints

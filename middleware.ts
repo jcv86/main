@@ -65,7 +65,8 @@ export async function middleware(request: NextRequest) {
   // Handle API routes with CORS and rate limiting
   if (request.nextUrl.pathname.startsWith('/api/')) {
     // Apply rate limiting based on endpoint
-    let limiter = rateLimiters.api
+    const isReadRequest = request.method === 'GET' || request.method === 'HEAD' || request.method === 'OPTIONS'
+    let limiter = isReadRequest ? rateLimiters.apiRead : rateLimiters.apiWrite
 
     if (request.nextUrl.pathname.includes('/auth/')) {
       limiter = rateLimiters.auth
