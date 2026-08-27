@@ -17,7 +17,7 @@ export default async function A2IntroLayout({
   const { data: profile, error } = await supabase
     .from('despega_user_profiles')
     .select(
-      'a1_report_seen, a2_intro_seen, conozcamonos_2_completed, onboarding_conozcamonos_2_completed, a2_route_generated',
+      'a1_report_seen, a2_intro_seen, conozcamonos_2_completed, a2_route_generated',
     )
     .eq('user_id', journey.user.id)
     .maybeSingle()
@@ -25,9 +25,7 @@ export default async function A2IntroLayout({
   if (error) throw error
 
   const c2Completed = Boolean(
-    profile?.conozcamonos_2_completed ||
-      profile?.onboarding_conozcamonos_2_completed ||
-      profile?.a2_route_generated,
+    profile?.conozcamonos_2_completed || profile?.a2_route_generated,
   )
   if (!c2Completed) redirect('/despega/conozcamonos-2')
   if (!profile?.a1_report_seen) redirect('/despega/a1-report')
