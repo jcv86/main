@@ -44,6 +44,11 @@ for (const module of A3_MODULES) {
 
 const completeDay = source('app/api/a2/complete-day/route.ts')
 const dayState = source('app/api/a2/day-state/[day]/route.ts')
+
+assert.ok(dayState.includes("export const dynamic = 'force-dynamic'"))
+assert.ok(dayState.includes('export const revalidate = 0'))
+assert.ok(dayState.includes("'Cache-Control': 'private, no-store"))
+assert.ok(dayState.includes("Vary: 'Cookie'"))
 const completion = source('app/api/a3/module-completion/route.ts')
 const clientCompletion = source('lib/a3/client-completion.ts')
 const template = source('components/a2-day-page-template.tsx')
