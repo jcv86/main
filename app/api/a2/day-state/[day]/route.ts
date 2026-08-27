@@ -10,6 +10,14 @@ import {
 import { normalizeA2MissionSubmission } from '@/lib/a2/day-submission'
 import { buildA2RouteAdaptation } from '@/lib/a2/route-adaptation'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+const PRIVATE_NO_STORE_HEADERS = {
+  'Cache-Control': 'private, no-store, max-age=0, must-revalidate',
+  Vary: 'Cookie',
+}
+
 const NUMERIC_TO_SLUG: Record<string, string> = {
   'module-1': 'career-mirror',
   'module-2': 'value-mining-lab',
@@ -206,7 +214,7 @@ export async function GET(
             missingModules: missingA3Modules,
           }
         : null,
-    })
+    }, { headers: PRIVATE_NO_STORE_HEADERS })
   } catch (error) {
     console.error('[v0] A2 day-state error:', error)
     return NextResponse.json(
