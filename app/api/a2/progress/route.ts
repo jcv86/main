@@ -5,6 +5,14 @@ import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
 import { nextA2Horizon } from '@/lib/a2/horizon'
 import { buildA2CycleReview } from '@/lib/a2/cycle-review'
 
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
+const PRIVATE_NO_STORE_HEADERS = {
+  'Cache-Control': 'private, no-store, max-age=0, must-revalidate',
+  Vary: 'Cookie',
+}
+
 const TOTAL_DAYS = 90
 const REVIEW_HORIZONS = [30, 60, 90] as const
 
@@ -119,7 +127,10 @@ export async function GET() {
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json(emptyProgress(), { status: 200 })
+      return NextResponse.json(emptyProgress(), {
+        status: 200,
+        headers: PRIVATE_NO_STORE_HEADERS,
+      })
     }
 
     const userId = currentUser.id
@@ -276,13 +287,13 @@ export async function GET() {
           },
         ],
       },
-      { status: 200 },
+      { status: 200, headers: PRIVATE_NO_STORE_HEADERS },
     )
   } catch (error) {
     console.error('[v0] Error fetching A2 progress:', error)
     return NextResponse.json(
       { ...emptyProgress(), status: 'error' },
-      { status: 200 },
+      { status: 200, headers: PRIVATE_NO_STORE_HEADERS },
     )
   }
 }
