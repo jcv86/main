@@ -2,6 +2,7 @@ export type PilotAuthState = 'signed_out' | 'invalid_session' | 'authenticated'
 export type PilotOAuthProvider = 'google' | 'linkedin_oidc'
 
 const DEFAULT_NEXT_PATH = '/despega'
+export const PILOT_OAUTH_NEXT_COOKIE = 'dtc_pilot_oauth_next'
 
 export function normalizeNextPath(value: string | null): string {
   if (!value) return DEFAULT_NEXT_PATH
@@ -31,13 +32,11 @@ export function classifyAuthState(input: {
 export function providerRedirect(
   provider: PilotOAuthProvider,
   origin: string,
-  nextPath: string,
 ): {
   provider: PilotOAuthProvider
   options: { redirectTo: string }
 } {
   const callback = new URL('/auth/callback', new URL(origin).origin)
-  callback.searchParams.set('next', normalizeNextPath(nextPath))
 
   return {
     provider,

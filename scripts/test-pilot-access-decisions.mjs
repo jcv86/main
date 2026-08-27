@@ -26,22 +26,22 @@ assert.equal(normalizeNextPath('/despega/a1-cerebral'), '/despega/a1-cerebral')
 assert.equal(normalizeNextPath('/despega/a1-cerebral?resume=1'), '/despega/a1-cerebral?resume=1')
 
 assert.deepEqual(
-  providerRedirect('google', 'https://despegatucarrera.cl', '/despega/a1-cerebral'),
+  providerRedirect('google', 'https://despegatucarrera.cl'),
   {
     provider: 'google',
     options: {
       redirectTo:
-        'https://despegatucarrera.cl/auth/callback?next=%2Fdespega%2Fa1-cerebral',
+        'https://despegatucarrera.cl/auth/callback',
     },
   },
 )
 
 assert.deepEqual(
-  providerRedirect('linkedin_oidc', 'https://despegatucarrera.cl/', 'https://evil.example'),
+  providerRedirect('linkedin_oidc', 'https://despegatucarrera.cl/'),
   {
     provider: 'linkedin_oidc',
     options: {
-      redirectTo: 'https://despegatucarrera.cl/auth/callback?next=%2Fdespega',
+      redirectTo: 'https://despegatucarrera.cl/auth/callback',
     },
   },
 )

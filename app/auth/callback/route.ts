@@ -1,17 +1,32 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
-import { normalizeNextPath } from '@/lib/auth/pilot-access'
+import { normalizeNextPath, PILOT_OAUTH_NEXT_COOKIE } from '@/lib/auth/pilot-access'
 import { PILOT_CLAIM_COOKIE, verifyInvitationCookieValue } from '@/lib/auth/invitation-cookie'
 
 function signInRedirect(request: NextRequest, error: string) {
   const url = new URL('/auth/signin', request.url)
   url.searchParams.set('error', error)
-  return NextResponse.redirect(url)
+  const response = NextResponse.redirect(url)
+  response.cookies.delete(PILOT_OAUTH_NEXT_COOKIE)
+  return response
+}
+
+function cookieNextPath(request: NextRequest): string | null {
+  const value = request.cookies.get(PILOT_OAUTH_NEXT_COOKIE)?.value
+  if (!value) return null
+
+  try {
+    return decodeURIComponent(value)
+  } catch {
+    return null
+  }
 }
 
 export async function GET(request: NextRequest) {
   const code = request.nextUrl.searchParams.get('code')
-  const next = normalizeNextPath(request.nextUrl.searchParams.get('next'))
+  const next = normalizeNextPath(
+    request.nextUrl.searchParams.get('next') ?? cookieNextPath(request),
+  )
   if (!code || request.nextUrl.searchParams.get('error')) return signInRedirect(request, 'oauth_failed')
 
   const supabase = await createClient()
@@ -36,5 +51,6 @@ export async function GET(request: NextRequest) {
 
   const response = NextResponse.redirect(new URL(next, request.url))
   response.cookies.delete(PILOT_CLAIM_COOKIE)
+  response.cookies.delete(PILOT_OAUTH_NEXT_COOKIE)
   return response
 }
