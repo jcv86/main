@@ -98,7 +98,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (error) throw error
       if (created) {
         setIdentity(created)
-        setStep(2)
+        setStep(3)
       }
     } catch (err) {
       console.error('[v0] Error saving archetype:', err)
@@ -222,6 +222,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
           </div>
 
           <Button
+            type="button"
             onClick={() => setStep(2)}
             className="w-full py-6 text-white font-semibold rounded-full"
             style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
