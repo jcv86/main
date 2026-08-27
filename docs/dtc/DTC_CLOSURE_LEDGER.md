@@ -1,0 +1,59 @@
+# DTC closure ledger
+
+Last grounded: 2026-08-26 UTC
+
+This is the canonical ledger for closing DespegaTuCarrera. An item is `verified` only when its acceptance criteria have observable evidence. Allowed statuses: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`.
+
+## Grounded release identity
+
+- Repository: `jcv86/main`
+- Canonical branch observed: `main`
+- Canonical commit: `c98097a48d5ad15f94ac6a0f1bf6a037109f57d6`
+- Vercel project: `v0-fork-of-despega-tu-carrera-clone` (`prj_SvrOCS2CtFQunqirMeYidZRHZKpm`)
+- Current production deployment: `dpl_E8B7e3Jfcn2dx2KG8E7dL5j2zRRi`
+- Current production commit: `c98097a48d5ad15f94ac6a0f1bf6a037109f57d6`
+- Current production source branch: `main`
+- Supabase project: `DTCFINAL` (`dcfrbwxbejtbcouionna`)
+
+Production and canonical `main` now point to the same release commit.
+
+## Closure backlog
+
+| ID | User outcome | Current evidence | Acceptance criteria | Dependency / risk | Skill | Status | Release blocker |
+|---|---|---|---|---|---|---|---|
+| DTC-C01 | Production and the canonical branch contain the same approved release | PR #130 merged candidate `66a85e98` into `main` as `c98097a4`; production deployment `dpl_E8B7e3Jfcn2dx2KG8E7dL5j2zRRi` is READY on that commit | Draft feature is reviewed, its migration is applied safely, the verified tree is integrated into `main`, and production points to it | Future releases must preserve branch/commit identity | `$dtc-release-production` | `verified` | yes |
+| DTC-C02 | A signed-in user can save and resume C1/A1 without losing answers | With the approved Joaquín account, C1 and A1 passed save-refresh-resume, all 28 A1 answers persisted, C2 saved eight answers, the integral report rendered, and the transition reached stable A2 | Save-refresh-resume-submit works for C1 and A1 on production and the canonical report opens after C2 | QA content is explicitly marked where free text was entered | `$dtc-supabase-backend` | `verified` | yes |
+| DTC-C03 | Pilot access and returning-user continuity remain reliable | `test-pilot-auth-flow`, `test-pilot-access-decisions`, and `check-pilot-access-contract` pass 3/3 on `main`; remote migration `pilot_access_foundation` exists; anonymous production requests to C1/A1 redirect to sign-in while preserving `next` | New invitation, returning Google/LinkedIn identity, preserved progress, sign-out, and browser-back journeys pass on deployed candidate | Requires synthetic pilot identities and live auth configuration | `$dtc-quality-gate` | `in_progress` | yes |
+| DTC-C04 | DTC user data is protected by intentional RLS and grants | Supabase advisor reports 515 security findings: 205 `rls_disabled_in_public`, 77 `policy_exists_rls_disabled`, 20 `security_definer_view`, plus executable security-definer functions | Every table reachable by active DTC browser/server journeys has documented exposure intent, least-privilege grants, tested RLS, and no unintended privileged execution | Database contains broad historical surface; bulk enabling RLS without dependency mapping could break the app | `$dtc-supabase-backend` | `not_started` | yes |
+| DTC-C05 | The app produces a reproducible production build | Clean local production build succeeds on `main`; Vercel candidate is READY | Clean local build and Vercel build both succeed for the same commit; build emits no unresolved Edge incompatibility | Build warns about Supabase Node API in Edge middleware; local build lacks production environment values | `$dtc-quality-gate` | `in_progress` | yes |
+| DTC-C06 | A normal user experiences one coherent DTC product rather than internal/test surfaces | Repository exposes hundreds of routes, including admin, demo, debug, test and design-system pages; reachability and authorization are not yet fully mapped | Public sitemap and navigation contain only intentional product routes; internal routes are removed, disabled, or protected; all visible CTAs lead to working outcomes | Large route surface increases accidental exposure and inconsistent UX | `$dtc-product-gap` | `not_started` | yes |
+| DTC-C07 | Core journey works on mobile and desktop with recovery states | Authenticated loading/error/not-found contracts exist; no current rendered evidence for the entire journey | Anonymous entry, auth, C1, A1, result, dashboard and next step pass at 390x844 and desktop, including loading/empty/error/expired-session states | Needs deployed candidate and test identity | `$dtc-quality-gate` | `not_started` | yes |
+| DTC-C08 | Users understand scores, limitations, progress, and the next action | Production inspection reached A2 and exposed a legacy-continuity mismatch: five persisted completions were shown alongside “Día actual 1”; the candidate now reconciles only contiguous persisted days and advances that account to Día 6 without allowing sparse records to skip prerequisites | Every assessment/result screen explains meaning and limitations, displays saved progress, and offers one clear next action | Candidate requires deployed authenticated verification before this item can be marked verified | `$dtc-build-experience` | `in_progress` | yes |
+| DTC-C09 | Public launch has trustworthy legal, accessibility, metadata, performance and observability basics | Production has domains and no grouped runtime errors in the last 7 days; current legal/accessibility/performance evidence is stale or partial | Current evidence covers legal pages/consent, WCAG-oriented checks, metadata/canonicals, Core Web Vitals budget, analytics and runtime alerts | Must be validated against current deployed UI, not historical reports | `$dtc-quality-gate` | `not_started` | yes |
+| DTC-C10 | Operators can diagnose failures without exposing personal assessment data | Runtime errors can be queried in Vercel; database has broad analytics/admin surface but operational path is not yet defined | Critical auth, persistence and AI failures have redacted logs, actionable alerts and an owner; no assessment answers or secrets appear in logs | Observability changes may touch production integrations | `$dtc-release-production` | `not_started` | no |
+
+## Evidence log
+
+### 2026-08-26
+
+- Vercel project and deployment identity verified through the connected Vercel account.
+- Vercel grouped runtime errors: none found in the selected seven-day window.
+- Repository branches and commits verified from the Git remote.
+- Pilot access contracts passed 3/3 on `main`.
+- Assessment-draft contract passed on production-source commit `da4a8f40`.
+- Remote Supabase migration `20260826233128_assessment_drafts` is applied after `pilot_access_foundation`.
+- Supabase security advisor: 515 findings. Performance advisor: 1,286 findings; performance debt is recorded but is not automatically a release blocker.
+- First local production build reached 432/432 static pages, then failed final cleanup with `ENOTEMPTY: .next/export`; a second build from a clean output directory succeeded. The reproducible warning remaining is the Supabase Node API import in Edge middleware.
+- Integrated candidate `32abd20d` contains the closure ledger plus the reviewed assessment-draft feature. All four focused contracts pass. Its local build again reached 432/432 pages and then hit `ENOTEMPTY` during `.next/export` cleanup; the same application commit is READY on Vercel, so local build finalization remains nondeterministic and unresolved.
+- Applied remote migration `20260826233128_assessment_drafts` to `DTCFINAL`. Verification: table exists with zero rows, RLS enabled, authenticated grants limited to SELECT/INSERT/UPDATE, anon has no table grants, three own-row policies use `auth.uid()`, expected constraints/indexes exist, and the Supabase security advisor reports zero findings for the table.
+- Read-only production smoke passed through the protected Vercel share URL: `/` rendered the intended value proposition and working CTAs; `/comenzar` rendered returning-account, invitation and access-request paths; anonymous requests to `/despega/conozcamonos-1` and `/despega/a1-cerebral` redirected to `/auth/signin` with the original path preserved in `next`. No OAuth action was initiated and no user data was created or changed.
+- Authenticated production verification used the user-approved Joaquín account. C1 saved, resumed at question 2 after a full reload, and submitted to A1. A1 saved, resumed at question 4 after a full reload, accepted all 28 answers, and persisted the assessment. The obsolete C2 alias was removed, PR #130 merged to canonical `main`, and production deployment `dpl_E8B7e3Jfcn2dx2KG8E7dL5j2zRRi` became READY on `c98097a4`. Post-deploy, `/despega/a1-report` redirected to C2, C2 persisted eight QA answers, the integral A1 report rendered, and its CTA opened stable `/despega/a2`. Vercel reported no grouped runtime errors and no error/fatal logs for the new deployment in the verification window. Previous production `dpl_Eu2Bwe4tD8qcX6Zjpb4CudXistjD` remains the rollback candidate.
+- A2 production inspection found five legacy Day 1–5 completions but stale journey state at Day 1, leaving Day 2 disabled and presenting the Day 1 start experience again. The candidate reconciles progression from the longest contiguous completion prefix, preserves a higher canonical journey position, ignores sparse later records for unlocking, and respects the active 30/60/90-day horizon. TypeScript plus focused critical-journey, A2 cycle, horizon, route-adaptation and continuity contracts pass.
+
+## Quality-gate verdict
+
+`CONDITIONAL_GO` for continued internal QA. The authenticated C1 → A1 → C2 → report → A2 journey and canonical production alignment are now verified. Public launch remains blocked by the unresolved release items DTC-C04 through DTC-C09, including broad security-surface disposition and full mobile/desktop release coverage.
+
+## Next coherent block
+
+Deploy the A2 legacy-continuity candidate from canonical `main`, then verify with the approved Joaquín account that the dashboard offers Día 6, Días 1–5 remain completed, Día 7 stays gated by Día 6, and reload preserves the same state. Continue with a fresh Día 6 completion only after the displayed continuity is correct.
