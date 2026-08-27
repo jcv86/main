@@ -120,6 +120,7 @@ const route = readFileSync(
   'utf8',
 )
 assert.ok(route.includes('validateA2SpecializedDaySubmission(day, submission)'))
+assert.ok(route.includes("mission.missionType !== 'a3_checkpoint'"))
 assert.ok(route.includes("error: 'La experiencia especializada necesita ajustes antes de avanzar.'"))
 assert.ok(route.includes('{ status: 422 }'))
 assert.ok(route.includes('specializedValidation ||'))
