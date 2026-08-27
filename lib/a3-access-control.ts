@@ -105,10 +105,12 @@ export async function checkA3ModuleAccess(
     const alreadyCompleted = completedA3Modules.includes(normalizedRequestedId)
     const day1Score = Math.max(0, Number(day1Result.data?.analysis_score) || 0)
 
-    // Legacy users with real A3 completions are grandfathered so their existing
-    // progress does not become inaccessible after the new Day 1 gate was added.
+    // Reaching Day 2 or later in the canonical sequential A2 journey proves
+    // Day 1 was completed. Legacy users may not have an a2_day1_submissions row.
     const day1Passed =
-      day1Result.data?.pass_fail_status === 'pass' || completedA3Modules.length > 0
+      day1Result.data?.pass_fail_status === 'pass' ||
+      a2Snapshot.currentDay > 1 ||
+      completedA3Modules.length > 0
 
     let day1Status: A3AccessCheck['day1Status'] = 'not_started'
     if (day1Passed) day1Status = 'passed'
@@ -201,7 +203,9 @@ export async function getA3AllModulesAccessState(
 
     const completed = completedModuleIds(a3Result.data?.completed_module_ids)
     const day1Passed =
-      day1Result.data?.pass_fail_status === 'pass' || completed.length > 0
+      day1Result.data?.pass_fail_status === 'pass' ||
+      a2Snapshot.currentDay > 1 ||
+      completed.length > 0
 
     return Object.entries(A3_CHECKPOINT_MAP)
       .map(([day, checkpoint]) => {
