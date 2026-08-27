@@ -2680,7 +2680,7 @@ export const A2_DAILY_MISSIONS: Record<number, A2DailyMission> = {
     unlockRequirements: {
       requiresDay1Passed: true,
       requiredPreviousDay: 77,
-      requiredCompletedA3Modules: ['career-mirror', 'value-mining-lab', 'cv-builder-studio', 'job-decoder', 'answer-architecture', 'coach-practice-room', 'communication-gym', 'recruiter-screen'],
+      requiredCompletedA3Modules: ['career-mirror', 'value-mining-lab', 'cv-builder-studio', 'job-decoder', 'answer-architecture', 'coach-practice-room', 'communication-gym', 'first-recruiter-simulation'],
     },
     userGoal: 'Completar una práctica de preguntas difíciles con honestidad y estructura',
     whyItMatters: 'Este checkpoint permite revisar cómo respondes preguntas inesperadas en un entorno de práctica.',
@@ -3071,7 +3071,7 @@ export const A2_DAILY_MISSIONS: Record<number, A2DailyMission> = {
     unlockRequirements: {
       requiresDay1Passed: true,
       requiredPreviousDay: 87,
-      requiredCompletedA3Modules: ['career-mirror', 'value-mining-lab', 'cv-builder-studio', 'job-decoder', 'answer-architecture', 'coach-practice-room', 'communication-gym', 'recruiter-screen', 'difficult-questions'],
+      requiredCompletedA3Modules: ['career-mirror', 'value-mining-lab', 'cv-builder-studio', 'job-decoder', 'answer-architecture', 'coach-practice-room', 'communication-gym', 'first-recruiter-simulation', 'risk-difficult-questions-lab'],
     },
     userGoal: 'Completar una simulación integral de identidad, respuestas y comunicación',
     whyItMatters: 'El checkpoint final ofrece evidencia de práctica y áreas por seguir desarrollando; no garantiza resultados laborales.',

@@ -93,6 +93,20 @@ assert.deepEqual(
   'A2 checkpoint days must match the canonical A3 map',
 )
 
+for (const checkpointDay of Object.keys(A3_CHECKPOINT_MAP).map(Number)) {
+  assert.deepEqual(
+    A2_DAILY_MISSIONS[checkpointDay].unlockRequirements.requiredCompletedA3Modules || [],
+    A3_CHECKPOINT_MAP[checkpointDay].requiredPreviousModules,
+    `Day ${checkpointDay} must require the canonical previous A3 module IDs`,
+  )
+}
+
+const requiredA3ModuleIds = configuredDays.flatMap(
+  (day) => A2_DAILY_MISSIONS[day].unlockRequirements.requiredCompletedA3Modules || [],
+)
+assert.ok(!requiredA3ModuleIds.includes('recruiter-screen'))
+assert.ok(!requiredA3ModuleIds.includes('difficult-questions'))
+
 const completeDayRoute = source('app/api/a2/complete-day/route.ts')
 const progressRoute = source('app/api/a2/progress/route.ts')
 const dayStateRoute = source('app/api/a2/day-state/[day]/route.ts')
