@@ -70,7 +70,10 @@ export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
       if (introError && introError.code !== 'PGRST116') throw introError
       if (intro) {
         setTestIntro(intro)
-        setStep(2) // Skip to building if data exists
+        if (intro.test_type && intro.test_feedback) setStep(4)
+        else if (intro.version_c) setStep(4)
+        else if (intro.version_a && intro.version_b) setStep(3)
+        else setStep(2)
       }
     } catch (err) {
       console.error('[v0] Error loading Day 5 data:', err)
@@ -104,7 +107,7 @@ export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
 
       if (intro) {
         setTestIntro(intro)
-        setStep(2)
+        setStep(3)
       }
     } catch (err) {
       console.error('[v0] Error saving versions:', err)
@@ -126,7 +129,7 @@ export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
       if (error) throw error
       if (updated) {
         setTestIntro(updated)
-        setStep(3)
+        setStep(4)
       }
     } catch (err) {
       console.error('[v0] Error saving coach feedback:', err)
@@ -244,7 +247,6 @@ export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
         <Day5VersionBuilder
           onVersionsBuilt={handleVersionsBuilt}
           isLoading={isLoading}
-          onNext={() => setStep(3)}
         />
       )}
 
@@ -254,7 +256,6 @@ export function Day5Experience({ onComplete, userId }: Day5ExperienceProps) {
           versionB={testIntro.version_b || ''}
           onFeedbackApplied={handleCoachFeedback}
           isLoading={isLoading}
-          onNext={() => setStep(4)}
         />
       )}
 

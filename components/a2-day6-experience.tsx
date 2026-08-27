@@ -70,7 +70,10 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (profError && profError.code !== 'PGRST116') throw profError
       if (prof) {
         setIdentity(prof)
-        setStep(4)
+        if (prof.is_validated && prof.stress_test_result) setStep(5)
+        else if (prof.version_simple && prof.version_recruiter && prof.version_interview) setStep(4)
+        else if (prof.candidate_archetype) setStep(3)
+        else setStep(2)
       }
     } catch (err) {
       console.error('[v0] Error loading Day 6 data:', err)
@@ -95,7 +98,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (error) throw error
       if (created) {
         setIdentity(created)
-        setStep(2)
+        setStep(3)
       }
     } catch (err) {
       console.error('[v0] Error saving archetype:', err)
@@ -122,7 +125,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (error) throw error
       if (updated) {
         setIdentity(updated)
-        setStep(3)
+        setStep(4)
       }
     } catch (err) {
       console.error('[v0] Error saving forged identities:', err)
@@ -145,7 +148,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (error) throw error
       if (updated) {
         setIdentity(updated)
-        setStep(4)
+        setStep(5)
       }
     } catch (err) {
       console.error('[v0] Error saving stress test:', err)
@@ -219,6 +222,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
           </div>
 
           <Button
+            type="button"
             onClick={() => setStep(2)}
             className="w-full py-6 text-white font-semibold rounded-full"
             style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
@@ -242,7 +246,6 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
           archetypeDescription={identity.archetype_description || ''}
           onIdentitiesForged={handleIdentitiesForged}
           isLoading={isLoading}
-          onNext={() => setStep(4)}
         />
       )}
 
@@ -251,7 +254,6 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
           identity={identity as ProfessionalIdentity}
           onStressTestComplete={handleStressTestComplete}
           isLoading={isLoading}
-          onNext={() => setStep(5)}
         />
       )}
 

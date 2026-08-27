@@ -76,6 +76,21 @@ export async function createProfessionalIdentity(
   data: Omit<ProfessionalIdentity, 'id' | 'user_id' | 'created_at' | 'updated_at'>
 ) {
   const supabase = createClient()
+
+  const { data: existing, error: existingError } = await supabase
+    .from('a2_professional_identities')
+    .select('id')
+    .eq('user_id', userId)
+    .eq('day_number', data.day_number)
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
+
+  if (existingError) return { data: null, error: existingError }
+  if (existing?.id) {
+    return updateProfessionalIdentity(existing.id, userId, data)
+  }
+
   return supabase
     .from('a2_professional_identities')
     .insert([{ ...data, user_id: userId }])
@@ -90,7 +105,9 @@ export async function getProfessionalIdentity(userId: string, dayNumber: number)
     .select('*')
     .eq('user_id', userId)
     .eq('day_number', dayNumber)
-    .single()
+    .order('updated_at', { ascending: false })
+    .limit(1)
+    .maybeSingle()
 }
 
 export async function updateProfessionalIdentity(

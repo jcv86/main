@@ -253,6 +253,14 @@ export function A3RouteOverview() {
                 <p className="mt-1 text-sm text-muted-foreground">
                   Tu puntaje, entregable y progreso fueron actualizados. Las repeticiones no vuelven a entregar XP.
                 </p>
+                <Link
+                  href={`/despega/a2/dia-${completedModule.checkpointDay}`}
+                  className="mt-3 inline-flex"
+                >
+                  <Button size="sm">
+                    Volver al checkpoint del Día {completedModule.checkpointDay}
+                  </Button>
+                </Link>
               </div>
             </div>
           </Card>

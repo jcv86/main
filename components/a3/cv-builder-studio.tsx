@@ -507,9 +507,9 @@ export function CvBuilderStudio() {
               </p>
               <Button
                 className="mt-4 bg-emerald-600 hover:bg-emerald-500"
-                onClick={() => router.push('/despega/a3')}
+                onClick={() => router.push(`/despega/a2/dia-${module.checkpointDay}`)}
               >
-                Volver a Entrenamiento
+                Volver al checkpoint del Día {module.checkpointDay}
               </Button>
             </div>
           ) : (

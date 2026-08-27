@@ -2,32 +2,25 @@
 
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { ChevronRight, Sparkles } from 'lucide-react'
+import { ChevronRight } from 'lucide-react'
 
 interface Day5VersionBuilderProps {
   onVersionsBuilt: (versions: { versionA: string; versionB: string }) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
 export function Day5VersionBuilder({
   onVersionsBuilt,
   isLoading,
-  onNext,
 }: Day5VersionBuilderProps) {
-  const [versionA, setVersionA] = useState(
-    'Soy un Product Manager con 5+ años coordinando equipos y lanzando productos SaaS que impactan a 100K+ usuarios.'
-  )
-  const [versionB, setVersionB] = useState(
-    'He lanzado 3 productos exitosos en el espacio B2B SaaS, liderando equipos multidisciplinarios desde ideación hasta go-to-market.'
-  )
+  const [versionA, setVersionA] = useState('')
+  const [versionB, setVersionB] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
   const handleSaveVersions = async () => {
     setIsSaving(true)
     try {
       await onVersionsBuilt({ versionA, versionB })
-      onNext()
     } catch (err) {
       console.error('[v0] Error saving versions:', err)
     } finally {
@@ -84,7 +77,7 @@ export function Day5VersionBuilder({
 
       <Button
         onClick={handleSaveVersions}
-        disabled={isSaving || isLoading}
+        disabled={isSaving || isLoading || versionA.trim().length < 20 || versionB.trim().length < 20}
         className="w-full py-6 text-white font-semibold rounded-full"
         style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
       >

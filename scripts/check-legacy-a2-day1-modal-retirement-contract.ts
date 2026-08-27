@@ -29,6 +29,8 @@ const uploadRoute = source('app/api/a2/day1/upload/route.ts')
 const coachRoute = source('app/api/a2/day1/coach-enhance/route.ts')
 const analyzeRoute = source('app/api/a2/day1/analyze/route.ts')
 const canonicalCoach = source('app/api/a2/coach-assist/route.ts')
+const canonicalExperience = source('components/a2-day1-experience.tsx')
+const canonicalIntro = source('components/a2-day1-intro.tsx')
 
 assert.ok(uploadRoute.includes("code: 'A2_DAY1_PUBLIC_UPLOAD_RETIRED'"))
 assert.ok(uploadRoute.includes("replacement: '/api/a2/day1/analyze'"))
@@ -72,6 +74,15 @@ assert.ok(canonicalCoach.includes('store: false'))
 assert.ok(!canonicalCoach.includes('body.userId'))
 assert.ok(!canonicalCoach.includes('SUPABASE_SERVICE_ROLE_KEY'))
 
+assert.ok(!canonicalExperience.includes('A2Day1Upload'))
+assert.ok(!canonicalExperience.includes('A2Day1Step5ExternalSave'))
+assert.ok(!canonicalExperience.includes("'Sube Tu Documento'"))
+assert.ok(!canonicalExperience.includes("'Guardar Externamente'"))
+assert.ok(canonicalExperience.includes("'Análisis y Puntuación'"))
+assert.ok(!canonicalIntro.includes('luego lo subirás'))
+assert.ok(!canonicalIntro.includes('editarlo afuera'))
+assert.ok(canonicalIntro.includes('Guardarlo de forma segura en tu recorrido'))
+
 const activeFiles = [
   ...executableFiles('app'),
   ...executableFiles('components'),
@@ -95,6 +106,7 @@ console.log(
     mockCoachReachable: false,
     canonicalDay1ServerOwned: true,
     canonicalCoachAuthenticated: true,
+    canonicalDay1StructuredFlow: true,
     liveHttpCheckedInThisScript: false,
     liveDatabaseCheckedInThisScript: false,
   }),

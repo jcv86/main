@@ -79,6 +79,7 @@ export function Day6ArchetypeSelector({
       <div className="grid grid-cols-3 gap-3">
         {ARCHETYPES.map((archetype) => (
           <button
+            type="button"
             key={archetype.name}
             onClick={() => setSelectedArchetype(archetype.name)}
             className={`p-4 rounded-lg transition-all border-2 text-left ${
@@ -106,6 +107,7 @@ export function Day6ArchetypeSelector({
       </div>
 
       <Button
+        type="button"
         onClick={handleSelectArchetype}
         disabled={!selectedArchetype || isSaving || isLoading}
         className="w-full py-6 text-white font-semibold rounded-full"

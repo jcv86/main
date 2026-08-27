@@ -5,7 +5,12 @@ import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { AlertCircle, Linkedin, Loader2 } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
-import { providerRedirect, type PilotOAuthProvider } from '@/lib/auth/pilot-access'
+import {
+  normalizeNextPath,
+  PILOT_OAUTH_NEXT_COOKIE,
+  providerRedirect,
+  type PilotOAuthProvider,
+} from '@/lib/auth/pilot-access'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
 
@@ -25,8 +30,12 @@ export default function SignInPage() {
       return
     }
 
+    const nextPath = normalizeNextPath(searchParams.get('next'))
+    const secure = window.location.protocol === 'https:' ? '; Secure' : ''
+    document.cookie = `${PILOT_OAUTH_NEXT_COOKIE}=${encodeURIComponent(nextPath)}; Path=/auth; Max-Age=600; SameSite=Lax${secure}`
+
     const { error: oauthError } = await supabase.auth.signInWithOAuth(
-      providerRedirect(provider, window.location.origin, searchParams.get('next') ?? '/despega'),
+      providerRedirect(provider, window.location.origin),
     )
     if (oauthError) {
       setError('No pudimos iniciar sesión. Intenta nuevamente.')

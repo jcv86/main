@@ -13,7 +13,6 @@ interface Day6IdentityForgeProps {
     interview: string
   }) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
 export function Day6IdentityForge({
@@ -21,17 +20,10 @@ export function Day6IdentityForge({
   archetypeDescription,
   onIdentitiesForged,
   isLoading,
-  onNext,
 }: Day6IdentityForgeProps) {
-  const [versionSimple, setVersionSimple] = useState(
-    `Soy un ${archetype} especializado en generar impacto. ${archetypeDescription}`
-  )
-  const [versionRecruiter, setVersionRecruiter] = useState(
-    `Como ${archetype}, identifico oportunidades, coordino equipos y aseguro resultados medibles.`
-  )
-  const [versionInterview, setVersionInterview] = useState(
-    'Aporto [expertise]. Mi fortaleza: [skill 1], [skill 2], [skill 3]. Cuando enfrenté [reto], aplicué [metodología] y logré [resultado cuantificado].'
-  )
+  const [versionSimple, setVersionSimple] = useState('')
+  const [versionRecruiter, setVersionRecruiter] = useState('')
+  const [versionInterview, setVersionInterview] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
   const handleForgeIdentities = async () => {
@@ -42,7 +34,6 @@ export function Day6IdentityForge({
         recruiter: versionRecruiter,
         interview: versionInterview,
       })
-      onNext()
     } catch (err) {
       console.error('[v0] Error forging identities:', err)
     } finally {
@@ -105,8 +96,15 @@ export function Day6IdentityForge({
       </div>
 
       <Button
+        type="button"
         onClick={handleForgeIdentities}
-        disabled={isSaving || isLoading}
+        disabled={
+          isSaving ||
+          isLoading ||
+          versionSimple.trim().length < 20 ||
+          versionRecruiter.trim().length < 20 ||
+          versionInterview.trim().length < 20
+        }
         className="w-full py-6 text-white font-semibold rounded-full"
         style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
       >

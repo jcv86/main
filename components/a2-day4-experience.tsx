@@ -70,7 +70,19 @@ export function Day4Experience({ onComplete, userId }: Day4ExperienceProps) {
       if (boardError && boardError.code !== 'PGRST116') throw boardError
       if (board) {
         setCandidateBoard(board)
-        setStep(2) // If board exists, go to review step
+        const completeBoard = [
+          board.column_1_quien_soy,
+          board.column_2_que_quiere,
+          board.column_3_que_prueba,
+          board.column_4_que_falta,
+        ].every((value) => value?.trim().length >= 10)
+        setStep(
+          completeBoard &&
+            board.candidate_hypothesis?.trim().length >= 20 &&
+            board.candidate_archetype?.trim().length >= 3
+            ? 3
+            : 2,
+        )
       }
     } catch (err) {
       console.error('[v0] Error loading Day 4 data:', err)
@@ -218,7 +230,6 @@ export function Day4Experience({ onComplete, userId }: Day4ExperienceProps) {
           candidateBoard={candidateBoard as CandidateBoard}
           onBuildBoard={handleBuildBoard}
           isLoading={isLoading}
-          onNext={() => setStep(3)}
         />
       )}
 
@@ -232,5 +243,3 @@ export function Day4Experience({ onComplete, userId }: Day4ExperienceProps) {
     </div>
   )
 }
-
-

@@ -66,7 +66,16 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
       if (memories && memories.length > 0) {
         setMemories(memories)
         setSelectedMemories(memories.filter(m => m.is_selected).map(m => m.id))
-        setStep(2)
+        const completedCount = memories.filter((memory) =>
+          memory.memory_text?.trim().length >= 10 &&
+          memory.memory_where?.trim().length >= 3 &&
+          memory.memory_why_remember?.trim().length >= 5
+        ).length
+        const taggedCount = memories.filter((memory) => (memory.coach_tags || []).length > 0).length
+        const selectedCount = memories.filter((memory) => memory.is_selected).length
+        if (selectedCount >= 3 || taggedCount >= 3) setStep(5)
+        else if (completedCount >= 5) setStep(4)
+        else setStep(3)
       }
     } catch (err) {
       console.error('[v0] Error loading Day 8 data:', err)
@@ -80,9 +89,12 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
 
     setIsLoading(true)
     try {
-      // Create initial memories from vault
-      const newMemories: WorkMemory[] = []
+      const { data: existing, error: existingError } = await getWorkMemories(userId, 8)
+      if (existingError && existingError.code !== 'PGRST116') throw existingError
+      const newMemories: WorkMemory[] = [...(existing || [])]
+      const existingIds = new Set(newMemories.map((memory) => memory.memory_id))
       for (let i = 0; i < vaultData.count; i++) {
+        if (existingIds.has(i + 1)) continue
         const { data: memory, error } = await createWorkMemory(userId, {
           day_number: 8,
           memory_id: i + 1,
@@ -98,10 +110,11 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
         if (memory) newMemories.push(memory)
       }
       setMemories(newMemories)
-      setStep(2)
+      setStep(3)
     } catch (err) {
       console.error('[v0] Error importing vault:', err)
       setError('Error al importar bóveda.')
+      throw err
     } finally {
       setIsLoading(false)
     }
@@ -132,6 +145,7 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
     } catch (err) {
       console.error('[v0] Error capturing memory:', err)
       setError('Error al capturar memoria.')
+      throw err
     } finally {
       setIsLoading(false)
     }
@@ -153,11 +167,12 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
       if (error) throw error
       if (updated) {
         setMemories(updated as WorkMemory[])
-        setStep(4)
+        setStep(5)
       }
     } catch (err) {
       console.error('[v0] Error tagging memories:', err)
       setError('Error al etiquetar memorias.')
+      throw err
     } finally {
       setIsLoading(false)
     }
@@ -181,6 +196,7 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
     } catch (err) {
       console.error('[v0] Error selecting memories:', err)
       setError('Error al seleccionar memorias.')
+      throw err
     } finally {
       setIsLoading(false)
     }
@@ -237,11 +253,11 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Coach tags cada una (impacto, skills, tipo)</span>
+                <span>Etiquetar cada una por impacto, habilidades y tipo</span>
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
-                <span>Seleccionar best 5 para construcción STAR</span>
+                <span>Seleccionar al menos 3 para construcción STAR</span>
               </li>
               <li className="flex gap-3">
                 <span style={{ color: 'rgb(80, 160, 170)' }}>✓</span>
@@ -265,7 +281,6 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
         <Day8VaultImport
           onVaultImported={handleVaultImported}
           isLoading={isLoading}
-          onNext={() => setStep(3)}
         />
       )}
 
@@ -283,7 +298,6 @@ export function Day8Experience({ onComplete, userId }: Day8ExperienceProps) {
           memories={memories}
           onMemoriesTagged={handleMemoriesTagged}
           isLoading={isLoading}
-          onNext={() => setStep(5)}
         />
       )}
 

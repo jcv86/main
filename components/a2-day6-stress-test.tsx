@@ -9,7 +9,6 @@ interface Day6StressTestProps {
   identity: ProfessionalIdentity
   onStressTestComplete: (result: string, isValidated: boolean) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
 const STRESS_QUESTIONS = [
@@ -24,20 +23,18 @@ export function Day6StressTest({
   identity,
   onStressTestComplete,
   isLoading,
-  onNext,
 }: Day6StressTestProps) {
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [responses, setResponses] = useState<string[]>([])
   const [isValidated, setIsValidated] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
+  const allResponsesComplete = STRESS_QUESTIONS.every(
+    (_, index) => (responses[index] || '').trim().length >= 5,
+  )
 
-  const handleResponseRecord = (response: string) => {
-    const newResponses = [...responses]
-    newResponses[currentQuestion] = response
-    setResponses(newResponses)
-
+  const handleResponseRecord = () => {
     if (currentQuestion < STRESS_QUESTIONS.length - 1) {
-      setCurrentQuestion(currentQuestion + 1)
+      setCurrentQuestion((question) => question + 1)
     }
   }
 
@@ -50,7 +47,6 @@ export function Day6StressTest({
         completed_at: new Date().toISOString(),
       })
       await onStressTestComplete(stressResult, isValidated)
-      onNext()
     } catch (err) {
       console.error('[v0] Error completing stress test:', err)
     } finally {
@@ -104,33 +100,34 @@ export function Day6StressTest({
       </div>
 
       {/* Validation Checkbox */}
-      <label className="flex gap-3 items-center cursor-pointer">
-        <div
-          className="w-5 h-5 rounded border-2 flex items-center justify-center"
-          style={{
-            borderColor: isValidated ? 'rgb(80, 160, 170)' : 'rgba(90, 90, 150, 0.6)',
-            backgroundColor: isValidated ? 'rgb(80, 160, 170)' : 'transparent',
-          }}
-        >
-          {isValidated && <Check className="w-3 h-3 text-white" />}
-        </div>
-        <span className="text-white/80 text-sm">Mi identidad paso el stress test: Puedo responder confiadamente</span>
+      <label className="flex gap-3 items-center cursor-pointer text-white/80 text-sm">
+        <input
+          type="checkbox"
+          checked={isValidated}
+          onChange={(event) => setIsValidated(event.target.checked)}
+          className="h-5 w-5 accent-cyan-500"
+        />
+        <span>Revisé mis respuestas y representan honestamente cómo presentaría mi experiencia.</span>
       </label>
 
       <div className="grid grid-cols-2 gap-3">
-        <Button
-          onClick={() => handleResponseRecord('')}
-          disabled={!responses[currentQuestion] || isSaving || isLoading}
-          className="py-6 text-white font-semibold rounded-full"
-          style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
-        >
-          {currentQuestion === STRESS_QUESTIONS.length - 1 ? 'Finalizar Test' : 'Siguiente Pregunta'}
-          <ChevronRight className="w-4 h-4 ml-2" />
-        </Button>
+        {currentQuestion < STRESS_QUESTIONS.length - 1 ? (
+          <Button
+            type="button"
+            onClick={handleResponseRecord}
+            disabled={(responses[currentQuestion] || '').trim().length < 5 || isSaving || isLoading}
+            className="py-6 text-white font-semibold rounded-full"
+            style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
+          >
+            Siguiente Pregunta
+            <ChevronRight className="w-4 h-4 ml-2" />
+          </Button>
+        ) : <div />}
 
         <Button
+          type="button"
           onClick={handleCompleteStressTest}
-          disabled={currentQuestion !== STRESS_QUESTIONS.length - 1 || !isValidated || isSaving || isLoading}
+          disabled={!allResponsesComplete || !isValidated || isSaving || isLoading}
           className="py-6 text-white font-semibold rounded-full"
           style={{ backgroundColor: 'rgba(80, 160, 170, 0.8)' }}
         >

@@ -8,7 +8,7 @@ import { Card } from '@/components/ui/card'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
 import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { completeA3Module } from '@/lib/a3/client-completion'
-import type { A3ModuleId } from '@/lib/a3/module-catalog'
+import { getA3ModuleByNumber, type A3ModuleId } from '@/lib/a3/module-catalog'
 
 export interface VerifiedCoachQuestion {
   id: string
@@ -33,6 +33,7 @@ export function VerifiedCoachSession({
   buildDeliverable,
 }: VerifiedCoachSessionProps) {
   const router = useRouter()
+  const checkpointDay = getA3ModuleByNumber(moduleNumber)?.checkpointDay
   const [showDeviceTest, setShowDeviceTest] = useState(true)
   const [textMode, setTextMode] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -171,8 +172,14 @@ export function VerifiedCoachSession({
               <RotateCcw className="mr-2 h-4 w-4" />
               Repetir módulo
             </Button>
-            <Button onClick={() => router.push('/despega/a3')}>
-              Volver a Entrenamiento
+            <Button
+              onClick={() => router.push(
+                checkpointDay ? `/despega/a2/dia-${checkpointDay}` : '/despega/a3',
+              )}
+            >
+              {checkpointDay
+                ? `Volver al checkpoint del Día ${checkpointDay}`
+                : 'Volver a Entrenamiento'}
               <ChevronRight className="ml-2 h-4 w-4" />
             </Button>
           </div>

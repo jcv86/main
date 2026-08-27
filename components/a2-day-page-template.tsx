@@ -154,8 +154,11 @@ export function A2DayPageTemplate({
   const needsEvidence = Boolean(
     mission && !children && requiresUniversalA2Submission(mission),
   )
-  const draftKey = `dtc:a2:mission-draft:${dayNumber}`
+  const draftKey = dayState?.draftScope
+    ? `dtc:a2:${dayState.draftScope}:mission-draft:${dayNumber}`
+    : ''
   const isCompleted = Boolean(dayState?.completion?.isCompleted)
+  const checkpointCompleted = Boolean(dayState?.checkpoint?.completed)
 
   const loadDayState = useCallback(async () => {
     setStateLoading(true)
@@ -182,6 +185,20 @@ export function A2DayPageTemplate({
   useEffect(() => {
     void loadDayState()
   }, [loadDayState])
+
+  useEffect(() => {
+    if (!checkpoint || checkpointCompleted) return
+
+    const refreshCheckpoint = () => {
+      if (document.visibilityState === 'visible') void loadDayState()
+    }
+    window.addEventListener('focus', refreshCheckpoint)
+    document.addEventListener('visibilitychange', refreshCheckpoint)
+    return () => {
+      window.removeEventListener('focus', refreshCheckpoint)
+      document.removeEventListener('visibilitychange', refreshCheckpoint)
+    }
+  }, [checkpoint, checkpointCompleted, loadDayState])
 
   const liveValidation = useMemo(
     () =>
@@ -219,7 +236,7 @@ export function A2DayPageTemplate({
     }
 
     try {
-      const stored = window.localStorage.getItem(draftKey)
+      const stored = draftKey ? window.localStorage.getItem(draftKey) : null
       if (stored) {
         setSubmission(
           normalizeA2MissionSubmission(mission, JSON.parse(stored)),
@@ -227,7 +244,7 @@ export function A2DayPageTemplate({
       }
     } catch (error) {
       console.error('[v0] Error restoring A2 mission draft:', error)
-      window.localStorage.removeItem(draftKey)
+      if (draftKey) window.localStorage.removeItem(draftKey)
     } finally {
       setDraftReady(true)
     }
@@ -235,7 +252,7 @@ export function A2DayPageTemplate({
 
   useEffect(() => {
     if (!draftReady || !needsEvidence) return
-    window.localStorage.setItem(draftKey, JSON.stringify(submission))
+    if (draftKey) window.localStorage.setItem(draftKey, JSON.stringify(submission))
   }, [draftKey, draftReady, needsEvidence, submission])
 
   if (!mission) {
@@ -335,9 +352,10 @@ export function A2DayPageTemplate({
   const prevDay = dayNumber > 1 ? dayNumber - 1 : null
   const nextDay = dayNumber < 90 ? dayNumber + 1 : null
   const typeInfo = taskTypeLabels[mission.missionType] || taskTypeLabels.builder
-  const checkpointCompleted = Boolean(dayState.checkpoint?.completed)
   const completionDisabled =
-    isCompleting || (needsEvidence && !liveValidation.passed)
+    isCompleting ||
+    Boolean(checkpoint && !checkpointCompleted) ||
+    (needsEvidence && !liveValidation.passed)
 
   const completeGenericDay = async () => {
     if (isCompleted && checkpoint) {
@@ -356,7 +374,7 @@ export function A2DayPageTemplate({
         needsEvidence ? submission : undefined,
       )
       onComplete?.()
-      if (needsEvidence) window.localStorage.removeItem(draftKey)
+      if (needsEvidence && draftKey) window.localStorage.removeItem(draftKey)
 
       if (isCompleted) {
         await loadDayState()
@@ -434,7 +452,22 @@ export function A2DayPageTemplate({
         <A2RouteContextCard adaptation={dayState.adaptation} />
 
         {children ? (
-          children
+          isCompleted && dayState.completion?.validationStatus === 'legacy' ? (
+            <section className="space-y-4 rounded-[28px] border border-cyan-500/25 bg-cyan-500/5 p-6">
+              <h2 className="text-xl font-semibold text-white">
+                Tu avance anterior está conservado
+              </h2>
+              <p className="text-sm text-slate-300">
+                Esta misión fue completada antes del sistema actual de evidencia.
+                No necesitas repetirla para continuar tu recorrido.
+              </p>
+              <Button onClick={() => router.push('/despega/a2')}>
+                Volver y continuar Tu Ruta
+              </Button>
+            </section>
+          ) : (
+            children
+          )
         ) : (
           <>
             <A2DailyMissionCard
@@ -542,13 +575,25 @@ export function A2DayPageTemplate({
                   )}
                 </div>
                 {!checkpointCompleted && (
-                  <Button
-                    onClick={() => router.push(checkpoint.route)}
-                    className="w-full border border-emerald-500/80 bg-emerald-600/80 py-6 text-white hover:bg-emerald-600"
-                  >
-                    Abrir {checkpoint.moduleTitle}
-                    <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <Button
+                      onClick={() => router.push(
+                        `${checkpoint.route}?from=/despega/a2/dia-${dayNumber}`,
+                      )}
+                      className="border border-emerald-500/80 bg-emerald-600/80 py-6 text-white hover:bg-emerald-600"
+                    >
+                      Abrir {checkpoint.moduleTitle}
+                      <ArrowRight className="ml-2 h-4 w-4" />
+                    </Button>
+                    <Button
+                      variant="outline"
+                      onClick={() => void loadDayState()}
+                      disabled={stateLoading}
+                      className="border-emerald-500/40 py-6 text-emerald-200"
+                    >
+                      {stateLoading ? 'Verificando…' : 'Ya lo completé: verificar'}
+                    </Button>
+                  </div>
                 )}
               </section>
             )}

@@ -146,6 +146,12 @@ assert.ok(!a2DayTemplate.includes('Checkpoint A3'))
 
 for (let day = 1; day <= 10; day += 1) {
   const dayPage = source(`app/despega/a2/dia-${day}/page.tsx`)
+  if (day === 7) {
+    assert.ok(dayPage.includes('<A2DayPageTemplate dayNumber={DIA_NUM} />'))
+    assert.ok(!dayPage.includes('Day7Experience'))
+    assert.ok(!dayPage.includes('completeA2Day'))
+    continue
+  }
   assert.ok(dayPage.includes("import { completeA2Day } from '@/lib/a2/client-completion'"))
   assert.ok(dayPage.includes('await completeA2Day(DIA_NUM, submission)'))
   assert.ok(dayPage.includes('router.push(result.nextPath)'))
@@ -154,6 +160,7 @@ for (let day = 1; day <= 10; day += 1) {
   assert.ok(!dayPage.includes('setTimeout(resolve => setTimeout'))
   assert.ok(!dayPage.includes('500'))
 }
+assert.ok(completeDay.includes("mission.missionType !== 'a3_checkpoint'"))
 
 assert.ok(journeyService.includes("A2: '/despega/a2'"))
 assert.ok(!journeyService.includes("A2: '/despega/a2/dashboard'"))

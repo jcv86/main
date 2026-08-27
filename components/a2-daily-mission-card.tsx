@@ -90,15 +90,13 @@ const missionTypeConfig: Record<
 }
 
 const phaseLabel: Record<A2DailyMission['phaseLabel'], string> = {
-  Foundation: 'Fundamentos',
-  'Role Alignment': 'Alineación con el rol',
-  'Simulation & Certification': 'Simulación y certificación',
-  'Master Difficult Questions & Return to Real Market':
-    'Preguntas difíciles y regreso al mercado',
-  'Final Applications & Offer Management':
-    'Postulaciones y gestión de ofertas',
-  'Final A3 Prep & Checkpoint': 'Preparación final de Entrenamiento',
-  'Final Review & Next Chapter': 'Cierre y siguiente capítulo',
+  Fundamentos: 'Fundamentos',
+  'Alineación con el rol': 'Alineación con el rol',
+  'Simulación y certificación': 'Simulación y certificación',
+  'Preguntas difíciles y mercado real': 'Preguntas difíciles y mercado real',
+  'Postulaciones y seguimiento': 'Postulaciones y seguimiento',
+  'Preparación final A3': 'Preparación final A3',
+  'Cierre y próximos pasos': 'Cierre y próximos pasos',
 }
 
 export function A2DailyMissionCard({

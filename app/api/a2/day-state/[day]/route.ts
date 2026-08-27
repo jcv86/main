@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server'
+import { createHash } from 'node:crypto'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
@@ -72,6 +73,7 @@ export async function GET(
     }
 
     const userId = currentUser.id
+    const draftScope = createHash('sha256').update(userId).digest('hex').slice(0, 16)
     const supabase = createAdminClient()
     const [snapshot, route] = await Promise.all([
       getA2ProgressSnapshot(userId, supabase),
@@ -157,6 +159,7 @@ export async function GET(
     return NextResponse.json({
       success: true,
       day,
+      draftScope,
       mission: {
         day: mission.day,
         slug: mission.slug,

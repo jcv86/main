@@ -302,7 +302,11 @@ export async function POST(request: Request) {
           { status: 500 },
         )
       }
-    } else if (day >= 2 && day <= 10) {
+    } else if (
+      day >= 2 &&
+      day <= 10 &&
+      mission.missionType !== 'a3_checkpoint'
+    ) {
       specializedValidation = validateA2SpecializedDaySubmission(day, submission)
 
       if (!specializedValidation.passed) {
