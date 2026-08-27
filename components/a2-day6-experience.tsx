@@ -125,7 +125,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (error) throw error
       if (updated) {
         setIdentity(updated)
-        setStep(3)
+        setStep(4)
       }
     } catch (err) {
       console.error('[v0] Error saving forged identities:', err)
@@ -148,7 +148,7 @@ export function Day6Experience({ onComplete, userId }: Day6ExperienceProps) {
       if (error) throw error
       if (updated) {
         setIdentity(updated)
-        setStep(4)
+        setStep(5)
       }
     } catch (err) {
       console.error('[v0] Error saving stress test:', err)

@@ -113,6 +113,7 @@ export function Day6StressTest({
       <div className="grid grid-cols-2 gap-3">
         {currentQuestion < STRESS_QUESTIONS.length - 1 ? (
           <Button
+            type="button"
             onClick={handleResponseRecord}
             disabled={(responses[currentQuestion] || '').trim().length < 5 || isSaving || isLoading}
             className="py-6 text-white font-semibold rounded-full"
@@ -124,6 +125,7 @@ export function Day6StressTest({
         ) : <div />}
 
         <Button
+          type="button"
           onClick={handleCompleteStressTest}
           disabled={!allResponsesComplete || !isValidated || isSaving || isLoading}
           className="py-6 text-white font-semibold rounded-full"

@@ -96,6 +96,7 @@ export function Day6IdentityForge({
       </div>
 
       <Button
+        type="button"
         onClick={handleForgeIdentities}
         disabled={
           isSaving ||
