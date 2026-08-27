@@ -24,6 +24,8 @@ export function Day8MemoryMapReview({
 }: Day8MemoryMapReviewProps) {
   const [selecting, setSelecting] = useState(false)
   const [selected, setSelected] = useState<string[]>(selectedMemories)
+  const selectionSaved = selected.length === selectedMemories.length &&
+    selected.every((id) => selectedMemories.includes(id))
 
   const handleToggleMemory = (id: string) => {
     setSelected(prev =>
@@ -65,7 +67,7 @@ export function Day8MemoryMapReview({
     <div className="space-y-6">
       <div>
         <h2 className="text-2xl font-bold text-white mb-2">Paso 4: Mapa de Memorias</h2>
-        <p className="text-white/70">Selecciona tus 5 mejores historias para construir STAR stories</p>
+        <p className="text-white/70">Selecciona al menos 3 historias que quieras transformar en relatos STAR.</p>
       </div>
 
       <div className="space-y-3">
@@ -120,7 +122,7 @@ export function Day8MemoryMapReview({
       <div className="space-y-3">
         <Button
           onClick={handleSelectBest}
-          disabled={selecting || isLoading || selected.length === 0}
+          disabled={selecting || isLoading || selected.length < 3 || selectionSaved}
           className="w-full py-4 text-white font-semibold rounded-full border border-cyan-400/60"
           style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}
         >
@@ -139,7 +141,7 @@ export function Day8MemoryMapReview({
 
         <Button
           onClick={handleComplete}
-          disabled={isSubmitting}
+          disabled={isSubmitting || isLoading || selected.length < 3 || !selectionSaved}
           className="w-full py-6 text-white font-semibold rounded-full"
           style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
         >

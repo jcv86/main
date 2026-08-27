@@ -9,13 +9,17 @@ interface Day8CoachMemoryTaggerProps {
   memories: WorkMemory[]
   onMemoriesTagged: (taggedMemories: Array<{ id: string; tags: string[] }>) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
-export function Day8CoachMemoryTagger({ memories, onMemoriesTagged, isLoading, onNext }: Day8CoachMemoryTaggerProps) {
+export function Day8CoachMemoryTagger({ memories, onMemoriesTagged, isLoading }: Day8CoachMemoryTaggerProps) {
+  const firstUntagged = memories.findIndex((memory) => !memory.coach_tags?.length)
+  const initialIndex = firstUntagged >= 0 ? firstUntagged : 0
   const [tagging, setTagging] = useState(false)
-  const [current, setCurrent] = useState(0)
-  const [selectedTags, setSelectedTags] = useState<string[]>([])
+  const [current, setCurrent] = useState(initialIndex)
+  const [tagsByMemory, setTagsByMemory] = useState<Record<string, string[]>>(() =>
+    Object.fromEntries(memories.map((memory) => [memory.id, memory.coach_tags || []])),
+  )
+  const selectedTags = tagsByMemory[memories[current]?.id] || []
 
   const availableTags = [
     '#Liderazgo',
@@ -33,23 +37,14 @@ export function Day8CoachMemoryTagger({ memories, onMemoriesTagged, isLoading, o
   const handleTag = async () => {
     setTagging(true)
     try {
-      const taggedMemory = {
-        id: memories[current].id,
-        tags: selectedTags,
-      }
-      
       if (current === memories.length - 1) {
-        // On last memory, collect all and submit
-        const allTagged = memories.map((mem, idx) => ({
+        const allTagged = memories.map((mem) => ({
           id: mem.id,
-          tags: idx === current ? selectedTags : mem.coach_tags || [],
+          tags: tagsByMemory[mem.id] || [],
         }))
         await onMemoriesTagged(allTagged)
-        onNext()
       } else {
-        // Move to next
-        setCurrent(current + 1)
-        setSelectedTags([])
+        setCurrent((index) => index + 1)
       }
     } finally {
       setTagging(false)
@@ -60,15 +55,20 @@ export function Day8CoachMemoryTagger({ memories, onMemoriesTagged, isLoading, o
   const progress = ((current + 1) / memories.length) * 100
 
   const toggleTag = (tag: string) => {
-    setSelectedTags(prev =>
-      prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
-    )
+    const memoryId = memories[current].id
+    setTagsByMemory((currentTags) => {
+      const tags = currentTags[memoryId] || []
+      return {
+        ...currentTags,
+        [memoryId]: tags.includes(tag) ? tags.filter((item) => item !== tag) : [...tags, tag],
+      }
+    })
   }
 
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Paso 3: Coach Tags ({current + 1}/{memories.length})</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Paso 3: Etiquetar memorias ({current + 1}/{memories.length})</h2>
         <div className="w-full bg-white/20 rounded-full h-2 mt-3">
           <div
             className="h-2 rounded-full transition-all"

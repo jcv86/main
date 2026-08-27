@@ -7,18 +7,16 @@ import { ChevronRight, Loader } from 'lucide-react'
 interface Day8VaultImportProps {
   onVaultImported: (vaultData: any) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
-export function Day8VaultImport({ onVaultImported, isLoading, onNext }: Day8VaultImportProps) {
+export function Day8VaultImport({ onVaultImported, isLoading }: Day8VaultImportProps) {
   const [importing, setImporting] = useState(false)
   const [count, setCount] = useState(10)
 
   const handleImport = async () => {
     setImporting(true)
     try {
-      await onVaultImported({ count, fromDay2: true })
-      onNext()
+      await onVaultImported({ count, fromDay2: false })
     } finally {
       setImporting(false)
     }
@@ -27,7 +25,7 @@ export function Day8VaultImport({ onVaultImported, isLoading, onNext }: Day8Vaul
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-2xl font-bold text-white mb-2">Paso 1: Importar Bóveda</h2>
+        <h2 className="text-2xl font-bold text-white mb-2">Paso 1: Preparar captura</h2>
         <p className="text-white/70">¿Cuántas memorias quieres excavar?</p>
       </div>
 
@@ -66,7 +64,7 @@ export function Day8VaultImport({ onVaultImported, isLoading, onNext }: Day8Vaul
           </>
         ) : (
           <>
-            Bóveda Importada - Capturar Memorias
+            Crear espacios y capturar memorias
             <ChevronRight className="w-4 h-4 ml-2" />
           </>
         )}

@@ -9,14 +9,12 @@ interface Day4BoardBuilderProps {
   candidateBoard: CandidateBoard
   onBuildBoard: (data: Partial<CandidateBoard>) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
 export function Day4BoardBuilder({
   candidateBoard,
   onBuildBoard,
   isLoading,
-  onNext,
 }: Day4BoardBuilderProps) {
   const [formData, setFormData] = useState({
     column_1_quien_soy: candidateBoard.column_1_quien_soy || '',
@@ -29,7 +27,6 @@ export function Day4BoardBuilder({
 
   const handleSubmit = async () => {
     await onBuildBoard(formData)
-    onNext()
   }
 
   const columns = [
@@ -117,6 +114,21 @@ export function Day4BoardBuilder({
         />
       </div>
 
+      <div className="space-y-2">
+        <label htmlFor="candidate-archetype" className="text-sm font-semibold text-white/80 block">
+          Arquetipo profesional
+        </label>
+        <input
+          id="candidate-archetype"
+          value={formData.candidate_archetype}
+          onChange={(event) => setFormData({ ...formData, candidate_archetype: event.target.value })}
+          placeholder="Ej.: Analista, Constructor, Conector"
+          className="w-full px-3 py-2 rounded-lg text-white placeholder:text-white/40 focus:outline-none"
+          style={{ backgroundColor: 'rgba(90, 90, 150, 0.2)', border: '1px solid rgba(90, 90, 150, 0.5)' }}
+        />
+        <p className="text-xs text-white/50">Es una hipótesis de trabajo, no una etiqueta fija.</p>
+      </div>
+
       <Button
         onClick={handleSubmit}
         disabled={
@@ -124,7 +136,9 @@ export function Day4BoardBuilder({
           !formData.column_1_quien_soy.trim() ||
           !formData.column_2_que_quiere.trim() ||
           !formData.column_3_que_prueba.trim() ||
-          !formData.column_4_que_falta.trim()
+          !formData.column_4_que_falta.trim() ||
+          formData.candidate_hypothesis.trim().length < 20 ||
+          formData.candidate_archetype.trim().length < 3
         }
         className="w-full py-6 text-white font-semibold rounded-full"
         style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}

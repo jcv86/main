@@ -42,6 +42,7 @@ export interface A2DayRouteState {
 export interface A2DayStateResponse {
   success: boolean
   day: number
+  draftScope: string
   route: A2DayRouteState | null
   adaptation: A2RouteAdaptation
   access: A2DayAccessState
@@ -68,7 +69,12 @@ export async function fetchA2DayState(
     throw error
   }
 
-  if (!payload.access || !payload.adaptation || payload.day !== dayNumber) {
+  if (
+    !payload.access ||
+    !payload.adaptation ||
+    payload.day !== dayNumber ||
+    typeof payload.draftScope !== 'string'
+  ) {
     throw new Error('La respuesta del estado del día es inválida.')
   }
 

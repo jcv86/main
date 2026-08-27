@@ -23,6 +23,7 @@ export function Day5TestSelector({
   const [selectedTest, setSelectedTest] = useState<string | null>(null)
   const [testFeedback, setTestFeedback] = useState('')
   const [isTestSubmitting, setIsTestSubmitting] = useState(false)
+  const testSaved = Boolean(testIntroduction.test_type && testIntroduction.test_feedback)
 
   const testOptions = [
     {
@@ -137,11 +138,11 @@ export function Day5TestSelector({
 
         <Button
           onClick={handleCompleteDay}
-          disabled={isSubmitting || isLoading}
+          disabled={!testSaved || isSubmitting || isLoading}
           className="py-6 text-white font-semibold rounded-full"
           style={{ backgroundColor: 'rgba(80, 160, 170, 0.8)' }}
         >
-          {isSubmitting ? 'Completando...' : 'Terminar Día 5'}
+          {isSubmitting ? 'Completando...' : testSaved ? 'Terminar Día 5' : 'Guarda el test para continuar'}
           <ChevronRight className="w-4 h-4 ml-2" />
         </Button>
       </div>

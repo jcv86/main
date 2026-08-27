@@ -9,7 +9,6 @@ interface Day5CoachFeedbackProps {
   versionB: string
   onFeedbackApplied: (improvedVersion: string) => Promise<void>
   isLoading: boolean
-  onNext: () => void
 }
 
 export function Day5CoachFeedback({
@@ -17,13 +16,11 @@ export function Day5CoachFeedback({
   versionB,
   onFeedbackApplied,
   isLoading,
-  onNext,
 }: Day5CoachFeedbackProps) {
   const [selectedVersion, setSelectedVersion] = useState<'a' | 'b'>('a')
   const [improvedVersion, setImprovedVersion] = useState('')
   const [isSaving, setIsSaving] = useState(false)
 
-  const bestVersion = versionA.length > versionB.length ? versionA : versionB
   const coachTip =
     selectedVersion === 'a'
       ? 'Agrega números y contexto: ¿Cuántos usuarios? ¿Qué impacto?'
@@ -32,8 +29,7 @@ export function Day5CoachFeedback({
   const handleApplyFeedback = async () => {
     setIsSaving(true)
     try {
-      await onFeedbackApplied(improvedVersion || bestVersion)
-      onNext()
+      await onFeedbackApplied(improvedVersion)
     } catch (err) {
       console.error('[v0] Error applying feedback:', err)
     } finally {
@@ -101,7 +97,7 @@ export function Day5CoachFeedback({
 
       <Button
         onClick={handleApplyFeedback}
-        disabled={isSaving || isLoading}
+        disabled={isSaving || isLoading || improvedVersion.trim().length < 20}
         className="w-full py-6 text-white font-semibold rounded-full"
         style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
       >

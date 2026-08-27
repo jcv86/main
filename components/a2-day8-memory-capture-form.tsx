@@ -13,11 +13,15 @@ interface Day8MemoryCaptureFormProps {
 }
 
 export function Day8MemoryCaptureForm({ memories, onMemoryCaptured, isLoading, onNext }: Day8MemoryCaptureFormProps) {
+  const firstIncomplete = memories.findIndex((memory) =>
+    !memory.memory_text?.trim() || !memory.memory_where?.trim() || !memory.memory_why_remember?.trim()
+  )
+  const initialIndex = firstIncomplete >= 0 ? firstIncomplete : 0
   const [capturing, setCapturing] = useState(false)
-  const [current, setCurrent] = useState(0)
-  const [what, setWhat] = useState('')
-  const [where, setWhere] = useState('')
-  const [why, setWhy] = useState('')
+  const [current, setCurrent] = useState(initialIndex)
+  const [what, setWhat] = useState(memories[initialIndex]?.memory_text || '')
+  const [where, setWhere] = useState(memories[initialIndex]?.memory_where || '')
+  const [why, setWhy] = useState(memories[initialIndex]?.memory_why_remember || '')
 
   const handleCapture = async () => {
     setCapturing(true)
@@ -30,10 +34,11 @@ export function Day8MemoryCaptureForm({ memories, onMemoryCaptured, isLoading, o
       })
       
       if (current < memories.length - 1) {
-        setCurrent(current + 1)
-        setWhat('')
-        setWhere('')
-        setWhy('')
+        const next = current + 1
+        setCurrent(next)
+        setWhat(memories[next]?.memory_text || '')
+        setWhere(memories[next]?.memory_where || '')
+        setWhy(memories[next]?.memory_why_remember || '')
       } else {
         onNext()
       }
@@ -116,7 +121,7 @@ export function Day8MemoryCaptureForm({ memories, onMemoryCaptured, isLoading, o
 
       <Button
         onClick={handleCapture}
-        disabled={capturing || isLoading || !what}
+        disabled={capturing || isLoading || what.trim().length < 10 || where.trim().length < 3 || why.trim().length < 5}
         className="w-full py-6 text-white font-semibold rounded-full"
         style={{ backgroundColor: 'rgba(90, 90, 150, 0.8)' }}
       >
