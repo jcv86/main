@@ -1,0 +1,83 @@
+name: Critical journey smoke
+
+on:
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'app/**'
+      - 'components/**'
+      - 'contexts/**'
+      - 'hooks/**'
+      - 'lib/**'
+      - 'middleware.ts'
+      - 'next.config.js'
+      - 'package.json'
+      - 'package-lock.json'
+      - 'scripts/critical-journey-smoke.mjs'
+      - 'scripts/test-critical-journey-smoke.mjs'
+      - '.github/workflows/critical-journey-smoke.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+      DEMO_SESSION_SECRET: test-demo-session-secret-for-ci
+      NEXTAUTH_SECRET: test-nextauth-secret-for-ci
+      CRON_SECRET: test-cron-secret-with-32-characters
+      OPENAI_API_KEY: test-openai-key
+      UPSTASH_REDIS_REST_URL: https://example.com
+      UPSTASH_REDIS_REST_TOKEN: test-upstash-token
+      BASE_URL: http://127.0.0.1:3000
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+
+      - name: Smoke runner contract
+        run: npm run test:smoke:critical
+
+      - name: TypeScript
+        run: npx tsc --noEmit
+
+      - name: Production build
+        run: npm run build
+
+      - name: Start production server
+        run: npm start > /tmp/dtc-next.log 2>&1 &
+
+      - name: Wait for application
+        run: |
+          for attempt in {1..60}; do
+            if curl --silent --fail --output /dev/null "$BASE_URL"; then
+              exit 0
+            fi
+            sleep 1
+          done
+          cat /tmp/dtc-next.log
+          exit 1
+
+      - name: Critical journey smoke
+        run: npm run smoke:critical
+
+      - name: Print server log on failure
+        if: failure()
+        run: cat /tmp/dtc-next.log || true

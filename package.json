@@ -12,6 +12,8 @@
     "test:assessment-drafts": "tsx scripts/test-assessment-drafts.mjs",
     "check:pilot-access": "tsx scripts/check-pilot-access-contract.ts",
     "generate:docs": "node scripts/generate-docx.js",
+    "test:smoke:critical": "node --test scripts/test-critical-journey-smoke.mjs",
+    "smoke:critical": "node scripts/critical-journey-smoke.mjs",
     "db:reset-progress": "node --env-file-if-exists=/vercel/share/.env.project --env-file-if-exists=/vercel/share/.env.snowflake --loader tsx scripts/reset-pillar-progress.ts"
   },
   "dependencies": {
