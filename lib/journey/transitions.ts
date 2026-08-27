@@ -12,7 +12,6 @@ export interface JourneyTransitionResult {
 interface TransitionProfile {
   a1_report_seen?: boolean | null
   conozcamonos_2_completed?: boolean | null
-  onboarding_conozcamonos_2_completed?: boolean | null
   a2_route_generated?: boolean | null
 }
 
@@ -53,7 +52,7 @@ async function loadTransitionProfile(userId: string): Promise<TransitionProfile>
   const { data, error } = await supabase
     .from('despega_user_profiles')
     .select(
-      'a1_report_seen, conozcamonos_2_completed, onboarding_conozcamonos_2_completed, a2_route_generated',
+      'a1_report_seen, conozcamonos_2_completed, a2_route_generated',
     )
     .eq('user_id', userId)
     .maybeSingle()
@@ -64,9 +63,7 @@ async function loadTransitionProfile(userId: string): Promise<TransitionProfile>
 
 function c2Completed(profile: TransitionProfile): boolean {
   return Boolean(
-    profile.conozcamonos_2_completed ||
-      profile.onboarding_conozcamonos_2_completed ||
-      profile.a2_route_generated,
+    profile.conozcamonos_2_completed || profile.a2_route_generated,
   )
 }
 
@@ -110,8 +107,8 @@ export async function recordJourneyTransition(
 }
 
 /**
- * Earlier versions persisted the C2 flag under a longer onboarding alias.
- * Repair it at canonical entry points so completed users never fall into a loop.
+ * Earlier versions could imply C2 completion by generating an A2 route.
+ * Repair that legacy state at canonical entry points so users never loop.
  */
 export async function repairLegacyC2Completion(
   userId: string,
