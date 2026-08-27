@@ -93,8 +93,7 @@ const phaseLabel: Record<A2DailyMission['phaseLabel'], string> = {
   Fundamentos: 'Fundamentos',
   'Alineación con el rol': 'Alineación con el rol',
   'Simulación y certificación': 'Simulación y certificación',
-  'Master Difficult Questions & Return to Real Market':
-    'Preguntas difíciles y regreso al mercado',
+  'Preguntas difíciles y mercado real': 'Preguntas difíciles y mercado real',
   'Final Applications & Offer Management':
     'Postulaciones y gestión de ofertas',
   'Final A3 Prep & Checkpoint': 'Preparación final de Entrenamiento',
