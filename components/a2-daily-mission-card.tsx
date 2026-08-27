@@ -90,7 +90,7 @@ const missionTypeConfig: Record<
 }
 
 const phaseLabel: Record<A2DailyMission['phaseLabel'], string> = {
-  Foundation: 'Fundamentos',
+  Fundamentos: 'Fundamentos',
   'Role Alignment': 'Alineación con el rol',
   'Simulation & Certification': 'Simulación y certificación',
   'Master Difficult Questions & Return to Real Market':
