@@ -146,8 +146,6 @@ export async function POST(request: Request) {
         {
           user_id: userId,
           conozcamonos_2_completed: true,
-          onboarding_conozcamonos_2_completed: true,
-          onboarding_conozcamonos_2_completed_at: now,
         },
         { onConflict: 'user_id' },
       )

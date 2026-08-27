@@ -36,7 +36,7 @@ interface UserProgress {
   onboarding_completed: boolean
   onboarding_cerebral_completed: boolean
   a1_test_completed: boolean
-  onboarding_conozcamonos_2_completed: boolean
+  conozcamonos_2_completed: boolean
   a2_route_generated: boolean
   a2_missions_started: boolean
   a3_intro_completed: boolean
@@ -83,7 +83,7 @@ export default function AdminProgressDashboard() {
         if (user.onboarding_completed) stage = 1
         if (user.onboarding_cerebral_completed) stage = 2
         if (user.a1_test_completed) stage = 2
-        if (user.onboarding_conozcamonos_2_completed) stage = 3
+        if (user.conozcamonos_2_completed) stage = 3
         if (user.a2_route_generated) stage = 4
         if (user.a2_missions_started) stage = 4
         if (user.a3_intro_completed) stage = 5
@@ -291,7 +291,7 @@ export default function AdminProgressDashboard() {
                         )}
                       </TableCell>
                       <TableCell>
-                        {user.onboarding_conozcamonos_2_completed ? (
+                        {user.conozcamonos_2_completed ? (
                           <CheckCircle2 className="w-5 h-5 text-green" />
                         ) : (
                           <Clock className="w-5 h-5 text-muted-foreground" />

@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
 import { QuestionProgress } from '@/components/question-progress'
+import { useAssessmentDraft } from '@/lib/use-assessment-draft'
 
 type QuestionTiming = {
   questionId: number
@@ -24,6 +25,7 @@ export default function A1CerebralPage() {
   const [questionTimings, setQuestionTimings] = useState<QuestionTiming[]>([])
   const router = useRouter()
   const sb = createClient()
+  const { loadDraft, saveDraft, completeDraft, draftError, savingDraft } = useAssessmentDraft('a1')
 
   useEffect(() => {
     const check = async () => {
@@ -42,11 +44,23 @@ export default function A1CerebralPage() {
         return
       }
 
-      setAuthOk(true)
+      try {
+        const draft = await loadDraft()
+        if (draft) {
+          const answers = draft.answers as { more?: Record<number, string>; less?: Record<number, string> }
+          setMore(answers.more ?? {})
+          setLess(answers.less ?? {})
+          setQuestionTimings(draft.timings as QuestionTiming[])
+          setIdx(draft.currentQuestion)
+        }
+        setAuthOk(true)
+      } catch {
+        setError('No pudimos recuperar tu avance. Intenta nuevamente.')
+      }
     }
 
     void check()
-  }, [sb, router])
+  }, [sb, router, loadDraft])
 
   useEffect(() => {
     setQuestionTimings((previous) => {
@@ -59,6 +73,9 @@ export default function A1CerebralPage() {
   }, [idx])
 
   if (!authOk) {
+    if (error) {
+      return <div className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div>
+    }
     return (
       <div className="min-h-screen flex items-center justify-center">
         <p>Verificando...</p>
@@ -99,6 +116,17 @@ export default function A1CerebralPage() {
     ]
     setQuestionTimings(updatedTimings)
 
+    try {
+      await saveDraft({
+        schemaVersion: 1,
+        currentQuestion: isLast ? idx : idx + 1,
+        answers: { more, less },
+        timings: updatedTimings,
+      })
+    } catch {
+      return
+    }
+
     if (!isLast) {
       setIdx((current) => current + 1)
       return
@@ -121,6 +149,8 @@ export default function A1CerebralPage() {
       if (!response.ok) {
         throw new Error(result.error || 'No pudimos guardar la evaluación.')
       }
+
+      await completeDraft()
 
       router.push('/despega/a1-report')
       router.refresh()
@@ -266,18 +296,26 @@ export default function A1CerebralPage() {
             </div>
           </div>
 
-          {error && (
+          {(error || draftError) && (
             <div className="mb-6 p-4 bg-red/15 border-2 border-red/40 rounded-lg">
-              <p className="text-red font-semibold text-center">{error}</p>
+              <p className="text-red font-semibold text-center">{error || draftError}</p>
             </div>
           )}
         </div>
 
         <div className="flex gap-4" style={{ borderRadius: '30px' }}>
           <Button
-            onClick={() => idx > 0 && setIdx((current) => current - 1)}
+            onClick={async () => {
+              if (idx <= 0) return
+              try {
+                await saveDraft({ schemaVersion: 1, currentQuestion: idx - 1, answers: { more, less }, timings: questionTimings })
+                setIdx((current) => current - 1)
+              } catch {
+                return
+              }
+            }}
             variant="outline"
-            disabled={idx === 0}
+            disabled={idx === 0 || savingDraft}
             className="flex-1 py-6 text-base font-semibold"
             style={{
               borderRadius: '20px',
@@ -291,14 +329,14 @@ export default function A1CerebralPage() {
           </Button>
           <Button
             onClick={handleNext}
-            disabled={!bothAnswered || loading}
+            disabled={!bothAnswered || loading || savingDraft}
             className="flex-1 py-6 text-base font-semibold text-white"
             style={{
               backgroundColor: 'rgba(80, 160, 170, 0.6)',
               borderRadius: '20px',
             }}
           >
-            {loading ? 'Guardando...' : isLast ? 'Ver Resultados →' : 'Siguiente →'}
+            {loading || savingDraft ? 'Guardando...' : isLast ? 'Ver Resultados →' : 'Siguiente →'}
           </Button>
         </div>
       </div>

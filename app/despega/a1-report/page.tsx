@@ -73,7 +73,7 @@ export default function A1ReportPage() {
       let c1Context = {}
       try {
         const { data: c1Data } = await supabase
-          .from('conozcamonos_1_responses')
+          .from('canon_conozcamonos_1_responses')
           .select('responses')
           .eq('user_id', user?.id)
           .single()

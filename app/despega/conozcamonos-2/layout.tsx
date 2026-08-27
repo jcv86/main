@@ -27,7 +27,7 @@ export default async function Conozcamonos2Layout({
     supabase
       .from('despega_user_profiles')
       .select(
-        'onboarding_conozcamonos_1_completed, onboarding_completed, a1_report_seen, conozcamonos_2_completed, onboarding_conozcamonos_2_completed, a2_route_generated',
+        'onboarding_conozcamonos_1_completed, onboarding_completed, a1_report_seen, conozcamonos_2_completed, a2_route_generated',
       )
       .eq('user_id', journey.user.id)
       .maybeSingle(),
@@ -51,9 +51,7 @@ export default async function Conozcamonos2Layout({
   if (!c1Completed) redirect('/despega/conozcamonos-1')
   if (!assessmentResult.data) redirect('/despega/a1-cerebral')
 
-  const legacyC2 = Boolean(
-    profile?.onboarding_conozcamonos_2_completed || profile?.a2_route_generated,
-  )
+  const legacyC2 = Boolean(profile?.a2_route_generated)
   if (legacyC2 && !profile?.conozcamonos_2_completed) {
     await repairLegacyC2Completion(journey.user.id)
   }

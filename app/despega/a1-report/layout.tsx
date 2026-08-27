@@ -39,7 +39,7 @@ export default async function A1ReportLayout({
     supabase
       .from('despega_user_profiles')
       .select(
-        'conozcamonos_2_completed, onboarding_conozcamonos_2_completed, a2_route_generated',
+        'conozcamonos_2_completed, a2_route_generated',
       )
       .eq('user_id', journey.user.id)
       .maybeSingle(),
@@ -65,9 +65,7 @@ export default async function A1ReportLayout({
 
   const profile = profileResult.data
   const c2Completed = Boolean(
-    profile?.conozcamonos_2_completed ||
-      profile?.onboarding_conozcamonos_2_completed ||
-      profile?.a2_route_generated,
+    profile?.conozcamonos_2_completed || profile?.a2_route_generated,
   )
   if (!c2Completed || !c2Result.data?.responses) {
     redirect('/despega/conozcamonos-2')

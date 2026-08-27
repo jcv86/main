@@ -7,6 +7,7 @@ import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
+import { useAssessmentDraft } from '@/lib/use-assessment-draft'
 
 type ResponseValue = string | string[]
 
@@ -23,6 +24,7 @@ export default function Conozcamonos1Page() {
   const router = useRouter()
   const supabase = createClient()
   const { trackEvent } = useV1Analytics()
+  const { loadDraft, saveDraft, completeDraft, draftError, savingDraft } = useAssessmentDraft('c1')
 
   // Track C1 page entry
   useEffect(() => {
@@ -58,7 +60,16 @@ export default function Conozcamonos1Page() {
           return
         }
         
-        console.log('[v0] User authenticated in conozcamonos-1:', user.email)
+        try {
+          const draft = await loadDraft()
+          if (draft) {
+            setResponses(draft.answers as Record<number, ResponseValue>)
+            setCurrentQuestion(draft.currentQuestion)
+          }
+        } catch {
+          setError('No pudimos recuperar tu avance. Recarga para intentarlo nuevamente.')
+          return
+        }
         setAuthChecked(true)
       } catch (err) {
         console.error('[v0] Auth check exception:', err)
@@ -66,9 +77,12 @@ export default function Conozcamonos1Page() {
       }
     }
     checkAuth()
-  }, [supabase, router])
+  }, [supabase, router, loadDraft])
 
   if (!authChecked) {
+    if (error) {
+      return <div className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div>
+    }
     return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
   }
 
@@ -158,6 +172,12 @@ export default function Conozcamonos1Page() {
       }
     }
 
+    try {
+      await saveDraft({ schemaVersion: 1, currentQuestion: isLastQuestion ? currentQuestion : currentQuestion + 1, answers: responses, timings: [] })
+    } catch {
+      return
+    }
+
     // Move to next or submit
     if (isLastQuestion) { 
       submitResponses() 
@@ -167,8 +187,14 @@ export default function Conozcamonos1Page() {
     }
   }
 
-  const handleBack = () => {
-    if (currentQuestion > 0) setCurrentQuestion(prev => prev - 1)
+  const handleBack = async () => {
+    if (currentQuestion <= 0) return
+    try {
+      await saveDraft({ schemaVersion: 1, currentQuestion: currentQuestion - 1, answers: responses, timings: [] })
+      setCurrentQuestion(prev => prev - 1)
+    } catch {
+      return
+    }
   }
 
   const submitResponses = async () => {
@@ -182,6 +208,7 @@ export default function Conozcamonos1Page() {
         .insert({ user_id: user.id, responses, completed_at: new Date().toISOString() })
 
       if (dbError) throw dbError
+      await completeDraft()
       
       // Mark Conozcámonos-1 as completed in despega_user_profiles (CANONICAL FLAG)
       const { error: profileError } = await supabase
@@ -339,25 +366,25 @@ export default function Conozcamonos1Page() {
             </div>
           )}
 
-          {error && (
+          {(error || draftError) && (
             <div className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
-              <p className="text-sm font-semibold text-red dark:text-red">{error}</p>
+              <p className="text-sm font-semibold text-red dark:text-red">{error || draftError}</p>
             </div>
           )}
         </div>
 
         <div className="flex gap-4">
-          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
+          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0 || savingDraft} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
           <Button 
             onClick={handleNext} 
-            disabled={!isAnswered() || loading || validating} 
+            disabled={!isAnswered() || loading || validating || savingDraft}
             className="flex-1"
             style={{
               backgroundColor: 'rgba(80, 160, 170, 0.6)',
               borderRadius: '20px'
             }}
           >
-            {validating ? 'Validando...' : loading ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
+            {validating ? 'Validando...' : loading || savingDraft ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
           </Button>
         </div>
       </div>
