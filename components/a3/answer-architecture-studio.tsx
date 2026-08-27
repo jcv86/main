@@ -505,8 +505,11 @@ export function AnswerArchitectureStudio() {
                     ? `Obtuviste ${completion.xpAwarded} XP.`
                     : 'Repetición registrada sin duplicar XP.'}
                 </p>
-                <Button className="mt-4 w-full" onClick={() => router.push('/despega/a3')}>
-                  Continuar en Entrenamiento
+                <Button
+                  className="mt-4 w-full"
+                  onClick={() => router.push(`/despega/a2/dia-${MODULE.checkpointDay}`)}
+                >
+                  Volver al checkpoint del Día {MODULE.checkpointDay}
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </Card>
