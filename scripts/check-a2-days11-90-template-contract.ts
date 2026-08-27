@@ -19,6 +19,7 @@ for (const day of getAllCheckpointDays()) {
 
 assert.ok(template.includes('Boolean(checkpoint && !checkpointCompleted)'))
 assert.ok(template.includes('Ya lo completé: verificar'))
+assert.ok(template.includes('${checkpoint.route}?from=/despega/a2/dia-${dayNumber}'))
 assert.ok(template.includes("window.addEventListener('focus', refreshCheckpoint)"))
 assert.ok(template.includes("document.addEventListener('visibilitychange', refreshCheckpoint)"))
 assert.ok(template.includes('dayState.draftScope'))

@@ -577,7 +577,9 @@ export function A2DayPageTemplate({
                 {!checkpointCompleted && (
                   <div className="grid gap-3 sm:grid-cols-2">
                     <Button
-                      onClick={() => router.push(checkpoint.route)}
+                      onClick={() => router.push(
+                        `${checkpoint.route}?from=/despega/a2/dia-${dayNumber}`,
+                      )}
                       className="border border-emerald-500/80 bg-emerald-600/80 py-6 text-white hover:bg-emerald-600"
                     >
                       Abrir {checkpoint.moduleTitle}
