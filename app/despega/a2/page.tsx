@@ -169,10 +169,9 @@ const PHASE_LABEL: Record<A2DailyMission['phaseLabel'], string> = {
   'Alineación con el rol': 'Alineación con el rol',
   'Simulación y certificación': 'Simulación y certificación',
   'Preguntas difíciles y mercado real': 'Preguntas difíciles y mercado real',
-  'Final Applications & Offer Management':
-    'Postulaciones y gestión de ofertas',
-  'Final A3 Prep & Checkpoint': 'Preparación final de Entrenamiento',
-  'Final Review & Next Chapter': 'Cierre y siguiente capítulo',
+  'Postulaciones y seguimiento': 'Postulaciones y seguimiento',
+  'Preparación final A3': 'Preparación final A3',
+  'Cierre y próximos pasos': 'Cierre y próximos pasos',
 }
 
 function groupForMission(type: A2MissionType): Exclude<MissionGroup, 'all'> {
