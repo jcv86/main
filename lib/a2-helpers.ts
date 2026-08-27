@@ -50,10 +50,10 @@ export function getA2MissionsByRange(
 }
 
 /**
- * Get missions for a phase (Foundation, Role Alignment, or Simulation & Certification)
+ * Get missions for an A2 phase label.
  */
 export function getA2MissionsByPhase(
-  phase: "Foundation" | "Role Alignment" | "Simulation & Certification"
+  phase: A2DailyMission['phaseLabel']
 ): A2DailyMission[] {
   return Object.values(A2_MISSIONS).filter(m => m.phaseLabel === phase)
 }
@@ -250,28 +250,28 @@ export function getA3BlockReason({
  * Get summary of what phase user is in
  */
 export function getPhaseInfo(currentDay: number): {
-  phase: "Foundation" | "Role Alignment" | "Simulation & Certification"
+  phase: "Fundamentos" | "Alineación con el rol" | "Simulación y certificación"
   daysInPhase: number
   daysCompleted: number
   description: string
 } {
   if (currentDay <= 30) {
     return {
-      phase: 'Foundation',
+      phase: 'Fundamentos',
       daysInPhase: 30,
       daysCompleted: Math.min(currentDay - 1, 30),
       description: 'Construyes tu identidad, evidencia y CV',
     }
   } else if (currentDay <= 60) {
     return {
-      phase: 'Role Alignment',
+      phase: 'Alineación con el rol',
       daysInPhase: 30,
       daysCompleted: Math.min(currentDay - 31, 30),
       description: 'Estudias el mercado, construyes respuestas y practicas',
     }
   } else {
     return {
-      phase: 'Simulation & Certification',
+      phase: 'Simulación y certificación',
       daysInPhase: 30,
       daysCompleted: Math.min(currentDay - 61, 30),
       description: 'Realizas simulaciones, dominas preguntas difíciles y certificas',

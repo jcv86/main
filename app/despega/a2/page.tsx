@@ -167,7 +167,7 @@ const MISSION_TYPE_COLOR: Record<A2MissionType, string> = {
 const PHASE_LABEL: Record<A2DailyMission['phaseLabel'], string> = {
   Fundamentos: 'Fundamentos',
   'Alineación con el rol': 'Alineación con el rol',
-  'Simulation & Certification': 'Simulación y certificación',
+  'Simulación y certificación': 'Simulación y certificación',
   'Master Difficult Questions & Return to Real Market':
     'Preguntas difíciles y regreso al mercado',
   'Final Applications & Offer Management':
