@@ -6,8 +6,6 @@ import { A2Day1VisionScan } from './a2-day1-vision-scan'
 import { A2Day1Hypothesis } from './a2-day1-hypothesis'
 import { A2Day1RoutGates } from './a2-day1-route-gates'
 import { A2Day1Roadmap } from './a2-day1-roadmap'
-import { A2Day1Step5ExternalSave } from './a2-day1-step5-external-save'
-import { A2Day1Upload } from './a2-day1-upload'
 import { A2Day1Scoring } from './a2-day1-scoring'
 import {
   formatDocumentContent,
@@ -89,8 +87,6 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     'Hipótesis de Ruta',
     'Las 3 Puertas',
     'Tu Roadmap',
-    'Guardar Externamente',
-    'Sube Tu Documento',
     'Análisis y Puntuación',
   ]
 
@@ -124,39 +120,6 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     setRouteData(next)
     saveDraft(6, next)
     setCurrentStep(6)
-  }
-
-  const handleExternalSaveNext = async () => {
-    if (userId) {
-      try {
-        await saveDayDocument(
-          userId,
-          1,
-          'route_contract',
-          formatDocumentContent({
-            'Mi Cambio en 30 Días': routeData.change30Days,
-            'Mi Rol Objetivo': routeData.targetRole,
-            'Mi Bloqueador Principal': routeData.mainBlocker,
-            'Mi Hipótesis de Ruta': routeData.hypothesis || '',
-            'PUERTA 1 - IDENTIDAD': routeData.gates?.identity || '',
-            'PUERTA 2 - EVIDENCIA': routeData.gates?.evidence || '',
-            'PUERTA 3 - MATERIAL': routeData.gates?.material || '',
-            'Mi Roadmap Profesional': routeData.roadmap || '',
-          }),
-          'Mi Contrato de Ruta',
-        )
-      } catch (saveError) {
-        console.error('[v0] Error saving Day 1 document:', saveError)
-      }
-    }
-
-    saveDraft(7, routeData)
-    setCurrentStep(7)
-  }
-
-  const handleUploadNext = () => {
-    saveDraft(8, routeData)
-    setCurrentStep(8)
   }
 
   const handleScoringComplete = async (
@@ -266,19 +229,6 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
           />
         )}
         {currentStep === 6 && (
-          <A2Day1Step5ExternalSave
-            onNext={handleExternalSaveNext}
-            onBack={() => setCurrentStep(5)}
-          />
-        )}
-        {currentStep === 7 && (
-          <A2Day1Upload
-            onNext={handleUploadNext}
-            onBack={() => setCurrentStep(6)}
-            routeData={routeData}
-          />
-        )}
-        {currentStep === 8 && (
           <A2Day1Scoring
             routeData={routeData}
             onComplete={handleScoringComplete}
