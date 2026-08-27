@@ -434,7 +434,22 @@ export function A2DayPageTemplate({
         <A2RouteContextCard adaptation={dayState.adaptation} />
 
         {children ? (
-          children
+          isCompleted && dayState.completion?.validationStatus === 'legacy' ? (
+            <section className="space-y-4 rounded-[28px] border border-cyan-500/25 bg-cyan-500/5 p-6">
+              <h2 className="text-xl font-semibold text-white">
+                Tu avance anterior está conservado
+              </h2>
+              <p className="text-sm text-slate-300">
+                Esta misión fue completada antes del sistema actual de evidencia.
+                No necesitas repetirla para continuar tu recorrido.
+              </p>
+              <Button onClick={() => router.push('/despega/a2')}>
+                Volver y continuar Tu Ruta
+              </Button>
+            </section>
+          ) : (
+            children
+          )
         ) : (
           <>
             <A2DailyMissionCard
