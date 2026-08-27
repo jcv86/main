@@ -52,7 +52,10 @@ const CYCLES = [
 ] as const
 
 async function fetcher(url: string): Promise<A2ProgressData> {
-  const response = await fetch(url, { credentials: 'include' })
+  const response = await fetch(url, {
+    credentials: 'include',
+    cache: 'no-store',
+  })
   if (!response.ok) throw new Error('No pudimos cargar el progreso de Tu Ruta.')
   return response.json()
 }
