@@ -1,226 +1,129 @@
-'use client'
+"use client";
 
-import { useState, useEffect } from 'react'
-import { Button } from '@/components/ui/button'
-import { Textarea } from '@/components/ui/textarea'
-import { ArrowLeft, Upload } from 'lucide-react'
-import { TRAVIS_DAY2_UPLOAD_FRAGMENTS, isTravisMode } from '@/lib/travis-form-data'
+import { useMemo, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { ArrowLeft } from "lucide-react";
+
+interface EvidenceFragment {
+  id: string;
+  text: string;
+  category: string;
+}
 
 interface A2Day2UploadProps {
-  onNext: (fragments: any[]) => void
-  onBack: () => void
+  onNext: (fragments: EvidenceFragment[]) => void;
+  onBack: () => void;
+}
+
+function parseFragments(content: string): EvidenceFragment[] {
+  return content
+    .split(/\n\s*\n/)
+    .map((text) => text.trim())
+    .filter(Boolean)
+    .slice(0, 20)
+    .map((text, index) => ({ id: `frag-${index + 1}`, text, category: "" }));
 }
 
 export function A2Day2Upload({ onNext, onBack }: A2Day2UploadProps) {
-  const [uploadMethod, setUploadMethod] = useState<'file' | 'text' | null>(null)
-  const [uploadedContent, setUploadedContent] = useState('')
-  const [fragmentCount, setFragmentCount] = useState(0)
-  const [isDevMode, setIsDevMode] = useState(false)
-
-  // Load Travis data in dev mode
-  useEffect(() => {
-    const travisMode = isTravisMode()
-    setIsDevMode(travisMode)
-    
-    if (travisMode) {
-      setUploadMethod('text')
-      handleTextChange(TRAVIS_DAY2_UPLOAD_FRAGMENTS)
-    }
-  }, [])
-
-  const parseFragments = (content: string) => {
-    // Simple parsing: count "FRAGMENTO" mentions or line breaks
-    const lines = content.split('\n').filter((line) => line.trim().length > 0)
-    const approxFragments = Math.max(
-      Math.ceil(lines.length / 10), // Rough estimate
-      content.toLowerCase().match(/fragment/gi)?.length || 0
-    )
-    return Math.min(approxFragments, 20) // Cap at 20 for display
-  }
-
-  const handleTextChange = (text: string) => {
-    setUploadedContent(text)
-    setFragmentCount(parseFragments(text))
-  }
-
-  const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
-    if (file) {
-      const reader = new FileReader()
-      reader.onload = (event) => {
-        const content = event.target?.result as string
-        handleTextChange(content)
-      }
-      reader.readAsText(file)
-    }
-  }
-
-  const handleSubmit = () => {
-    if (fragmentCount >= 7) {
-      // Parse into fragments (simplified)
-      const fragments = uploadedContent
-        .split('\n\n')
-        .filter((f) => f.trim().length > 0)
-        .map((rawText, idx) => ({
-          id: `frag-${idx}`,
-          rawText,
-          type: 'unclassified',
-        }))
-      onNext(fragments)
-    }
-  }
-
-  const isComplete = fragmentCount >= 7
+  const [content, setContent] = useState("");
+  const fragments = useMemo(() => parseFragments(content), [content]);
+  const isComplete = fragments.length >= 7;
 
   return (
     <div className="max-w-3xl mx-auto px-4 space-y-6">
-      {/* Dev Mode Badge */}
-      {isDevMode && (
-        <div className="fixed top-20 right-4 z-50 bg-green-600/90 text-white text-xs px-3 py-1.5 rounded-full font-medium shadow-lg">
-          Fragmentos Pre-cargados (Dev)
-        </div>
-      )}
-
-      {/* Header */}
       <div
         className="rounded-lg p-4"
-        style={{ backgroundColor: 'rgba(90, 90, 150, 0.1)', borderColor: 'rgba(80, 160, 170, 0.2)', border: '1px solid' }}
+        style={{
+          backgroundColor: "rgba(90, 90, 150, 0.1)",
+          borderColor: "rgba(80, 160, 170, 0.2)",
+          border: "1px solid",
+        }}
       >
-        <h3 className="font-bold text-white mb-2">Subir Tu Evidencia</h3>
+        <h3 className="font-bold text-white mb-2">Registrar tus fragmentos</h3>
         <p className="text-sm text-white/70">
-          Sube los fragmentos recolectados. Mínimo 7 fragmentos.
+          Escribe una evidencia por bloque y sepárala de la siguiente con una
+          línea en blanco. Necesitas al menos 7.
         </p>
       </div>
 
-      {/* Method Selection */}
-      {!uploadMethod && (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-          <button
-            onClick={() => setUploadMethod('file')}
-            className="p-4 rounded-lg border transition"
-            style={{
-              borderColor: 'rgba(80, 160, 170, 0.2)',
-              backgroundColor: 'rgba(90, 90, 150, 0.05)',
-            }}
-          >
-            <Upload className="w-6 h-6 mb-2" style={{ color: 'rgb(90, 90, 150)' }} />
-            <p className="font-semibold text-white text-sm">Subir Archivo</p>
-            <p className="text-xs text-white/50 mt-1">PDF, DOCX, TXT</p>
-          </button>
-
-          <button
-            onClick={() => setUploadMethod('text')}
-            className="p-4 rounded-lg border transition"
-            style={{
-              borderColor: 'rgba(80, 160, 170, 0.2)',
-              backgroundColor: 'rgba(90, 90, 150, 0.05)',
-            }}
-          >
-            <p className="text-2xl mb-2">📋</p>
-            <p className="font-semibold text-white text-sm">Pegar Texto</p>
-            <p className="text-xs text-white/50 mt-1">Copia y pega</p>
-          </button>
-        </div>
-      )}
-
-      {/* File Upload */}
-      {uploadMethod === 'file' && (
-        <div>
-          <input
-            type="file"
-            accept=".pdf,.docx,.txt"
-            onChange={handleFileUpload}
-            className="hidden"
-            id="file-upload"
-          />
-          <label
-            htmlFor="file-upload"
-            className="block p-6 rounded-lg border-2 border-dashed text-center cursor-pointer transition"
-            style={{
-              borderColor: 'rgba(80, 160, 170, 0.2)',
-              backgroundColor: 'rgba(90, 90, 150, 0.05)',
-            }}
-          >
-            <Upload className="w-8 h-8 mx-auto text-white/50 mb-2" />
-            <p className="font-semibold text-white">Arrastra archivo o haz clic</p>
-            <p className="text-xs text-white/50 mt-1">PDF, DOCX, TXT</p>
-          </label>
-        </div>
-      )}
-
-      {/* Text Input */}
-      {uploadMethod === 'text' && (
+      <div className="space-y-2">
+        <label
+          htmlFor="day2-fragments"
+          className="text-sm font-semibold text-white"
+        >
+          Evidencias de tu experiencia
+        </label>
         <Textarea
-          value={uploadedContent}
-          onChange={(e) => handleTextChange(e.target.value)}
-          placeholder="Pega el contenido de tu evidencia aquí..."
+          id="day2-fragments"
+          value={content}
+          onChange={(event) => setContent(event.target.value)}
+          placeholder={
+            "Ejemplo: Reduje el tiempo de respuesta del equipo en 25%.\n\nEjemplo: Coordiné el lanzamiento de una nueva funcionalidad."
+          }
           className="min-h-[300px]"
           style={{
-            backgroundColor: 'rgba(15, 15, 30, 0.5)',
-            borderColor: 'rgba(80, 160, 170, 0.2)',
-            color: 'white',
+            backgroundColor: "rgba(15, 15, 30, 0.5)",
+            borderColor: "rgba(80, 160, 170, 0.2)",
+            color: "white",
           }}
         />
-      )}
+      </div>
 
-      {/* Fragment Count */}
-      {uploadedContent && (
-        <div
-          className="rounded-lg p-4"
-          style={{
-            backgroundColor: fragmentCount >= 7 ? 'rgba(80, 160, 170, 0.1)' : 'rgba(90, 90, 150, 0.1)',
-            borderColor: fragmentCount >= 7 ? 'rgba(80, 160, 170, 0.2)' : 'rgba(90, 90, 150, 0.2)',
-            border: '1px solid',
-          }}
-        >
-          <p className="text-sm font-semibold text-white">
-            Fragmentos detectados: <span style={{ color: fragmentCount >= 7 ? 'rgb(80, 160, 170)' : 'rgb(90, 90, 150)' }}>{fragmentCount}</span>
-          </p>
-          <p className="text-xs text-white/50 mt-1">Necesitas: 7+ fragmentos</p>
-        </div>
-      )}
+      <div
+        className="rounded-lg p-4"
+        style={{
+          backgroundColor: isComplete
+            ? "rgba(80, 160, 170, 0.1)"
+            : "rgba(90, 90, 150, 0.1)",
+          borderColor: isComplete
+            ? "rgba(80, 160, 170, 0.2)"
+            : "rgba(90, 90, 150, 0.2)",
+          border: "1px solid",
+        }}
+        aria-live="polite"
+      >
+        <p className="text-sm font-semibold text-white">
+          Fragmentos registrados:{" "}
+          <span
+            style={{
+              color: isComplete ? "rgb(80, 160, 170)" : "rgb(150, 150, 200)",
+            }}
+          >
+            {fragments.length}
+          </span>
+        </p>
+        <p className="text-xs text-white/50 mt-1">
+          Necesitas 7 o más fragmentos separados por una línea en blanco.
+        </p>
+      </div>
 
-      {/* CTA */}
-      <div className="pt-4 border-t space-y-3" style={{ borderColor: 'rgba(80, 160, 170, 0.2)' }}>
+      <div
+        className="pt-4 border-t space-y-3"
+        style={{ borderColor: "rgba(80, 160, 170, 0.2)" }}
+      >
         <Button
-          onClick={handleSubmit}
+          onClick={() => onNext(fragments)}
           disabled={!isComplete}
           className="w-full"
           size="lg"
           style={{
-            backgroundColor: isComplete ? 'rgb(90, 90, 150)' : 'rgba(90, 90, 150, 0.4)',
-            color: 'white',
+            backgroundColor: isComplete
+              ? "rgb(90, 90, 150)"
+              : "rgba(90, 90, 150, 0.4)",
+            color: "white",
           }}
         >
-          Clasificar Evidencia →
+          Clasificar evidencia →
         </Button>
-
-        {uploadMethod && (
-          <Button
-            onClick={() => {
-              setUploadMethod(null)
-              setUploadedContent('')
-              setFragmentCount(0)
-            }}
-            variant="outline"
-            className="w-full"
-            style={{
-              borderColor: 'rgba(80, 160, 170, 0.2)',
-              color: 'white',
-            }}
-          >
-            Cambiar método
-          </Button>
-        )}
-
         <button
+          type="button"
           onClick={onBack}
           className="flex items-center gap-2 text-white/50 hover:text-white/70 text-sm transition w-full justify-center"
         >
-          <ArrowLeft className="w-4 h-4" />
-          Volver
+          <ArrowLeft className="w-4 h-4" /> Volver
         </button>
       </div>
     </div>
-  )
+  );
 }
