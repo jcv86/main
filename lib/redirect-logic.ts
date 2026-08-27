@@ -19,7 +19,6 @@ export interface UserProfile {
   // Compatibility aliases from older profile versions.
   onboarding_completed?: boolean
   onboarding_cerebral_completed?: boolean
-  onboarding_conozcamonos_2_completed?: boolean
   a1_test_completed?: boolean
 }
 
@@ -42,10 +41,7 @@ function viewedA1Result(profile: UserProfile) {
 }
 
 function completedC2(profile: UserProfile) {
-  return Boolean(
-    profile.conozcamonos_2_completed ||
-      profile.onboarding_conozcamonos_2_completed,
-  )
+  return Boolean(profile.conozcamonos_2_completed)
 }
 
 /** Returns the next onboarding page; A3 and A4 unlock inside the live journey. */
