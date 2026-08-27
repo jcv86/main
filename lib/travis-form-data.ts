@@ -748,24 +748,9 @@ export function getTravisA3ModuleData(moduleNumber: number): Record<string, any>
 // ═══════════════════════════════════════════════════════════════════════════
 
 export function isTravisMode(): boolean {
-  if (typeof window === 'undefined') return false
-  
-  // Check localStorage for demo mode
-  try {
-    const demoUser = localStorage.getItem('demo_user')
-    if (demoUser) {
-      const parsed = JSON.parse(demoUser)
-      return parsed.email === 'travis@despega.dev' || parsed.id === 'demo-travis'
-    }
-  } catch {
-    // Ignore parse errors
-  }
-  
-  // Check for demo cookie
-  if (typeof document !== 'undefined') {
-    return document.cookie.includes('demo_user')
-  }
-  
+  // Production journeys must never trust browser-controlled storage or cookies
+  // to seed synthetic data into an authenticated user's account. Test fixtures
+  // remain available to explicit scripts, outside the live product surface.
   return false
 }
 
