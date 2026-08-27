@@ -47,7 +47,7 @@ export const A2_DAILY_MISSIONS: Record<number, A2DailyMission> = {
       'Save to Notion or download as document',
       'Upload document to DTC for analysis',
     ],
-    deliverable: 'Roadmap document with vision, milestones, and action plan (PDF, Word, or Markdown)',
+    deliverable: 'Roadmap estructurado con visión, hitos y próximos pasos guardado en DTC',
     dtcValidation: {
       required: true,
       passScore: 75,
@@ -60,7 +60,7 @@ export const A2_DAILY_MISSIONS: Record<number, A2DailyMission> = {
     },
     completionResult: {
       onPass: 'Día 1 completado. Tu roadmap inicial fue aprobado y la ruta del Día 2 está desbloqueada.',
-      onFail: 'Tu roadmap necesita una revisión. Corrige los puntos marcados con el coach y vuelve a subirlo para continuar.',
+      onFail: 'Tu roadmap necesita una revisión. Ajusta los puntos marcados y vuelve a evaluarlo para continuar.',
     },
     notionTemplate: 'https://notion.so/template-dia-1-roadmap',
   },
