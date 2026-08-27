@@ -262,11 +262,17 @@ export async function getA2ProgressSnapshot(
   const completedDays = (completionRows || [])
     .map((row: { day?: unknown }) => Number(row.day))
     .filter((day: number) => Number.isInteger(day) && day >= 1 && day <= 90)
+  const highestCompletedDay = completedDays.length
+    ? Math.max(...completedDays)
+    : null
 
   const journeyCurrent = validDay(journey?.current_a2_day)
   const journeyHighest = validDay(journey?.highest_a2_day_unlocked)
   if (journeyCurrent || journeyHighest) {
-    const activeHorizon = inferA2Horizon(journey?.metadata, journeyHighest)
+    const activeHorizon = inferA2Horizon(
+      journey?.metadata,
+      Math.max(journeyHighest ?? 1, highestCompletedDay ?? 1),
+    )
     const reconciled = reconcileA2Progress({
       currentDay: journeyCurrent,
       highestUnlockedDay: journeyHighest,
@@ -295,7 +301,10 @@ export async function getA2ProgressSnapshot(
 
   const routeDay = validDay(routeProgress?.dia_actual)
   if (routeDay) {
-    const activeHorizon = inferA2Horizon(null, routeDay)
+    const activeHorizon = inferA2Horizon(
+      null,
+      Math.max(routeDay, highestCompletedDay ?? 1),
+    )
     const reconciled = reconcileA2Progress({
       currentDay: routeDay,
       highestUnlockedDay: routeDay,
@@ -309,7 +318,7 @@ export async function getA2ProgressSnapshot(
     }
   }
 
-  const activeHorizon = inferA2Horizon(null, null)
+  const activeHorizon = inferA2Horizon(null, highestCompletedDay)
   return {
     ...reconcileA2Progress({
       currentDay: null,
