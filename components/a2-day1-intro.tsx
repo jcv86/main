@@ -36,7 +36,7 @@ export function A2Day1Intro({ onNext }: A2Day1IntroProps) {
             Hoy creamos el mapa. No tiene que ser perfecto. Tiene que ser claro, posible y tuyo.
           </p>
           <p>
-            Este no es un formulario más. Es un contrato con tu futuro profesional. Lo vas a crear aquí, lo vas a editar afuera, lo vas a personalizar, y luego lo subirás. DTC lo validará. Si es fuerte, desbloquearás los próximos 89 días.
+            Este no es un formulario más. Es un contrato de trabajo contigo: lo crearás aquí y DTC evaluará su claridad, realismo y capacidad de convertirse en acciones. Si cumple los criterios, desbloquearás el Día 2.
           </p>
         </div>
 
@@ -50,9 +50,9 @@ export function A2Day1Intro({ onNext }: A2Day1IntroProps) {
             <li>✓ Responder 3 preguntas sobre tu visión</li>
             <li>✓ Ver una hipótesis de ruta generada por coach</li>
             <li>✓ Definir 3 puertas (hitos de validación)</li>
-            <li>✓ Generar un documento de ruta profesional</li>
-            <li>✓ Descargarlo, editarlo afuera, subirlo</li>
-            <li>✓ Obtener puntuación y feedback</li>
+            <li>✓ Construir tu roadmap profesional dentro de DTC</li>
+            <li>✓ Guardarlo de forma segura en tu recorrido</li>
+            <li>✓ Obtener una evaluación explicada y puntos a fortalecer</li>
           </ul>
         </div>
 
