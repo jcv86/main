@@ -1,183 +1,27 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { ArrowLeft, ArrowRight, Radar, ShieldCheck } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowRight, Target, Zap } from 'lucide-react'
-import { ASection, ASectionPart } from '@/components/a-section-layout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PrintReportButton } from '@/components/reports/print-report-button'
+import { pulsePriorityLabel } from '@/lib/a4/evidence-pulse'
+import { getJourneyForCurrentUser } from '@/lib/journey/service'
+import { loadA4Report } from '@/lib/reports/user-report-data'
 
-interface A4Insights {
-  posicionamientoEstrategico?: string
-  inteligenciaMercado?: string
-  nivelGamificacion?: string
-  proximasFocalizaciones?: string
-  oportunidadesCaptura?: string
-  visionLargo?: string
-}
+export const dynamic = 'force-dynamic'
 
-const insightCards = [
-  {
-    key: 'posicionamientoEstrategico',
-    icon: '',
-    title: 'Posicionamiento Estratégico',
-    color: 'from-green/50'
-  },
-  {
-    key: 'inteligenciaMercado',
-    icon: '',
-    title: 'Inteligencia de Mercado',
-    color: 'from-blue'
-  },
-  {
-    key: 'nivelGamificacion',
-    icon: '🏆',
-    title: 'Nivel de Gamificación',
-    color: 'from-purple/50500'
-  },
-  {
-    key: 'proximasFocalizaciones',
-    icon: '🔍',
-    title: 'Próximas Focalizaciones',
-    color: 'from-yellow/50/50'
-  },
-  {
-    key: 'oportunidadesCaptura',
-    icon: '💎',
-    title: 'Oportunidades de Captura',
-    color: 'from-red/50500'
-  },
-  {
-    key: 'visionLargo',
-    icon: '',
-    title: 'Visión a Largo Plazo',
-    color: 'from-blue/50'
-  }
-]
+export default async function A4ResultadosPage() {
+  const journey = await getJourneyForCurrentUser()
+  if (!journey) redirect('/auth/signin?next=/despega/a4/resultados')
+  if (!journey.access.a4) redirect('/despega/a3')
+  const report = await loadA4Report(journey.user.id)
+  const priority = pulsePriorityLabel(report.pulse.priority)
 
-export default function A4ResultadosPage() {
-  const router = useRouter()
-  const [insights, setInsights] = useState<A4Insights | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const { user, loading: authLoading } = useAuthRedirect()
-
-  useEffect(() => {
-    if (authLoading || !user?.id) return
-    loadA4Results()
-  }, [authLoading, user?.id])
-
-  const loadA4Results = async () => {
-    try {
-      // Generate AI insights
-      const response = await fetch('/api/a4-insights', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0],
-          radarScores: {
-            estrategico: 78,
-            noticias: 85,
-            personalizacion: 72,
-            pruebas: 88
-          },
-          engagementMetrics: {
-            puntosAcumulados: 2450,
-            insignias: ['Radarcero', 'Investigador', 'Ganador'],
-            nivelActual: 'Maestro'
-          },
-          performanceLevel: 'Excepcional'
-        })
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setInsights(data.insights)
-      } else {
-        throw new Error('Failed to generate insights')
-      }
-
-      setLoading(false)
-    } catch (err) {
-      console.error('[v0] Error loading A4 results:', err)
-      setError('Error al cargar resultados')
-      setLoading(false)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-blue" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <ASection title="Resultados: Tu Inteligencia Estratégica" subtitle="Análisis y Recomendaciones" icon="" colorClass="from-blue/50">
-        <ASectionPart title="Algo Salió Mal" icon={<Target />}>
-          <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
-              <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
-            </div>
-            <Button 
-              onClick={() => router.push('/despega/a4')} 
-              className="w-full bg-background"
-            >
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Volver a A4
-            </Button>
-          </div>
-        </ASectionPart>
-      </ASection>
-    )
-  }
-
-  return (
-    <ASection title="A4: Radar" subtitle="Resultados Estratégicos" icon="" colorClass="from-blue/50">
-      <ASectionPart title="Análisis Estratégico Completo" icon={<Zap />}>
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-background`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="text-3xl mb-2">{card.icon}</div>
-                      <CardTitle className="text-lg">{card.title}</CardTitle>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm leading-relaxed opacity-90">
-                    {insights?.[card.key as keyof A4Insights] || 'Cargando...'}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          <div className="mt-8 flex gap-4 justify-center">
-            <Button 
-              onClick={() => router.push('/despega/a4')}
-              className="bg-background"
-            >
-              <Target className="w-5 h-5 mr-2" />
-              Continuar en A4
-            </Button>
-            <Button 
-              onClick={() => router.push('/despega/dashboard')}
-              variant="outline"
-              className="font-semibold py-6 px-8"
-            >
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Dashboard
-            </Button>
-          </div>
-        </div>
-      </ASectionPart>
-    </ASection>
-  )
+  return <main className="min-h-screen bg-slate-950 px-4 py-10 text-white"><div className="mx-auto max-w-6xl space-y-8">
+    <header className="space-y-5"><div className="flex flex-wrap items-center justify-between gap-3 print:hidden"><Button asChild variant="ghost"><Link href="/despega/a4"><ArrowLeft className="mr-2 h-4 w-4" />Volver al Radar</Link></Button><PrintReportButton /></div><div><p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">Inteligencia estratégica verificable</p><h1 className="mt-2 text-4xl font-bold md:text-5xl">Radar · A4</h1><p className="mt-3 max-w-3xl text-slate-300">No hay puntajes ficticios: este reporte crece con señales fechadas, fuentes y decisiones revisables.</p></div></header>
+    <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">{[['Señales activas', String(report.pulse.activeSignals.length)], ['Hechos', String(report.pulse.facts)], ['Hipótesis', String(report.pulse.hypotheses)], ['Decisiones', String(report.decisions.length)]].map(([label,value]) => <Card key={label} className="border-slate-800 bg-slate-900"><CardContent className="p-5"><p className="text-sm text-slate-400">{label}</p><p className="mt-2 text-3xl font-bold">{value}</p></CardContent></Card>)}</section>
+    <Card className="border-rose-400/30 bg-rose-400/10"><CardHeader><CardTitle className="flex items-center gap-2"><Radar className="h-5 w-5" />Prioridad actual: {priority.label}</CardTitle></CardHeader><CardContent><p className="text-rose-50/80">{priority.detail}</p><p className="mt-3 text-sm text-rose-50/60">Cobertura: {report.pulse.coveredCategories} categorías · {report.documents} documentos propios disponibles.</p></CardContent></Card>
+    {report.signals.length === 0 ? <Card className="border-slate-700 bg-slate-900"><CardContent className="p-6"><p className="font-semibold">Tu Radar está listo, pero aún no tiene evidencia.</p><p className="mt-2 text-sm text-slate-300">Registra la primera señal con fuente y fecha. Después vincula una decisión y su revisión.</p><Button asChild className="mt-5 print:hidden"><Link href="/despega/a4#a4-workspace"><ShieldCheck className="mr-2 h-4 w-4" />Registrar primera señal</Link></Button></CardContent></Card> : <section className="grid gap-4 md:grid-cols-2">{report.signals.map((signal) => <Card key={signal.id} className="border-slate-800 bg-slate-900/80"><CardHeader><CardTitle className="text-lg">{signal.title}</CardTitle></CardHeader><CardContent className="space-y-2 text-sm text-slate-300"><p>{signal.summary}</p><p className="text-slate-500">{signal.classification === 'fact' ? 'Hecho' : 'Hipótesis'} · confianza {signal.confidence}/5 · {signal.source_date}</p></CardContent></Card>)}</section>}
+    <div className="flex flex-wrap gap-3 print:hidden"><Button asChild><Link href="/despega/a4"><Radar className="mr-2 h-4 w-4" />Continuar Radar</Link></Button><Button asChild variant="outline"><Link href="/despega/reporte-integral">Reporte integral<ArrowRight className="ml-2 h-4 w-4" /></Link></Button></div>
+  </div></main>
 }

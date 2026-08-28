@@ -1,211 +1,52 @@
-'use client'
-
-import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { useAuthRedirect } from '@/hooks/use-auth-redirect'
-import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import Link from 'next/link'
+import { redirect } from 'next/navigation'
+import { AlertCircle, ArrowLeft, ArrowRight, CheckCircle2, Map } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { Loader2, ArrowRight, Target, Zap, Users, TrendingUp } from 'lucide-react'
-import { ASection, ASectionPart } from '@/components/a-section-layout'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
+import { PrintReportButton } from '@/components/reports/print-report-button'
+import { getJourneyForCurrentUser } from '@/lib/journey/service'
+import { loadA2Report } from '@/lib/reports/user-report-data'
 
-interface A2Insights {
-  alineacionMision?: string
-  rutaAprendizaje?: string
-  dinamicasEquipo?: string
-  areasGrowth?: string
-  hitosExito?: string
-  riesgosOportunidades?: string
-}
+export const dynamic = 'force-dynamic'
 
-const insightCards = [
-  {
-    key: 'alineacionMision',
-    icon: '',
-    title: 'Alineación de Misión',
-    color: 'from-green/50'
-  },
-  {
-    key: 'rutaAprendizaje',
-    icon: '',
-    title: 'Ruta de Aprendizaje',
-    color: 'from-blue'
-  },
-  {
-    key: 'dinamicasEquipo',
-    icon: '👥',
-    title: 'Dinámicas de Equipo',
-    color: 'from-purple/50500'
-  },
-  {
-    key: 'areasGrowth',
-    icon: '📈',
-    title: 'Áreas de Crecimiento',
-    color: 'from-yellow/50/50'
-  },
-  {
-    key: 'hitosExito',
-    icon: '🏆',
-    title: 'Hitos de Éxito',
-    color: 'from-red/50500'
-  },
-  {
-    key: 'riesgosOportunidades',
-    icon: '',
-    title: 'Riesgos & Oportunidades',
-    color: 'from-blue/50'
-  }
-]
-
-export default function A2ResultadosPage() {
-  const router = useRouter()
-  const [insights, setInsights] = useState<A2Insights | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const { user, loading: authLoading } = useAuthRedirect()
-  const supabase = createClient()
-
-  useEffect(() => {
-    if (authLoading || !user?.id) return
-    loadA2Results()
-  }, [authLoading, user?.id])
-
-  const loadA2Results = async () => {
-    try {
-      // Get user profile for cerebral data
-      const { data: profileData } = await supabase
-        .from('despega_user_profiles')
-        .select('*')
-        .eq('user_id', user?.id)
-        .single()
-
-      if (!profileData?.a2_mission_id) {
-        setError('No se encontró misión A2. Por favor completa Conozcamonos-2 primero.')
-        setLoading(false)
-        return
-      }
-
-      // Get A1 cerebral data for context
-      const { data: a1Data } = await supabase
-        .from('a1_cerebral_assessment')
-        .select('disc_profile')
-        .eq('user_id', user?.id)
-        .order('completed_at', { ascending: false })
-        .limit(1)
-        .single()
-
-      const discProfile = a1Data?.disc_profile || {}
-      
-      // Map DISC to Despega dimensions
-      const cerebralProfile = {
-        energia: (Math.abs(discProfile.D || 0) / (Math.abs(discProfile.D || 0) + Math.abs(discProfile.I || 0) + Math.abs(discProfile.S || 0) + Math.abs(discProfile.C || 0) || 1)) * 100,
-        plan_ejecutivo: (Math.abs(discProfile.I || 0) / (Math.abs(discProfile.D || 0) + Math.abs(discProfile.I || 0) + Math.abs(discProfile.S || 0) + Math.abs(discProfile.C || 0) || 1)) * 100,
-        relaciones: (Math.abs(discProfile.S || 0) / (Math.abs(discProfile.D || 0) + Math.abs(discProfile.I || 0) + Math.abs(discProfile.S || 0) + Math.abs(discProfile.C || 0) || 1)) * 100,
-        enfoque: (Math.abs(discProfile.C || 0) / (Math.abs(discProfile.D || 0) + Math.abs(discProfile.I || 0) + Math.abs(discProfile.S || 0) + Math.abs(discProfile.C || 0) || 1)) * 100,
-        primary: 'D'
-      }
-
-      // Generate AI insights
-      const response = await fetch('/api/a2-insights', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cerebralProfile,
-          userName: user?.user_metadata?.full_name || user?.email?.split('@')[0],
-          missionData: {
-            titulo: profileData?.a2_mission_id,
-            duracion: '90 días'
-          }
-        })
-      })
-
-      if (response.ok) {
-        const data = await response.json()
-        setInsights(data.insights)
-      } else {
-        throw new Error('Failed to generate insights')
-      }
-
-      setLoading(false)
-    } catch (err) {
-      console.error('[v0] Error loading A2 results:', err)
-      setError('Error al cargar resultados')
-      setLoading(false)
-    }
-  }
-
-  if (loading) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
-        <Loader2 className="h-8 w-8 animate-spin text-blue" />
-      </div>
-    )
-  }
-
-  if (error) {
-    return (
-      <ASection title="Resultados: Tu Plan de Ruta" subtitle="Análisis de Tu Estrategia" icon="" colorClass="from-blue">
-        <ASectionPart title="Algo Salió Mal" icon={<Target />}>
-          <div className="space-y-4">
-            <div className="p-6 bg-red/5 dark:bg-red/20 border-2 border-red/20 dark:border-red/50 rounded-lg">
-              <p className="text-red dark:text-red/30 font-semibold text-lg">{error}</p>
-            </div>
-            <Button 
-              onClick={() => router.push('/despega/a2/dashboard')} 
-              className="w-full bg-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 text-lg"
-            >
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Volver al Dashboard A2
-            </Button>
-          </div>
-        </ASectionPart>
-      </ASection>
-    )
-  }
+export default async function A2ResultadosPage() {
+  const journey = await getJourneyForCurrentUser()
+  if (!journey) redirect('/auth/signin?next=/despega/a2/resultados')
+  if (!journey.access.a2) redirect('/despega/a1-report')
+  const report = await loadA2Report(journey.user.id)
+  const finalReview = report.reviews[2]
 
   return (
-    <ASection title="A2: Camino" subtitle="Resultados de tu Misión" icon="" colorClass="from-blue">
-      <ASectionPart title="Insights Generados" icon={<Zap />}>
-        <div className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {insightCards.map((card) => (
-              <Card key={card.key} className={`bg-background`}>
-                <CardHeader>
-                  <div className="flex items-start justify-between">
-                    <div>
-                      <div className="text-3xl mb-2">{card.icon}</div>
-                      <CardTitle className="text-lg">{card.title}</CardTitle>
-                    </div>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-sm leading-relaxed opacity-90">
-                    {insights?.[card.key as keyof A2Insights] || 'Cargando...'}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
+    <main className="min-h-screen bg-slate-950 px-4 py-10 text-white">
+      <div className="mx-auto max-w-6xl space-y-8">
+        <header className="space-y-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 print:hidden">
+            <Button asChild variant="ghost"><Link href="/despega/a2"><ArrowLeft className="mr-2 h-4 w-4" />Volver a Tu Ruta</Link></Button>
+            <PrintReportButton />
           </div>
-
-          <div className="mt-8 flex gap-4 justify-center">
-            <Button 
-              onClick={() => router.push('/despega/a2/dashboard')}
-              className="bg-blue hover:from-blue hover:to-cyan-700 text-white font-semibold py-6 px-8"
-            >
-              <Target className="w-5 h-5 mr-2" />
-              Continuar con Misión
-            </Button>
-            <Button 
-              onClick={() => router.push('/despega/a3')}
-              variant="outline"
-              className="font-semibold py-6 px-8"
-            >
-              <ArrowRight className="w-5 h-5 mr-2" />
-              Avanzar a A3
-            </Button>
+          <div>
+            <p className="text-sm font-semibold uppercase tracking-[0.2em] text-cyan-300">Reporte basado en evidencia persistida</p>
+            <h1 className="mt-2 text-4xl font-bold md:text-5xl">Tu Ruta · A2</h1>
+            <p className="mt-3 max-w-3xl text-slate-300">Resume tus 90 días sin inventar conclusiones. Las tasas se calculan desde entregas, validaciones y checkpoints guardados.</p>
           </div>
-        </div>
-      </ASectionPart>
-    </ASection>
+        </header>
+        <section className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          {[
+            ['Días completados', `${report.completedDays}/90`],
+            ['Cierre de ruta', `${finalReview.closureScore}/100`],
+            ['Días con evidencia', `${finalReview.evidenceDays}/90`],
+            ['Checkpoints A3', `${finalReview.checkpointsCompleted}/${finalReview.checkpointsRequired}`],
+          ].map(([label, value]) => <Card key={label} className="border-slate-800 bg-slate-900"><CardContent className="p-5"><p className="text-sm text-slate-400">{label}</p><p className="mt-2 text-3xl font-bold">{value}</p></CardContent></Card>)}
+        </section>
+        <section className="grid gap-4 md:grid-cols-3">
+          {report.reviews.map((review) => <Card key={review.horizon} className="border-slate-800 bg-slate-900/80"><CardHeader><CardTitle>Ciclo de {review.horizon} días</CardTitle></CardHeader><CardContent className="space-y-3 text-sm text-slate-300"><p>{review.completedDays}/{review.horizon} días · {review.completionRate}%</p><p>Validación: {review.validationRate}%</p><p>Evidencia: {review.evidenceRate}%</p><p>Checkpoints: {review.checkpointRate}%</p></CardContent></Card>)}
+        </section>
+        <section className="grid gap-4 md:grid-cols-2">
+          <Card className="border-emerald-500/30 bg-emerald-500/10"><CardHeader><CardTitle className="flex items-center gap-2"><CheckCircle2 className="h-5 w-5" />Evidencia consolidada</CardTitle></CardHeader><CardContent><ul className="space-y-2 text-sm text-emerald-50">{(finalReview.strengths.length ? finalReview.strengths : ['Aún no hay fortalezas suficientes para consolidar.']).map((item) => <li key={item}>• {item}</li>)}</ul></CardContent></Card>
+          <Card className="border-amber-500/30 bg-amber-500/10"><CardHeader><CardTitle className="flex items-center gap-2"><AlertCircle className="h-5 w-5" />Pendientes observables</CardTitle></CardHeader><CardContent><ul className="space-y-2 text-sm text-amber-50">{(finalReview.gaps.length ? finalReview.gaps : ['No hay brechas pendientes en el cierre de 90 días.']).map((item) => <li key={item}>• {item}</li>)}</ul></CardContent></Card>
+        </section>
+        <div className="flex flex-wrap gap-3 print:hidden"><Button asChild><Link href="/despega/a3/resultados"><Map className="mr-2 h-4 w-4" />Ver reporte A3</Link></Button><Button asChild variant="outline"><Link href="/despega/reporte-integral">Reporte integral<ArrowRight className="ml-2 h-4 w-4" /></Link></Button></div>
+      </div>
+    </main>
   )
 }

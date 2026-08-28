@@ -1,6 +1,6 @@
 # DTC closure ledger
 
-Last grounded: 2026-08-26 UTC
+Last grounded: 2026-08-28 UTC
 
 This is the canonical ledger for closing DespegaTuCarrera. An item is `verified` only when its acceptance criteria have observable evidence. Allowed statuses: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`.
 
@@ -32,8 +32,19 @@ Production and canonical `main` now point to the same release commit.
 | DTC-C09 | Public launch has trustworthy legal, accessibility, metadata, performance and observability basics | Production has domains and no grouped runtime errors in the last 7 days; current legal/accessibility/performance evidence is stale or partial | Current evidence covers legal pages/consent, WCAG-oriented checks, metadata/canonicals, Core Web Vitals budget, analytics and runtime alerts | Must be validated against current deployed UI, not historical reports | `$dtc-quality-gate` | `not_started` | yes |
 | DTC-C10 | Operators can diagnose failures without exposing personal assessment data | Runtime errors can be queried in Vercel; database has broad analytics/admin surface but operational path is not yet defined | Critical auth, persistence and AI failures have redacted logs, actionable alerts and an owner; no assessment answers or secrets appear in logs | Observability changes may touch production integrations | `$dtc-release-production` | `not_started` | no |
 | DTC-C11 | A2 reads as one coherent Spanish-language program across all 90 days | The 90 missions were reviewed in Spanish by coherent arcs; focused contracts cover Days 1–30 and every ten-day block through Day 90, while the global Day 81–90 contract confirms all 90 missions and rejects unsupported automation, XP copy and deterministic employment claims across A2 | Every user-facing A2 title, subtitle, goal, rationale, instruction and deliverable is reviewed in natural Chilean Spanish while established terms such as CV, STAR and recruiter remain intentional | Future content changes must keep the focused Spanish-content contracts green and preserve validation semantics | `$dtc-build-experience` | `verified` | yes |
+| DTC-C12 | A signed-in user can review A2, A3 and A4 from real persisted evidence and download one coherent A1–A4 report | Source contract, TypeScript and production build pass; remote migration `20260828002558_retire_dtc_documents_demo_read` removed the public demo-document policy and policy inspection now shows ownership-only reads | Authenticated desktop and 390x844 checks show Joaquin's 90/90 A2 report, 10/10 A3 report, truthful empty A4 report, integral report/PDF action and no cross-user documents | Requires deployed browser evidence and runtime-log scan before verification | `$dtc-build-experience`, `$dtc-supabase-backend`, `$dtc-quality-gate` | `in_progress` | yes |
 
 ## Evidence log
+
+### 2026-08-28
+
+- Replaced the legacy A2 results dependency with a server-owned report derived from the canonical 90-day completion rows and neutral 30/60/90 cycle reviews.
+- Replaced simulated A3 insights with a report derived from completed `a3_session_attempts`, deduplicated by module.
+- Replaced the missing `/api/a4-insights` dependency and fictional scores with an evidence report derived from verified signals, decisions and user-owned documents, including a truthful empty state.
+- Added a protected integral A1–A4 report with stage detail links, a next evidence-based action and browser print/save-as-PDF support.
+- Added explicit user ownership filters to the A4 documents client and delete operations.
+- Applied remote migration `20260828002558_retire_dtc_documents_demo_read`; `dtc_documents_demo_read` no longer exists and remaining SELECT policies require `auth.uid() = user_id`.
+- Focused reporting contract, TypeScript and the full Next.js production build pass. The existing Edge/Supabase middleware warning and broader historical Supabase advisor debt remain outside this coherent block.
 
 ### 2026-08-27
 
