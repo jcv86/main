@@ -55,6 +55,12 @@ type RouteContext = {
   description: string
 }
 
+type JourneyNavigationData = {
+  currentModule: 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
+  access: Record<'a1' | 'a2' | 'a3' | 'a4', boolean>
+  completed: Record<'a1' | 'a2' | 'a3' | 'a4', boolean>
+}
+
 const fetcher = (url: string) => fetch(url).then((response) => response.json())
 
 const navigation: NavGroup[] = [
@@ -196,7 +202,15 @@ function getRouteContext(pathname: string): RouteContext {
   )
 }
 
-function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
+function ShellNavigation({
+  pathname,
+  journey,
+  onNavigate,
+}: {
+  pathname: string
+  journey?: JourneyNavigationData
+  onNavigate?: () => void
+}) {
   const currentJourneyIndex = getJourneyIndex(pathname)
 
   return (
@@ -212,8 +226,16 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
           <div className="space-y-1">
             {group.items.map((item) => {
               const active = isActive(item, pathname)
-              const completed =
-                item.journeyIndex !== undefined && currentJourneyIndex >= 0 && item.journeyIndex < currentJourneyIndex
+              const journeyKey =
+                item.journeyIndex !== undefined
+                  ? (`a${item.journeyIndex + 1}` as keyof JourneyNavigationData['completed'])
+                  : null
+              const completed = journeyKey
+                ? Boolean(journey?.completed[journeyKey])
+                : item.journeyIndex !== undefined && currentJourneyIndex >= 0 && item.journeyIndex < currentJourneyIndex
+              const current = journeyKey
+                ? journey?.currentModule === journeyKey.toUpperCase()
+                : active
               const Icon = item.icon
 
               return (
@@ -243,11 +265,11 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
                   </span>
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
                   {item.journeyIndex !== undefined ? (
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={active ? 'En progreso' : completed ? 'Etapa anterior' : 'Pendiente'}>
-                      {active ? (
-                        <Circle className="h-2.5 w-2.5 fill-current text-[hsl(var(--dtc-indigo-300))]" />
-                      ) : completed ? (
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={completed ? 'Completado' : current ? 'En progreso' : 'Pendiente'}>
+                      {completed ? (
                         <Check className="h-3.5 w-3.5 text-success" />
+                      ) : current ? (
+                        <Circle className="h-2.5 w-2.5 fill-current text-[hsl(var(--dtc-indigo-300))]" />
                       ) : (
                         <Circle className="h-2.5 w-2.5 text-muted-foreground/55" />
                       )}
@@ -288,6 +310,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
     refreshInterval: 5000,
     dedupingInterval: 2000,
   })
+  const { data: journeyNavigation } = useSWR<JourneyNavigationData>(
+    isDemoUser ? null : '/api/journey/module-access',
+    fetcher,
+    { revalidateOnFocus: true, revalidateOnReconnect: true },
+  )
 
   React.useEffect(() => setMobileOpen(false), [pathname])
 
@@ -385,7 +412,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto px-4 py-6">
-          <ShellNavigation pathname={pathname} />
+          <ShellNavigation pathname={pathname} journey={journeyNavigation} />
         </div>
         <div className="border-t border-border p-4">
           <div className="mb-3 rounded-[var(--dtc-radius-md)] border border-border bg-background/50 p-3">
@@ -429,7 +456,11 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Button>
             </div>
             <div className="flex-1 overflow-y-auto px-4 py-6">
-              <ShellNavigation pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+              <ShellNavigation
+                pathname={pathname}
+                journey={journeyNavigation}
+                onNavigate={() => setMobileOpen(false)}
+              />
             </div>
             <div className="border-t border-border p-4">
               <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground" onClick={handleLogout}>
