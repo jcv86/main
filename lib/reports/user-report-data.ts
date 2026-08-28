@@ -4,6 +4,7 @@ import { buildA2CycleReview, type A2CycleReviewRecord } from '@/lib/a2/cycle-rev
 import { computeA4EvidencePulse } from '@/lib/a4/evidence-pulse'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
 import { createAdminClient } from '@/lib/supabase/server'
+import { buildA1ProfessionalReport } from '@/lib/reports/a1-professional-report'
 
 function objectValue(value: unknown): Record<string, unknown> {
   return value && typeof value === 'object' && !Array.isArray(value)
@@ -18,6 +19,45 @@ function textValue(value: unknown): string {
 function numberValue(value: unknown): number | null {
   const numeric = Number(value)
   return Number.isFinite(numeric) ? numeric : null
+}
+
+export async function loadA1Report(userId: string) {
+  const supabase = createAdminClient()
+  const [assessmentResult, c1Result, c2Result] = await Promise.all([
+    supabase
+      .from('a1_cerebral_assessment')
+      .select('disc_profile,dominant_pattern,secondary_pattern,completed_at')
+      .eq('user_id', userId)
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('canon_conozcamonos_1_responses')
+      .select('responses')
+      .eq('user_id', userId)
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+    supabase
+      .from('canon_conozcamonos_2_responses')
+      .select('responses')
+      .eq('user_id', userId)
+      .order('completed_at', { ascending: false })
+      .limit(1)
+      .maybeSingle(),
+  ])
+  const firstError = assessmentResult.error || c1Result.error || c2Result.error
+  if (firstError) throw new Error(`No se pudo cargar el reporte A1: ${firstError.message}`)
+  if (!assessmentResult.data?.disc_profile) return null
+
+  return buildA1ProfessionalReport({
+    rawScores: objectValue(assessmentResult.data.disc_profile),
+    dominantPattern: assessmentResult.data.dominant_pattern,
+    secondaryPattern: assessmentResult.data.secondary_pattern,
+    completedAt: textValue(assessmentResult.data.completed_at) || null,
+    c1Responses: objectValue(c1Result.data?.responses),
+    c2Responses: objectValue(c2Result.data?.responses),
+  })
 }
 
 export async function loadA2Report(userId: string) {
