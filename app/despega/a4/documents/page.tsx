@@ -76,31 +76,6 @@ export default function A4DocumentsPage() {
   const [filterType, setFilterType] = useState<string | null>(null)
   const [filterStatus, setFilterStatus] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
-  const [realUserId, setRealUserId] = useState<string | null>(null)
-
-  // Get REAL user ID from Supabase auth state listener
-  useEffect(() => {
-    const supabase = createClient()
-    
-    // Listen to auth state changes
-    const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
-      if (session?.user?.id) {
-        console.log('[v0] Got auth user ID from listener:', session.user.id)
-        setRealUserId(session.user.id)
-      }
-    })
-    
-    // Also try immediate getUser() call
-    supabase.auth.getUser().then(({ data: { user: authUser } }) => {
-      if (authUser?.id) {
-        console.log('[v0] Got real user ID from getUser:', authUser.id)
-        setRealUserId(authUser.id)
-      }
-    })
-    
-    return () => subscription?.unsubscribe()
-  }, [])
-
   // Fetch documents using client-side Supabase (works with auth)
   const fetchDocuments = useCallback(async () => {
     if (authLoading || !user) return
@@ -113,10 +88,11 @@ export default function A4DocumentsPage() {
       
       console.log('[v0] Fetching documents, authLoading:', authLoading, 'user:', user?.id)
       
-      // Build query - let RLS filter by user
+      // Ownership is explicit here and is also enforced by RLS.
       let query = supabase
         .from('dtc_documents')
         .select('*')
+        .eq('user_id', user.id)
         .order('updated_at', { ascending: false })
       
       if (filterType) {
@@ -157,7 +133,7 @@ export default function A4DocumentsPage() {
     } finally {
       setLoading(false)
     }
-  }, [filterType, filterStatus, user, authLoading, realUserId])
+  }, [filterType, filterStatus, user, authLoading])
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -191,6 +167,7 @@ export default function A4DocumentsPage() {
         .from('dtc_documents')
         .delete()
         .eq('id', docId)
+        .eq('user_id', user.id)
       
       if (deleteError) {
         console.error('[v0] Error deleting document:', deleteError)

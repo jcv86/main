@@ -248,9 +248,14 @@ export default async function RadarEstrategicoPage() {
                 decisiones permanecen separadas de los XP y no alteran resultados anteriores.
               </p>
             </div>
-            <Button asChild variant="outline" className="shrink-0 border-white/20">
-              <Link href="/despega/a3">Revisar Entrenamiento</Link>
-            </Button>
+            <div className="flex flex-wrap gap-3">
+              <Button asChild variant="outline" className="shrink-0 border-white/20">
+                <Link href="/despega/a3">Revisar Entrenamiento</Link>
+              </Button>
+              <Button asChild className="shrink-0 bg-rose-500 hover:bg-rose-400">
+                <Link href="/despega/a4/resultados">Ver reporte A4</Link>
+              </Button>
+            </div>
           </CardContent>
         </Card>
       </div>
