@@ -1,0 +1,4 @@
+interface:
+  display_name: "DTC Report Export"
+  short_description: "Make DTC reports print and PDF ready"
+  default_prompt: "Use $dtc-report-export to implement and verify a trustworthy PDF-ready DTC report."

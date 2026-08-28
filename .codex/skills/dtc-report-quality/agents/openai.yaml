@@ -1,0 +1,4 @@
+interface:
+  display_name: "DTC Report Quality"
+  short_description: "Gate report accuracy, privacy, UX, and export"
+  default_prompt: "Use $dtc-report-quality to produce a release verdict for this DTC report change."

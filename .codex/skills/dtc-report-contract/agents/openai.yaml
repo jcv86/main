@@ -1,0 +1,4 @@
+interface:
+  display_name: "DTC Report Contract"
+  short_description: "Define truthful report data and metrics"
+  default_prompt: "Use $dtc-report-contract to define the evidence and metric contract for this DTC report."

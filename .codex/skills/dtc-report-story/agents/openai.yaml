@@ -1,0 +1,4 @@
+interface:
+  display_name: "DTC Report Story"
+  short_description: "Clarify report meaning, limits, and next steps"
+  default_prompt: "Use $dtc-report-story to improve the Spanish narrative and UX of this DTC report."

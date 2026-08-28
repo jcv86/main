@@ -1,0 +1,4 @@
+interface:
+  display_name: "DTC Report Suite"
+  short_description: "Coordinate complete A1-A4 report improvements"
+  default_prompt: "Use $dtc-report-suite to improve and verify this DTC reporting block end to end."

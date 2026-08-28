@@ -1,0 +1,4 @@
+interface:
+  display_name: "DTC Report Audit"
+  short_description: "Find prioritized gaps across A1-A4 reports"
+  default_prompt: "Use $dtc-report-audit to audit these DTC reports and prioritize evidence-backed gaps."
