@@ -89,6 +89,7 @@ export default async function A1ReportLayout({
         dominantPattern: assessmentResult.data.dominant_pattern,
         secondaryPattern: assessmentResult.data.secondary_pattern,
         completedAt: assessmentResult.data.completed_at,
+        generatedAt: new Date().toISOString(),
         c1Responses: objectValue(c1Result.data?.responses),
         c2Responses: objectValue(c2Result.data.responses),
       })}

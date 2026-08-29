@@ -8,12 +8,14 @@ export interface A1ProfessionalReportInput {
   dominantPattern?: unknown
   secondaryPattern?: unknown
   completedAt?: string | null
+  generatedAt?: string | null
   c1Responses?: Record<string, unknown>
   c2Responses?: Record<string, unknown>
 }
 
 export interface A1ProfessionalReport {
   assessmentDate: string | null
+  generatedAt: string
   primary: A1DiscDimension
   secondary: A1DiscDimension
   combinationName: string
@@ -114,6 +116,7 @@ export function buildA1ProfessionalReport(input: A1ProfessionalReportInput): A1P
 
   return {
     assessmentDate: input.completedAt || null,
+    generatedAt: input.generatedAt || new Date().toISOString(),
     primary,
     secondary,
     combinationName: COMBINATIONS[`${primary}-${secondary}`] || `${DESPEGA_PROFILES[primary].nombre} + ${DESPEGA_PROFILES[secondary].nombre}`,

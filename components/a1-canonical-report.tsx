@@ -38,6 +38,10 @@ function present(value: string): string {
   return value || 'No informado'
 }
 
+function withoutArticle(value: string): string {
+  return value.replace(/^(el|la|los|las)\s+/i, '')
+}
+
 export function A1CanonicalReport({ report }: A1CanonicalReportProps) {
   const primary = report.dimensions.find((dimension) => dimension.key === report.primary)!
   const secondary = report.dimensions.find((dimension) => dimension.key === report.secondary)!
@@ -63,7 +67,7 @@ export function A1CanonicalReport({ report }: A1CanonicalReportProps) {
     {
       icon: Users,
       title: 'Colaboración',
-      body: `Tu lectura combina tendencias de ${primary.name.toLowerCase()} y ${secondary.name.toLowerCase()}; el contexto y la conducta observable determinan cómo aparecen en cada equipo.`,
+      body: `Tu lectura combina tendencias de ${withoutArticle(primary.name).toLowerCase()} y ${withoutArticle(secondary.name).toLowerCase()}; el contexto y la conducta observable determinan cómo aparecen en cada equipo.`,
     },
     {
       icon: ShieldCheck,
@@ -100,6 +104,7 @@ export function A1CanonicalReport({ report }: A1CanonicalReportProps) {
               <p className="flex items-center gap-2"><CalendarDays className="h-4 w-4" />{displayDate(report.assessmentDate)}</p>
               <p className="flex items-center gap-2"><BarChart3 className="h-4 w-4" />28 elecciones forzadas</p>
               <p className="flex items-center gap-2"><CheckCircle2 className="h-4 w-4" />{report.answeredContextItems} respuestas de contexto</p>
+              <p className="text-xs text-slate-500 print:text-slate-500">Informe generado el {displayDate(report.generatedAt)}</p>
             </div>
           </div>
         </header>
@@ -182,7 +187,7 @@ export function A1CanonicalReport({ report }: A1CanonicalReportProps) {
         </section>
 
         <section aria-labelledby="bridge-heading" className="space-y-5">
-          <div><p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300 print:text-slate-600">Del diagnóstico a la evidencia</p><h2 id="bridge-heading" className="mt-2 text-3xl font-semibold">Cómo continúa tu recorrido</h2></div>
+          <div><p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300 print:text-slate-600">De la lectura a la evidencia</p><h2 id="bridge-heading" className="mt-2 text-3xl font-semibold">Cómo continúa tu recorrido</h2></div>
           <div className="grid gap-4 md:grid-cols-3">
             {[
               ['A2 · Traducir', 'Convierte el objetivo y las tensiones observables en acciones, entregables y revisiones desde el primer ciclo de 30 días de Tu Ruta.'],
@@ -199,6 +204,11 @@ export function A1CanonicalReport({ report }: A1CanonicalReportProps) {
             <p><strong className="text-slate-200 print:text-slate-900">Qué no representa:</strong> un diagnóstico clínico, una evaluación de capacidad, una garantía de desempeño o una recomendación automática de cargo. Las hipótesis deben contrastarse con conducta y evidencia real.</p>
           </CardContent>
         </Card>
+
+        <footer className="break-inside-avoid border-t border-slate-800 pt-5 text-xs leading-relaxed text-slate-500 print:border-slate-300 print:text-slate-600">
+          <p><strong className="text-slate-300 print:text-slate-800">Documento personal de orientación.</strong> Generado el {displayDate(report.generatedAt)} con evidencia disponible hasta el {displayDate(report.assessmentDate)}.</p>
+          <p className="mt-1">Este archivo reproduce el informe autenticado de DespegaTuCarrera. No constituye una certificación, diagnóstico ni garantía de desempeño.</p>
+        </footer>
 
         <div className="flex flex-wrap gap-3 print:hidden">
           <Button asChild variant="outline"><Link href="/despega/reporte-integral">Ver reporte integral<ArrowRight className="ml-2 h-4 w-4" /></Link></Button>

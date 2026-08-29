@@ -15,6 +15,7 @@ const report = buildA1ProfessionalReport({
   dominantPattern: 'D',
   secondaryPattern: 'S',
   completedAt: '2026-08-28T12:00:00.000Z',
+  generatedAt: '2026-08-28T13:00:00.000Z',
   c1Responses: {
     '1': 'Empleado de tiempo completo',
     '3': 'Desafío observable',
@@ -30,6 +31,7 @@ const report = buildA1ProfessionalReport({
 })
 
 assert.equal(report.primary, 'D')
+assert.equal(report.generatedAt, '2026-08-28T13:00:00.000Z')
 assert.equal(report.secondary, 'S')
 assert.equal(report.intensities.D, 100)
 assert.equal(report.intensities.I, 0)
