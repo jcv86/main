@@ -1,3 +1,5 @@
+import type { A1AgentContext } from './context/a1-context'
+
 /**
  * DTC AgentOS - Core Type Definitions
  * 
@@ -293,6 +295,7 @@ export interface UnlockState {
 }
 
 export interface DTCContext {
+  a1?: A1AgentContext
   user: UserProfile
   memory: MemoryItem[]
   agent: AgentConfig

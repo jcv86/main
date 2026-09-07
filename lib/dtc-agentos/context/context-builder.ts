@@ -6,6 +6,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server'
+import { loadA1AgentContext, formatA1AgentContext, type A1AgentContext } from './a1-context'
 import type {
   DTCContext,
   UserProfile,
@@ -22,7 +23,7 @@ import { getCommand, validateCommandExecution } from '../registries/commands'
 import { getAgent } from '../registries/agents'
 import { getMode } from '../registries/modes'
 import { getUserMemory, getContextualMemories, formatMemoriesForContext } from './memory-manager'
-import { isDevMode, ALL_MODULES } from '../index'
+import { isDevMode, ALL_MODULES } from '../runtime-config'
 
 // =============================================================================
 // MAIN CONTEXT BUILDER
@@ -82,6 +83,11 @@ export async function buildDtcContext(
   }
 
   try {
+    const supabase = await createClient()
+    const { data: auth, error: authError } = await supabase.auth.getUser()
+    if (authError || !auth.user || auth.user.id !== userId) {
+      return { success: false, error: 'Context access denied' }
+    }
     // Fetch all context components in parallel
     const [
       user,
@@ -91,6 +97,7 @@ export async function buildDtcContext(
       documents,
       unlocks,
       previousInterviews,
+      a1,
     ] = await Promise.all([
       fetchUserProfile(userId),
       getContextualMemories(userId, command),
@@ -99,12 +106,13 @@ export async function buildDtcContext(
       fetchRelevantDocuments(userId, command),
       fetchUnlockState(userId),
       fetchRecentInterviews(userId, 3),
+      loadA1AgentContext(supabase, userId),
     ])
 
     // Check for missing required context
     const missingContext = checkRequiredContext(
       commandConfig.requiredContext,
-      { user, memory, moduleState, dayProgress, documents }
+      { user, memory, moduleState, dayProgress, documents, a1 }
     )
 
     if (missingContext.length > 0 && !isDevMode(userId)) {
@@ -119,6 +127,7 @@ export async function buildDtcContext(
     const context: DTCContext = {
       user: user!,
       memory,
+      a1,
       agent: agentConfig,
       mode: modeConfig,
       module: moduleState,
@@ -135,10 +144,10 @@ export async function buildDtcContext(
       context,
     }
   } catch (error) {
-    console.error('[ContextBuilder] Error building context:', error)
+    console.error('[ContextBuilder] Context unavailable')
     return {
       success: false,
-      error: error instanceof Error ? error.message : 'Unknown error building context',
+      error: 'No pudimos verificar el contexto actual. Intenta nuevamente.',
     }
   }
 }
@@ -412,6 +421,7 @@ function checkRequiredContext(
     moduleState: ModuleState | null
     dayProgress: DayProgress | null
     documents: DocumentRef[]
+    a1: A1AgentContext
   }
 ): string[] {
   const missing: string[] = []
@@ -423,8 +433,7 @@ function checkRequiredContext(
         if (!context.user) missing.push(key)
         break
       case 'identity_audit':
-        // Check if we have A1 memories
-        // This is a simplified check - in production, check for specific memory types
+        if (!['resolved', 'ambiguous'].includes(context.a1.status)) missing.push(key)
         break
       case 'career_direction':
       case 'career_goal':
@@ -467,6 +476,8 @@ Score de preparación: ${context.user.readinessScore || 0}/100`)
   if (context.memory.length > 0) {
     sections.push(`MEMORIA DEL USUARIO:\n${formatMemoriesForContext(context.memory)}`)
   }
+
+  if (context.a1) sections.push(formatA1AgentContext(context.a1))
 
   // Current module
   if (context.module) {

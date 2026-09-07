@@ -29,12 +29,12 @@ export const dtcCommands: Record<CommandId, CommandConfig> = {
   '/dtc:a1-identity-audit': {
     id: '/dtc:a1-identity-audit',
     name: 'Identity Audit',
-    description: 'Analyzes A1 test results and DISC profile to extract identity insights',
+    description: 'Reads the owner-bound A1 assessment as self-reported preferences without generating inferred memories',
     requiredContext: ['user_profile_snapshot'],
     optionalContext: ['disc_results', 'previous_audits'],
     allowedAgents: ['coach', 'system'],
     allowedModes: ['identity-audit', 'background'],
-    writesTo: ['identity_audit', 'memory_items'],
+    writesTo: [],
     timeout: 60000,
   },
 

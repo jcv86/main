@@ -31,8 +31,8 @@ export async function onC1Complete(
     userId,
     commandId: 'c1_disc_complete',
     input: { response_count: Object.keys(responses).length },
-    output: { profile },
-    memoriesCreated: 3
+    output: { kind: 'self_reported_context' },
+    memoriesCreated: 0
   })
 }
 
@@ -46,9 +46,9 @@ export async function onA1Complete(
   await DTCAgentOS.logAgentRun({
     userId,
     agentId: 'a1_analyst',
-    context: { profile: analysis.profile },
-    response: { insights_count: analysis.insights?.length || 0 },
-    memoriesExtracted: (analysis.insights?.length || 0) + 5,
+    context: { policy: 'a1-canonical-context.v1' },
+    response: { status: 'source_read_on_demand' },
+    memoriesExtracted: 0,
     tokensUsed: 0
   })
 }

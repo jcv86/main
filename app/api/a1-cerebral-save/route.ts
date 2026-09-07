@@ -1,6 +1,5 @@
 import { createClient } from '@/lib/supabase/server'
 import { NextResponse } from 'next/server'
-import { executeCommand } from '@/lib/dtc-agentos/commands/execute-command'
 import { validateAndScoreDiscResponses } from '@/lib/a1/disc-scoring'
 
 const CLIENT_OWNED_FIELDS = ['user_id', 'questions', 'disc_profile', 'dominant_pattern', 'secondary_pattern', 'patternEvidence'] as const
@@ -56,12 +55,7 @@ export async function POST(request: Request) {
     const assessmentId = saved?.assessment_id
     if (!assessmentId) return NextResponse.json({ error: 'No pudimos confirmar la evaluación guardada.' }, { status: 500 })
     const pattern = scoring.value.responses._meta?.patternEvidence
-    // Do not reinforce compatibility-only tie-break labels in supplemental AI memory.
-    if (pattern?.status === 'resolved') {
-      try {
-        await executeCommand({ userId: user.id, commandId: '/dtc:a1-identity-audit', agentId: 'coach', modeId: 'identity-audit', params: { testId: assessmentId, responses: scoring.value.responses, discProfile: scoring.value.scores, dominantPattern: scoring.value.dominantPattern, secondaryPattern: scoring.value.secondaryPattern, patternEvidence: pattern, responseTimings, correlationId } })
-      } catch { console.error('[a1] Supplemental identity capture failed', { correlationId }) }
-    }
+    // AgentOS reads this assessment on demand; no duplicate inferred memory is written.
     return NextResponse.json({ success: true, assessmentId, profile: scoring.value.scores, dominantPattern: pattern?.primary ?? null, secondaryPattern: pattern?.secondary ?? null, patternEvidence: pattern, careerIdentityVersion: saved?.identity_version, correlationId }, { headers: { 'Cache-Control': 'private, no-store' } })
   } catch {
     console.error('[a1] Assessment processing failed')

@@ -6,6 +6,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server'
+import { filterA1AgentMemories, assertNotA1MemoryWrite } from './a1-context'
 import type { 
   MemoryItem, 
   MemoryItemType, 
@@ -17,7 +18,7 @@ import type {
 // Define stage memory types - what memory items should be captured from each stage
 export const STAGE_MEMORY_TYPES: Record<string, MemoryItemType[]> = {
   c1: ['career_goal', 'motivation', 'constraint', 'learning_preference'],
-  a1: ['strength', 'weakness', 'communication_style', 'interview_pattern'],
+  a1: [], // A1 is read from its canonical assessment, never inferred as a capability.
   c2: ['role_target', 'skill', 'achievement', 'market_region', 'company_preference'],
   a2: ['feedback_received', 'evidence'],
   a3: ['star_story', 'interview_pattern', 'skill', 'weakness', 'feedback_received'],
@@ -26,6 +27,16 @@ export const STAGE_MEMORY_TYPES: Record<string, MemoryItemType[]> = {
 
 // Re-export types for consumers
 export type { CaptureMemoryPayload, MemoryItem, MemoryItemType, MemorySourceType }
+
+/** Never accept a caller-supplied owner independently of the verified session. */
+async function verifiedMemoryClient(userId?: string) {
+  const supabase = await createClient()
+  const { data, error } = await supabase.auth.getUser()
+  if (error || !data.user || (userId !== undefined && data.user.id !== userId)) {
+    throw new Error('MEMORY_ACCESS_DENIED')
+  }
+  return { supabase, userId: data.user.id }
+}
 
 // =============================================================================
 // DATABASE OPERATIONS
@@ -38,7 +49,7 @@ export async function getUserMemory(
   userId: string,
   types?: MemoryItemType[]
 ): Promise<MemoryItem[]> {
-  const supabase = await createClient()
+  const { supabase } = await verifiedMemoryClient(userId)
 
   let query = supabase
     .from('memory_items')
@@ -55,11 +66,11 @@ export async function getUserMemory(
   const { data, error } = await query
 
   if (error) {
-    console.error('[MemoryManager] Error fetching user memory:', error)
+    console.error('[MemoryManager] Error fetching user memory:')
     return []
   }
 
-  return (data || []).map(mapDbToMemoryItem)
+  return filterA1AgentMemories(data || []).map(mapDbToMemoryItem)
 }
 
 /**
@@ -69,7 +80,7 @@ export async function getMemoryBySource(
   userId: string,
   sourceType: MemorySourceType
 ): Promise<MemoryItem[]> {
-  const supabase = await createClient()
+  const { supabase } = await verifiedMemoryClient(userId)
 
   const { data, error } = await supabase
     .from('memory_items')
@@ -80,11 +91,11 @@ export async function getMemoryBySource(
     .order('created_at', { ascending: false })
 
   if (error) {
-    console.error('[MemoryManager] Error fetching source memory:', error)
+    console.error('[MemoryManager] Error fetching source memory:')
     return []
   }
 
-  return (data || []).map(mapDbToMemoryItem)
+  return filterA1AgentMemories(data || []).map(mapDbToMemoryItem)
 }
 
 /**
@@ -111,7 +122,8 @@ export async function getContextualMemories(
 export async function captureMemory(
   payload: CaptureMemoryPayload
 ): Promise<MemoryItem | null> {
-  const supabase = await createClient()
+  assertNotA1MemoryWrite(payload)
+  const { supabase } = await verifiedMemoryClient(payload.userId)
 
   const memoryData = {
     user_id: payload.userId,
@@ -134,7 +146,7 @@ export async function captureMemory(
     .single()
 
   if (error) {
-    console.error('[MemoryManager] Error capturing memory:', error)
+    console.error('[MemoryManager] Error capturing memory:')
     return null
   }
 
@@ -147,6 +159,7 @@ export async function captureMemory(
 export async function captureMemories(
   payloads: CaptureMemoryPayload[]
 ): Promise<MemoryItem[]> {
+  payloads.forEach(assertNotA1MemoryWrite)
   const results = await Promise.all(payloads.map(captureMemory))
   return results.filter((m): m is MemoryItem => m !== null)
 }
@@ -158,7 +171,8 @@ export async function updateMemory(
   memoryId: string,
   updates: Partial<Pick<MemoryItem, 'content' | 'confidence' | 'importance' | 'title'>>
 ): Promise<boolean> {
-  const supabase = await createClient()
+  assertNotA1MemoryWrite(updates)
+  const { supabase, userId } = await verifiedMemoryClient()
 
   const { error } = await supabase
     .from('memory_items')
@@ -167,9 +181,10 @@ export async function updateMemory(
       updated_at: new Date().toISOString(),
     })
     .eq('id', memoryId)
+    .eq('user_id', userId)
 
   if (error) {
-    console.error('[MemoryManager] Error updating memory:', error)
+    console.error('[MemoryManager] Error updating memory:')
     return false
   }
 
@@ -180,7 +195,7 @@ export async function updateMemory(
  * Invalidate a memory (soft delete by setting valid_until)
  */
 export async function invalidateMemory(memoryId: string): Promise<boolean> {
-  const supabase = await createClient()
+  const { supabase, userId } = await verifiedMemoryClient()
 
   const { error } = await supabase
     .from('memory_items')
@@ -188,9 +203,10 @@ export async function invalidateMemory(memoryId: string): Promise<boolean> {
       valid_until: new Date().toISOString(),
     })
     .eq('id', memoryId)
+    .eq('user_id', userId)
 
   if (error) {
-    console.error('[MemoryManager] Error invalidating memory:', error)
+    console.error('[MemoryManager] Error invalidating memory:')
     return false
   }
 
@@ -205,7 +221,7 @@ export async function invalidateMemoriesByType(
   userId: string,
   memoryType: MemoryItemType
 ): Promise<boolean> {
-  const supabase = await createClient()
+  const { supabase } = await verifiedMemoryClient(userId)
 
   const { error } = await supabase
     .from('memory_items')
@@ -217,7 +233,7 @@ export async function invalidateMemoriesByType(
     .is('valid_until', null)
 
   if (error) {
-    console.error('[MemoryManager] Error invalidating memories by type:', error)
+    console.error('[MemoryManager] Error invalidating memories by type:')
     return false
   }
 
@@ -305,67 +321,7 @@ export async function extractA1Memories(
     discProfile?: Record<string, number>
   }
 ): Promise<MemoryItem[]> {
-  const memories: CaptureMemoryPayload[] = []
-
-  // Strengths
-  if (auditResults.strengths) {
-    for (const strength of auditResults.strengths) {
-      memories.push({
-        userId,
-        sourceType: 'a1',
-        memoryType: 'strength',
-        title: 'Fortaleza identificada',
-        content: strength,
-        importance: 0.8,
-        confidence: 0.85,
-      })
-    }
-  }
-
-  // Weaknesses
-  if (auditResults.weaknesses) {
-    for (const weakness of auditResults.weaknesses) {
-      memories.push({
-        userId,
-        sourceType: 'a1',
-        memoryType: 'weakness',
-        title: 'Área de mejora',
-        content: weakness,
-        importance: 0.9, // Higher importance for development focus
-        confidence: 0.85,
-      })
-    }
-  }
-
-  // Communication style
-  if (auditResults.communicationStyle) {
-    memories.push({
-      userId,
-      sourceType: 'a1',
-      memoryType: 'communication_style',
-      title: 'Estilo de comunicación',
-      content: auditResults.communicationStyle,
-      importance: 0.7,
-      confidence: 0.9,
-    })
-  }
-
-  // Interview patterns
-  if (auditResults.interviewPatterns) {
-    for (const pattern of auditResults.interviewPatterns) {
-      memories.push({
-        userId,
-        sourceType: 'a1',
-        memoryType: 'interview_pattern',
-        title: 'Patrón de entrevista',
-        content: pattern,
-        importance: 0.8,
-        confidence: 0.8,
-      })
-    }
-  }
-
-  return captureMemories(memories)
+  throw new TypeError('A1_MEMORY_WRITES_RETIRED: consulta la evaluación canónica con su contexto.')
 }
 
 /**
@@ -587,8 +543,9 @@ export async function extractA4Memories(
  * Format memories for AI context injection
  */
 export function formatMemoriesForContext(memories: MemoryItem[]): string {
+  memories = filterA1AgentMemories(memories)
   if (memories.length === 0) {
-    return 'No hay memorias previas del usuario.'
+    return 'No hay memorias previas utilizables del usuario.'
   }
 
   const grouped = groupMemoriesByType(memories)
@@ -678,7 +635,7 @@ function getRelevantMemoryTypes(command: CommandId): MemoryItemType[] {
   const commandMemoryMap: Record<string, MemoryItemType[]> = {
     '/dtc:c2-context-bridge': ['career_goal', 'motivation', 'strength', 'weakness', 'constraint'],
     '/dtc:a2-generate-day': ['career_goal', 'role_target', 'weakness', 'feedback_received', 'evidence'],
-    '/dtc:a3-run-interview': ['career_goal', 'role_target', 'strength', 'weakness', 'interview_pattern', 'star_story', 'achievement'],
+    '/dtc:a3-run-interview': ['career_goal', 'strength', 'role_target', 'weakness', 'interview_pattern', 'star_story', 'achievement'],
     '/dtc:a3-evaluate-answer': ['career_goal', 'strength', 'weakness', 'interview_pattern'],
     '/dtc:a4-create-document': ['career_goal', 'role_target', 'achievement', 'star_story', 'evidence'],
     '/dtc:a4-review-document': ['career_goal', 'role_target', 'achievement', 'star_story'],
