@@ -1,0 +1,32 @@
+name: A1 understanding render
+on:
+  pull_request:
+    paths:
+      - 'lib/a1/**'
+      - 'lib/reports/**'
+      - 'components/reports/**'
+      - 'scripts/check-a1-understanding-render.tsx'
+      - '.github/workflows/a1-understanding-render.yml'
+permissions:
+  contents: read
+jobs:
+  render:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing dependencies without lifecycle scripts
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+      - name: Render actual individual-report section with synthetic data
+        env:
+          A1_QA_OUTPUT: /tmp/a1-understanding-ssr
+        run: npx tsx scripts/check-a1-understanding-render.tsx
+      - name: Upload synthetic SSR evidence (not browser QA)
+        uses: actions/upload-artifact@v4
+        with:
+          name: a1-understanding-ssr-${{ github.event.pull_request.head.sha }}
+          path: /tmp/a1-understanding-ssr
+          retention-days: 7

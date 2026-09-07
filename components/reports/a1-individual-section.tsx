@@ -5,6 +5,7 @@ import { A1Clarifications } from './a1-clarifications'
 export function A1IndividualSection({ value, editRevision }: { value: IndividualUnderstanding; editRevision: string | null }) {
   const available = value.responseState === 'available'
   const recognition = RECOGNITION_OPTIONS.find((option) => option.id === value.answers?.recognition)
+  const versionLabel = value.questionnaireVersion === 'legacy-compatible' ? 'Registro histórico compatible por sus respuestas' : value.questionnaireVersion === 'unknown' ? 'Versión no reconocida' : value.questionnaireVersion
   return (
     <section aria-labelledby="a1-individual-heading" className="space-y-6">
       <div><p className="text-sm font-semibold uppercase tracking-wider text-cyan-300">Tu lectura individual</p><h2 id="a1-individual-heading" className="mt-2 text-3xl font-semibold">Más allá de una combinación de letras</h2><p className="mt-3 max-w-3xl text-sm leading-relaxed text-slate-300">Esta sección conecta lo que elegiste en cada situación con el contexto que declaraste. No atribuye capacidades ni motivaciones que no hayas aportado.</p></div>
@@ -14,7 +15,8 @@ export function A1IndividualSection({ value, editRevision }: { value: Individual
         <h3 className="text-xl font-semibold">El contexto desde el que respondiste</h3>
         <dl className="mt-4 grid gap-4 sm:grid-cols-2">{[
           ['Situación', value.context.situation], ['Experiencia declarada', value.context.experience],
-          ['Desafío actual', value.context.challenge], ['Objetivo más reciente', value.context.goal],
+          ['Desafío actual', value.context.challenge], ['Objetivo inicial', value.context.originalGoal],
+          ['Objetivo más reciente', value.context.goal], ['Rol objetivo declarado', value.context.targetRole],
         ].map(([label, text]) => <div key={label}><dt className="text-xs font-semibold uppercase tracking-wider text-slate-400">{label}</dt><dd className="mt-2 whitespace-pre-wrap break-words text-sm leading-relaxed text-slate-200">{text || 'No informado'}</dd></div>)}</dl>
         {!!value.context.notes.length && <div className="mt-4 space-y-2 border-t border-slate-700 pt-4">{value.context.notes.map((note) => <p key={note} className="text-xs leading-relaxed text-slate-400">{note}</p>)}</div>}
       </div>
@@ -28,7 +30,7 @@ export function A1IndividualSection({ value, editRevision }: { value: Individual
       </>}
       {(value.clarificationStatements.length > 0 || recognition) && <section data-report-card className="rounded-2xl border border-emerald-400/30 p-5 sm:p-6"><h3 className="text-xl font-semibold">Los matices que tú añadiste</h3><p className="mt-2 text-sm text-slate-400">Declaraciones posteriores, separadas del cuestionario original. No modifican los puntajes.</p><dl className="mt-4 space-y-4">{value.clarificationStatements.map((item) => <div key={item.domain}><dt className="font-semibold text-slate-200">{item.title}</dt><dd className="mt-1 text-sm leading-relaxed text-slate-300">{item.statement}{!item.isEvidence && ' · No se toma como evidencia conductual.'}</dd></div>)}</dl>{recognition && <p className="mt-4 text-sm text-slate-200">Tu perspectiva sobre la lectura: <strong>{recognition.label}</strong>. Esta respuesta no valida ni invalida por sí sola el instrumento.</p>}</section>}
       {available && value.revision && editRevision && <A1Clarifications key={`${value.revision}:${editRevision}`} revision={value.revision} editRevision={editRevision} questions={value.questions} initial={value.answers} stale={value.clarificationState === 'stale'} />}
-      <p className="text-xs leading-relaxed text-slate-400">Versión de lectura: {value.version}. Reconstrucción del cuestionario: {value.questionnaireVersion}. Esta lectura orientativa requiere evaluación de uso y validación profesional; no es un diagnóstico ni una evaluación de aptitud laboral.</p>
+      <p className="text-xs leading-relaxed text-slate-400">Versión de lectura: {value.version}. Cuestionario: {versionLabel}. Esta lectura orientativa requiere evaluación de uso y validación profesional; no es un diagnóstico ni una evaluación de aptitud laboral.</p>
     </section>
   )
 }
