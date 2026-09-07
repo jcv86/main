@@ -1,0 +1,43 @@
+name: A1 writer and AgentOS
+on:
+  pull_request:
+    paths:
+      - 'lib/a1/**'
+      - 'lib/career/**'
+      - 'lib/dtc-agentos/**'
+      - 'app/api/a1-cerebral-save/**'
+      - 'supabase/migrations/*a1*'
+      - 'scripts/*a1*'
+      - '.github/workflows/a1-writer-v2.yml'
+permissions:
+  contents: read
+jobs:
+  source-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Package only reviewed public source paths, never environment or user data
+        run: |
+          mkdir -p /tmp/a1-writer-source
+          git archive --format=tar.gz --output=/tmp/a1-writer-source/source.tar.gz HEAD \
+            lib/dtc-agentos lib/a1 lib/career lib/reports lib/disc-test-questions.ts \
+            lib/despega-profiles.ts lib/supabase app/api/a1-cerebral-save/route.ts \
+            scripts/check-a1-a2-a3-journey-contract.ts \
+            scripts/check-a1-career-identity-dual-write-contract.ts \
+            scripts/check-a1-career-boundary.ts scripts/tsconfig.career-boundary.json \
+            supabase/migrations/20260804061000_career_identity_foundation.sql \
+            supabase/migrations/20260804070000_a1_career_identity_dual_write.sql \
+            supabase/migrations/20260804125500_a1_career_identity_revoke_anon.sql \
+            supabase/migrations/20260907204000_a1_owner_boundary.sql \
+            tsconfig.json package.json
+          git rev-parse HEAD > /tmp/a1-writer-source/commit.txt
+          cd /tmp/a1-writer-source && sha256sum source.tar.gz > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a1-writer-source-${{ github.event.pull_request.head.sha }}
+          path: /tmp/a1-writer-source
+          retention-days: 7
