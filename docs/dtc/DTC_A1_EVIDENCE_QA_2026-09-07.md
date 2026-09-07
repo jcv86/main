@@ -7,11 +7,11 @@ Production baseline: `dpl_BuEW4F7KjGbHSjEipCBGhrJz98DK` (READY, main).
 
 ## Scope and verdict
 
-This is a DTC-C13 implementation and QA addendum to `DTC_CLOSURE_LEDGER.md`, not a production release or a declaration that the launch blockers are closed. **Production verdict: NO_GO until authenticated desktop/mobile and PDF verification pass on the exact candidate.** The existing ledger's historical grounded-release header predates the current baseline; the identity above was read live from GitHub and Vercel for this work.
+This is a DTC-C13 implementation and QA addendum to `DTC_CLOSURE_LEDGER.md`, not a production release or a declaration that the launch blockers are closed. **Production verdict: NO_GO until authenticated desktop/mobile and PDF verification pass on the exact candidate and the infrastructure isolation blocker is remediated.** The existing ledger's historical grounded-release header predates the current baseline; the identity above was read live from GitHub and Vercel for this work.
 
 Implemented: a pure score/date evidence boundary; absent/invalid score states; ambiguity-aware pattern resolution; A1/integral parity; separately labeled assessment/C1/C2 dates; source-limited provenance; responsive report semantics and print isolation; build-time report contracts and TypeScript gate.
 
-No migrations, credentials, dependency versions, production aliases, authentication policy, user records, or main-branch ref were changed by this block. A read-only Supabase metadata query verified the selected timestamps and ownership columns in all three A1 source relations. This is schema evidence, not an authenticated user-data or RLS test.
+No migrations, credentials, dependency versions, production aliases, authentication policy, user records, or main-branch ref were changed by this block. A read-only Supabase metadata query verified the selected timestamps and ownership columns in all three A1 source relations. Additional read-only role simulations identified an existing isolation blocker; operational details and personal data are not published in this public repository. This must not be mistaken for a passing RLS gate.
 
 ## Data contract
 
@@ -30,19 +30,23 @@ No migrations, credentials, dependency versions, production aliases, authenticat
 - Strict isolated TypeScript check of `report-evidence.ts`: PASS.
 - TS/TSX syntax transpilation of all ten changed/new TS/TSX files: PASS. **This is not full application type validation.**
 - Exact baseline `package.json` blob reconstruction checked against GitHub SHA `0591a78f6cc16d95e1fa47f587634bbea2473a53`; the candidate changes scripts only, not dependencies.
+- Static DOM test confirms the print-isolation selector selects synthetic app chrome but preserves report header/provenance; the stylesheet parses with PostCSS. Neither test proves visual layout or PDF pagination.
 - No network access was available in the local execution container, so a complete checkout/install/build and authenticated browser/PDF run were not performed there.
 
 ## Remote build gate
 
-`npm run build` now runs `check:report-quality` before Next.js:
+`npm run build` runs `check:report-quality` before Next.js:
 
 1. 103 behavioral score/date cases.
 2. Full A1 model regression (populated, partial, invalid, empty, tied, legacy and provenance).
-3. Existing cross-stage reporting source contract.
-4. Full `tsc --noEmit`.
-5. Existing Next.js production build; existing prebuild/document generation is preserved.
+3. Existing A1–A3 journey contract, including canonical guidance and the Day 7 checkpoint.
+4. Existing cross-stage reporting source contract.
+5. Full `tsc --noEmit`.
+6. Existing Next.js production build; existing prebuild/document generation is preserved.
 
-Record exact candidate commit, deployment ID, gate output and remaining warnings in the linked pull request after Vercel responds. Do not infer success from a deployment merely being queued or from an older production build.
+Initial commit `5f43aaa673ff1bad8ce0ce79c4c86b6f789989a3` reached Vercel READY at deployment `dpl_8Zib5g68KmPYfL4PQWRncmFh1dAe`: the three initial reporting contracts, full TypeScript and Next.js build passed. GitHub Career Identity, Pilot access and Design enforcement passed. Evidence-aware validation correctly rejected removed journey labels and the missing Day 7 reference; the implementation restores the guidance and adds that unchanged test to the build gate. Final-head validation must be recorded separately; the older deployment is not proof of the final head.
+
+Record exact candidate commit, deployment ID, gate output and remaining warnings in PR #133 after Vercel responds. Do not infer success from a deployment merely being queued or from an older production build.
 
 ## Required rendered acceptance — still pending
 
@@ -52,7 +56,8 @@ Use an approved QA identity, never copied credentials in git, and never fabricat
 - Scores are readable and exposed as accessible meters only when present; missing values use a dash plus explicit explanation, not zero or 50.
 - Long free-text answers remain intact. Generic pattern resources are identified as hypotheses, not measured behaviors.
 - Print A4-sized PDF: sidebar, session email, breadcrumb, app chrome and interactive buttons absent; report header, selectable text, numbers, limits and provenance present; no clipping, blank terminal page, or truncated multi-page answer.
-- Anonymous and expired sessions remain protected. Verify another user's rows cannot enter either report. No source inspection or metadata-only SQL counts as passing this check.
+- Anonymous and expired sessions remain protected. Verify another user's rows cannot enter either report. The Vercel fetch reached its SSO boundary, not an authenticated app report; it is not a passing browser or user-data test.
+- Remediate and repeat infrastructure role-isolation checks before any promotion.
 - Inspect runtime errors for this candidate after the rendered checks; an empty log window without exercising the routes is not functional proof.
 
 ## Follow-on blocks, not completed here
