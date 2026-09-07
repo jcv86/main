@@ -165,10 +165,10 @@ export function A1CanonicalReport({ report }: A1CanonicalReportProps) {
           <div><p className="text-sm font-semibold uppercase tracking-[0.18em] text-emerald-300">Orientación para los siguientes pasos</p><h2 id="bridge-heading" className="mt-2 text-3xl font-semibold">Cómo continúa tu recorrido</h2></div>
           <div className="grid gap-4 md:grid-cols-3">
             {[
-              ['A2 “Tu Ruta”', 'Comienza con un ciclo de 30 días para traducir tu objetivo en acciones, entregables y revisiones. Puede ampliarse a 60/90 días.'],
-              ['A3 “Entrenamiento”', 'Contrasta hipótesis del perfil con respuestas, conversaciones y simulaciones del programa.'],
-              ['A4 “Radar Estratégico”', 'Conecta tu dirección profesional con señales y decisiones que puedas revisar con evidencia.'],
-            ].map(([title, body]) => <Card key={title} data-report-card className={panel}><CardContent className="p-6"><h3 className="font-semibold text-emerald-200">{title}</h3><p className="mt-3 text-sm leading-relaxed text-slate-400">{body}</p></CardContent></Card>)}
+              ['A2 · Traducir', 'A2 “Tu Ruta”', 'Comienza con un ciclo de 30 días para traducir tu objetivo en acciones, entregables y revisiones. Puede ampliarse a 60/90 días.'],
+              ['A3 · Practicar', 'A3 “Entrenamiento”', 'Contrasta hipótesis del perfil con respuestas, conversaciones y simulaciones del programa, con el primer checkpoint desde el Día 7.'],
+              ['A4 · Observar', 'A4 “Radar Estratégico”', 'Conecta tu dirección profesional con señales y decisiones que puedas revisar con evidencia.'],
+            ].map(([purpose, title, body]) => <Card key={title} data-report-card className={panel}><CardContent className="p-6"><p className="mb-2 text-xs font-semibold uppercase tracking-wider text-slate-400">{purpose}</p><h3 className="font-semibold text-emerald-200">{title}</h3><p className="mt-3 text-sm leading-relaxed text-slate-400">{body}</p></CardContent></Card>)}
           </div>
         </section>
 
