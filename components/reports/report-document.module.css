@@ -1,0 +1,45 @@
+.document {
+  overflow-wrap: anywhere;
+}
+.document :where(section, article, dl, div) {
+  min-width: 0;
+}
+@media print {
+  .document {
+    background: white !important;
+    color: #0f172a !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .document :where(*) {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+  .document :where(h1, h2, h3, dt) {
+    break-after: avoid;
+  }
+  .document :where(p, li, dd) {
+    orphans: 3;
+    widows: 3;
+  }
+  .document [data-report-card] {
+    background: white !important;
+    background-image: none !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    /* Long answers must be allowed to flow instead of clipping on a single page. */
+    overflow: visible !important;
+  }
+  .document [data-report-dimension] {
+    break-inside: avoid;
+  }
+  .document [data-report-actions] {
+    display: none !important;
+  }
+  .document [data-report-provenance] {
+    margin-top: 12pt;
+    border-color: #cbd5e1 !important;
+  }
+}

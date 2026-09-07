@@ -10,9 +10,12 @@ import {
 } from '@/lib/journey/transitions'
 import { buildA1ProfessionalReport } from '@/lib/reports/a1-professional-report'
 
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: phaseMetadata.a1Report.title,
   description: phaseMetadata.a1Report.description,
+  robots: { index: false, follow: false },
   openGraph: {
     title: phaseMetadata.a1Report.title,
     description: phaseMetadata.a1Report.description,
@@ -53,14 +56,14 @@ export default async function A1ReportLayout({
       .maybeSingle(),
     supabase
       .from('canon_conozcamonos_1_responses')
-      .select('responses')
+      .select('responses,completed_at')
       .eq('user_id', journey.user.id)
       .order('completed_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
     supabase
       .from('canon_conozcamonos_2_responses')
-      .select('responses')
+      .select('responses,completed_at')
       .eq('user_id', journey.user.id)
       .order('completed_at', { ascending: false })
       .limit(1)
@@ -80,19 +83,23 @@ export default async function A1ReportLayout({
   }
   if (!assessmentResult.data?.disc_profile) redirect('/despega/a1-cerebral')
 
-  await recordJourneyTransition(journey.user.id, 'a1_report')
+  const report = buildA1ProfessionalReport({
+    rawScores: objectValue(assessmentResult.data.disc_profile),
+    dominantPattern: assessmentResult.data.dominant_pattern,
+    secondaryPattern: assessmentResult.data.secondary_pattern,
+    completedAt: assessmentResult.data.completed_at,
+    generatedAt: new Date().toISOString(),
+    c1CompletedAt: c1Result.data?.completed_at,
+    c2CompletedAt: c2Result.data.completed_at,
+    c1Responses: objectValue(c1Result.data?.responses),
+    c2Responses: objectValue(c2Result.data.responses),
+  })
 
-  return (
-    <A1CanonicalReport
-      report={buildA1ProfessionalReport({
-        rawScores: objectValue(assessmentResult.data.disc_profile),
-        dominantPattern: assessmentResult.data.dominant_pattern,
-        secondaryPattern: assessmentResult.data.secondary_pattern,
-        completedAt: assessmentResult.data.completed_at,
-        generatedAt: new Date().toISOString(),
-        c1Responses: objectValue(c1Result.data?.responses),
-        c2Responses: objectValue(c2Result.data.responses),
-      })}
-    />
-  )
+  // Do not mark a report as reviewed when its evidence cannot support a reading.
+  // Existing downstream progress is preserved; this does not reset legacy users.
+  if (report.interpretationAvailable) {
+    await recordJourneyTransition(journey.user.id, 'a1_report')
+  }
+
+  return <A1CanonicalReport report={report} />
 }

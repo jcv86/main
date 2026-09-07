@@ -1,7 +1,12 @@
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
+import {
+  A1_DIMENSIONS, latestReportTimestamp, netScoreToIntensity, normalizeReportTimestamp,
+  readA1ScoreEvidence, resolveA1Patterns,
+  type A1DiscDimension, type A1ScoreEvidence, type A1ScoreMap,
+} from './report-evidence'
 
-export type A1DiscDimension = 'D' | 'I' | 'S' | 'C'
+export type { A1DiscDimension } from './report-evidence'
 
 export interface A1ProfessionalReportInput {
   rawScores: Partial<Record<A1DiscDimension, unknown>>
@@ -9,6 +14,8 @@ export interface A1ProfessionalReportInput {
   secondaryPattern?: unknown
   completedAt?: string | null
   generatedAt?: string | null
+  c1CompletedAt?: string | null
+  c2CompletedAt?: string | null
   c1Responses?: Record<string, unknown>
   c2Responses?: Record<string, unknown>
 }
@@ -16,18 +23,28 @@ export interface A1ProfessionalReportInput {
 export interface A1ProfessionalReport {
   assessmentDate: string | null
   generatedAt: string
-  primary: A1DiscDimension
-  secondary: A1DiscDimension
+  primary: A1DiscDimension | null
+  secondary: A1DiscDimension | null
   combinationName: string
-  rawScores: Record<A1DiscDimension, number>
-  intensities: Record<A1DiscDimension, number>
+  interpretationAvailable: boolean
+  patternSource: 'canonical' | 'derived' | 'unavailable'
+  scoreEvidence: A1ScoreEvidence
+  questionCount: number
+  provenance: {
+    c1CompletedAt: string | null
+    c2CompletedAt: string | null
+    latestDatedSource: string | null
+    hasUndatedSources: boolean
+  }
+  rawScores: A1ScoreMap
+  intensities: A1ScoreMap
   answeredContextItems: number
   dimensions: Array<{
     key: A1DiscDimension
     name: string
     professionalName: string
-    score: number
-    rawScore: number
+    score: number | null
+    rawScore: number | null
     strength: string
     development: string
     color: string
@@ -49,24 +66,11 @@ export interface A1ProfessionalReport {
   }
 }
 
-const DIMENSIONS: A1DiscDimension[] = ['D', 'I', 'S', 'C']
 const COMBINATIONS: Record<string, string> = {
-  'D-I': 'Impulsor Catalítico',
-  'D-S': 'Impulsor Estable',
-  'D-C': 'Estratega Ejecutivo',
-  'I-D': 'Catalizador Decisivo',
-  'I-S': 'Facilitador Influyente',
-  'I-C': 'Comunicador Estratégico',
-  'S-D': 'Gestor Resuelto',
-  'S-I': 'Conector Confiable',
-  'S-C': 'Constructor Metódico',
-  'C-D': 'Arquitecto Ejecutivo',
-  'C-I': 'Analista Persuasivo',
-  'C-S': 'Arquitecto Estable',
-}
-
-function isDimension(value: unknown): value is A1DiscDimension {
-  return typeof value === 'string' && DIMENSIONS.includes(value.toUpperCase() as A1DiscDimension)
+  'D-I': 'Impulsor Catalítico', 'D-S': 'Impulsor Estable', 'D-C': 'Estratega Ejecutivo',
+  'I-D': 'Catalizador Decisivo', 'I-S': 'Facilitador Influyente', 'I-C': 'Comunicador Estratégico',
+  'S-D': 'Gestor Resuelto', 'S-I': 'Conector Confiable', 'S-C': 'Constructor Metódico',
+  'C-D': 'Arquitecto Ejecutivo', 'C-I': 'Analista Persuasivo', 'C-S': 'Arquitecto Estable',
 }
 
 function safeText(value: unknown): string {
@@ -79,51 +83,51 @@ function stringList(value: unknown): string[] {
   return text ? [text] : []
 }
 
-function numericScore(value: unknown): number {
-  const score = Number(value)
-  const limit = DISC_TEST_QUESTIONS.length
-  return Number.isFinite(score) ? Math.max(-limit, Math.min(limit, score)) : 0
-}
-
-export function discNetScoreToIntensity(score: number): number {
-  const limit = DISC_TEST_QUESTIONS.length
-  return Math.round(((Math.max(-limit, Math.min(limit, score)) + limit) / (limit * 2)) * 100)
+export function discNetScoreToIntensity(score: number | null): number | null {
+  return netScoreToIntensity(score, DISC_TEST_QUESTIONS.length)
 }
 
 export function buildA1ProfessionalReport(input: A1ProfessionalReportInput): A1ProfessionalReport {
-  const rawScores = Object.fromEntries(
-    DIMENSIONS.map((key) => [key, numericScore(input.rawScores[key])]),
-  ) as Record<A1DiscDimension, number>
-  const ranked = [...DIMENSIONS].sort(
-    (left, right) => rawScores[right] - rawScores[left] || DIMENSIONS.indexOf(left) - DIMENSIONS.indexOf(right),
+  const scoreEvidence = readA1ScoreEvidence(input.rawScores, DISC_TEST_QUESTIONS.length)
+  const rawScores = scoreEvidence.scores
+  const { primary, secondary, source: patternSource } = resolveA1Patterns(
+    scoreEvidence, input.dominantPattern, input.secondaryPattern,
   )
-  const storedPrimary = isDimension(input.dominantPattern)
-    ? input.dominantPattern.toUpperCase() as A1DiscDimension
-    : null
-  const primary = storedPrimary || ranked[0]
-  const storedSecondary = isDimension(input.secondaryPattern)
-    ? input.secondaryPattern.toUpperCase() as A1DiscDimension
-    : null
-  const secondary = storedSecondary && storedSecondary !== primary
-    ? storedSecondary
-    : ranked.find((key) => key !== primary) || ranked[1]
+  const interpretationAvailable = primary !== null && secondary !== null
   const intensities = Object.fromEntries(
-    DIMENSIONS.map((key) => [key, discNetScoreToIntensity(rawScores[key])]),
-  ) as Record<A1DiscDimension, number>
+    A1_DIMENSIONS.map((key) => [key, discNetScoreToIntensity(rawScores[key])]),
+  ) as A1ScoreMap
   const c1 = input.c1Responses || {}
   const c2 = input.c2Responses || {}
   const contextValues = [...Object.values(c1), ...Object.values(c2)]
+  const assessmentDate = normalizeReportTimestamp(input.completedAt)
+  const c1CompletedAt = normalizeReportTimestamp(input.c1CompletedAt)
+  const c2CompletedAt = normalizeReportTimestamp(input.c2CompletedAt)
 
   return {
-    assessmentDate: input.completedAt || null,
-    generatedAt: input.generatedAt || new Date().toISOString(),
+    assessmentDate,
+    generatedAt: normalizeReportTimestamp(input.generatedAt) || new Date().toISOString(),
     primary,
     secondary,
-    combinationName: COMBINATIONS[`${primary}-${secondary}`] || `${DESPEGA_PROFILES[primary].nombre} + ${DESPEGA_PROFILES[secondary].nombre}`,
+    combinationName: primary && secondary ? COMBINATIONS[`${primary}-${secondary}`]
+      || `${DESPEGA_PROFILES[primary].nombre} + ${DESPEGA_PROFILES[secondary].nombre}`
+      : 'Lectura pendiente de verificación',
+    interpretationAvailable,
+    patternSource,
+    scoreEvidence,
+    questionCount: DISC_TEST_QUESTIONS.length,
+    provenance: {
+      c1CompletedAt,
+      c2CompletedAt,
+      latestDatedSource: latestReportTimestamp([assessmentDate, c1CompletedAt, c2CompletedAt]),
+      hasUndatedSources: !assessmentDate
+        || (Object.values(c1).some((value) => stringList(value).length > 0) && !c1CompletedAt)
+        || (Object.values(c2).some((value) => stringList(value).length > 0) && !c2CompletedAt),
+    },
     rawScores,
     intensities,
     answeredContextItems: contextValues.filter((value) => stringList(value).length > 0).length,
-    dimensions: DIMENSIONS.map((key) => ({
+    dimensions: A1_DIMENSIONS.map((key) => ({
       key,
       name: DESPEGA_PROFILES[key].nombre,
       professionalName: DESPEGA_PROFILES[key].nombreProfesional,
@@ -133,14 +137,14 @@ export function buildA1ProfessionalReport(input: A1ProfessionalReportInput): A1P
       development: DESPEGA_PROFILES[key].oportunidades[0],
       color: DESPEGA_PROFILES[key].color,
     })),
-    strengths: [
+    strengths: primary && secondary ? [
       ...DESPEGA_PROFILES[primary].fortalezas.slice(0, 3),
       ...DESPEGA_PROFILES[secondary].fortalezas.slice(0, 2),
-    ],
-    tensions: [
+    ] : [],
+    tensions: primary && secondary ? [
       ...DESPEGA_PROFILES[primary].oportunidades.slice(0, 3),
       ...DESPEGA_PROFILES[secondary].oportunidades.slice(0, 2),
-    ],
+    ] : [],
     context: {
       currentSituation: safeText(c1['1']),
       experience: safeText(c1['2']),
