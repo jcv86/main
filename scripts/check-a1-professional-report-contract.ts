@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+import { join } from 'node:path'
 import {
   buildA1ProfessionalReport,
   discNetScoreToIntensity,
@@ -81,5 +83,9 @@ assert.equal(legacy.interpretationAvailable, true)
 assert.equal(legacy.patternSource, 'derived')
 assert.equal(legacy.primary, 'D')
 assert.equal(legacy.secondary, 'I')
+
+const layoutSource = readFileSync(join(process.cwd(), 'app/despega/a1-report/layout.tsx'), 'utf8')
+assert.match(layoutSource, /if \(report\.interpretationAvailable\) \{\s+await recordJourneyTransition\(journey\.user\.id, 'a1_report'\)/)
+assert.ok(layoutSource.includes('<A1CanonicalReport report={report} />'))
 
 console.log('DTC A1 professional report contract: PASS (populated, partial, invalid, empty, tied, legacy, provenance)')
