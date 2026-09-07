@@ -23,7 +23,15 @@ export interface ClarificationDependencies<T extends ClarificationSnapshot> {
 const MAX_BYTES = 8192
 const HEX = /^[a-f0-9]{64}$/
 function response(status: number, payload: Record<string, unknown>): Response {
-  return Response.json(payload, { status, headers: { 'Cache-Control': 'private, no-store', 'X-Content-Type-Options': 'nosniff' } })
+  // Compatible with the DOM type definitions pinned in the existing pnpm lockfile.
+  return new Response(JSON.stringify(payload), {
+    status,
+    headers: {
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache-Control': 'private, no-store',
+      'X-Content-Type-Options': 'nosniff',
+    },
+  })
 }
 async function boundedJson(request: Request): Promise<unknown> {
   const reader = request.body?.getReader()
