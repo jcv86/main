@@ -1,0 +1,53 @@
+name: A1 career and PostgreSQL boundary
+on:
+  pull_request:
+    paths:
+      - 'lib/career/**'
+      - 'lib/a1/**'
+      - 'lib/reports/**'
+      - 'app/despega/career-identity/**'
+      - 'components/career/**'
+      - 'scripts/check-a1-career-boundary.ts'
+      - 'scripts/check-career-identity-render.tsx'
+      - 'scripts/test-a1-owner-boundary.mjs'
+      - 'supabase/migrations/20260907204000_a1_owner_boundary.sql'
+      - '.github/workflows/a1-career-boundary.yml'
+permissions:
+  contents: read
+jobs:
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: dtc_fixture_only
+          POSTGRES_DB: dtc_a1_boundary_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing dependencies
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+      - name: Career read boundary and real service contract
+        run: node --conditions=react-server --import tsx scripts/check-a1-career-boundary.ts
+      - name: PostgreSQL ownership and concurrent-write integration
+        env:
+          A1_BOUNDARY_DISPOSABLE: 'yes'
+          A1_BOUNDARY_TEST_DATABASE_URL: postgres://postgres:dtc_fixture_only@127.0.0.1:5432/dtc_a1_boundary_test
+        run: node scripts/test-a1-owner-boundary.mjs
+      - name: Real IdentityOverview SSR with synthetic data
+        run: npx tsx scripts/check-career-identity-render.tsx
+      - name: Full repository TypeScript
+        run: npx tsc --noEmit
