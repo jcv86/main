@@ -33,14 +33,14 @@ export async function loadA1Report(userId: string) {
       .maybeSingle(),
     supabase
       .from('canon_conozcamonos_1_responses')
-      .select('responses')
+      .select('responses,completed_at')
       .eq('user_id', userId)
       .order('completed_at', { ascending: false })
       .limit(1)
       .maybeSingle(),
     supabase
       .from('canon_conozcamonos_2_responses')
-      .select('responses')
+      .select('responses,completed_at')
       .eq('user_id', userId)
       .order('completed_at', { ascending: false })
       .limit(1)
@@ -55,6 +55,8 @@ export async function loadA1Report(userId: string) {
     dominantPattern: assessmentResult.data.dominant_pattern,
     secondaryPattern: assessmentResult.data.secondary_pattern,
     completedAt: textValue(assessmentResult.data.completed_at) || null,
+    c1CompletedAt: textValue(c1Result.data?.completed_at) || null,
+    c2CompletedAt: textValue(c2Result.data?.completed_at) || null,
     c1Responses: objectValue(c1Result.data?.responses),
     c2Responses: objectValue(c2Result.data?.responses),
   })
