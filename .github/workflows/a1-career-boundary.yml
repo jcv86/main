@@ -9,6 +9,7 @@ on:
       - 'components/career/**'
       - 'scripts/check-a1-career-boundary.ts'
       - 'scripts/check-career-identity-render.tsx'
+      - 'scripts/tsconfig.career-boundary.json'
       - 'scripts/test-a1-owner-boundary.mjs'
       - 'supabase/migrations/20260907204000_a1_owner_boundary.sql'
       - '.github/workflows/a1-career-boundary.yml'
@@ -27,7 +28,7 @@ jobs:
         ports:
           - 5432:5432
         options: >-
-          --health-cmd pg_isready
+          --health-cmd "pg_isready -U postgres -d dtc_a1_boundary_test"
           --health-interval 5s
           --health-timeout 5s
           --health-retries 12
@@ -41,7 +42,9 @@ jobs:
       - name: Install existing dependencies
         run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
       - name: Career read boundary and real service contract
-        run: node --conditions=react-server --import tsx scripts/check-a1-career-boundary.ts
+        # CLI mirrors Next's actual server-only -> compiled/server-only/empty alias.
+        # No replacement service, credential, or production bundler change is involved.
+        run: npx tsx --tsconfig scripts/tsconfig.career-boundary.json scripts/check-a1-career-boundary.ts
       - name: PostgreSQL ownership and concurrent-write integration
         env:
           A1_BOUNDARY_DISPOSABLE: 'yes'
