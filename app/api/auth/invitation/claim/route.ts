@@ -5,13 +5,14 @@ import {
   createInvitationCookieValue,
   PILOT_CLAIM_COOKIE,
   PILOT_CLAIM_MAX_AGE,
+  resolveInvitationCookieSecret,
 } from '@/lib/auth/invitation-cookie'
 
 const TOKEN_PATTERN = /^[A-Za-z0-9_-]{43,128}$/
 
 export async function GET(request: NextRequest) {
   const token = request.nextUrl.searchParams.get('token') ?? ''
-  const secret = process.env.PILOT_INVITATION_COOKIE_SECRET ?? ''
+  const secret = resolveInvitationCookieSecret()
   const errorUrl = new URL('/auth/signin?error=invalid_invitation', request.url)
 
   if (!TOKEN_PATTERN.test(token) || secret.length < 32) {
@@ -37,7 +38,7 @@ export async function GET(request: NextRequest) {
     secure: process.env.NODE_ENV === 'production',
     sameSite: 'lax',
     path: '/',
-    maxAge: 900,
+    maxAge: PILOT_CLAIM_MAX_AGE,
   })
   return response
 }
