@@ -8,11 +8,8 @@ import {
   Moon, 
   Sun, 
   Bell, 
-  Globe, 
   Clock, 
   Eye, 
-  LogIn,
-  Volume2,
   AlertCircle,
   CheckCircle2
 } from 'lucide-react'
@@ -45,32 +42,9 @@ const TIMEZONES = [
   { value: 'Australia/Sydney', label: 'Sydney (UTC+10)' },
 ]
 
-const LEARNING_STYLES = [
-  { value: 'visual', label: 'Visual - Aprendo mejor con gráficos e imágenes' },
-  { value: 'auditory', label: 'Auditivo - Prefiero escuchar explicaciones' },
-  { value: 'kinesthetic', label: 'Kinestésico - Aprendo haciendo práctica' },
-  { value: 'reading', label: 'Lectura/Escritura - Prefiero texto y documentos' },
-]
-
-const DIFFICULTY_LEVELS = [
-  { value: 'beginner', label: 'Principiante' },
-  { value: 'intermediate', label: 'Intermedio' },
-  { value: 'advanced', label: 'Avanzado' },
-]
-
-const CONTACT_METHODS = [
-  { value: 'email', label: 'Correo Electrónico' },
-  { value: 'whatsapp', label: 'WhatsApp' },
-  { value: 'both', label: 'Ambos' },
-]
-
 export default function SettingsPage() {
   const { user } = useAuthRedirect()
-  const [preferences, setPreferences] = useState<Partial<UserPreferences & {
-    learning_style: string
-    difficulty_level: string
-    preferred_contact: string
-  }>>({})
+  const [preferences, setPreferences] = useState<Partial<UserPreferences>>({})
   const [loading, setLoading] = useState(false)
   const [saveSuccess, setSaveSuccess] = useState(false)
   const [error, setError] = useState('')
@@ -87,7 +61,7 @@ export default function SettingsPage() {
     }
   }, [prefData])
 
-  const handlePreferenceChange = (key: string, value: any) => {
+  const handlePreferenceChange = <K extends keyof UserPreferences>(key: K, value: UserPreferences[K]) => {
     setPreferences(prev => ({
       ...prev,
       [key]: value
@@ -97,7 +71,7 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     if (!user?.id) {
-      setError('User not authenticated')
+      setError('Tu sesión expiró. Vuelve a ingresar para guardar tus preferencias.')
       return
     }
 
@@ -105,27 +79,24 @@ export default function SettingsPage() {
     setError('')
     
     try {
-      console.log('[v0] Saving preferences:', preferences)
       const response = await fetch('/api/preferences', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(preferences)
       })
 
-      console.log('[v0] Save response status:', response.status)
       const responseData = await response.json()
-      console.log('[v0] Save response data:', responseData)
 
       if (!response.ok) {
-        throw new Error(responseData.error || 'Failed to save preferences')
+        throw new Error(responseData.error || 'No pudimos guardar tus preferencias.')
       }
 
       setSaveSuccess(true)
       mutate()
       setTimeout(() => setSaveSuccess(false), 3000)
     } catch (err) {
-      console.error('[v0] Save error:', err)
-      setError(err instanceof Error ? err.message : 'Failed to save preferences')
+      console.error('Error al guardar preferencias:', err)
+      setError(err instanceof Error ? err.message : 'No pudimos guardar tus preferencias.')
     } finally {
       setLoading(false)
     }
@@ -144,10 +115,10 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-8 pb-20">
+    <div className="mx-auto max-w-4xl min-w-0 px-0 py-4 pb-20 sm:px-4 sm:py-8">
       {/* Header with pillar color accent */}
-      <div className="mb-8 border-l-4 border-l-purple pl-6">
-        <h1 className="text-4xl font-bold text-white mb-2">Preferencias de Perfil</h1>
+      <div className="mb-8 border-l-4 border-l-purple pl-4 sm:pl-6">
+        <h1 className="text-3xl font-bold text-white mb-2 sm:text-4xl">Preferencias de perfil</h1>
         <p className="text-white/70 text-lg">Personaliza tu experiencia en Despega Tu Carrera</p>
         
         {/* Pillar color indicators */}
@@ -160,7 +131,7 @@ export default function SettingsPage() {
       {saveSuccess && (
         <div className="mb-6 p-4 rounded-lg bg-green-500/10 border border-green-500/30 text-green-400 text-sm flex items-center gap-2">
           <CheckCircle2 className="w-4 h-4" />
-          Preferencias guardadas exitosamente
+          Preferencias guardadas correctamente
         </div>
       )}
 
@@ -175,7 +146,7 @@ export default function SettingsPage() {
       <div className="space-y-6">
 
         {/* Display & Theme - A2 Ritual (Blue) */}
-        <div className="rounded-lg border-2 border-blue/30 bg-blue/5 p-6 backdrop-blur-sm hover:border-blue/50 transition-colors">
+        <div className="min-w-0 rounded-lg border-2 border-blue/30 bg-blue/5 p-4 backdrop-blur-sm transition-colors hover:border-blue/50 sm:p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-blue/30 border border-blue/50">
               <Sun className="w-5 h-5 text-blue" />
@@ -190,7 +161,7 @@ export default function SettingsPage() {
             {/* Theme Selection */}
             <div>
               <label className="block text-sm font-medium text-white mb-3">Tema</label>
-              <div className="flex gap-3">
+              <div className="flex flex-wrap gap-3">
                 {[
                   { value: 'dark', label: 'Oscuro', icon: Moon },
                   { value: 'light', label: 'Claro', icon: Sun },
@@ -231,7 +202,7 @@ export default function SettingsPage() {
         </div>
 
         {/* Notifications - A3 Exploration (Orange) */}
-        <div className="rounded-lg border-2 border-orange/30 bg-orange/5 p-6 backdrop-blur-sm hover:border-orange/50 transition-colors">
+        <div className="min-w-0 rounded-lg border-2 border-orange/30 bg-orange/5 p-4 backdrop-blur-sm transition-colors hover:border-orange/50 sm:p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-orange/30 border border-orange/50">
               <Bell className="w-5 h-5 text-orange" />
@@ -250,88 +221,31 @@ export default function SettingsPage() {
               { key: 'goal_reminders', label: 'Recordatorios de objetivos' },
               { key: 'weekly_insights_email', label: 'Resumen semanal de insights' },
             ].map(notif => (
-              <label key={notif.key} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-colors">
+              <label key={notif.key} className="flex min-w-0 cursor-pointer items-start gap-3 rounded-lg p-3 transition-colors hover:bg-white/10">
                 <input
                   type="checkbox"
                   checked={preferences[notif.key as keyof typeof preferences] === true}
-                  onChange={(e) => handlePreferenceChange(notif.key, e.target.checked)}
+                  onChange={(e) => handlePreferenceChange(notif.key as keyof UserPreferences, e.target.checked)}
                   className="w-4 h-4 rounded accent-orange"
                 />
-                <span className="text-white/80">{notif.label}</span>
+                <span className="min-w-0 text-sm leading-relaxed text-white/80 sm:text-base">{notif.label}</span>
               </label>
             ))}
           </div>
         </div>
 
-        {/* Learning Preferences - A1 Information (Purple) */}
-        <div className="rounded-lg border-2 border-purple/30 bg-purple/5 p-6 backdrop-blur-sm hover:border-purple/50 transition-colors">
+        <div className="min-w-0 rounded-lg border-2 border-purple/30 bg-purple/5 p-4 backdrop-blur-sm transition-colors hover:border-purple/50 sm:p-6">
           <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-purple/30 border border-purple/50">
-              <Volume2 className="w-5 h-5 text-purple" />
+            <div className="rounded-lg border border-purple/50 bg-purple/30 p-2">
+              <Clock className="h-5 w-5 text-purple" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Preferencias de Aprendizaje</h2>
-              <p className="text-xs text-purple/60">Tu estilo de aprendizaje</p>
+              <h2 className="text-xl font-semibold text-white">Zona horaria</h2>
+              <p className="text-xs text-purple/60">Ajusta fechas y recordatorios</p>
             </div>
           </div>
 
           <div className="space-y-4">
-            {/* Learning Style */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-3">Tu Estilo de Aprendizaje</label>
-              <div className="space-y-2">
-                {LEARNING_STYLES.map(style => (
-                  <label key={style.value} className="flex items-center gap-3 cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-colors">
-                    <input
-                      type="radio"
-                      name="learning_style"
-                      value={style.value}
-                      checked={preferences.learning_style === style.value}
-                      onChange={(e) => handlePreferenceChange('learning_style', e.target.value)}
-                      className="w-4 h-4 accent-purple"
-                    />
-                    <span className="text-white/80">{style.label}</span>
-                  </label>
-                ))}
-              </div>
-            </div>
-
-            {/* Difficulty Level */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-3">Nivel de Dificultad Preferido</label>
-              <div className="flex gap-3">
-                {DIFFICULTY_LEVELS.map(level => (
-                  <button
-                    key={level.value}
-                    onClick={() => handlePreferenceChange('difficulty_level', level.value)}
-                    className={`px-4 py-2 rounded-lg transition-all text-sm ${
-                      preferences.difficulty_level === level.value
-                        ? 'bg-purple text-white'
-                        : 'bg-white/10 text-white/60 hover:bg-white/20'
-                    }`}
-                  >
-                    {level.label}
-                  </button>
-                ))}
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* Communication Preferences - A4 Reality (Red) */}
-        <div className="rounded-lg border-2 border-red/30 bg-red/5 p-6 backdrop-blur-sm hover:border-[rgb(80,160,170)]/50 transition-colors">
-          <div className="flex items-center gap-3 mb-6">
-            <div className="p-2 rounded-lg bg-red/30 border border-red/50">
-              <LogIn className="w-5 h-5 text-red" />
-            </div>
-            <div>
-              <h2 className="text-xl font-semibold text-white">Comunicación</h2>
-              <p className="text-xs text-red/60">Tu preferencia de contacto</p>
-            </div>
-          </div>
-
-          <div className="space-y-4">
-            {/* Timezone */}
             <div>
               <label className="block text-sm font-medium text-white mb-3 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
@@ -340,7 +254,7 @@ export default function SettingsPage() {
               <select
                 value={preferences.timezone || 'America/Santiago'}
                 onChange={(e) => handlePreferenceChange('timezone', e.target.value)}
-                className="w-full px-4 py-2 rounded-lg bg-white/10 border border-[rgb(80,160,170)]/20 text-white focus:outline-none focus:ring-2 focus:ring-red/50"
+                className="w-full min-w-0 rounded-lg border border-[rgb(80,160,170)]/20 bg-white/10 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple/50 sm:px-4"
               >
                 {TIMEZONES.map(tz => (
                   <option key={tz.value} value={tz.value}>{tz.label}</option>
@@ -348,74 +262,31 @@ export default function SettingsPage() {
               </select>
             </div>
 
-            {/* Preferred Contact Method */}
-            <div>
-              <label className="block text-sm font-medium text-white mb-3">Método de Contacto Preferido</label>
-              <div className="flex gap-3">
-                {CONTACT_METHODS.map(method => (
-                  <button
-                    key={method.value}
-                    onClick={() => handlePreferenceChange('preferred_contact', method.value)}
-                    className={`px-4 py-2 rounded-lg transition-all text-sm ${
-                      preferences.preferred_contact === method.value
-                        ? 'bg-red text-white'
-                        : 'bg-white/10 text-white/60 hover:bg-white/20'
-                    }`}
-                  >
-                    {method.label}
-                  </button>
-                ))}
-              </div>
-            </div>
           </div>
         </div>
 
-        {/* Privacy & Data - Data Protection (Cyan) */}
-        <div className="rounded-lg border-2 border-cyan/30 bg-cyan/5 p-6 backdrop-blur-sm hover:border-cyan/50 transition-colors">
+        <div className="min-w-0 rounded-lg border-2 border-cyan/30 bg-cyan/5 p-4 backdrop-blur-sm transition-colors hover:border-cyan/50 sm:p-6">
           <div className="flex items-center gap-3 mb-6">
             <div className="p-2 rounded-lg bg-cyan/30 border border-cyan/50">
               <Eye className="w-5 h-5 text-cyan" />
             </div>
             <div>
-              <h2 className="text-xl font-semibold text-white">Privacidad y Datos</h2>
-              <p className="text-xs text-cyan/60">Controla tu información</p>
+              <h2 className="text-xl font-semibold text-white">Privacidad y datos</h2>
+              <p className="text-xs text-cyan/60">Qué ocurre con esta información</p>
             </div>
           </div>
 
-          <div className="space-y-4">
-            <label className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-colors">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="w-4 h-4 rounded accent-cyan mt-0.5"
-              />
-              <div>
-                <span className="text-white/80 block">Compartir datos anónimos para mejorar la plataforma</span>
-                <span className="text-white/40 text-sm">Nos ayuda a mejorar tu experiencia sin compartir información personal</span>
-              </div>
-            </label>
-
-            <label className="flex items-start gap-3 cursor-pointer p-3 rounded-lg hover:bg-white/10 transition-colors">
-              <input
-                type="checkbox"
-                defaultChecked
-                className="w-4 h-4 rounded accent-cyan mt-0.5"
-              />
-              <div>
-                <span className="text-white/80 block">Usar mi perfil para recomendaciones</span>
-                <span className="text-white/40 text-sm">Personalizamos contenido basado en tu perfil y progreso</span>
-              </div>
-            </label>
-          </div>
+          <p className="text-sm leading-relaxed text-white/65">Esta pantalla solo guarda las preferencias visibles de idioma, tema, zona horaria y notificaciones. La administración o eliminación de datos personales se gestiona mediante una solicitud al equipo de DTC.</p>
+          <a href="/privacy" className="mt-4 inline-flex text-sm font-semibold text-cyan hover:text-cyan/80">Revisar política de privacidad</a>
         </div>
       </div>
 
       {/* Action Buttons */}
-      <div className="mt-8 flex items-center gap-3 sticky bottom-0 bg-black/80 backdrop-blur p-4 rounded-lg border border-[rgb(80,160,170)]/10">
+      <div className="sticky bottom-0 mt-8 flex flex-col items-stretch gap-3 rounded-lg border border-[rgb(80,160,170)]/10 bg-black/90 p-4 backdrop-blur sm:flex-row sm:items-center">
         <Button
           onClick={handleSave}
           disabled={loading}
-          className="bg-blue hover:bg-blue/90 text-white flex items-center gap-2"
+          className="flex items-center gap-2 bg-blue text-white hover:bg-blue/90"
         >
           <Save className="w-4 h-4" />
           {loading ? 'Guardando...' : 'Guardar Cambios'}
