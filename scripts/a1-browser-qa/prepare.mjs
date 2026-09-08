@@ -9,7 +9,7 @@ assert.ok(root.startsWith(resolve(process.env.RUNNER_TEMP || tmpdir()) + '/'), '
 assert.ok(!existsSync(root), 'Never overwrite an existing lab')
 const repo = process.cwd(), app = join(root, 'app-runtime')
 mkdirSync(app, { recursive: true }); mkdirSync(join(root, 'stack')); mkdirSync(join(root, 'evidence'))
-for (const path of ['lib', 'components']) cpSync(join(repo, path), join(app, path), { recursive: true })
+for (const path of ['lib', 'components', 'hooks']) cpSync(join(repo, path), join(app, path), { recursive: true })
 for (const path of ['tailwind.config.ts', 'postcss.config.js', 'postcss.config.mjs']) if (existsSync(join(repo, path))) cpSync(join(repo, path), join(app, path))
 symlinkSync(join(repo, 'node_modules'), join(app, 'node_modules'), 'dir')
 const write = (path, text) => { mkdirSync(dirname(join(app, path)), { recursive: true }); writeFileSync(join(app, path), text) }
@@ -19,7 +19,7 @@ write('next.config.mjs', `export default { devIndicators: false, experimental: {
 write('postcss.config.mjs', `export default { plugins: { tailwindcss: {}, autoprefixer: {} } }\n`)
 write('app/globals.css', readFileSync(join(repo, 'app/globals.css'), 'utf8'))
 write('app/layout.tsx', `import './globals.css'
-export default function Layout({children}:{children:React.ReactNode}) { return <html lang="es" className="dark"><body style={{'--font-montserrat':'Arial','--font-lora':'Georgia'} as React.CSSProperties}><header data-lab-chrome className="border-b p-4 text-sm">LABORATORIO SINTÉTICO · componentes reales, no producción<nav className="mt-2 flex gap-4"><a href="/despega/a1-report">A1</a><a href="/despega/career-identity">Identidad profesional</a><a href="/login">Acceso de laboratorio</a></nav></header><main id="main-content"><div className="mx-auto max-w-7xl p-4">{children}</div></main></body></html> }
+export default function Layout({children}:{children:React.ReactNode}) { return <html lang="es" className="dark"><body style={{'--font-montserrat':'Arial','--font-lora':'Georgia'} as React.CSSProperties}><header data-lab-chrome className="border-b p-4 text-sm">LABORATORIO SINTÉTICO · componentes reales, no producción<nav className="mt-2 flex flex-wrap gap-4"><a href="/despega/a1-report">A1</a><a href="/despega/career-identity">Identidad profesional</a><a href="/despega/settings">Configuración</a><a href="/login">Acceso de laboratorio</a></nav></header><main id="main-content"><div className="mx-auto max-w-7xl p-4">{children}</div></main></body></html> }
 `)
 write('app/page.tsx', `export default function Page(){return <p>Laboratorio A1 listo</p>}\n`)
 write('app/login/page.tsx', `'use client'
@@ -44,5 +44,6 @@ export const dynamic='force-dynamic'
 export default async function Page(){const s=await createClient();const {data:{user},error}=await s.auth.getUser();if(error||!user)redirect('/login');const service=new SupabaseCareerService(s);const identity=await service.getIdentity(user.id);const context=identity?await service.getContext(user.id):null;return <IdentityOverview a1={await loadA1Report(user.id)} context={context}/>}
 `)
 for (const path of ['app/api/a1-cerebral-save/route.ts', 'app/api/a1/clarifications/route.ts']) write(path, readFileSync(join(repo, path), 'utf8'))
-writeFileSync(join(root, 'evidence/scope.json'), JSON.stringify({ commit: process.env.A1_SOURCE_COMMIT, environment: 'disposable-local-supabase-and-next', genuine: ['Supabase Auth', 'JWT', 'PostgREST', 'PostgreSQL', 'actual A1 save and clarification route exports', 'actual report components and loaders', 'Chromium'], substituted: ['minimal laboratory page shell and login form', 'C1/C2 capture seeded as synthetic fixtures', 'pilot admission function is a lab allowlist fixture', 'system fallback font, not production font loading'], notVerified: ['production or Vercel session', 'full production middleware/journey/onboarding', 'A2-A4 integral route', 'psychometric validity'] }, null, 2))
+for (const path of ['app/api/preferences/route.ts', 'app/despega/settings/page.tsx']) write(path, readFileSync(join(repo, path), 'utf8'))
+writeFileSync(join(root, 'evidence/scope.json'), JSON.stringify({ commit: process.env.A1_SOURCE_COMMIT, environment: 'disposable-local-supabase-and-next', genuine: ['Supabase Auth', 'JWT', 'PostgREST', 'PostgreSQL', 'actual A1 save, clarification and preferences route exports', 'actual report, identity and settings components', 'Chromium at 1440 and 390x844'], substituted: ['minimal laboratory page shell and login form', 'C1/C2 capture seeded as synthetic fixtures', 'pilot admission function is a lab allowlist fixture', 'system fallback font, not production font loading'], notVerified: ['production OAuth provider or Vercel preview session', 'full production middleware/journey/onboarding', 'A2-A4 integral route', 'psychometric validity'] }, null, 2))
 console.log('Isolated A1 browser application prepared; no production routes or environment copied.')

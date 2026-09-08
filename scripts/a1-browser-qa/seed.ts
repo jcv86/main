@@ -28,6 +28,7 @@ async function main() {
       create table public.a3_user_progress(user_id text primary key,completed_module_ids text[] default '{}');
       create table public.a3_route_progression(user_id uuid primary key,route_completed_at timestamp without time zone);
       create table public.despega_journey_state(user_id uuid primary key,metadata jsonb default '{}');
+      create table public.user_preferences(id uuid primary key default gen_random_uuid(),user_id uuid not null unique references auth.users(id),language text not null default 'es',theme text not null default 'dark',notifications_enabled boolean not null default true,email_notifications boolean not null default true,timezone text not null default 'America/Santiago',weekly_insights_email boolean not null default true,goal_reminders boolean not null default true,achievement_notifications boolean not null default true,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
       create table public.qa_pilot_allowlist(user_id uuid primary key references auth.users(id));
       create function public.resolve_pilot_access(p_user_id uuid,p_claim_id uuid default null) returns table(allowed boolean) language sql security invoker set search_path='' as $$ select exists(select 1 from public.qa_pilot_allowlist where user_id=p_user_id) $$;
       grant all on public.qa_pilot_allowlist to service_role;
@@ -40,7 +41,10 @@ async function main() {
       create policy lab_c1_owner on public.canon_conozcamonos_1_responses for all to authenticated using(auth.uid()=user_id) with check(auth.uid()=user_id);
       alter table public.canon_conozcamonos_2_responses enable row level security;
       create policy lab_c2_owner on public.canon_conozcamonos_2_responses for all to authenticated using(auth.uid()=user_id) with check(auth.uid()=user_id);
+      alter table public.user_preferences enable row level security;
+      create policy lab_preferences_owner on public.user_preferences for all to authenticated using(auth.uid()=user_id) with check(auth.uid()=user_id);
       grant select,insert,update,delete on public.users,public.a1_cerebral_assessment,public.canon_conozcamonos_1_responses,public.canon_conozcamonos_2_responses to authenticated,service_role;
+      grant select,insert,update,delete on public.user_preferences to authenticated,service_role;
       grant select on public.a1_cerebral_assessment,public.canon_conozcamonos_1_responses,public.canon_conozcamonos_2_responses to anon;
     `)
     // Only laboratory schema. These are not migrations of the connected project.

@@ -14,6 +14,9 @@ on:
       - 'lib/supabase/**'
       - 'app/api/a1/**'
       - 'app/api/a1-cerebral-save/**'
+      - 'app/api/preferences/**'
+      - 'app/despega/settings/**'
+      - 'hooks/use-auth-redirect.ts'
       - 'app/globals.css'
       - '.github/workflows/a1-browser-qa.yml'
 permissions:
@@ -58,7 +61,7 @@ jobs:
           supabase status --workdir "$A1_LAB_ROOT/stack" -o json > "$A1_LAB_ROOT/status.json"
       - name: Apply selected real migrations to the empty lab and create synthetic Auth users
         run: npx tsx scripts/a1-browser-qa/seed.ts
-      - name: Browser, cookies, PostgREST, clarification persistence, mobile and print
+      - name: Browser, cookies, PostgREST, preferences persistence, mobile and print
         run: node scripts/a1-browser-qa/browser.mjs
       - name: A1-A4 map, persisted progress and navigation in the same local stack
         run: node scripts/a1-browser-qa/flow-browser.mjs

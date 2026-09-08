@@ -28,7 +28,8 @@ async function browserSave(p,responses){return p.evaluate(async responses=>{cons
 async function clarificationSave(p,expected=200){const wait=p.waitForResponse(r=>new URL(r.url()).pathname==='/api/a1/clarifications'&&r.request().method()==='PUT');await p.getByRole('button',{name:'Guardar mis matices',exact:true}).click();const result=await wait;if(result.status()!==expected)throw new Error(JSON.stringify({status:result.status(),expected,body:await result.text(),origin:result.request().headers().origin,requestOrigin:result.headers()['x-lab-request-origin'],headerOrigin:result.headers()['x-lab-header-origin']}));await p.waitForTimeout(1000)}
 async function visibleText(p,text){await p.getByText(text,{exact:false}).first().waitFor({state:'visible'})}
 async function visual(p,name,width){
- await p.setViewportSize({width,height:1000});await p.waitForTimeout(350);await p.screenshot({path:join(evidence,name+'.png'),fullPage:true})
+ const height=width===390?844:1000
+ await p.setViewportSize({width,height});await p.waitForTimeout(350);await p.screenshot({path:join(evidence,name+'.png'),fullPage:true})
  const bounds=await p.evaluate(()=>({width:innerWidth,scroll:document.documentElement.scrollWidth,radios:[...document.querySelectorAll('[data-dtc-report] input[type="radio"]')].map(r=>({width:r.getBoundingClientRect().width,labelWidth:r.closest('label')?.getBoundingClientRect().width}))}))
  if(bounds.scroll>bounds.width+1)visualFailures.push({name,issue:'horizontal_overflow',...bounds})
  if(bounds.radios.some(r=>r.width>32||r.width<14))visualFailures.push({name,issue:'choice_control_size',radios:bounds.radios})
@@ -64,7 +65,20 @@ try{
  })
  await step('identity_uses_same_source_without_disc_skills',async()=>{await page.goto(base+'/despega/career-identity');await visibleText(page,'Lo que sabes de ti, con su evidencia');await visibleText(page,'Objetivo posterior alpha');await visibleText(page,'Todavía no hay registros de habilidades');assert.ok(!(await page.locator('body').innerText()).includes('Objetivo posterior beta'))})
  await visual(page,'identity-desktop',1440);await visual(page,'identity-mobile',390)
- await step('real_jwt_postgrest_cross_owner_isolation',async()=>{const beta=fixtures.users.find(u=>u.label==='beta'),alpha=fixtures.users.find(u=>u.label==='alpha');const other=createClient(status.API_URL,status.ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false}});const auth=await other.auth.signInWithPassword({email:beta.email,password:fixtures.password});assert.ifError(auth.error);for(const table of ['a1_cerebral_assessment','canon_conozcamonos_1_responses','canon_conozcamonos_2_responses']){const result=await other.from(table).select('id').eq('user_id',alpha.id);assert.ifError(result.error);assert.deepEqual(result.data,[])}const r=await other.from('canon_conozcamonos_2_responses').update({responses:{forged:true}}).eq('user_id',alpha.id).select('id');assert.ifError(r.error);assert.deepEqual(r.data,[]);await other.auth.signOut()})
+ await step('preferences_real_http_save_reload_and_restore',async()=>{
+  await page.goto(base+'/despega/settings');await visibleText(page,'Preferencias de perfil')
+  const weekly=page.getByRole('checkbox',{name:'Resumen semanal de insights'})
+  assert.equal(await weekly.isChecked(),true);await weekly.uncheck()
+  let wait=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/preferences'&&r.request().method()==='POST')
+  await page.getByRole('button',{name:'Guardar Cambios'}).click();assert.equal((await wait).status(),200)
+  await page.reload();assert.equal(await weekly.isChecked(),false)
+  await weekly.check();wait=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/preferences'&&r.request().method()==='POST')
+  await page.getByRole('button',{name:'Guardar Cambios'}).click();assert.equal((await wait).status(),200)
+  await page.reload();assert.equal(await weekly.isChecked(),true)
+ })
+ await visual(page,'settings-desktop',1440);await visual(page,'settings-mobile-390x844',390)
+ await step('real_jwt_postgrest_cross_owner_isolation',async()=>{const beta=fixtures.users.find(u=>u.label==='beta'),alpha=fixtures.users.find(u=>u.label==='alpha');const other=createClient(status.API_URL,status.ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false}});const auth=await other.auth.signInWithPassword({email:beta.email,password:fixtures.password});assert.ifError(auth.error);for(const table of ['a1_cerebral_assessment','canon_conozcamonos_1_responses','canon_conozcamonos_2_responses','user_preferences']){const result=await other.from(table).select('id').eq('user_id',alpha.id);assert.ifError(result.error);assert.deepEqual(result.data,[])}const r=await other.from('canon_conozcamonos_2_responses').update({responses:{forged:true}}).eq('user_id',alpha.id).select('id');assert.ifError(r.error);assert.deepEqual(r.data,[]);const preferences=await other.from('user_preferences').update({theme:'light'}).eq('user_id',alpha.id).select('id');assert.ifError(preferences.error);assert.deepEqual(preferences.data,[]);await other.auth.signOut()})
+ await step('preferences_without_cookie_are_rejected',async()=>{await c.clearCookies();const response=await page.evaluate(async()=>{const r=await fetch('/api/preferences');return r.status});assert.equal(response,401)})
  await step('session_cookie_removed_is_rejected',async()=>{await c.clearCookies();const r=await page.evaluate(async()=>{const response=await fetch('/api/a1/clarifications',{method:'PUT',headers:{'Content-Type':'application/json'},body:JSON.stringify({})});return response.status});assert.equal(r,401);await page.reload();await page.waitForURL('**/login')})
  const emptyContext=await context(),empty=await emptyContext.newPage();await login(empty,'empty');await empty.goto(base+'/despega/career-identity');await visibleText(empty,'Sin evaluación disponible');await visual(empty,'identity-empty-mobile',390);await emptyContext.close()
  const tiedContext=await context(),tied=await tiedContext.newPage();await login(tied,'tied');const tieSave=await browserSave(tied,fixtures.tied);assert.equal(tieSave.status,200);await tied.reload();await visibleText(tied,'Hay más de una lectura posible del patrón');await visual(tied,'a1-tied-mobile',390);await tiedContext.close()
