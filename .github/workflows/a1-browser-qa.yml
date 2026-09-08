@@ -25,11 +25,13 @@ jobs:
     timeout-minutes: 25
     env:
       A1_BROWSER_LAB: 'yes'
-      A1_LAB_ROOT: ${{ runner.temp }}/dtc-a1-browser
-      A1_TOOLS_ROOT: ${{ runner.temp }}/dtc-a1-tools
       A1_SOURCE_COMMIT: ${{ github.event.pull_request.head.sha }}
       NEXT_TELEMETRY_DISABLED: '1'
     steps:
+      - name: Initialize runner-local paths
+        run: |
+          echo "A1_LAB_ROOT=$RUNNER_TEMP/dtc-a1-browser" >> "$GITHUB_ENV"
+          echo "A1_TOOLS_ROOT=$RUNNER_TEMP/dtc-a1-tools" >> "$GITHUB_ENV"
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.event.pull_request.head.sha }}
