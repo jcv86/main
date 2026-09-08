@@ -1,7 +1,23 @@
-import { createHmac, timingSafeEqual } from 'node:crypto'
+import { createHash, createHmac, timingSafeEqual } from 'node:crypto'
 
 export const PILOT_CLAIM_COOKIE = 'dtc_pilot_claim'
 export const PILOT_CLAIM_MAX_AGE = 15 * 60
+
+const SECRET_CONTEXT = 'dtc-pilot-invitation-cookie-v1'
+
+export function resolveInvitationCookieSecret(
+  env: Partial<Pick<NodeJS.ProcessEnv, 'PILOT_INVITATION_COOKIE_SECRET' | 'SUPABASE_SERVICE_ROLE_KEY'>> = process.env,
+): string {
+  const configured = env.PILOT_INVITATION_COOKIE_SECRET?.trim() ?? ''
+  if (configured.length >= 32) return configured
+
+  const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY?.trim() ?? ''
+  if (serviceRoleKey.length < 32) return ''
+
+  return createHash('sha256')
+    .update(`${SECRET_CONTEXT}\0${serviceRoleKey}`)
+    .digest('hex')
+}
 
 function signature(claimId: string, secret: string): string {
   return createHmac('sha256', secret).update(claimId).digest('base64url')

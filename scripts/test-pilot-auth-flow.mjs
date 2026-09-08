@@ -1,6 +1,10 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-import { createInvitationCookieValue, verifyInvitationCookieValue } from '../lib/auth/invitation-cookie.ts'
+import {
+  createInvitationCookieValue,
+  resolveInvitationCookieSecret,
+  verifyInvitationCookieValue,
+} from '../lib/auth/invitation-cookie.ts'
 
 const source = (path) => readFileSync(path, 'utf8')
 const secret = 'test-secret-that-is-long-enough-for-hmac'
@@ -11,12 +15,33 @@ assert.notEqual(signed, claimId)
 assert.equal(verifyInvitationCookieValue(signed, secret), claimId)
 assert.equal(verifyInvitationCookieValue(`${signed}x`, secret), null)
 
+assert.equal(
+  resolveInvitationCookieSecret({
+    PILOT_INVITATION_COOKIE_SECRET: secret,
+    SUPABASE_SERVICE_ROLE_KEY: 'service-role-key-that-is-also-long-enough',
+  }),
+  secret,
+)
+const derivedSecret = resolveInvitationCookieSecret({
+  PILOT_INVITATION_COOKIE_SECRET: '',
+  SUPABASE_SERVICE_ROLE_KEY: 'service-role-key-that-is-long-enough-for-a-safe-fallback',
+})
+assert.equal(derivedSecret.length, 64)
+assert.equal(
+  derivedSecret,
+  resolveInvitationCookieSecret({
+    SUPABASE_SERVICE_ROLE_KEY: 'service-role-key-that-is-long-enough-for-a-safe-fallback',
+  }),
+)
+assert.equal(resolveInvitationCookieSecret({}), '')
+
 const claimRoute = source('app/api/auth/invitation/claim/route.ts')
 assert.match(claimRoute, /createHash\(['"]sha256['"]\)/)
 assert.match(claimRoute, /claim_pilot_invitation/)
 assert.match(claimRoute, /httpOnly:\s*true/)
 assert.match(claimRoute, /sameSite:\s*['"]lax['"]/)
-assert.match(claimRoute, /maxAge:\s*900/)
+assert.match(claimRoute, /maxAge:\s*PILOT_CLAIM_MAX_AGE/)
+assert.match(claimRoute, /resolveInvitationCookieSecret/)
 assert.doesNotMatch(claimRoute, /console\.(?:log|warn|error)\([^)]*token/)
 
 const signIn = source('app/auth/signin/page.tsx')
@@ -34,6 +59,7 @@ assert.match(callback, /cookieNextPath/)
 assert.match(callback, /cookies\.delete\(PILOT_OAUTH_NEXT_COOKIE\)/)
 assert.match(callback, /access_required/)
 assert.match(callback, /auth\.signOut/)
+assert.match(callback, /resolveInvitationCookieSecret/)
 
 const middleware = source('lib/supabase/middleware.ts')
 assert.match(middleware, /classifyAuthState/)
