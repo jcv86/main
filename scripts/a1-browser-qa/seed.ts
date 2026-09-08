@@ -24,6 +24,10 @@ async function main() {
       create table public.a1_cerebral_assessment(id uuid primary key default gen_random_uuid(),user_id uuid not null references public.users(id),questions jsonb not null,responses jsonb not null,disc_profile jsonb not null,dominant_pattern text not null,secondary_pattern text,completed_at timestamptz not null default now(),created_at timestamptz not null default now());
       create table public.canon_conozcamonos_1_responses(id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id),responses jsonb not null,completed_at timestamptz,updated_at timestamptz default now());
       create table public.canon_conozcamonos_2_responses(id uuid primary key default gen_random_uuid(),user_id uuid not null references auth.users(id),responses jsonb not null,completed_at timestamptz,updated_at timestamptz default now());
+      create table public.a2_user_task_completions(id uuid primary key default gen_random_uuid(),user_id uuid not null,day integer,completed_at timestamptz);
+      create table public.a3_user_progress(user_id text primary key,completed_module_ids text[] default '{}');
+      create table public.a3_route_progression(user_id uuid primary key,route_completed_at timestamp without time zone);
+      create table public.despega_journey_state(user_id uuid primary key,metadata jsonb default '{}');
       create table public.qa_pilot_allowlist(user_id uuid primary key references auth.users(id));
       create function public.resolve_pilot_access(p_user_id uuid,p_claim_id uuid default null) returns table(allowed boolean) language sql security invoker set search_path='' as $$ select exists(select 1 from public.qa_pilot_allowlist where user_id=p_user_id) $$;
       grant all on public.qa_pilot_allowlist to service_role;
@@ -39,6 +43,10 @@ async function main() {
       grant select,insert,update,delete on public.users,public.a1_cerebral_assessment,public.canon_conozcamonos_1_responses,public.canon_conozcamonos_2_responses to authenticated,service_role;
       grant select on public.a1_cerebral_assessment,public.canon_conozcamonos_1_responses,public.canon_conozcamonos_2_responses to anon;
     `)
+    // Only laboratory schema. These are not migrations of the connected project.
+    for (const table of ['a2_user_task_completions','a3_user_progress','a3_route_progression','despega_journey_state']) {
+      await db.query(`alter table public.${table} enable row level security; create policy lab_flow_owner on public.${table} for all to authenticated using(auth.uid()::text=user_id::text) with check(auth.uid()::text=user_id::text); grant select,insert,update,delete on public.${table} to authenticated,service_role;`)
+    }
     for (const path of ['20260804061000_career_identity_foundation.sql','20260804070000_a1_career_identity_dual_write.sql','20260804125500_a1_career_identity_revoke_anon.sql','20260907204000_a1_owner_boundary.sql','20260907211500_a1_source_writer_v2.sql']) await db.query(readFileSync(join('supabase/migrations',path),'utf8'))
     await db.query("notify pgrst, 'reload schema'")
     const admin = createClient(status.API_URL,status.SERVICE_ROLE_KEY,{auth:{persistSession:false,autoRefreshToken:false}})
@@ -50,6 +58,10 @@ async function main() {
       const id = data.user.id; users.push({label,email,id})
       await db.query('insert into public.users(id,email,full_name) values($1,$2,$3)',[id,email,`QA sintético ${label}`])
       await db.query('insert into public.qa_pilot_allowlist values($1)',[id])
+      await db.query('insert into public.despega_journey_state(user_id,metadata) values($1,$2)',[id,{a2_horizon:30}])
+      await db.query('insert into public.a3_user_progress(user_id) values($1)',[id])
+      await db.query('insert into public.a3_route_progression(user_id) values($1)',[id])
+      if(label==='alpha') await db.query('insert into public.a2_user_task_completions(user_id,day,completed_at) select $1,d,now() from generate_series(1,6) d',[id])
       const challenge = label === 'alpha' ? 'CASO ALPHA SINTÉTICO. ' + 'Coordinar decisiones con evidencia y comunicar sus límites. '.repeat(12) : `CASO ${label.toUpperCase()} SINTÉTICO, no datos de una persona real.`
       const c1 = {'1':['Empleado','Independiente'],'2':['5-10 años'],'3':challenge,'4':`Objetivo inicial ${label}`,'6':['3-5 horas']}
       const c2 = {'1':`Objetivo posterior ${label}`,'2':'Sector sintético','3':`Rol ${label}`,'4':['Comunicación'],'5':'Menos de 5 horas','6':['Práctica'],'7':['Tiempo limitado'],'8':'Flexible'}

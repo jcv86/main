@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict'
+import {readFileSync} from 'node:fs'
 import {buildJourneyFlow,canonicalOnboardingPath,ONBOARDING_PATHS,type FlowInput,type OnboardingFlags} from '../lib/journey/flow'
 let count=0
 function check(name:string,run:()=>void){try{run();count++}catch(error){throw new Error(`A1-A4 flow: ${name}`,{cause:error})}}
@@ -16,8 +17,14 @@ check('thirty completed days do not finish ninety',()=>{const f=buildJourneyFlow
 check('ten sessions or module strings do not unlock A4',()=>{const f=buildJourneyFlow({...base,access:{...base.access,a3:true,a4:true},currentModule:'A3',highestA2DayUnlocked:30,completedA3Modules:['career-mirror',...Array.from({length:12},(_,i)=>`module-${i}`)]});assert.equal(f.radarAvailable,false);assert.equal(f.cards.find(c=>c.id==='A4')?.href,null)})
 check('route closure still requires authorized A4 access',()=>{const f=buildJourneyFlow({...base,a3RouteClosed:true});assert.equal(f.radarAvailable,false)})
 check('A4 uses explicit closure plus access',()=>{const f=buildJourneyFlow({...base,access:{a1:true,a2:true,a3:true,a4:true},a3RouteClosed:true});assert.equal(f.next.href,'/despega/a4');assert.equal(f.cards.find(c=>c.id==='A3')?.state,'completed')})
-check('onboarding requirements win over isolated unlock flags',()=>{const f=buildJourneyFlow({...base,profile:{},access:{a1:true,a2:true,a3:true,a4:true},a3RouteClosed:true});assert.equal(f.next.href,'/despega/conozcamonos-1');assert.equal(f.radarAvailable,false)})
+check('onboarding requirements win over isolated unlock flags',()=>{const f=buildJourneyFlow({...base,profile:{},access:{a1:true,a2:true,a3:true,a4:true},a3RouteClosed:true});assert.equal(f.next.href,'/despega/conozcamonos-1');assert.equal(f.radarAvailable,false);assert.equal(f.cards.find(c=>c.id==='A2')?.href,null)})
 check('all ninety unique days complete A2 only',()=>{const f=buildJourneyFlow({...base,completedA2Days:Array.from({length:90},(_,i)=>i+1)});assert.equal(f.cards.find(c=>c.id==='A2')?.state,'completed');assert.equal(f.radarAvailable,false)})
 for(const day of [-1,0,1,7,90,900,NaN])check(`bounded resume ${day}`,()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:day});assert.ok(f.resumeDay>=1&&f.resumeDay<=90);assert.ok(f.next.href.startsWith('/despega/'))})
+check('explicit horizon prevents a silent extension',()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:90,horizonMetadata:{a2_horizon:30},completedA2Days:Array.from({length:30},(_,i)=>i+1)});assert.equal(f.activeHorizon,30);assert.equal(f.resumeDay,30);assert.equal(f.cycleProgress,100)})
+check('existing sixty-day cycle is preserved',()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:31,completedA2Days:Array.from({length:30},(_,i)=>i+1)});assert.equal(f.activeHorizon,60);assert.equal(f.cycleProgress,50);assert.equal(f.next.href,'/despega/a2/dia-31')})
+check('ninety-day extension retains actual count',()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:61,horizonMetadata:{a2_horizon:90},completedA2Days:[1,2,3]});assert.equal(f.activeHorizon,90);assert.equal(f.cycleCompletedDays,3);assert.equal(f.resumeDay,4)})
 check('input is never mutated',()=>{const snapshot=JSON.stringify(base);buildJourneyFlow(base);assert.equal(JSON.stringify(base),snapshot)})
-console.log(`A1-A4 continuity: PASS (${count} behavioral checks; read-only navigation, no live gate or progress writes)`)
+check('shared resolver wired to server and legacy client',()=>{assert.ok(readFileSync('lib/journey/service.ts','utf8').includes('return canonicalOnboardingPath(profile)'));assert.ok(readFileSync('lib/redirect-logic.ts','utf8').includes('return canonicalOnboardingPath(profile)'))})
+check('dashboard and integral use the same flow service',()=>{for(const p of ['app/despega/dashboard/page.tsx','app/despega/reporte-integral/page.tsx','app/despega/recorrido/page.tsx'])assert.ok(readFileSync(p,'utf8').includes('loadJourneyFlow(journey)'));assert.ok(!readFileSync('app/despega/dashboard/page.tsx','utf8').includes('highestA2DayUnlocked - 1'))})
+check('new assessment does not automatically become reviewed',()=>{const source=readFileSync('lib/journey/service.ts','utf8');assert.ok(!source.includes('a1_report_seen: profile.a1_report_seen || hasA1Evidence'));assert.ok(source.includes('a1_report_seen: profile.a1_report_seen || hasA2Evidence'))})
+console.log(`A1-A4 continuity: PASS (${count} behavioral/source checks; read-only navigation, no live gate or progress writes)`)

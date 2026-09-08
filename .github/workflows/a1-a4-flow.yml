@@ -8,7 +8,10 @@ on:
       - 'app/despega/dashboard/**'
       - 'app/despega/reporte-integral/**'
       - 'app/despega/recorrido/**'
-      - 'scripts/check-a1-a4-flow.ts'
+      - 'scripts/check-a1-a4-flow*'
+      - 'scripts/check-journey-transition-evidence.ts'
+      - 'scripts/tsconfig.journey-flow.json'
+      - 'scripts/fixtures/journey-supabase.ts'
       - '.github/workflows/a1-a4-flow.yml'
 permissions:
   contents: read
@@ -24,7 +27,7 @@ jobs:
       - name: Export explicit public flow source paths only
         run: |
           mkdir -p /tmp/dtc-flow-source
-          git archive --format=tar.gz --output=/tmp/dtc-flow-source/source.tar.gz HEAD lib/journey lib/redirect-logic.ts lib/a2 lib/a3 lib/dtc/product-language.ts components/layout components/reports components/career components/phase-transition-handler.tsx components/a1-canonical-report.tsx app/despega/dashboard app/despega/reporte-integral app/despega/layout.tsx scripts/a1-browser-qa scripts/check-a1-a4-flow.ts package.json
+          git archive --format=tar.gz --output=/tmp/dtc-flow-source/source.tar.gz HEAD lib/journey lib/redirect-logic.ts lib/a2 lib/a3 lib/dtc/product-language.ts components/journey components/layout components/reports components/career components/phase-transition-handler.tsx components/a1-canonical-report.tsx app/despega/dashboard app/despega/reporte-integral app/despega/recorrido app/despega/layout.tsx scripts/a1-browser-qa scripts/check-a1-a4-flow.ts scripts/check-a1-a4-flow-service.ts scripts/check-journey-transition-evidence.ts scripts/fixtures/journey-supabase.ts scripts/tsconfig.journey-flow.json package.json
           git rev-parse HEAD > /tmp/dtc-flow-source/commit.txt
           cd /tmp/dtc-flow-source && sha256sum source.tar.gz > SHA256SUMS
       - uses: actions/upload-artifact@v4
@@ -45,4 +48,6 @@ jobs:
           node-version: '22'
       - run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
       - run: npx tsx scripts/check-a1-a4-flow.ts
+      - run: npx tsx --tsconfig scripts/tsconfig.journey-flow.json scripts/check-a1-a4-flow-service.ts
+      - run: npx tsx --tsconfig scripts/tsconfig.journey-flow.json scripts/check-journey-transition-evidence.ts
       - run: npx tsc --noEmit

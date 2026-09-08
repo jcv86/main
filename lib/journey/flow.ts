@@ -1,4 +1,6 @@
 /** Read-only navigation model. It never grants access or writes completion flags. */
+import { inferA2Horizon } from '../a2/server-progress'
+
 export const FLOW_VERSION = 'a1-a4-continuity.v1'
 export interface OnboardingFlags {
   onboarding_conozcamonos_1_completed?: boolean | null
@@ -35,6 +37,7 @@ export interface FlowInput {
   access: { a1: boolean; a2: boolean; a3: boolean; a4: boolean }
   currentModule: string
   highestA2DayUnlocked: number
+  horizonMetadata?: unknown
   completedA2Days: unknown[]
   completedA3Modules: unknown[]
   a3RouteClosed: boolean
@@ -67,7 +70,11 @@ export function buildJourneyFlow(input: FlowInput) {
   const completed = new Set(completedDays)
   const initialDays = completedDays.filter(day=>day<=30).length
   const modules = [...new Set(input.completedA3Modules.filter((v): v is string=>typeof v==='string' && Boolean(v.trim())).map(v=>v.trim()))]
-  const unlocked = Number.isInteger(input.highestA2DayUnlocked) ? Math.max(1,Math.min(90,input.highestA2DayUnlocked)) : 1
+  const boundedUnlocked = Number.isInteger(input.highestA2DayUnlocked) ? Math.max(1,Math.min(90,input.highestA2DayUnlocked)) : 1
+  const activeHorizon = inferA2Horizon(input.horizonMetadata, boundedUnlocked)
+  const unlocked = Math.min(activeHorizon, boundedUnlocked)
+  const cycleCompletedDays = completedDays.filter(day=>day<=activeHorizon).length
+  const cycleComplete = cycleCompletedDays === activeHorizon
   const resumeDay = Array.from({length:unlocked},(_,i)=>i+1).find(day=>!completed.has(day)) ?? unlocked
   const checkpointPending = input.access.a3 && unlocked>=7 && !modules.includes(checkpoint)
   const radarAvailable = onboardingComplete && input.access.a4 && input.a3RouteClosed
@@ -83,22 +90,22 @@ export function buildJourneyFlow(input: FlowInput) {
     next={href:'/despega/a3/career-mirror',label:'Realizar el checkpoint del Día 7',title:'Tu Ruta y Entrenamiento se conectan aquí',description:'Completa Career Mirror y vuelve a Tu Ruta. Entrenamiento no exige terminar primero los 30 días.'}
   } else if (input.access.a3 && (input.currentModule==='A3' || modules.length>0 || initialDays===30)) {
     next={href:'/despega/a3',label:'Continuar Entrenamiento',title:'Contrasta tu avance con práctica',description:input.a3RouteClosed?'Tu cierre está registrado; revisa la sincronización del acceso antes de abrir A4.':'Retoma el siguiente módulo habilitado. El número de sesiones no reemplaza el cierre de la ruta.'}
-  } else if (initialDays===30) {
-    next={href:'/despega/a2/resultados',label:'Revisar mi ciclo de 30 días',title:'Revisa la evidencia de tu ciclo inicial',description:'Treinta días registrados no son noventa. Revisa el balance y las opciones habilitadas para continuar.'}
+  } else if (cycleComplete) {
+    next={href:'/despega/a2/resultados',label:`Revisar mi ciclo de ${activeHorizon} días`,title:'Revisa la evidencia de tu ciclo',description:'La finalización del ciclo no amplía automáticamente tu ruta. Revisa el balance y las opciones habilitadas para continuar.'}
   } else {
     next={href:`/despega/a2/dia-${resumeDay}`,label:`Continuar día ${resumeDay}`,title:'Retoma una acción pendiente',description:'Se prioriza el primer día sin finalización registrada dentro de lo habilitado; un día abierto no se cuenta como completado.'}
   }
   const cards=stages.map(stage=>{
-    const allowed=stage.id==='A4'?radarAvailable:input.access[stage.id.toLowerCase() as keyof FlowInput['access']]
+    const allowed=stage.id==='A4'?radarAvailable:stage.id==='A1'?input.access.a1:onboardingComplete&&input.access.a2&&input.access[stage.id.toLowerCase() as keyof FlowInput['access']]
     const done=stage.id==='A1'?onboardingComplete:stage.id==='A2'?completedDays.length===90:stage.id==='A3'?input.a3RouteClosed:false
     const active=allowed&&(stage.id==='A4'?radarAvailable:stage.id==='A1'?!onboardingComplete:next.href.startsWith(`/despega/${stage.id.toLowerCase()}`))
     const state=!allowed?'locked':done?'completed':active?'active':'available'
     const detail=stage.id==='A1'?(onboardingComplete?'Lectura y contexto revisados':'Contexto, evaluación, C2 e informe antes de A2')
-      :stage.id==='A2'?`${initialDays}/30 días del ciclo inicial · ${completedDays.length} días registrados en total`
+      :stage.id==='A2'?`${cycleCompletedDays}/${activeHorizon} días del ciclo activo · ${completedDays.length} días registrados en total`
       :stage.id==='A3'?(input.a3RouteClosed?'Cierre de ruta registrado':modules.includes(checkpoint)?'Primer checkpoint registrado; continúa los módulos habilitados':'Primer checkpoint desde el Día 7 de A2')
       :radarAvailable?'Acceso respaldado por el cierre de A3':'Pendiente de cierre verificado de A3 y acceso autorizado'
     return {...stage,state,detail,href:allowed?(stage.id==='A1'&&!onboardingComplete?onboardingPath:stage.href):null}
   })
-  return {version:FLOW_VERSION,onboardingPath,next,cards,completedDays,initialDays,initialProgress:Math.round(initialDays/30*100),resumeDay,checkpointPending,radarAvailable,completedStages:cards.filter(c=>c.state==='completed').length}
+  return {version:FLOW_VERSION,onboardingPath,next,cards,completedDays,initialDays,activeHorizon,cycleCompletedDays,cycleProgress:Math.round(cycleCompletedDays/activeHorizon*100),initialProgress:Math.round(initialDays/30*100),resumeDay,checkpointPending,radarAvailable,completedStages:cards.filter(c=>c.state==='completed').length}
 }
 export type JourneyFlow = ReturnType<typeof buildJourneyFlow>

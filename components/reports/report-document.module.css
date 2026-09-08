@@ -4,8 +4,7 @@
 .document :where(section, article, dl, div) {
   min-width: 0;
 }
-/* Global text-field sizing must not expand native choice controls to 100% width.
-   The surrounding label remains the full-size pointer/touch target. */
+/* Labels retain the touch target; native radios must not inherit global text-field width. */
 .document input[type='radio'] {
   width: 1.125rem;
   height: 1.125rem;
@@ -27,13 +26,8 @@
     color: #0f172a !important;
     text-shadow: none !important;
   }
-  .document :where(h1, h2, h3, dt) {
-    break-after: avoid;
-  }
-  .document :where(p, li, dd) {
-    orphans: 3;
-    widows: 3;
-  }
+  .document :where(h1, h2, h3, dt) { break-after: avoid; }
+  .document :where(p, li, dd) { orphans: 3; widows: 3; }
   .document [data-report-card] {
     background: white !important;
     background-image: none !important;
@@ -41,14 +35,9 @@
     box-shadow: none !important;
     overflow: visible !important;
   }
-  .document [data-report-dimension] {
-    break-inside: avoid;
-  }
-  .document [data-report-actions] {
-    display: none !important;
-  }
-  .document [data-report-provenance] {
-    margin-top: 12pt;
-    border-color: #cbd5e1 !important;
-  }
+  .document [data-report-dimension], .document details li { break-inside: avoid; }
+  .document section[aria-labelledby='bridge-heading'] > div { grid-template-columns: minmax(0, 1fr) !important; }
+  .document section[aria-labelledby='bridge-heading'] [data-report-card] { break-inside: avoid; }
+  .document [data-report-actions] { display: none !important; }
+  .document [data-report-provenance] { margin-top: 12pt; border-color: #cbd5e1 !important; }
 }

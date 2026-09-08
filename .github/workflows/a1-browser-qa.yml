@@ -6,7 +6,9 @@ on:
       - 'components/reports/**'
       - 'components/a1-canonical-report.tsx'
       - 'components/career/**'
+      - 'components/journey/**'
       - 'lib/a1/**'
+      - 'lib/journey/**'
       - 'lib/reports/**'
       - 'lib/career/**'
       - 'lib/supabase/**'
@@ -58,6 +60,8 @@ jobs:
         run: npx tsx scripts/a1-browser-qa/seed.ts
       - name: Browser, cookies, PostgREST, clarification persistence, mobile and print
         run: node scripts/a1-browser-qa/browser.mjs
+      - name: A1-A4 map, persisted progress and navigation in the same local stack
+        run: node scripts/a1-browser-qa/flow-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4
