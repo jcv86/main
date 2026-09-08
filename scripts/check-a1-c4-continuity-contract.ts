@@ -72,21 +72,24 @@ assert.equal(PRODUCT_STAGES.A3.href, '/despega/a3')
 assert.equal(PRODUCT_STAGES.A4.href, '/despega/a4')
 
 const journey = source('lib/journey/service.ts')
+const flow = source('lib/journey/flow.ts')
 const canonicalOrder = [
-  "if (!hasCompletedC1(profile)) return MODULE_ENTRY.A1",
-  "if (!profile.a1_cerebral_intro_seen) return '/despega/a1-cerebral-intro'",
-  "return '/despega/a1-cerebral'",
-  "if (!hasSeenA1Report(profile)) return '/despega/a1/resultado'",
-  "if (!profile.a2_intro_seen) return '/despega/a2/intro'",
-  "if (!hasCompletedC2(profile)) return '/despega/conozcamonos-2'",
-  'return MODULE_ENTRY.A2',
+  "if (!(profile.onboarding_conozcamonos_1_completed || profile.onboarding_completed)) return ONBOARDING_PATHS[0]",
+  'if (!profile.a1_cerebral_intro_seen) return ONBOARDING_PATHS[1]',
+  "if (!(profile.a1_cerebral_completed || profile.a1_test_completed || profile.onboarding_cerebral_completed)) return ONBOARDING_PATHS[2]",
+  "if (!profile.conozcamonos_2_completed) return ONBOARDING_PATHS[3]",
+  "if (!(profile.a1_report_seen || profile.a1_results_saved)) return ONBOARDING_PATHS[4]",
+  "if (!profile.a2_intro_seen) return ONBOARDING_PATHS[5]",
+  'return ONBOARDING_PATHS[6]',
 ]
 let previousIndex = -1
 for (const marker of canonicalOrder) {
-  const index = journey.indexOf(marker)
+  const index = flow.indexOf(marker)
   assert.ok(index > previousIndex, `Canonical journey marker missing or out of order: ${marker}`)
   previousIndex = index
 }
+assert.ok(journey.includes("import { canonicalOnboardingPath } from './flow'"))
+assert.ok(journey.includes('return canonicalOnboardingPath(profile)'))
 assert.ok(journey.includes('state.highestA2DayUnlocked >= 7'))
 assert.ok(journey.includes('state.a4UnlockedAt && profile.a4_unlocked'))
 assert.ok(journey.includes('const hasA4Evidence = Boolean(evidence.a3RouteCompletedAt)'))
