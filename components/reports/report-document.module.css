@@ -13,6 +13,13 @@
   flex: 0 0 1.125rem;
   accent-color: hsl(var(--primary));
 }
+/* The A1 -> A2 label is deliberately descriptive. Let it wrap instead of escaping its mobile button. */
+.document [data-report-actions] button {
+  white-space: normal;
+  height: auto;
+  min-height: 2.75rem;
+}
+.document [data-report-actions] button svg { flex-shrink: 0; }
 @media print {
   .document {
     background: white !important;
