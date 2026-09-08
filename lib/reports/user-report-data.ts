@@ -5,59 +5,49 @@ import { computeA4EvidencePulse } from '@/lib/a4/evidence-pulse'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
 import { createAdminClient } from '@/lib/supabase/server'
 import { buildA1ProfessionalReport } from '@/lib/reports/a1-professional-report'
+import { a1SourceRevision, a1EditRevision } from '@/lib/a1/source-revision'
 
 function objectValue(value: unknown): Record<string, unknown> {
-  return value && typeof value === 'object' && !Array.isArray(value)
-    ? (value as Record<string, unknown>)
-    : {}
+  return value && typeof value === 'object' && !Array.isArray(value) ? value as Record<string, unknown> : {}
 }
-
-function textValue(value: unknown): string {
-  return typeof value === 'string' ? value : ''
-}
-
+function textValue(value: unknown): string { return typeof value === 'string' ? value : '' }
 function numberValue(value: unknown): number | null {
   const numeric = Number(value)
   return Number.isFinite(numeric) ? numeric : null
 }
 
-export async function loadA1Report(userId: string) {
+/** Server-only bundle. Never pass raw source rows or storage IDs to client components. */
+export async function loadA1ReportBundle(userId: string) {
+  if (!userId) throw new Error('Se requiere una identidad verificada.')
   const supabase = createAdminClient()
   const [assessmentResult, c1Result, c2Result] = await Promise.all([
-    supabase
-      .from('a1_cerebral_assessment')
-      .select('disc_profile,dominant_pattern,secondary_pattern,completed_at')
-      .eq('user_id', userId)
-      .order('completed_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    supabase
-      .from('canon_conozcamonos_1_responses')
-      .select('responses')
-      .eq('user_id', userId)
-      .order('completed_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
-    supabase
-      .from('canon_conozcamonos_2_responses')
-      .select('responses')
-      .eq('user_id', userId)
-      .order('completed_at', { ascending: false })
-      .limit(1)
-      .maybeSingle(),
+    supabase.from('a1_cerebral_assessment')
+      .select('id,responses,disc_profile,dominant_pattern,secondary_pattern,completed_at')
+      .eq('user_id', userId).order('completed_at', { ascending: false }).order('id', { ascending: false }).limit(1).maybeSingle(),
+    supabase.from('canon_conozcamonos_1_responses')
+      .select('id,responses,completed_at')
+      .eq('user_id', userId).order('completed_at', { ascending: false, nullsFirst: false }).order('id', { ascending: false }).limit(1).maybeSingle(),
+    supabase.from('canon_conozcamonos_2_responses')
+      .select('id,responses,completed_at,updated_at')
+      .eq('user_id', userId).order('completed_at', { ascending: false, nullsFirst: false }).order('id', { ascending: false }).limit(1).maybeSingle(),
   ])
-  const firstError = assessmentResult.error || c1Result.error || c2Result.error
-  if (firstError) throw new Error(`No se pudo cargar el reporte A1: ${firstError.message}`)
-  if (!assessmentResult.data?.disc_profile) return null
-
-  return buildA1ProfessionalReport({
-    rawScores: objectValue(assessmentResult.data.disc_profile),
-    dominantPattern: assessmentResult.data.dominant_pattern,
-    secondaryPattern: assessmentResult.data.secondary_pattern,
-    completedAt: textValue(assessmentResult.data.completed_at) || null,
-    c1Responses: objectValue(c1Result.data?.responses),
-    c2Responses: objectValue(c2Result.data?.responses),
+  if (assessmentResult.error || c1Result.error || c2Result.error) throw new Error('No se pudo cargar el reporte A1.')
+  const assessment = assessmentResult.data, c1 = c1Result.data, c2 = c2Result.data
+  if (!assessment?.disc_profile) return null
+  const revision = a1SourceRevision(assessment, c1, c2)
+  const editRevision = a1EditRevision(c2)
+  const report = buildA1ProfessionalReport({
+    rawScores: objectValue(assessment.disc_profile), dominantPattern: assessment.dominant_pattern,
+    secondaryPattern: assessment.secondary_pattern, completedAt: textValue(assessment.completed_at) || null,
+    c1CompletedAt: textValue(c1?.completed_at) || null, c2CompletedAt: textValue(c2?.completed_at) || null,
+    c1Responses: objectValue(c1?.responses), c2Responses: objectValue(c2?.responses),
+    assessmentResponses: assessment.responses, sourceRevision: revision, editRevision,
   })
+  return { report, c2, revision, editRevision, questions: report.understanding.questions }
+}
+
+export async function loadA1Report(userId: string) {
+  return (await loadA1ReportBundle(userId))?.report || null
 }
 
 export async function loadA2Report(userId: string) {

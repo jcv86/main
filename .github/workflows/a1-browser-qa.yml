@@ -1,0 +1,78 @@
+name: A1 browser and local Auth
+on:
+  pull_request:
+    paths:
+      - 'scripts/a1-browser-qa/**'
+      - 'components/reports/**'
+      - 'components/a1-canonical-report.tsx'
+      - 'components/career/**'
+      - 'components/journey/**'
+      - 'lib/a1/**'
+      - 'lib/journey/**'
+      - 'lib/reports/**'
+      - 'lib/career/**'
+      - 'lib/supabase/**'
+      - 'app/api/a1/**'
+      - 'app/api/a1-cerebral-save/**'
+      - 'app/globals.css'
+      - '.github/workflows/a1-browser-qa.yml'
+permissions:
+  contents: read
+concurrency:
+  group: a1-browser-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  isolated-browser:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    env:
+      A1_BROWSER_LAB: 'yes'
+      A1_SOURCE_COMMIT: ${{ github.event.pull_request.head.sha }}
+      NEXT_TELEMETRY_DISABLED: '1'
+    steps:
+      - name: Initialize runner-local paths
+        run: |
+          echo "A1_LAB_ROOT=$RUNNER_TEMP/dtc-a1-browser" >> "$GITHUB_ENV"
+          echo "A1_TOOLS_ROOT=$RUNNER_TEMP/dtc-a1-tools" >> "$GITHUB_ENV"
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - name: Install application and isolated browser tools
+        run: |
+          npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+          npm install --prefix "$A1_TOOLS_ROOT" --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
+          "$A1_TOOLS_ROOT/node_modules/.bin/playwright" install chromium
+      - name: Prepare isolated application and start local Supabase only
+        run: |
+          node scripts/a1-browser-qa/prepare.mjs
+          node scripts/a1-browser-qa/configure-local.mjs
+          supabase init --workdir "$A1_LAB_ROOT/stack" --yes
+          supabase start --workdir "$A1_LAB_ROOT/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$A1_LAB_ROOT/stack-start.log" 2>&1
+          supabase status --workdir "$A1_LAB_ROOT/stack" -o json > "$A1_LAB_ROOT/status.json"
+      - name: Apply selected real migrations to the empty lab and create synthetic Auth users
+        run: npx tsx scripts/a1-browser-qa/seed.ts
+      - name: Browser, cookies, PostgREST, clarification persistence, mobile and print
+        run: node scripts/a1-browser-qa/browser.mjs
+      - name: A1-A4 map, persisted progress and navigation in the same local stack
+        run: node scripts/a1-browser-qa/flow-browser.mjs
+      - name: Upload only synthetic visual evidence and sanitized summary
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: a1-browser-evidence-${{ github.event.pull_request.head.sha }}
+          path: ${{ runner.temp }}/dtc-a1-browser/evidence
+          retention-days: 7
+          if-no-files-found: warn
+      - name: Stop disposable local stack, never a linked project
+        if: always()
+        run: |
+          if test -f "$A1_LAB_ROOT/stack/supabase/config.toml"; then
+            supabase stop --workdir "$A1_LAB_ROOT/stack" --no-backup > /dev/null 2>&1 || true
+          fi

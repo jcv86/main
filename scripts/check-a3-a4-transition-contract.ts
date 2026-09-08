@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { buildJourneyFlow, type FlowInput } from '../lib/journey/flow'
 
 function source(path: string): string {
   return readFileSync(join(process.cwd(), path), 'utf8')
@@ -81,21 +82,62 @@ assert.ok(!a4Page.includes('Colocación laboral'))
 assert.ok(!a4Page.includes('2026-04-06'))
 assert.ok(!a4Page.includes('Ofertas laborales personalizadas'))
 
-assert.ok(dashboard.includes("label: 'Abrir Radar Estratégico'"))
-assert.ok(dashboard.includes("id === 'A3' && access.a4"))
-assert.ok(dashboard.includes("id === 'A4' && access.a4"))
+// Continuation and stage state moved out of the dashboard into one shared model.
+// Check the wiring plus behavior, rather than requiring the removed inline branches.
+assert.ok(dashboard.includes('loadJourneyFlow(journey)'))
+assert.ok(dashboard.includes('const continueAction = flow.next'))
+assert.ok(dashboard.includes('flow.cards.find'))
+assert.ok(dashboard.includes('flow.radarAvailable'))
 assert.ok(dashboard.includes('Radar Estratégico desbloqueado'))
+
+const fixture: FlowInput = {
+  profile: {
+    onboarding_conozcamonos_1_completed: true,
+    a1_cerebral_intro_seen: true,
+    a1_cerebral_completed: true,
+    conozcamonos_2_completed: true,
+    a1_report_seen: true,
+    a2_intro_seen: true,
+  },
+  access: { a1: true, a2: true, a3: true, a4: false },
+  currentModule: 'A3',
+  highestA2DayUnlocked: 90,
+  completedA2Days: [],
+  completedA3Modules: ['career-mirror'],
+  a3RouteClosed: false,
+}
+for (const closure of [false, true]) {
+  for (const authorized of [false, true]) {
+    const flow = buildJourneyFlow({ ...fixture, a3RouteClosed: closure, access: { ...fixture.access, a4: authorized } })
+    const allowed = closure && authorized
+    assert.equal(flow.radarAvailable, allowed)
+    assert.equal(flow.next.href === '/despega/a4', allowed)
+    assert.equal(flow.cards.find((card) => card.id === 'A4')?.href, allowed ? '/despega/a4' : null)
+    assert.equal(flow.cards.find((card) => card.id === 'A3')?.state === 'completed', closure)
+    if (allowed) {
+      assert.equal(flow.next.label, 'Abrir Radar Estratégico')
+      assert.equal(flow.cards.find((card) => card.id === 'A4')?.state, 'active')
+    }
+  }
+}
+const incomplete = buildJourneyFlow({ ...fixture, profile: {}, a3RouteClosed: true, access: { ...fixture.access, a4: true } })
+assert.equal(incomplete.radarAvailable, false)
+assert.equal(incomplete.next.href, '/despega/conozcamonos-1')
+assert.equal(incomplete.cards.find((card) => card.id === 'A4')?.href, null)
 
 console.log(
   JSON.stringify({
     transition: 'A3 -> A4',
+    evidenceLevel: 'source_contracts_plus_shared_dashboard_model_runtime',
     atomicJourneyUpdate: true,
     atomicProfileUpdate: true,
     prematureUnlockGuarded: true,
     routeClosureEvidenceRequired: true,
     clientConfirmationRequired: true,
     dashboardAligned: true,
+    dashboardRuntimeScenarios: 5,
     a4UsesPersistedEvidenceOnly: true,
     a4DirectAccessGuarded: true,
+    deployedHttpOrDatabaseTestedHere: false,
   }),
 )

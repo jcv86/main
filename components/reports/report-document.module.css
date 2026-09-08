@@ -1,0 +1,50 @@
+.document {
+  overflow-wrap: anywhere;
+}
+.document :where(section, article, dl, div) {
+  min-width: 0;
+}
+/* Labels retain the touch target; native radios must not inherit global text-field width. */
+.document input[type='radio'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  min-width: 1.125rem;
+  min-height: 1.125rem;
+  flex: 0 0 1.125rem;
+  accent-color: hsl(var(--primary));
+}
+/* The A1 -> A2 label is deliberately descriptive. Let it wrap instead of escaping its mobile button. */
+.document [data-report-actions] button {
+  white-space: normal;
+  height: auto;
+  min-height: 2.75rem;
+}
+.document [data-report-actions] button svg { flex-shrink: 0; }
+@media print {
+  .document {
+    background: white !important;
+    color: #0f172a !important;
+    min-height: auto !important;
+    padding: 0 !important;
+    font-size: 10pt;
+    line-height: 1.5;
+  }
+  .document :where(*) {
+    color: #0f172a !important;
+    text-shadow: none !important;
+  }
+  .document :where(h1, h2, h3, dt) { break-after: avoid; }
+  .document :where(p, li, dd) { orphans: 3; widows: 3; }
+  .document [data-report-card] {
+    background: white !important;
+    background-image: none !important;
+    border-color: #cbd5e1 !important;
+    box-shadow: none !important;
+    overflow: visible !important;
+  }
+  .document [data-report-dimension], .document details li { break-inside: avoid; }
+  .document section[aria-labelledby='bridge-heading'] > div { grid-template-columns: minmax(0, 1fr) !important; }
+  .document section[aria-labelledby='bridge-heading'] [data-report-card] { break-inside: avoid; }
+  .document [data-report-actions] { display: none !important; }
+  .document [data-report-provenance] { margin-top: 12pt; border-color: #cbd5e1 !important; }
+}

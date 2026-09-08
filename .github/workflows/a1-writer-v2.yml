@@ -1,0 +1,82 @@
+name: A1 writer and AgentOS
+on:
+  pull_request:
+    paths:
+      - 'lib/a1/**'
+      - 'lib/career/**'
+      - 'lib/dtc-agentos/**'
+      - 'lib/reports/**'
+      - 'lib/disc-test-questions.ts'
+      - 'app/api/a1-cerebral-save/**'
+      - 'supabase/migrations/*a1*'
+      - 'scripts/*a1*'
+      - 'scripts/fixtures/agentos-supabase.ts'
+      - '.github/workflows/a1-writer-v2.yml'
+permissions:
+  contents: read
+jobs:
+  source-provenance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Package reviewed public source paths, never environment or user data
+        run: |
+          mkdir -p /tmp/a1-writer-source
+          git archive --format=tar.gz --output=/tmp/a1-writer-source/source.tar.gz HEAD \
+            lib/dtc-agentos lib/a1 lib/career lib/reports lib/disc-test-questions.ts \
+            lib/despega-profiles.ts lib/supabase app/api/a1-cerebral-save/route.ts \
+            scripts/check-a1-a2-a3-journey-contract.ts \
+            scripts/check-a1-career-identity-dual-write-contract.ts \
+            scripts/check-a1-career-boundary.ts scripts/tsconfig.career-boundary.json \
+            scripts/check-a1-writer-agentos.ts scripts/test-a1-writer-v2.ts \
+            scripts/fixtures/agentos-supabase.ts scripts/tsconfig.a1-agentos.json \
+            supabase/migrations/20260804061000_career_identity_foundation.sql \
+            supabase/migrations/20260804070000_a1_career_identity_dual_write.sql \
+            supabase/migrations/20260804125500_a1_career_identity_revoke_anon.sql \
+            supabase/migrations/20260907204000_a1_owner_boundary.sql \
+            supabase/migrations/20260907211500_a1_source_writer_v2.sql \
+            docs/dtc/A1_WRITER_AGENTOS_2026-09-07.md tsconfig.json package.json
+          git rev-parse HEAD > /tmp/a1-writer-source/commit.txt
+          cd /tmp/a1-writer-source && sha256sum source.tar.gz > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: a1-writer-source-${{ github.event.pull_request.head.sha }}
+          path: /tmp/a1-writer-source
+          retention-days: 7
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_PASSWORD: dtc_fixture_only
+          POSTGRES_DB: dtc_a1_writer_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U postgres -d dtc_a1_writer_test"
+          --health-interval 5s --health-timeout 5s --health-retries 12
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install existing dependencies without lifecycle scripts
+        run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+      - name: Actual AgentOS modules with synthetic session and query ports
+        run: npx tsx --tsconfig scripts/tsconfig.a1-agentos.json scripts/check-a1-writer-agentos.ts
+      - name: Actual SQL writer, parity, rollback and concurrency in disposable PostgreSQL
+        env:
+          A1_WRITER_DISPOSABLE: 'yes'
+          A1_WRITER_TEST_DATABASE_URL: postgres://postgres:dtc_fixture_only@127.0.0.1:5432/dtc_a1_writer_test
+        run: npx tsx scripts/test-a1-writer-v2.ts
+      - name: Full repository TypeScript
+        run: npx tsc --noEmit

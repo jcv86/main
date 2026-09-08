@@ -4,6 +4,7 @@ import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { DEMO_COOKIE_NAME, verifyDemoSessionToken } from '@/lib/auth/demo-user'
+import { canonicalOnboardingPath } from './flow'
 
 export type JourneyModule = 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
 
@@ -279,8 +280,9 @@ function hydrateProfileFlags(
       profile.a1_cerebral_intro_seen || hasA1Evidence,
     a1_cerebral_completed:
       profile.a1_cerebral_completed || hasA1Evidence,
-    a1_results_saved: profile.a1_results_saved || hasA1Evidence,
-    a1_report_seen: profile.a1_report_seen || hasA1Evidence,
+    // A new assessment is not proof of report review. Preserve downstream legacy continuity only.
+    a1_results_saved: profile.a1_results_saved || hasA2Evidence,
+    a1_report_seen: profile.a1_report_seen || hasA2Evidence,
     a2_intro_seen: profile.a2_intro_seen || hasA2Evidence,
     conozcamonos_2_completed:
       profile.conozcamonos_2_completed || hasA2Evidence,
@@ -418,19 +420,7 @@ export async function requireA2Day(day: number) {
 export async function getCanonicalNextPath(
   profile: ProfileFlags,
 ): Promise<string> {
-  if (!hasCompletedC1(profile)) return MODULE_ENTRY.A1
-  if (!profile.a1_cerebral_intro_seen) return '/despega/a1-cerebral-intro'
-  if (
-    !profile.a1_cerebral_completed &&
-    !profile.a1_test_completed &&
-    !profile.onboarding_cerebral_completed
-  ) {
-    return '/despega/a1-cerebral'
-  }
-  if (!hasSeenA1Report(profile)) return '/despega/a1/resultado'
-  if (!profile.a2_intro_seen) return '/despega/a2/intro'
-  if (!hasCompletedC2(profile)) return '/despega/conozcamonos-2'
-  return MODULE_ENTRY.A2
+  return canonicalOnboardingPath(profile)
 }
 
 export interface SharedJourneyContext {

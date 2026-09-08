@@ -12,7 +12,6 @@ import { getAgent } from '../registries/agents'
 import { dtcModes } from '../registries/modes'
 import { buildDtcContext } from '../context/context-builder'
 import { captureMemory } from '../context/memory-manager'
-import { checkUnlock } from '../unlock/rules-engine'
 
 export interface ExecuteCommandParams {
   userId: string
@@ -105,24 +104,13 @@ export async function executeCommand(
 
     const context = contextResult.context
 
-    // 4. Check missing required context (already checked in buildDtcContext, but double-check)
-    const missingContext: string[] = []
-    for (const required of command.requiredContext) {
-      if (!context[required as keyof typeof context]) {
-        missingContext.push(required)
-      }
-    }
-
-    if (missingContext.length > 0) {
-      // In dev mode, this might be handled differently
-      if (process.env.NODE_ENV === 'development') {
-        console.warn(`[v0] Missing context for ${params.commandId}:`, missingContext)
-      }
-      return {
-        success: false,
-        commandId: params.commandId,
-        agentId: params.agentId,
-        error: `Missing required context: ${missingContext.join(', ')}`,
+    // A1 is a source read and its required aliases are checked by the context builder.
+    // Preserve the legacy guard for other commands; their execution contracts are outside this patch.
+    if (params.commandId !== '/dtc:a1-identity-audit') {
+      const missingContext = command.requiredContext.filter((required) => !context[required as keyof typeof context])
+      if (missingContext.length > 0) {
+        return { success: false, commandId: params.commandId, agentId: params.agentId,
+          error: `Missing required context: ${missingContext.join(', ')}` }
       }
     }
 
@@ -138,7 +126,6 @@ export async function executeCommand(
 
       case '/dtc:a1-identity-audit':
         result = await executeA1IdentityAudit(params, context)
-        memoryUpdates.push('strength', 'weakness', 'communication_style')
         break
 
       case '/dtc:c2-context-bridge':
@@ -246,15 +233,8 @@ async function executeC1ProfileCapture(params: ExecuteCommandParams, context: an
 }
 
 async function executeA1IdentityAudit(params: ExecuteCommandParams, context: any) {
-  // Analyzes test results and creates identity profile
-  await captureMemory({
-    userId: params.userId,
-    sourceType: 'a1',
-    memoryType: 'strength',
-    content: JSON.stringify(params.params.strengths),
-    confidence: 0.9,
-  })
-  return { status: 'analyzed', identityId: params.params.testId }
+  // Ignore params.strengths/scores: only the owner-bound persisted assessment is authoritative.
+  return { status: 'read_only', a1: context.a1 }
 }
 
 async function executeC2ContextBridge(params: ExecuteCommandParams, context: any) {
@@ -308,7 +288,8 @@ async function executeMemoryUpdate(params: ExecuteCommandParams, context: any) {
 }
 
 async function executeUnlockCheck(params: ExecuteCommandParams, context: any) {
-  // Checks unlock conditions
+  // Load evaluation dependencies only for an actual unlock command, not an A1 source read.
+  const { checkUnlock } = await import('../unlock/rules-engine')
   const result = await checkUnlock(params.userId, params.params.unlockKey as string)
   return result
 }
@@ -331,8 +312,8 @@ async function logCommandExecution(options: {
       user_id: options.userId,
       command: options.commandId,
       status: options.status,
-      input_params: options.inputParams,
-      output_data: options.outputData,
+      input_params: options.commandId === '/dtc:a1-identity-audit' ? { policy: 'a1-canonical-context.v1' } : options.inputParams,
+      output_data: options.commandId === '/dtc:a1-identity-audit' ? { status: options.status, kind: 'source_read' } : options.outputData,
       error_message: options.errorMessage,
       created_at: new Date().toISOString(),
     })

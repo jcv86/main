@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "prebuild": "node scripts/generate-docx.js",
-    "build": "next build",
+    "build": "npm run check:report-quality && next build",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",
@@ -12,6 +12,8 @@
     "test:assessment-drafts": "tsx scripts/test-assessment-drafts.mjs",
     "check:pilot-access": "tsx scripts/check-pilot-access-contract.ts",
     "check:reporting": "tsx scripts/check-reporting-contract.ts",
+    "check:a1-understanding": "tsx scripts/check-a1-individual-understanding-contract.ts",
+    "check:report-quality": "tsx scripts/check-report-evidence-contract.ts && tsx scripts/check-a1-professional-report-contract.ts && tsx scripts/check-a1-individual-understanding-contract.ts && tsx scripts/check-a1-a2-a3-journey-contract.ts && tsx scripts/check-reporting-contract.ts && tsc --noEmit",
     "generate:docs": "node scripts/generate-docx.js",
     "db:reset-progress": "node --env-file-if-exists=/vercel/share/.env.project --env-file-if-exists=/vercel/share/.env.snowflake --loader tsx scripts/reset-pillar-progress.ts"
   },

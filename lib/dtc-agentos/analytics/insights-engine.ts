@@ -5,6 +5,7 @@
  */
 
 import { createClient } from '@/lib/supabase/server'
+import { filterA1AgentMemories } from '../context/a1-context'
 
 export interface UserAnalytics {
   userId: string
@@ -93,12 +94,12 @@ export async function buildUserAnalytics(userId: string): Promise<{
     }
 
     // Extract strengths and weaknesses from memories
-    const strengthsIdentified = memories
+    const strengthsIdentified = filterA1AgentMemories(memories || [])
       ?.filter((m: any) => m.memory_type === 'strength')
       .map((m: any) => m.content)
       .slice(0, 3) || []
 
-    const weaknessesTargeted = memories
+    const weaknessesTargeted = filterA1AgentMemories(memories || [])
       ?.filter((m: any) => m.memory_type === 'weakness')
       .map((m: any) => m.content)
       .slice(0, 3) || []
