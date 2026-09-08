@@ -228,7 +228,7 @@ export default function SettingsPage() {
                   onChange={(e) => handlePreferenceChange(notif.key as keyof UserPreferences, e.target.checked)}
                   className="w-4 h-4 rounded accent-orange"
                 />
-                <span className="min-w-0 text-sm leading-relaxed text-white/80 sm:text-base">{notif.label}</span>
+                <span className="min-w-0 flex-1 break-words text-sm leading-relaxed text-white/80 sm:text-base">{notif.label}</span>
               </label>
             ))}
           </div>
