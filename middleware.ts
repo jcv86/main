@@ -12,6 +12,11 @@ const PUBLIC_ROUTES = [
   '/api/documentos',
 ]
 
+// Invitation claims are protected by a high-entropy, single-use token and an
+// atomic database transition. A shared IP limiter can lock legitimate invitees
+// out when browsers, mail scanners, or office networks reuse the same egress IP.
+const RATE_LIMIT_EXEMPT_ROUTES = ['/api/auth/invitation/claim']
+
 // Auth routes
 const AUTH_ROUTES = ['/auth', '/auth/signin', '/auth/callback']
 
@@ -33,6 +38,10 @@ const PILLAR_EXEMPT_ROUTES = [
 
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
+}
+
+function isRateLimitExemptRoute(pathname: string): boolean {
+  return RATE_LIMIT_EXEMPT_ROUTES.some(route => pathname === route)
 }
 
 function isAuthRoute(pathname: string): boolean {
@@ -74,7 +83,7 @@ export async function middleware(request: NextRequest) {
     }
 
     // Check rate limit for non-public routes
-    if (!isPublicRoute(pathname)) {
+    if (!isPublicRoute(pathname) && !isRateLimitExemptRoute(pathname)) {
       const rateLimitResponse = await checkRateLimit(request, limiter)
       if (rateLimitResponse) {
         logger.warn('Rate limit exceeded', {
