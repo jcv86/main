@@ -25,8 +25,10 @@ try{
  const context=await browser.newContext({viewport:{width:1440,height:1000},reducedMotion:'reduce'})
  await context.route('**/*',route=>['localhost','127.0.0.1'].includes(new URL(route.request().url()).hostname)?route.continue():route.abort())
  page=await context.newPage();page.on('pageerror',error=>errors.push(error.name))
- await page.goto(base+'/despega/recorrido');await page.waitForURL('**/login');record('anonymous_map_redirect')
- await page.getByLabel('Correo de prueba',{exact:true}).fill(user.email);await page.getByLabel('Contraseña de prueba',{exact:true}).fill(fixture.password);await page.getByRole('button',{name:'Entrar al laboratorio'}).click();await page.waitForURL('**/despega/a1-report')
+ await page.goto(base+'/despega/recorrido?source=resume');await page.waitForURL('**/auth/signin?next=%2Fdespega%2Frecorrido');record('anonymous_map_redirect_preserves_destination')
+ await page.getByLabel('Correo de prueba',{exact:true}).fill(user.email);await page.getByLabel('Contraseña de prueba',{exact:true}).fill(fixture.password);await page.getByRole('button',{name:'Entrar al laboratorio'}).click()
+ await page.waitForURL('**/despega/recorrido');record('authenticated_return_to_requested_route')
+ await page.goto(base+'/despega/a1-report')
  await page.getByRole('heading',{name:'Más allá de una combinación de letras'}).waitFor()
  await page.setViewportSize({width:390,height:844})
  const transition=page.getByRole('button',{name:'Continuar a la introducción de Tu Ruta',exact:true})
@@ -57,7 +59,9 @@ try{
  await page.reload();assert.equal(await page.locator('[data-next-step]').getAttribute('href'),'/despega/a3');record('checkpoint_source_change_updates_next_action')
  assert.ifError((await scoped.from('a3_route_progression').update({route_completed_at:'2026-09-07T12:00:00'}).eq('user_id',user.id)).error)
  await page.reload();assert.equal(await page.locator('[data-stage-id="A4"] a').count(),0);record('closure_without_access_does_not_offer_radar')
- await scoped.auth.signOut();await context.clearCookies();await page.reload();await page.waitForURL('**/login');record('session_removed_rejected')
+ const signout=page.waitForResponse(r=>new URL(r.url()).pathname==='/api/auth/signout'&&r.request().method()==='POST')
+ await page.getByRole('button',{name:'Cerrar sesión de laboratorio'}).click();assert.equal((await signout).status(),303);await page.waitForURL('**/auth/signin');record('real_signout_route_clears_session')
+ await page.goBack();await page.waitForTimeout(500);assert.ok(new URL(page.url()).pathname==='/auth/signin');assert.equal(await page.getByRole('heading',{name:'Tu siguiente paso tiene contexto'}).count(),0);record('browser_back_does_not_restore_protected_content')
  assert.deepEqual(errors,[]);record('no_javascript_exceptions')
 }catch(error){process.exitCode=1;steps.push({name:'suite',status:'FAIL',message:String(error instanceof Error?error.message:'unknown').split(fixture.password).join('[REDACTED]')});if(page)await page.screenshot({path:join(evidence,'flow-failure.png'),fullPage:true}).catch(()=>{})}
 finally{if(browser)await browser.close();server.kill('SIGTERM');log.end();writeFileSync(join(evidence,'flow-results.json'),JSON.stringify({commit:process.env.A1_SOURCE_COMMIT,scope:'actual flow loader/model/component; real local Auth and PostgREST; source fixtures and fixed lab admission, not production journey',steps,violations,errors,verdict:process.exitCode?'FAIL':'PASS'},null,2))}
