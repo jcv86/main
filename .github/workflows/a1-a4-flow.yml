@@ -1,0 +1,48 @@
+name: A1-A4 continuity
+on:
+  pull_request:
+    paths:
+      - 'lib/journey/**'
+      - 'lib/redirect-logic.ts'
+      - 'components/journey/**'
+      - 'app/despega/dashboard/**'
+      - 'app/despega/reporte-integral/**'
+      - 'app/despega/recorrido/**'
+      - 'scripts/check-a1-a4-flow.ts'
+      - '.github/workflows/a1-a4-flow.yml'
+permissions:
+  contents: read
+jobs:
+  source:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - name: Export explicit public flow source paths only
+        run: |
+          mkdir -p /tmp/dtc-flow-source
+          git archive --format=tar.gz --output=/tmp/dtc-flow-source/source.tar.gz HEAD lib/journey lib/redirect-logic.ts lib/a2 lib/a3 lib/dtc/product-language.ts components/layout components/reports components/career components/phase-transition-handler.tsx components/a1-canonical-report.tsx app/despega/dashboard app/despega/reporte-integral app/despega/layout.tsx scripts/a1-browser-qa scripts/check-a1-a4-flow.ts package.json
+          git rev-parse HEAD > /tmp/dtc-flow-source/commit.txt
+          cd /tmp/dtc-flow-source && sha256sum source.tar.gz > SHA256SUMS
+      - uses: actions/upload-artifact@v4
+        with:
+          name: dtc-flow-source-${{ github.event.pull_request.head.sha }}
+          path: /tmp/dtc-flow-source
+          retention-days: 7
+  contracts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+      - run: npx tsx scripts/check-a1-a4-flow.ts
+      - run: npx tsc --noEmit

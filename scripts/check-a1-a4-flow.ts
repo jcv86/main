@@ -1,0 +1,23 @@
+import assert from 'node:assert/strict'
+import {buildJourneyFlow,canonicalOnboardingPath,ONBOARDING_PATHS,type FlowInput,type OnboardingFlags} from '../lib/journey/flow'
+let count=0
+function check(name:string,run:()=>void){try{run();count++}catch(error){throw new Error(`A1-A4 flow: ${name}`,{cause:error})}}
+const ready:OnboardingFlags={onboarding_conozcamonos_1_completed:true,a1_cerebral_intro_seen:true,a1_cerebral_completed:true,conozcamonos_2_completed:true,a1_report_seen:true,a2_intro_seen:true}
+const base:FlowInput={profile:ready,access:{a1:true,a2:true,a3:false,a4:false},currentModule:'A2',highestA2DayUnlocked:1,completedA2Days:[],completedA3Modules:[],a3RouteClosed:false}
+check('canonical sequence puts C2 before the report and intro',()=>{const p:OnboardingFlags={};const keys=['onboarding_conozcamonos_1_completed','a1_cerebral_intro_seen','a1_cerebral_completed','conozcamonos_2_completed','a1_report_seen','a2_intro_seen'] as const;assert.equal(canonicalOnboardingPath(p),ONBOARDING_PATHS[0]);keys.forEach((key,i)=>{p[key]=true;assert.equal(canonicalOnboardingPath(p),ONBOARDING_PATHS[i+1])})})
+check('legacy completed assessment is not a reviewed report',()=>{assert.equal(canonicalOnboardingPath({onboarding_completed:true,a1_cerebral_intro_seen:true,a1_test_completed:true,conozcamonos_2_completed:true}),'/despega/a1-report')})
+check('C2 first even with stale report/intro flags',()=>assert.equal(canonicalOnboardingPath({...ready,conozcamonos_2_completed:false}),'/despega/conozcamonos-2'))
+check('unlocked days are not counted as completed',()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:30});assert.equal(f.initialDays,0);assert.equal(f.initialProgress,0);assert.equal(f.resumeDay,1)})
+check('unique valid evidence only',()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:6,completedA2Days:[1,2,2,4,0,91,2.5,'3',null]});assert.deepEqual(f.completedDays,[1,2,4]);assert.equal(f.resumeDay,3);assert.equal(f.initialDays,3)})
+check('checkpoint day7 outranks ordinary A2 continuation',()=>{const f=buildJourneyFlow({...base,access:{...base.access,a3:true},highestA2DayUnlocked:7,completedA2Days:[1,2,3,4,5,6]});assert.equal(f.next.href,'/despega/a3/career-mirror')})
+check('navigation never grants an unavailable checkpoint',()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:7});assert.equal(f.checkpointPending,false);assert.equal(f.cards.find(c=>c.id==='A3')?.href,null)})
+check('checkpoint completion permits A3 continuation before day30',()=>{const f=buildJourneyFlow({...base,access:{...base.access,a3:true},highestA2DayUnlocked:7,completedA3Modules:['career-mirror']});assert.equal(f.next.href,'/despega/a3')})
+check('thirty completed days do not finish ninety',()=>{const f=buildJourneyFlow({...base,completedA2Days:Array.from({length:30},(_,i)=>i+1)});assert.equal(f.initialProgress,100);assert.equal(f.cards.find(c=>c.id==='A2')?.state,'active');assert.equal(f.next.href,'/despega/a2/resultados')})
+check('ten sessions or module strings do not unlock A4',()=>{const f=buildJourneyFlow({...base,access:{...base.access,a3:true,a4:true},currentModule:'A3',highestA2DayUnlocked:30,completedA3Modules:['career-mirror',...Array.from({length:12},(_,i)=>`module-${i}`)]});assert.equal(f.radarAvailable,false);assert.equal(f.cards.find(c=>c.id==='A4')?.href,null)})
+check('route closure still requires authorized A4 access',()=>{const f=buildJourneyFlow({...base,a3RouteClosed:true});assert.equal(f.radarAvailable,false)})
+check('A4 uses explicit closure plus access',()=>{const f=buildJourneyFlow({...base,access:{a1:true,a2:true,a3:true,a4:true},a3RouteClosed:true});assert.equal(f.next.href,'/despega/a4');assert.equal(f.cards.find(c=>c.id==='A3')?.state,'completed')})
+check('onboarding requirements win over isolated unlock flags',()=>{const f=buildJourneyFlow({...base,profile:{},access:{a1:true,a2:true,a3:true,a4:true},a3RouteClosed:true});assert.equal(f.next.href,'/despega/conozcamonos-1');assert.equal(f.radarAvailable,false)})
+check('all ninety unique days complete A2 only',()=>{const f=buildJourneyFlow({...base,completedA2Days:Array.from({length:90},(_,i)=>i+1)});assert.equal(f.cards.find(c=>c.id==='A2')?.state,'completed');assert.equal(f.radarAvailable,false)})
+for(const day of [-1,0,1,7,90,900,NaN])check(`bounded resume ${day}`,()=>{const f=buildJourneyFlow({...base,highestA2DayUnlocked:day});assert.ok(f.resumeDay>=1&&f.resumeDay<=90);assert.ok(f.next.href.startsWith('/despega/'))})
+check('input is never mutated',()=>{const snapshot=JSON.stringify(base);buildJourneyFlow(base);assert.equal(JSON.stringify(base),snapshot)})
+console.log(`A1-A4 continuity: PASS (${count} behavioral checks; read-only navigation, no live gate or progress writes)`)
