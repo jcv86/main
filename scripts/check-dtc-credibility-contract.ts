@@ -36,6 +36,7 @@ assert.ok(!settings.includes('preferred_contact'))
 assert.ok(!settings.includes('defaultChecked'))
 assert.ok(settings.includes('flex-wrap'))
 assert.ok(settings.includes('min-w-0'))
+assert.ok(settings.includes('flex-1 break-words'))
 
 const preferences = source('app/api/preferences/route.ts')
 assert.ok(preferences.includes('supabase.auth.getUser()'))
