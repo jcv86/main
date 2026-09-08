@@ -27,7 +27,7 @@ const DOMAIN_TESTS: Record<string, EvidenceLevel> = {
   'scripts/check-a3-interview-response-atomicity-contract.ts': 'source_only',
   'scripts/check-a3-reward-endpoint-retirement-contract.ts': 'source_only',
   'scripts/check-unverified-training-reward-retirement-contract.ts': 'source_only',
-  'scripts/check-a3-a4-transition-contract.ts': 'source_only',
+  'scripts/check-a3-a4-transition-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a4-signal-decision-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a4-evidence-pulse-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a4-daily-snapshot-contract.ts': 'mixed_runtime_and_source',
@@ -109,18 +109,19 @@ for (const [path, level] of Object.entries(DOMAIN_TESTS)) {
 assert.equal(Object.keys(DOMAIN_TESTS).length, 41)
 assert.deepEqual(counts, {
   runtime_only: 1,
-  mixed_runtime_and_source: 22,
-  source_only: 18,
+  mixed_runtime_and_source: 23,
+  source_only: 17,
 })
 
 console.log(
   JSON.stringify({
+    scope: '.github/workflows/typecheck.yml; separate browser and PostgreSQL workflows report their own evidence',
     domainTests: Object.keys(DOMAIN_TESTS).length,
     evidenceLevels: counts,
     liveHttpTestsInCi: 0,
     liveDatabaseTestsInCi: 0,
     browserEndToEndTestsInCi: 0,
     interpretation:
-      'Green means runtime fixtures and/or source contracts passed; it does not mean live HTTP or live database integration was executed.',
+      'Green in this workflow means runtime fixtures and/or source contracts passed; it does not mean live HTTP or live database integration was executed here.',
   }),
 )
