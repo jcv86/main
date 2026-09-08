@@ -83,7 +83,7 @@ try{
  const emptyContext=await context(),empty=await emptyContext.newPage();await login(empty,'empty');await empty.goto(base+'/despega/career-identity');await visibleText(empty,'Sin evaluación disponible');await visual(empty,'identity-empty-mobile',390);await emptyContext.close()
  const tiedContext=await context(),tied=await tiedContext.newPage();await login(tied,'tied');const tieSave=await browserSave(tied,fixtures.tied);assert.equal(tieSave.status,200);await tied.reload();await visibleText(tied,'Hay más de una lectura posible del patrón');await visual(tied,'a1-tied-mobile',390);await tiedContext.close()
  await step('no_browser_javascript_exceptions',async()=>assert.deepEqual(pageErrors,[]))
- if(visualFailures.length)throw new Error('Visual or accessibility assertions failed; inspect sanitized evidence')
+ if(visualFailures.length){console.error('Visual failures: '+redact(JSON.stringify(visualFailures)));throw new Error('Visual or accessibility assertions failed; inspect sanitized evidence')}
  console.log(`A1 browser laboratory: PASS (${steps.length} recorded checks; real local Auth/JWT/PostgREST and actual modules; production journey not tested)`)
 }catch(error){steps.push({name:'suite',status:'FAIL',message:redact(error instanceof Error?error.message:error)});if(page)await page.screenshot({path:join(evidence,'failure.png'),fullPage:true}).catch(()=>{});process.exitCode=1;console.error('A1 browser laboratory failed; see sanitized artifact.')}
 finally{
