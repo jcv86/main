@@ -65,6 +65,11 @@ const middleware = source('lib/supabase/middleware.ts')
 assert.match(middleware, /classifyAuthState/)
 assert.match(middleware, /state === ['"]signed_out['"]/)
 
+const rootMiddleware = source('middleware.ts')
+assert.match(rootMiddleware, /RATE_LIMIT_EXEMPT_ROUTES/)
+assert.match(rootMiddleware, /\/api\/auth\/invitation\/claim/)
+assert.match(rootMiddleware, /!isRateLimitExemptRoute\(pathname\)/)
+
 const comenzar = source('app/comenzar/page.tsx')
 for (const label of ['Ya tengo cuenta', 'Tengo una invitación', 'Solicitar acceso']) {
   assert.ok(comenzar.includes(label), `missing public action: ${label}`)
