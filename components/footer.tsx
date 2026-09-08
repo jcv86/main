@@ -29,7 +29,7 @@ export default function Footer() {
             {/* Brand */}
             <div>
               <h3 className="font-bold text-lg mb-4">Despega Tu Carrera</h3>
-              <p className="text-sm text-foreground/60">Tu siguiente versión empieza aquí. Transformación en 4 fases.</p>
+              <p className="text-sm text-foreground/60">Claridad, práctica y decisiones conectadas en cuatro etapas.</p>
             </div>
 
             {/* Product */}
@@ -37,10 +37,10 @@ export default function Footer() {
               <h4 className="font-semibold mb-4 text-sm">Producto</h4>
               <ul className="space-y-2 text-sm">
                 <li><Link href="/como-funciona" className="text-foreground/60 hover:text-foreground transition">Cómo Funciona</Link></li>
-                <li><Link href="/despega/conozcamonos-1" className="text-foreground/60 hover:text-foreground transition">El Ritual</Link></li>
-                <li><Link href="/despega/a2-routes" className="text-foreground/60 hover:text-foreground transition">Exploración</Link></li>
-                <li><Link href="/despega/a3" className="text-foreground/60 hover:text-foreground transition">Entrenamiento</Link></li>
-                <li><Link href="/despega/a4" className="text-foreground/60 hover:text-foreground transition">La Realidad</Link></li>
+                <li><Link href="/despega/a1-cerebral-intro" className="text-foreground/60 hover:text-foreground transition">A1 · Despega Cerebral</Link></li>
+                <li><Link href="/despega/a2" className="text-foreground/60 hover:text-foreground transition">A2 · Tu Ruta</Link></li>
+                <li><Link href="/despega/a3" className="text-foreground/60 hover:text-foreground transition">A3 · Entrenamiento</Link></li>
+                <li><Link href="/despega/a4" className="text-foreground/60 hover:text-foreground transition">A4 · Radar Estratégico</Link></li>
                 <li><Link href="/para-empresas" className="text-foreground/60 hover:text-foreground transition">Para Empresas</Link></li>
               </ul>
             </div>

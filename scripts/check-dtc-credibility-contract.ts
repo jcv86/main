@@ -44,4 +44,19 @@ assert.ok(!preferences.includes('createAdminClient'))
 assert.ok(!preferences.includes('SUPABASE_SERVICE_ROLE_KEY'))
 assert.ok(preferences.includes("'Cache-Control': 'private, no-store'"))
 
+const footer = source('components/footer.tsx')
+for (const label of ['A1 · Despega Cerebral', 'A2 · Tu Ruta', 'A3 · Entrenamiento', 'A4 · Radar Estratégico']) {
+  assert.ok(footer.includes(label), `Falta nomenclatura canónica en footer: ${label}`)
+}
+for (const staleLabel of ['>El Ritual<', '>Exploración<', '>La Realidad<']) {
+  assert.ok(!footer.includes(staleLabel), `Nomenclatura heredada visible en footer: ${staleLabel}`)
+}
+
+const globalMetadata = source('app/layout.tsx')
+const homeMetadata = source('app/page.tsx')
+for (const unsupportedClaim of ['test MBTI', 'Big Five personalidad', 'Tests Psicométricos']) {
+  assert.ok(!globalMetadata.includes(unsupportedClaim), `Metadata global no acreditada: ${unsupportedClaim}`)
+}
+assert.ok(!homeMetadata.includes('tests científicos'))
+
 console.log('DTC credibility contract: PASS (public promises, canonical language, private evolution, persisted settings)')

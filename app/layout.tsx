@@ -27,29 +27,25 @@ const montserrat = Montserrat({
 export const metadata: Metadata = {
   metadataBase: new URL("https://www.despegatucarrera.com"),
   title: {
-    default: "Despega Tu Carrera - El Ritual, Exploración, Entrenamiento y La Realidad | Transformación Profesional con IA",
+    default: "Despega Tu Carrera | Claridad y desarrollo profesional con IA",
     template: "%s | Despega Tu Carrera",
   },
   description:
-    "Las 4 fases de tu transformación profesional: El Ritual (autoconocimiento), Exploración (diseña tu ruta 90 días), Entrenamiento (simulación intensiva con video), y La Realidad (ejecución con coach IA 24/7). Entrenamientos con feedback en tiempo real, análisis multimodal con video y contexto laboral estratégico.",
+    "Un recorrido conectado para comprender cómo funcionas, construir una ruta, practicar y tomar decisiones profesionales con más contexto y evidencia.",
   keywords: [
     "desarrollo profesional Chile",
-    "evaluaciones psicométricas",
+    "autoconocimiento profesional",
     "coaching con inteligencia artificial",
-    "evaluación personalidad",
-    "test MBTI en español",
-    "Big Five personalidad",
-    "inteligencia emocional test",
+    "identidad profesional",
     "biblioteca desarrollo profesional",
     "cursos liderazgo Chile",
-    "evaluación competencias laborales",
+    "evidencia profesional",
     "crecimiento profesional",
     "habilidades blandas",
     "orientación vocacional",
     "coaching carrera profesional",
     "libros desarrollo personal",
-    "evaluación vocacional Chile",
-    "evaluación soft skills",
+    "ruta profesional de 90 días",
     "mentor virtual IA",
     "planificación carrera",
     "empleabilidad Chile",
@@ -67,7 +63,7 @@ export const metadata: Metadata = {
     locale: "es_CL",
     url: "https://www.despegatucarrera.com",
     siteName: "Despega Tu Carrera",
-    title: "Despega Tu Carrera - Desarrollo Profesional con IA y Tests Psicométricos",
+    title: "Despega Tu Carrera | Desarrollo profesional con evidencia",
     description:
       "Transforma tu carrera con evaluaciones científicas, contenido especializado y coaching personalizado con inteligencia artificial.",
     images: [
@@ -156,7 +152,7 @@ export default function RootLayout({
               "@type": "EducationalOrganization",
               name: "Despega Tu Carrera",
               description:
-                "Plataforma líder en Chile para desarrollo profesional con IA, tests psicométricos y coaching personalizado",
+                "Plataforma chilena de desarrollo profesional con IA para comprender tu perfil, definir tu ruta, entrenar decisiones y leer el mercado laboral",
               url: "https://www.despegatucarrera.com",
               logo: "https://www.despegatucarrera.com/logo.png",
               sameAs: [

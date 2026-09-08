@@ -15,14 +15,14 @@ const LandingPageOptimized = dynamic(() => import("@/components/dtc/dtc-landing"
 export const metadata: Metadata = {
   title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
   description:
-    "Tu siguiente versión te está esperando. Descubre quién eres ahora, explora quién podrías ser, y construye el puente que te llevará allá con tests científicos, coaching IA y exploración de narrativas de transformación.",
+    "Comprende cómo funcionas, ordena tu ruta y practica decisiones profesionales con una experiencia conectada y basada en evidencia.",
   keywords: [
     "transición de identidad",
     "transformación profesional",
     "autoconocimiento",
     "coaching con IA",
     "transición de carrera",
-    "test de personalidad",
+    "identidad profesional",
     "orientación vocacional",
     "desarrollo personal",
     "cambio de carrera",
@@ -38,7 +38,7 @@ export const metadata: Metadata = {
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
     description:
-      "Tu siguiente versión te está esperando. Descubre quién eres, explora quién podrías ser, y construye tu puente de transformación con tests científicos y coaching IA.",
+      "Comprende cómo funcionas, ordena tu ruta y practica decisiones profesionales con una experiencia conectada y basada en evidencia.",
     images: [
       {
         url: "/og-image.png",
@@ -52,7 +52,7 @@ export const metadata: Metadata = {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Tu Siguiente Versión Empieza Aquí",
     description:
-      "Tu siguiente versión te está esperando. Descubre quién eres ahora, explora nuevas identidades, y construye tu puente con coaching IA 24/7.",
+      "Comprende cómo funcionas, ordena tu ruta y practica decisiones profesionales con contexto y evidencia.",
     images: ["/og-image.png"],
   },
   robots: {
