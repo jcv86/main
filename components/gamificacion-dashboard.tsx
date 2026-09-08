@@ -6,7 +6,6 @@ import { useRouter } from 'next/navigation'
 import { createClient } from '@/lib/supabase/client'
 import { getDemoUser } from '@/lib/auth/demo-user'
 import {
-  Trophy,
   Flame,
   Zap,
   Target,
@@ -74,25 +73,25 @@ interface MisionUser {
 
 const PILLAR_CONFIG = {
   a1: {
-    label: 'El Ritual',
+    label: 'A1 · Despega Cerebral',
     color: 'rgb(54,224,192)',
     bgColor: 'rgba(54,224,192,0.08)',
     borderColor: 'rgba(54,224,192,0.2)',
     scoreKey: 'score_a1_cerebral' as keyof RankingEntry,
     icon: Brain,
-    href: '/despega/a1/resultado',
+    href: '/despega/a1-report',
   },
   a2: {
-    label: 'Exploración',
+    label: 'A2 · Tu Ruta',
     color: 'rgb(124,92,255)',
     bgColor: 'rgba(124,92,255,0.08)',
     borderColor: 'rgba(124,92,255,0.2)',
     scoreKey: 'score_a2_rutas' as keyof RankingEntry,
     icon: Map,
-    href: '/despega/a2/recomendaciones',
+    href: '/despega/a2',
   },
   a3: {
-    label: 'Entrenamiento',
+    label: 'A3 · Entrenamiento',
     color: 'rgb(220,80,180)',
     bgColor: 'rgba(220,80,180,0.08)',
     borderColor: 'rgba(220,80,180,0.2)',
@@ -101,7 +100,7 @@ const PILLAR_CONFIG = {
     href: '/despega/a3',
   },
   a4: {
-    label: 'La Realidad',
+    label: 'A4 · Radar Estratégico',
     color: 'rgb(255,140,60)',
     bgColor: 'rgba(255,140,60,0.08)',
     borderColor: 'rgba(255,140,60,0.2)',
@@ -244,41 +243,6 @@ function PillarCard({ pilarKey, score, pilarProgress }: {
   )
 }
 
-function LeaderboardCard({ entry, rank, isMe }: { entry: RankingEntry; rank: number; isMe: boolean }) {
-  const medals = ['rgb(255,215,0)', 'rgb(192,192,192)', 'rgb(205,127,50)']
-
-  return (
-    <div
-      className="flex items-center gap-3 px-4 py-3 rounded-xl transition-colors"
-      style={{
-        backgroundColor: isMe ? 'rgba(54,224,192,0.10)' : 'rgba(255,255,255,0.02)',
-        border: `1px solid ${isMe ? 'rgba(54,224,192,0.28)' : 'rgba(255,255,255,0.06)'}`,
-      }}
-    >
-      <span className="w-6 text-center flex-shrink-0 text-sm font-bold"
-        style={{ color: rank <= 3 ? medals[rank - 1] : 'rgba(255,255,255,0.25)' }}>
-        {rank}
-      </span>
-      <div
-        className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 text-xs font-bold text-white/70"
-        style={{ backgroundColor: 'rgba(255,255,255,0.08)' }}
-      >
-        {entry.user_id.slice(0, 2).toUpperCase()}
-      </div>
-      <div className="flex-1 min-w-0">
-        <p className={`text-sm font-semibold truncate ${isMe ? 'text-teal-300' : 'text-white/70'}`}>
-          {isMe ? 'Tú' : `Participante ${rank}`}
-        </p>
-        <p className="text-[10px] text-white/30">Racha: {entry.streak_actual ?? 0}d</p>
-      </div>
-      <div className="flex items-center gap-1 flex-shrink-0">
-        <Star className="w-3.5 h-3.5 text-teal-400/60" />
-        <span className="text-sm font-bold text-white">{entry.score_general}</span>
-      </div>
-    </div>
-  )
-}
-
 function MisionItem({ mision }: { mision: MisionUser }) {
   const isDone = mision.completada
   const pilarColor: Record<string, string> = {
@@ -328,10 +292,8 @@ function MisionItem({ mision }: { mision: MisionUser }) {
 
 export function GamificacionDashboard() {
   const router = useRouter()
-  const [userId,    setUserId]    = useState<string | null>(null)
   const [profile,   setProfile]   = useState<GamificationProfile | null>(null)
   const [pilares,   setPilares]   = useState<PilarProgress[]>([])
-  const [rankings,  setRankings]  = useState<RankingEntry[]>([])
   const [misiones,  setMisiones]  = useState<MisionUser[]>([])
   const [myRanking, setMyRanking] = useState<RankingEntry | null>(null)
   const [loading,   setLoading]   = useState(true)
@@ -348,9 +310,7 @@ export function GamificacionDashboard() {
       }
 
       if (!uid) { router.push('/auth/signin'); return }
-      setUserId(uid)
-
-      const [xpRes, pilaresRes, rankingsRes, misionesRes] = await Promise.all([
+      const [xpRes, pilaresRes, myRankingRes, misionesRes] = await Promise.all([
         supabase
           .from('user_gamification_profile')
           .select('total_xp,current_xp,current_level,interview_streak,best_interview_streak,total_interviews_completed,badges,achievements')
@@ -363,8 +323,8 @@ export function GamificacionDashboard() {
         supabase
           .from('despega_rankings')
           .select('user_id,score_general,rank_general,score_a1_cerebral,score_a2_rutas,score_aterrizaje,score_base,score_camino_persona,score_camino_profesional,streak_actual,mejor_streak,total_misiones_completadas,total_dias_activos')
-          .order('score_general', { ascending: false })
-          .limit(10),
+          .eq('user_id', uid)
+          .maybeSingle(),
         supabase
           .from('despega_user_misiones')
           .select('id,completada,completada_at,misiones:mision_id(titulo,descripcion,xp_reward,pilar)')
@@ -379,8 +339,7 @@ export function GamificacionDashboard() {
         total_interviews_completed: 0, badges: [], achievements: [],
       })
       setPilares(pilaresRes.data ?? [])
-      setRankings(rankingsRes.data ?? [])
-      setMyRanking((rankingsRes.data ?? []).find((r: RankingEntry) => r.user_id === uid) ?? null)
+      setMyRanking(myRankingRes.data ?? null)
       setMisiones((misionesRes.data ?? []) as MisionUser[])
       setLoading(false)
     }
@@ -405,10 +364,10 @@ export function GamificacionDashboard() {
         <div className="flex items-center gap-2 text-white/40 text-sm mb-1">
           <Link href="/despega" className="hover:text-white/70 transition-colors">Área personal</Link>
           <ChevronRight className="w-3.5 h-3.5" />
-          <span className="text-white/70">Mis Logros</span>
+          <span className="text-white/70">Mi evolución</span>
         </div>
-        <h1 className="text-2xl font-bold text-white text-balance">Mis Logros</h1>
-        <p className="text-white/40 text-sm mt-0.5">Tu XP, racha y posición en el ranking</p>
+        <h1 className="text-2xl font-bold text-white text-balance">Mi evolución</h1>
+        <p className="text-white/50 text-sm mt-0.5">Tu avance personal, construido desde actividades y evidencia registradas.</p>
       </div>
 
       <div className="max-w-5xl mx-auto px-4 md:px-6 py-8 space-y-8">
@@ -418,10 +377,10 @@ export function GamificacionDashboard() {
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             <XPCard profile={profile} />
             <StatCard
-              icon={Trophy}
-              label="Posición global"
-              value={myRanking?.rank_general != null ? `#${myRanking.rank_general}` : '—'}
-              sub={myRanking ? `${myRanking.score_general} puntos` : 'Sin datos aún'}
+              icon={Star}
+              label="Puntos registrados"
+              value={myRanking?.score_general ?? 0}
+              sub="Solo refleja tu propio avance"
               color="rgb(255,215,0)"
             />
             <StatCard
@@ -452,35 +411,20 @@ export function GamificacionDashboard() {
           </div>
         </section>
 
-        {/* Leaderboard + Misiones */}
-        <div className="grid md:grid-cols-2 gap-6">
-
-          <section>
-            <div className="flex items-center justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <Trophy className="w-4 h-4 text-white/30" />
-                <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wider">Top 10</h2>
-              </div>
-              <Link href="/despega/rankings" className="text-xs text-teal-400 hover:text-teal-300 transition-colors flex items-center gap-1">
-                Ver completo <ChevronRight className="w-3.5 h-3.5" />
-              </Link>
+        <div className="grid gap-6 md:grid-cols-[0.8fr_1.2fr]">
+          <section className="rounded-2xl border border-white/8 bg-white/[0.025] p-5">
+            <div className="flex items-center gap-2 mb-3">
+              <Award className="w-4 h-4 text-white/35" />
+              <h2 className="text-sm font-semibold text-white/55 uppercase tracking-wider">Tu referencia</h2>
             </div>
-            <div className="space-y-2">
-              {rankings.length === 0
-                ? <p className="text-sm text-white/30 px-1">Sin datos de ranking todavía.</p>
-                : rankings.map((entry, i) => (
-                    <LeaderboardCard
-                      key={entry.user_id}
-                      entry={entry}
-                      rank={(entry.rank_general != null ? entry.rank_general : i + 1)}
-                      isMe={entry.user_id === userId}
-                    />
-                  ))
-              }
-            </div>
+            <p className="text-lg font-semibold text-white">Compárate contigo, no con perfiles anónimos.</p>
+            <p className="mt-2 text-sm leading-relaxed text-white/50">Los puntos y porcentajes resumen actividad registrada. No certifican desempeño ni te comparan con otras personas.</p>
+            <Link href="/despega/career-identity" className="mt-5 inline-flex items-center gap-1 text-sm font-semibold text-teal-300 hover:text-teal-200">
+              Ver mi evidencia <ChevronRight className="h-4 w-4" />
+            </Link>
           </section>
 
-          <section>
+          <section className="rounded-2xl border border-white/8 bg-white/[0.025] p-5">
             <div className="flex items-center gap-2 mb-4">
               <Target className="w-4 h-4 text-white/30" />
               <h2 className="text-sm font-semibold text-white/50 uppercase tracking-wider">
@@ -498,7 +442,9 @@ export function GamificacionDashboard() {
                 ? (
                   <div className="flex flex-col items-center gap-2 py-8 text-center">
                     <Lock className="w-6 h-6 text-white/20" />
-                    <p className="text-sm text-white/30">No hay misiones asignadas aún.</p>
+                    <p className="text-sm font-medium text-white/65">Todavía no tienes misiones activas.</p>
+                    <p className="max-w-sm text-xs leading-relaxed text-white/40">Continúa tu recorrido para que DTC pueda mostrarte el siguiente trabajo relevante.</p>
+                    <Link href="/despega" className="mt-2 inline-flex items-center gap-1 text-sm font-semibold text-teal-300 hover:text-teal-200">Ver mi siguiente paso <ChevronRight className="h-4 w-4" /></Link>
                   </div>
                 )
                 : (

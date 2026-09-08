@@ -1,318 +1,80 @@
-"use client"
+import Link from 'next/link'
+import { ArrowRight, Brain, CheckCircle2, Compass, Radar, Target } from 'lucide-react'
 
-import Link from "next/link"
-import { ArrowRight, Lock, CheckCircle2, Brain, BookOpen, Zap } from "lucide-react"
-import { Button } from "@/components/ui/button"
+import { Button } from '@/components/ui/button'
+
+const stages = [
+  { code: 'A1', title: 'Despega Cerebral', description: 'Reconoce cómo tiendes a decidir, comunicarte y responder a distintas situaciones profesionales.', evidence: 'Lectura personal con metodología, matices y límites explícitos.', icon: Brain },
+  { code: 'A2', title: 'Tu Ruta', description: 'Convierte lo que sabes de ti en prioridades, misiones y una ruta profesional de 90 días.', evidence: 'Acciones, entregables y reflexiones guardadas en tu recorrido.', icon: Compass },
+  { code: 'A3', title: 'Entrenamiento', description: 'Practica conversaciones, entrevistas y decisiones antes de enfrentar el momento real.', evidence: 'Prácticas evaluadas y oportunidades concretas de mejora.', icon: Target },
+  { code: 'A4', title: 'Radar Estratégico', description: 'Relaciona señales del mercado con tu objetivo, tu evidencia y tus próximas decisiones.', evidence: 'Señales verificables, documentos y decisiones registradas.', icon: Radar },
+]
+
+const principles = [
+  'Tu progreso se guarda para que puedas retomar sin empezar de nuevo.',
+  'Las preferencias declaradas no se presentan como habilidades demostradas.',
+  'Cada etapa explica qué significa el resultado y cuál es el siguiente paso.',
+  'Tú decides: DTC organiza evidencia y contexto, no decide tu carrera por ti.',
+]
 
 export default function ComoFuncionaPage() {
-  const pillars = [
-    {
-      title: "Conozcámonos",
-      subtitle: "C1 - Career Foundation",
-      duration: "Día 1",
-      description: "Define tu situación actual y tus metas profesionales. Responderás preguntas clave sobre tu carrera, motivaciones y expectativas.",
-      icon: Brain,
-      objectives: ["Clarificar metas profesionales", "Identificar motivaciones", "Establecer baseline inicial"],
-      output: "Perfil de carrera personalizado",
-      requiresAuth: false,
-    },
-    {
-      title: "Rutas",
-      subtitle: "A1 - Identity Audit",
-      duration: "Días 2-7",
-      description: "Descubre tu identidad profesional a través de 6 evaluaciones psicométricas validadas científicamente.",
-      icon: BookOpen,
-      objectives: ["Autoconocimiento profundo", "Identificar fortalezas y debilidades", "Entender tu DISC, MBTI y más"],
-      output: "6 reportes de personalidad personalizados",
-      requiresAuth: true,
-      tests: ["DISC Profile", "MBTI Type", "Big Five", "RIASEC", "EQ Index", "Soft Skills"],
-    },
-    {
-      title: "Entrenamiento",
-      subtitle: "C2 + A2-A4 - Training Modules",
-      duration: "Días 8-60",
-      description: "Programas de entrenamiento adaptativos basados en tu perfil. Incluye simulaciones de entrevistas y construcción de documentos estratégicos.",
-      icon: Zap,
-      objectives: ["Desarrollar habilidades críticas", "Preparar para entrevistas", "Crear documentos profesionales"],
-      output: "Certificados completados, CV optimizado, STAR stories",
-      requiresAuth: true,
-    },
-    {
-      title: "Realidad",
-      subtitle: "Market Integration",
-      duration: "Día 61+",
-      description: "Aplica todo lo aprendido en búsqueda activa. Acceso a recursos del mercado y networking.",
-      icon: CheckCircle2,
-      objectives: ["Job searching guidance", "Network building", "Continuous learning"],
-      output: "Recursos de búsqueda, conectar con oportunidades",
-      requiresAuth: true,
-    },
-  ]
-
   return (
-    <div className="min-h-screen bg-background">
-      {/* Header */}
-      <div className="border-b border-purple/10">
-        <div className="container mx-auto px-4 py-12 max-w-7xl">
-          <Link href="/" className="text-purple/40 hover:text-purple/30 transition-colors text-sm font-medium mb-4 inline-block">
-            ← Volver al inicio
-          </Link>
-          <div>
-            <h1 className="text-5xl md:text-6xl font-black text-white mb-3">Cómo Funciona</h1>
-            <p className="text-xl text-purple/40 max-w-2xl">Un viaje estructurado de 90 días diseñado para transformar tu carrera. Conoce los 4 pilares de tu desarrollo profesional.</p>
-          </div>
+    <main className="min-h-screen bg-background text-foreground">
+      <header className="border-b border-border">
+        <div className="mx-auto max-w-6xl px-4 py-12 sm:px-6 sm:py-16">
+          <Link href="/" className="mb-5 inline-flex text-sm font-medium text-muted-foreground transition-colors hover:text-foreground">← Volver al inicio</Link>
+          <p className="mb-3 text-sm font-semibold uppercase tracking-[0.16em] text-cyan">Un recorrido conectado</p>
+          <h1 className="max-w-4xl text-4xl font-black tracking-tight text-white sm:text-6xl">Cómo funciona DespegaTuCarrera</h1>
+          <p className="mt-5 max-w-3xl text-lg leading-relaxed text-white/65 sm:text-xl">Primero comprende tu punto de partida. Después organiza una ruta, practica y observa el mercado con evidencia. Las cuatro etapas comparten el mismo contexto para evitar respuestas genéricas o desconectadas.</p>
         </div>
-      </div>
+      </header>
 
-      {/* Main Content */}
-      <div className="container mx-auto px-4 py-20 max-w-6xl">
-        {/* Overview */}
-        <div className="grid md:grid-cols-2 gap-12 mb-20 items-center">
-          <div>
-            <h2 className="text-3xl font-bold text-white mb-4">Viaje de 90 Días</h2>
-            <p className="text-purple/60 mb-6">
-              Despega Tu Carrera no es otro curso más. Es un sistema estructurado que te guía paso a paso a través de 4 pilares fundamentales, con IA adaptándose a tu progreso.
-            </p>
-            <ul className="space-y-3">
-              {[
-                "Personalizados basados en tu perfil",
-                "Avanzas solo cuando dominas cada sección",
-                "Coaching de IA disponible 24/7",
-                "Acceso a 120+ recursos profesionales",
-              ].map((item, idx) => (
-                <li key={idx} className="flex items-start gap-3">
-                  <CheckCircle2 className="w-5 h-5 text-cyan flex-shrink-0 mt-0.5" />
-                  <span className="text-white">{item}</span>
-                </li>
-              ))}
-            </ul>
+      <div className="mx-auto max-w-6xl space-y-20 px-4 py-16 sm:px-6 sm:py-20">
+        <section aria-labelledby="stages-title">
+          <div className="mb-9 max-w-3xl">
+            <p className="text-sm font-semibold uppercase tracking-[0.14em] text-cyan">Tu recorrido</p>
+            <h2 id="stages-title" className="mt-2 text-3xl font-bold text-white sm:text-4xl">Cuatro etapas, una sola historia</h2>
+            <p className="mt-3 text-white/60">El avance es secuencial para que cada nueva actividad pueda usar lo que ya construiste.</p>
           </div>
-          <div className="bg-purple/5 border border-purple/10 rounded-xl p-8 h-full flex flex-col justify-center">
-            <div className="space-y-4">
-              <div className="bg-background rounded-lg p-4 border border-cyan/20">
-                <p className="text-sm text-purple/40 mb-1">Duración Total</p>
-                <p className="text-2xl font-bold text-white">90 Días</p>
-              </div>
-              <div className="bg-background rounded-lg p-4 border border-cyan/20">
-                <p className="text-sm text-purple/40 mb-1">Tiempo Semanal Recomendado</p>
-                <p className="text-2xl font-bold text-white">5-7 Horas</p>
-              </div>
-              <div className="bg-background rounded-lg p-4 border border-cyan/20">
-                <p className="text-sm text-purple/40 mb-1">Evaluaciones Incluidas</p>
-                <p className="text-2xl font-bold text-white">6 Tests</p>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* The 4 Pillars */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-12">Los 4 Pilares</h2>
-          <div className="space-y-6">
-            {pillars.map((pillar, index) => {
-              const IconComponent = pillar.icon
-              return (
-                <div key={index} className="group border border-purple/10 rounded-xl p-8 hover:border-cyan/30 transition-colors bg-purple/5 hover:bg-purple/10">
-                  <div className="flex items-start justify-between mb-6">
-                    <div className="flex items-start gap-4">
-                      <div className="w-12 h-12 bg-cyan/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                        <IconComponent className="w-6 h-6 text-cyan" />
-                      </div>
-                      <div>
-                        <div className="flex items-center gap-3 mb-1">
-                          <h3 className="text-2xl font-bold text-white">{pillar.title}</h3>
-                          <span className="text-xs px-2 py-1 bg-cyan/10 text-cyan rounded-full font-mono">
-                            {pillar.subtitle}
-                          </span>
-                        </div>
-                        <p className="text-purple/40 text-sm">{pillar.duration}</p>
-                      </div>
-                    </div>
-                    {pillar.requiresAuth && (
-                      <div className="flex items-center gap-1 px-3 py-1 bg-purple/10 rounded-full">
-                        <Lock className="w-4 h-4 text-purple/60" />
-                        <span className="text-xs text-purple/60 font-medium">Requiere login</span>
-                      </div>
-                    )}
-                  </div>
-
-                  <p className="text-purple/60 mb-6 text-lg">{pillar.description}</p>
-
-                  <div className="grid md:grid-cols-3 gap-6">
-                    {/* Objectives */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-cyan rounded-full"></span>
-                        Objetivos
-                      </h4>
-                      <ul className="space-y-2">
-                        {pillar.objectives.map((obj, idx) => (
-                          <li key={idx} className="text-sm text-purple/60 flex gap-2">
-                            <span className="text-cyan">→</span>
-                            <span>{obj}</span>
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-
-                    {/* Tests/Features */}
-                    {pillar.tests && (
-                      <div>
-                        <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 bg-cyan rounded-full"></span>
-                          Evaluaciones
-                        </h4>
-                        <ul className="space-y-2">
-                          {pillar.tests.map((test, idx) => (
-                            <li key={idx} className="text-sm text-purple/60 flex gap-2">
-                              <span className="text-cyan">✓</span>
-                              <span>{test}</span>
-                            </li>
-                          ))}
-                        </ul>
-                      </div>
-                    )}
-
-                    {/* Output */}
-                    <div>
-                      <h4 className="text-sm font-semibold text-white mb-3 flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-cyan rounded-full"></span>
-                        Resultado
-                      </h4>
-                      <p className="text-sm text-purple/60">{pillar.output}</p>
-                    </div>
-                  </div>
+          <div className="grid gap-5 md:grid-cols-2">
+            {stages.map(({ code, title, description, evidence, icon: Icon }) => (
+              <article key={code} className="rounded-2xl border border-white/10 bg-white/[0.035] p-6 sm:p-7">
+                <div className="flex items-start gap-4">
+                  <span className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl border border-cyan/25 bg-cyan/10 text-cyan"><Icon className="h-6 w-6" aria-hidden="true" /></span>
+                  <div className="min-w-0"><p className="text-xs font-bold uppercase tracking-[0.14em] text-cyan">{code}</p><h3 className="mt-1 text-2xl font-bold text-white">{title}</h3></div>
                 </div>
-              )
-            })}
-          </div>
-        </div>
-
-        {/* Flow Diagram */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Flujo de Progresión</h2>
-          <div className="bg-purple/5 border border-purple/10 rounded-xl p-8">
-            <div className="grid md:grid-cols-4 gap-4">
-              {["Conozcámonos", "Rutas", "Entrenamiento", "Realidad"].map((stage, idx) => (
-                <div key={idx} className="flex flex-col items-center">
-                  <div className="w-16 h-16 bg-cyan/10 border-2 border-cyan rounded-full flex items-center justify-center mb-4">
-                    <span className="text-xl font-bold text-cyan">{idx + 1}</span>
-                  </div>
-                  <p className="text-white font-semibold text-center text-sm">{stage}</p>
-                  {idx < 3 && (
-                    <ArrowRight className="w-5 h-5 text-cyan mt-4 md:hidden" />
-                  )}
-                </div>
-              ))}
-            </div>
-            <div className="hidden md:flex justify-center gap-4 mt-4 text-cyan">
-              <ArrowRight className="w-6 h-6" />
-              <ArrowRight className="w-6 h-6" />
-              <ArrowRight className="w-6 h-6" />
-            </div>
-          </div>
-        </div>
-
-        {/* Smart Unlock Rules */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Progresión Inteligente</h2>
-          <div className="bg-purple/5 border border-purple/10 rounded-xl p-8">
-            <p className="text-purple/60 mb-6">
-              No saltamos etapas. El sistema verifica que hayas dominado cada sección antes de avanzar:
-            </p>
-            <div className="grid md:grid-cols-2 gap-6">
-              {[
-                {
-                  label: "Competencia Validada",
-                  desc: "Debes aprobar evaluaciones con 70%+ para avanzar",
-                },
-                {
-                  label: "Secuencia Obligatoria",
-                  desc: "Los módulos se desbloquean en orden. No puedes saltear etapas.",
-                },
-                {
-                  label: "Reintentos Ilimitados",
-                  desc: "Puedes retomar cualquier evaluación sin límite de intentos",
-                },
-                {
-                  label: "Retroalimentación en Tiempo Real",
-                  desc: "La IA te da feedback personalizado después de cada respuesta",
-                },
-              ].map((item, idx) => (
-                <div key={idx} className="bg-background rounded-lg p-4 border border-cyan/10">
-                  <h4 className="text-white font-semibold mb-2 flex items-center gap-2">
-                    <CheckCircle2 className="w-5 h-5 text-cyan" />
-                    {item.label}
-                  </h4>
-                  <p className="text-sm text-purple/60">{item.desc}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-
-        {/* FAQ */}
-        <div className="mb-20">
-          <h2 className="text-3xl font-bold text-white mb-8">Preguntas Frecuentes</h2>
-          <div className="space-y-4">
-            {[
-              {
-                question: "¿Puedo pausar el programa?",
-                answer: "Sí, puedes pausar cuando quieras. No hay fecha límite. Puedes retomar desde donde lo dejaste.",
-              },
-              {
-                question: "¿Necesito estudiar a tiempo completo?",
-                answer: "No. Recomendamos 5-7 horas por semana. Algunos lo completan más rápido, otros toman 120+ días.",
-              },
-              {
-                question: "¿Qué pasa si no paso una evaluación?",
-                answer: "Puedes retomar la evaluación ilimitadas veces. Obtendrás retroalimentación personalizada para mejorar.",
-              },
-              {
-                question: "¿Acceso de por vida?",
-                answer: "Sí, mantiene acceso completo a todos los contenidos y recursos mientras tu cuenta esté activa.",
-              },
-              {
-                question: "¿Puedo acceder desde móvil?",
-                answer: "Completamente responsive. Diseñado para web, tablet y móvil.",
-              },
-              {
-                question: "¿Hay certificado al terminar?",
-                answer: "Sí, recibirás un certificado digital verificable que puedes compartir en LinkedIn.",
-              },
-            ].map((faq, idx) => (
-              <details key={idx} className="group bg-purple/5 border border-purple/10 rounded-lg p-4 hover:border-cyan/30 transition-colors cursor-pointer">
-                <summary className="flex items-center justify-between text-white font-semibold group-open:text-cyan transition-colors">
-                  {faq.question}
-                  <span className="text-purple/40 group-open:text-cyan">+</span>
-                </summary>
-                <p className="text-purple/60 mt-3">{faq.answer}</p>
-              </details>
+                <p className="mt-5 leading-relaxed text-white/65">{description}</p>
+                <div className="mt-5 rounded-xl border border-white/8 bg-black/20 p-4"><p className="text-xs font-semibold uppercase tracking-wider text-white/40">Qué conservas</p><p className="mt-2 text-sm leading-relaxed text-white/75">{evidence}</p></div>
+              </article>
             ))}
           </div>
-        </div>
+        </section>
 
-        {/* CTA */}
-        <div className="bg-gradient-to-r from-cyan/10 to-purple/10 border border-cyan/20 rounded-xl p-12 text-center">
-          <h2 className="text-3xl font-bold text-white mb-4">¿Listo para comenzar?</h2>
-          <p className="text-purple/60 mb-8 max-w-2xl mx-auto">
-            Únete a cientos de profesionales que ya están transformando sus carreras con Despega Tu Carrera.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link href="/auth/signup">
-              <Button size="lg" className="bg-cyan hover:bg-cyan/90 text-black font-semibold">
-                Comenzar Ahora
-                <ArrowRight className="w-4 h-4 ml-2" />
-              </Button>
-            </Link>
-            <Link href="/contact">
-              <Button size="lg" variant="outline" className="border-purple/20 text-white hover:bg-purple/5">
-                Más Información
-              </Button>
-            </Link>
+        <section aria-labelledby="principles-title" className="grid gap-8 rounded-3xl border border-cyan/20 bg-gradient-to-br from-cyan/10 to-purple/10 p-7 md:grid-cols-[0.8fr_1.2fr] md:p-10">
+          <div><p className="text-sm font-semibold uppercase tracking-[0.14em] text-cyan">Cómo cuidamos la interpretación</p><h2 id="principles-title" className="mt-2 text-3xl font-bold text-white">Claridad sin etiquetarte</h2><p className="mt-4 leading-relaxed text-white/60">DTC es una herramienta de desarrollo personal y profesional. No es un diagnóstico clínico ni una promesa de empleo.</p></div>
+          <ul className="space-y-3">
+            {principles.map((principle) => <li key={principle} className="flex gap-3 rounded-xl border border-white/8 bg-black/15 p-4 text-sm leading-relaxed text-white/75"><CheckCircle2 className="mt-0.5 h-5 w-5 shrink-0 text-cyan" aria-hidden="true" /><span>{principle}</span></li>)}
+          </ul>
+        </section>
+
+        <section aria-labelledby="pace-title" className="grid gap-5 md:grid-cols-3">
+          <div className="md:col-span-3"><h2 id="pace-title" className="text-3xl font-bold text-white">Avanza a tu ritmo</h2></div>
+          {[
+            ['Primera lectura', 'A1 toma aproximadamente 10 minutos y construye la base interpretativa.'],
+            ['Ruta de 90 días', 'A2 organiza el trabajo en misiones que puedes retomar y documentar.'],
+            ['Continuidad', 'Tu información se guarda bajo tu cuenta y acompaña las etapas siguientes.'],
+          ].map(([title, copy]) => <article key={title} className="rounded-2xl border border-white/10 bg-white/[0.03] p-6"><h3 className="font-semibold text-white">{title}</h3><p className="mt-2 text-sm leading-relaxed text-white/55">{copy}</p></article>)}
+        </section>
+
+        <section className="rounded-3xl border border-white/10 bg-white/[0.035] p-8 text-center sm:p-12">
+          <h2 className="text-3xl font-bold text-white">Empieza por conocerte mejor</h2>
+          <p className="mx-auto mt-3 max-w-2xl text-white/60">Ingresa al piloto y continúa desde el punto exacto que corresponda a tu recorrido.</p>
+          <div className="mt-7 flex flex-col justify-center gap-3 sm:flex-row">
+            <Button asChild size="lg" className="font-semibold"><Link href="/auth/signin">Comenzar mi recorrido <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
+            <Button asChild size="lg" variant="outline"><Link href="/contact">Hablar con el equipo</Link></Button>
           </div>
-        </div>
+        </section>
       </div>
-    </div>
+    </main>
   )
 }
