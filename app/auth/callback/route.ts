@@ -1,7 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { normalizeNextPath, PILOT_OAUTH_NEXT_COOKIE } from '@/lib/auth/pilot-access'
-import { PILOT_CLAIM_COOKIE, verifyInvitationCookieValue } from '@/lib/auth/invitation-cookie'
+import {
+  PILOT_CLAIM_COOKIE,
+  resolveInvitationCookieSecret,
+  verifyInvitationCookieValue,
+} from '@/lib/auth/invitation-cookie'
 
 function signInRedirect(request: NextRequest, error: string) {
   const url = new URL('/auth/signin', request.url)
@@ -33,7 +37,7 @@ export async function GET(request: NextRequest) {
   const { data, error } = await supabase.auth.exchangeCodeForSession(code)
   if (error || !data.user) return signInRedirect(request, 'exchange_failed')
 
-  const secret = process.env.PILOT_INVITATION_COOKIE_SECRET ?? ''
+  const secret = resolveInvitationCookieSecret()
   const claimId = verifyInvitationCookieValue(request.cookies.get(PILOT_CLAIM_COOKIE)?.value, secret)
   const admin = createAdminClient()
   const { data: accessData, error: accessError } = await admin.rpc('resolve_pilot_access', {
