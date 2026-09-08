@@ -153,7 +153,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-white">Apariencia y Tema</h2>
-              <p className="text-xs text-blue/60">Personaliza tu interfaz</p>
+              <p className="text-xs text-white/70">Personaliza tu interfaz</p>
             </div>
           </div>
 
@@ -169,8 +169,10 @@ export default function SettingsPage() {
                   const Icon = theme.icon
                   return (
                     <button
+                      type="button"
                       key={theme.value}
                       onClick={() => handlePreferenceChange('theme', theme.value)}
+                      aria-pressed={preferences.theme === theme.value}
                       className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-all ${
                         preferences.theme === theme.value
                           ? 'bg-blue text-white'
@@ -187,8 +189,9 @@ export default function SettingsPage() {
 
             {/* Language Selection */}
             <div>
-              <label className="block text-sm font-medium text-white mb-3">Idioma</label>
+              <label htmlFor="settings-language" className="block text-sm font-medium text-white mb-3">Idioma</label>
               <select
+                id="settings-language"
                 value={preferences.language || 'es'}
                 onChange={(e) => handlePreferenceChange('language', e.target.value)}
                 className="w-full px-4 py-2 rounded-lg bg-white/10 border border-[rgb(80,160,170)]/20 text-white focus:outline-none focus:ring-2 focus:ring-blue/50"
@@ -209,7 +212,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-white">Notificaciones</h2>
-              <p className="text-xs text-orange/60">Mantente actualizado</p>
+              <p className="text-xs text-white/70">Mantente actualizado</p>
             </div>
           </div>
 
@@ -241,17 +244,18 @@ export default function SettingsPage() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-white">Zona horaria</h2>
-              <p className="text-xs text-purple/60">Ajusta fechas y recordatorios</p>
+              <p className="text-xs text-white/70">Ajusta fechas y recordatorios</p>
             </div>
           </div>
 
           <div className="space-y-4">
             <div>
-              <label className="block text-sm font-medium text-white mb-3 flex items-center gap-2">
+              <label htmlFor="settings-timezone" className="block text-sm font-medium text-white mb-3 flex items-center gap-2">
                 <Clock className="w-4 h-4" />
                 Tu Zona Horaria
               </label>
               <select
+                id="settings-timezone"
                 value={preferences.timezone || 'America/Santiago'}
                 onChange={(e) => handlePreferenceChange('timezone', e.target.value)}
                 className="w-full min-w-0 rounded-lg border border-[rgb(80,160,170)]/20 bg-white/10 px-3 py-2 text-white focus:outline-none focus:ring-2 focus:ring-purple/50 sm:px-4"
@@ -272,7 +276,7 @@ export default function SettingsPage() {
             </div>
             <div>
               <h2 className="text-xl font-semibold text-white">Privacidad y datos</h2>
-              <p className="text-xs text-cyan/60">Qué ocurre con esta información</p>
+              <p className="text-xs text-white/70">Qué ocurre con esta información</p>
             </div>
           </div>
 

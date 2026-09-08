@@ -25,6 +25,7 @@ for (const label of ['A1 · Despega Cerebral', 'A2 · Tu Ruta', 'A3 · Entrenami
 }
 assert.ok(!evolution.includes('Participante ${rank}'))
 assert.ok(!evolution.includes('Top 10'))
+
 assert.ok(!evolution.includes(".limit(10)"))
 assert.ok(evolution.includes(".eq('user_id', uid)"))
 assert.ok(evolution.includes('Compárate contigo'))
@@ -37,6 +38,13 @@ assert.ok(!settings.includes('defaultChecked'))
 assert.ok(settings.includes('flex-wrap'))
 assert.ok(settings.includes('min-w-0'))
 assert.ok(settings.includes('flex-1 break-words'))
+for (const controlId of ['settings-language', 'settings-timezone']) {
+  assert.ok(settings.includes(`htmlFor="${controlId}"`), `Falta etiqueta accesible para ${controlId}`)
+  assert.ok(settings.includes(`id="${controlId}"`), `Falta id accesible para ${controlId}`)
+}
+for (const lowContrastClass of ['text-blue/60', 'text-orange/60', 'text-purple/60', 'text-cyan/60']) {
+  assert.ok(!settings.includes(lowContrastClass), `Contraste insuficiente en Configuración: ${lowContrastClass}`)
+}
 
 const preferences = source('app/api/preferences/route.ts')
 assert.ok(preferences.includes('supabase.auth.getUser()'))
