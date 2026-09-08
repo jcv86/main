@@ -50,6 +50,7 @@ jobs:
       - name: Prepare isolated application and start local Supabase only
         run: |
           node scripts/a1-browser-qa/prepare.mjs
+          node scripts/a1-browser-qa/configure-local.mjs
           supabase init --workdir "$A1_LAB_ROOT/stack" --yes
           supabase start --workdir "$A1_LAB_ROOT/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$A1_LAB_ROOT/stack-start.log" 2>&1
           supabase status --workdir "$A1_LAB_ROOT/stack" -o json > "$A1_LAB_ROOT/status.json"

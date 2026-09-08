@@ -4,6 +4,16 @@
 .document :where(section, article, dl, div) {
   min-width: 0;
 }
+/* Global text-field sizing must not expand native choice controls to 100% width.
+   The surrounding label remains the full-size pointer/touch target. */
+.document input[type='radio'] {
+  width: 1.125rem;
+  height: 1.125rem;
+  min-width: 1.125rem;
+  min-height: 1.125rem;
+  flex: 0 0 1.125rem;
+  accent-color: hsl(var(--primary));
+}
 @media print {
   .document {
     background: white !important;
@@ -29,7 +39,6 @@
     background-image: none !important;
     border-color: #cbd5e1 !important;
     box-shadow: none !important;
-    /* Long answers must be allowed to flow instead of clipping on a single page. */
     overflow: visible !important;
   }
   .document [data-report-dimension] {
