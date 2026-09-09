@@ -11,6 +11,7 @@
     "test:pilot-access": "tsx scripts/test-pilot-auth-flow.mjs && tsx scripts/test-pilot-access-decisions.mjs",
     "test:assessment-drafts": "tsx scripts/test-assessment-drafts.mjs",
     "check:pilot-access": "tsx scripts/check-pilot-access-contract.ts",
+    "check:pilot-invitation-issuer": "tsx scripts/check-pilot-invitation-issuer.ts",
     "check:reporting": "tsx scripts/check-reporting-contract.ts",
     "check:a1-understanding": "tsx scripts/check-a1-individual-understanding-contract.ts",
     "check:credibility": "tsx scripts/check-dtc-credibility-contract.ts",
