@@ -8,10 +8,10 @@ This is the canonical ledger for closing DespegaTuCarrera. An item is `verified`
 
 - Repository: `jcv86/main`
 - Canonical branch observed: `main`
-- Canonical commit: `bdc025c7cac72c075d72f442db889f58f1918a1a`
+- Canonical commit: `ec2a121d22fd6be88a383fcaa0b2636ec4949fa4`
 - Vercel project: `v0-fork-of-despega-tu-carrera-clone` (`prj_SvrOCS2CtFQunqirMeYidZRHZKpm`)
-- Current production deployment: `dpl_FVLgDPaVKqDfXU6ZJduLNC8Cwj8M`
-- Current production commit: `bdc025c7cac72c075d72f442db889f58f1918a1a`
+- Current production deployment: `dpl_EX3WDcaDp2szVZsShZfFvHDyiGfE`
+- Current production commit: `ec2a121d22fd6be88a383fcaa0b2636ec4949fa4`
 - Current production source branch: `main`
 - Supabase project: `DTCFINAL` (`dcfrbwxbejtbcouionna`)
 
@@ -24,7 +24,7 @@ Production and canonical `main` now point to the same release commit.
 | DTC-C01 | Production and the canonical branch contain the same approved release | PR #130 merged candidate `66a85e98` into `main` as `c98097a4`; production deployment `dpl_E8B7e3Jfcn2dx2KG8E7dL5j2zRRi` is READY on that commit | Draft feature is reviewed, its migration is applied safely, the verified tree is integrated into `main`, and production points to it | Future releases must preserve branch/commit identity | `$dtc-release-production` | `verified` | yes |
 | DTC-C02 | A signed-in user can save and resume C1/A1 without losing answers | With the approved Joaquín account, C1 and A1 passed save-refresh-resume, all 28 A1 answers persisted, C2 saved eight answers, the integral report rendered, and the transition reached stable A2 | Save-refresh-resume-submit works for C1 and A1 on production and the canonical report opens after C2 | QA content is explicitly marked where free text was entered | `$dtc-supabase-backend` | `verified` | yes |
 | DTC-C03 | Pilot access and returning-user continuity remain reliable | `test-pilot-auth-flow`, `test-pilot-access-decisions`, and `check-pilot-access-contract` pass 3/3 on `main`; remote migration `pilot_access_foundation` exists; anonymous production requests to C1/A1 redirect to sign-in while preserving `next` | New invitation, returning Google/LinkedIn identity, preserved progress, sign-out, and browser-back journeys pass on deployed candidate | Requires synthetic pilot identities and live auth configuration | `$dtc-quality-gate` | `in_progress` | yes |
-| DTC-C04 | DTC user data is protected by intentional RLS and grants | Production P0 protects `profiles` and `unified_test_results`: RLS is active, anonymous privileges are absent, and authenticated access is owner-scoped with least privilege. P1 is prepared for `test_results`, `user_profiles`, `books` and `a4_noticias`, separating personal owner-only data from public read-only catalogs | Every table reachable by active DTC browser/server journeys has documented exposure intent, least-privilege grants, tested RLS, and no unintended privileged execution | P1 requires transaction dry-run, role simulation, reviewed migration and production verification before it becomes evidence | `$dtc-supabase-backend` | `in_progress` | yes |
+| DTC-C04 | DTC user data is protected by intentional RLS and grants | Production P0 protects `profiles` and `unified_test_results`; production P1 protects `test_results` and `user_profiles` as owner-only and limits `books` and `a4_noticias` to public read-only access. The next verified active gap is the permissive aggregate `a3_user_progress` boundary | Every table reachable by active DTC browser/server journeys has documented exposure intent, least-privilege grants, tested RLS, and no unintended privileged execution | P2 must pass transaction dry-run, owner/other/anonymous role simulation, CI, Preview and production verification | `$dtc-supabase-backend` | `in_progress` | yes |
 | DTC-C05 | The app produces a reproducible production build | Clean local production build succeeds on `main`; Vercel candidate is READY | Clean local build and Vercel build both succeed for the same commit; build emits no unresolved Edge incompatibility | Build warns about Supabase Node API in Edge middleware; local build lacks production environment values | `$dtc-quality-gate` | `in_progress` | yes |
 | DTC-C06 | A normal user experiences one coherent DTC product rather than internal/test surfaces | Repository exposes hundreds of routes, including admin, demo, debug, test and design-system pages; reachability and authorization are not yet fully mapped | Public sitemap and navigation contain only intentional product routes; internal routes are removed, disabled, or protected; all visible CTAs lead to working outcomes | Large route surface increases accidental exposure and inconsistent UX | `$dtc-product-gap` | `not_started` | yes |
 | DTC-C07 | Core journey works on mobile and desktop with recovery states | Authenticated loading/error/not-found contracts exist; no current rendered evidence for the entire journey | Anonymous entry, auth, C1, A1, result, dashboard and next step pass at 390x844 and desktop, including loading/empty/error/expired-session states | Needs deployed candidate and test identity | `$dtc-quality-gate` | `not_started` | yes |
@@ -42,6 +42,8 @@ Production and canonical `main` now point to the same release commit.
 
 ### 2026-09-09
 
+- Merged and promoted P1 on commit `ec2a121d`, production deployment `dpl_EX3WDcaDp2szVZsShZfFvHDyiGfE`: owner-only legacy profiles/results and read-only public catalogs passed role simulation, live smoke and runtime-log verification.
+- Re-grounded the proposed P2 database scope against the production catalog. Seven source-declared A3/A4 tables are absent remotely and are not being created; only the existing two-row `a3_user_progress` relation remains in scope. Its rows map to real Auth users, but current `public` policies are unconditional and `anon` has full table privileges.
 - Production and canonical `main` were reconciled at commit `d37496a9`, deployment `dpl_4T7yq9a4A253SeZortMU1kRur8a3`.
 - A real invitation was issued, claimed and verified as single-use in Supabase; the temporary operator role used for the test was removed.
 - A parallel source/runtime audit scored A1 93, A2 87, A3 88 and A4 86. The main remaining evidence gap is a full live A1→A4 desktop/mobile journey.
