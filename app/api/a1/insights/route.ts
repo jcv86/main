@@ -183,7 +183,7 @@ IMPORTANTE:
         throw new Error('No JSON found in response')
       }
     } catch (parseError) {
-      console.error('[v0] Failed to parse OpenAI response:', content)
+      console.error('[v0] Failed to parse OpenAI insights response')
       // Fallback to default insights
       insights = {
         fortalezasPrincipales: `Tu perfil ${primaryProfileName} te proporciona fortalezas únicas para el mercado laboral. Combinado con tu lado ${secondaryProfileName}, tienes una configuración versátil que te permite adaptarte a diferentes contextos profesionales.`,

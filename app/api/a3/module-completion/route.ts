@@ -359,7 +359,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!isAtomicCompletionResult(data)) {
-      console.error('[v0] Invalid A3 atomic completion response:', data)
+      console.error('[v0] Invalid A3 atomic completion response')
       return NextResponse.json(
         {
           error: 'La finalización no devolvió un resultado válido.',

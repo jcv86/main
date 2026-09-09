@@ -126,13 +126,13 @@ Respuesta del usuario: "${trimmedResponse}"
 
       const aiData = await aiValidationResponse.json()
       const aiContent = aiData.choices?.[0]?.message?.content
-      console.log(`[v0] OpenAI validation response:`, aiContent)
+      console.log(`[v0] OpenAI validation response received`)
 
       try {
         const aiValidation = JSON.parse(aiContent)
         
         if (!aiValidation.isValid) {
-          console.log(`[v0] OpenAI rejected response:`, aiValidation.reason)
+          console.log(`[v0] OpenAI rejected response`)
           return NextResponse.json({
             valid: false,
             message: 'Respuesta rechazada',
@@ -172,5 +172,4 @@ Respuesta del usuario: "${trimmedResponse}"
     })
   }
 }
-
 

@@ -64,7 +64,7 @@ export function SessionWrapper({ children }: SessionWrapperProps) {
         if (isMounted) {
           // Only log significant auth events, not every state check
           if (event === 'SIGNED_IN' || event === 'SIGNED_OUT') {
-            console.log('[v0] Auth event:', event, 'User:', newSession?.user?.email)
+            console.log('[v0] Auth event:', event)
           }
           setSession(newSession)
           setIsLoading(false)

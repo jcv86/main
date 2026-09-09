@@ -1,8 +1,5 @@
 'use client'
 
-import { useEffect, useState } from 'react'
-import { useRouter } from 'next/navigation'
-import { createClient } from '@/lib/supabase/client'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { AdminDashboard } from '@/components/admin-dashboard'
 import { AdminUserManagement } from '@/components/admin-user-management'
@@ -10,52 +7,6 @@ import Link from 'next/link'
 import { ArrowLeft } from 'lucide-react'
 
 export default function AdminPage() {
-  const [isAdmin, setIsAdmin] = useState(false)
-  const [loading, setLoading] = useState(true)
-  const router = useRouter()
-  const supabase = createClient()
-
-  useEffect(() => {
-    checkAdminStatus()
-  }, [])
-
-  async function checkAdminStatus() {
-    try {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        setIsAdmin(false)
-        setLoading(false)
-        router.push('/despega')
-        return
-      }
-
-      // Check if user is admin (would need to implement admin role in your auth)
-      const { data } = await supabase
-        .from('despega_user_profiles')
-        .select('is_admin')
-        .eq('id', user.id)
-        .single()
-
-      if (!data?.is_admin) {
-        router.push('/despega')
-        return
-      }
-
-      setIsAdmin(data?.is_admin || false)
-    } catch (error) {
-      console.error('Error checking admin status:', error)
-      setIsAdmin(false)
-      router.push('/despega')
-    } finally {
-      setLoading(false)
-    }
-  }
-
-  if (loading) {
-    return <div className="flex items-center justify-center h-screen">Cargando...</div>
-  }
-
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-8">

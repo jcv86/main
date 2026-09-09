@@ -59,7 +59,7 @@ export const markTaskComplete = async (
 
   // Create a consistent task ID for debugging
   const taskId = getTaskId(phase, day, title)
-  console.log('[v0] Marking task complete:', { taskId, phase, day, title, userId: user.id })
+  console.log('[v0] Marking task complete', { taskId, phase, day })
 
   // Check if already exists first
   const { data: existing, error: checkError } = await supabase

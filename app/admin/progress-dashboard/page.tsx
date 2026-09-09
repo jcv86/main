@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Progress } from '@/components/ui/progress'
@@ -59,7 +58,6 @@ export default function AdminProgressDashboard() {
     stage6: 0,
     fullyOnboarded: 0,
   })
-  const supabase = createClient()
 
   useEffect(() => {
     loadUserProgress()
@@ -67,15 +65,9 @@ export default function AdminProgressDashboard() {
 
   const loadUserProgress = async () => {
     try {
-      const { data: usersData, error } = await supabase
-        .from('despega_user_profiles')
-        .select('*')
-        .order('created_at', { ascending: false })
-
-      if (error) {
-        console.error('Error loading user progress:', error)
-        return
-      }
+      const response = await fetch('/api/admin/dashboard', { cache: 'no-store' })
+      if (!response.ok) throw new Error('Unable to load user progress')
+      const { profiles: usersData } = await response.json()
 
       // Calculate completion stage for each user
       const enhancedUsers = usersData?.map((user) => {

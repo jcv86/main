@@ -139,7 +139,7 @@ export async function sendMilestoneNotifications() {
         .update({ notification_sent: true })
         .eq('user_id', completion.user_id)
     } catch (error) {
-      console.error(`Failed to send notification to ${completion.user_id}:`, error)
+      console.error('Failed to send completion notification')
     }
   }
 }

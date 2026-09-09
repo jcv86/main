@@ -114,6 +114,9 @@ jobs:
       - name: A4 cron clock runtime logic and source contract
         run: npx tsx scripts/check-a4-daily-cron-contract.ts
 
+      - name: Cron parity, health endpoints, and sanitized operations contract
+        run: npx tsx scripts/check-observability-p0-contract.ts
+
       - name: A4 job matching access and parameter source contract
         run: npx tsx scripts/check-a4-job-matching-contract.ts
 

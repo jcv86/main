@@ -178,7 +178,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!isAtomicCompletionResult(data)) {
-      console.error('[v0] Invalid difficult questions completion response:', data)
+      console.error('[v0] Invalid difficult questions completion response')
       return NextResponse.json(
         {
           error: 'La finalización no devolvió un resultado válido.',

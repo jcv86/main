@@ -211,7 +211,7 @@ export async function POST(request: NextRequest) {
     }
 
     if (!isAtomicCompletionResult(data)) {
-      console.error('[v0] Invalid basic interview completion response:', data)
+      console.error('[v0] Invalid basic interview completion response')
       return NextResponse.json(
         {
           error: 'La finalización no devolvió un resultado válido.',

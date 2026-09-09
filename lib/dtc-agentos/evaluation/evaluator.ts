@@ -253,7 +253,7 @@ function parseEvaluationResponse(
     }
   } catch (error) {
     console.error('[Evaluator] Error parsing AI response:', error)
-    console.error('[Evaluator] Raw response:', text)
+    console.error('[Evaluator] AI response could not be parsed')
 
     // Return a default evaluation on parse error
     return {

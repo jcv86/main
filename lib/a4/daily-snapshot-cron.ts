@@ -7,6 +7,10 @@ import { captureA4DailySnapshotForUser } from './snapshot-capture'
 
 const PAGE_SIZE = 1000
 const CONCURRENCY = 5
+const NO_STORE_HEADERS = {
+  'Cache-Control': 'no-store, max-age=0',
+  'CDN-Cache-Control': 'no-store',
+}
 
 type AdminClient = ReturnType<typeof createAdminClient>
 
@@ -28,7 +32,7 @@ function authorizeCron(request: Request):
       authorized: false,
       response: NextResponse.json(
         { error: 'CRON_SECRET no está configurado de forma segura.' },
-        { status: 503 },
+        { status: 503, headers: NO_STORE_HEADERS },
       ),
     }
   }
@@ -38,7 +42,10 @@ function authorizeCron(request: Request):
   if (!safeSecretMatch(actual, expected)) {
     return {
       authorized: false,
-      response: NextResponse.json({ error: 'No autorizado' }, { status: 401 }),
+      response: NextResponse.json(
+        { error: 'No autorizado' },
+        { status: 401, headers: NO_STORE_HEADERS },
+      ),
     }
   }
 
@@ -85,14 +92,17 @@ export async function runA4DailySnapshotCron(request: Request) {
   const now = new Date()
   const window = getSantiagoCronWindow(now)
   if (!window.shouldRun) {
-    return NextResponse.json({
-      success: true,
-      skipped: true,
-      reason: 'OUTSIDE_SANTIAGO_08_WINDOW',
-      localDate: window.date,
-      localHour: window.hour,
-      localMinute: window.minute,
-    })
+    return NextResponse.json(
+      {
+        success: true,
+        skipped: true,
+        reason: 'OUTSIDE_SANTIAGO_08_WINDOW',
+        localDate: window.date,
+        localHour: window.hour,
+        localMinute: window.minute,
+      },
+      { headers: NO_STORE_HEADERS },
+    )
   }
 
   try {
@@ -159,20 +169,35 @@ export async function runA4DailySnapshotCron(request: Request) {
       )
     }
 
-    return NextResponse.json({
-      success: result.failed === 0,
-      localDate: window.date,
-      timezone: 'America/Santiago',
-      ...result,
-    })
+    return NextResponse.json(
+      {
+        success: result.failed === 0,
+        localDate: window.date,
+        timezone: 'America/Santiago',
+        candidates: result.candidates,
+        captured: result.captured,
+        evidenceChanged: result.evidenceChanged,
+        withoutNewEvidence: result.withoutNewEvidence,
+        skippedNoAccess: result.skippedNoAccess,
+        skippedNoEvidence: result.skippedNoEvidence,
+        failed: result.failed,
+      },
+      { headers: NO_STORE_HEADERS },
+    )
   } catch (error) {
-    console.error('[v0] A4 daily snapshot cron error:', error)
+    console.error(
+      JSON.stringify({
+        level: 'error',
+        message: 'A4 daily snapshot cron failed',
+        error: error instanceof Error ? error.name : 'UnknownError',
+      }),
+    )
     return NextResponse.json(
       {
         success: false,
-        error: error instanceof Error ? error.message : 'Cron execution failed',
+        error: 'Cron execution failed',
       },
-      { status: 500 },
+      { status: 500, headers: NO_STORE_HEADERS },
     )
   }
 }

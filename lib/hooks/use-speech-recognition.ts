@@ -61,7 +61,7 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
         const transcript = event.results[i][0].transcript
         const confidence = event.results[i][0].confidence
 
-        console.log('[v0] Result:', { transcript, confidence, isFinal: event.results[i].isFinal })
+        console.log('[v0] Speech recognition result processed', { confidence, isFinal: event.results[i].isFinal })
 
         if (event.results[i].isFinal) {
           finalTranscript += transcript + ' '
@@ -81,7 +81,7 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
         lastResultRef.current = finalTranscript.trim()
         setTranscript(finalTranscript.trim())
         setIsFinal(true)
-        console.log('[v0] Final transcript set:', finalTranscript.trim())
+        console.log('[v0] Final speech recognition result set')
 
         // Reset silence timer
         if (silenceTimerRef.current) {
@@ -191,4 +191,3 @@ export function useSpeechRecognition(options: UseSpeechRecognitionOptions = {}) 
     resetTranscript
   }
 }
-

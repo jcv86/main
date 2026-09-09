@@ -319,7 +319,7 @@ export async function upsertDocument(
       return result
     } else {
       // Create new
-      console.log('[v0] Creating new document:', { type, sourceModule, userId })
+      console.log('[v0] Creating new document', { type, sourceModule })
       const result = await createDocument(userId, input)
       console.log('[v0] Document created:', result)
       return result

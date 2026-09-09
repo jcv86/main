@@ -22,7 +22,7 @@ export function VoiceInput({ onTranscript, isDisabled = false, pillarColor = 'rg
   useEffect(() => {
     // Only trigger callback when we have a FINAL result (after 2 seconds of silence)
     if (transcript && isFinal && transcript !== lastTranscriptRef.current) {
-      console.log('[v0] Final transcript received:', transcript)
+      console.log('[v0] Final transcript received')
       lastTranscriptRef.current = transcript
       onTranscript(transcript)
       // Reset for next recording
@@ -71,4 +71,3 @@ export function VoiceInput({ onTranscript, isDisabled = false, pillarColor = 'rg
     </Button>
   )
 }
-

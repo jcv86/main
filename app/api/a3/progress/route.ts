@@ -56,7 +56,7 @@ export async function GET(_request: NextRequest) {
     // Calculate percentage based on XP earned (capped at 100%)
     const percentage = Math.min(Math.round((totalXP / TOTAL_XP_TARGET) * 100), 100)
 
-    console.log('[v0] Progress for user:', user.id, '| XP:', totalXP, '| Trainings:', completedTrainings, '| %:', percentage)
+    console.log('[v0] Progress calculated', { totalXP, completedTrainings, percentage })
 
     return NextResponse.json({
       totalXP,

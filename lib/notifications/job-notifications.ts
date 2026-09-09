@@ -35,7 +35,7 @@ export async function createNotification(payload: NotificationPayload): Promise<
         created_at: new Date().toISOString()
       })
 
-    console.log(`[v0] Notification created for user ${payload.userId}`)
+    console.log('[v0] Notification created')
 
     // Future: Send push notification via service (Firebase, OneSignal, etc.)
     // await sendPushNotification(payload)
@@ -97,7 +97,7 @@ export async function broadcastNotification(userId: string, notification: Notifi
           event: 'new_notification'
         },
         (payload) => {
-          console.log('[v0] Notification broadcast:', payload)
+          console.log('[v0] Notification broadcast completed', { type: payload.type })
         }
       )
       .subscribe()
