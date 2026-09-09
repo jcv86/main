@@ -92,7 +92,7 @@ export function PersistentAICoach() {
           data: { session },
         } = await supabase.auth.getSession()
         if (session?.user?.email) {
-          console.log("[v0] User email from session:", session.user.email)
+          console.log("[v0] Authenticated coach session loaded")
           setUserEmail(session.user.email)
 
           await loadPerformanceContext(session.user.id)
@@ -221,7 +221,7 @@ export function PersistentAICoach() {
             .map((result) => result.transcript)
             .join("")
 
-          console.log("[v0] Transcript:", transcript)
+          console.log("[v0] Speech transcript captured")
           setInputMessage(transcript)
 
           if (event.results[event.results.length - 1].isFinal) {
@@ -350,7 +350,7 @@ export function PersistentAICoach() {
     setIsLoading(true)
 
     try {
-      console.log("[v0] Sending message:", currentMessage)
+      console.log("[v0] Sending coach message")
       const response = await fetch("/api/brain-query", {
         method: "POST",
         headers: {

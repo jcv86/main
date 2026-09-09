@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react"
 import { Plus, Search, Edit, Trash2, BookOpen, TrendingUp, Users, BarChart3 } from "lucide-react"
-import { createClient } from "@/lib/supabase/client"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
@@ -45,7 +44,6 @@ export default function AdminKnowledgeBasePage() {
   const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
   const [editingBook, setEditingBook] = useState<KnowledgeBook | null>(null)
   const { toast } = useToast()
-  const supabase = createClient()
 
   const [formData, setFormData] = useState({
     title: "",
@@ -66,22 +64,12 @@ export default function AdminKnowledgeBasePage() {
   const loadBooks = async () => {
     try {
       setLoading(true)
-      const { data: booksData, error: booksError } = await supabase
-        .from("knowledge_base")
-        .select("*")
-        .order("created_at", { ascending: false })
-
-      if (booksError) throw booksError
-
-      const { data: categoriesData, error: categoriesError } = await supabase
-        .from("knowledge_base")
-        .select("category")
-        .order("category") as { data: Array<{ category: string }> | null; error: any }
-
-      if (categoriesError) throw categoriesError
+      const response = await fetch('/api/admin/knowledge-base', { cache: 'no-store' })
+      if (!response.ok) throw new Error('Unable to load knowledge base')
+      const { books: booksData } = await response.json() as { books: KnowledgeBook[] }
 
       const uniqueCategories: string[] = Array.from(
-        new Set((categoriesData ?? []).map((item) => item.category))
+        new Set((booksData ?? []).map((item) => item.category))
       )
 
       setBooks((booksData as KnowledgeBook[]) || [])
@@ -128,9 +116,10 @@ export default function AdminKnowledgeBasePage() {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "")
 
-      const { data, error } = await supabase
-        .from("knowledge_base")
-        .insert({
+      const response = await fetch('/api/admin/knowledge-base', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
           title: formData.title,
           author: formData.author,
           category: formData.category,
@@ -138,11 +127,10 @@ export default function AdminKnowledgeBasePage() {
           tags: tagsArray,
           slug: slug,
           read_count: 0,
-        })
-        .select()
-        .single()
-
-      if (error) throw error
+        }),
+      })
+      if (!response.ok) throw new Error('Unable to add book')
+      const { book: data } = await response.json() as { book: KnowledgeBook }
 
       setBooks((prev) => [data, ...prev])
       setIsAddDialogOpen(false)
@@ -174,22 +162,20 @@ export default function AdminKnowledgeBasePage() {
         .replace(/[^a-z0-9]+/g, "-")
         .replace(/(^-|-$)/g, "")
 
-      const { data, error } = await supabase
-        .from("knowledge_base")
-        .update({
+      const response = await fetch('/api/admin/knowledge-base', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id: editingBook.id, book: {
           title: formData.title,
           author: formData.author,
           category: formData.category,
           content: formData.content,
           tags: tagsArray,
           slug: slug,
-          updated_at: new Date().toISOString(),
-        })
-        .eq("id", editingBook.id)
-        .select()
-        .single()
-
-      if (error) throw error
+        }}),
+      })
+      if (!response.ok) throw new Error('Unable to update book')
+      const { book: data } = await response.json() as { book: KnowledgeBook }
 
       setBooks((prev) => prev.map((book) => (book.id === editingBook.id ? data : book)))
       setIsEditDialogOpen(false)
@@ -213,9 +199,8 @@ export default function AdminKnowledgeBasePage() {
     if (!confirm("¿Estás seguro de que quieres eliminar este libro?")) return
 
     try {
-      const { error } = await supabase.from("knowledge_base").delete().eq("id", bookId)
-
-      if (error) throw error
+      const response = await fetch(`/api/admin/knowledge-base?id=${bookId}`, { method: 'DELETE' })
+      if (!response.ok) throw new Error('Unable to delete book')
 
       setBooks((prev) => prev.filter((book) => book.id !== bookId))
       toast({

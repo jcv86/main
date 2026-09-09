@@ -124,22 +124,22 @@ export default function AdminBrainPage() {
       })
 
       const responseText = await response.text()
-      console.log("[v0] Response text:", responseText)
+      console.log("[v0] Upload response received")
 
       let data
       try {
         data = JSON.parse(responseText)
-        console.log("[v0] Parsed JSON data:", data)
+        console.log("[v0] Upload response parsed")
       } catch (parseError) {
         console.error("[v0] ERROR: Failed to parse response as JSON")
         console.error("[v0] Parse error:", parseError)
-        console.error("[v0] Response was:", responseText)
-        throw new Error(`Server returned invalid JSON: ${responseText.substring(0, 100)}`)
+        console.error("[v0] Upload response was not valid JSON")
+        throw new Error('Server returned invalid JSON')
       }
 
       if (!response.ok) {
         console.error("[v0] ERROR: Response not OK")
-        console.error("[v0] Error data:", data)
+        console.error("[v0] Upload request failed", { status: response.status })
         throw new Error(data.error || "Error al subir documento")
       }
 

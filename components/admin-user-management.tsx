@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -25,7 +24,6 @@ export function AdminUserManagement() {
   const [loading, setLoading] = useState(true)
   const [searchTerm, setSearchTerm] = useState('')
   const [filterPillar, setFilterPillar] = useState('all')
-  const supabase = createClient()
 
   useEffect(() => {
     fetchUsers()
@@ -33,10 +31,9 @@ export function AdminUserManagement() {
 
   async function fetchUsers() {
     try {
-      const { data } = await supabase
-        .from('despega_user_profiles')
-        .select('*')
-        .order('created_at', { ascending: false })
+      const response = await fetch('/api/admin/dashboard', { cache: 'no-store' })
+      if (!response.ok) throw new Error('Unable to load users')
+      const { profiles: data } = await response.json()
 
       setUsers(
         data?.map(u => ({

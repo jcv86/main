@@ -55,7 +55,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
 
   useEffect(() => {
     if (userEmail) {
-      console.log("[v0] ActivityCalendar: Fetching activities for email:", userEmail)
+      console.log("[v0] ActivityCalendar: Fetching activities")
       fetchActivities()
       fetchPhoneNumber()
     } else {
@@ -67,7 +67,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
   const fetchActivities = async () => {
     try {
       setError(null)
-      console.log("[v0] Fetching activities for:", userEmail, "date:", selectedDate.toISOString())
+      console.log("[v0] Fetching activities for selected date")
       const response = await fetch(`/api/activities?email=${userEmail}&date=${selectedDate.toISOString()}`)
 
       if (!response.ok) {
@@ -75,7 +75,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
       }
 
       const data = await response.json()
-      console.log("[v0] Activities fetched:", data)
+      console.log("[v0] Activities fetched", { count: data.activities?.length ?? 0 })
       setActivities(data.activities || [])
     } catch (error) {
       console.error("[v0] Error fetching activities:", error)
@@ -91,7 +91,7 @@ export function ActivityCalendar({ userEmail }: { userEmail: string }) {
       if (response.ok) {
         const data = await response.json()
         setPhoneNumber(data.phone_number || "")
-        console.log("[v0] Phone number fetched:", data.phone_number)
+        console.log("[v0] Phone number fetched")
       }
     } catch (error) {
       console.error("[v0] Error fetching phone number:", error)

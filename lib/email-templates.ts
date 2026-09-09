@@ -211,6 +211,6 @@ export async function sendTransitionEmail(
   // Implementar con tu proveedor de emails
   // Ejemplo: await sendgrid.send({ to: email, subject: template.subject, html: content })
 
-  console.log(`[Email enviado] ${template.subject} → ${email}`)
+  console.log('[Email] Message dispatched', { template: templateType })
   return true
 }

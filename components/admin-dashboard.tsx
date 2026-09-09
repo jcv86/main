@@ -1,7 +1,6 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Progress } from '@/components/ui/progress'
@@ -25,7 +24,6 @@ export function AdminDashboard() {
   const [loading, setLoading] = useState(true)
   const [userSegments, setUserSegments] = useState<any[]>([])
   const [topPerformers, setTopPerformers] = useState<any[]>([])
-  const supabase = createClient()
 
   useEffect(() => {
     fetchMetrics()
@@ -33,22 +31,14 @@ export function AdminDashboard() {
 
   async function fetchMetrics() {
     try {
-      // Get user counts
-      const { count: totalCount } = await supabase
-        .from('despega_user_profiles')
-        .select('*', { count: 'exact' })
+      const response = await fetch('/api/admin/dashboard', { cache: 'no-store' })
+      if (!response.ok) throw new Error('Unable to load dashboard')
+      const payload = await response.json()
+      const totalCount = payload.profiles.length
+      const activeCount = payload.activeUsers
+      const a1Data = payload.a1Results
 
-      const { count: activeCount } = await supabase
-        .from('despega_user_profiles')
-        .select('*', { count: 'exact' })
-        .gte('last_activity', new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString())
-
-      // Get average A1 scores
-      const { data: a1Data } = await supabase
-        .from('despega_a1_results')
-        .select('score_energia, score_enfoque, score_relaciones, score_plan_ejecutivo')
-
-      const avgA1 = a1Data
+      const avgA1 = a1Data.length > 0
         ? Math.round(
             a1Data.reduce((sum, r) => 
               sum + (r.score_energia + r.score_enfoque + r.score_relaciones + r.score_plan_ejecutivo) / 4, 0
@@ -57,9 +47,7 @@ export function AdminDashboard() {
         : 0
 
       // Get pillar progress
-      const { data: progressData } = await supabase
-        .from('despega_pilar_progress')
-        .select('pilar, progreso, score')
+      const progressData = payload.pillarProgress
 
       const pillarStats = ['a1_cerebral', 'a2_intermediate', 'a3_rutas', 'a4_base'].map(pilar => {
         const pilarData = progressData?.filter(p => p.pilar === pilar) || []
@@ -95,13 +83,7 @@ export function AdminDashboard() {
       })
 
       // Get top performers
-      const { data: topUsers } = await supabase
-        .from('despega_rankings')
-        .select('user_id, score_total')
-        .order('score_total', { ascending: false })
-        .limit(5)
-
-      setTopPerformers(topUsers || [])
+      setTopPerformers(payload.rankings || [])
     } catch (error) {
       console.error('Error fetching metrics:', error)
     } finally {

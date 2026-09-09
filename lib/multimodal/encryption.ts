@@ -42,7 +42,7 @@ export function encryptData(data: Buffer, userId: string): EncryptedData {
 
     const authTag = cipher.getAuthTag()
 
-    console.log(`[v0] Data encrypted for user ${userId}: ${encryptedData.length} bytes`)
+    console.log(`[v0] User data encrypted: ${encryptedData.length} bytes`)
 
     return {
       encryptedData,
@@ -76,7 +76,7 @@ export function decryptData(
     let decrypted = decipher.update(encryptedData)
     decrypted = Buffer.concat([decrypted, decipher.final()])
 
-    console.log(`[v0] Data decrypted for user ${userId}: ${decrypted.length} bytes`)
+    console.log(`[v0] User data decrypted: ${decrypted.length} bytes`)
 
     return decrypted
   } catch (error) {
@@ -187,7 +187,7 @@ export async function secureDeleteVideo(userId: string, videoId: string) {
 
     if (sessionError) console.error('[v0] Error deleting session:', sessionError)
 
-    console.log(`[v0] Securely deleted video ${videoId} for user ${userId}`)
+    console.log('[v0] Video securely deleted')
     return true
   } catch (error) {
     console.error('[v0] Secure delete error:', error)

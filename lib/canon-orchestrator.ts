@@ -31,7 +31,7 @@ export async function orchestrateCanon(
   try {
     const supabase = await createClient()
 
-    console.log('[v0] CANON Orchestration starting for user:', request.userId)
+    console.log('[v0] CANON orchestration starting')
 
     // Paso 1: Ejecutar Motor de Reglas
     console.log('[v0] Step 1: Executing Rules Engine...')

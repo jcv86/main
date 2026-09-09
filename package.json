@@ -15,6 +15,8 @@
     "check:v1-analytics": "tsx scripts/check-v1-analytics-contract.ts",
     "check:v1-analytics-migration": "tsx scripts/check-v1-analytics-migration-contract.ts",
     "check:sensitive-api-cache": "node --import tsx scripts/check-sensitive-api-cache-contract.ts",
+    "check:observability-p0": "tsx scripts/check-observability-p0-contract.ts",
+    "check:admin-boundary": "tsx scripts/check-admin-server-boundary-contract.ts",
     "check:reporting": "tsx scripts/check-reporting-contract.ts",
     "check:a1-understanding": "tsx scripts/check-a1-individual-understanding-contract.ts",
     "check:credibility": "tsx scripts/check-dtc-credibility-contract.ts",

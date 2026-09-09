@@ -83,7 +83,7 @@ export async function callOpenAIJSON<T>(
 
     return JSON.parse(jsonString) as T
   } catch (error) {
-    console.error('[v0] Failed to parse JSON response:', responseText)
+    console.error('[v0] Failed to parse OpenAI JSON response')
     throw new Error('Failed to parse OpenAI response as JSON')
   }
 }
