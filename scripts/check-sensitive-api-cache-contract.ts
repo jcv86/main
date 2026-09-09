@@ -12,7 +12,13 @@ const config = JSON.parse(
 ) as { headers?: HeaderRule[] }
 
 const rules = config.headers ?? []
-const sensitiveSources = ['/api/a1(.*)', '/api/a2(.*)', '/api/a3(.*)', '/api/a4(.*)']
+const sensitiveSources = [
+  '/api/a1(.*)',
+  '/api/a2(.*)',
+  '/api/a3(.*)',
+  '/api/a4(.*)',
+  '/api/v1-analytics(.*)',
+]
 const dailyTaskRoute = readFileSync(
   path.join(process.cwd(), 'app/api/a2/daily-task/route.ts'),
   'utf8',
@@ -39,7 +45,7 @@ for (const source of sensitiveSources) {
 }
 
 for (const rule of rules) {
-  if (!rule.source || !/^\/api\/a[1-4]/.test(rule.source)) continue
+  if (!rule.source || !/^\/api\/(?:a[1-4]|v1-analytics)/.test(rule.source)) continue
   for (const header of rule.headers ?? []) {
     if (!/cache-control/i.test(header.key ?? '')) continue
     assert.doesNotMatch(
