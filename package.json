@@ -17,6 +17,7 @@
     "check:sensitive-api-cache": "node --import tsx scripts/check-sensitive-api-cache-contract.ts",
     "check:observability-p0": "tsx scripts/check-observability-p0-contract.ts",
     "check:rls-p1": "tsx scripts/check-rls-p1-contract.ts",
+    "check:rls-p2": "tsx scripts/check-rls-p2-contract.ts",
     "check:admin-boundary": "tsx scripts/check-admin-server-boundary-contract.ts",
     "check:reporting": "tsx scripts/check-reporting-contract.ts",
     "check:a1-understanding": "tsx scripts/check-a1-individual-understanding-contract.ts",
