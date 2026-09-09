@@ -44,6 +44,18 @@ assert.match(claimRoute, /maxAge:\s*PILOT_CLAIM_MAX_AGE/)
 assert.match(claimRoute, /resolveInvitationCookieSecret/)
 assert.doesNotMatch(claimRoute, /console\.(?:log|warn|error)\([^)]*token/)
 
+for (const legacyRoutePath of [
+  'app/api/auth/validate-invitation/route.ts',
+  'app/api/auth/redeem-invitation/route.ts',
+  'app/api/auth/invitation-status/route.ts',
+]) {
+  const legacyRoute = source(legacyRoutePath)
+  assert.match(legacyRoute, /status:\s*410/)
+  assert.match(legacyRoute, /LEGACY_INVITATION_FLOW_RETIRED/)
+  assert.match(legacyRoute, /['"]Cache-Control['"]:\s*['"]no-store['"]/)
+  assert.doesNotMatch(legacyRoute, /createAdminClient|invitation_codes|user_invitations/)
+}
+
 const signIn = source('app/auth/signin/page.tsx')
 assert.match(signIn, /Continuar con Google/)
 assert.match(signIn, /Continuar con LinkedIn/)
