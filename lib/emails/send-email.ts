@@ -26,9 +26,6 @@ export async function sendEmail({
 
     const resend = new Resend(apiKey)
 
-    console.log('[v0] Sending email to:', to)
-    console.log('[v0] From:', from)
-
     const response = await resend.emails.send({
       from,
       to,

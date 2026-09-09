@@ -53,20 +53,18 @@ export async function GET(request: NextRequest) {
         isRestDay: true
       }, {
         headers: {
-          'Cache-Control': 'public, s-maxage=3600, stale-while-revalidate=86400',
-          'CDN-Cache-Control': 'max-age=3600'
+          'Cache-Control': 'private, no-store, max-age=0',
+          'CDN-Cache-Control': 'no-store'
         }
       })
     }
 
+    // This endpoint can return an adaptive, user-specific task. Keep the whole
+    // mixed route out of shared caches so an authenticated response can never be
+    // reused for another visitor.
     const response = NextResponse.json(task)
-    // Cache adaptive tasks for shorter duration since they change per user
-    const cacheControl = user ? 
-      'private, s-maxage=300, stale-while-revalidate=600' : // 5 min for logged-in users
-      'public, s-maxage=3600, stale-while-revalidate=86400' // 1 hour for static tasks
-    
-    response.headers.set('Cache-Control', cacheControl)
-    response.headers.set('CDN-Cache-Control', user ? 'max-age=300' : 'max-age=3600')
+    response.headers.set('Cache-Control', 'private, no-store, max-age=0')
+    response.headers.set('CDN-Cache-Control', 'no-store')
     return response
   } catch (error) {
     console.error('[v0] Error fetching daily task:', error)

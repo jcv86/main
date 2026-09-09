@@ -24,51 +24,54 @@
   "regions": ["sfo1"],
   "headers": [
     {
-      "source": "/api/a2/daily-task",
+      "source": "/api/a1(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, s-maxage=3600, stale-while-revalidate=86400"
+          "value": "private, no-store, max-age=0"
         },
         {
           "key": "CDN-Cache-Control",
-          "value": "max-age=3600"
+          "value": "no-store"
         }
       ]
     },
     {
-      "source": "/api/a2/(.*)",
+      "source": "/api/a2(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, s-maxage=1800, stale-while-revalidate=43200"
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
         }
       ]
     },
     {
-      "source": "/api/a1/(.*)",
+      "source": "/api/a3(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, s-maxage=1800, stale-while-revalidate=43200"
+          "value": "private, no-store, max-age=0"
+        },
+        {
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
         }
       ]
     },
     {
-      "source": "/api/a3/(.*)",
+      "source": "/api/a4(.*)",
       "headers": [
         {
           "key": "Cache-Control",
-          "value": "public, s-maxage=1800, stale-while-revalidate=43200"
-        }
-      ]
-    },
-    {
-      "source": "/api/a4/(.*)",
-      "headers": [
+          "value": "private, no-store, max-age=0"
+        },
         {
-          "key": "Cache-Control",
-          "value": "public, s-maxage=3600, stale-while-revalidate=86400"
+          "key": "CDN-Cache-Control",
+          "value": "no-store"
         }
       ]
     },

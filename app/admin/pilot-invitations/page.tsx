@@ -1,37 +1,21 @@
-'use client'
+import { redirect } from 'next/navigation'
 
-import { FormEvent, useState } from 'react'
+import { createAdminClient, createClient } from '@/lib/supabase/server'
+import { PilotInvitationForm } from './pilot-invitation-form'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { Label } from '@/components/ui/label'
+export default async function PilotInvitationsPage() {
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) redirect('/auth/signin?next=/admin/pilot-invitations')
 
-export default function PilotInvitationsPage() {
-  const [email, setEmail] = useState('')
-  const [status, setStatus] = useState('')
-  const [sending, setSending] = useState(false)
+  const admin = createAdminClient()
+  const { data: role } = await admin
+    .from('user_roles_extended')
+    .select('role')
+    .eq('user_id', user.id)
+    .maybeSingle()
 
-  async function submit(event: FormEvent<HTMLFormElement>) {
-    event.preventDefault()
-    setSending(true)
-    setStatus('')
-
-    try {
-      const response = await fetch('/api/admin/pilot-invitations', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email }),
-      })
-      const result = await response.json()
-      if (!response.ok) throw new Error(result.error || 'No se pudo enviar la invitación.')
-      setStatus(`Invitación enviada a ${email}.`)
-      setEmail('')
-    } catch (error) {
-      setStatus(error instanceof Error ? error.message : 'No se pudo enviar la invitación.')
-    } finally {
-      setSending(false)
-    }
-  }
+  if (role?.role !== 'superadmin') redirect('/dashboard')
 
   return (
     <section className="mx-auto w-full max-w-2xl px-5 py-12 sm:px-8">
@@ -40,25 +24,7 @@ export default function PilotInvitationsPage() {
       <p className="mt-3 text-muted-foreground">
         Crea un acceso personal, de un solo uso y válido con vigencia de siete días.
       </p>
-
-      <form onSubmit={submit} className="mt-8 space-y-5 rounded-2xl border border-border bg-card p-6">
-        <div className="space-y-2">
-          <Label htmlFor="pilot-email">Correo de la persona invitada</Label>
-          <Input
-            id="pilot-email"
-            type="email"
-            autoComplete="email"
-            value={email}
-            onChange={(event) => setEmail(event.target.value)}
-            placeholder="persona@correo.com"
-            required
-          />
-        </div>
-        <Button type="submit" disabled={sending || !email.trim()}>
-          {sending ? 'Enviando…' : 'Enviar invitación'}
-        </Button>
-        <p aria-live="polite" role="status" className="text-sm text-muted-foreground">{status}</p>
-      </form>
+      <PilotInvitationForm />
     </section>
   )
 }

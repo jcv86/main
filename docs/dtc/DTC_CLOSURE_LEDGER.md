@@ -1,6 +1,6 @@
 # DTC closure ledger
 
-Last grounded: 2026-08-28 UTC
+Last grounded: 2026-09-09 UTC
 
 This is the canonical ledger for closing DespegaTuCarrera. An item is `verified` only when its acceptance criteria have observable evidence. Allowed statuses: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`.
 
@@ -8,10 +8,10 @@ This is the canonical ledger for closing DespegaTuCarrera. An item is `verified`
 
 - Repository: `jcv86/main`
 - Canonical branch observed: `main`
-- Canonical commit: `c98097a48d5ad15f94ac6a0f1bf6a037109f57d6`
+- Canonical commit: `d37496a9cfc49f8852a2a88ec4e224280aaad6e1`
 - Vercel project: `v0-fork-of-despega-tu-carrera-clone` (`prj_SvrOCS2CtFQunqirMeYidZRHZKpm`)
-- Current production deployment: `dpl_E8B7e3Jfcn2dx2KG8E7dL5j2zRRi`
-- Current production commit: `c98097a48d5ad15f94ac6a0f1bf6a037109f57d6`
+- Current production deployment: `dpl_4T7yq9a4A253SeZortMU1kRur8a3`
+- Current production commit: `d37496a9cfc49f8852a2a88ec4e224280aaad6e1`
 - Current production source branch: `main`
 - Supabase project: `DTCFINAL` (`dcfrbwxbejtbcouionna`)
 
@@ -35,8 +35,18 @@ Production and canonical `main` now point to the same release commit.
 | DTC-C12 | A signed-in user can review A2, A3 and A4 from real persisted evidence and download one coherent A1–A4 report | Production commit `5684ba82` is READY; authenticated Joaquín QA shows A2 90/90, A3 10/10 with 95/100 average, truthful empty A4, coherent integral report/PDF action and zero cross-user documents; runtime error scan is clean | Authenticated checks show Joaquin's 90/90 A2 report, 10/10 A3 report, truthful empty A4 report, integral report/PDF action and no cross-user documents | Responsive layouts use single-column mobile defaults; the controlled browser evidence covered desktop because viewport emulation was unavailable | `$dtc-build-experience`, `$dtc-supabase-backend`, `$dtc-quality-gate` | `verified` | yes |
 | DTC-C13 | Despega Cerebral is presented as the professional interpretive core of the A1–A4 journey | The candidate replaces the brief A1 summary with a professional evidence dossier, corrects the signed DISC score conversion, integrates C1/C2 context, explains methodology and limitations, and anchors the integral report in A1; focused contracts, TypeScript and the full 427-page build pass | An approved authenticated QA identity sees accurate A1 patterns and context on desktop/mobile, the integral report agrees with A1, and print/PDF remains legible without exposing private data | Requires deployed-candidate visual and PDF verification; no production promotion is authorized by this block | `$dtc-report-suite`, `$dtc-build-experience`, `$dtc-report-quality` | `in_progress` | yes |
 | DTC-C14 | Public promises and personal progress remain credible and consistent with the implemented product | Production `a4510c7e` contains canonical A1–A4 public/B2B language, no unsupported tests, certifications, integrations, prices or ROI claims, private-only Mi evolución and the owner-scoped preferences endpoint. Authenticated production QA changed, saved, reloaded and restored `weekly_insights_email`; desktop has no horizontal overflow. The isolated browser gate on PR #138 passed real local Auth/JWT/PostgREST/RLS, cross-owner denial, anonymous rejection, save/reload/restore, serious/critical accessibility checks and exact 390x844 plus 1440x1000 screenshots | Public pages contain only supportable claims; Mi evolución displays only the signed-in user's progress; settings load, save and reload supported preferences without horizontal overflow at 390x844 or desktop | Future changes to public promises, evolution, settings or preferences must keep the credibility and isolated-browser gates green | `$dtc-build-experience`, `$dtc-supabase-backend`, `$dtc-quality-gate` | `verified` | yes |
+| DTC-C15 | Personal APIs, operator surfaces and invitation flows fail closed without leaking identity data | Local hardening candidate protects `/admin`, adds a server-side superadmin guard, removes email addresses from delivery logs, allowlists profile updates, disables three unused legacy invitation endpoints with `410`, retires the unsafe unused A2 transcription endpoint, returns `401` for unauthenticated A2 progress and forces private/no-store caching for A1–A4 APIs | Vercel preview build succeeds; anonymous/non-admin admin checks, legacy `410`, A2 `401`, profile mass-assignment rejection and cache headers pass live | Candidate is not yet deployed; production remains on `d37496a9` | `$dtc-build-experience`, `$dtc-supabase-backend`, `$dtc-quality-gate` | `in_progress` | yes |
+| DTC-C16 | Pilot analytics measure the A1–A4 funnel without collecting assessment answers or arbitrary PII | Local candidate adds an authenticated allowlisted endpoint, event-to-stage validation, unique-session funnel metrics, owner-scoped RLS migration and a 90-day visibility boundary | Migration is reviewed/applied, RLS is verified with two users, events persist in preview and physical expiry is scheduled or explicitly deferred | Production database mutation requires separate authorization; no remote migration has been applied | `$dtc-supabase-backend`, `$dtc-quality-gate` | `in_progress` | no |
 
 ## Evidence log
+
+### 2026-09-09
+
+- Production and canonical `main` were reconciled at commit `d37496a9`, deployment `dpl_4T7yq9a4A253SeZortMU1kRur8a3`.
+- A real invitation was issued, claimed and verified as single-use in Supabase; the temporary operator role used for the test was removed.
+- A parallel source/runtime audit scored A1 93, A2 87, A3 88 and A4 86. The main remaining evidence gap is a full live A1→A4 desktop/mobile journey.
+- The platform audit found public API caching, an unguarded admin page, PII in email logs, unsafe legacy endpoints, permissive profile updates and missing analytics persistence. A local hardening candidate addresses these findings; focused contracts and TypeScript pass.
+- The local Next.js build compiled and generated 428/428 pages, then hit the known workspace-only `.next/export` `ENOTEMPTY` cleanup fault. A Vercel preview build remains required as the canonical build gate.
 
 ### 2026-09-08
 

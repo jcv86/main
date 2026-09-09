@@ -119,7 +119,10 @@ export async function GET() {
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json(emptyProgress(), { status: 200 })
+      return NextResponse.json(
+        { error: 'Debes iniciar sesión para consultar Tu Ruta.', code: 'unauthenticated' },
+        { status: 401, headers: { 'Cache-Control': 'private, no-store' } },
+      )
     }
 
     const userId = currentUser.id
