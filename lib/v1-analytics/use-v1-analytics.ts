@@ -52,10 +52,9 @@ export const useV1Analytics = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(analyticsEvent)
-      }).catch(err => console.warn('[v0] Analytics event failed:', err))
-
-      // Also log locally for debugging
-      console.log('[v0] [ANALYTICS]', event, analyticsEvent)
+      }).catch(() => {
+        // Analytics is best-effort and must not interrupt the user journey.
+      })
     }
   }, [pathname])
 
