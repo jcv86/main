@@ -117,6 +117,9 @@ jobs:
       - name: Cron parity, health endpoints, and sanitized operations contract
         run: npx tsx scripts/check-observability-p0-contract.ts
 
+      - name: P1 legacy personal data and catalog RLS contract
+        run: npx tsx scripts/check-rls-p1-contract.ts
+
       - name: A4 job matching access and parameter source contract
         run: npx tsx scripts/check-a4-job-matching-contract.ts
 
