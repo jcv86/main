@@ -4,7 +4,7 @@ import { NextResponse, type NextRequest } from 'next/server'
 import { classifyAuthState } from '@/lib/auth/pilot-access'
 
 const SIGN_IN_PATH = '/auth/signin'
-const PROTECTED_PATH_PREFIXES = ['/despega', '/dashboard', '/a4-dashboard'] as const
+const PROTECTED_PATH_PREFIXES = ['/despega', '/dashboard', '/a4-dashboard', '/admin'] as const
 
 function isProtectedPath(pathname: string): boolean {
   return PROTECTED_PATH_PREFIXES.some(
@@ -25,6 +25,7 @@ function redirectToSignIn(request: NextRequest, reason?: string, error?: string)
 export async function updateSession(request: NextRequest) {
   const pathname = request.nextUrl.pathname
   const protectedPath = isProtectedPath(pathname)
+  const adminPath = pathname === '/admin' || pathname.startsWith('/admin/')
   const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
@@ -74,7 +75,9 @@ export async function updateSession(request: NextRequest) {
       return redirectToSignIn(request, 'authentication_verification_failed')
     }
 
-    if (protectedPath && user) {
+    // Admin pages have their own server-side role guard. They must require a
+    // valid session here, but not a pilot entitlement intended for learners.
+    if (protectedPath && user && !adminPath) {
       if (!supabaseServiceKey) return redirectToSignIn(request, 'authentication_unavailable')
       const admin = createAdminClient(supabaseUrl, supabaseServiceKey, {
         auth: { autoRefreshToken: false, persistSession: false },
