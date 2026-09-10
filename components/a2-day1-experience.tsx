@@ -148,7 +148,7 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
       }
 
       await onComplete(finalSubmission)
-      if (userId) clearAllDrafts(1)
+      if (userId) clearAllDrafts(userId, 1)
     } catch (completionError) {
       console.error('[v0] Error completing Day 1:', completionError)
       throw completionError

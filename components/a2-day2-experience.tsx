@@ -202,7 +202,7 @@ export function Day2Experience({ onComplete, userId }: Day2ExperienceProps) {
 
       // Clear draft after successful completion
       if (userId) {
-        clearAllDrafts(2);
+        if (userId) clearAllDrafts(userId, 2);
       }
     } catch (err) {
       console.error("[v0] Error completing Day 2:", err);

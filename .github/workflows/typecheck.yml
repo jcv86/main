@@ -39,6 +39,9 @@ jobs:
       - name: A4 canonical guarded entry contract
         run: npx tsx scripts/check-a4-canonical-entry-contract.ts
 
+      - name: A2 user-scoped draft isolation contract
+        run: npx tsx scripts/check-a2-draft-isolation-contract.ts
+
       - name: A2 Day 1 runtime scoring logic
         run: npx tsx scripts/check-a2-day1-scoring.ts
 
