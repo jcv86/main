@@ -92,7 +92,7 @@ const navigation: NavGroup[] = [
       },
       {
         label: 'A4 · Radar Estratégico',
-        href: '/despega/a4-intro',
+        href: '/despega/a4',
         icon: Radar,
         journeyIndex: 3,
         match: (pathname) => pathname.includes('/a4'),
