@@ -33,6 +33,9 @@ jobs:
       - name: Test evidence classification
         run: npx tsx scripts/check-test-evidence-matrix.ts
 
+      - name: Global Spanish not-found recovery contract
+        run: npx tsx scripts/check-global-not-found-contract.ts
+
       - name: A2 Day 1 runtime scoring logic
         run: npx tsx scripts/check-a2-day1-scoring.ts
 
