@@ -1,6 +1,6 @@
 # DTC closure ledger
 
-Last grounded: 2026-09-09 UTC
+Last grounded: 2026-09-10 UTC
 
 This is the canonical ledger for closing DespegaTuCarrera. An item is `verified` only when its acceptance criteria have observable evidence. Allowed statuses: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`.
 
@@ -8,10 +8,10 @@ This is the canonical ledger for closing DespegaTuCarrera. An item is `verified`
 
 - Repository: `jcv86/main`
 - Canonical branch observed: `main`
-- Canonical commit: `ec2a121d22fd6be88a383fcaa0b2636ec4949fa4`
+- Canonical commit: `eebdf85534493362a19c6487f6f19e5e37d4a9b3`
 - Vercel project: `v0-fork-of-despega-tu-carrera-clone` (`prj_SvrOCS2CtFQunqirMeYidZRHZKpm`)
-- Current production deployment: `dpl_EX3WDcaDp2szVZsShZfFvHDyiGfE`
-- Current production commit: `ec2a121d22fd6be88a383fcaa0b2636ec4949fa4`
+- Current production deployment: `dpl_CbLLteoEGyfr5wumK25PDWJcTLid`
+- Current production commit: `eebdf85534493362a19c6487f6f19e5e37d4a9b3`
 - Current production source branch: `main`
 - Supabase project: `DTCFINAL` (`dcfrbwxbejtbcouionna`)
 
@@ -24,7 +24,7 @@ Production and canonical `main` now point to the same release commit.
 | DTC-C01 | Production and the canonical branch contain the same approved release | PR #130 merged candidate `66a85e98` into `main` as `c98097a4`; production deployment `dpl_E8B7e3Jfcn2dx2KG8E7dL5j2zRRi` is READY on that commit | Draft feature is reviewed, its migration is applied safely, the verified tree is integrated into `main`, and production points to it | Future releases must preserve branch/commit identity | `$dtc-release-production` | `verified` | yes |
 | DTC-C02 | A signed-in user can save and resume C1/A1 without losing answers | With the approved Joaquín account, C1 and A1 passed save-refresh-resume, all 28 A1 answers persisted, C2 saved eight answers, the integral report rendered, and the transition reached stable A2 | Save-refresh-resume-submit works for C1 and A1 on production and the canonical report opens after C2 | QA content is explicitly marked where free text was entered | `$dtc-supabase-backend` | `verified` | yes |
 | DTC-C03 | Pilot access and returning-user continuity remain reliable | `test-pilot-auth-flow`, `test-pilot-access-decisions`, and `check-pilot-access-contract` pass 3/3 on `main`; remote migration `pilot_access_foundation` exists; anonymous production requests to C1/A1 redirect to sign-in while preserving `next` | New invitation, returning Google/LinkedIn identity, preserved progress, sign-out, and browser-back journeys pass on deployed candidate | Requires synthetic pilot identities and live auth configuration | `$dtc-quality-gate` | `in_progress` | yes |
-| DTC-C04 | DTC user data is protected by intentional RLS and grants | Production P0 protects `profiles` and `unified_test_results`; production P1 protects `test_results` and `user_profiles` as owner-only and limits `books` and `a4_noticias` to public read-only access. The next verified active gap is the permissive aggregate `a3_user_progress` boundary | Every table reachable by active DTC browser/server journeys has documented exposure intent, least-privilege grants, tested RLS, and no unintended privileged execution | P2 must pass transaction dry-run, owner/other/anonymous role simulation, CI, Preview and production verification | `$dtc-supabase-backend` | `in_progress` | yes |
+| DTC-C04 | DTC user data is protected by intentional RLS and grants | Production P0/P1 protect personal profiles/results and public catalogs; P2 owner-scopes `a3_user_progress` with no anonymous access. The next active gap is browser-write access to public catalogs `biblioteca` and `knowledge_base` | Every table reachable by active DTC browser/server journeys has documented exposure intent, least-privilege grants, tested RLS, and no unintended privileged execution | P3 must preserve public reads and superadmin writes while denying browser writes, then pass CI, Preview and production verification | `$dtc-supabase-backend` | `in_progress` | yes |
 | DTC-C05 | The app produces a reproducible production build | Clean local production build succeeds on `main`; Vercel candidate is READY | Clean local build and Vercel build both succeed for the same commit; build emits no unresolved Edge incompatibility | Build warns about Supabase Node API in Edge middleware; local build lacks production environment values | `$dtc-quality-gate` | `in_progress` | yes |
 | DTC-C06 | A normal user experiences one coherent DTC product rather than internal/test surfaces | Repository exposes hundreds of routes, including admin, demo, debug, test and design-system pages; reachability and authorization are not yet fully mapped | Public sitemap and navigation contain only intentional product routes; internal routes are removed, disabled, or protected; all visible CTAs lead to working outcomes | Large route surface increases accidental exposure and inconsistent UX | `$dtc-product-gap` | `not_started` | yes |
 | DTC-C07 | Core journey works on mobile and desktop with recovery states | Authenticated loading/error/not-found contracts exist; no current rendered evidence for the entire journey | Anonymous entry, auth, C1, A1, result, dashboard and next step pass at 390x844 and desktop, including loading/empty/error/expired-session states | Needs deployed candidate and test identity | `$dtc-quality-gate` | `not_started` | yes |
@@ -40,8 +40,13 @@ Production and canonical `main` now point to the same release commit.
 
 ## Evidence log
 
+### 2026-09-10
+
+- Grounded P3 against production and active imports: only `biblioteca` and `knowledge_base` are reachable public catalogs in this sub-scope. Both have RLS disabled and full browser-role CRUD today; the candidate preserves 123 and 203 public-readable rows respectively while reserving writes for `service_role`. Transaction dry-run and anonymous/authenticated role simulation passed with rollback.
+
 ### 2026-09-09
 
+- Merged and promoted P2 on commit `eebdf855`, deployment `dpl_CbLLteoEGyfr5wumK25PDWJcTLid`; `a3_user_progress` is owner-scoped, preserves both rows, denies cross-owner and anonymous access, and passed production smoke/runtime verification.
 - Merged and promoted P1 on commit `ec2a121d`, production deployment `dpl_EX3WDcaDp2szVZsShZfFvHDyiGfE`: owner-only legacy profiles/results and read-only public catalogs passed role simulation, live smoke and runtime-log verification.
 - Re-grounded the proposed P2 database scope against the production catalog. Seven source-declared A3/A4 tables are absent remotely and are not being created; only the existing two-row `a3_user_progress` relation remains in scope. Its rows map to real Auth users, but current `public` policies are unconditional and `anon` has full table privileges.
 - Production and canonical `main` were reconciled at commit `d37496a9`, deployment `dpl_4T7yq9a4A253SeZortMU1kRur8a3`.
