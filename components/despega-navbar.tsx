@@ -75,7 +75,7 @@ const stages = [
     phase: 'reality',
     icon: Radar,
     routes: [
-      { label: 'Contexto del Mercado', href: '/despega/a4-intro' },
+      { label: 'Radar Estratégico', href: '/despega/a4' },
       { label: 'Tu Dashboard Ejecutivo', href: '/despega/a4' },
       { label: 'DTC Documents', href: '/despega/a4-documents' },
     ]

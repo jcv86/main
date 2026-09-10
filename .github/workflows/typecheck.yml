@@ -36,6 +36,9 @@ jobs:
       - name: Global Spanish not-found recovery contract
         run: npx tsx scripts/check-global-not-found-contract.ts
 
+      - name: A4 canonical guarded entry contract
+        run: npx tsx scripts/check-a4-canonical-entry-contract.ts
+
       - name: A2 Day 1 runtime scoring logic
         run: npx tsx scripts/check-a2-day1-scoring.ts
 
