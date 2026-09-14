@@ -6,8 +6,10 @@
  */
 
 import { createClient } from '@/lib/supabase/client'
-
-const AUTOSAVE_KEY_PREFIX = 'a2_day_draft_'
+import {
+  createA2DraftStorageKey,
+  createLegacyA2DraftStorageKey,
+} from '@/lib/a2/draft-storage-key'
 
 export interface DayDraftData {
   dayNumber: number
@@ -20,9 +22,9 @@ export interface DayDraftData {
 /**
  * Save day progress to localStorage for immediate recovery
  */
-export function saveToLocalStorage(dayNumber: number, stepNumber: number, formData: any): void {
+export function saveToLocalStorage(userId: string, dayNumber: number, stepNumber: number, formData: any): void {
   try {
-    const key = `${AUTOSAVE_KEY_PREFIX}${dayNumber}`
+    const key = createA2DraftStorageKey(userId, dayNumber)
     const draftData: DayDraftData = {
       dayNumber,
       stepNumber,
@@ -40,9 +42,11 @@ export function saveToLocalStorage(dayNumber: number, stepNumber: number, formDa
 /**
  * Load day progress from localStorage
  */
-export function loadFromLocalStorage(dayNumber: number): DayDraftData | null {
+export function loadFromLocalStorage(userId: string, dayNumber: number): DayDraftData | null {
   try {
-    const key = `${AUTOSAVE_KEY_PREFIX}${dayNumber}`
+    // Legacy keys have no owner and therefore cannot be attributed safely.
+    localStorage.removeItem(createLegacyA2DraftStorageKey(dayNumber))
+    const key = createA2DraftStorageKey(userId, dayNumber)
     const data = localStorage.getItem(key)
     if (data) {
       return JSON.parse(data)
@@ -57,10 +61,10 @@ export function loadFromLocalStorage(dayNumber: number): DayDraftData | null {
 /**
  * Clear localStorage draft for a day
  */
-export function clearLocalStorageDraft(dayNumber: number): void {
+export function clearLocalStorageDraft(userId: string, dayNumber: number): void {
   try {
-    const key = `${AUTOSAVE_KEY_PREFIX}${dayNumber}`
-    localStorage.removeItem(key)
+    localStorage.removeItem(createA2DraftStorageKey(userId, dayNumber))
+    localStorage.removeItem(createLegacyA2DraftStorageKey(dayNumber))
     console.log(`[v0] Cleared draft for Day ${dayNumber}`)
   } catch (error) {
     console.warn('[v0] Failed to clear localStorage:', error)
@@ -168,7 +172,7 @@ export async function autosaveDayProgress(
   formData: any,
 ): Promise<void> {
   // Always save to localStorage for immediate recovery
-  saveToLocalStorage(dayNumber, stepNumber, formData)
+  saveToLocalStorage(userId, dayNumber, stepNumber, formData)
 
   // Also save to Supabase async (don't wait)
   saveDayProgressToSupabase(userId, dayNumber, stepNumber, formData).catch(err => {
@@ -184,7 +188,7 @@ export async function loadDayProgressWithFallback(
   dayNumber: number,
 ): Promise<DayDraftData | null> {
   // Try localStorage first (fastest)
-  const localDraft = loadFromLocalStorage(dayNumber)
+  const localDraft = loadFromLocalStorage(userId, dayNumber)
   if (localDraft) {
     console.log(`[v0] Loaded Day ${dayNumber} from localStorage, step ${localDraft.stepNumber}`)
     return localDraft
@@ -195,7 +199,7 @@ export async function loadDayProgressWithFallback(
   if (supaDraft) {
     console.log(`[v0] Loaded Day ${dayNumber} from Supabase, step ${supaDraft.stepNumber}`)
     // Restore to localStorage for next load
-    saveToLocalStorage(dayNumber, supaDraft.stepNumber, supaDraft.formData)
+    saveToLocalStorage(userId, dayNumber, supaDraft.stepNumber, supaDraft.formData)
     return supaDraft
   }
 
@@ -206,7 +210,7 @@ export async function loadDayProgressWithFallback(
 /**
  * Clear all drafts for a day after successful completion
  */
-export function clearAllDrafts(dayNumber: number): void {
-  clearLocalStorageDraft(dayNumber)
+export function clearAllDrafts(userId: string, dayNumber: number): void {
+  clearLocalStorageDraft(userId, dayNumber)
   // Supabase cleanup happens automatically when day is marked complete
 }

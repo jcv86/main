@@ -21,6 +21,7 @@
     "check:rls-p3": "tsx scripts/check-rls-p3-contract.ts",
     "check:global-not-found": "tsx scripts/check-global-not-found-contract.ts",
     "check:a4-canonical-entry": "tsx scripts/check-a4-canonical-entry-contract.ts",
+    "check:a2-draft-isolation": "tsx scripts/check-a2-draft-isolation-contract.ts",
     "check:admin-boundary": "tsx scripts/check-admin-server-boundary-contract.ts",
     "check:reporting": "tsx scripts/check-reporting-contract.ts",
     "check:a1-understanding": "tsx scripts/check-a1-individual-understanding-contract.ts",
