@@ -56,7 +56,7 @@ assert.ok(overview.indexOf('if (loadError || !progress)') < overview.indexOf('DÃ
 assert.ok(overview.includes("fetch('/api/a3/user-progress'"))
 assert.ok(overview.includes('A3_MODULES.map'))
 assert.ok(overview.includes('A3_ROUTE_OVERVIEW[module.id]'))
-assert.ok(overview.includes('progress.accessStates'))
+assert.ok(overview.includes('progress?.accessStates'))
 assert.ok(overview.includes('access?.status'))
 assert.ok(overview.includes('access.currentDayMet'))
 assert.ok(overview.includes('access.prerequisitesCompleted'))
