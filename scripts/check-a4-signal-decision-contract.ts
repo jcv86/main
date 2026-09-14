@@ -88,19 +88,49 @@ const pastDecision = validateDecisionInput(
 assert.equal(pastDecision.valid, false)
 assert.ok(pastDecision.errors.some((error) => error.includes('anterior')))
 
-const incompleteReview = validateDecisionUpdate({
-  status: 'reviewed',
-  outcome: '',
-})
+const incompleteReview = validateDecisionUpdate(
+  {
+    status: 'reviewed',
+    outcome: '',
+    reviewOn: '2026-08-03',
+  },
+  now,
+)
 assert.equal(incompleteReview.valid, false)
 assert.ok(incompleteReview.errors.some((error) => error.includes('resultado')))
 
-const completedReview = validateDecisionUpdate({
-  status: 'reviewed',
-  outcome:
-    'La nueva versión generó preguntas más específicas y permitió sostener el relato con evidencia cuantitativa.',
-})
+const completedReview = validateDecisionUpdate(
+  {
+    status: 'reviewed',
+    outcome:
+      'La nueva versión generó preguntas más específicas y permitió sostener el relato con evidencia cuantitativa.',
+    reviewOn: '2026-08-01',
+  },
+  now,
+)
 assert.equal(completedReview.valid, true, completedReview.errors.join('; '))
+assert.equal(completedReview.value?.reviewOn, '2026-08-01')
+
+const rescheduledReview = validateDecisionUpdate(
+  {
+    status: 'testing',
+    outcome: 'La señal sigue abierta y necesita una semana adicional de observación.',
+    reviewOn: '2026-08-10',
+  },
+  now,
+)
+assert.equal(rescheduledReview.valid, true, rescheduledReview.errors.join('; '))
+
+const staleOpenReview = validateDecisionUpdate(
+  {
+    status: 'watching',
+    outcome: '',
+    reviewOn: '2026-08-01',
+  },
+  now,
+)
+assert.equal(staleOpenReview.valid, false)
+assert.ok(staleOpenReview.errors.some((error) => error.includes('próxima revisión')))
 
 const migration = source('migrations/08-a4-signal-decision-log.sql')
 const hardeningMigration = source(
@@ -176,6 +206,12 @@ assert.ok(decisionRoute.includes('validateDecisionInput('))
 assert.ok(decisionRoute.includes('createAdminClient()'))
 assert.ok(decisionRoute.includes(".from('a4_verified_signals')"))
 assert.ok(decisionRoute.includes(".eq('user_id', resolved.currentUser!.id)"))
+assert.ok(decisionRoute.includes('review_on: value.reviewOn'))
+assert.ok(radarModel.includes('reviewOn: string'))
+assert.ok(radarModel.includes('Una decisión abierta debe programar su próxima revisión desde hoy.'))
+assert.ok(workspace.includes('Próxima revisión'))
+assert.ok(workspace.includes('reviewOn: decision.review_on'))
+assert.ok(workspace.includes('quedó reprogramada'))
 assert.ok(decisionRoute.includes('validateDecisionUpdate('))
 
 assert.ok(page.includes("if (!journey.access.a4) redirect('/despega/a3')"))
