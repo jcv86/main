@@ -145,10 +145,48 @@ assert.equal(
   pulse.reviewQueue[3].decision.id,
   'dddddddd-dddd-4ddd-8ddd-dddddddddddd',
 )
+assert.equal(pulse.nextAction.kind, 'review_decision')
+assert.equal(
+  pulse.nextAction.href,
+  '#decision-aaaaaaaa-aaaa-4aaa-8aaa-aaaaaaaaaaaa',
+)
+assert.equal(pulse.nextAction.cta, 'Registrar resultado')
+
+const buildingPulse = computeA4EvidencePulse([], [], new Date('2026-08-03T12:00:00-04:00'))
+assert.equal(buildingPulse.priority, 'building_evidence')
+assert.equal(buildingPulse.nextAction.kind, 'add_signal')
+assert.equal(buildingPulse.nextAction.href, '#a4-new-signal')
+
+const refreshPulse = computeA4EvidencePulse(
+  [
+    signal('55555555-5555-4555-8555-555555555555', { source_date: '2026-06-01' }),
+    signal('66666666-6666-4666-8666-666666666666', { source_date: '2026-06-02' }),
+    signal('77777777-7777-4777-8777-777777777777', { source_date: '2026-06-03' }),
+  ],
+  [],
+  new Date('2026-08-03T12:00:00-04:00'),
+)
+assert.equal(refreshPulse.priority, 'refresh_sources')
+assert.equal(refreshPulse.nextAction.kind, 'refresh_signal')
+assert.equal(refreshPulse.nextAction.href, '#a4-new-signal')
+
+const monitoringPulse = computeA4EvidencePulse(
+  [
+    signal('88888888-8888-4888-8888-888888888888'),
+    signal('99999999-9999-4999-8999-999999999999'),
+    signal('12121212-1212-4212-8212-121212121212'),
+  ],
+  [],
+  new Date('2026-08-03T12:00:00-04:00'),
+)
+assert.equal(monitoringPulse.priority, 'monitoring')
+assert.equal(monitoringPulse.nextAction.kind, 'monitor')
+assert.equal(monitoringPulse.nextAction.href, '#a4-workspace')
 
 const pulseSource = source('lib/a4/evidence-pulse.ts')
 const component = source('components/a4/evidence-pulse.tsx')
 const page = source('app/despega/a4/page.tsx')
+const workspace = source('components/a4/strategic-radar-workspace.tsx')
 const workflow = source('.github/workflows/typecheck.yml')
 
 assert.ok(pulseSource.includes("timeZone: 'America/Santiago'"))
@@ -163,6 +201,9 @@ assert.ok(!pulseSource.includes('strategicScore'))
 assert.ok(!pulseSource.includes('Math.random'))
 
 assert.ok(component.includes('Pulso de Evidencia'))
+assert.ok(component.includes('Tu prioridad de hoy'))
+assert.ok(component.includes('pulse.nextAction.href'))
+assert.ok(component.includes('Registrar resultado'))
 assert.ok(component.includes('Agenda de revisión'))
 assert.ok(component.includes('Delta verificable'))
 assert.ok(component.includes('no genera noticias, tesis ni puntajes estratégicos'))
@@ -171,6 +212,9 @@ assert.ok(component.includes('href="#a4-workspace"'))
 assert.ok(page.includes("import { EvidencePulse }"))
 assert.ok(page.includes('<EvidencePulse signals={signals} decisions={decisions} />'))
 assert.ok(page.includes('id="a4-workspace"'))
+assert.ok(workspace.includes('id="a4-new-signal"'))
+assert.ok(workspace.includes('id={`decision-${decision.id}`}'))
+assert.ok(workspace.includes('scroll-mt-24'))
 assert.ok(workflow.includes('check-a4-evidence-pulse-contract.ts'))
 
 console.log(
@@ -181,6 +225,12 @@ console.log(
     staleSignals: pulse.staleSignals.length,
     reviewQueue: pulse.reviewQueue.map((item) => item.timing),
     deterministicPriority: pulse.priority,
+    nextAction: pulse.nextAction.kind,
+    coveredStates: [
+      buildingPulse.nextAction.kind,
+      refreshPulse.nextAction.kind,
+      monitoringPulse.nextAction.kind,
+    ],
     noGeneratedThesis: true,
     noSyntheticScore: true,
   }),
