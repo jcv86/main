@@ -173,6 +173,16 @@ assert.ok(decisionRoute.includes('validateDecisionUpdate('))
 assert.ok(page.includes("if (!journey.access.a4) redirect('/despega/a3')"))
 assert.ok(page.includes(".from('a4_verified_signals')"))
 assert.ok(page.includes(".from('a4_decision_log')"))
+assert.ok(page.includes('const loadFailures = ['))
+assert.ok(page.includes('if (loadFailures.length > 0)'))
+assert.ok(page.includes('role="alert"'))
+assert.ok(page.includes('aria-live="assertive"'))
+assert.ok(page.includes('No mostramos cifras parciales'))
+assert.ok(page.includes('<form action="/despega/a4" method="get">'))
+assert.ok(
+  page.indexOf('if (loadFailures.length > 0)') <
+    page.indexOf('const completedSessions'),
+)
 assert.ok(!page.includes(".from('a4_noticias')"))
 assert.ok(!page.includes(".from('a4_signal_history')"))
 assert.ok(!page.includes(".from('a4_strategic_score')"))

@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { redirect } from 'next/navigation'
 import {
+  AlertTriangle,
   ArrowLeft,
   BarChart3,
   CheckCircle2,
@@ -103,6 +104,71 @@ export default async function RadarEstrategicoPage() {
   }
   if (snapshotsResult.error) {
     console.error('[v0] A4 snapshot history error:', snapshotsResult.error)
+  }
+
+  const loadFailures = [
+    a3Result.error && 'progreso de Entrenamiento',
+    documentsResult.error && 'documentos',
+    signalsResult.error && 'señales verificadas',
+    decisionsResult.error && 'decisiones',
+    snapshotsResult.error && 'cortes diarios',
+  ].filter((failure): failure is string => Boolean(failure))
+
+  if (loadFailures.length > 0) {
+    return (
+      <main className="min-h-screen bg-slate-950 px-4 py-10 text-white">
+        <div className="mx-auto flex min-h-[70vh] max-w-2xl items-center">
+          <Card
+            role="alert"
+            aria-live="assertive"
+            className="w-full border-amber-400/30 bg-slate-900/90"
+          >
+            <CardContent className="space-y-6 p-6 sm:p-8">
+              <div className="flex items-start gap-4">
+                <div className="rounded-full bg-amber-400/10 p-3 text-amber-300">
+                  <AlertTriangle aria-hidden="true" className="h-6 w-6" />
+                </div>
+                <div className="space-y-2">
+                  <p className="text-sm font-semibold uppercase tracking-[0.18em] text-amber-300">
+                    Datos temporalmente no disponibles
+                  </p>
+                  <h1 className="text-2xl font-bold sm:text-3xl">
+                    No pudimos cargar tu Radar
+                  </h1>
+                  <p className="leading-relaxed text-slate-300">
+                    No mostramos cifras parciales para evitar que un problema temporal
+                    parezca un resultado real. Tus datos no fueron reemplazados ni
+                    reiniciados.
+                  </p>
+                </div>
+              </div>
+
+              <div className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
+                <p className="text-sm font-medium text-slate-200">
+                  Secciones pendientes de recuperar:
+                </p>
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-400">
+                  {loadFailures.map((failure) => (
+                    <li key={failure}>{failure}</li>
+                  ))}
+                </ul>
+              </div>
+
+              <div className="flex flex-col gap-3 sm:flex-row">
+                <form action="/despega/a4" method="get">
+                  <Button type="submit" className="w-full bg-rose-500 hover:bg-rose-400">
+                    Reintentar
+                  </Button>
+                </form>
+                <Button asChild variant="outline" className="border-white/20">
+                  <Link href="/despega/dashboard">Volver al panel</Link>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </main>
+    )
   }
 
   const completedSessions = (a3Result.data ?? []).filter(
