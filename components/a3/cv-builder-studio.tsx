@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module, type A3CompletionPayload } from '@/lib/a3/client-completion'
 import { getA3Module } from '@/lib/a3/module-catalog'
 import { validateA3ModuleSubmission } from '@/lib/a3/module-validation'
@@ -42,11 +43,18 @@ function FieldLabel({ children }: { children: React.ReactNode }) {
 export function CvBuilderStudio() {
   const router = useRouter()
   const [state, setState] = useState<CvBuilderState>(EMPTY_CV_BUILDER_STATE)
-  const [draftReady, setDraftReady] = useState(false)
   const [showPreview, setShowPreview] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<A3CompletionPayload | null>(null)
+
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'cv-builder-studio',
+    legacyKey: CV_BUILDER_DRAFT_KEY,
+    value: state,
+    onRestore: (stored) => setState(normalizeCvBuilderState(stored)),
+    enabled: !completion?.success,
+  })
 
   const module = useMemo(() => getA3Module('cv-builder-studio'), [])
   const deliverable = useMemo(() => buildCvBuilderDeliverable(state), [state])
@@ -58,23 +66,6 @@ export function CvBuilderStudio() {
         : null,
     [deliverable, module, responses],
   )
-
-  useEffect(() => {
-    try {
-      const stored = window.localStorage.getItem(CV_BUILDER_DRAFT_KEY)
-      if (stored) setState(normalizeCvBuilderState(JSON.parse(stored)))
-    } catch (loadError) {
-      console.error('[v0] Error restoring CV builder draft:', loadError)
-      window.localStorage.removeItem(CV_BUILDER_DRAFT_KEY)
-    } finally {
-      setDraftReady(true)
-    }
-  }, [])
-
-  useEffect(() => {
-    if (!draftReady || completion?.success) return
-    window.localStorage.setItem(CV_BUILDER_DRAFT_KEY, JSON.stringify(state))
-  }, [completion?.success, draftReady, state])
 
   const update = <K extends keyof CvBuilderState>(
     key: K,
@@ -113,7 +104,7 @@ export function CvBuilderStudio() {
         deliverable,
       })
       setCompletion(result)
-      window.localStorage.removeItem(CV_BUILDER_DRAFT_KEY)
+      clearDraft()
     } catch (submitError) {
       console.error('[v0] Error completing CV builder:', submitError)
       setError(

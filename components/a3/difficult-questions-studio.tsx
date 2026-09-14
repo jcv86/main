@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getActiveA3Module } from '@/lib/a3/active-module'
 import {
@@ -94,16 +95,14 @@ export function DifficultQuestionsStudio() {
   const [submitError, setSubmitError] = useState('')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(DIFFICULT_QUESTIONS_DRAFT_KEY)
-    if (stored) {
-      try {
-        setDraft(toDifficultQuestionsDraft(JSON.parse(stored)))
-      } catch {
-        window.localStorage.removeItem(DIFFICULT_QUESTIONS_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'risk-difficult-questions-lab',
+    legacyKey: DIFFICULT_QUESTIONS_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft(toDifficultQuestionsDraft(stored)),
+  })
 
+  useEffect(() => {
     fetch('/api/a3/module-context/risk-difficult-questions-lab', {
       credentials: 'include',
     })
@@ -117,10 +116,6 @@ export function DifficultQuestionsStudio() {
       )
       .finally(() => setContextLoading(false))
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(DIFFICULT_QUESTIONS_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   useEffect(() => {
     if (!activeTimer) return
@@ -209,7 +204,7 @@ export function DifficultQuestionsStudio() {
         responses: [],
         deliverable: draft,
       })
-      window.localStorage.removeItem(DIFFICULT_QUESTIONS_DRAFT_KEY)
+      clearDraft()
       router.push('/despega/a3?completed=risk-difficult-questions-lab')
     } catch (error) {
       setSubmitError(

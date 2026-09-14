@@ -9,6 +9,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getActiveA3Module } from '@/lib/a3/active-module'
 import {
@@ -64,16 +65,14 @@ export function FirstRecruiterSimulationStudio() {
   const [submitError, setSubmitError] = useState('')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(FIRST_RECRUITER_DRAFT_KEY)
-    if (stored) {
-      try {
-        setDraft(toFirstRecruiterDraft(JSON.parse(stored)))
-      } catch {
-        window.localStorage.removeItem(FIRST_RECRUITER_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'first-recruiter-simulation',
+    legacyKey: FIRST_RECRUITER_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft(toFirstRecruiterDraft(stored)),
+  })
 
+  useEffect(() => {
     fetch('/api/a3/module-context/first-recruiter-simulation', { credentials: 'include' })
       .then(async (response) => {
         const payload = (await response.json().catch(() => ({}))) as ContextPayload
@@ -83,10 +82,6 @@ export function FirstRecruiterSimulationStudio() {
       .catch((error) => setContextError(error instanceof Error ? error.message : 'No pudimos cargar el contexto.'))
       .finally(() => setContextLoading(false))
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(FIRST_RECRUITER_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   useEffect(() => {
     if (!activeTimer) return
@@ -147,7 +142,7 @@ export function FirstRecruiterSimulationStudio() {
         responses: [],
         deliverable: draft,
       })
-      window.localStorage.removeItem(FIRST_RECRUITER_DRAFT_KEY)
+      clearDraft()
       router.push('/despega/a3?completed=first-recruiter-simulation')
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'No pudimos completar la simulación.')

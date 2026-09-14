@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { getActiveA3Module } from '@/lib/a3/active-module'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import {
   ANSWER_ARCHITECTURE_DRAFT_KEY,
@@ -111,19 +112,14 @@ export function AnswerArchitectureStudio() {
   const [completion, setCompletion] = useState<CompletionSummary | null>(null)
   const [timerSeconds, setTimerSeconds] = useState<number | null>(null)
 
-  useEffect(() => {
-    const saved = window.localStorage.getItem(ANSWER_ARCHITECTURE_DRAFT_KEY)
-    if (saved) {
-      try {
-        setDraft({
-          ...EMPTY_ANSWER_ARCHITECTURE_DRAFT,
-          ...(JSON.parse(saved) as Partial<AnswerArchitectureDraft>),
-        })
-      } catch {
-        window.localStorage.removeItem(ANSWER_ARCHITECTURE_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'answer-architecture',
+    legacyKey: ANSWER_ARCHITECTURE_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft({ ...EMPTY_ANSWER_ARCHITECTURE_DRAFT, ...(stored as Partial<AnswerArchitectureDraft>) }),
+  })
 
+  useEffect(() => {
     void fetch('/api/a3/module-context/answer-architecture', {
       credentials: 'include',
     })
@@ -139,10 +135,6 @@ export function AnswerArchitectureStudio() {
       })
       .finally(() => setContextLoading(false))
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(ANSWER_ARCHITECTURE_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   useEffect(() => {
     if (timerSeconds === null || timerSeconds <= 0) return
@@ -180,7 +172,7 @@ export function AnswerArchitectureStudio() {
         responses: Object.values(draft),
         deliverable: draft,
       })
-      window.localStorage.removeItem(ANSWER_ARCHITECTURE_DRAFT_KEY)
+      clearDraft()
       setCompletion({
         score: result.score || validation.score,
         xpAwarded: result.xpAwarded || 0,

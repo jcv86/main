@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getActiveA3Module } from '@/lib/a3/active-module'
 import {
@@ -161,16 +162,14 @@ export function BasicInterviewMissionStudio() {
   const [submitError, setSubmitError] = useState('')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(BASIC_INTERVIEW_DRAFT_KEY)
-    if (stored) {
-      try {
-        setDraft(toBasicInterviewDraft(JSON.parse(stored)))
-      } catch {
-        window.localStorage.removeItem(BASIC_INTERVIEW_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'basic-interview-mission',
+    legacyKey: BASIC_INTERVIEW_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft(toBasicInterviewDraft(stored)),
+  })
 
+  useEffect(() => {
     fetch('/api/a3/module-context/basic-interview-mission', { credentials: 'include' })
       .then(async (response) => {
         const payload = (await response.json().catch(() => ({}))) as ContextPayload
@@ -184,10 +183,6 @@ export function BasicInterviewMissionStudio() {
       })
       .finally(() => setContextLoading(false))
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(BASIC_INTERVIEW_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   useEffect(() => {
     if (!activeTimer) return
@@ -293,7 +288,7 @@ export function BasicInterviewMissionStudio() {
       if (!result.routeCompleted) {
         throw new Error('La misión fue guardada, pero la ruta no confirmó su cierre.')
       }
-      window.localStorage.removeItem(BASIC_INTERVIEW_DRAFT_KEY)
+      clearDraft()
       router.push('/despega/a3?completed=basic-interview-mission&final=true')
     } catch (error) {
       setSubmitError(

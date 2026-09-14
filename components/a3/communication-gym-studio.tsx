@@ -21,6 +21,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getActiveA3Module } from '@/lib/a3/active-module'
 import {
@@ -74,16 +75,14 @@ export function CommunicationGymStudio() {
   const [submitError, setSubmitError] = useState('')
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null)
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(COMMUNICATION_GYM_DRAFT_KEY)
-    if (stored) {
-      try {
-        setDraft({ ...EMPTY_COMMUNICATION_GYM_DRAFT, ...JSON.parse(stored) })
-      } catch {
-        window.localStorage.removeItem(COMMUNICATION_GYM_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'communication-gym',
+    legacyKey: COMMUNICATION_GYM_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft({ ...EMPTY_COMMUNICATION_GYM_DRAFT, ...(stored as Partial<CommunicationGymDraft>) }),
+  })
 
+  useEffect(() => {
     fetch('/api/a3/module-context/communication-gym', { credentials: 'include' })
       .then(async (response) => {
         const payload = (await response.json().catch(() => ({}))) as ContextPayload
@@ -95,10 +94,6 @@ export function CommunicationGymStudio() {
       })
       .finally(() => setContextLoading(false))
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(COMMUNICATION_GYM_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   useEffect(() => {
     if (!activeTimer) return
@@ -172,7 +167,7 @@ export function CommunicationGymStudio() {
         responses: [],
         deliverable: draft,
       })
-      window.localStorage.removeItem(COMMUNICATION_GYM_DRAFT_KEY)
+      clearDraft()
       router.push('/despega/a3?completed=communication-gym')
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'No pudimos completar el gimnasio.')
