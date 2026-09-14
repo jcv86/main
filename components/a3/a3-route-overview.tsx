@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import Link from 'next/link'
 import {
   AlertCircle,
@@ -77,30 +77,6 @@ interface ProgressResponse {
   error?: string
 }
 
-const EMPTY_ROUTE: A3RouteState = {
-  currentModuleNumber: 1,
-  totalCompleted: 0,
-  canReplayModules7To10: false,
-  advancedUnlockedAt: null,
-  proUnlockedAt: null,
-  routeCompletedAt: null,
-}
-
-const EMPTY_PROGRESS: A3ProgressPayload = {
-  totalXp: 0,
-  maxXp: A3_TOTAL_XP,
-  progressPct: 0,
-  completedModules: 0,
-  totalModules: A3_MODULES.length,
-  moduleStates: Object.fromEntries(A3_MODULES.map((module) => [module.id, 'locked'])),
-  completedModuleIds: [],
-  accessStates: [],
-  moduleResults: {},
-  nextAvailableModuleId: null,
-  a2CurrentDay: 1,
-  route: EMPTY_ROUTE,
-}
-
 function dateLabel(value: string | null): string {
   if (!value) return ''
   const date = new Date(value)
@@ -154,10 +130,36 @@ function blockedReasons(
 }
 
 export function A3RouteOverview() {
-  const [progress, setProgress] = useState<A3ProgressPayload>(EMPTY_PROGRESS)
+  const [progress, setProgress] = useState<A3ProgressPayload | null>(null)
   const [loading, setLoading] = useState(true)
   const [loadError, setLoadError] = useState('')
   const [completedNotice, setCompletedNotice] = useState<A3ModuleId | null>(null)
+
+  const loadProgress = useCallback(async () => {
+    setLoading(true)
+    setLoadError('')
+
+    try {
+      const response = await fetch('/api/a3/user-progress', {
+        credentials: 'include',
+        cache: 'no-store',
+      })
+      const payload = (await response.json().catch(() => ({}))) as ProgressResponse
+      if (!response.ok || !payload.progress) {
+        throw new Error(payload.error || 'No pudimos cargar tu progreso de Entrenamiento.')
+      }
+      setProgress(payload.progress)
+    } catch (error) {
+      setProgress(null)
+      setLoadError(
+        error instanceof Error
+          ? error.message
+          : 'No pudimos cargar tu progreso de Entrenamiento.',
+      )
+    } finally {
+      setLoading(false)
+    }
+  }, [])
 
   useEffect(() => {
     const params = new URLSearchParams(window.location.search)
@@ -166,43 +168,16 @@ export function A3RouteOverview() {
       setCompletedNotice(completed as A3ModuleId)
     }
 
-    fetch('/api/a3/user-progress', {
-      credentials: 'include',
-      cache: 'no-store',
-    })
-      .then(async (response) => {
-        const payload = (await response.json().catch(() => ({}))) as ProgressResponse
-        if (!response.ok || !payload.progress) {
-          throw new Error(payload.error || 'No pudimos cargar tu progreso de Entrenamiento.')
-        }
-        setProgress(payload.progress)
-      })
-      .catch((error) => {
-        setLoadError(
-          error instanceof Error
-            ? error.message
-            : 'No pudimos cargar tu progreso de Entrenamiento.',
-        )
-      })
-      .finally(() => setLoading(false))
-  }, [])
+    void loadProgress()
+  }, [loadProgress])
 
   const accessByModule = useMemo(
     () =>
       Object.fromEntries(
-        progress.accessStates.map((state) => [state.moduleId, state]),
+        (progress?.accessStates ?? []).map((state) => [state.moduleId, state]),
       ) as Partial<Record<A3ModuleId, A3AccessState>>,
-    [progress.accessStates],
+    [progress?.accessStates],
   )
-
-  const nextModule = A3_MODULES.find(
-    (module) => module.id === progress.nextAvailableModuleId,
-  )
-  const routeCompleted = Boolean(progress.route.routeCompletedAt) ||
-    progress.completedModules === A3_MODULES.length
-  const completedModule = completedNotice
-    ? A3_MODULES.find((module) => module.id === completedNotice)
-    : null
 
   if (loading) {
     return (
@@ -214,6 +189,54 @@ export function A3RouteOverview() {
       </main>
     )
   }
+
+  if (loadError || !progress) {
+    return (
+      <main className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
+        <Card
+          role="alert"
+          aria-live="assertive"
+          className="w-full max-w-lg border-destructive/30 bg-destructive/5 p-6"
+        >
+          <div className="flex items-start gap-3">
+            <AlertCircle className="mt-0.5 h-5 w-5 shrink-0 text-destructive" aria-hidden="true" />
+            <div className="min-w-0 space-y-3">
+              <div>
+                <h1 className="font-semibold text-destructive">No pudimos cargar tu progreso</h1>
+                <p className="mt-1 text-sm text-muted-foreground">
+                  {loadError || 'Ocurrió un problema al consultar tu ruta de Entrenamiento.'}
+                </p>
+              </div>
+              <p className="text-sm text-muted-foreground">
+                Tu avance no fue reemplazado ni reiniciado. Puedes intentar cargarlo nuevamente.
+              </p>
+              <div className="flex flex-col gap-2 sm:flex-row">
+                <Button onClick={() => void loadProgress()} className="w-full sm:w-auto">
+                  <RotateCcw className="mr-2 h-4 w-4" aria-hidden="true" />
+                  Reintentar
+                </Button>
+                <Link href="/despega" className="w-full sm:w-auto">
+                  <Button variant="outline" className="w-full">
+                    <ArrowLeft className="mr-2 h-4 w-4" aria-hidden="true" />
+                    Volver a Despega
+                  </Button>
+                </Link>
+              </div>
+            </div>
+          </div>
+        </Card>
+      </main>
+    )
+  }
+
+  const nextModule = A3_MODULES.find(
+    (module) => module.id === progress.nextAvailableModuleId,
+  )
+  const routeCompleted = Boolean(progress.route.routeCompletedAt) ||
+    progress.completedModules === A3_MODULES.length
+  const completedModule = completedNotice
+    ? A3_MODULES.find((module) => module.id === completedNotice)
+    : null
 
   return (
     <main className="min-h-screen bg-background">
@@ -266,13 +289,6 @@ export function A3RouteOverview() {
           </Card>
         ) : null}
 
-        {loadError ? (
-          <Card className="border-destructive/30 bg-destructive/5 p-5">
-            <p className="flex items-center gap-2 font-medium text-destructive">
-              <AlertCircle className="h-5 w-5" /> {loadError}
-            </p>
-          </Card>
-        ) : null}
 
         <section className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
           <Card className="p-4">

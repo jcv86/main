@@ -43,10 +43,20 @@ assert.ok(page.includes('return <A3RouteOverview />'))
 assert.ok(!page.includes('BASIC_LEVEL_MODULES'))
 assert.ok(!page.includes('selectedPath'))
 
+assert.ok(overview.includes('useState<A3ProgressPayload | null>(null)'))
+assert.ok(!overview.includes('EMPTY_PROGRESS'))
+assert.ok(overview.includes('const loadProgress = useCallback(async () =>'))
+assert.ok(overview.includes('setProgress(null)'))
+assert.ok(overview.includes('if (loadError || !progress)'))
+assert.ok(overview.includes('role="alert"'))
+assert.ok(overview.includes('aria-live="assertive"'))
+assert.ok(overview.includes('onClick={() => void loadProgress()}'))
+assert.ok(overview.includes('Tu avance no fue reemplazado ni reiniciado.'))
+assert.ok(overview.indexOf('if (loadError || !progress)') < overview.indexOf('Día {progress.a2CurrentDay}'))
 assert.ok(overview.includes("fetch('/api/a3/user-progress'"))
 assert.ok(overview.includes('A3_MODULES.map'))
 assert.ok(overview.includes('A3_ROUTE_OVERVIEW[module.id]'))
-assert.ok(overview.includes('progress.accessStates'))
+assert.ok(overview.includes('progress?.accessStates'))
 assert.ok(overview.includes('access?.status'))
 assert.ok(overview.includes('access.currentDayMet'))
 assert.ok(overview.includes('access.prerequisitesCompleted'))
@@ -140,6 +150,7 @@ console.log(
     fakeAdvancedCtaRemoved: true,
     honestMediaLanguage: true,
     mobileResponsiveOverview: true,
+    honestProgressRecovery: true,
     directModuleAccessGuarded: guardedPages.length,
     legacyValueMiningRoutesRetired: true,
   }),
