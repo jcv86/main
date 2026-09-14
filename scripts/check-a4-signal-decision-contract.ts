@@ -161,7 +161,7 @@ const hardeningMigration = source(
 const radarModel = source('lib/a4/strategic-radar.ts')
 const sourceIntegrity = source('lib/a4/source-integrity.ts')
 const sourceIntegrityMigration = source(
-  'supabase/migrations/20260914160000_a4_source_integrity.sql',
+  'supabase/migrations/20260914153833_a4_source_integrity.sql',
 )
 const signalRoute = source('app/api/a4/signals/route.ts')
 const decisionRoute = source('app/api/a4/decisions/route.ts')
