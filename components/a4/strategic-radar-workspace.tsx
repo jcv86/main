@@ -321,7 +321,7 @@ export function StrategicRadarWorkspace({
       </section>
 
       <section className="grid gap-6 xl:grid-cols-2">
-        <Card className="border-slate-800 bg-slate-900/70">
+        <Card id="a4-new-signal" className="scroll-mt-24 border-slate-800 bg-slate-900/70">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Plus className="h-5 w-5 text-rose-300" /> Registrar señal
@@ -501,7 +501,7 @@ export function StrategicRadarWorkspace({
           </CardContent>
         </Card>
 
-        <Card className="border-slate-800 bg-slate-900/70">
+        <Card id="a4-new-decision" className="scroll-mt-24 border-slate-800 bg-slate-900/70">
           <CardHeader>
             <CardTitle className="flex items-center gap-2">
               <Plus className="h-5 w-5 text-cyan-300" /> Registrar decisión
@@ -632,7 +632,7 @@ export function StrategicRadarWorkspace({
         ) : (
           <div className="grid gap-4 lg:grid-cols-2">
             {signals.map((signal) => (
-              <Card key={signal.id} className="border-slate-800 bg-slate-900/70">
+              <Card id={`signal-${signal.id}`} key={signal.id} className="scroll-mt-24 border-slate-800 bg-slate-900/70">
                 <CardContent className="space-y-4 p-5">
                   <div className="flex flex-wrap items-start justify-between gap-3">
                     <div>
@@ -702,7 +702,7 @@ export function StrategicRadarWorkspace({
                 outcome: decision.outcome || '',
               }
               return (
-                <Card key={decision.id} className="border-slate-800 bg-slate-900/70">
+                <Card id={`decision-${decision.id}`} key={decision.id} className="scroll-mt-24 border-slate-800 bg-slate-900/70">
                   <CardContent className="grid gap-5 p-5 lg:grid-cols-[1fr_0.75fr]">
                     <div className="space-y-3">
                       <div className="flex flex-wrap gap-2">
