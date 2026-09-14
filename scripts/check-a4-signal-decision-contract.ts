@@ -7,6 +7,11 @@ import {
   validateDecisionUpdate,
   validateSignalInput,
 } from '../lib/a4/strategic-radar'
+import {
+  A4SourceVerificationError,
+  isPrivateNetworkAddress,
+  parseSafePublicSourceUrl,
+} from '../lib/a4/source-integrity'
 
 function source(path: string): string {
   return readFileSync(join(process.cwd(), path), 'utf8')
@@ -16,6 +21,23 @@ const now = new Date('2026-08-02T12:00:00-04:00')
 const chileNight = new Date('2026-08-02T23:30:00-04:00')
 assert.equal(santiagoDateIso(chileNight), '2026-08-02')
 assert.equal(santiagoDateIso(chileNight, 7), '2026-08-09')
+
+assert.equal(
+  parseSafePublicSourceUrl('https://www.ine.gob.cl/estadisticas#empleo').toString(),
+  'https://www.ine.gob.cl/estadisticas',
+)
+assert.equal(isPrivateNetworkAddress('127.0.0.1'), true)
+assert.equal(isPrivateNetworkAddress('10.0.0.1'), true)
+assert.equal(isPrivateNetworkAddress('::1'), true)
+assert.equal(isPrivateNetworkAddress('8.8.8.8'), false)
+assert.throws(
+  () => parseSafePublicSourceUrl('http://example.com/fuente'),
+  A4SourceVerificationError,
+)
+assert.throws(
+  () => parseSafePublicSourceUrl('https://127.0.0.1/fuente'),
+  A4SourceVerificationError,
+)
 
 const chileDstNight = new Date('2026-04-04T23:30:00-03:00')
 assert.equal(santiagoDateIso(chileDstNight), '2026-04-04')
@@ -137,6 +159,10 @@ const hardeningMigration = source(
   'migrations/10-a4-server-owned-write-hardening.sql',
 )
 const radarModel = source('lib/a4/strategic-radar.ts')
+const sourceIntegrity = source('lib/a4/source-integrity.ts')
+const sourceIntegrityMigration = source(
+  'supabase/migrations/20260914160000_a4_source_integrity.sql',
+)
 const signalRoute = source('app/api/a4/signals/route.ts')
 const decisionRoute = source('app/api/a4/decisions/route.ts')
 const page = source('app/despega/a4/page.tsx')
@@ -198,6 +224,17 @@ assert.ok(access.includes(".select('route_completed_at')"))
 assert.ok(signalRoute.includes('resolveServerUser()'))
 assert.ok(signalRoute.includes('checkA4Access('))
 assert.ok(signalRoute.includes('validateSignalInput('))
+assert.ok(signalRoute.includes('verifyExternalSourceUrl('))
+assert.ok(signalRoute.includes("action === 'verify_source'"))
+assert.ok(signalRoute.includes('source_verification_status: sourceVerification.status'))
+assert.ok(sourceIntegrity.includes("redirect: 'manual'"))
+assert.ok(sourceIntegrity.includes("cache: 'no-store'"))
+assert.ok(sourceIntegrity.includes("url.protocol !== 'https:'"))
+assert.ok(sourceIntegrity.includes('assertPublicHostname'))
+assert.ok(sourceIntegrity.includes('requires_corroboration'))
+assert.ok(sourceIntegrityMigration.includes('source_verification_status'))
+assert.ok(sourceIntegrityMigration.includes('source_authority'))
+assert.ok(sourceIntegrityMigration.includes('source_integrity_coherent'))
 assert.ok(signalRoute.includes('createAdminClient()'))
 assert.ok(signalRoute.includes(".eq('user_id', resolved.currentUser!.id)"))
 assert.ok(decisionRoute.includes('resolveServerUser()'))
@@ -243,6 +280,11 @@ assert.ok(workspace.includes("fetch('/api/a4/signals'"))
 assert.ok(workspace.includes("fetch('/api/a4/decisions'"))
 assert.ok(workspace.includes('A4_SIGNAL_CLASSIFICATIONS.map'))
 assert.ok(workspace.includes('Fecha de la fuente'))
+assert.ok(workspace.includes('Jerarquía recomendada'))
+assert.ok(workspace.includes('Comprobar fuente'))
+assert.ok(workspace.includes('Enlace verificado'))
+assert.ok(workspace.includes('Requiere corroboración'))
+assert.ok(workspace.includes('noopener noreferrer'))
 assert.ok(workspace.includes('Evidencia que observarás'))
 assert.ok(workspace.includes('return santiagoDateIso(new Date(), offsetDays)'))
 assert.ok(!workspace.includes('toISOString().slice(0, 10)'))
@@ -257,6 +299,8 @@ console.log(
       'signal input',
       'future source rejection',
       'missing source rejection',
+      'unsafe source URL rejection',
+      'private network rejection',
       'decision input',
       'review outcome requirement',
     ],
@@ -266,6 +310,9 @@ console.log(
       'API validation wiring',
       'server-owned write hardening migration',
       'legacy news exclusion',
+      'source availability verification',
+      'source authority separation',
+      'source integrity persistence',
     ],
     liveDatabaseCheckedInThisScript: false,
     liveHttpCheckedInThisScript: false,
