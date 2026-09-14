@@ -163,6 +163,9 @@ const sourceIntegrity = source('lib/a4/source-integrity.ts')
 const sourceIntegrityMigration = source(
   'supabase/migrations/20260914153833_a4_source_integrity.sql',
 )
+const sourceIntegrityCompatibility = source(
+  'supabase/migrations/20260914154438_a4_source_integrity_backward_compatibility.sql',
+)
 const signalRoute = source('app/api/a4/signals/route.ts')
 const decisionRoute = source('app/api/a4/decisions/route.ts')
 const page = source('app/despega/a4/page.tsx')
@@ -235,6 +238,11 @@ assert.ok(sourceIntegrity.includes('requires_corroboration'))
 assert.ok(sourceIntegrityMigration.includes('source_verification_status'))
 assert.ok(sourceIntegrityMigration.includes('source_authority'))
 assert.ok(sourceIntegrityMigration.includes('source_integrity_coherent'))
+assert.ok(
+  sourceIntegrityCompatibility.includes(
+    'drop constraint if exists a4_verified_signals_source_integrity_coherent',
+  ),
+)
 assert.ok(signalRoute.includes('createAdminClient()'))
 assert.ok(signalRoute.includes(".eq('user_id', resolved.currentUser!.id)"))
 assert.ok(decisionRoute.includes('resolveServerUser()'))
