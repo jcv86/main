@@ -61,11 +61,47 @@ for (const staleLabel of ['>El Ritual<', '>Exploración<', '>La Realidad<']) {
   assert.ok(!footer.includes(staleLabel), `Nomenclatura heredada visible en footer: ${staleLabel}`)
 }
 
+
+const sitemap = source('app/sitemap.ts')
+assert.ok(sitemap.includes('"/privacy"'))
+assert.ok(sitemap.includes('"/terms"'))
+assert.ok(!sitemap.includes('"/privacidad"'))
+assert.ok(!sitemap.includes('"/terminos"'))
+assert.ok(!sitemap.includes('lastModified: new Date()'))
+
+const robots = source('app/robots.ts')
+for (const privatePath of [
+  '/api/',
+  '/admin/',
+  '/auth/',
+  '/dashboard/',
+  '/despega/',
+  '/mi-coach/',
+  '/perfil/',
+  '/settings/',
+  '/test/*/results/',
+]) {
+  assert.ok(robots.includes(`"${privatePath}"`), `Falta exclusión privada: ${privatePath}`)
+}
+assert.ok(robots.includes('disallow: ["/_next/", ...privatePaths]'))
+assert.ok(robots.includes('disallow: privatePaths'))
+
 const globalMetadata = source('app/layout.tsx')
 const homeMetadata = source('app/page.tsx')
-for (const unsupportedClaim of ['test MBTI', 'Big Five personalidad', 'Tests Psicométricos']) {
+for (const unsupportedClaim of [
+  'test MBTI',
+  'Big Five personalidad',
+  'Tests Psicométricos',
+  'evaluaciones científicas',
+  'price: "0"',
+  'google-site-verification-code',
+  'yandex-verification-code',
+  'bing-verification-code',
+  'https://www.despegatucarrera.com/es',
+  'generator: "v0.app"',
+]) {
   assert.ok(!globalMetadata.includes(unsupportedClaim), `Metadata global no acreditada: ${unsupportedClaim}`)
 }
 assert.ok(!homeMetadata.includes('tests científicos'))
 
-console.log('DTC credibility contract: PASS (public promises, canonical language, private evolution, persisted settings)')
+console.log('DTC credibility contract: PASS (public promises, metadata, crawl boundaries, canonical language, private evolution, persisted settings)')

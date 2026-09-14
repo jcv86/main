@@ -65,7 +65,7 @@ export const metadata: Metadata = {
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera | Desarrollo profesional con evidencia",
     description:
-      "Transforma tu carrera con evaluaciones científicas, contenido especializado y coaching personalizado con inteligencia artificial.",
+      "Un recorrido conectado para comprender cómo funcionas, construir una ruta, practicar y tomar decisiones profesionales con más contexto y evidencia.",
     images: [
       {
         url: "https://www.despegatucarrera.com/og-image.png",
@@ -78,7 +78,8 @@ export const metadata: Metadata = {
   twitter: {
     card: "summary_large_image",
     title: "Despega Tu Carrera - Desarrollo Profesional con IA",
-    description: "Tests psicométricos, contenido especializado y coaching con IA. Impulsa tu carrera hoy.",
+    description:
+      "Comprende cómo funcionas, construye una ruta, practica y toma decisiones profesionales con más contexto y evidencia.",
     images: ["https://www.despegatucarrera.com/twitter-image.png"],
     creator: "@despegatucarrera",
   },
@@ -97,19 +98,10 @@ export const metadata: Metadata = {
     canonical: "https://www.despegatucarrera.com",
     languages: {
       "es-CL": "https://www.despegatucarrera.com",
-      es: "https://www.despegatucarrera.com/es",
-    },
-  },
-  verification: {
-    google: "google-site-verification-code",
-    yandex: "yandex-verification-code",
-    other: {
-      "msvalidate.01": "bing-verification-code",
     },
   },
   category: "education",
   classification: "Professional Development Platform",
-  generator: "v0.app",
 }
 
 export const viewport: Viewport = {
@@ -168,13 +160,6 @@ export default function RootLayout({
               areaServed: {
                 "@type": "Country",
                 name: "Chile",
-              },
-              offers: {
-                "@type": "Offer",
-                category: "Professional Development Services",
-                price: "0",
-                priceCurrency: "CLP",
-                availability: "https://schema.org/InStock",
               },
             }),
           }}

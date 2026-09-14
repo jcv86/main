@@ -8,14 +8,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "",
     "/biblioteca",
     "/faq",
-    "/privacidad",
-    "/terminos",
+    "/privacy",
+    "/terms",
     "/contact",
     "/como-funciona",
     "/para-empresas",
   ].map((route) => ({
     url: `${baseUrl}${route}`,
-    lastModified: new Date(),
     changeFrequency: "monthly" as const,
     priority:
       route === ""
