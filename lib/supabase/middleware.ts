@@ -92,61 +92,6 @@ export async function updateSession(request: NextRequest) {
       }
     }
 
-    const isDespegaRoute = pathname === '/despega' || pathname.startsWith('/despega/')
-    if (!user || !isDespegaRoute) {
-      return supabaseResponse
-    }
-
-    try {
-      const pathMatch = pathname.match(/\/despega\/a2\/dia-(\d+)/)
-      if (pathMatch) {
-        const requestedDay = Number.parseInt(pathMatch[1], 10)
-        const { data: progress } = await supabase
-          .from('despega_pilar_progress')
-          .select('ciclo_dia, is_a2_pilar_complete, is_a3_unlocked')
-          .eq('user_id', user.id)
-          .eq('pilar', 'a2_rutas')
-          .maybeSingle()
-
-        if (progress) {
-          if (progress.is_a2_pilar_complete && !progress.is_a3_unlocked) {
-            const url = request.nextUrl.clone()
-            url.pathname = '/despega/a3'
-            return NextResponse.redirect(url)
-          }
-
-          if (requestedDay > progress.ciclo_dia && !progress.is_a2_pilar_complete) {
-            const url = request.nextUrl.clone()
-            url.pathname = `/despega/a2/dia-${progress.ciclo_dia}`
-            return NextResponse.redirect(url)
-          }
-        }
-      }
-
-      if (pathname === '/despega' || pathname === '/despega/') {
-        const { data: progress } = await supabase
-          .from('despega_pilar_progress')
-          .select('ciclo_dia, is_a2_pilar_complete')
-          .eq('user_id', user.id)
-          .eq('pilar', 'a2_rutas')
-          .maybeSingle()
-
-        if (progress?.is_a2_pilar_complete) {
-          const url = request.nextUrl.clone()
-          url.pathname = '/despega/a3'
-          return NextResponse.redirect(url)
-        }
-
-        if (progress) {
-          const url = request.nextUrl.clone()
-          url.pathname = `/despega/a2/dia-${progress.ciclo_dia}`
-          return NextResponse.redirect(url)
-        }
-      }
-    } catch (progressError) {
-      console.error('[v0] Protected journey redirect lookup failed:', progressError)
-    }
-
     return supabaseResponse
   } catch (error) {
     console.error('[v0] Authentication middleware failed:', error)

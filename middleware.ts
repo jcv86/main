@@ -36,6 +36,18 @@ const PILLAR_EXEMPT_ROUTES = [
   '/api/documentos',
 ]
 
+const PRODUCTION_LAB_ROUTE_PREFIXES = ['/test', '/demo', '/design-system'] as const
+const PRODUCTION_LAB_ROUTES = ['/auth/debug', '/auth/test'] as const
+
+export function isProductionLaboratoryRoute(pathname: string): boolean {
+  return PRODUCTION_LAB_ROUTES.includes(pathname as (typeof PRODUCTION_LAB_ROUTES)[number])
+    || PRODUCTION_LAB_ROUTE_PREFIXES.some(
+      (prefix) => pathname === prefix
+        || pathname.startsWith(`${prefix}/`)
+        || pathname.startsWith(`${prefix}-`),
+    )
+}
+
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
 }
@@ -62,6 +74,15 @@ function isPillarExemptRoute(pathname: string): boolean {
 
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+
+  // Internal laboratories are available only on a developer's localhost.
+  // Both Preview and Production are externally reachable Vercel environments.
+  if (process.env.VERCEL_ENV && isProductionLaboratoryRoute(pathname)) {
+    return new NextResponse(null, {
+      status: 404,
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+    })
+  }
 
   // Fix double slashes in pathname
   if (pathname.includes('//')) {
@@ -127,16 +148,6 @@ export async function middleware(request: NextRequest) {
       return response
     }
     return response
-  }
-
-  const hostname = request.headers.get('host')?.split(':')[0] || ''
-  const isPreviewHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.vercel.app') || hostname.endsWith('.v0.dev')
-  const hasPreviewAccess = request.cookies.get('dtc_preview_access')?.value === '1'
-  const hasPreviewQuery = request.nextUrl.searchParams.get('preview') === '1'
-
-  // Preview-only bypass for QA. Production domains never satisfy isPreviewHost.
-  if (isPreviewHost && (hasPreviewAccess || hasPreviewQuery)) {
-    return NextResponse.next()
   }
 
   const response = await updateSession(request)

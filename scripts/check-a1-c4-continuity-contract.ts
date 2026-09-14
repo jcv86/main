@@ -73,6 +73,8 @@ assert.equal(PRODUCT_STAGES.A4.href, '/despega/a4')
 
 const journey = source('lib/journey/service.ts')
 const flow = source('lib/journey/flow.ts')
+const entry = source('app/despega/page.tsx')
+const authMiddleware = source('lib/supabase/middleware.ts')
 const canonicalOrder = [
   "if (!(profile.onboarding_conozcamonos_1_completed || profile.onboarding_completed)) return ONBOARDING_PATHS[0]",
   'if (!profile.a1_cerebral_intro_seen) return ONBOARDING_PATHS[1]',
@@ -95,6 +97,16 @@ assert.ok(journey.includes('state.a4UnlockedAt && profile.a4_unlocked'))
 assert.ok(journey.includes('const hasA4Evidence = Boolean(evidence.a3RouteCompletedAt)'))
 assert.ok(journey.includes('a4_unlocked: hasA4Evidence'))
 assert.ok(journey.includes("else if (hasA4Evidence) currentModule = 'A4'"))
+
+// The canonical entry owns journey routing. Middleware only enforces session
+// and pilot access, so stale legacy A2 rows cannot outrank canonical A1/A3/A4
+// state when the two models diverge.
+assert.ok(entry.includes('getJourneyForCurrentUser()'))
+assert.ok(entry.includes('getCanonicalNextPath(journey.profile)'))
+assert.ok(entry.includes("journey.access.a2 ? '/despega/dashboard' : nextRequiredPath"))
+assert.ok(!authMiddleware.includes(".from('despega_pilar_progress')"))
+assert.ok(!authMiddleware.includes('Protected journey redirect lookup failed'))
+assert.ok(!authMiddleware.includes("pathname === '/despega' || pathname === '/despega/'"))
 
 const compatibility = source('lib/journey/legacy-compatibility.ts')
 assert.ok(compatibility.includes('getJourneyForCurrentUser()'))
@@ -168,9 +180,12 @@ console.log(
     runtimeValidated: [
       'legacy destination resolver states',
       'canonical stage identifiers and routes',
+      'divergent legacy and canonical journey ownership',
     ],
     sourceContractsChecked: [
       'A1 onboarding marker order',
+      'canonical /despega entry ownership',
+      'middleware legacy journey redirect retirement',
       'legacy route redirects',
       'parallel onboarding retirement',
       'false-success test writer retirement',

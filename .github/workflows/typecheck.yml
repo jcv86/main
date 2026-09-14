@@ -27,6 +27,10 @@ jobs:
       - name: Install dependencies
         run: npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
 
+      # `npm run quality:gate` exposes the same release-critical core locally.
+      # Explicit CI steps remain below so evidence stays attributable and does
+      # not imply live HTTP, database, or browser coverage.
+
       - name: TypeScript full-repository check
         run: npx tsc --noEmit
 
@@ -173,6 +177,12 @@ jobs:
 
       - name: Global route authentication boundary source contract
         run: npx tsx scripts/check-global-auth-boundary-contract.ts
+
+      - name: Production cannot activate laboratory bypasses
+        run: npm run check:production-laboratory-boundary
+
+      - name: Privileged RPC and legacy table security contract
+        run: npm run check:security-p0
 
       - name: A2 task and Day 3 signal writer source contract
         run: npx tsx scripts/check-a2-task-signal-writer-contract.ts
