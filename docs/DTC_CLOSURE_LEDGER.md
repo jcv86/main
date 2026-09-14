@@ -11,9 +11,9 @@
 | DTC-A4-01 | Las fuentes externas se verifican sin SSRF/DNS rebinding y sin enlaces obsoletos | Contratos runtime, build y release de PR #165 | A4/QA | Ninguna | verified | no |
 | DTC-QA-01 | Existe una puerta reproducible de TypeScript, contratos críticos y build | `npm run quality:gate`; CI principal actualizado | QA | CI del candidato | in_progress | sí |
 | DTC-QA-02 | Invitado nuevo y usuario recurrente completan un recorrido autenticado real | Desktop y 390x844: claim, login, guardar, recargar, retomar y cerrar sesión | QA | Cuenta/fixture sintético | not_started | sí |
-| DTC-JRN-02 | Días A2 bloqueados no renderizan contenido por URL directa | Guard SSR para días 11–90 + pruebas locked/completed | Journey | Diseño de guard compartido | not_started | sí |
+| DTC-JRN-02 | Días A2 bloqueados no renderizan contenido por URL directa | Guard SSR compartido 11–90 + pruebas 11/31/61/90; falta Preview | Journey | Preview del candidato | in_progress | sí |
 | DTC-UX-01 | El menú muestra progreso persistido, no inferido desde la URL | Estados reales y enlaces bloqueados verificables | Frontend | Journey canónico | not_started | no |
-| DTC-SEC-03 | El resto del esquema legacy queda clasificado y cerrado por oleadas compatibles | Inventario remoto: 195 tablas RLS-off; pruebas por uso antes de cada migración | Supabase | DTC-SEC-02 | not_started | sí |
+| DTC-SEC-03 | El resto del esquema legacy queda clasificado y cerrado por oleadas compatibles | Wave 2 preparada: 145 inactivas, 6 owner-scoped y 4 catálogos; quedan 35 diferidas | Supabase | Aprobación y verificación remota | in_progress | sí |
 | DTC-OPS-01 | Errores críticos pueden seguirse de navegador a API | IDs de correlación, redacción y logs de transiciones | Observabilidad | Definir alcance | not_started | no |
 
 ## Criterio de 9,7

@@ -184,6 +184,12 @@ jobs:
       - name: Privileged RPC and legacy table security contract
         run: npm run check:security-p0
 
+      - name: Inactive and unambiguous relation security contract
+        run: npm run check:security-wave2
+
+      - name: A2 extended-day SSR access guard
+        run: npm run check:a2-day-ssr-guard
+
       - name: A2 task and Day 3 signal writer source contract
         run: npx tsx scripts/check-a2-task-signal-writer-contract.ts
 
