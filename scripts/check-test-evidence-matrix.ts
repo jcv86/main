@@ -14,6 +14,7 @@ const DOMAIN_TESTS: Record<string, EvidenceLevel> = {
   'scripts/check-a2-activity-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a1-a2-a3-journey-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a3-active-completion-contract.ts': 'mixed_runtime_and_source',
+  'scripts/check-a3-draft-isolation-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a3-job-decoder-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a3-answer-architecture-contract.ts': 'mixed_runtime_and_source',
   'scripts/check-a3-coach-practice-contract.ts': 'mixed_runtime_and_source',
@@ -113,10 +114,10 @@ for (const [path, level] of Object.entries(DOMAIN_TESTS)) {
   counts[level] += 1
 }
 
-assert.equal(Object.keys(DOMAIN_TESTS).length, 48)
+assert.equal(Object.keys(DOMAIN_TESTS).length, 49)
 assert.deepEqual(counts, {
   runtime_only: 1,
-  mixed_runtime_and_source: 23,
+  mixed_runtime_and_source: 24,
   source_only: 24,
 })
 
