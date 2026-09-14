@@ -187,6 +187,9 @@ jobs:
       - name: Inactive and unambiguous relation security contract
         run: npm run check:security-wave2
 
+      - name: Remaining active relation security contract
+        run: npm run check:security-wave3
+
       - name: A2 extended-day SSR access guard
         run: npm run check:a2-day-ssr-guard
 

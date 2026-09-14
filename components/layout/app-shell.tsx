@@ -14,6 +14,7 @@ import {
   Compass,
   FileText,
   Home,
+  Lock,
   LogOut,
   Menu,
   Radar,
@@ -28,13 +29,14 @@ import { Button } from '@/components/ui/button'
 import { Progress } from '@/components/ui/progress'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { cn } from '@/lib/utils'
+import type { JourneyFlow, FlowStage } from '@/lib/journey/flow'
 
 type NavItem = {
   label: string
   href: string
   icon: React.ComponentType<{ className?: string }>
   match?: (pathname: string) => boolean
-  journeyIndex?: number
+  stageId?: FlowStage
 }
 
 type NavGroup = {
@@ -72,7 +74,7 @@ const navigation: NavGroup[] = [
         label: 'A1 · Despega Cerebral',
         href: '/despega/a1-cerebral-intro',
         icon: Brain,
-        journeyIndex: 0,
+        stageId: 'A1',
         match: (pathname) =>
           pathname.includes('conozcamonos-1') || pathname.includes('a1-cerebral') || pathname.includes('a1-report'),
       },
@@ -80,21 +82,21 @@ const navigation: NavGroup[] = [
         label: 'A2 · Tu Ruta',
         href: '/despega/conozcamonos-2',
         icon: Compass,
-        journeyIndex: 1,
+        stageId: 'A2',
         match: (pathname) => pathname.includes('conozcamonos-2') || pathname.includes('/a2'),
       },
       {
         label: 'A3 · Entrenamiento',
         href: '/despega/a3-intro',
         icon: Target,
-        journeyIndex: 2,
+        stageId: 'A3',
         match: (pathname) => pathname.includes('/a3') || pathname.includes('interview'),
       },
       {
         label: 'A4 · Radar Estratégico',
         href: '/despega/a4',
         icon: Radar,
-        journeyIndex: 3,
+        stageId: 'A4',
         match: (pathname) => pathname.includes('/a4'),
       },
     ],
@@ -181,11 +183,6 @@ function isActive(item: NavItem, pathname: string) {
   return item.match ? item.match(pathname) : pathname === item.href || pathname.startsWith(`${item.href}/`)
 }
 
-function getJourneyIndex(pathname: string) {
-  const journeyItems = navigation[1].items
-  return journeyItems.findIndex((item) => isActive(item, pathname))
-}
-
 function getRouteContext(pathname: string): RouteContext {
   return (
     routeContexts.find((entry) => entry.match(pathname))?.context ?? {
@@ -196,8 +193,7 @@ function getRouteContext(pathname: string): RouteContext {
   )
 }
 
-function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigate?: () => void }) {
-  const currentJourneyIndex = getJourneyIndex(pathname)
+function ShellNavigation({ pathname, flow, onNavigate }: { pathname: string; flow: JourneyFlow; onNavigate?: () => void }) {
 
   return (
     <nav aria-label="Navegación principal" className="space-y-7">
@@ -212,23 +208,15 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
           <div className="space-y-1">
             {group.items.map((item) => {
               const active = isActive(item, pathname)
-              const completed =
-                item.journeyIndex !== undefined && currentJourneyIndex >= 0 && item.journeyIndex < currentJourneyIndex
+              const stage = item.stageId
+                ? flow.cards.find((card) => card.id === item.stageId)
+                : undefined
+              const state = stage?.state
+              const completed = state === 'completed'
+              const locked = state === 'locked'
               const Icon = item.icon
-
-              return (
-                <Link
-                  key={item.href}
-                  href={item.href}
-                  onClick={onNavigate}
-                  aria-current={active ? 'page' : undefined}
-                  className={cn(
-                    'group flex min-h-11 items-center gap-3 rounded-[var(--dtc-radius-md)] px-3 py-2.5 text-sm font-medium outline-none transition-[background-color,color,transform] duration-180 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
-                    active
-                      ? 'bg-[hsl(var(--primary)/0.14)] text-foreground shadow-[var(--dtc-shadow-inset)]'
-                      : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground',
-                  )}
-                >
+              const content = (
+                <>
                   <span
                     className={cn(
                       'flex h-8 w-8 shrink-0 items-center justify-center rounded-[var(--dtc-radius-sm)] border transition-colors',
@@ -242,14 +230,14 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
                     <Icon className="h-4 w-4" />
                   </span>
                   <span className="min-w-0 flex-1 truncate">{item.label}</span>
-                  {item.journeyIndex !== undefined ? (
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={active ? 'En progreso' : completed ? 'Etapa anterior' : 'Pendiente'}>
-                      {active ? (
-                        <Circle className="h-2.5 w-2.5 fill-current text-[hsl(var(--dtc-indigo-300))]" />
-                      ) : completed ? (
+                  {item.stageId ? (
+                    <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={completed ? 'Completado' : locked ? 'Bloqueado' : state === 'active' ? 'En curso' : 'Disponible'}>
+                      {completed ? (
                         <Check className="h-3.5 w-3.5 text-success" />
+                      ) : locked ? (
+                        <Lock className="h-3.5 w-3.5 text-muted-foreground/55" />
                       ) : (
-                        <Circle className="h-2.5 w-2.5 text-muted-foreground/55" />
+                        <Circle className={cn('h-2.5 w-2.5', state === 'active' && 'fill-current text-[hsl(var(--dtc-indigo-300))]')} />
                       )}
                     </span>
                   ) : (
@@ -262,6 +250,30 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
                       )}
                     />
                   )}
+                </>
+              )
+              const itemClassName = cn(
+                'group flex min-h-11 items-center gap-3 rounded-[var(--dtc-radius-md)] px-3 py-2.5 text-sm font-medium outline-none transition-[background-color,color,transform] duration-180 focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background',
+                active
+                  ? 'bg-[hsl(var(--primary)/0.14)] text-foreground shadow-[var(--dtc-shadow-inset)]'
+                  : locked
+                    ? 'cursor-not-allowed text-muted-foreground/60'
+                    : 'text-muted-foreground hover:bg-muted/60 hover:text-foreground',
+              )
+
+              return locked ? (
+                <div key={item.href} aria-disabled="true" className={itemClassName}>
+                  {content}
+                </div>
+              ) : (
+                <Link
+                  key={item.href}
+                  href={item.href}
+                  onClick={onNavigate}
+                  aria-current={active ? 'page' : undefined}
+                  className={itemClassName}
+                >
+                  {content}
                 </Link>
               )
             })}
@@ -272,7 +284,7 @@ function ShellNavigation({ pathname, onNavigate }: { pathname: string; onNavigat
   )
 }
 
-export function AppShell({ children }: { children: React.ReactNode }) {
+export function AppShell({ children, flow }: { children: React.ReactNode; flow: JourneyFlow }) {
   const pathname = usePathname()
   const router = useRouter()
   const { user } = useAuthRedirect()
@@ -385,7 +397,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
           </div>
         </div>
         <div className="flex-1 overflow-y-auto px-4 py-6">
-          <ShellNavigation pathname={pathname} />
+          <ShellNavigation pathname={pathname} flow={flow} />
         </div>
         <div className="border-t border-border p-4">
           <div className="mb-3 rounded-[var(--dtc-radius-md)] border border-border bg-background/50 p-3">
@@ -429,7 +441,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
               </Button>
             </div>
             <div className="flex-1 overflow-y-auto px-4 py-6">
-              <ShellNavigation pathname={pathname} onNavigate={() => setMobileOpen(false)} />
+              <ShellNavigation pathname={pathname} flow={flow} onNavigate={() => setMobileOpen(false)} />
             </div>
             <div className="border-t border-border p-4">
               <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground" onClick={handleLogout}>

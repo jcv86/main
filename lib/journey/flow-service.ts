@@ -1,4 +1,5 @@
 import 'server-only'
+import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { buildJourneyFlow, type FlowInput } from './flow'
 
@@ -34,6 +35,6 @@ export async function readJourneyFlow(journey: FlowJourney, client: Awaited<Retu
   })
 }
 
-export async function loadJourneyFlow(journey: FlowJourney) {
+export const loadJourneyFlow = cache(async function loadJourneyFlow(journey: FlowJourney) {
   return readJourneyFlow(journey, await createClient())
-}
+})

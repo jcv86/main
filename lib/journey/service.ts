@@ -1,5 +1,6 @@
 import 'server-only'
 
+import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { resolveA2DayAccess } from './a2-day-access'
@@ -337,7 +338,7 @@ function hydrateJourneyState(
   }
 }
 
-export async function getJourneyForCurrentUser() {
+export const getJourneyForCurrentUser = cache(async function getJourneyForCurrentUser() {
   const identity = await getCurrentIdentity()
   if (!identity) return null
 
@@ -388,7 +389,7 @@ export async function getJourneyForCurrentUser() {
     access: getModuleAccess(state, profile),
     isDemo: identity.isDemo,
   }
-}
+})
 
 export async function requireJourneyModule(
   module: Exclude<JourneyModule, 'COMPLETED'>,
