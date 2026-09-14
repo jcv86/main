@@ -11,6 +11,7 @@ import {
   A4SourceVerificationError,
   isPrivateNetworkAddress,
   parseSafePublicSourceUrl,
+  selectPublicAddress,
   verifyExternalSourceUrl,
 } from '../lib/a4/source-integrity'
 
@@ -31,6 +32,14 @@ assert.equal(isPrivateNetworkAddress('127.0.0.1'), true)
 assert.equal(isPrivateNetworkAddress('10.0.0.1'), true)
 assert.equal(isPrivateNetworkAddress('::1'), true)
 assert.equal(isPrivateNetworkAddress('8.8.8.8'), false)
+assert.deepEqual(selectPublicAddress([{ address: '8.8.8.8' }]), {
+  address: '8.8.8.8',
+  family: 4,
+})
+assert.throws(
+  () => selectPublicAddress([{ address: '8.8.8.8' }, { address: '127.0.0.1' }]),
+  A4SourceVerificationError,
+)
 assert.throws(
   () => parseSafePublicSourceUrl('http://example.com/fuente'),
   A4SourceVerificationError,
@@ -41,57 +50,63 @@ assert.throws(
 )
 
 async function checkSourceIntegrityRuntime(): Promise<void> {
-  const originalFetch = globalThis.fetch
-  try {
-    const requestedMethods: string[] = []
-    globalThis.fetch = async (_input, init) => {
-      requestedMethods.push(init?.method ?? 'GET')
-      return init?.method === 'HEAD'
-        ? new Response(null, { status: 405 })
-        : new Response(null, { status: 200 })
-    }
-    const availableSource = await verifyExternalSourceUrl(
-      'https://8.8.8.8/fuente',
-      now,
-    )
-    assert.equal(availableSource.status, 'verified')
-    assert.equal(availableSource.authority, 'requires_corroboration')
-    assert.equal(availableSource.httpStatus, 200)
-    assert.deepEqual(requestedMethods, ['HEAD', 'GET'])
+  const requestedMethods: string[] = []
+  const availableRequester = async (_url: URL, method: 'HEAD' | 'GET') => {
+    requestedMethods.push(method)
+    return method === 'HEAD'
+      ? { status: 405, location: null }
+      : { status: 200, location: null }
+  }
+  const availableSource = await verifyExternalSourceUrl(
+    'https://8.8.8.8/fuente',
+    now,
+    availableRequester,
+  )
+  assert.equal(availableSource.status, 'verified')
+  assert.equal(availableSource.authority, 'requires_corroboration')
+  assert.equal(availableSource.httpStatus, 200)
+  assert.deepEqual(requestedMethods, ['HEAD', 'GET'])
 
-    globalThis.fetch = async () => new Response(null, { status: 403 })
-    const restrictedSource = await verifyExternalSourceUrl(
+  const restrictedRequester = async () => ({ status: 403, location: null })
+  const restrictedSource = await verifyExternalSourceUrl(
     'https://8.8.8.8/restringida',
     now,
+    restrictedRequester,
   )
-    assert.equal(restrictedSource.status, 'restricted')
-    assert.equal(restrictedSource.httpStatus, 403)
+  assert.equal(restrictedSource.status, 'restricted')
+  assert.equal(restrictedSource.httpStatus, 403)
 
-    globalThis.fetch = async () =>
-      new Response(null, {
-        status: 302,
-        headers: { location: 'https://127.0.0.1/privada' },
-      })
-    await assert.rejects(
-      verifyExternalSourceUrl('https://8.8.8.8/redireccion-privada', now),
-      A4SourceVerificationError,
-    )
+  const privateRedirectRequester = async () => ({
+    status: 302,
+    location: 'https://127.0.0.1/privada',
+  })
+  await assert.rejects(
+    verifyExternalSourceUrl(
+      'https://8.8.8.8/redireccion-privada',
+      now,
+      privateRedirectRequester,
+    ),
+    A4SourceVerificationError,
+  )
 
-    globalThis.fetch = async () => new Response(null, { status: 404 })
-    await assert.rejects(
-      verifyExternalSourceUrl('https://8.8.8.8/no-existe', now),
-      /estado HTTP 404/,
-    )
+  const notFoundRequester = async () => ({ status: 404, location: null })
+  await assert.rejects(
+    verifyExternalSourceUrl('https://8.8.8.8/no-existe', now, notFoundRequester),
+    /estado HTTP 404/,
+  )
 
-    globalThis.fetch = async () =>
-      new Response(null, { status: 302, headers: { location: '/siguiente' } })
-    await assert.rejects(
-      verifyExternalSourceUrl('https://8.8.8.8/redirecciones', now),
-      /máximo seguro de redirecciones/,
-    )
-  } finally {
-    globalThis.fetch = originalFetch
-  }
+  const redirectRequester = async () => ({ status: 302, location: '/siguiente' })
+  await assert.rejects(
+    verifyExternalSourceUrl('https://8.8.8.8/redirecciones', now, redirectRequester),
+    /máximo seguro de redirecciones/,
+  )
+
+  const officialSource = await verifyExternalSourceUrl(
+    'https://www.ine.gob.cl/estadisticas',
+    now,
+    async () => ({ status: 200, location: null }),
+  )
+  assert.equal(officialSource.authority, 'official')
 }
 
 const chileDstNight = new Date('2026-04-04T23:30:00-03:00')
@@ -221,6 +236,9 @@ const sourceIntegrityMigration = source(
 const sourceIntegrityCompatibility = source(
   'supabase/migrations/20260914154438_a4_source_integrity_backward_compatibility.sql',
 )
+const sourceIntegrityRestore = source(
+  'supabase/migrations/20260914201532_restore_a4_source_integrity_coherence.sql',
+)
 const signalRoute = source('app/api/a4/signals/route.ts')
 const decisionRoute = source('app/api/a4/decisions/route.ts')
 const page = source('app/despega/a4/page.tsx')
@@ -285,10 +303,11 @@ assert.ok(signalRoute.includes('validateSignalInput('))
 assert.ok(signalRoute.includes('verifyExternalSourceUrl('))
 assert.ok(signalRoute.includes("action === 'verify_source'"))
 assert.ok(signalRoute.includes('source_verification_status: sourceVerification.status'))
-assert.ok(sourceIntegrity.includes("redirect: 'manual'"))
-assert.ok(sourceIntegrity.includes("cache: 'no-store'"))
+assert.ok(sourceIntegrity.includes("import { request as httpsRequest } from 'node:https'"))
+assert.ok(sourceIntegrity.includes('lookup: (_hostname, _options, callback)'))
+assert.ok(sourceIntegrity.includes('callback(null, pinned.address, pinned.family)'))
 assert.ok(sourceIntegrity.includes("url.protocol !== 'https:'"))
-assert.ok(sourceIntegrity.includes('assertPublicHostname'))
+assert.ok(sourceIntegrity.includes('resolvePublicAddress'))
 assert.ok(sourceIntegrity.includes('requires_corroboration'))
 assert.ok(sourceIntegrityMigration.includes('source_verification_status'))
 assert.ok(sourceIntegrityMigration.includes('source_authority'))
@@ -298,6 +317,11 @@ assert.ok(
     'drop constraint if exists a4_verified_signals_source_integrity_coherent',
   ),
 )
+assert.ok(sourceIntegrityRestore.includes('add constraint a4_verified_signals_source_integrity_coherent'))
+assert.ok(sourceIntegrityRestore.includes("source_authority <> 'documented_internal'"))
+assert.ok(signalRoute.includes('source_final_url: null'))
+assert.ok(signalRoute.includes('unavailableError'))
+assert.ok(workspace.includes("source_verification_status !== 'unavailable'"))
 assert.ok(signalRoute.includes('createAdminClient()'))
 assert.ok(signalRoute.includes(".eq('user_id', resolved.currentUser!.id)"))
 assert.ok(decisionRoute.includes('resolveServerUser()'))
@@ -366,12 +390,14 @@ checkSourceIntegrityRuntime()
           'missing source rejection',
           'unsafe source URL rejection',
           'private network rejection',
+          'mixed public/private DNS rejection',
           'HEAD to GET fallback',
           'available source classification',
           'restricted source classification',
           'private redirect rejection',
           'HTTP error rejection',
           'redirect limit enforcement',
+          'official source authority',
           'decision input',
           'review outcome requirement',
         ],

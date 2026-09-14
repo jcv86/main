@@ -1,4 +1,5 @@
 import { lookup } from 'node:dns/promises'
+import { request as httpsRequest } from 'node:https'
 import { isIP } from 'node:net'
 
 export type A4SourceVerificationStatus =
@@ -17,6 +18,16 @@ export interface A4SourceVerification {
   finalUrl: string | null
   note: string
 }
+
+interface A4SourceHttpResult {
+  status: number
+  location: string | null
+}
+
+export type A4SourceRequester = (
+  url: URL,
+  method: 'HEAD' | 'GET',
+) => Promise<A4SourceHttpResult>
 
 export class A4SourceVerificationError extends Error {
   constructor(message: string) {
@@ -112,58 +123,87 @@ export function parseSafePublicSourceUrl(input: string): URL {
   return url
 }
 
-async function assertPublicHostname(hostname: string): Promise<void> {
-  if (isIP(hostname)) return
+async function resolvePublicAddress(
+  hostname: string,
+): Promise<{ address: string; family: 4 | 6 }> {
+  if (isIP(hostname)) {
+    if (isPrivateNetworkAddress(hostname)) {
+      throw new A4SourceVerificationError('La fuente debe estar alojada en una red pública.')
+    }
+    return { address: hostname, family: isIP(hostname) as 4 | 6 }
+  }
   let addresses: Array<{ address: string }>
   try {
     addresses = await lookup(hostname, { all: true, verbatim: true })
   } catch {
     throw new A4SourceVerificationError('No pudimos resolver el dominio de la fuente.')
   }
-  if (
-    addresses.length === 0 ||
-    addresses.some(({ address }) => isPrivateNetworkAddress(address))
-  ) {
+  return selectPublicAddress(addresses)
+}
+
+export function selectPublicAddress(
+  addresses: Array<{ address: string }>,
+): { address: string; family: 4 | 6 } {
+  if (addresses.length === 0 || addresses.some(({ address }) => isPrivateNetworkAddress(address))) {
     throw new A4SourceVerificationError('El dominio de la fuente no apunta a una red pública segura.')
+  }
+  const selected = addresses[0]
+  const family = isIP(selected.address)
+  if (family !== 4 && family !== 6) {
+    throw new A4SourceVerificationError('El dominio de la fuente no apunta a una red pública segura.')
+  }
+  return {
+    address: selected.address,
+    family,
   }
 }
 
-async function requestSource(url: URL, method: 'HEAD' | 'GET'): Promise<Response> {
-  await assertPublicHostname(url.hostname.toLowerCase())
-  const controller = new AbortController()
-  const timeout = setTimeout(() => controller.abort(), 6000)
-  try {
-    return await fetch(url, {
+async function requestSource(
+  url: URL,
+  method: 'HEAD' | 'GET',
+): Promise<A4SourceHttpResult> {
+  const pinned = await resolvePublicAddress(url.hostname.toLowerCase())
+  return new Promise((resolve, reject) => {
+    const request = httpsRequest(url, {
       method,
-      redirect: 'manual',
-      cache: 'no-store',
       headers:
         method === 'GET'
           ? { Range: 'bytes=0-0', 'User-Agent': 'DespegaTuCarrera-SourceCheck/1.0' }
           : { 'User-Agent': 'DespegaTuCarrera-SourceCheck/1.0' },
-      signal: controller.signal,
+      lookup: (_hostname, _options, callback) => {
+        callback(null, pinned.address, pinned.family)
+      },
+    }, (response) => {
+      const status = response.statusCode ?? 0
+      const location = Array.isArray(response.headers.location)
+        ? response.headers.location[0] ?? null
+        : response.headers.location ?? null
+      response.resume()
+      resolve({ status, location })
     })
-  } catch {
-    throw new A4SourceVerificationError('La fuente no respondió dentro del tiempo esperado.')
-  } finally {
-    clearTimeout(timeout)
-  }
+    request.setTimeout(6000, () => request.destroy(new Error('timeout')))
+    request.on('error', () => {
+      reject(new A4SourceVerificationError('La fuente no respondió dentro del tiempo esperado.'))
+    })
+    request.end()
+  })
 }
 
 export async function verifyExternalSourceUrl(
   input: string,
   now = new Date(),
+  requester: A4SourceRequester = requestSource,
 ): Promise<A4SourceVerification> {
   let current = parseSafePublicSourceUrl(input)
 
   for (let redirects = 0; redirects <= 3; redirects += 1) {
-    let response = await requestSource(current, 'HEAD')
+    let response = await requester(current, 'HEAD')
     if (response.status === 405 || response.status === 501) {
-      response = await requestSource(current, 'GET')
+      response = await requester(current, 'GET')
     }
 
     if (response.status >= 300 && response.status < 400) {
-      const location = response.headers.get('location')
+      const location = response.location
       if (!location) {
         throw new A4SourceVerificationError('La fuente redirige sin indicar un destino.')
       }
@@ -174,7 +214,7 @@ export async function verifyExternalSourceUrl(
     const authority: A4SourceAuthority = isOfficialHostname(current.hostname.toLowerCase())
       ? 'official'
       : 'requires_corroboration'
-    if (response.ok) {
+    if (response.status >= 200 && response.status < 300) {
       return {
         status: 'verified',
         authority,
