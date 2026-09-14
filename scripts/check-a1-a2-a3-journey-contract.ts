@@ -49,6 +49,15 @@ assert.ok(a1Page.includes("fetch('/api/a1-cerebral-save'"))
 assert.ok(a1Page.includes('responses: { more, less }'))
 assert.ok(a1Page.includes('response_timings: updatedTimings'))
 assert.ok(a1Page.includes("router.replace('/auth/signin')"))
+assert.match(
+  a1Page,
+  /try \{\s+await completeDraft\(\)\s+\} catch \(draftCleanupError\)/,
+  'A1 draft cleanup must be isolated from the authoritative result write.',
+)
+assert.ok(
+  a1Page.includes("router.replace('/despega/a1-report')"),
+  'A successful A1 submission must replace the assessment with its report.',
+)
 assert.ok(!a1Page.includes('getDemoMode'))
 assert.ok(!a1Page.includes('calculateScores'))
 assert.ok(!a1Page.includes('user_id: userId'))
