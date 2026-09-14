@@ -35,6 +35,19 @@ export const A4_PULSE_PRIORITIES = [
 
 export type A4PulsePriority = (typeof A4_PULSE_PRIORITIES)[number]['id']
 export type A4ReviewTiming = 'overdue' | 'due_today' | 'next_7_days' | 'later'
+export type A4NextActionKind =
+  | 'review_decision'
+  | 'add_signal'
+  | 'refresh_signal'
+  | 'monitor'
+
+export interface A4NextAction {
+  kind: A4NextActionKind
+  title: string
+  detail: string
+  href: string
+  cta: string
+}
 
 export interface A4CategoryCoverage {
   id: A4SignalCategory
@@ -51,6 +64,7 @@ export interface A4ReviewQueueItem {
 export interface A4EvidencePulse {
   today: string
   priority: A4PulsePriority
+  nextAction: A4NextAction
   activeSignals: A4VerifiedSignal[]
   recentSignals: A4VerifiedSignal[]
   staleSignals: A4VerifiedSignal[]
@@ -176,9 +190,56 @@ export function computeA4EvidencePulse(
   else if (activeSignals.length < 3) priority = 'building_evidence'
   else if (recentSignals.length === 0) priority = 'refresh_sources'
 
+  const firstReview = reviewQueue.find(
+    (item) => item.timing === 'overdue' || item.timing === 'due_today',
+  )
+  let nextAction: A4NextAction
+  if (firstReview) {
+    nextAction = {
+      kind: 'review_decision',
+      title: firstReview.decision.decision,
+      detail:
+        firstReview.timing === 'overdue'
+          ? `La revisión está vencida hace ${Math.abs(firstReview.daysFromToday)} día${Math.abs(firstReview.daysFromToday) === 1 ? '' : 's'}.`
+          : 'La revisión comprometida corresponde a hoy.',
+      href: `#decision-${firstReview.decision.id}`,
+      cta: 'Registrar resultado',
+    }
+  } else if (activeSignals.length < 3) {
+    nextAction = {
+      kind: 'add_signal',
+      title: 'Agregar una señal verificable',
+      detail: `La base activa tiene ${activeSignals.length} de las 3 señales mínimas para contrastar decisiones.`,
+      href: '#a4-new-signal',
+      cta: 'Registrar señal',
+    }
+  } else if (recentSignals.length === 0) {
+    const oldestSignal = staleSignals[0]
+    nextAction = {
+      kind: 'refresh_signal',
+      title: oldestSignal
+        ? `Actualizar evidencia: ${oldestSignal.title}`
+        : 'Agregar evidencia reciente',
+      detail: oldestSignal
+        ? `La fuente más antigua es del ${oldestSignal.source_date}. Registra una señal nueva con evidencia actual.`
+        : 'No hay una fuente activa de los últimos siete días.',
+      href: '#a4-new-signal',
+      cta: 'Agregar evidencia',
+    }
+  } else {
+    nextAction = {
+      kind: 'monitor',
+      title: 'Revisar la bitácora estratégica',
+      detail: 'No hay revisiones vencidas y existe evidencia reciente. Mantén el seguimiento trazable.',
+      href: '#a4-workspace',
+      cta: 'Abrir bitácora',
+    }
+  }
+
   return {
     today,
     priority,
+    nextAction,
     activeSignals,
     recentSignals,
     staleSignals,
