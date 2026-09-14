@@ -91,6 +91,7 @@ export interface ValidatedDecisionInput {
 export interface ValidatedDecisionUpdate {
   status: A4DecisionStatus
   outcome: string | null
+  reviewOn: string
 }
 
 export interface ValidationResult<T> {
@@ -280,10 +281,12 @@ export function validateDecisionInput(
 
 export function validateDecisionUpdate(
   input: unknown,
+  now = new Date(),
 ): ValidationResult<ValidatedDecisionUpdate> {
   const body = objectValue(input)
   const status = cleanText(body.status)
   const outcome = cleanLongText(body.outcome)
+  const reviewOn = cleanText(body.reviewOn)
   const errors: string[] = []
 
   if (!DECISION_STATUS_IDS.has(status)) {
@@ -295,6 +298,12 @@ export function validateDecisionUpdate(
   if (status === 'reviewed' && !outcome) {
     errors.push('Una decisión revisada debe registrar el resultado observado.')
   }
+  const isClosed = status === 'reviewed' || status === 'discarded'
+  if (!validDate(reviewOn)) {
+    errors.push('La fecha de seguimiento debe ser válida.')
+  } else if (!isClosed && reviewOn < santiagoDateIso(now)) {
+    errors.push('Una decisión abierta debe programar su próxima revisión desde hoy.')
+  }
 
   if (errors.length > 0) return { valid: false, errors, value: null }
 
@@ -304,6 +313,7 @@ export function validateDecisionUpdate(
     value: {
       status: status as A4DecisionStatus,
       outcome: outcome || null,
+      reviewOn,
     },
   }
 }

@@ -37,6 +37,7 @@ interface StrategicRadarWorkspaceProps {
 interface DecisionEditState {
   status: A4DecisionStatus
   outcome: string
+  reviewOn: string
 }
 
 function localDate(offsetDays = 0) {
@@ -118,6 +119,7 @@ export function StrategicRadarWorkspace({
           {
             status: decision.status,
             outcome: decision.outcome || '',
+            reviewOn: decision.review_on,
           },
         ]),
       ),
@@ -250,7 +252,11 @@ export function StrategicRadarWorkspace({
       setDecisions((current) => [created, ...current])
       setDecisionEdits((current) => ({
         ...current,
-        [created.id]: { status: created.status, outcome: created.outcome || '' },
+        [created.id]: {
+          status: created.status,
+          outcome: created.outcome || '',
+          reviewOn: created.review_on,
+        },
       }))
       setDecisionForm((current) => ({
         ...current,
@@ -290,7 +296,11 @@ export function StrategicRadarWorkspace({
       setDecisions((current) =>
         current.map((item) => (item.id === updated.id ? updated : item)),
       )
-      setDecisionMessage('La revisión quedó actualizada con evidencia persistida.')
+      setDecisionMessage(
+        updated.status === 'reviewed' || updated.status === 'discarded'
+          ? 'La revisión quedó cerrada con su resultado persistido.'
+          : `La decisión quedó reprogramada para el ${formatDate(updated.review_on)}.`,
+      )
       router.refresh()
     } catch {
       setDecisionErrors(['No pudimos actualizar la decisión.'])
@@ -700,6 +710,7 @@ export function StrategicRadarWorkspace({
               const edit = decisionEdits[decision.id] || {
                 status: decision.status,
                 outcome: decision.outcome || '',
+                reviewOn: decision.review_on,
               }
               return (
                 <Card id={`decision-${decision.id}`} key={decision.id} className="scroll-mt-24 border-slate-800 bg-slate-900/70">
@@ -739,6 +750,39 @@ export function StrategicRadarWorkspace({
                           <option key={item.id} value={item.id}>{item.label}</option>
                         ))}
                       </select>
+                      <div>
+                        <label
+                          htmlFor={`decision-review-${decision.id}`}
+                          className="text-sm font-medium text-slate-200"
+                        >
+                          {edit.status === 'reviewed' || edit.status === 'discarded'
+                            ? 'Fecha de esta revisión'
+                            : 'Próxima revisión'}
+                        </label>
+                        <Input
+                          id={`decision-review-${decision.id}`}
+                          type="date"
+                          min={
+                            edit.status === 'reviewed' || edit.status === 'discarded'
+                              ? undefined
+                              : localDate()
+                          }
+                          value={edit.reviewOn}
+                          onChange={(event) =>
+                            setDecisionEdits((current) => ({
+                              ...current,
+                              [decision.id]: {
+                                ...edit,
+                                reviewOn: event.target.value,
+                              },
+                            }))
+                          }
+                          className="mt-2"
+                        />
+                        <p className="mt-2 text-xs leading-relaxed text-slate-500">
+                          Si la decisión sigue abierta, programa cuándo volverás a contrastarla.
+                        </p>
+                      </div>
                       <label className="text-sm font-medium text-slate-200">Resultado observado</label>
                       <Textarea
                         value={edit.outcome}
