@@ -72,6 +72,19 @@ function decisionStatusLabel(value: string) {
   return A4_DECISION_STATUSES.find((item) => item.id === value)?.label || value
 }
 
+function sourceAuthorityLabel(signal: A4VerifiedSignal) {
+  if (signal.source_authority === 'official') return 'Fuente oficial'
+  if (signal.source_authority === 'documented_internal') return 'Referencia documentada'
+  return 'Requiere corroboración'
+}
+
+function sourceVerificationLabel(signal: A4VerifiedSignal) {
+  if (signal.source_verification_status === 'verified') return 'Enlace verificado'
+  if (signal.source_verification_status === 'restricted') return 'Acceso restringido'
+  if (signal.source_verification_status === 'unavailable') return 'Enlace no disponible'
+  return 'Sin enlace público'
+}
+
 function errorsFromResponse(payload: any): string[] {
   const validationErrors = payload?.validation?.errors
   if (Array.isArray(validationErrors)) {
@@ -90,6 +103,8 @@ export function StrategicRadarWorkspace({
   const [signals, setSignals] = useState(initialSignals)
   const [decisions, setDecisions] = useState(initialDecisions)
   const [signalBusy, setSignalBusy] = useState(false)
+  const [verifyingSignalId, setVerifyingSignalId] = useState<string | null>(null)
+  const [sourceCheckFeedback, setSourceCheckFeedback] = useState<Record<string, string>>({})
   const [decisionBusy, setDecisionBusy] = useState(false)
   const [updatingDecisionId, setUpdatingDecisionId] = useState<string | null>(null)
   const [decisionUpdateFeedback, setDecisionUpdateFeedback] = useState<
@@ -236,6 +251,41 @@ export function StrategicRadarWorkspace({
       setSignalErrors(['No pudimos actualizar la señal.'])
     } finally {
       setSignalBusy(false)
+    }
+  }
+
+  async function verifySignalSource(signal: A4VerifiedSignal) {
+    if (verifyingSignalId) return
+    setVerifyingSignalId(signal.id)
+    setSourceCheckFeedback((current) => ({ ...current, [signal.id]: '' }))
+
+    try {
+      const response = await fetch('/api/a4/signals', {
+        method: 'PATCH',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ signalId: signal.id, action: 'verify_source' }),
+      })
+      const payload = await response.json()
+      if (payload.signal) {
+        const updated = payload.signal as A4VerifiedSignal
+        setSignals((current) =>
+          current.map((item) => (item.id === updated.id ? updated : item)),
+        )
+      }
+      setSourceCheckFeedback((current) => ({
+        ...current,
+        [signal.id]: response.ok
+          ? 'Comprobación actualizada.'
+          : errorsFromResponse(payload)[0],
+      }))
+      if (response.ok) router.refresh()
+    } catch {
+      setSourceCheckFeedback((current) => ({
+        ...current,
+        [signal.id]: 'No pudimos comprobar esta fuente. Revisa tu conexión e inténtalo nuevamente.',
+      }))
+    } finally {
+      setVerifyingSignalId(null)
     }
   }
 
@@ -507,7 +557,7 @@ export function StrategicRadarWorkspace({
               </div>
 
               <div>
-                <label className="text-sm font-medium text-slate-200">URL</label>
+                <label className="text-sm font-medium text-slate-200">URL segura de la fuente</label>
                 <Input
                   type="url"
                   value={signalForm.sourceUrl}
@@ -529,6 +579,15 @@ export function StrategicRadarWorkspace({
                   placeholder="Nombre del documento, reunión, página o sección que permite verificarla."
                   className="mt-2"
                 />
+              </div>
+
+              <div className="rounded-xl border border-cyan-500/20 bg-cyan-500/5 p-4 text-xs leading-relaxed text-cyan-100/75">
+                <p className="font-semibold text-cyan-100">Jerarquía recomendada</p>
+                <p className="mt-2">
+                  Prioriza el documento original, organismo oficial o publicación del empleador.
+                  Una web disponible no se considera confiable automáticamente; si no es oficial,
+                  contrástala con una segunda fuente primaria.
+                </p>
               </div>
 
               {signalErrors.length > 0 && (
@@ -691,6 +750,18 @@ export function StrategicRadarWorkspace({
                           {classificationLabel(signal.classification)}
                         </Badge>
                         {signal.status === 'archived' && <Badge variant="secondary">Archivada</Badge>}
+                        <Badge
+                          className={
+                            signal.source_verification_status === 'verified'
+                              ? 'bg-emerald-500/15 text-emerald-200'
+                              : signal.source_verification_status === 'unavailable'
+                                ? 'bg-red-500/15 text-red-200'
+                                : 'bg-amber-500/15 text-amber-200'
+                          }
+                        >
+                          {sourceVerificationLabel(signal)}
+                        </Badge>
+                        <Badge variant="outline">{sourceAuthorityLabel(signal)}</Badge>
                       </div>
                       <h3 className="mt-3 text-lg font-semibold text-white">{signal.title}</h3>
                     </div>
@@ -707,23 +778,59 @@ export function StrategicRadarWorkspace({
                     <p>Fuente: <span className="text-slate-300">{signal.source_name}</span></p>
                     <p>Fecha de la fuente: <span className="text-slate-300">{formatDate(signal.source_date)}</span></p>
                     {signal.source_reference && <p>Referencia: <span className="text-slate-300">{signal.source_reference}</span></p>}
+                    {signal.source_checked_at && (
+                      <p>
+                        Última comprobación:{' '}
+                        <span className="text-slate-300">
+                          {new Intl.DateTimeFormat('es-CL', {
+                            dateStyle: 'medium',
+                            timeStyle: 'short',
+                            timeZone: 'America/Santiago',
+                          }).format(new Date(signal.source_checked_at))}
+                        </span>
+                      </p>
+                    )}
+                    {signal.source_verification_note && (
+                      <p className="mt-1 text-slate-400">{signal.source_verification_note}</p>
+                    )}
                     {signal.source_url && (
-                      <a href={signal.source_url} target="_blank" rel="noreferrer" className="mt-2 inline-flex items-center gap-1 text-cyan-300 hover:underline">
+                      <a href={signal.source_final_url || signal.source_url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-cyan-300 hover:underline">
                         Abrir fuente <ExternalLink className="h-3 w-3" />
                       </a>
                     )}
                   </div>
 
-                  <Button
-                    type="button"
-                    variant="outline"
-                    size="sm"
-                    disabled={signalBusy}
-                    onClick={() => toggleSignal(signal)}
-                  >
-                    <Archive className="mr-2 h-4 w-4" />
-                    {signal.status === 'active' ? 'Archivar señal' : 'Reactivar señal'}
-                  </Button>
+                  <div className="flex flex-wrap gap-2">
+                    {signal.source_type === 'external_url' && (
+                      <Button
+                        type="button"
+                        variant="outline"
+                        size="sm"
+                        disabled={verifyingSignalId !== null}
+                        onClick={() => verifySignalSource(signal)}
+                      >
+                        <ShieldCheck className="mr-2 h-4 w-4" />
+                        {verifyingSignalId === signal.id
+                          ? 'Comprobando…'
+                          : 'Comprobar fuente'}
+                      </Button>
+                    )}
+                    <Button
+                      type="button"
+                      variant="outline"
+                      size="sm"
+                      disabled={signalBusy || verifyingSignalId !== null}
+                      onClick={() => toggleSignal(signal)}
+                    >
+                      <Archive className="mr-2 h-4 w-4" />
+                      {signal.status === 'active' ? 'Archivar señal' : 'Reactivar señal'}
+                    </Button>
+                  </div>
+                  {sourceCheckFeedback[signal.id] && (
+                    <p role="status" aria-live="polite" className="text-xs text-slate-300">
+                      {sourceCheckFeedback[signal.id]}
+                    </p>
+                  )}
                 </CardContent>
               </Card>
             ))}
