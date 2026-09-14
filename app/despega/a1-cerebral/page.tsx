@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
@@ -23,6 +23,7 @@ export default function A1CerebralPage() {
   const [error, setError] = useState('')
   const [authOk, setAuthOk] = useState(false)
   const [questionTimings, setQuestionTimings] = useState<QuestionTiming[]>([])
+  const errorRef = useRef<HTMLDivElement>(null)
   const router = useRouter()
   const sb = createClient()
   const { loadDraft, saveDraft, completeDraft, draftError, savingDraft } = useAssessmentDraft('a1')
@@ -72,13 +73,18 @@ export default function A1CerebralPage() {
     })
   }, [idx])
 
+  useEffect(() => {
+    if (!error && !draftError) return
+    window.requestAnimationFrame(() => errorRef.current?.focus())
+  }, [draftError, error])
+
   if (!authOk) {
     if (error) {
-      return <div className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div>
+      return <div ref={errorRef} role="alert" tabIndex={-1} className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center outline-none"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div>
     }
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <p>Verificando...</p>
+        <p role="status" aria-live="polite">Verificando…</p>
       </div>
     )
   }
@@ -197,7 +203,7 @@ export default function A1CerebralPage() {
         </div>
 
         <div
-          className="bg-card border-2 rounded-2xl p-10 mb-8 shadow-lg"
+          className="bg-card border-2 rounded-2xl p-5 mb-8 shadow-lg sm:p-10"
           style={{
             borderStyle: 'none',
             backgroundColor: 'rgba(80, 160, 170, 0.2)',
@@ -206,12 +212,14 @@ export default function A1CerebralPage() {
         >
           <div className="mb-10 pb-6 border-b border-purple/20">
             <h2
+              id={`a1-question-${q.id}`}
               className="text-3xl text-white leading-tight"
               style={{ fontWeight: '500' }}
             >
               {q.pregunta}
             </h2>
             <p
+              id="a1-selection-instructions"
               className="mt-3 font-semibold"
               style={{ color: 'rgba(80, 160, 170)', fontWeight: '700' }}
             >
@@ -235,18 +243,25 @@ export default function A1CerebralPage() {
             </div>
           )}
 
-          <div className="grid md:grid-cols-2 gap-8 mb-8">
-            <div>
+          <div className="grid gap-6 mb-8 md:grid-cols-2 md:gap-8">
+            <div
+              role="group"
+              aria-labelledby={`a1-question-${q.id} a1-more-label`}
+              aria-describedby="a1-selection-instructions"
+            >
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-green rounded-full w-10 h-10 flex items-center justify-center">
                   <span className="text-white font-bold text-xl">+</span>
                 </div>
-                <p className="text-xl font-bold text-green">MÁS como yo</p>
+                <p id="a1-more-label" className="text-xl font-bold text-green">MÁS como yo</p>
               </div>
               <div className="space-y-3">
                 {q.opciones.map((option) => (
                   <button
                     key={`more-${option.texto}`}
+                    type="button"
+                    aria-pressed={more[q.id] === option.texto}
+                    aria-label={`${option.texto}, MÁS como yo`}
                     onClick={() => {
                       setMore((previous) => ({
                         ...previous,
@@ -255,7 +270,7 @@ export default function A1CerebralPage() {
                       setError('')
                     }}
                     disabled={less[q.id] === option.texto}
-                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base ${
+                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                       more[q.id] === option.texto
                         ? 'border-green bg-green/25 text-white shadow-lg shadow-green/20'
                         : less[q.id] === option.texto
@@ -269,17 +284,24 @@ export default function A1CerebralPage() {
               </div>
             </div>
 
-            <div>
+            <div
+              role="group"
+              aria-labelledby={`a1-question-${q.id} a1-less-label`}
+              aria-describedby="a1-selection-instructions"
+            >
               <div className="flex items-center gap-3 mb-6">
                 <div className="bg-red rounded-full w-10 h-10 flex items-center justify-center">
                   <span className="text-white font-bold text-xl">−</span>
                 </div>
-                <p className="text-xl font-bold text-red">MENOS como yo</p>
+                <p id="a1-less-label" className="text-xl font-bold text-red">MENOS como yo</p>
               </div>
               <div className="space-y-3">
                 {q.opciones.map((option) => (
                   <button
                     key={`less-${option.texto}`}
+                    type="button"
+                    aria-pressed={less[q.id] === option.texto}
+                    aria-label={`${option.texto}, MENOS como yo`}
                     onClick={() => {
                       setLess((previous) => ({
                         ...previous,
@@ -288,7 +310,7 @@ export default function A1CerebralPage() {
                       setError('')
                     }}
                     disabled={more[q.id] === option.texto}
-                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base ${
+                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                       less[q.id] === option.texto
                         ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20'
                         : more[q.id] === option.texto
@@ -304,7 +326,13 @@ export default function A1CerebralPage() {
           </div>
 
           {(error || draftError) && (
-            <div className="mb-6 p-4 bg-red/15 border-2 border-red/40 rounded-lg">
+            <div
+              ref={errorRef}
+              role="alert"
+              aria-live="assertive"
+              tabIndex={-1}
+              className="mb-6 rounded-lg border-2 border-red/40 bg-red/15 p-4 outline-none focus-visible:ring-2 focus-visible:ring-red"
+            >
               <p className="text-red font-semibold text-center">{error || draftError}</p>
             </div>
           )}
