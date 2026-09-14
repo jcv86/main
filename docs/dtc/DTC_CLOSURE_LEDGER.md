@@ -1,6 +1,6 @@
 # DTC closure ledger
 
-Last grounded: 2026-09-10 UTC
+Last grounded: 2026-09-14 UTC
 
 This is the canonical ledger for closing DespegaTuCarrera. An item is `verified` only when its acceptance criteria have observable evidence. Allowed statuses: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`.
 
@@ -8,10 +8,10 @@ This is the canonical ledger for closing DespegaTuCarrera. An item is `verified`
 
 - Repository: `jcv86/main`
 - Canonical branch observed: `main`
-- Canonical commit: `017d05a2f96348c60a64888528aa9a37745d0175`
+- Canonical commit: `3378436c459ba55690fb14772eb82646f7a8bc08`
 - Vercel project: `v0-fork-of-despega-tu-carrera-clone` (`prj_SvrOCS2CtFQunqirMeYidZRHZKpm`)
-- Current production deployment: `dpl_59e7Pe2eFNZuTBJ3QWtZQ7aDgTGX`
-- Current production commit: `017d05a2f96348c60a64888528aa9a37745d0175`
+- Current production deployment: `dpl_6u6qtVxveVozXdtQa4RMVywdaqVP`
+- Current production commit: `3378436c459ba55690fb14772eb82646f7a8bc08`
 - Current production source branch: `main`
 - Supabase project: `DTCFINAL` (`dcfrbwxbejtbcouionna`)
 
@@ -29,7 +29,7 @@ Production and canonical `main` now point to the same release commit.
 | DTC-C06 | A normal user experiences one coherent DTC product rather than internal/test surfaces | Repository still exposes a large legacy surface. Current A4 audit found the signed-in navigation linking to `/despega/a4-intro`, a client-side legacy page that bypasses journey gating and promises unsupported monitoring; the candidate points navigation to guarded `/despega/a4` and converts the alias into a server redirect | Public sitemap and navigation contain only intentional product routes; internal routes are removed, disabled, or protected; all visible CTAs lead to working outcomes | Remaining A1–A3 aliases and internal/test routes still require reachability disposition | `$dtc-product-gap`, `$dtc-build-experience` | `in_progress` | yes |
 | DTC-C07 | Core journey works on mobile and desktop with recovery states | Authenticated desktop production QA confirms C1 entry, A1 resume and guarded A3/A4 navigation. Global Spanish 404 recovery is live. The current A2 candidate user-scopes Day 1/2 local drafts and discards unowned legacy keys so account changes cannot restore another user's text | Anonymous entry, auth, C1, A1, result, dashboard and next step pass at 390x844 and desktop, including cross-account draft isolation and loading/empty/error/expired-session states | Exact 390x844 authenticated journey, live cross-account draft proof and remaining recovery states still need current rendered evidence | `$dtc-quality-gate`, `$dtc-build-experience` | `in_progress` | yes |
 | DTC-C08 | Users understand scores, limitations, progress, and the next action | Production inspection reached A2 and exposed a legacy-continuity mismatch plus an impossible Day 1 upload promise; the candidate reconciles contiguous persisted days, recovers legacy 60/90-day horizons, prevents sparse skips, and replaces the performative file step with the canonical structured server evaluation | Every assessment/result screen explains meaning and limitations, displays saved progress, and offers one clear next action | Candidate requires deployed authenticated verification before this item can be marked verified | `$dtc-build-experience` | `in_progress` | yes |
-| DTC-C09 | Public launch has trustworthy legal, accessibility, metadata, performance and observability basics | Production has domains and no grouped runtime errors in the last 7 days; current legal/accessibility/performance evidence is stale or partial | Current evidence covers legal pages/consent, WCAG-oriented checks, metadata/canonicals, Core Web Vitals budget, analytics and runtime alerts | Must be validated against current deployed UI, not historical reports | `$dtc-quality-gate` | `not_started` | yes |
+| DTC-C09 | Public launch has trustworthy legal, accessibility, metadata, performance and observability basics | Production domains and runtime monitoring are active. Current candidate removes unsupported scientific/test and free-price metadata, placeholder search verification, the nonexistent `/es` alternate, repairs legal sitemap URLs, stops fabricating `lastModified`, and excludes protected product routes from all crawler groups | Current evidence covers legal pages/consent, WCAG-oriented checks, metadata/canonicals, Core Web Vitals budget, analytics and runtime alerts | Candidate still requires CI, deployed HTTP inspection and broader current accessibility/performance evidence | `$dtc-quality-gate` | `in_progress` | yes |
 | DTC-C10 | Operators can diagnose failures without exposing personal assessment data | Runtime errors can be queried in Vercel; database has broad analytics/admin surface but operational path is not yet defined | Critical auth, persistence and AI failures have redacted logs, actionable alerts and an owner; no assessment answers or secrets appear in logs | Observability changes may touch production integrations | `$dtc-release-production` | `not_started` | no |
 | DTC-C11 | A2 reads as one coherent Spanish-language program across all 90 days | The 90 missions were reviewed in Spanish by coherent arcs; focused contracts cover Days 1–30 and every ten-day block through Day 90, while the global Day 81–90 contract confirms all 90 missions and rejects unsupported automation, XP copy and deterministic employment claims across A2 | Every user-facing A2 title, subtitle, goal, rationale, instruction and deliverable is reviewed in natural Chilean Spanish while established terms such as CV, STAR and recruiter remain intentional | Future content changes must keep the focused Spanish-content contracts green and preserve validation semantics | `$dtc-build-experience` | `verified` | yes |
 | DTC-C12 | A signed-in user can review A2, A3 and A4 from real persisted evidence and download one coherent A1–A4 report | Production commit `5684ba82` is READY; authenticated Joaquín QA shows A2 90/90, A3 10/10 with 95/100 average, truthful empty A4, coherent integral report/PDF action and zero cross-user documents; runtime error scan is clean | Authenticated checks show Joaquin's 90/90 A2 report, 10/10 A3 report, truthful empty A4 report, integral report/PDF action and no cross-user documents | Responsive layouts use single-column mobile defaults; the controlled browser evidence covered desktop because viewport emulation was unavailable | `$dtc-build-experience`, `$dtc-supabase-backend`, `$dtc-quality-gate` | `verified` | yes |
@@ -39,6 +39,13 @@ Production and canonical `main` now point to the same release commit.
 | DTC-C16 | Pilot analytics measure the A1–A4 funnel without collecting assessment answers or arbitrary PII | Local candidate adds an authenticated allowlisted endpoint, event-to-stage validation, unique-session funnel metrics, owner-scoped RLS migration and a 90-day visibility boundary | Migration is reviewed/applied, RLS is verified with two users, events persist in preview and physical expiry is scheduled or explicitly deferred | Production database mutation requires separate authorization; no remote migration has been applied | `$dtc-supabase-backend`, `$dtc-quality-gate` | `in_progress` | no |
 
 ## Evidence log
+
+### 2026-09-14
+
+- Re-grounded canonical production after PRs #157 and #158: `main` commit `3378436c`, deployment `dpl_6u6qtVxveVozXdtQa4RMVywdaqVP` READY, 8/8 workflows green across both release blocks and no runtime error clusters after promotion.
+- A4 now fails closed when any persisted context query fails, so unavailable data cannot appear as zero progress or an empty Radar.
+- A4 browser defaults and server validation now share the `America/Santiago` calendar, with regression checks for nighttime and daylight-saving boundaries.
+- Public launch audit found unsupported metadata claims, placeholder verification tokens, a nonexistent language alternate, incorrect legal sitemap paths, fabricated per-request modification dates and missing crawler exclusions for protected DTC routes. The current candidate addresses this DTC-C09 sub-scope.
 
 ### 2026-09-10
 

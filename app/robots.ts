@@ -6,35 +6,46 @@ export default function robots(): MetadataRoute.Robots {
   // Pages we want answer engines (ChatGPT, Claude, Perplexity, Gemini, etc.)
   // to read and cite. /faq is high value for GEO/LLMO answers.
   const llmAllow = ["/", "/faq", "/biblioteca/", "/como-funciona", "/para-empresas"]
-  const llmDisallow = ["/api/", "/admin/", "/private/", "/dashboard/", "/auth/"]
+  const privatePaths = [
+    "/api/",
+    "/admin/",
+    "/auth/",
+    "/dashboard/",
+    "/despega/",
+    "/mi-coach/",
+    "/perfil/",
+    "/private/",
+    "/settings/",
+    "/test/*/results/",
+  ]
 
   return {
     rules: [
       {
         userAgent: "*",
         allow: "/",
-        disallow: ["/api/", "/admin/", "/private/", "/_next/", "/dashboard/", "/test/*/results/"],
+        disallow: ["/_next/", ...privatePaths],
       },
       // OpenAI
-      { userAgent: "GPTBot", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "ChatGPT-User", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "OAI-SearchBot", allow: llmAllow, disallow: llmDisallow },
+      { userAgent: "GPTBot", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "ChatGPT-User", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "OAI-SearchBot", allow: llmAllow, disallow: privatePaths },
       // Anthropic
-      { userAgent: "anthropic-ai", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "ClaudeBot", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "Claude-Web", allow: llmAllow, disallow: llmDisallow },
+      { userAgent: "anthropic-ai", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "ClaudeBot", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "Claude-Web", allow: llmAllow, disallow: privatePaths },
       // Perplexity
-      { userAgent: "PerplexityBot", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "Perplexity-User", allow: llmAllow, disallow: llmDisallow },
+      { userAgent: "PerplexityBot", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "Perplexity-User", allow: llmAllow, disallow: privatePaths },
       // Google AI (Gemini / AI Overviews) & Apple
-      { userAgent: "Google-Extended", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "Applebot-Extended", allow: llmAllow, disallow: llmDisallow },
+      { userAgent: "Google-Extended", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "Applebot-Extended", allow: llmAllow, disallow: privatePaths },
       // Others
-      { userAgent: "CCBot", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "Amazonbot", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "Bytespider", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "cohere-ai", allow: llmAllow, disallow: llmDisallow },
-      { userAgent: "Meta-ExternalAgent", allow: llmAllow, disallow: llmDisallow },
+      { userAgent: "CCBot", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "Amazonbot", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "Bytespider", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "cohere-ai", allow: llmAllow, disallow: privatePaths },
+      { userAgent: "Meta-ExternalAgent", allow: llmAllow, disallow: privatePaths },
     ],
     sitemap: `${baseUrl}/sitemap.xml`,
     host: baseUrl,
