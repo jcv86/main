@@ -71,7 +71,7 @@ export default async function RadarEstrategicoPage() {
     supabase
       .from('a4_verified_signals')
       .select(
-        'id,title,category,classification,summary,relevance,confidence,source_type,source_name,source_url,source_reference,source_date,status,created_at,updated_at',
+        'id,title,category,classification,summary,relevance,confidence,source_type,source_name,source_url,source_reference,source_date,source_verification_status,source_authority,source_checked_at,source_http_status,source_final_url,source_verification_note,status,created_at,updated_at',
       )
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
