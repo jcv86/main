@@ -76,16 +76,24 @@ export function EvidencePulse({ signals, decisions }: EvidencePulseProps) {
                 {formatDate(pulse.today)}
               </Badge>
             </div>
-            <h2 id="a4-evidence-pulse-title" className="mt-4 text-3xl font-bold text-white">
-              {priority.label}
+            <p className="mt-4 text-xs font-semibold uppercase tracking-[0.18em] text-cyan-200">
+              Tu prioridad de hoy · {priority.label}
+            </p>
+            <h2 id="a4-evidence-pulse-title" className="mt-2 text-3xl font-bold text-white">
+              {pulse.nextAction.title}
             </h2>
-            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
-              {priority.detail} Este pulso ordena fechas, fuentes, clasificaciones y
-              cobertura persistidas; no genera noticias, tesis ni puntajes estratégicos.
+            <p id="a4-next-action-detail" className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
+              {pulse.nextAction.detail} {priority.detail}
+            </p>
+            <p className="mt-3 max-w-3xl text-xs leading-relaxed text-slate-500">
+              El centro ordena fechas, fuentes, clasificaciones y cobertura persistidas;
+              no genera noticias, tesis ni puntajes estratégicos.
             </p>
           </div>
-          <Button asChild variant="outline" className="border-white/20">
-            <a href="#a4-workspace">Abrir bitácora</a>
+          <Button asChild className="w-full bg-cyan-300 text-slate-950 hover:bg-cyan-200 lg:w-auto">
+            <a href={pulse.nextAction.href} aria-describedby="a4-next-action-detail">
+              {pulse.nextAction.cta}
+            </a>
           </Button>
         </CardContent>
       </Card>
@@ -169,9 +177,18 @@ export function EvidencePulse({ signals, decisions }: EvidencePulseProps) {
                         {timing.label}
                       </Badge>
                     </div>
-                    <p className="mt-3 text-xs text-slate-500">
-                      Fecha comprometida: {formatDate(item.decision.review_on)}
-                    </p>
+                    <div className="mt-3 flex flex-wrap items-center justify-between gap-3">
+                      <p className="text-xs text-slate-500">
+                        Fecha comprometida: {formatDate(item.decision.review_on)}
+                      </p>
+                      {(item.timing === 'overdue' || item.timing === 'due_today') && (
+                        <Button asChild size="sm" variant="outline" className="border-cyan-400/30 text-cyan-100">
+                          <a href={`#decision-${item.decision.id}`}>
+                            Registrar resultado
+                          </a>
+                        </Button>
+                      )}
+                    </div>
                   </div>
                 )
               })
