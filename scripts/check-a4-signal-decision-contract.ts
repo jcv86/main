@@ -11,6 +11,7 @@ import {
   A4SourceVerificationError,
   isPrivateNetworkAddress,
   parseSafePublicSourceUrl,
+  verifyExternalSourceUrl,
 } from '../lib/a4/source-integrity'
 
 function source(path: string): string {
@@ -38,6 +39,60 @@ assert.throws(
   () => parseSafePublicSourceUrl('https://127.0.0.1/fuente'),
   A4SourceVerificationError,
 )
+
+async function checkSourceIntegrityRuntime(): Promise<void> {
+  const originalFetch = globalThis.fetch
+  try {
+    const requestedMethods: string[] = []
+    globalThis.fetch = async (_input, init) => {
+      requestedMethods.push(init?.method ?? 'GET')
+      return init?.method === 'HEAD'
+        ? new Response(null, { status: 405 })
+        : new Response(null, { status: 200 })
+    }
+    const availableSource = await verifyExternalSourceUrl(
+      'https://8.8.8.8/fuente',
+      now,
+    )
+    assert.equal(availableSource.status, 'verified')
+    assert.equal(availableSource.authority, 'requires_corroboration')
+    assert.equal(availableSource.httpStatus, 200)
+    assert.deepEqual(requestedMethods, ['HEAD', 'GET'])
+
+    globalThis.fetch = async () => new Response(null, { status: 403 })
+    const restrictedSource = await verifyExternalSourceUrl(
+    'https://8.8.8.8/restringida',
+    now,
+  )
+    assert.equal(restrictedSource.status, 'restricted')
+    assert.equal(restrictedSource.httpStatus, 403)
+
+    globalThis.fetch = async () =>
+      new Response(null, {
+        status: 302,
+        headers: { location: 'https://127.0.0.1/privada' },
+      })
+    await assert.rejects(
+      verifyExternalSourceUrl('https://8.8.8.8/redireccion-privada', now),
+      A4SourceVerificationError,
+    )
+
+    globalThis.fetch = async () => new Response(null, { status: 404 })
+    await assert.rejects(
+      verifyExternalSourceUrl('https://8.8.8.8/no-existe', now),
+      /estado HTTP 404/,
+    )
+
+    globalThis.fetch = async () =>
+      new Response(null, { status: 302, headers: { location: '/siguiente' } })
+    await assert.rejects(
+      verifyExternalSourceUrl('https://8.8.8.8/redirecciones', now),
+      /máximo seguro de redirecciones/,
+    )
+  } finally {
+    globalThis.fetch = originalFetch
+  }
+}
 
 const chileDstNight = new Date('2026-04-04T23:30:00-03:00')
 assert.equal(santiagoDateIso(chileDstNight), '2026-04-04')
@@ -298,31 +353,44 @@ assert.ok(workspace.includes('return santiagoDateIso(new Date(), offsetDays)'))
 assert.ok(!workspace.includes('toISOString().slice(0, 10)'))
 assert.ok(!workspace.includes('action_recommended'))
 
-console.log(
-  JSON.stringify({
-    evidenceLevel: 'mixed_runtime_and_source_contract',
-    runtimeValidated: [
-      'Chile calendar date at local night',
-      'Chile calendar date across DST change',
-      'signal input',
-      'future source rejection',
-      'missing source rejection',
-      'unsafe source URL rejection',
-      'private network rejection',
-      'decision input',
-      'review outcome requirement',
-    ],
-    sourceContractsChecked: [
-      'canonical tables',
-      'RLS declarations',
-      'API validation wiring',
-      'server-owned write hardening migration',
-      'legacy news exclusion',
-      'source availability verification',
-      'source authority separation',
-      'source integrity persistence',
-    ],
-    liveDatabaseCheckedInThisScript: false,
-    liveHttpCheckedInThisScript: false,
-  }),
-)
+checkSourceIntegrityRuntime()
+  .then(() =>
+    console.log(
+      JSON.stringify({
+        evidenceLevel: 'mixed_runtime_and_source_contract',
+        runtimeValidated: [
+          'Chile calendar date at local night',
+          'Chile calendar date across DST change',
+          'signal input',
+          'future source rejection',
+          'missing source rejection',
+          'unsafe source URL rejection',
+          'private network rejection',
+          'HEAD to GET fallback',
+          'available source classification',
+          'restricted source classification',
+          'private redirect rejection',
+          'HTTP error rejection',
+          'redirect limit enforcement',
+          'decision input',
+          'review outcome requirement',
+        ],
+        sourceContractsChecked: [
+          'canonical tables',
+          'RLS declarations',
+          'API validation wiring',
+          'server-owned write hardening migration',
+          'legacy news exclusion',
+          'source availability verification',
+          'source authority separation',
+          'source integrity persistence',
+        ],
+        liveDatabaseCheckedInThisScript: false,
+        liveHttpCheckedInThisScript: false,
+      }),
+    ),
+  )
+  .catch((error) => {
+    console.error(error)
+    process.exitCode = 1
+  })
