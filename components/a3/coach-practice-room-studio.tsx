@@ -20,6 +20,7 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { Textarea } from '@/components/ui/textarea'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getActiveA3Module } from '@/lib/a3/active-module'
 import { useCoaching } from '@/lib/hooks/use-coaching'
@@ -62,16 +63,14 @@ export function CoachPracticeRoomStudio() {
   const [submitting, setSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState('')
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(COACH_PRACTICE_DRAFT_KEY)
-    if (stored) {
-      try {
-        setDraft({ ...EMPTY_COACH_PRACTICE_DRAFT, ...JSON.parse(stored) })
-      } catch {
-        window.localStorage.removeItem(COACH_PRACTICE_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'coach-practice-room',
+    legacyKey: COACH_PRACTICE_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft({ ...EMPTY_COACH_PRACTICE_DRAFT, ...(stored as Partial<CoachPracticeDraft>) }),
+  })
 
+  useEffect(() => {
     fetch('/api/a3/module-context/coach-practice-room', {
       credentials: 'include',
     })
@@ -85,10 +84,6 @@ export function CoachPracticeRoomStudio() {
       })
       .finally(() => setContextLoading(false))
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(COACH_PRACTICE_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   const validation = useMemo(() => {
     if (!moduleDefinition) return null
@@ -158,7 +153,7 @@ export function CoachPracticeRoomStudio() {
         responses: [],
         deliverable: draft,
       })
-      window.localStorage.removeItem(COACH_PRACTICE_DRAFT_KEY)
+      clearDraft()
       router.push('/despega/a3?completed=coach-practice-room')
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'No pudimos completar la práctica.')

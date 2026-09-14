@@ -66,6 +66,9 @@ jobs:
       - name: A1 to A3 static journey wiring contract
         run: npx tsx scripts/check-a1-a2-a3-journey-contract.ts
 
+      - name: A3 user-scoped draft isolation contract
+        run: npx tsx scripts/check-a3-draft-isolation-contract.ts
+
       - name: A3 catalog validators and source contract
         run: npx tsx scripts/check-a3-active-completion-contract.ts
 

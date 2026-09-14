@@ -18,6 +18,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getActiveA3Module } from '@/lib/a3/active-module'
 import { validateJobDecoderSubmission } from '@/lib/a3/job-decoder-validation'
@@ -116,16 +117,14 @@ export function JobDecoderStudio() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(JOB_DECODER_DRAFT_KEY)
-    if (stored) {
-      try {
-        setDraft({ ...EMPTY_JOB_DECODER_DRAFT, ...(JSON.parse(stored) as JobDecoderDraft) })
-      } catch {
-        window.localStorage.removeItem(JOB_DECODER_DRAFT_KEY)
-      }
-    }
+  const { clearDraft } = useA3DraftStorage({
+    moduleId: 'job-decoder',
+    legacyKey: JOB_DECODER_DRAFT_KEY,
+    value: draft,
+    onRestore: (stored) => setDraft({ ...EMPTY_JOB_DECODER_DRAFT, ...(stored as JobDecoderDraft) }),
+  })
 
+  useEffect(() => {
     let active = true
     const loadContext = async () => {
       try {
@@ -148,10 +147,6 @@ export function JobDecoderStudio() {
       active = false
     }
   }, [])
-
-  useEffect(() => {
-    window.localStorage.setItem(JOB_DECODER_DRAFT_KEY, JSON.stringify(draft))
-  }, [draft])
 
   const validation = useMemo(
     () =>
@@ -178,7 +173,7 @@ export function JobDecoderStudio() {
         responses: [],
         deliverable: draft,
       })
-      window.localStorage.removeItem(JOB_DECODER_DRAFT_KEY)
+      clearDraft()
       router.push(`/despega/a3?completed=job-decoder&score=${payload.score || validation.score}`)
       router.refresh()
     } catch (submitError) {
