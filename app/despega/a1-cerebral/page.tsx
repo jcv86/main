@@ -150,9 +150,16 @@ export default function A1CerebralPage() {
         throw new Error(result.error || 'No pudimos guardar la evaluación.')
       }
 
-      await completeDraft()
+      // The assessment is authoritative once the server confirms the write.
+      // Draft cleanup is best-effort and must never turn a successful result
+      // into a false save error or invite a duplicate submission.
+      try {
+        await completeDraft()
+      } catch (draftCleanupError) {
+        console.warn('[v0] A1 result saved; draft cleanup will be retried later:', draftCleanupError)
+      }
 
-      router.push('/despega/a1-report')
+      router.replace('/despega/a1-report')
       router.refresh()
     } catch (submissionError) {
       console.error('[v0] Test submission error:', submissionError)
