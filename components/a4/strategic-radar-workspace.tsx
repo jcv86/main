@@ -40,6 +40,11 @@ interface DecisionEditState {
   reviewOn: string
 }
 
+interface DecisionUpdateFeedback {
+  tone: 'success' | 'error'
+  messages: string[]
+}
+
 function localDate(offsetDays = 0) {
   return santiagoDateIso(new Date(), offsetDays)
 }
@@ -86,6 +91,10 @@ export function StrategicRadarWorkspace({
   const [decisions, setDecisions] = useState(initialDecisions)
   const [signalBusy, setSignalBusy] = useState(false)
   const [decisionBusy, setDecisionBusy] = useState(false)
+  const [updatingDecisionId, setUpdatingDecisionId] = useState<string | null>(null)
+  const [decisionUpdateFeedback, setDecisionUpdateFeedback] = useState<
+    Record<string, DecisionUpdateFeedback>
+  >({})
   const [signalErrors, setSignalErrors] = useState<string[]>([])
   const [decisionErrors, setDecisionErrors] = useState<string[]>([])
   const [signalMessage, setSignalMessage] = useState('')
@@ -277,9 +286,13 @@ export function StrategicRadarWorkspace({
 
   async function updateDecision(decisionId: string) {
     const edit = decisionEdits[decisionId]
-    if (!edit) return
-    setDecisionBusy(true)
-    setDecisionErrors([])
+    if (!edit || updatingDecisionId) return
+    setUpdatingDecisionId(decisionId)
+    setDecisionUpdateFeedback((current) => {
+      const next = { ...current }
+      delete next[decisionId]
+      return next
+    })
 
     try {
       const response = await fetch('/api/a4/decisions', {
@@ -289,23 +302,49 @@ export function StrategicRadarWorkspace({
       })
       const payload = await response.json()
       if (!response.ok) {
-        setDecisionErrors(errorsFromResponse(payload))
+        setDecisionUpdateFeedback((current) => ({
+          ...current,
+          [decisionId]: {
+            tone: 'error',
+            messages: errorsFromResponse(payload),
+          },
+        }))
         return
       }
       const updated = payload.decision as A4Decision
       setDecisions((current) =>
         current.map((item) => (item.id === updated.id ? updated : item)),
       )
-      setDecisionMessage(
-        updated.status === 'reviewed' || updated.status === 'discarded'
-          ? 'La revisión quedó cerrada con su resultado persistido.'
-          : `La decisión quedó reprogramada para el ${formatDate(updated.review_on)}.`,
-      )
+      setDecisionEdits((current) => ({
+        ...current,
+        [updated.id]: {
+          status: updated.status,
+          outcome: updated.outcome || '',
+          reviewOn: updated.review_on,
+        },
+      }))
+      setDecisionUpdateFeedback((current) => ({
+        ...current,
+        [decisionId]: {
+          tone: 'success',
+          messages: [
+            updated.status === 'reviewed' || updated.status === 'discarded'
+              ? 'La revisión quedó cerrada con su resultado persistido.'
+              : `La decisión quedó reprogramada para el ${formatDate(updated.review_on)}.`,
+          ],
+        },
+      }))
       router.refresh()
     } catch {
-      setDecisionErrors(['No pudimos actualizar la decisión.'])
+      setDecisionUpdateFeedback((current) => ({
+        ...current,
+        [decisionId]: {
+          tone: 'error',
+          messages: ['No pudimos actualizar esta decisión. Revisa tu conexión e inténtalo nuevamente.'],
+        },
+      }))
     } finally {
-      setDecisionBusy(false)
+      setUpdatingDecisionId(null)
     }
   }
 
@@ -707,6 +746,7 @@ export function StrategicRadarWorkspace({
           <div className="space-y-4">
             {decisions.map((decision) => {
               const signal = signalsById.get(decision.signal_id)
+              const feedback = decisionUpdateFeedback[decision.id]
               const edit = decisionEdits[decision.id] || {
                 status: decision.status,
                 outcome: decision.outcome || '',
@@ -732,8 +772,14 @@ export function StrategicRadarWorkspace({
                     </div>
 
                     <div className="space-y-3 rounded-xl border border-slate-800 bg-slate-950/50 p-4">
-                      <label className="text-sm font-medium text-slate-200">Actualizar estado</label>
+                      <label
+                        htmlFor={`decision-status-${decision.id}`}
+                        className="text-sm font-medium text-slate-200"
+                      >
+                        Actualizar estado
+                      </label>
                       <select
+                        id={`decision-status-${decision.id}`}
                         value={edit.status}
                         onChange={(event) =>
                           setDecisionEdits((current) => ({
@@ -783,8 +829,14 @@ export function StrategicRadarWorkspace({
                           Si la decisión sigue abierta, programa cuándo volverás a contrastarla.
                         </p>
                       </div>
-                      <label className="text-sm font-medium text-slate-200">Resultado observado</label>
+                      <label
+                        htmlFor={`decision-outcome-${decision.id}`}
+                        className="text-sm font-medium text-slate-200"
+                      >
+                        Resultado observado
+                      </label>
                       <Textarea
+                        id={`decision-outcome-${decision.id}`}
                         value={edit.outcome}
                         onChange={(event) =>
                           setDecisionEdits((current) => ({
@@ -798,11 +850,33 @@ export function StrategicRadarWorkspace({
                       <Button
                         type="button"
                         variant="outline"
-                        disabled={decisionBusy}
+                        disabled={updatingDecisionId !== null}
+                        aria-describedby={
+                          feedback ? `decision-feedback-${decision.id}` : undefined
+                        }
                         onClick={() => updateDecision(decision.id)}
                       >
-                        <Save className="mr-2 h-4 w-4" /> Guardar revisión
+                        <Save className="mr-2 h-4 w-4" />
+                        {updatingDecisionId === decision.id
+                          ? 'Guardando revisión…'
+                          : 'Guardar revisión'}
                       </Button>
+                      {feedback && (
+                        <div
+                          id={`decision-feedback-${decision.id}`}
+                          role={feedback.tone === 'error' ? 'alert' : 'status'}
+                          aria-live="polite"
+                          className={
+                            feedback.tone === 'error'
+                              ? 'rounded-lg border border-red-500/30 bg-red-500/10 p-3 text-sm text-red-100'
+                              : 'rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-3 text-sm text-emerald-100'
+                          }
+                        >
+                          {feedback.messages.map((message) => (
+                            <p key={message}>{message}</p>
+                          ))}
+                        </div>
+                      )}
                     </div>
                   </CardContent>
                 </Card>
