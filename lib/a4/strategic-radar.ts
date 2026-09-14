@@ -130,13 +130,18 @@ function validDate(value: string): boolean {
   return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value
 }
 
-function todayIso(now = new Date()): string {
+export function santiagoDateIso(
+  now = new Date(),
+  offsetDays = 0,
+): string {
+  const adjusted = new Date(now)
+  adjusted.setUTCDate(adjusted.getUTCDate() + offsetDays)
   return new Intl.DateTimeFormat('en-CA', {
     timeZone: 'America/Santiago',
     year: 'numeric',
     month: '2-digit',
     day: '2-digit',
-  }).format(now)
+  }).format(adjusted)
 }
 
 function validHttpUrl(value: string): boolean {
@@ -196,7 +201,7 @@ export function validateSignalInput(
   if (sourceName.length < 3 || sourceName.length > 180) {
     errors.push('Identifica la fuente con un nombre claro.')
   }
-  if (!validDate(sourceDate) || sourceDate > todayIso(now)) {
+  if (!validDate(sourceDate) || sourceDate > santiagoDateIso(now)) {
     errors.push('La fecha de la fuente debe ser válida y no puede estar en el futuro.')
   }
   if (!sourceUrl && !sourceReference) {
@@ -253,7 +258,7 @@ export function validateDecisionInput(
   if (!DECISION_STATUS_IDS.has(status)) {
     errors.push('Selecciona un estado de decisión válido.')
   }
-  if (!validDate(reviewOn) || reviewOn < todayIso(now)) {
+  if (!validDate(reviewOn) || reviewOn < santiagoDateIso(now)) {
     errors.push('La fecha de revisión debe ser válida y no anterior a hoy.')
   }
 

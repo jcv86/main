@@ -2,6 +2,7 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { join } from 'node:path'
 import {
+  santiagoDateIso,
   validateDecisionInput,
   validateDecisionUpdate,
   validateSignalInput,
@@ -12,6 +13,13 @@ function source(path: string): string {
 }
 
 const now = new Date('2026-08-02T12:00:00-04:00')
+const chileNight = new Date('2026-08-02T23:30:00-04:00')
+assert.equal(santiagoDateIso(chileNight), '2026-08-02')
+assert.equal(santiagoDateIso(chileNight, 7), '2026-08-09')
+
+const chileDstNight = new Date('2026-04-04T23:30:00-03:00')
+assert.equal(santiagoDateIso(chileDstNight), '2026-04-04')
+assert.equal(santiagoDateIso(chileDstNight, 1), '2026-04-05')
 const validSignal = {
   title: 'Aumentan las vacantes de operaciones con foco en automatización',
   category: 'labor_market',
@@ -152,7 +160,7 @@ assert.ok(!hardeningMigration.includes('grant delete'))
 assert.ok(radarModel.includes('Hecho verificable'))
 assert.ok(radarModel.includes('Hipótesis por contrastar'))
 assert.ok(radarModel.includes("sourceType === 'external_url'"))
-assert.ok(radarModel.includes('sourceDate > todayIso(now)'))
+assert.ok(radarModel.includes('sourceDate > santiagoDateIso(now)'))
 assert.ok(radarModel.includes("status === 'reviewed' && !outcome"))
 
 assert.ok(access.includes(".from('a3_route_progression')"))
@@ -191,12 +199,16 @@ assert.ok(workspace.includes("fetch('/api/a4/decisions'"))
 assert.ok(workspace.includes('A4_SIGNAL_CLASSIFICATIONS.map'))
 assert.ok(workspace.includes('Fecha de la fuente'))
 assert.ok(workspace.includes('Evidencia que observarás'))
+assert.ok(workspace.includes('return santiagoDateIso(new Date(), offsetDays)'))
+assert.ok(!workspace.includes('toISOString().slice(0, 10)'))
 assert.ok(!workspace.includes('action_recommended'))
 
 console.log(
   JSON.stringify({
     evidenceLevel: 'mixed_runtime_and_source_contract',
     runtimeValidated: [
+      'Chile calendar date at local night',
+      'Chile calendar date across DST change',
       'signal input',
       'future source rejection',
       'missing source rejection',
