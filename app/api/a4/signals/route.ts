@@ -3,6 +3,11 @@ import { resolveServerUser } from '@/lib/auth/server-user'
 import { createAdminClient } from '@/lib/supabase/server'
 import { checkA4Access, getA4AccessDenialMessage } from '@/lib/a4/access-control'
 import { validateSignalInput } from '@/lib/a4/strategic-radar'
+import {
+  A4SourceVerificationError,
+  nonExternalSourceVerification,
+  verifyExternalSourceUrl,
+} from '@/lib/a4/source-integrity'
 
 const SIGNAL_COLUMNS = [
   'id',
@@ -17,6 +22,12 @@ const SIGNAL_COLUMNS = [
   'source_url',
   'source_reference',
   'source_date',
+  'source_verification_status',
+  'source_authority',
+  'source_checked_at',
+  'source_http_status',
+  'source_final_url',
+  'source_verification_note',
   'status',
   'created_at',
   'updated_at',
@@ -102,6 +113,25 @@ export async function POST(request: NextRequest) {
     }
 
     const value = validation.value
+    let sourceVerification
+    try {
+      sourceVerification =
+        value.sourceType === 'external_url' && value.sourceUrl
+          ? await verifyExternalSourceUrl(value.sourceUrl)
+          : nonExternalSourceVerification()
+    } catch (error) {
+      if (error instanceof A4SourceVerificationError) {
+        return NextResponse.json(
+          {
+            error: error.message,
+            validation: { valid: false, errors: [error.message], value: null },
+          },
+          { status: 422 },
+        )
+      }
+      throw error
+    }
+
     const { data, error } = await resolved.supabase!
       .from('a4_verified_signals')
       .insert({
@@ -117,6 +147,12 @@ export async function POST(request: NextRequest) {
         source_url: value.sourceUrl,
         source_reference: value.sourceReference,
         source_date: value.sourceDate,
+        source_verification_status: sourceVerification.status,
+        source_authority: sourceVerification.authority,
+        source_checked_at: sourceVerification.checkedAt,
+        source_http_status: sourceVerification.httpStatus,
+        source_final_url: sourceVerification.finalUrl,
+        source_verification_note: sourceVerification.note,
         status: 'active',
       })
       .select(SIGNAL_COLUMNS)
@@ -153,6 +189,76 @@ export async function PATCH(request: NextRequest) {
     }
 
     const signalId = typeof body.signalId === 'string' ? body.signalId.trim() : ''
+    const action = body.action === 'verify_source' ? 'verify_source' : null
+
+    if (signalId && action === 'verify_source') {
+      const { data: signal, error: signalError } = await resolved.supabase!
+        .from('a4_verified_signals')
+        .select('id,source_type,source_url')
+        .eq('id', signalId)
+        .eq('user_id', resolved.currentUser!.id)
+        .maybeSingle()
+
+      if (signalError) {
+        console.error('[v0] A4 source verification lookup error:', signalError)
+        return NextResponse.json({ error: 'No pudimos cargar la fuente.' }, { status: 500 })
+      }
+      if (!signal) {
+        return NextResponse.json({ error: 'Señal no encontrada.' }, { status: 404 })
+      }
+
+      let verification
+      try {
+        verification =
+          signal.source_type === 'external_url' && signal.source_url
+            ? await verifyExternalSourceUrl(signal.source_url)
+            : nonExternalSourceVerification()
+      } catch (error) {
+        if (error instanceof A4SourceVerificationError) {
+          const checkedAt = new Date().toISOString()
+          const { data: unavailable } = await resolved.supabase!
+            .from('a4_verified_signals')
+            .update({
+              source_verification_status: 'unavailable',
+              source_authority: 'requires_corroboration',
+              source_checked_at: checkedAt,
+              source_http_status: null,
+              source_verification_note: error.message,
+            })
+            .eq('id', signalId)
+            .eq('user_id', resolved.currentUser!.id)
+            .select(SIGNAL_COLUMNS)
+            .maybeSingle()
+          return NextResponse.json(
+            { error: error.message, signal: unavailable },
+            { status: 422 },
+          )
+        }
+        throw error
+      }
+
+      const { data: verified, error: updateError } = await resolved.supabase!
+        .from('a4_verified_signals')
+        .update({
+          source_verification_status: verification.status,
+          source_authority: verification.authority,
+          source_checked_at: verification.checkedAt,
+          source_http_status: verification.httpStatus,
+          source_final_url: verification.finalUrl,
+          source_verification_note: verification.note,
+        })
+        .eq('id', signalId)
+        .eq('user_id', resolved.currentUser!.id)
+        .select(SIGNAL_COLUMNS)
+        .maybeSingle()
+
+      if (updateError || !verified) {
+        console.error('[v0] A4 source verification update error:', updateError)
+        return NextResponse.json({ error: 'No pudimos guardar la verificación.' }, { status: 500 })
+      }
+      return NextResponse.json({ success: true, signal: verified })
+    }
+
     const status = body.status === 'archived' ? 'archived' : body.status === 'active' ? 'active' : ''
     if (!signalId || !status) {
       return NextResponse.json(

@@ -46,6 +46,12 @@ export interface A4VerifiedSignal {
   source_url: string | null
   source_reference: string | null
   source_date: string
+  source_verification_status?: 'verified' | 'restricted' | 'unavailable' | 'not_applicable'
+  source_authority?: 'official' | 'requires_corroboration' | 'documented_internal'
+  source_checked_at?: string | null
+  source_http_status?: number | null
+  source_final_url?: string | null
+  source_verification_note?: string | null
   status: 'active' | 'archived'
   created_at: string
   updated_at: string
