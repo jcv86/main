@@ -23,6 +23,7 @@ import {
   A4_SIGNAL_CATEGORIES,
   A4_SIGNAL_CLASSIFICATIONS,
   A4_SOURCE_TYPES,
+  santiagoDateIso,
   type A4Decision,
   type A4DecisionStatus,
   type A4VerifiedSignal,
@@ -39,9 +40,7 @@ interface DecisionEditState {
 }
 
 function localDate(offsetDays = 0) {
-  const date = new Date()
-  date.setDate(date.getDate() + offsetDays)
-  return date.toISOString().slice(0, 10)
+  return santiagoDateIso(new Date(), offsetDays)
 }
 
 function formatDate(value: string) {
