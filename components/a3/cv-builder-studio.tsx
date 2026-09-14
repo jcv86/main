@@ -48,7 +48,7 @@ export function CvBuilderStudio() {
   const [error, setError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<A3CompletionPayload | null>(null)
 
-  const { clearDraft } = useA3DraftStorage({
+  const { clearDraft, ready: draftReady } = useA3DraftStorage({
     moduleId: 'cv-builder-studio',
     legacyKey: CV_BUILDER_DRAFT_KEY,
     value: state,
