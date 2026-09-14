@@ -793,7 +793,7 @@ export function StrategicRadarWorkspace({
                     {signal.source_verification_note && (
                       <p className="mt-1 text-slate-400">{signal.source_verification_note}</p>
                     )}
-                    {signal.source_url && (
+                    {signal.source_url && signal.source_verification_status !== 'unavailable' && (
                       <a href={signal.source_final_url || signal.source_url} target="_blank" rel="noopener noreferrer" className="mt-2 inline-flex items-center gap-1 text-cyan-300 hover:underline">
                         Abrir fuente <ExternalLink className="h-3 w-3" />
                       </a>

@@ -216,19 +216,27 @@ export async function PATCH(request: NextRequest) {
       } catch (error) {
         if (error instanceof A4SourceVerificationError) {
           const checkedAt = new Date().toISOString()
-          const { data: unavailable } = await resolved.supabase!
+          const { data: unavailable, error: unavailableError } = await resolved.supabase!
             .from('a4_verified_signals')
             .update({
               source_verification_status: 'unavailable',
               source_authority: 'requires_corroboration',
               source_checked_at: checkedAt,
               source_http_status: null,
+              source_final_url: null,
               source_verification_note: error.message,
             })
             .eq('id', signalId)
             .eq('user_id', resolved.currentUser!.id)
             .select(SIGNAL_COLUMNS)
             .maybeSingle()
+          if (unavailableError || !unavailable) {
+            console.error('[v0] A4 unavailable source update error:', unavailableError)
+            return NextResponse.json(
+              { error: 'No pudimos guardar la verificación.' },
+              { status: 500 },
+            )
+          }
           return NextResponse.json(
             { error: error.message, signal: unavailable },
             { status: 422 },
