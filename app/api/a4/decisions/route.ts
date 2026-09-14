@@ -189,6 +189,7 @@ export async function PATCH(request: NextRequest) {
       .update({
         status: value.status,
         outcome: value.outcome,
+        review_on: value.reviewOn,
         reviewed_at: value.status === 'reviewed' ? new Date().toISOString() : null,
       })
       .eq('id', decisionId)
