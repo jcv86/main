@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
-import { readFileSync } from 'node:fs'
-import { spawnSync } from 'node:child_process'
+import { readdirSync, readFileSync } from 'node:fs'
+import { extname, join, relative } from 'node:path'
 
 const migrationPath = 'supabase/migrations/20260914212058_harden_legacy_auth_and_privileged_rpc_p0.sql'
 const migration = readFileSync(migrationPath, 'utf8')
@@ -36,26 +36,28 @@ for (const rpc of revokedRpcs) {
   )
 }
 
-const callsiteScan = spawnSync(
-  'rg',
-  [
-    '-n',
-    '-g', '!node_modules',
-    '-g', '!.next',
-    '-g', '!_archive_dtc/**',
-    '-g', '!DTC_Tech_Evidence_Pack*/**',
-    '-g', '!supabase/migrations/**',
-    '-g', '!lib/supabase/migrations/**',
-    '-g', '!scripts/check-security-p0-contract.ts',
-    revokedRpcs.map((rpc) => `\\.rpc\\(['\"]${rpc}['\"]`).join('|'),
-    'app', 'components', 'hooks', 'lib',
-  ],
-  { encoding: 'utf8' },
-)
-assert.ok(callsiteScan.status === 0 || callsiteScan.status === 1, callsiteScan.stderr)
-const activeSource = callsiteScan.stdout.trim()
+const sourceExtensions = new Set(['.cjs', '.js', '.jsx', '.mjs', '.ts', '.tsx'])
+const rpcAlternation = revokedRpcs.map((rpc) => rpc.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')).join('|')
+const revokedRpcCall = new RegExp(`\\.rpc\\(\\s*['\"](?:${rpcAlternation})['\"]`)
 
-assert.equal(activeSource, '', `revoked RPC still has an active direct callsite:\n${activeSource}`)
+function collectSourceFiles(directory: string): string[] {
+  return readdirSync(directory, { withFileTypes: true }).flatMap((entry) => {
+    const path = join(directory, entry.name)
+    if (entry.isDirectory()) return collectSourceFiles(path)
+    return entry.isFile() && sourceExtensions.has(extname(entry.name)) ? [path] : []
+  })
+}
+
+assert.ok(revokedRpcCall.test(`supabase.rpc('ensure_user_profile', {})`))
+assert.ok(revokedRpcCall.test('supabase.rpc(\n  "update_user_progress",\n  payload\n)'))
+assert.equal(revokedRpcCall.test(`supabase.rpc('allowed_rpc', {})`), false)
+
+const activeSource = ['app', 'components', 'hooks', 'lib']
+  .flatMap(collectSourceFiles)
+  .filter((path) => revokedRpcCall.test(readFileSync(path, 'utf8')))
+  .map((path) => relative('.', path))
+
+assert.deepEqual(activeSource, [], `revoked RPC still has an active direct callsite:\n${activeSource.join('\n')}`)
 
 console.log(JSON.stringify({
   contract: 'security-p0',
