@@ -10,52 +10,52 @@ const FAQS = [
   {
     question: '¿Esto es solo un test de personalidad?',
     answer:
-      'No. Despega Cerebral es el punto de partida, pero su lectura se transforma en un Plan Ejecutivo, una ruta concreta, entrenamiento y criterio para leer tu entorno.',
+      'No. Despega Cerebral es el punto de partida, pero su lectura se conecta con una ruta profesional, práctica y contexto de mercado dentro del recorrido A1–A4.',
   },
   {
     question: '¿Me sirve si estoy estancado y no sé por dónde empezar?',
     answer:
-      'Sí. DTC parte desde tu situación actual, identifica fortalezas y brechas, y construye una misión inicial de 30 días con un foco claro y alcanzable.',
+      'Sí. DTC parte desde tu situación actual y usa la evidencia que vas construyendo para ordenar un siguiente paso y una ruta que puedas revisar con el tiempo.',
   },
   {
     question: '¿Está pensado solo para encontrar trabajo?',
     answer:
-      'No. DTC trabaja claridad, estructura, práctica y criterio. La empleabilidad mejora como consecuencia visible del avance; no prometemos empleo rápido ni garantizado.',
+      'No. DTC trabaja claridad, estructura, práctica y criterio. Puede apoyar tu empleabilidad, pero no promete empleo rápido ni garantizado.',
   },
   {
     question: '¿Qué hace diferente a DTC?',
     answer:
-      'No parte desde una vacante ni desde palabras clave. Parte desde la persona y conecta diagnóstico, ruta, entrenamiento y radar en una sola continuidad.',
+      'No parte desde una vacante ni desde palabras clave. Parte desde la persona y conecta autoconocimiento, ruta, entrenamiento y señales de mercado en una sola continuidad.',
   },
   {
     question: '¿Qué es el Perfil Vivo?',
     answer:
-      'Es una representación dinámica de tus cualidades, objetivos, avances, habilidades entrenadas, brechas y oportunidades. Se actualiza a medida que avanzas.',
+      'Es una representación dinámica de información y evidencia que vas construyendo en el recorrido. Se actualiza a medida que avanzas y completa nuevas etapas.',
   },
   {
     question: '¿La IA decide por mí?',
     answer:
-      'No. La IA ayuda a leer, ordenar y personalizar. Las decisiones siguen siendo tuyas y el sistema busca aumentar tu claridad, no reemplazar tu juicio.',
+      'No. Vera ayuda a organizar contexto, evidencia y alternativas. Cuando faltan datos relevantes debe preguntar antes de concluir, y la decisión final siempre es tuya.',
   },
   {
     question: '¿Cuánto tiempo toma?',
     answer:
-      'El diagnóstico inicial toma minutos. Después comienzas con un ciclo de 30 días, expandible a 60 y 90 según tu contexto y avance.',
+      'El inicio se completa por etapas y A2 organiza una ruta de hasta 90 días. Ese horizonte describe la estructura del recorrido, no una garantía de lograr un resultado profesional específico en ese plazo.',
   },
   {
     question: '¿Qué ocurre con mis datos?',
     answer:
-      'Tu información se usa para personalizar el proceso bajo reglas de privacidad, consentimiento, trazabilidad y control humano. Tú decides qué compartes.',
+      'Las áreas privadas requieren autenticación y los datos principales del recorrido usan controles de propiedad y acceso. Revisa la política de privacidad publicada para conocer el marco aplicable.',
   },
   {
     question: '¿DTC garantiza un empleo?',
     answer:
-      'No. DTC aumenta claridad, preparación y empleabilidad. El empleo depende de múltiples factores y no es una promesa automática de la plataforma.',
+      'No. DTC puede ayudarte a comprender tu punto de partida, organizar una ruta y practicar, pero el empleo depende de múltiples factores externos y no es una promesa de la plataforma.',
   },
   {
     question: '¿Sirve para universidades, municipios o empresas?',
     answer:
-      'Sí. DTC puede convertir el avance de las personas en evidencia y trazabilidad, lo que permite acompañar programas de orientación, formación e inserción.',
+      'Puede evaluarse con instituciones mediante pilotos acotados. El alcance, los resguardos, las métricas y cualquier condición deben definirse antes de comenzar y revisarse con evidencia antes de escalar.',
   },
 ]
 
@@ -66,7 +66,7 @@ const PRODUCT_LINKS = PRODUCT_STAGE_ORDER.map((stageId) => ({
 
 const DTC_LINKS = [
   { label: 'Pruébalo en vivo', href: ROUTES.pruebaEnVivo },
-  { label: 'Empleo', href: ROUTES.empleo },
+  { label: 'Equipo DTC', href: ROUTES.empleo },
   { label: 'Para instituciones', href: ROUTES.instituciones },
   { label: 'Preguntas frecuentes', href: ROUTES.preguntas },
 ]
@@ -82,10 +82,10 @@ export default function CanonicalClosing() {
         <div className="relative mx-auto max-w-3xl px-4 text-center sm:px-6 lg:px-8">
           <Reveal>
             <h2 className="text-balance text-4xl font-bold leading-[1.1] tracking-tight text-white md:text-5xl">
-              Da el primer paso hacia <GradientText>tu claridad.</GradientText>
+              Da el primer paso hacia <GradientText>más claridad.</GradientText>
             </h2>
             <p className="mt-5 text-lg leading-relaxed" style={{ color: COLORS.textMuted }}>
-              Comienza con tu diagnóstico y deja que DTC ordene el siguiente paso. Empezar toma minutos; el avance se construye día a día.
+              Comienza por entender tu punto de partida. DTC conecta esa evidencia con una ruta, práctica y contexto para ayudarte a revisar qué hacer después.
             </p>
             <div className="mt-8 flex flex-col justify-center gap-3 sm:flex-row">
               <Link
@@ -144,7 +144,7 @@ export default function CanonicalClosing() {
                 </span>
               </Link>
               <p className="mt-4 max-w-sm text-sm leading-relaxed" style={{ color: COLORS.textMuted }}>
-                Plataforma AI-first humana que transforma autoconocimiento en avance verificable. Parte desde la persona, no desde la vacante.
+                Desarrollo profesional con un recorrido A1–A4 que conecta autoconocimiento, ruta, práctica y contexto de mercado con apoyo de IA.
               </p>
             </div>
 
@@ -157,10 +157,10 @@ export default function CanonicalClosing() {
             style={{ borderTop: `1px solid ${COLORS.border}` }}
           >
             <p className="text-xs" style={{ color: COLORS.textFaint }}>
-              DespegaTuCarrera · Plataforma AI-first humana
+              Despega Tu Carrera · Desarrollo profesional con IA y evidencia
             </p>
             <p className="text-center text-xs md:text-right" style={{ color: COLORS.textFaint }}>
-              © 2026 DespegaTuCarrera. La empleabilidad es una consecuencia del avance, no una promesa automática.
+              © 2026 Despega Tu Carrera. No garantizamos empleo ni resultados profesionales específicos.
             </p>
           </div>
         </div>
