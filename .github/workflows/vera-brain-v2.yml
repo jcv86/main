@@ -1,0 +1,34 @@
+name: Vera Brain v2 and hero
+
+on:
+  pull_request:
+    paths:
+      - 'lib/vera/**'
+      - 'app/api/despega/a4-coach/route.ts'
+      - 'components/dtc/hero.tsx'
+      - 'scripts/check-vera-brain-v2-contract.ts'
+      - 'scripts/check-hero-vera-contract.ts'
+      - '.github/workflows/vera-brain-v2.yml'
+  workflow_dispatch:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Vera routing benchmark and privacy contract
+        run: pnpm exec tsx scripts/check-vera-brain-v2-contract.ts
+      - name: Hero product and performance contract
+        run: pnpm exec tsx scripts/check-hero-vera-contract.ts
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build
