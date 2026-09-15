@@ -21,14 +21,20 @@ const CASES: Array<{ query: string; expected: VeraTrack }> = [
   { query: '¿Qué tendencias hay hoy en el mercado laboral chileno?', expected: 'fast' },
 ]
 
-let correct = 0
+const mismatches: Array<{ query: string; expected: VeraTrack; actual: VeraTrack }> = []
 for (const testCase of CASES) {
   const decision = routeVeraQuery(testCase.query)
-  if (decision.track === testCase.expected) correct += 1
+  if (decision.track !== testCase.expected) {
+    mismatches.push({ query: testCase.query, expected: testCase.expected, actual: decision.track })
+  }
 }
 
+const correct = CASES.length - mismatches.length
 const accuracy = correct / CASES.length
-assert.ok(accuracy >= 0.9, `Vera router benchmark below target: ${accuracy}`)
+assert.ok(
+  accuracy >= 0.9,
+  `Vera router benchmark below target: ${accuracy}; mismatches=${JSON.stringify(mismatches)}`,
+)
 
 const route = readFileSync(join(process.cwd(), 'app/api/despega/a4-coach/route.ts'), 'utf8')
 const brain = readFileSync(join(process.cwd(), 'lib/vera/brain-v2.ts'), 'utf8')
@@ -38,7 +44,7 @@ const context = readFileSync(join(process.cwd(), 'lib/vera/context-pack.ts'), 'u
 assert.ok(route.includes('resolveServerUser()'), 'A4 Vera route must verify Supabase session')
 assert.ok(route.includes('requestSchema.safeParse(payload)'), 'A4 Vera route must validate payload')
 assert.ok(route.includes("'authentication_required'"), 'A4 Vera route must reject anonymous access')
-assert.ok(route.includes("store: false"), 'A4 Vera route must disable provider response storage')
+assert.ok(route.includes('store: false'), 'A4 Vera route must disable provider response storage')
 assert.ok(route.includes("runVeraTool('journey_context')"), 'Agentic path must use server-owned journey tool')
 assert.ok(route.includes("'x-vera-track'"), 'Response must expose non-sensitive routing mode')
 assert.ok(!route.includes('userId?:'), 'A4 Vera request must not accept client-controlled user id')
@@ -48,7 +54,7 @@ assert.ok(tools.includes('callers never provide a user id'), 'Tool catalogue mus
 assert.ok(context.includes('SENSITIVE_KEY'), 'Evidence pack must filter sensitive identity fields')
 assert.ok(context.includes('.slice(0, 8)'), 'Evidence pack must bound arrays')
 assert.ok(brain.includes("track: agentic ? 'agentic' : 'fast'"), 'Router must expose Fast/Agentic split')
-assert.ok(brain.includes('decision final pertenece al usuario'), 'Coach policy must preserve user agency')
+assert.ok(brain.includes('decisión final pertenece al usuario'), 'Coach policy must preserve user agency')
 
 console.log(
   JSON.stringify({
@@ -56,6 +62,7 @@ console.log(
     cases: CASES.length,
     correct,
     accuracy,
+    mismatches,
     fastTrack: true,
     agenticTrack: true,
     canonicalJourneyTool: true,
