@@ -4,15 +4,22 @@ import {
   emptyGamificationSummary,
   getGamificationSummary,
 } from '@/lib/gamification/server-summary'
+import {
+  DTC_REQUEST_ID_HEADER,
+  resolveRequestId,
+} from '@/lib/observability/request-id'
+import { logOperationalError } from '@/lib/observability/server-log'
 
 type AvailabilityReason = 'unauthenticated' | 'unavailable' | null
 
 function toApiPayload(
   summary: Awaited<ReturnType<typeof getGamificationSummary>>,
+  requestId: string,
   available = true,
   availabilityReason: AvailabilityReason = null,
 ) {
   return {
+    request_id: requestId,
     available,
     availability_reason: availabilityReason,
     total_xp: summary.totalXp,
@@ -53,25 +60,54 @@ function toApiPayload(
   }
 }
 
-export async function GET() {
+function jsonResponse(
+  payload: ReturnType<typeof toApiPayload>,
+  requestId: string,
+  cacheControl = 'no-store',
+) {
+  return NextResponse.json(payload, {
+    headers: {
+      'Cache-Control': cacheControl,
+      [DTC_REQUEST_ID_HEADER]: requestId,
+    },
+  })
+}
+
+export async function GET(request: Request) {
+  const requestId = resolveRequestId(request.headers)
+
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json(
-        toApiPayload(emptyGamificationSummary(), false, 'unauthenticated'),
-        { headers: { 'Cache-Control': 'no-store' } },
+      return jsonResponse(
+        toApiPayload(
+          emptyGamificationSummary(),
+          requestId,
+          false,
+          'unauthenticated',
+        ),
+        requestId,
       )
     }
 
     const summary = await getGamificationSummary(currentUser.id)
-    return NextResponse.json(toApiPayload(summary), {
-      headers: { 'Cache-Control': 'private, no-store' },
-    })
+    return jsonResponse(toApiPayload(summary, requestId), requestId, 'private, no-store')
   } catch (error) {
-    console.error('[v0] Error fetching global gamification:', error)
-    return NextResponse.json(
-      toApiPayload(emptyGamificationSummary(), false, 'unavailable'),
-      { headers: { 'Cache-Control': 'no-store' } },
+    logOperationalError({
+      event: 'gamification.global.failed',
+      requestId,
+      route: '/api/gamification/global',
+      status: 200,
+      error,
+    })
+    return jsonResponse(
+      toApiPayload(
+        emptyGamificationSummary(),
+        requestId,
+        false,
+        'unavailable',
+      ),
+      requestId,
     )
   }
 }
