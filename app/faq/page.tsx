@@ -8,16 +8,15 @@ const SITE_URL = "https://www.despegatucarrera.com"
 export const metadata: Metadata = {
   title: "Preguntas Frecuentes sobre Despega Tu Carrera (DTC)",
   description:
-    "Respuestas claras sobre qué es Despega Tu Carrera, cómo funciona el programa de 90 días, los tests psicométricos, el coach con IA Vera, precios, garantía de 7 días y resultados. Todo lo que necesitas saber antes de empezar.",
+    "Respuestas actuales sobre el recorrido A1–A4, la ruta de 90 días, Vera, acceso, privacidad, instituciones y los límites de Despega Tu Carrera.",
   keywords: [
     "preguntas frecuentes Despega Tu Carrera",
     "qué es DTC",
     "cómo funciona Despega Tu Carrera",
-    "coach IA Vera",
-    "tests psicométricos Chile",
-    "programa 90 días carrera",
-    "garantía desarrollo profesional",
-    "precio Despega Tu Carrera",
+    "Vera coach IA",
+    "ruta profesional 90 días",
+    "desarrollo profesional Chile",
+    "privacidad DTC",
   ],
   alternates: {
     canonical: `${SITE_URL}/faq`,
@@ -29,14 +28,11 @@ export const metadata: Metadata = {
     siteName: "Despega Tu Carrera",
     title: "Preguntas Frecuentes sobre Despega Tu Carrera (DTC)",
     description:
-      "Respuestas claras sobre el programa de 90 días, los tests, el coach con IA Vera, precios y garantía de Despega Tu Carrera.",
+      "Cómo funciona el recorrido A1–A4, qué hace Vera, cómo se accede y qué límites tiene la plataforma.",
   },
 }
 
 export default function FAQPage() {
-  // Build the FAQPage JSON-LD from the single source of truth so it never
-  // drifts from the on-page content. This is what powers Google rich results
-  // and is read by LLM crawlers (GPTBot, ClaudeBot, PerplexityBot, Gemini).
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
@@ -66,7 +62,6 @@ export default function FAQPage() {
 
   return (
     <main className="min-h-screen bg-background">
-      {/* FAQPage structured data for Google rich results + LLM/GEO answer engines */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }}
@@ -88,13 +83,10 @@ export default function FAQPage() {
             Preguntas frecuentes sobre Despega Tu Carrera
           </h1>
           <p className="text-base md:text-lg text-foreground/70 max-w-3xl mx-auto text-pretty leading-relaxed">
-            Todo lo que necesitas saber sobre el programa de 90 días, los tests psicométricos, el coach con IA Vera,
-            precios y la garantía de 7 días. Si no encuentras tu respuesta, Vera está disponible 24/7.
+            Información actual sobre el recorrido A1–A4, la ruta de 90 días, Vera, acceso, privacidad y los límites del producto.
           </p>
         </header>
 
-        {/* itemScope FAQPage wraps the interactive list so the microdata on each
-            question/answer is correctly associated even without JS. */}
         <section itemScope itemType="https://schema.org/FAQPage" aria-label="Preguntas frecuentes">
           <InteractiveFAQ />
         </section>
