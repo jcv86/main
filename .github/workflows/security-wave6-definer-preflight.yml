@@ -1,0 +1,43 @@
+name: Security Wave 6 definer preflight
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/20260915175000_harden_service_only_definer_search_path.sql'
+      - 'scripts/security-wave6-definer-fixture.sql'
+      - 'scripts/security-wave6-definer-verify.sql'
+      - '.github/workflows/security-wave6-definer-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  disposable-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - name: Start disposable local Supabase database only
+        run: |
+          export WAVE6_ROOT="$RUNNER_TEMP/dtc-wave6"
+          echo "WAVE6_ROOT=$WAVE6_ROOT" >> "$GITHUB_ENV"
+          supabase init --workdir "$WAVE6_ROOT" --yes
+          supabase start --workdir "$WAVE6_ROOT" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$WAVE6_ROOT-start.log" 2>&1
+          supabase status --workdir "$WAVE6_ROOT" -o json > "$WAVE6_ROOT-status.json"
+      - name: Apply Wave 6 twice and verify boundaries
+        run: |
+          DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.WAVE6_ROOT+'-status.json','utf8')).DB_URL)")"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f scripts/security-wave6-definer-fixture.sql
+          for pass in 1 2; do
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915175000_harden_service_only_definer_search_path.sql
+          done
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f scripts/security-wave6-definer-verify.sql
+      - name: Stop disposable local stack
+        if: always()
+        run: supabase stop --workdir "$WAVE6_ROOT" --no-backup > /dev/null 2>&1 || true
