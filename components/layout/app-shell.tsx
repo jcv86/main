@@ -45,9 +45,12 @@ type NavGroup = {
 }
 
 type XPData = {
+  available: boolean
+  availability_reason: 'unauthenticated' | 'unavailable' | null
   total_xp: number
   current_level: number
   xp_to_next_level: number
+  xp_progress_percent: number
   daily_streak: number
 }
 
@@ -57,7 +60,11 @@ type RouteContext = {
   description: string
 }
 
-const fetcher = (url: string) => fetch(url).then((response) => response.json())
+const fetcher = async (url: string) => {
+  const response = await fetch(url, { cache: 'no-store' })
+  if (!response.ok) throw new Error(`Request failed with ${response.status}`)
+  return response.json()
+}
 
 const navigation: NavGroup[] = [
   {
@@ -194,7 +201,6 @@ function getRouteContext(pathname: string): RouteContext {
 }
 
 function ShellNavigation({ pathname, flow, onNavigate }: { pathname: string; flow: JourneyFlow; onNavigate?: () => void }) {
-
   return (
     <nav aria-label="Navegación principal" className="space-y-7">
       {navigation.map((group) => (
@@ -293,13 +299,14 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
   const closeButtonRef = React.useRef<HTMLButtonElement>(null)
   const routeContext = getRouteContext(pathname)
 
-  const isDemoUser = typeof window !== 'undefined' && localStorage.getItem('demo_user') !== null
-  const { data: xpData } = useSWR<XPData>(isDemoUser ? null : '/api/gamification/global', fetcher, {
+  const { data: xpData, isLoading: xpLoading } = useSWR<XPData>('/api/gamification/global', fetcher, {
     revalidateOnFocus: true,
     revalidateOnReconnect: true,
     refreshInterval: 5000,
     dedupingInterval: 2000,
   })
+  const xpAvailable = xpData?.available === true
+  const progress = xpAvailable ? xpData.xp_progress_percent : 0
 
   React.useEffect(() => setMobileOpen(false), [pathname])
 
@@ -322,13 +329,7 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
     }
   }, [mobileOpen])
 
-  const progress = xpData?.xp_to_next_level
-    ? Math.min(100, Math.round((xpData.total_xp / xpData.xp_to_next_level) * 100))
-    : 0
-
   const handleLogout = async () => {
-    localStorage.removeItem('demo_user')
-    document.cookie = 'demo_user=; path=/; max-age=0'
     try {
       await fetch('/api/auth/signout', { method: 'POST' })
     } finally {
@@ -371,10 +372,13 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
           <div className="hidden min-w-48 items-center gap-3 sm:flex">
             <div className="min-w-0 flex-1">
               <div className="mb-1 flex items-center justify-between gap-3 text-[11px] font-semibold text-muted-foreground">
-                <span>Nivel {xpData?.current_level ?? 1}</span>
-                <span>{xpData?.daily_streak ?? 0} días</span>
+                <span>Nivel {xpLoading ? '…' : xpAvailable ? xpData.current_level : '—'}</span>
+                <span>{xpLoading ? '…' : xpAvailable ? `${xpData.daily_streak} días` : 'Sin datos'}</span>
               </div>
-              <Progress value={progress} aria-label="Progreso al siguiente nivel" />
+              <Progress
+                value={progress}
+                aria-label={xpAvailable ? `Progreso al siguiente nivel: ${progress}%` : 'Progreso no disponible'}
+              />
             </div>
           </div>
 
@@ -401,7 +405,7 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
         </div>
         <div className="border-t border-border p-4">
           <div className="mb-3 rounded-[var(--dtc-radius-md)] border border-border bg-background/50 p-3">
-            <p className="truncate text-sm font-semibold">{user?.email ?? 'Sesión de demostración'}</p>
+            <p className="truncate text-sm font-semibold">{user?.email ?? 'Verificando sesión…'}</p>
             <p className="mt-1 text-xs text-muted-foreground">Tu información permanece conectada a tu recorrido.</p>
           </div>
           <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground" onClick={handleLogout}>
