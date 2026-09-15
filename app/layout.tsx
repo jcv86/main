@@ -61,7 +61,6 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "es_CL",
-    url: "https://www.despegatucarrera.com",
     siteName: "Despega Tu Carrera",
     title: "Despega Tu Carrera | Desarrollo profesional con evidencia",
     description:
@@ -92,12 +91,6 @@ export const metadata: Metadata = {
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
-    },
-  },
-  alternates: {
-    canonical: "https://www.despegatucarrera.com",
-    languages: {
-      "es-CL": "https://www.despegatucarrera.com",
     },
   },
   category: "education",
