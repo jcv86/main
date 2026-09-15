@@ -4,6 +4,9 @@ import { generateOrganizationSchema, generateFAQSchema, generateBreadcrumbSchema
 export const metadata: Metadata = {
   title: "Cómo Funciona | Despega Tu Carrera",
   description: "Conoce el recorrido A1–A4 de Despega Tu Carrera: autoconocimiento, ruta profesional, práctica y contexto de mercado conectados por evidencia.",
+  alternates: {
+    canonical: "https://www.despegatucarrera.com/como-funciona",
+  },
   openGraph: {
     title: "Cómo Funciona | Despega Tu Carrera",
     description: "Un recorrido conectado de cuatro etapas para comprender tu punto de partida, organizar una ruta, practicar y decidir con más contexto.",
