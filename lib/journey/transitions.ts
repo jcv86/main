@@ -3,12 +3,21 @@ import 'server-only'
 import { createAdminClient } from '@/lib/supabase/server'
 import { buildA1ProfessionalReport } from '@/lib/reports/a1-professional-report'
 import { record } from '@/lib/a1/individual-evidence'
+import { createRequestId } from '@/lib/observability/request-id'
+import {
+  logOperationalError,
+  logOperationalEvent,
+} from '@/lib/observability/server-log'
 
 export type JourneyTransitionStep = 'a1_report' | 'a2_intro'
 
 export interface JourneyTransitionResult {
   nextPath: string
   repairedLegacyState?: boolean
+}
+
+export interface JourneyTransitionContext {
+  requestId?: string
 }
 
 interface TransitionProfile {
@@ -55,21 +64,54 @@ function c2Completed(profile: TransitionProfile): boolean {
   return Boolean(profile.conozcamonos_2_completed || profile.a2_route_generated)
 }
 
-export async function recordJourneyTransition(userId: string, step: JourneyTransitionStep): Promise<JourneyTransitionResult> {
-  if (!(await hasA1Assessment(userId))) throw new Error('Completa Despega Cerebral antes de continuar.')
-  const profile = await loadTransitionProfile(userId)
-  if (step === 'a1_report') {
-    if (!c2Completed(profile)) {
-      throw new Error('Completa Conozcámonos 2 antes de abrir tu informe final.')
+export async function recordJourneyTransition(
+  userId: string,
+  step: JourneyTransitionStep,
+  context: JourneyTransitionContext = {},
+): Promise<JourneyTransitionResult> {
+  const requestId = context.requestId || createRequestId()
+
+  try {
+    if (!(await hasA1Assessment(userId))) throw new Error('Completa Despega Cerebral antes de continuar.')
+    const profile = await loadTransitionProfile(userId)
+
+    if (step === 'a1_report') {
+      if (!c2Completed(profile)) {
+        throw new Error('Completa Conozcámonos 2 antes de abrir tu informe final.')
+      }
+      await upsertProfileFlags(userId, { conozcamonos_2_completed: true, a1_results_saved: true, a1_report_seen: true })
+      const result = { nextPath: '/despega/a2/intro' }
+      logOperationalEvent({
+        event: 'journey.transition.completed',
+        requestId,
+        status: 'success',
+        metadata: { step, next_path: result.nextPath },
+      })
+      return result
     }
-    await upsertProfileFlags(userId, { conozcamonos_2_completed: true, a1_results_saved: true, a1_report_seen: true })
-    return { nextPath: '/despega/a2/intro' }
+
+    if (!c2Completed(profile) || !profile.a1_report_seen) {
+      throw new Error('Completa A1 y revisa tu informe antes de iniciar Tu Ruta.')
+    }
+    await upsertProfileFlags(userId, { conozcamonos_2_completed: true, a1_results_saved: true, a1_report_seen: true, a2_intro_seen: true, a2_intro_seen_at: new Date().toISOString() })
+    const result = { nextPath: '/despega/a2' }
+    logOperationalEvent({
+      event: 'journey.transition.completed',
+      requestId,
+      status: 'success',
+      metadata: { step, next_path: result.nextPath },
+    })
+    return result
+  } catch (error) {
+    logOperationalError({
+      event: 'journey.transition.failed',
+      requestId,
+      status: 'failed',
+      metadata: { step },
+      error,
+    })
+    throw error
   }
-  if (!c2Completed(profile) || !profile.a1_report_seen) {
-    throw new Error('Completa A1 y revisa tu informe antes de iniciar Tu Ruta.')
-  }
-  await upsertProfileFlags(userId, { conozcamonos_2_completed: true, a1_results_saved: true, a1_report_seen: true, a2_intro_seen: true, a2_intro_seen_at: new Date().toISOString() })
-  return { nextPath: '/despega/a2' }
 }
 
 /** Preserve legacy continuity without altering a user's responses. */
@@ -83,13 +125,40 @@ export async function repairLegacyC2Completion(userId: string): Promise<boolean>
 }
 
 /** Keep canonical journey state aligned when the first A3 checkpoint is opened. */
-export async function markA3JourneyVisited(userId: string): Promise<void> {
-  const supabase = createAdminClient()
-  const { data, error } = await supabase.from('despega_journey_state').select('current_module, a3_unlocked_at, version').eq('user_id', userId).maybeSingle()
-  if (error) throw error
-  if (!data || ['A4', 'COMPLETED'].includes(String(data.current_module))) return
-  if (data.current_module === 'A3' && data.a3_unlocked_at) return
-  const now = new Date().toISOString()
-  const { error: updateError } = await supabase.from('despega_journey_state').update({ current_module: 'A3', a3_unlocked_at: data.a3_unlocked_at || now, version: (Number(data.version) || 0) + 1, updated_at: now }).eq('user_id', userId)
-  if (updateError) throw updateError
+export async function markA3JourneyVisited(
+  userId: string,
+  context: JourneyTransitionContext = {},
+): Promise<void> {
+  const requestId = context.requestId || createRequestId()
+
+  try {
+    const supabase = createAdminClient()
+    const { data, error } = await supabase.from('despega_journey_state').select('current_module, a3_unlocked_at, version').eq('user_id', userId).maybeSingle()
+    if (error) throw error
+    if (!data || ['A4', 'COMPLETED'].includes(String(data.current_module))) return
+    if (data.current_module === 'A3' && data.a3_unlocked_at) return
+    const now = new Date().toISOString()
+    const nextVersion = (Number(data.version) || 0) + 1
+    const { error: updateError } = await supabase.from('despega_journey_state').update({ current_module: 'A3', a3_unlocked_at: data.a3_unlocked_at || now, version: nextVersion, updated_at: now }).eq('user_id', userId)
+    if (updateError) throw updateError
+
+    logOperationalEvent({
+      event: 'journey.a3.visited',
+      requestId,
+      status: 'success',
+      metadata: {
+        from_module: String(data.current_module),
+        to_module: 'A3',
+        version: nextVersion,
+      },
+    })
+  } catch (error) {
+    logOperationalError({
+      event: 'journey.a3.visit_failed',
+      requestId,
+      status: 'failed',
+      error,
+    })
+    throw error
+  }
 }
