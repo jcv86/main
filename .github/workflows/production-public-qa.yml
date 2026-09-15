@@ -3,9 +3,25 @@ name: Production public QA
 on:
   pull_request:
     paths:
-      - 'components/dtc/theme.tsx'
+      - 'app/layout.tsx'
       - 'app/(public)/como-funciona/layout.tsx'
+      - 'app/(public)/para-empresas/layout.tsx'
+      - 'app/(public)/contact/layout.tsx'
+      - 'app/(public)/contact/page.tsx'
+      - 'app/convenios-universidades/page.tsx'
+      - 'app/faq/page.tsx'
+      - 'app/privacy/page.tsx'
+      - 'app/terms/page.tsx'
+      - 'app/biblioteca/page.tsx'
+      - 'app/sitemap.ts'
+      - 'app/manifest.ts'
+      - 'components/dtc/theme.tsx'
+      - 'components/dtc/navbar.tsx'
+      - 'components/dtc/closing-canonical.tsx'
+      - 'components/seo-optimized-content.tsx'
+      - 'lib/faq-data.ts'
       - 'lib/schema-org.tsx'
+      - 'public/ai-training-data.md'
       - 'scripts/check-production-public-qa-contract.ts'
       - '.github/workflows/production-public-qa.yml'
   workflow_dispatch:
