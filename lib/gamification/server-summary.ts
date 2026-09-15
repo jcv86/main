@@ -10,6 +10,7 @@ export interface GamificationSummary {
   currentLevel: number
   levelLabel: string
   xpToNextLevel: number
+  xpProgressPercent: number
   dailyStreak: number
   bestStreak: number
   totalPoints: number
@@ -46,6 +47,7 @@ export function emptyGamificationSummary(): GamificationSummary {
     currentLevel: 1,
     levelLabel: 'Bronze',
     xpToNextLevel: XP_PER_LEVEL,
+    xpProgressPercent: 0,
     dailyStreak: 0,
     bestStreak: 0,
     totalPoints: 0,
@@ -98,6 +100,18 @@ export async function getGamificationSummary(
         .maybeSingle(),
     ])
 
+  const queryErrors = [
+    coreResult.error,
+    profileResult.error,
+    trainingResult.error,
+    radarResult.error,
+    balanceResult.error,
+  ].filter(Boolean)
+
+  if (queryErrors.length > 0) {
+    throw new Error(`Gamification summary query failed (${queryErrors.length})`)
+  }
+
   const core = coreResult.data
   const profile = profileResult.data
   const practices = trainingResult.data || []
@@ -118,6 +132,10 @@ export async function getGamificationSummary(
   const totalXp = coreXp + profileXp
   const currentLevel = Math.floor(totalXp / XP_PER_LEVEL) + 1
   const xpToNextLevel = currentLevel * XP_PER_LEVEL - totalXp
+  const xpProgressPercent = Math.min(
+    100,
+    Math.max(0, Math.round(((totalXp % XP_PER_LEVEL) / XP_PER_LEVEL) * 100)),
+  )
 
   const completedRadar = radarModules.filter((module) => module.completado).length
   const radarProgress = radarModules.length
@@ -152,6 +170,7 @@ export async function getGamificationSummary(
         ? profile.current_level
         : `Nivel ${currentLevel}`,
     xpToNextLevel,
+    xpProgressPercent,
     dailyStreak: Math.max(0, Number(profile?.interview_streak) || 0),
     bestStreak: Math.max(0, Number(profile?.best_interview_streak) || 0),
     totalPoints: Math.max(0, Number(balanceResult.data?.balance) || 0),
