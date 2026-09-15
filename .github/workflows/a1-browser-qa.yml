@@ -80,6 +80,8 @@ jobs:
           npx tsx scripts/a1-browser-qa/seed-invitation.ts
       - name: Scanner-safe single-use invitation in real browser
         run: node scripts/a1-browser-qa/invitation-browser.mjs
+      - name: Preview-equivalent middleware runtime boundaries
+        run: node scripts/a1-browser-qa/runtime-boundary-browser.mjs
       - name: Browser, cookies, PostgREST, preferences persistence, mobile and print
         run: node scripts/a1-browser-qa/browser.mjs
       - name: A1-A4 map, persisted progress and navigation in the same local stack
