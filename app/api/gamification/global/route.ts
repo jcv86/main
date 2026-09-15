@@ -5,12 +5,21 @@ import {
   getGamificationSummary,
 } from '@/lib/gamification/server-summary'
 
-function toApiPayload(summary: Awaited<ReturnType<typeof getGamificationSummary>>) {
+type AvailabilityReason = 'unauthenticated' | 'unavailable' | null
+
+function toApiPayload(
+  summary: Awaited<ReturnType<typeof getGamificationSummary>>,
+  available = true,
+  availabilityReason: AvailabilityReason = null,
+) {
   return {
+    available,
+    availability_reason: availabilityReason,
     total_xp: summary.totalXp,
     current_level: summary.currentLevel,
     level_label: summary.levelLabel,
     xp_to_next_level: summary.xpToNextLevel,
+    xp_progress_percent: summary.xpProgressPercent,
     daily_streak: summary.dailyStreak,
     total_points: summary.totalPoints,
     badges: summary.badges,
@@ -48,13 +57,21 @@ export async function GET() {
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json(toApiPayload(emptyGamificationSummary()))
+      return NextResponse.json(
+        toApiPayload(emptyGamificationSummary(), false, 'unauthenticated'),
+        { headers: { 'Cache-Control': 'no-store' } },
+      )
     }
 
     const summary = await getGamificationSummary(currentUser.id)
-    return NextResponse.json(toApiPayload(summary))
+    return NextResponse.json(toApiPayload(summary), {
+      headers: { 'Cache-Control': 'private, no-store' },
+    })
   } catch (error) {
     console.error('[v0] Error fetching global gamification:', error)
-    return NextResponse.json(toApiPayload(emptyGamificationSummary()))
+    return NextResponse.json(
+      toApiPayload(emptyGamificationSummary(), false, 'unavailable'),
+      { headers: { 'Cache-Control': 'no-store' } },
+    )
   }
 }
