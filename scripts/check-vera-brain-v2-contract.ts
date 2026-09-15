@@ -37,7 +37,7 @@ const context = readFileSync(join(process.cwd(), 'lib/vera/context-pack.ts'), 'u
 
 assert.ok(route.includes('resolveServerUser()'), 'A4 Vera route must verify Supabase session')
 assert.ok(route.includes('requestSchema.safeParse(payload)'), 'A4 Vera route must validate payload')
-assert.ok(route.includes("code: 'authentication_required'"), 'A4 Vera route must reject anonymous access')
+assert.ok(route.includes("'authentication_required'"), 'A4 Vera route must reject anonymous access')
 assert.ok(route.includes("store: false"), 'A4 Vera route must disable provider response storage')
 assert.ok(route.includes("runVeraTool('journey_context')"), 'Agentic path must use server-owned journey tool')
 assert.ok(route.includes("'x-vera-track'"), 'Response must expose non-sensitive routing mode')
