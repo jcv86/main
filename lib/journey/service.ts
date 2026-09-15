@@ -1,7 +1,9 @@
 import 'server-only'
 
+import { cache } from 'react'
 import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
+import { resolveA2DayAccess } from './a2-day-access'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { DEMO_COOKIE_NAME, verifyDemoSessionToken } from '@/lib/auth/demo-user'
 import { canonicalOnboardingPath } from './flow'
@@ -336,7 +338,7 @@ function hydrateJourneyState(
   }
 }
 
-export async function getJourneyForCurrentUser() {
+export const getJourneyForCurrentUser = cache(async function getJourneyForCurrentUser() {
   const identity = await getCurrentIdentity()
   if (!identity) return null
 
@@ -387,7 +389,7 @@ export async function getJourneyForCurrentUser() {
     access: getModuleAccess(state, profile),
     isDemo: identity.isDemo,
   }
-}
+})
 
 export async function requireJourneyModule(
   module: Exclude<JourneyModule, 'COMPLETED'>,
@@ -407,12 +409,9 @@ export async function requireJourneyModule(
 
 export async function requireA2Day(day: number) {
   const journey = await requireJourneyModule('A2')
-  if (
-    day < 1 ||
-    day > 90 ||
-    day > journey.state.highestA2DayUnlocked
-  ) {
-    redirect(`/despega/a2/dia-${journey.state.highestA2DayUnlocked}`)
+  const decision = resolveA2DayAccess(day, journey.state.highestA2DayUnlocked)
+  if ('redirectDay' in decision) {
+    redirect(`/despega/a2/dia-${decision.redirectDay}`)
   }
   return journey
 }

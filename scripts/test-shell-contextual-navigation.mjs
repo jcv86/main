@@ -10,9 +10,10 @@ const requirements = [
   ['focus restoration', shell.includes('menuButtonRef.current?.focus()')],
   ['drawer initial focus', shell.includes('closeButtonRef.current?.focus()')],
   ['aria controls', shell.includes('aria-controls="mobile-navigation"')],
-  ['journey state', shell.includes('currentJourneyIndex') && shell.includes('completed')],
-  ['active state label', shell.includes("'En progreso'")],
-  ['pending state label', shell.includes("'Pendiente'")],
+  ['canonical journey state', shell.includes('flow.cards.find') && shell.includes("state === 'completed'")],
+  ['active state label', shell.includes("'En curso'")],
+  ['locked state label', shell.includes("'Bloqueado'")],
+  ['locked navigation disabled', shell.includes('aria-disabled="true"')],
 ]
 
 const failures = requirements.filter(([, passed]) => !passed)

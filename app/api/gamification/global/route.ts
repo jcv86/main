@@ -4,13 +4,29 @@ import {
   emptyGamificationSummary,
   getGamificationSummary,
 } from '@/lib/gamification/server-summary'
+import {
+  DTC_REQUEST_ID_HEADER,
+  resolveRequestId,
+} from '@/lib/observability/request-id'
+import { logOperationalError } from '@/lib/observability/server-log'
 
-function toApiPayload(summary: Awaited<ReturnType<typeof getGamificationSummary>>) {
+type AvailabilityReason = 'unauthenticated' | 'unavailable' | null
+
+function toApiPayload(
+  summary: Awaited<ReturnType<typeof getGamificationSummary>>,
+  requestId: string,
+  available = true,
+  availabilityReason: AvailabilityReason = null,
+) {
   return {
+    request_id: requestId,
+    available,
+    availability_reason: availabilityReason,
     total_xp: summary.totalXp,
     current_level: summary.currentLevel,
     level_label: summary.levelLabel,
     xp_to_next_level: summary.xpToNextLevel,
+    xp_progress_percent: summary.xpProgressPercent,
     daily_streak: summary.dailyStreak,
     total_points: summary.totalPoints,
     badges: summary.badges,
@@ -44,17 +60,54 @@ function toApiPayload(summary: Awaited<ReturnType<typeof getGamificationSummary>
   }
 }
 
-export async function GET() {
+function jsonResponse(
+  payload: ReturnType<typeof toApiPayload>,
+  requestId: string,
+  cacheControl = 'no-store',
+) {
+  return NextResponse.json(payload, {
+    headers: {
+      'Cache-Control': cacheControl,
+      [DTC_REQUEST_ID_HEADER]: requestId,
+    },
+  })
+}
+
+export async function GET(request: Request) {
+  const requestId = resolveRequestId(request.headers)
+
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json(toApiPayload(emptyGamificationSummary()))
+      return jsonResponse(
+        toApiPayload(
+          emptyGamificationSummary(),
+          requestId,
+          false,
+          'unauthenticated',
+        ),
+        requestId,
+      )
     }
 
     const summary = await getGamificationSummary(currentUser.id)
-    return NextResponse.json(toApiPayload(summary))
+    return jsonResponse(toApiPayload(summary, requestId), requestId, 'private, no-store')
   } catch (error) {
-    console.error('[v0] Error fetching global gamification:', error)
-    return NextResponse.json(toApiPayload(emptyGamificationSummary()))
+    logOperationalError({
+      event: 'gamification.global.failed',
+      requestId,
+      route: '/api/gamification/global',
+      status: 200,
+      error,
+    })
+    return jsonResponse(
+      toApiPayload(
+        emptyGamificationSummary(),
+        requestId,
+        false,
+        'unavailable',
+      ),
+      requestId,
+    )
   }
 }

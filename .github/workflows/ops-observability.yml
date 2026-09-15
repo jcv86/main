@@ -1,0 +1,37 @@
+name: Ops request observability
+
+on:
+  pull_request:
+    paths:
+      - 'middleware.ts'
+      - 'lib/observability/**'
+      - 'lib/journey/transitions.ts'
+      - 'app/api/journey/transition/route.ts'
+      - 'app/api/gamification/global/route.ts'
+      - 'components/phase-transition-handler.tsx'
+      - 'components/a2-canonical-intro.tsx'
+      - 'scripts/check-ops-correlation-contract.ts'
+      - '.github/workflows/ops-observability.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  correlation:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Correlation and redaction contract
+        run: pnpm exec tsx scripts/check-ops-correlation-contract.ts
+      - name: TypeScript
+        run: pnpm exec tsc --noEmit
+      - name: Production build
+        run: pnpm build

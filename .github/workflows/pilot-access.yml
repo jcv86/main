@@ -27,5 +27,7 @@ jobs:
       - run: pnpm test:pilot-access
       - run: pnpm check:pilot-access
       - run: pnpm exec tsx scripts/check-global-auth-boundary-contract.ts
+      - run: pnpm check:production-laboratory-boundary
+      - run: pnpm check:signin-recovery
       - run: pnpm exec tsc --noEmit
       - run: pnpm build

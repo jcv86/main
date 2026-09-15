@@ -4,6 +4,10 @@ import { checkRateLimit, rateLimiters } from '@/lib/middleware/rate-limit'
 import { logger } from '@/lib/logger'
 import { getPillarFromPath, shouldEnforcePillarAccess, getAccessDeniedRedirect } from '@/lib/pillar-access-validation'
 import { DEMO_COOKIE_NAME, demoSessionCookieOptions } from '@/lib/auth/demo-user'
+import {
+  DTC_REQUEST_ID_HEADER,
+  resolveRequestId,
+} from '@/lib/observability/request-id'
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -36,6 +40,18 @@ const PILLAR_EXEMPT_ROUTES = [
   '/api/documentos',
 ]
 
+const PRODUCTION_LAB_ROUTE_PREFIXES = ['/test', '/demo', '/design-system'] as const
+const PRODUCTION_LAB_ROUTES = ['/auth/debug', '/auth/test'] as const
+
+export function isProductionLaboratoryRoute(pathname: string): boolean {
+  return PRODUCTION_LAB_ROUTES.includes(pathname as (typeof PRODUCTION_LAB_ROUTES)[number])
+    || PRODUCTION_LAB_ROUTE_PREFIXES.some(
+      (prefix) => pathname === prefix
+        || pathname.startsWith(`${prefix}/`)
+        || pathname.startsWith(`${prefix}-`),
+    )
+}
+
 function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
 }
@@ -60,15 +76,32 @@ function isPillarExemptRoute(pathname: string): boolean {
   return PILLAR_EXEMPT_ROUTES.some(route => pathname.startsWith(route))
 }
 
+function withRequestId<T extends Response>(response: T, requestId: string): T {
+  response.headers.set(DTC_REQUEST_ID_HEADER, requestId)
+  return response
+}
+
 export async function middleware(request: NextRequest) {
   const pathname = request.nextUrl.pathname
+  const requestId = resolveRequestId(request.headers)
+  const forwardedHeaders = new Headers(request.headers)
+  forwardedHeaders.set(DTC_REQUEST_ID_HEADER, requestId)
+
+  // Internal laboratories are available only on a developer's localhost.
+  // Both Preview and Production are externally reachable Vercel environments.
+  if (process.env.VERCEL_ENV && isProductionLaboratoryRoute(pathname)) {
+    return withRequestId(new NextResponse(null, {
+      status: 404,
+      headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+    }), requestId)
+  }
 
   // Fix double slashes in pathname
   if (pathname.includes('//')) {
     const normalizedPath = pathname.replace(/\/+/g, '/')
     const normalizedUrl = new URL(request.nextUrl)
     normalizedUrl.pathname = normalizedPath
-    return NextResponse.redirect(normalizedUrl)
+    return withRequestId(NextResponse.redirect(normalizedUrl), requestId)
   }
 
   // Handle API routes with CORS and rate limiting
@@ -88,13 +121,15 @@ export async function middleware(request: NextRequest) {
       if (rateLimitResponse) {
         logger.warn('Rate limit exceeded', {
           path: request.nextUrl.pathname,
-          ip: request.headers.get('x-forwarded-for') || request.headers.get('x-real-ip'),
+          requestId,
         })
-        return rateLimitResponse
+        return withRequestId(rateLimitResponse, requestId)
       }
     }
 
-    const response = NextResponse.next()
+    const response = NextResponse.next({
+      request: { headers: forwardedHeaders },
+    })
 
     // Set CORS headers with restricted origin
     const allowedOrigins = [
@@ -114,7 +149,7 @@ export async function middleware(request: NextRequest) {
     }
 
     response.headers.set('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
-    response.headers.set('Access-Control-Allow-Headers', 'Content-Type, Authorization')
+    response.headers.set('Access-Control-Allow-Headers', `Content-Type, Authorization, ${DTC_REQUEST_ID_HEADER}`)
     response.headers.set('Access-Control-Allow-Credentials', 'true')
     response.headers.set('Access-Control-Max-Age', '86400')
 
@@ -124,19 +159,9 @@ export async function middleware(request: NextRequest) {
     response.headers.set('X-XSS-Protection', '1; mode=block')
 
     if (request.method === 'OPTIONS') {
-      return response
+      return withRequestId(response, requestId)
     }
-    return response
-  }
-
-  const hostname = request.headers.get('host')?.split(':')[0] || ''
-  const isPreviewHost = hostname === 'localhost' || hostname === '127.0.0.1' || hostname.endsWith('.vercel.app') || hostname.endsWith('.v0.dev')
-  const hasPreviewAccess = request.cookies.get('dtc_preview_access')?.value === '1'
-  const hasPreviewQuery = request.nextUrl.searchParams.get('preview') === '1'
-
-  // Preview-only bypass for QA. Production domains never satisfy isPreviewHost.
-  if (isPreviewHost && (hasPreviewAccess || hasPreviewQuery)) {
-    return NextResponse.next()
+    return withRequestId(response, requestId)
   }
 
   const response = await updateSession(request)
@@ -146,7 +171,7 @@ export async function middleware(request: NextRequest) {
       maxAge: 0,
     })
   }
-  return response
+  return withRequestId(response, requestId)
 }
 
 export const config = {

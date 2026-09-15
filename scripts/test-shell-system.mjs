@@ -13,7 +13,8 @@ const requirements = [
   ['router replace on logout', shell.includes("router.replace('/auth/signin')")],
   ['canonical shadows', shell.includes('var(--dtc-shadow-')],
   ['layout imports AppShell', layout.includes("import { AppShell } from '@/components/layout/app-shell'")],
-  ['layout renders AppShell', /<AppShell>[\s\S]*?<\/AppShell>/.test(layout)],
+  ['layout loads canonical journey flow', layout.includes('const flow = await loadJourneyFlow(journey)')],
+  ['layout renders AppShell with flow', /<AppShell flow=\{flow\}>[\s\S]*?<\/AppShell>/.test(layout)],
   ['legacy navbar removed from layout', !layout.includes('DespegaNavbar')],
 ]
 

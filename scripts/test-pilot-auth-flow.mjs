@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { NextRequest } from 'next/server'
 import {
   createInvitationCookieValue,
   resolveInvitationCookieSecret,
@@ -36,13 +37,67 @@ assert.equal(
 assert.equal(resolveInvitationCookieSecret({}), '')
 
 const claimRoute = source('app/api/auth/invitation/claim/route.ts')
-assert.match(claimRoute, /createHash\(['"]sha256['"]\)/)
 assert.match(claimRoute, /claim_pilot_invitation/)
-assert.match(claimRoute, /httpOnly:\s*true/)
-assert.match(claimRoute, /sameSite:\s*['"]lax['"]/)
-assert.match(claimRoute, /maxAge:\s*PILOT_CLAIM_MAX_AGE/)
+assert.match(claimRoute, /export async function GET/)
+assert.match(claimRoute, /export async function POST/)
+const getHandler = claimRoute.slice(
+  claimRoute.indexOf('export async function GET'),
+  claimRoute.indexOf('export async function POST'),
+)
+const postHandler = claimRoute.slice(claimRoute.indexOf('export async function POST'))
+const claimProcessor = source('lib/auth/process-invitation-claim.ts')
+assert.doesNotMatch(getHandler, /claim_pilot_invitation|createAdminClient|createHash\(['"]sha256['"]\)/)
+assert.match(getHandler, /method=\"post\"/)
+assert.match(getHandler, /Confirmar y continuar/)
+assert.match(getHandler, /Cache-Control['"]:\s*['"]no-store/)
+assert.match(claimProcessor, /request\.formData\(\)/)
+assert.match(postHandler, /claim_pilot_invitation/)
+assert.match(claimProcessor, /createHash\(['"]sha256['"]\)/)
+assert.match(claimProcessor, /httpOnly:\s*true/)
+assert.match(claimProcessor, /sameSite:\s*['"]lax['"]/)
+assert.match(claimProcessor, /maxAge:\s*PILOT_CLAIM_MAX_AGE/)
 assert.match(claimRoute, /resolveInvitationCookieSecret/)
 assert.doesNotMatch(claimRoute, /console\.(?:log|warn|error)\([^)]*token/)
+
+const previousInvitationSecret = process.env.PILOT_INVITATION_COOKIE_SECRET
+process.env.PILOT_INVITATION_COOKIE_SECRET = secret
+const { GET: getInvitation } = await import(
+  '../app/api/auth/invitation/claim/route.ts'
+)
+const { processInvitationClaim } = await import('../lib/auth/process-invitation-claim.ts')
+const invitationToken = 'a'.repeat(43)
+let claimCalls = 0
+const scannerResponse = await getInvitation(
+  new NextRequest(`https://www.despegatucarrera.com/api/auth/invitation/claim?token=${invitationToken}`),
+)
+assert.equal(scannerResponse.status, 200)
+assert.equal(scannerResponse.headers.get('set-cookie'), null)
+assert.match(await scannerResponse.text(), /Confirmar y continuar/)
+assert.equal(claimCalls, 0, 'scanner GET must not claim the invitation')
+
+const form = new FormData()
+form.set('token', invitationToken)
+const claimResponse = await processInvitationClaim(
+  new NextRequest('https://www.despegatucarrera.com/api/auth/invitation/claim', {
+    method: 'POST',
+    body: form,
+  }),
+  {
+    createClaimId: () => claimId,
+    claim: async (tokenHash, receivedClaimId) => {
+      claimCalls += 1
+      assert.equal(tokenHash.length, 64)
+      assert.equal(receivedClaimId, claimId)
+      return { data: { allowed: true }, error: null }
+    },
+  },
+)
+assert.equal(claimCalls, 1, 'explicit POST must claim exactly once')
+assert.equal(claimResponse.status, 303)
+assert.equal(claimResponse.headers.get('location'), 'https://www.despegatucarrera.com/auth/signin?invited=1')
+assert.match(claimResponse.headers.get('set-cookie') || '', /dtc_pilot_claim=/)
+if (previousInvitationSecret === undefined) delete process.env.PILOT_INVITATION_COOKIE_SECRET
+else process.env.PILOT_INVITATION_COOKIE_SECRET = previousInvitationSecret
 
 for (const legacyRoutePath of [
   'app/api/auth/validate-invitation/route.ts',

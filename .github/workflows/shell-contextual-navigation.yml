@@ -5,6 +5,10 @@ on:
     paths:
       - 'components/layout/app-shell.tsx'
       - 'scripts/test-shell-contextual-navigation.mjs'
+      - 'scripts/check-shell-canonical-journey-contract.ts'
+      - 'app/despega/layout.tsx'
+      - 'lib/journey/flow.ts'
+      - 'lib/journey/flow-service.ts'
       - '.github/workflows/shell-contextual-navigation.yml'
 
 jobs:
@@ -22,6 +26,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Contextual navigation contract
         run: node scripts/test-shell-contextual-navigation.mjs
+      - name: Canonical journey states contract
+        run: pnpm run check:shell-canonical-journey
       - name: TypeScript
         run: pnpm exec tsc --noEmit
       - name: Production build

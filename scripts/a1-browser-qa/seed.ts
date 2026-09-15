@@ -29,10 +29,6 @@ async function main() {
       create table public.a3_route_progression(user_id uuid primary key,route_completed_at timestamp without time zone);
       create table public.despega_journey_state(user_id uuid primary key,metadata jsonb default '{}');
       create table public.user_preferences(id uuid primary key default gen_random_uuid(),user_id uuid not null unique references auth.users(id),language text not null default 'es',theme text not null default 'dark',notifications_enabled boolean not null default true,email_notifications boolean not null default true,timezone text not null default 'America/Santiago',weekly_insights_email boolean not null default true,goal_reminders boolean not null default true,achievement_notifications boolean not null default true,created_at timestamptz not null default now(),updated_at timestamptz not null default now());
-      create table public.qa_pilot_allowlist(user_id uuid primary key references auth.users(id));
-      create function public.resolve_pilot_access(p_user_id uuid,p_claim_id uuid default null) returns table(allowed boolean) language sql security invoker set search_path='' as $$ select exists(select 1 from public.qa_pilot_allowlist where user_id=p_user_id) $$;
-      grant all on public.qa_pilot_allowlist to service_role;
-      grant execute on function public.resolve_pilot_access(uuid,uuid) to service_role;
       alter table public.users enable row level security;
       create policy lab_users_owner on public.users for all to authenticated using(auth.uid()=id) with check(auth.uid()=id);
       alter table public.a1_cerebral_assessment enable row level security;
@@ -61,7 +57,6 @@ async function main() {
       assert.ifError(error); assert.ok(data.user)
       const id = data.user.id; users.push({label,email,id})
       await db.query('insert into public.users(id,email,full_name) values($1,$2,$3)',[id,email,`QA sintético ${label}`])
-      await db.query('insert into public.qa_pilot_allowlist values($1)',[id])
       await db.query('insert into public.despega_journey_state(user_id,metadata) values($1,$2)',[id,{a2_horizon:30}])
       await db.query('insert into public.a3_user_progress(user_id) values($1)',[id])
       await db.query('insert into public.a3_route_progression(user_id) values($1)',[id])
@@ -78,7 +73,7 @@ async function main() {
       return {more,less}
     }
     writeFileSync(join(root,'fixtures.private.json'),JSON.stringify({users,password,ordinary:fixture(),tied:fixture(true)}),{mode:0o600})
-    console.log('Four synthetic users created through real local Supabase Auth; real selected SQL installed. No remote project or email delivery used.')
+    console.log('Four synthetic users created through real local Supabase Auth; real selected SQL installed. Pilot admission is installed separately from the production migration.')
   } finally { await db.end() }
 }
 main().catch(error=>{console.error('A1 lab setup failed:',error instanceof Error?error.message:'unknown');process.exitCode=1})

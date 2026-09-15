@@ -11,14 +11,17 @@ import {
   providerRedirect,
   type PilotOAuthProvider,
 } from '@/lib/auth/pilot-access'
+import { getAuthenticationRecovery } from '@/lib/auth/signin-recovery'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent } from '@/components/ui/card'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 
 export default function SignInPage() {
   const searchParams = useSearchParams()
   const [error, setError] = useState('')
   const [loadingProvider, setLoadingProvider] = useState<PilotOAuthProvider | null>(null)
   const urlError = searchParams.get('error')
+  const recovery = getAuthenticationRecovery(searchParams.get('reason'), searchParams.get('next'))
 
   const signIn = async (provider: PilotOAuthProvider) => {
     setError('')
@@ -71,9 +74,22 @@ export default function SignInPage() {
               </p>
             )}
             {safeError && (
-              <div className="flex gap-3 rounded-lg border border-red/30 bg-red/10 p-3 text-sm text-red/80">
-                <AlertCircle className="h-5 w-5 shrink-0" /><p>{safeError}</p>
-              </div>
+              <Alert variant="destructive" aria-live="polite">
+                <AlertCircle className="h-5 w-5" />
+                <AlertDescription>{safeError}</AlertDescription>
+              </Alert>
+            )}
+            {recovery && (
+              <Alert variant="warning" aria-live="polite">
+                <AlertCircle className="h-5 w-5" />
+                <AlertTitle>{recovery.title}</AlertTitle>
+                <AlertDescription>
+                  <p>{recovery.message}</p>
+                  <Button asChild variant="outline" size="sm" className="mt-3">
+                    <Link href={recovery.retryHref}>Intentar nuevamente</Link>
+                  </Button>
+                </AlertDescription>
+              </Alert>
             )}
 
             <Button className="h-12 w-full bg-white text-slate-900 hover:bg-white/90" disabled={loadingProvider !== null} onClick={() => signIn('google')}>

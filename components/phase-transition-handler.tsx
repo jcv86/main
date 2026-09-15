@@ -6,6 +6,10 @@ import { ArrowRight, CheckCircle2, Loader2, Trophy, Zap } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  createRequestId,
+  DTC_REQUEST_ID_HEADER,
+} from '@/lib/observability/request-id'
 
 interface PhaseTransitionProps {
   currentPhase: 'a1' | 'a2' | 'a3' | 'a4'
@@ -15,7 +19,7 @@ interface PhaseTransitionProps {
   nextPhaseUrl: string
   onTransitionReady?: () => void
 }
-interface TransitionPayload { success?: boolean; nextPath?: string; error?: string }
+interface TransitionPayload { success?: boolean; nextPath?: string; error?: string; request_id?: string }
 const PHASE_CONFIG = {
   a1: { name: 'Despega Cerebral', nextLabel: 'Tu Ruta', step: 'a1_report' },
   a2: { name: 'Tu Ruta', nextLabel: 'Entrenamiento', step: 'a2_intro' },
@@ -35,16 +39,27 @@ export function PhaseTransitionHandler({ currentPhase, isComplete, nextPhaseLabe
     try {
       let nextPath = nextPhaseUrl
       if (config.step) {
-        const response = await fetch('/api/journey/transition', { method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'include', body: JSON.stringify({ step: config.step }) })
+        const requestId = createRequestId()
+        const response = await fetch('/api/journey/transition', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            [DTC_REQUEST_ID_HEADER]: requestId,
+          },
+          credentials: 'include',
+          body: JSON.stringify({ step: config.step }),
+        })
         const payload = (await response.json().catch(() => ({}))) as TransitionPayload
-        if (!response.ok || !payload.nextPath) throw new Error(payload.error || 'No pudimos registrar la transición.')
+        const supportId = payload.request_id || response.headers.get(DTC_REQUEST_ID_HEADER) || requestId
+        if (!response.ok || !payload.nextPath) {
+          throw new Error(`${payload.error || 'No pudimos registrar la transición.'} Código de soporte: ${supportId}`)
+        }
         nextPath = payload.nextPath
       }
       onTransitionReady?.()
       router.push(nextPath)
       router.refresh()
     } catch (transitionError) {
-      console.error('[v0] Phase transition error:', transitionError)
       setError(transitionError instanceof Error ? transitionError.message : 'No pudimos continuar.')
     } finally { setUpdating(false) }
   }
