@@ -30,8 +30,7 @@ alter table public.despega_user_profiles
   add column if not exists a4_unlocked boolean default false;
 
 create unique index if not exists despega_user_profiles_user_id_uidx
-  on public.despega_user_profiles(user_id)
-  where user_id is not null;
+  on public.despega_user_profiles(user_id);
 
 create table if not exists public.despega_journey_state (
   user_id uuid primary key references auth.users(id) on delete cascade,
