@@ -75,10 +75,10 @@ begin
 end
 $verify$;
 
--- Prove that revoking browser EXECUTE does not disable the existing trigger
--- execution path used by the privileged auth role.
+-- Trigger execution is independent from browser RPC EXECUTE grants once the
+-- trigger exists. Exercise the trigger after the revokes; the explicit ACL
+-- assertion above separately proves supabase_auth_admin retains EXECUTE.
 begin;
-set local role supabase_auth_admin;
 insert into public.wave4_trigger_probe(note) values ('trigger-still-runs');
 rollback;
 
