@@ -1,3 +1,5 @@
+'use client'
+
 import Link from 'next/link'
 import { ArrowRight, Brain, Check, Dumbbell, Map, Radar, Sparkles } from 'lucide-react'
 import { COLORS, GRADIENT_BTN, GradientText, ROUTES } from './theme'
