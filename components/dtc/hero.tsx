@@ -20,8 +20,8 @@ const TRUST = [
 const PROOF = [
   { value: '4', label: 'etapas conectadas' },
   { value: '90', label: 'días de ruta adaptable' },
-  { value: '1', label: 'contexto compartido' },
-  { value: '2', label: 'modos de Vera' },
+  { value: '1', label: 'perfil que evoluciona' },
+  { value: '2', label: 'niveles de acompañamiento' },
 ]
 
 export default function DtcHero() {
@@ -44,7 +44,7 @@ export default function DtcHero() {
               style={{ border: `1px solid ${COLORS.border}`, background: 'rgba(255,255,255,0.035)', color: COLORS.textMuted }}
             >
               <Sparkles className="h-3.5 w-3.5" style={{ color: COLORS.teal }} aria-hidden />
-              Vera Brain · IA con contexto, no un chat genérico
+              Vera · IA con contexto, no un chat genérico
             </div>
 
             <h1 className="max-w-[780px] text-balance text-[2.65rem] font-bold leading-[1.03] tracking-[-0.045em] text-white sm:text-5xl lg:text-[4rem]">
@@ -149,12 +149,12 @@ function VeraSystemMap() {
             Contexto activo
           </div>
           <span className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Vera</span>
-          <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]" style={{ color: COLORS.textMuted }}>Brain v2</span>
+          <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]" style={{ color: COLORS.textMuted }}>Coach con evidencia</span>
           <div className="mt-2 flex gap-1 text-[8px] font-medium sm:mt-3 sm:gap-1.5 sm:text-[9px]">
-            <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-1 text-white/70 sm:px-2">Fast</span>
-            <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-1 text-white/70 sm:px-2">Agentic</span>
+            <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-1 text-white/70 sm:px-2">Respuesta rápida</span>
+            <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-1 text-white/70 sm:px-2">Análisis profundo</span>
           </div>
-          <span className="mt-3 hidden text-[10px] leading-4 sm:block" style={{ color: COLORS.textFaint }}>Router → evidencia → intervención</span>
+          <span className="mt-3 hidden text-[10px] leading-4 sm:block" style={{ color: COLORS.textFaint }}>Pregunta → evidencia → siguiente paso</span>
         </div>
       </div>
 
