@@ -14,14 +14,10 @@ export interface VeraToolResultMap {
  * server session; callers never provide a user id.
  */
 export async function runVeraTool<T extends VeraToolId>(tool: T): Promise<VeraToolResultMap[T]> {
-  switch (tool) {
-    case 'journey_context': {
-      const context = await getSharedJourneyContext()
-      return (context ? buildVeraEvidencePack(context) : null) as VeraToolResultMap[T]
-    }
-    default: {
-      const unreachable: never = tool
-      throw new Error(`Unsupported Vera tool: ${String(unreachable)}`)
-    }
+  if (tool === 'journey_context') {
+    const context = await getSharedJourneyContext()
+    return (context ? buildVeraEvidencePack(context) : null) as VeraToolResultMap[T]
   }
+
+  throw new Error(`Unsupported Vera tool: ${String(tool)}`)
 }
