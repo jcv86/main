@@ -6,7 +6,7 @@ const migration = readFileSync(migrationPath, 'utf8')
 
 const arrays = [...migration.matchAll(/foreach target_table in array array\[([^\]]+)\]/g)]
   .map((match) => [...match[1].matchAll(/'([a-z0-9_]+)'/g)].map((item) => item[1]))
-assert.deepEqual(arrays.map((items) => items.length), [10, 15, 8, 3])
+assert.deepEqual(arrays.map((items) => items.length), [8, 15, 8, 5])
 
 const hardened = arrays.flat()
 assert.equal(new Set(hardened).size, 36, 'wave 3 classifications must not overlap')
@@ -33,7 +33,7 @@ console.log(JSON.stringify({
   migration: migrationPath,
   classifiedRemainingTables: 35,
   additionalDependencyTable: 'book_reviews',
-  policyGroups: { uuidOwner: 10, emailOwner: 15, publicReadOnly: 8, serverOnly: 3 },
+  policyGroups: { uuidOwner: 8, emailOwner: 15, publicReadOnly: 8, serverOnly: 5 },
   readingStatsRpc: 'authenticated owner-bound',
   estimatedAfter: { rlsDisabled: 0, advisor0007: 0 },
 }, null, 2))
