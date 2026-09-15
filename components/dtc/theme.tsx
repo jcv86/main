@@ -25,7 +25,7 @@ export const GRADIENT_BTN = `linear-gradient(135deg, ${COLORS.purple}, ${COLORS.
 /* Routes used by all CTAs */
 export const ROUTES = {
   diagnostico: '/comenzar',
-  pruebaEnVivo: '/demo',
+  pruebaEnVivo: '/#perfil-vivo',
   empleo: '/careers',
   instituciones: '/convenios-universidades',
   preguntas: '/faq',

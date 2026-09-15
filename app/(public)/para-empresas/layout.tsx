@@ -1,24 +1,43 @@
 import type { Metadata } from "next"
-import { generateOrganizationSchema, generateFAQSchema, generateBreadcrumbSchema, generateProductSchema } from "@/lib/schema-org"
+import { generateOrganizationSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema-org"
 
 export const metadata: Metadata = {
   title: "Para Empresas | Despega Tu Carrera",
-  description: "Solución de desarrollo profesional para empresas. Reduce rotación, mejora retención, y desarrolla talento con nuestra plataforma de coaching IA.",
+  description:
+    "Conoce cómo una organización puede evaluar Despega Tu Carrera mediante un piloto acotado, con alcance, métricas y resguardos acordados antes de comenzar.",
+  alternates: {
+    canonical: "https://www.despegatucarrera.com/para-empresas",
+  },
   openGraph: {
     title: "Para Empresas | Despega Tu Carrera",
-    description: "Solución B2B de desarrollo profesional con coaching IA para empresas.",
+    description:
+      "Pilotos institucionales de desarrollo profesional con alcance, evidencia y responsabilidades definidas antes de escalar.",
     type: "website",
     url: "https://www.despegatucarrera.com/para-empresas",
   },
 }
 
 const enterpriseFaqs = [
-  { question: "¿Cómo funciona el programa piloto?", answer: "El programa piloto dura 4-8 semanas e incluye un grupo selecto de empleados para medir resultados." },
-  { question: "¿Qué métricas de ROI proporcionan?", answer: "Medimos retención, engagement, tiempo de promoción, y satisfacción laboral." },
-  { question: "¿Se integra con nuestros sistemas de HR?", answer: "Sí, nos integramos con ADP, SAP SuccessFactors, Workday, y otros sistemas HR." },
-  { question: "¿Ofrecen white-label?", answer: "Sí, el plan Enterprise incluye opciones de personalización completa de marca." },
-  { question: "¿Cuántos empleados necesitamos mínimo?", answer: "El programa Startup acepta desde 10 empleados. Enterprise es para 100+ empleados." },
-  { question: "¿Tienen soporte en español?", answer: "Sí, todo nuestro soporte y contenido está disponible en español latinoamericano." },
+  {
+    question: "¿Cómo se define un piloto?",
+    answer:
+      "El alcance se acuerda caso a caso: objetivo, participantes, duración, soporte, resguardos y señales observables antes de comenzar.",
+  },
+  {
+    question: "¿Qué resultados garantiza DTC?",
+    answer:
+      "DTC no garantiza retención, ascensos, empleo, ahorro ni retorno sobre inversión. El piloto busca observar participación, aprendizaje y utilidad antes de decidir cualquier expansión.",
+  },
+  {
+    question: "¿Qué datos puede ver una organización?",
+    answer:
+      "El alcance de cualquier reporte debe definirse explícitamente. Las respuestas individuales permanecen protegidas y no se convierten automáticamente en información visible para la organización.",
+  },
+  {
+    question: "¿Existen integraciones, white-label o precios estándar?",
+    answer:
+      "No se publican como capacidades o condiciones estándar. Cualquier necesidad técnica, personalización o condición comercial debe evaluarse y acordarse específicamente para el piloto.",
+  },
 ]
 
 export default function ParaEmpresasLayout({ children }: { children: React.ReactNode }) {
@@ -28,15 +47,6 @@ export default function ParaEmpresasLayout({ children }: { children: React.React
     { name: "Inicio", url: "https://www.despegatucarrera.com" },
     { name: "Para Empresas", url: "https://www.despegatucarrera.com/para-empresas" },
   ])
-  const productSchema = generateProductSchema({
-    name: "DTC Enterprise - Desarrollo Profesional para Empresas",
-    description: "Plataforma de coaching IA para desarrollo de talento corporativo",
-    price: "2000",
-    currency: "USD",
-    rating: 4.9,
-    ratingCount: 48,
-    availability: "https://schema.org/InStock",
-  })
 
   return (
     <>
@@ -51,10 +61,6 @@ export default function ParaEmpresasLayout({ children }: { children: React.React
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }}
       />
       {children}
     </>

@@ -2,14 +2,14 @@ import type { MetadataRoute } from "next"
 
 export default function manifest(): MetadataRoute.Manifest {
   return {
-    name: "TuCarrera.cl - Desarrollo Profesional con IA",
-    short_name: "TuCarrera",
+    name: "Despega Tu Carrera",
+    short_name: "DTC",
     description:
-      "Plataforma líder en Chile para desarrollo profesional con tests psicométricos, libros y coaching con IA",
+      "Recorrido de desarrollo profesional que conecta autoconocimiento, una ruta de 90 días, práctica y contexto de mercado con apoyo de IA.",
     start_url: "/",
     display: "standalone",
-    background_color: "#ffffff",
-    theme_color: "#7c3aed",
+    background_color: "#080B14",
+    theme_color: "#080B14",
     orientation: "portrait",
     icons: [
       {

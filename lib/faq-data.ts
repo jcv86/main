@@ -10,213 +10,153 @@ export interface FAQItem {
 export type FAQCategory = "tests" | "biblioteca" | "coach-ia" | "cuenta" | "empresa" | "general"
 
 export const FAQ_CATEGORIES: Record<FAQCategory, { label: string; icon: string }> = {
-  tests: { label: "Tests Psicométricos", icon: "clipboard" },
-  biblioteca: { label: "Biblioteca", icon: "book" },
-  "coach-ia": { label: "Coach IA", icon: "sparkles" },
+  tests: { label: "A1 · Autoconocimiento", icon: "clipboard" },
+  biblioteca: { label: "A2 · Tu Ruta", icon: "book" },
+  "coach-ia": { label: "Vera", icon: "sparkles" },
   cuenta: { label: "Cuenta y Acceso", icon: "user" },
-  empresa: { label: "Empresas", icon: "building" },
+  empresa: { label: "Instituciones", icon: "building" },
   general: { label: "General", icon: "help" },
 }
 
 export const FAQ_DATA: FAQItem[] = [
   {
     id: "que-es-dtc",
-    question: "¿Qué es Despega Tu Carrera y cómo puede ayudarme?",
+    question: "¿Qué es Despega Tu Carrera?",
     answer:
-      "Despega Tu Carrera es la plataforma líder en Chile para desarrollo profesional. Combina tests psicométricos científicos (Despega Cerebral, Mapa de Personalidad, 5 Dimensiones, Brújula Vocacional, Inteligencia Emocional), una biblioteca con más de 120 libros profesionales y coaching personalizado con inteligencia artificial. Te ayudamos a descubrir tu potencial, desarrollar habilidades clave y alcanzar tus objetivos profesionales.",
+      "Despega Tu Carrera es un recorrido de desarrollo profesional conectado en cuatro etapas. A1 ayuda a observar tu punto de partida e identidad profesional; A2 organiza una ruta de 90 días; A3 permite practicar situaciones reales; y A4 incorpora señales y contexto de mercado. El objetivo es ayudarte a tomar decisiones con más evidencia, no prometerte un empleo ni decidir por ti.",
     category: "general",
-    keywords: ["plataforma", "desarrollo profesional", "ayuda", "qué es", "beneficios"],
-    relatedIds: ["tests-confiables", "coach-ia-funciona"],
+    keywords: ["qué es", "desarrollo profesional", "a1", "a2", "a3", "a4", "evidencia"],
+    relatedIds: ["como-funciona-90-dias", "quien-es-vera"],
   },
   {
-    id: "tests-confiables",
-    question: "¿Los tests psicométricos son confiables?",
+    id: "que-es-a1",
+    question: "¿Qué hace A1 · Despega Cerebral?",
     answer:
-      "Sí, utilizamos tests psicométricos validados científicamente y reconocidos internacionalmente. Nuestros tests incluyen Despega Cerebral (comportamiento laboral), Mapa de Personalidad (tipos de personalidad), 5 Dimensiones (rasgos de personalidad), Brújula Vocacional (orientación vocacional) e Inteligencia Emocional. Miles de empresas y profesionales confían en estas evaluaciones para tomar decisiones informadas.",
+      "A1 reúne respuestas y evidencia del usuario para construir una lectura de su identidad profesional y sus patrones. No es un diagnóstico clínico ni una verdad definitiva sobre la persona: es una base de trabajo que luego se conecta con la ruta, la práctica y el contexto de mercado.",
     category: "tests",
-    keywords: ["confiables", "científicos", "validados", "precisión", "exactitud"],
-    relatedIds: ["tiempo-tests", "que-es-dtc"],
+    keywords: ["a1", "despega cerebral", "autoconocimiento", "identidad", "perfil"],
+    relatedIds: ["que-es-dtc", "privacidad-datos"],
   },
-  {
-    id: "coach-ia-funciona",
-    question: "¿Cómo funciona el coaching con inteligencia artificial?",
-    answer:
-      "Nuestro Coach IA analiza tu perfil psicométrico y te brinda recomendaciones personalizadas 24/7. Utiliza tecnología GPT-4 entrenada con conocimiento de 120+ libros profesionales y 100+ recursos especializados. Recibe consejos sobre desarrollo de carrera, habilidades blandas, liderazgo y crecimiento profesional adaptados específicamente a tu perfil y objetivos.",
-    category: "coach-ia",
-    keywords: ["coach", "ia", "inteligencia artificial", "personalizado", "funciona", "sofia", "dani"],
-    relatedIds: ["biblioteca-incluye", "que-es-dtc"],
-  },
-  {
-    id: "biblioteca-incluye",
-    question: "¿Qué incluye la biblioteca profesional?",
-    answer:
-      "Acceso a más de 120 libros completos sobre desarrollo profesional, liderazgo, inteligencia emocional, productividad, comunicación efectiva y habilidades blandas. Incluye bestsellers como '7 Hábitos de la Gente Altamente Efectiva', 'Inteligencia Emocional', 'Hábitos Atómicos', 'Cómo Ganar Amigos' y muchos más. Además, 100+ recursos web curados del mercado chileno.",
-    category: "biblioteca",
-    keywords: ["biblioteca", "libros", "contenido", "recursos", "bestsellers"],
-    relatedIds: ["es-gratis", "coach-ia-funciona"],
-  },
-  {
-    id: "tiempo-tests",
-    question: "¿Cuánto tiempo toma completar los tests?",
-    answer:
-      "Cada test toma entre 10-20 minutos. Despega Cerebral: 15 min, Mapa de Personalidad: 20 min, 5 Dimensiones: 15 min, Brújula Vocacional: 20 min, Inteligencia Emocional: 15 min, Competencias: 15 min. Puedes tomarlos en cualquier momento y desde cualquier dispositivo. Los resultados están disponibles inmediatamente después de completar cada evaluación.",
-    category: "tests",
-    keywords: ["tiempo", "duración", "cuánto demora", "minutos", "rápido"],
-    relatedIds: ["tests-confiables", "resultados-privados"],
-  },
-  {
-    id: "es-gratis",
-    question: "¿Es gratis la plataforma?",
-    answer:
-      "Sí, Despega Tu Carrera ofrece acceso gratuito a todos sus tests psicométricos, biblioteca completa de libros y coaching básico con IA. Estamos comprometidos con democratizar el acceso al desarrollo profesional en Chile. Planes premium con funcionalidades avanzadas estarán disponibles próximamente.",
-    category: "cuenta",
-    keywords: ["gratis", "precio", "costo", "pago", "gratuito", "free"],
-    relatedIds: ["que-es-dtc", "biblioteca-incluye"],
-  },
-  {
-    id: "para-empresas",
-    question: "¿Puedo usar Despega Tu Carrera para mi equipo o empresa?",
-    answer:
-      "Sí, ofrecemos soluciones para empresas que desean evaluar y desarrollar el talento de sus equipos. Contáctanos para conocer planes corporativos que incluyen evaluaciones masivas, dashboards de equipo, análisis comparativos y coaching especializado para líderes.",
-    category: "empresa",
-    keywords: ["empresa", "equipo", "corporativo", "negocio", "rrhh", "recursos humanos"],
-    relatedIds: ["tests-confiables", "resultados-privados"],
-  },
-  {
-    id: "resultados-privados",
-    question: "¿Los resultados de los tests son privados?",
-    answer:
-      "Absolutamente. Tus resultados son completamente privados y solo tú puedes acceder a ellos. No compartimos información personal con terceros. Puedes descargar tus resultados en PDF o compartirlos voluntariamente cuando lo desees, por ejemplo, en procesos de selección o desarrollo profesional.",
-    category: "cuenta",
-    keywords: ["privacidad", "privados", "seguridad", "confidencial", "datos"],
-    relatedIds: ["es-gratis", "para-empresas"],
-  },
-  {
-    id: "diferencia-sofia-dani",
-    question: "¿Cuál es la diferencia entre Sofia y Dani?",
-    answer:
-      "Sofia y Dani son nuestros dos coaches virtuales con personalidades complementarias. Sofia se especializa en apoyo emocional, motivación y desarrollo personal, con un enfoque empático y cálido. Dani se enfoca en estrategia profesional, planificación de carrera y aspectos técnicos como CV, entrevistas y networking, con un enfoque más estructurado y analítico. El sistema selecciona automáticamente el coach más apropiado según tu consulta.",
-    category: "coach-ia",
-    keywords: ["sofia", "dani", "diferencia", "coaches", "personalidades"],
-    relatedIds: ["coach-ia-funciona", "que-es-dtc"],
-  },
-  {
-    id: "como-empezar",
-    question: "¿Cómo empiezo a usar la plataforma?",
-    answer:
-      "Es muy simple: 1) Crea tu cuenta gratuita, 2) Completa al menos un test psicométrico para que el sistema conozca tu perfil, 3) Explora la biblioteca de libros y recursos, 4) Chatea con Sofia o Dani para recibir recomendaciones personalizadas. No necesitas tarjeta de crédito y puedes empezar inmediatamente.",
-    category: "cuenta",
-    keywords: ["empezar", "comenzar", "inicio", "primeros pasos", "tutorial"],
-    relatedIds: ["es-gratis", "tiempo-tests"],
-  },
-  // Strategic FAQ Section - Added from Landing Page
-  {
-    id: "dtc-vs-test-cualquiera",
-    question: "¿Es DTC un test cualquiera o algo más?",
-    answer:
-      "No es un test cualquiera. DTC es un sistema integral que combina diagnóstico profundo, ruta personalizada, entrenamiento práctico y contexto laboral. Mientras otros tests solo dan números o descripciones, DTC interpreta esos datos, construye una ruta, te entrena en habilidades reales y te mantiene conectado al mercado laboral. Es más parecido a tener un coach personal con IA que a completar un cuestionario.",
-    category: "general",
-    keywords: ["test", "diferencia", "sistema", "integral", "interpretación"],
-    relatedIds: ["que-es-dtc", "coach-ia-funciona"],
-  },
-  {
-    id: "estancado-ayuda-dtc",
-    question: "¿Qué pasa si estoy estancado? ¿Realmente ayuda DTC?",
-    answer:
-      "La mayoría de personas estancadas no lo están por falta de talento, sino por falta de claridad, dirección y estructura. DTC funciona precisamente para eso: te ayuda a entender qué te está frenando realmente, crea una ruta clara de 90 días con hitos medibles, y te entrena en habilidades específicas donde te bloqueas. El cambio ocurre cuando el desorden se convierte en dirección, y la comprensión en práctica.",
-    category: "general",
-    keywords: ["estancado", "ayuda", "progreso", "avance", "bloqueo"],
-    relatedIds: ["que-es-dtc", "tiempo-tests"],
-  },
-  {
-    id: "dtc-laboral-o-integral",
-    question: "¿Es solo para buscar trabajo o también para crecimiento integral?",
-    answer:
-      "Es para ambas cosas. DTC trabaja tanto la búsqueda de oportunidades laborales como tu desarrollo integral como persona. El diagnóstico te ayuda a entender cómo funcionas realmente. La ruta personalizada puede enfocarse en búsqueda activa o en crecimiento interno. El entrenamiento incluye tanto habilidades de mercado como liderazgo personal. Tú eliges el foco, pero el sistema está diseñado para que ambos aspectos mejoren.",
-    category: "general",
-    keywords: ["trabajo", "integral", "carrera", "personal", "desarrollo"],
-    relatedIds: ["coach-ia-funciona", "biblioteca-incluye"],
-  },
-  {
-    id: "diferenciacion-mercado",
-    question: "¿Cómo me diferencio realmente en el mercado?",
-    answer:
-      "La diferenciación viene de dos cosas: entender dónde realmente eres bueno (y dónde no) y saber comunicarlo con claridad. DTC te ayuda a identificar tus tensiones internas, patrones reales de avance, y fortalezas que otros no ven. Luego, el entrenamiento en entrevistas y comunicación te da las herramientas para comunicar esa diferencia de forma natural y creíble. La diferenciación auténtica viene de autoconocimiento + práctica. Eso es DTC.",
-    category: "general",
-    keywords: ["diferenciación", "mercado", "competencia", "ventaja", "único"],
-    relatedIds: ["tests-confiables", "coach-ia-funciona"],
-  },
-  {
-    id: "dtc-con-experiencia",
-    question: "¿Es útil DTC si ya tengo experiencia o es solo para junior?",
-    answer:
-      "Es especialmente útil para gente con experiencia. A veces después de años en el mercado, la claridad puede nublarse. Personas con experiencia se benefician de reenfocarse, entender qué quieren realmente, identificar si están en el rol correcto, y desarrollar criterio más profundo sobre su carrera. DTC es perfecto para eso. Si tienes experiencia pero sientes que hay algo desordenado o desalineado, este es tu momento.",
-    category: "general",
-    keywords: ["experiencia", "senior", "junior", "reenfoque", "carrera"],
-    relatedIds: ["que-es-dtc", "para-empresas"],
-  },
-  // High-intent / GEO-LLMO questions aligned with the current product (Vera, 90 días, garantía, precio)
   {
     id: "como-funciona-90-dias",
-    question: "¿Cómo funciona el programa de 90 días de Despega Tu Carrera?",
+    question: "¿Qué significa la ruta de 90 días de A2?",
     answer:
-      "El programa de 90 días de Despega Tu Carrera se estructura en cuatro fases progresivas: (1) El Ritual, donde haces un diagnóstico profundo de autoconocimiento; (2) Exploración, donde diseñas una ruta personalizada con hitos medibles; (3) Entrenamiento, donde practicas habilidades reales como entrevistas y comunicación con feedback de IA; y (4) La Realidad, donde ejecutas tu plan acompañado por Vera, tu coach con IA, las 24 horas. Cada fase desbloquea la siguiente y la memoria del sistema personaliza todo el recorrido según tu perfil.",
+      "A2 organiza el trabajo profesional en una ruta de hasta 90 días con etapas, actividades y revisiones. La ruta se conecta con la evidencia disponible del recorrido y puede retomarse desde la cuenta. Los 90 días describen la estructura de la ruta; no son una garantía de conseguir trabajo ni de lograr un resultado específico en ese plazo.",
+    category: "biblioteca",
+    keywords: ["a2", "90 días", "ruta", "misiones", "progreso"],
+    relatedIds: ["que-es-dtc", "guardar-progreso"],
+  },
+  {
+    id: "que-es-a3",
+    question: "¿Qué se practica en A3 · Entrenamiento?",
+    answer:
+      "A3 está diseñado para practicar antes del momento real. Incluye ejercicios y simulaciones relacionados con comunicación, entrevistas y decisiones profesionales. El foco es producir evidencia de práctica y aprendizaje que pueda conectarse con el resto del recorrido.",
     category: "general",
-    keywords: ["90 días", "cómo funciona", "fases", "programa", "ritual", "exploración", "entrenamiento", "realidad", "etapas"],
+    keywords: ["a3", "entrenamiento", "entrevista", "práctica", "simulación"],
+    relatedIds: ["que-es-dtc", "quien-es-vera"],
+  },
+  {
+    id: "que-es-a4",
+    question: "¿Qué aporta A4 · Radar Estratégico?",
+    answer:
+      "A4 incorpora señales y contexto de mercado para que la persona pueda revisar sus decisiones con una mirada más amplia. DTC busca distinguir datos, contexto e inferencias; no reemplaza asesoría financiera, legal ni decisiones personales del usuario.",
+    category: "general",
+    keywords: ["a4", "radar", "mercado", "señales", "contexto"],
     relatedIds: ["que-es-dtc", "quien-es-vera"],
   },
   {
     id: "quien-es-vera",
-    question: "¿Quién es Vera y cómo te acompaña?",
+    question: "¿Quién es Vera y cómo usa mi contexto?",
     answer:
-      "Vera es el coach con inteligencia artificial de Despega Tu Carrera, disponible 24/7. No es un chat genérico: Vera entiende tu perfil psicométrico, tu contexto y tus objetivos para darte respuestas personalizadas. Te acompaña con preguntas a cualquier hora, decisiones en entrevistas (qué preguntar, cómo negociar), dudas sobre tu ruta y motivación cuando tu progreso baja. Combina datos de tu diagnóstico con conocimiento del mercado laboral chileno para orientarte de forma concreta.",
+      "Vera es el coach con IA de DTC. Para preguntas simples puede responder con un camino rápido; cuando una consulta requiere contexto personal, puede usar evidencia disponible del recorrido A1–A4 mediante herramientas del servidor. Vera debe distinguir evidencia de inferencias, preguntar cuando falta contexto y dejar la decisión final en tus manos.",
     category: "coach-ia",
-    keywords: ["vera", "coach ia", "inteligencia artificial", "24/7", "acompañamiento", "asistente"],
-    relatedIds: ["coach-ia-funciona", "como-funciona-90-dias"],
+    keywords: ["vera", "coach", "ia", "contexto", "evidencia", "análisis profundo"],
+    relatedIds: ["vera-inventa", "privacidad-datos"],
   },
   {
-    id: "precio-dtc",
-    question: "¿Cuánto cuesta Despega Tu Carrera y qué incluye cada plan?",
+    id: "vera-inventa",
+    question: "¿Vera puede decidir por mí o inventar información sobre mi perfil?",
     answer:
-      "Despega Tu Carrera tiene un plan Gratuito y un plan Pro. El plan Gratuito incluye el diagnóstico inicial (30 min), tu perfil vivo con las primeras insights, 7 días de acceso a Vera y acceso a FAQ y recursos, sin tarjeta de crédito. El plan Pro cuesta $4.390 CLP al mes e incluye los 90 días completos, Vera 24/7 ilimitado, constructor de CV ATS + portfolio, ruta personalizada, recursos y templates, y garantía de 7 días sin costo. Puedes empezar gratis y subir a Pro cuando lo necesites.",
+      "No debería hacerlo. La política de Vera exige no inventar hechos sobre el usuario o el mercado y separar lo observado de lo inferido. En decisiones profesionales, su función es ayudarte a revisar criterios, trade-offs y evidencia; la decisión final pertenece al usuario.",
+    category: "coach-ia",
+    keywords: ["vera", "decisión", "inventar", "inferencia", "agencia"],
+    relatedIds: ["quien-es-vera", "que-es-dtc"],
+  },
+  {
+    id: "guardar-progreso",
+    question: "¿Puedo salir y retomar mi progreso después?",
+    answer:
+      "Sí. El recorrido usa estado persistido para que puedas volver a la etapa correspondiente. Además, existen controles de acceso que evitan saltar directamente a contenido futuro cuando todavía no corresponde según el progreso registrado.",
     category: "cuenta",
-    keywords: ["precio", "costo", "cuánto cuesta", "plan", "pro", "gratuito", "$4390", "mensualidad", "pago"],
-    relatedIds: ["garantia-7-dias", "es-gratis"],
+    keywords: ["progreso", "guardar", "retomar", "sesión", "ruta"],
+    relatedIds: ["como-funciona-90-dias", "como-acceder"],
   },
   {
-    id: "garantia-7-dias",
-    question: "¿Qué incluye la garantía de 7 días?",
+    id: "como-acceder",
+    question: "¿Cómo accedo actualmente a Despega Tu Carrera?",
     answer:
-      "Si dentro de los primeros 7 días sientes que Despega Tu Carrera no es para ti, te devolvemos cada peso, sin preguntas. Es una garantía de satisfacción total pensada para que comiences sin riesgo. Según nuestros datos, 9 de cada 10 personas que empiezan el programa deciden continuar, pero la garantía existe para que la decisión de probar sea completamente libre de presión.",
+      "El acceso actual se gestiona mediante el piloto e invitaciones autorizadas. Si ya tienes acceso puedes iniciar sesión; si todavía no lo tienes, puedes solicitar información o contactar al equipo desde la página de acceso. DTC no publica actualmente un plan comercial de autoservicio con precio o garantía estándar.",
     category: "cuenta",
-    keywords: ["garantía", "devolución", "reembolso", "7 días", "sin riesgo", "satisfacción"],
-    relatedIds: ["precio-dtc", "como-empezar"],
+    keywords: ["acceso", "invitación", "piloto", "precio", "cuenta"],
+    relatedIds: ["guardar-progreso", "instituciones"],
   },
   {
-    id: "cv-ats-armado",
-    question: "¿Despega Tu Carrera me ayuda a crear un CV optimizado para ATS?",
+    id: "privacidad-datos",
+    question: "¿Cómo se protege mi información dentro del recorrido?",
     answer:
-      "Sí. El plan Pro incluye un constructor de CV optimizado para sistemas ATS (Applicant Tracking Systems), los filtros automáticos que usan las empresas para revisar candidaturas. Despega Tu Carrera estructura tu CV con las palabras clave, el formato y las secciones que estos sistemas leen correctamente, además de ayudarte a construir un portfolio que respalde tu candidatura. El objetivo es que tu CV pase los filtros automáticos y llegue a manos de un reclutador humano.",
-    category: "general",
-    keywords: ["cv", "ats", "currículum", "resume", "filtros", "applicant tracking system", "portfolio"],
-    relatedIds: ["como-funciona-90-dias", "diferenciacion-mercado"],
+      "Las áreas privadas requieren autenticación y los datos principales del recorrido están protegidos con controles de propiedad y políticas de acceso en la base de datos. Algunos procesos técnicos del servidor y administradores autorizados pueden acceder cuando es necesario para operar y proteger el servicio. La política de privacidad publicada contiene el marco aplicable al tratamiento de datos.",
+    category: "cuenta",
+    keywords: ["privacidad", "datos", "seguridad", "rls", "acceso"],
+    relatedIds: ["quien-es-vera", "como-acceder"],
   },
   {
-    id: "para-quien-es-dtc",
-    question: "¿Para quién está pensado Despega Tu Carrera?",
+    id: "instituciones",
+    question: "¿DTC puede evaluarse con una universidad, empresa u otra institución?",
     answer:
-      "Despega Tu Carrera está pensado para profesionales en Chile que sienten que su carrera está estancada o desalineada y quieren claridad y dirección. Sirve tanto para quienes buscan activamente un nuevo trabajo como para quienes desean crecer internamente, cambiar de rumbo o redescubrir qué quieren realmente. Funciona para personas con experiencia que necesitan reenfocarse y también para quienes recién comienzan y buscan orientación. El sistema empieza desde ti, no desde una lista de vacantes.",
-    category: "general",
-    keywords: ["para quién", "público", "audiencia", "profesionales", "chile", "estancado", "cambio de carrera"],
-    relatedIds: ["dtc-con-experiencia", "como-empezar"],
+      "Sí, mediante un piloto acotado y acordado caso a caso. Antes de escalar se define qué se quiere aprender, la población, la duración, los resguardos y las métricas observables. DTC no publica resultados institucionales, ahorros, rankings ni retornos sobre inversión sin evidencia verificable que los respalde.",
+    category: "empresa",
+    keywords: ["universidad", "empresa", "institución", "piloto", "b2b"],
+    relatedIds: ["como-acceder", "que-es-dtc"],
   },
   {
-    id: "dtc-vs-bolsa-empleos",
-    question: "¿En qué se diferencia DTC de una bolsa de empleos o un test estándar?",
+    id: "garantiza-empleo",
+    question: "¿Despega Tu Carrera garantiza que voy a conseguir trabajo?",
     answer:
-      "Una bolsa de empleos te muestra vacantes; un test estándar te da un resultado y termina ahí. Despega Tu Carrera es distinto: empieza desde ti (no desde las vacantes), combina IA con acompañamiento humano, te entrega una ruta clara de 90 días, arma tu CV ATS, ofrece garantía de 7 días y mantiene transparencia total de precios. No te 'encontramos' un trabajo: te preparamos integralmente para que lo consigas y para que tomes mejores decisiones de carrera a largo plazo.",
+      "No. DTC puede ayudarte a comprender mejor tu punto de partida, organizar una ruta, practicar y revisar evidencia, pero no garantiza empleo, ascensos, aumentos de sueldo ni resultados profesionales específicos. Las decisiones y resultados dependen de múltiples factores fuera del control de la plataforma.",
     category: "general",
-    keywords: ["diferencia", "bolsa de empleos", "test estándar", "coach suelto", "comparación", "ventaja", "por qué"],
-    relatedIds: ["dtc-vs-test-cualquiera", "diferenciacion-mercado"],
+    keywords: ["empleo", "garantía", "resultado", "trabajo", "ascenso"],
+    relatedIds: ["que-es-dtc", "como-funciona-90-dias"],
+  },
+  {
+    id: "es-clinico",
+    question: "¿DTC reemplaza evaluación psicológica, terapia o asesoría profesional regulada?",
+    answer:
+      "No. Despega Tu Carrera es una herramienta de desarrollo profesional y no un servicio clínico. Tampoco reemplaza asesoría legal, financiera, médica u otra asesoría profesional regulada. Cuando una situación lo requiera, corresponde acudir al profesional adecuado.",
+    category: "general",
+    keywords: ["psicología", "terapia", "clínico", "asesoría", "límites"],
+    relatedIds: ["que-es-a1", "garantiza-empleo"],
   },
 ]
+
+export function getFAQsByCategory(category: FAQCategory): FAQItem[] {
+  return FAQ_DATA.filter((faq) => faq.category === category)
+}
+
+export function searchFAQs(query: string): FAQItem[] {
+  const q = query.toLowerCase().trim()
+  if (!q) return FAQ_DATA
+
+  return FAQ_DATA.filter(
+    (faq) =>
+      faq.question.toLowerCase().includes(q) ||
+      faq.answer.toLowerCase().includes(q) ||
+      faq.keywords.some((keyword) => keyword.toLowerCase().includes(q)),
+  )
+}
+
+export function getRelatedFAQs(faq: FAQItem): FAQItem[] {
+  if (!faq.relatedIds?.length) return []
+  return faq.relatedIds
+    .map((id) => FAQ_DATA.find((item) => item.id === id))
+    .filter((item): item is FAQItem => Boolean(item))
+}
