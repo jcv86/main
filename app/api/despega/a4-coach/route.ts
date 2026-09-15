@@ -1,112 +1,170 @@
 import { NextRequest, NextResponse } from 'next/server'
+import { z } from 'zod'
+import { resolveServerUser } from '@/lib/auth/server-user'
+import { buildVeraCoachPolicyPrompt, routeVeraQuery } from '@/lib/vera/brain-v2'
+import { evidencePackToPrompt } from '@/lib/vera/context-pack'
+import { runVeraTool } from '@/lib/vera/tool-catalog'
+import { DTC_REQUEST_ID_HEADER, resolveRequestId } from '@/lib/observability/request-id'
+import { logOperationalError, logOperationalEvent } from '@/lib/observability/server-log'
 
-const A4_SYSTEM_PROMPT = `Eres el Coach de Contexto de Despega Tu Carrera. Tu rol es ayudar personas a entender el sistema en Chile de una manera práctica y accesible.
+const requestSchema = z.object({
+  message: z.string().trim().min(2).max(2_000),
+  context: z.unknown().optional(),
+  conversationHistory: z
+    .array(
+      z.object({
+        role: z.enum(['user', 'assistant', 'coach']),
+        content: z.string().trim().min(1).max(3_000),
+      }),
+    )
+    .max(16)
+    .optional()
+    .default([]),
+})
 
-**TU IDENTIDAD:**
-- Eres un TRADUCTOR de contexto, no un informante
-- Explicasconceptos de forma clara y aplicada
-- Enfoque NO elitista
-- Buscas explicar CÓMO FUNCIONA el sistema
-- Hablas desde la perspectiva de alguien que VIVE en él
+const A4_SPECIALIZATION = `Estás acompañando A4 · Radar Estratégico de Despega Tu Carrera.
+Tu especialidad es traducir señales del mercado laboral chileno a contexto comprensible.
+Explica conceptos antes de interpretarlos. No hagas recomendaciones financieras personalizadas ni editorialices políticamente.
+Cuando exista evidencia verificada del recorrido del usuario, úsala como contexto, no como destino: no conviertas un resultado psicométrico en una sentencia.
+Responde en español de Chile, con lenguaje adulto y claro. Prioriza contexto → conexión con evidencia → pregunta o siguiente experimento.`
 
-**TU OBJETIVO:**
-- Reducir brechas de cultura aplicada
-- Que el usuario deje de sentirse "afuera del sistema"
-- Proporcionar lenguaje y marcos para navegar con confianza
+function unverifiedTopicHint(value: unknown) {
+  if (typeof value === 'string') return value.trim().slice(0, 600)
+  if (!value || typeof value !== 'object') return ''
 
-**REGLAS OBLIGATORIAS:**
-1. Explica conceptos ANTES de opinar
-2. Reduce complejidad SIN sobre-simplificar
-3. Conecta noticias a impacto diario
-4. Traduce lenguaje técnico a lenguaje humano
-5. NUNCA ridiculices la ignorancia
+  const candidate = value as Record<string, unknown>
+  const topic = candidate.topicContext ?? candidate.newsContext ?? candidate.topic
+  return typeof topic === 'string' ? topic.trim().slice(0, 600) : ''
+}
 
-**CONTENIDOS DONDE PUEDES AYUDAR:**
-- Noticias económicas (UF, inflación, tasas, empleo)
-- Indicadores de país (IMACEC, IPC, PIB)
-- Reglas implícitas del mundo laboral
-- Cultura mínima para entrevistas y trabajo
-- Cambios sociales que afectan decisiones personales
-
-**SIEMPRE con enfoque PRÁCTICO.**
-
-**NO HAGAS:**
-- Sermones o moralejas
-- Editorializaciones políticas
-- Recomendaciones financieras personalizadas
-- Asumir nivel de conocimiento previo
-
-**EJEMPLOS QUE FUNCIONAN:**
-"Esto funciona parecido a cuando sube el arriendo aunque tu sueldo no cambie."
-"Mira, la UF es como un 'índice de inflación' que el gobierno usa para..."
-
-**CUANDO EL USUARIO NO SABE ALGO:**
-- Normaliza: "esto no se enseña formalmente"
-- Explica desde cero
-- Evita tono académico
-- Nunca hagas sentir "menos-que"
-
-**RED FLAGS - BLOQUEA INMEDIATAMENTE:**
-- Recomendaciones financieras específicas
-- Análisis político editorial
-- Contenido que ridiculiza ignorancia
-- Suposiciones elitistas
-- Tono sermoneador
-
-Responde siempre en español de Chile, de forma conversacional y empática.`
-
-interface A4CoachRequest {
-  message: string
-  context?: string
-  userId?: string
-  conversationHistory?: Array<{ role: string; content: string }>
+function errorResponse(requestId: string, status: number, code: string, message: string) {
+  return NextResponse.json(
+    { error: message, code, request_id: requestId },
+    {
+      status,
+      headers: {
+        'Cache-Control': 'private, no-store',
+        [DTC_REQUEST_ID_HEADER]: requestId,
+      },
+    },
+  )
 }
 
 export async function POST(request: NextRequest) {
+  const requestId = resolveRequestId(request.headers)
+  const resolvedUser = await resolveServerUser()
+  if (!resolvedUser) {
+    return errorResponse(requestId, 401, 'authentication_required', 'Unauthorized')
+  }
+
+  let payload: unknown
   try {
-    const body: A4CoachRequest = await request.json()
-    const { message, context = 'noticias y contexto de Chile', conversationHistory = [] } = body
+    payload = await request.json()
+  } catch {
+    return errorResponse(requestId, 400, 'invalid_json', 'Invalid JSON')
+  }
 
-    const openaiApiKey = process.env.OPENAI_API_KEY
-    if (!openaiApiKey) {
-      console.error('[v0] Missing OPENAI_API_KEY')
-      return NextResponse.json({ error: 'API configuration missing' }, { status: 500 })
+  const parsed = requestSchema.safeParse(payload)
+  if (!parsed.success) {
+    return errorResponse(requestId, 400, 'invalid_coaching_request', 'Invalid coaching request')
+  }
+
+  const routing = routeVeraQuery(parsed.data.message)
+  const topicHint = unverifiedTopicHint(parsed.data.context)
+  let evidencePrompt = ''
+  let toolUsed = false
+
+  if (routing.needsJourneyContext) {
+    try {
+      const evidence = await runVeraTool('journey_context')
+      if (evidence) {
+        evidencePrompt = evidencePackToPrompt(evidence)
+        toolUsed = true
+      }
+    } catch (error) {
+      logOperationalError({
+        event: 'vera.tool.journey_context_failed',
+        requestId,
+        route: '/api/despega/a4-coach',
+        status: 'degraded',
+        metadata: { track: routing.track, intent: routing.intent },
+        error,
+      })
     }
+  }
 
-    // Format conversation for OpenAI
-    const messages = [
-      ...conversationHistory.map((msg) => ({
-        role: msg.role as 'user' | 'assistant',
-        content: msg.content,
-      })),
-      {
-        role: 'user' as const,
-        content: message,
-      },
-    ]
+  const openaiApiKey = process.env.OPENAI_API_KEY
+  if (!openaiApiKey) {
+    return errorResponse(requestId, 503, 'coaching_not_configured', 'AI coaching is not configured')
+  }
 
+  const history = parsed.data.conversationHistory.map((message) => ({
+    role: (message.role === 'coach' ? 'assistant' : message.role) as 'user' | 'assistant',
+    content: message.content,
+  }))
+
+  const systemPrompt = [
+    buildVeraCoachPolicyPrompt(routing.intent),
+    A4_SPECIALIZATION,
+    routing.track === 'agentic'
+      ? 'Estás en modo Agentic Coach: usa la evidencia disponible, conecta piezas y explicita los trade-offs.'
+      : 'Estás en modo Fast Coach: responde con precisión y brevedad; no inventes contexto personal ausente.',
+  ].join('\n\n')
+
+  const userMessage = [
+    evidencePrompt ? `EVIDENCIA VERIFICADA DEL RECORRIDO:\n${evidencePrompt}` : '',
+    topicHint ? `CONTEXTO TEMÁTICO APORTADO POR EL CLIENTE (NO VERIFICADO):\n${topicHint}` : '',
+    `PREGUNTA ACTUAL:\n${parsed.data.message}`,
+  ]
+    .filter(Boolean)
+    .join('\n\n')
+
+  try {
     const response = await fetch('https://api.openai.com/v1/chat/completions', {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${openaiApiKey}`,
+        Authorization: `Bearer ${openaiApiKey}`,
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
         model: 'gpt-4o-mini',
-        messages: [{ role: 'system', content: A4_SYSTEM_PROMPT }, ...messages],
-        temperature: 0.7,
-        max_tokens: 500,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...history,
+          { role: 'user', content: userMessage },
+        ],
+        temperature: routing.track === 'agentic' ? 0.45 : 0.35,
+        max_tokens: routing.track === 'agentic' ? 750 : 500,
         stream: true,
+        store: false,
       }),
+      signal: AbortSignal.timeout(25_000),
     })
 
     if (!response.ok) {
-      const error = await response.text()
-      console.error('[v0] OpenAI API error:', error)
-      return NextResponse.json({ error: 'Failed to get coach response' }, { status: response.status })
+      logOperationalEvent({
+        event: 'vera.openai.failed',
+        requestId,
+        route: '/api/despega/a4-coach',
+        status: response.status,
+        metadata: { track: routing.track, intent: routing.intent, tool_used: toolUsed },
+      })
+      return errorResponse(requestId, 502, 'coach_generation_failed', 'Coach response unavailable')
     }
 
-    // Stream the response
+    logOperationalEvent({
+      event: 'vera.route.completed',
+      requestId,
+      route: '/api/despega/a4-coach',
+      status: 200,
+      metadata: {
+        track: routing.track,
+        intent: routing.intent,
+        tool_used: toolUsed,
+        history_items: history.length,
+      },
+    })
+
     const encoder = new TextEncoder()
     const customStream = new ReadableStream({
       async start(controller) {
@@ -129,27 +187,32 @@ export async function POST(request: NextRequest) {
 
             for (let i = 0; i < lines.length - 1; i++) {
               const line = lines[i].trim()
-              if (line.startsWith('data: ')) {
-                const data = line.slice(6)
+              if (!line.startsWith('data: ')) continue
+              const data = line.slice(6)
+              if (data === '[DONE]') continue
 
-                if (data === '[DONE]') break
-
-                try {
-                  const parsed = JSON.parse(data)
-                  const content = parsed.choices?.[0]?.delta?.content
-                  if (content) {
-                    controller.enqueue(encoder.encode(content))
-                  }
-                } catch {
-                  // Skip unparseable lines
+              try {
+                const event = JSON.parse(data)
+                const content = event.choices?.[0]?.delta?.content
+                if (typeof content === 'string' && content) {
+                  controller.enqueue(encoder.encode(content))
                 }
+              } catch {
+                // Ignore malformed upstream SSE fragments.
               }
             }
 
             buffer = lines[lines.length - 1]
           }
         } catch (error) {
-          console.error('[v0] Stream error:', error)
+          logOperationalError({
+            event: 'vera.stream.failed',
+            requestId,
+            route: '/api/despega/a4-coach',
+            status: 'stream_error',
+            metadata: { track: routing.track, intent: routing.intent },
+            error,
+          })
           controller.error(error)
         } finally {
           controller.close()
@@ -159,13 +222,22 @@ export async function POST(request: NextRequest) {
 
     return new Response(customStream, {
       headers: {
-        'Content-Type': 'text/event-stream',
-        'Cache-Control': 'no-cache',
-        'Connection': 'keep-alive',
+        'Content-Type': 'text/plain; charset=utf-8',
+        'Cache-Control': 'private, no-store',
+        [DTC_REQUEST_ID_HEADER]: requestId,
+        'x-vera-track': routing.track,
+        'x-vera-intent': routing.intent,
       },
     })
   } catch (error) {
-    console.error('[v0] A4 Coach API error:', error)
-    return NextResponse.json({ error: 'Internal server error' }, { status: 500 })
+    logOperationalError({
+      event: 'vera.generation.failed',
+      requestId,
+      route: '/api/despega/a4-coach',
+      status: 502,
+      metadata: { track: routing.track, intent: routing.intent, tool_used: toolUsed },
+      error,
+    })
+    return errorResponse(requestId, 502, 'coach_generation_failed', 'Coach response unavailable')
   }
 }
