@@ -4,8 +4,12 @@ on:
     paths:
       - 'supabase/migrations/20260915160*.sql'
       - 'scripts/a1-browser-qa/a2-day-guard-browser.mjs'
+      - 'scripts/a1-browser-qa/legacy-resume-browser.mjs'
       - 'lib/journey/**'
       - 'app/despega/a2/**'
+      - 'app/despega/conozcamonos/**'
+      - 'app/despega/conozcamonos-3/**'
+      - 'app/despega/conozcamonos-4/**'
       - '.github/workflows/journey-foundation.yml'
 permissions:
   contents: read
@@ -60,6 +64,8 @@ jobs:
         run: npx tsx scripts/a1-browser-qa/seed-invitation.ts
       - name: Direct A2 days cannot bypass SSR guard
         run: node scripts/a1-browser-qa/a2-day-guard-browser.mjs
+      - name: Legacy URLs resume the canonical journey flow
+        run: node scripts/a1-browser-qa/legacy-resume-browser.mjs
       - name: Stop disposable local stack
         if: always()
         run: supabase stop --workdir "$A1_LAB_ROOT/stack" --no-backup > /dev/null 2>&1 || true
