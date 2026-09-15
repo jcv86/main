@@ -64,6 +64,8 @@ const shell = source('components/layout/app-shell.tsx')
 const layout = source('app/despega/layout.tsx')
 const service = source('lib/journey/service.ts')
 const flowService = source('lib/journey/flow-service.ts')
+const gamificationRoute = source('app/api/gamification/global/route.ts')
+const gamificationSummary = source('lib/gamification/server-summary.ts')
 
 assert.ok(shell.includes('flow.cards.find'))
 assert.ok(!shell.includes('currentJourneyIndex'))
@@ -74,10 +76,24 @@ assert.ok(layout.includes('<AppShell flow={flow}>'))
 assert.ok(service.includes('cache(async function getJourneyForCurrentUser()'))
 assert.ok(flowService.includes('cache(async function loadJourneyFlow(journey: FlowJourney)'))
 
+assert.ok(!shell.includes("localStorage.getItem('demo_user')"))
+assert.ok(!shell.includes('Sesión de demostración'))
+assert.ok(!shell.includes('(xpData.total_xp / xpData.xp_to_next_level)'))
+assert.ok(shell.includes('xpData?.available === true'))
+assert.ok(shell.includes('xpData.xp_progress_percent'))
+assert.ok(gamificationRoute.includes('availability_reason'))
+assert.ok(gamificationRoute.includes('xp_progress_percent: summary.xpProgressPercent'))
+assert.ok(gamificationSummary.includes('const queryErrors = ['))
+assert.ok(gamificationSummary.includes('xpProgressPercent'))
+
 console.log(JSON.stringify({
   evidenceLevel: 'runtime_and_source_contract',
   scenarios: ['day_7_checkpoint', 'day_30', 'a3_closed'],
   navigationStates: ['completed', 'active', 'available', 'locked'],
   lockedNavigation: false,
   duplicateJourneyReadWithinRequest: false,
+  demoShellFallback: false,
+  gamificationAvailabilityExplicit: true,
+  gamificationProgressServerCanonical: true,
+  gamificationQueryFailuresFailClosed: true,
 }))
