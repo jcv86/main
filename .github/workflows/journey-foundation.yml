@@ -1,0 +1,63 @@
+name: Canonical journey foundation
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/20260915160*.sql'
+      - 'scripts/a1-browser-qa/a2-day-guard-browser.mjs'
+      - 'lib/journey/**'
+      - 'app/despega/a2/**'
+      - '.github/workflows/journey-foundation.yml'
+permissions:
+  contents: read
+jobs:
+  local-journey:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      A1_BROWSER_LAB: 'yes'
+      A1_SOURCE_COMMIT: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - name: Prepare disposable browser stack
+        run: |
+          echo "A1_LAB_ROOT=$RUNNER_TEMP/dtc-journey" >> "$GITHUB_ENV"
+          echo "A1_TOOLS_ROOT=$RUNNER_TEMP/dtc-journey-tools" >> "$GITHUB_ENV"
+          npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+          npm install --prefix "$RUNNER_TEMP/dtc-journey-tools" --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          "$RUNNER_TEMP/dtc-journey-tools/node_modules/.bin/playwright" install chromium
+          A1_LAB_ROOT="$RUNNER_TEMP/dtc-journey" A1_TOOLS_ROOT="$RUNNER_TEMP/dtc-journey-tools" node scripts/a1-browser-qa/prepare.mjs
+          node scripts/a1-browser-qa/configure-local.mjs
+          supabase init --workdir "$RUNNER_TEMP/dtc-journey/stack" --yes
+          supabase start --workdir "$RUNNER_TEMP/dtc-journey/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$RUNNER_TEMP/dtc-journey/stack-start.log" 2>&1
+          supabase status --workdir "$RUNNER_TEMP/dtc-journey/stack" -o json > "$RUNNER_TEMP/dtc-journey/status.json"
+      - name: Create synthetic users with existing lab seed
+        run: npx tsx scripts/a1-browser-qa/seed.ts
+      - name: Apply canonical journey migrations twice
+        run: |
+          DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.A1_LAB_ROOT+'/status.json','utf8')).DB_URL)")"
+          for pass in 1 2; do
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160000_canonical_journey_foundation.sql
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160100_canonical_journey_security.sql
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160200_retire_legacy_progress_rpc_access.sql
+          done
+      - name: Seed synthetic Day 7 state
+        run: |
+          DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.A1_LAB_ROOT+'/status.json','utf8')).DB_URL)")"
+          ALPHA_ID="$(node -e "const fs=require('fs');const f=JSON.parse(fs.readFileSync(process.env.A1_LAB_ROOT+'/fixtures.private.json','utf8'));process.stdout.write(f.users.find(u=>u.label==='alpha').id)")"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -v alpha_id="$ALPHA_ID" -c "insert into public.despega_user_profiles(user_id,onboarding_conozcamonos_1_completed,a1_cerebral_intro_seen,a1_cerebral_completed,a1_results_saved,a1_report_seen,conozcamonos_2_completed,a2_intro_seen,a2_route_generated) values (:'alpha_id'::uuid,true,true,true,true,true,true,true,true) on conflict (user_id) do update set onboarding_conozcamonos_1_completed=true,a1_cerebral_intro_seen=true,a1_cerebral_completed=true,a1_results_saved=true,a1_report_seen=true,conozcamonos_2_completed=true,a2_intro_seen=true,a2_route_generated=true,updated_at=now(); update public.despega_journey_state set current_module='A2',current_a2_day=7,highest_a2_day_unlocked=7,a1_completed_at=coalesce(a1_completed_at,now()),a2_started_at=coalesce(a2_started_at,now()),version=greatest(version,1)+1,updated_at=now() where user_id=:'alpha_id'::uuid; notify pgrst, 'reload schema';"
+      - name: Install real pilot access migration for middleware
+        run: npx tsx scripts/a1-browser-qa/seed-invitation.ts
+      - name: Direct A2 days cannot bypass SSR guard
+        run: node scripts/a1-browser-qa/a2-day-guard-browser.mjs
+      - name: Stop disposable local stack
+        if: always()
+        run: supabase stop --workdir "$A1_LAB_ROOT/stack" --no-backup > /dev/null 2>&1 || true
