@@ -29,16 +29,18 @@ jobs:
           version: 2.117.0
       - name: Prepare disposable browser stack
         run: |
-          echo "A1_LAB_ROOT=$RUNNER_TEMP/dtc-journey" >> "$GITHUB_ENV"
-          echo "A1_TOOLS_ROOT=$RUNNER_TEMP/dtc-journey-tools" >> "$GITHUB_ENV"
+          export A1_LAB_ROOT="$RUNNER_TEMP/dtc-journey"
+          export A1_TOOLS_ROOT="$RUNNER_TEMP/dtc-journey-tools"
+          echo "A1_LAB_ROOT=$A1_LAB_ROOT" >> "$GITHUB_ENV"
+          echo "A1_TOOLS_ROOT=$A1_TOOLS_ROOT" >> "$GITHUB_ENV"
           npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
-          npm install --prefix "$RUNNER_TEMP/dtc-journey-tools" --ignore-scripts --no-audit --no-fund playwright@1.56.1
-          "$RUNNER_TEMP/dtc-journey-tools/node_modules/.bin/playwright" install chromium
-          A1_LAB_ROOT="$RUNNER_TEMP/dtc-journey" A1_TOOLS_ROOT="$RUNNER_TEMP/dtc-journey-tools" node scripts/a1-browser-qa/prepare.mjs
+          npm install --prefix "$A1_TOOLS_ROOT" --ignore-scripts --no-audit --no-fund playwright@1.56.1
+          "$A1_TOOLS_ROOT/node_modules/.bin/playwright" install chromium
+          node scripts/a1-browser-qa/prepare.mjs
           node scripts/a1-browser-qa/configure-local.mjs
-          supabase init --workdir "$RUNNER_TEMP/dtc-journey/stack" --yes
-          supabase start --workdir "$RUNNER_TEMP/dtc-journey/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$RUNNER_TEMP/dtc-journey/stack-start.log" 2>&1
-          supabase status --workdir "$RUNNER_TEMP/dtc-journey/stack" -o json > "$RUNNER_TEMP/dtc-journey/status.json"
+          supabase init --workdir "$A1_LAB_ROOT/stack" --yes
+          supabase start --workdir "$A1_LAB_ROOT/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$A1_LAB_ROOT/stack-start.log" 2>&1
+          supabase status --workdir "$A1_LAB_ROOT/stack" -o json > "$A1_LAB_ROOT/status.json"
       - name: Create synthetic users with existing lab seed
         run: npx tsx scripts/a1-browser-qa/seed.ts
       - name: Apply canonical journey migrations twice
