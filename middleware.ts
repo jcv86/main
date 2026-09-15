@@ -76,7 +76,7 @@ function isPillarExemptRoute(pathname: string): boolean {
   return PILLAR_EXEMPT_ROUTES.some(route => pathname.startsWith(route))
 }
 
-function withRequestId<T extends NextResponse>(response: T, requestId: string): T {
+function withRequestId<T extends Response>(response: T, requestId: string): T {
   response.headers.set(DTC_REQUEST_ID_HEADER, requestId)
   return response
 }
