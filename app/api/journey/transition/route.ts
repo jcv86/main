@@ -4,21 +4,49 @@ import {
   recordJourneyTransition,
   type JourneyTransitionStep,
 } from '@/lib/journey/transitions'
+import {
+  DTC_REQUEST_ID_HEADER,
+  resolveRequestId,
+} from '@/lib/observability/request-id'
 
 const VALID_STEPS: JourneyTransitionStep[] = ['a1_report', 'a2_intro']
+const SAFE_TRANSITION_ERRORS = new Set([
+  'Completa Despega Cerebral antes de continuar.',
+  'Completa Conozcámonos 2 antes de abrir tu informe final.',
+  'Completa A1 y revisa tu informe antes de iniciar Tu Ruta.',
+])
+
+function jsonResponse(
+  payload: Record<string, unknown>,
+  status: number,
+  requestId: string,
+) {
+  return NextResponse.json(
+    { ...payload, request_id: requestId },
+    {
+      status,
+      headers: {
+        'Cache-Control': 'no-store',
+        [DTC_REQUEST_ID_HEADER]: requestId,
+      },
+    },
+  )
+}
 
 export async function POST(request: Request) {
+  const requestId = resolveRequestId(request.headers)
+
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+      return jsonResponse({ error: 'No autenticado' }, 401, requestId)
     }
 
     let body: { step?: unknown }
     try {
       body = (await request.json()) as { step?: unknown }
     } catch {
-      return NextResponse.json({ error: 'Solicitud inválida' }, { status: 400 })
+      return jsonResponse({ error: 'Solicitud inválida' }, 400, requestId)
     }
 
     const step =
@@ -28,24 +56,23 @@ export async function POST(request: Request) {
         : null
 
     if (!step) {
-      return NextResponse.json(
+      return jsonResponse(
         { error: 'La transición solicitada no es válida.' },
-        { status: 400 },
+        400,
+        requestId,
       )
     }
 
-    const result = await recordJourneyTransition(currentUser.id, step)
-    return NextResponse.json({ success: true, ...result })
+    const result = await recordJourneyTransition(currentUser.id, step, {
+      requestId,
+    })
+    return jsonResponse({ success: true, ...result }, 200, requestId)
   } catch (error) {
-    console.error('[v0] Journey transition error:', error)
-    return NextResponse.json(
-      {
-        error:
-          error instanceof Error
-            ? error.message
-            : 'No pudimos registrar la transición.',
-      },
-      { status: 500 },
-    )
+    const safeMessage =
+      error instanceof Error && SAFE_TRANSITION_ERRORS.has(error.message)
+        ? error.message
+        : 'No pudimos registrar la transición.'
+
+    return jsonResponse({ error: safeMessage }, 500, requestId)
   }
 }
