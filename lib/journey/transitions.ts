@@ -80,28 +80,26 @@ export async function recordJourneyTransition(
         throw new Error('Completa Conozcámonos 2 antes de abrir tu informe final.')
       }
       await upsertProfileFlags(userId, { conozcamonos_2_completed: true, a1_results_saved: true, a1_report_seen: true })
-      const result = { nextPath: '/despega/a2/intro' }
       logOperationalEvent({
         event: 'journey.transition.completed',
         requestId,
         status: 'success',
-        metadata: { step, next_path: result.nextPath },
+        metadata: { step, next_path: '/despega/a2/intro' },
       })
-      return result
+      return { nextPath: '/despega/a2/intro' }
     }
 
     if (!c2Completed(profile) || !profile.a1_report_seen) {
       throw new Error('Completa A1 y revisa tu informe antes de iniciar Tu Ruta.')
     }
     await upsertProfileFlags(userId, { conozcamonos_2_completed: true, a1_results_saved: true, a1_report_seen: true, a2_intro_seen: true, a2_intro_seen_at: new Date().toISOString() })
-    const result = { nextPath: '/despega/a2' }
     logOperationalEvent({
       event: 'journey.transition.completed',
       requestId,
       status: 'success',
-      metadata: { step, next_path: result.nextPath },
+      metadata: { step, next_path: '/despega/a2' },
     })
-    return result
+    return { nextPath: '/despega/a2' }
   } catch (error) {
     logOperationalError({
       event: 'journey.transition.failed',
