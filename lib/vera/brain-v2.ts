@@ -24,10 +24,10 @@ const PERSONAL_CONTEXT_PATTERNS = [
   /\bmis objetivos\b/i,
   /\bmi progreso\b/i,
   /\bmi carrera\b/i,
-  /\bpara mí\b/i,
-  /\bcon lo que sabes de mí\b/i,
-  /\bsegún (?:mi|mis)\b/i,
-  /\blo que (?:hice|respondí|definí)\b/i,
+  /\bpara m[ií](?=\s|[,.!?;:]|$)/i,
+  /\bcon lo que sabes de m[ií](?=\s|[,.!?;:]|$)/i,
+  /\bseg[uú]n (?:mi|mis)\b/i,
+  /\blo que (?:hice|respond[ií]|defin[ií])\b/i,
 ]
 
 const MULTI_STEP_PATTERNS = [
@@ -59,7 +59,7 @@ const MARKET_PATTERNS = [
 ]
 
 const PRACTICE_PATTERNS = [
-  /\bpractic(?:a|ar|amos)\b/i,
+  /\bpractic(?:a|ar|amos)|\bpractiquemos\b/i,
   /\bsimul(?:a|ar|ación)\b/i,
   /\bensay(?:a|ar|emos)\b/i,
   /\brole[- ]?play\b/i,
@@ -67,10 +67,10 @@ const PRACTICE_PATTERNS = [
 ]
 
 const EXPLAIN_PATTERNS = [
-  /^\s*(?:qué|que) (?:es|significa)\b/i,
-  /^\s*c[oó]mo funciona\b/i,
-  /^\s*expl[ií]came\b/i,
-  /^\s*define\b/i,
+  /^[¿?]?\s*(?:qué|que) (?:es|significa)\b/i,
+  /^[¿?]?\s*c[oó]mo funciona\b/i,
+  /^[¿?]?\s*expl[ií]came\b/i,
+  /^[¿?]?\s*define\b/i,
 ]
 
 function matchesAny(text: string, patterns: RegExp[]) {
@@ -97,17 +97,21 @@ export function routeVeraQuery(message: string): VeraRoutingDecision {
   const normalized = message.trim()
   const personal = matchesAny(normalized, PERSONAL_CONTEXT_PATTERNS)
   const multiStep = matchesAny(normalized, MULTI_STEP_PATTERNS)
-  const explainOnly = matchesAny(normalized, EXPLAIN_PATTERNS) && !personal && !multiStep
+  const explanation = matchesAny(normalized, EXPLAIN_PATTERNS)
   const intent = inferIntent(normalized)
+  const practice = intent === 'practice'
+  const explainOnly = explanation && !personal && !practice
 
   const reasonCodes: string[] = []
   if (personal) reasonCodes.push('personal_context')
-  if (multiStep) reasonCodes.push('multi_step')
-  if (intent === 'practice') reasonCodes.push('interactive_practice')
+  if (multiStep && !explainOnly) reasonCodes.push('multi_step')
+  if (practice) reasonCodes.push('interactive_practice')
   if (intent === 'market') reasonCodes.push('market_context')
   if (explainOnly) reasonCodes.push('simple_explanation')
 
-  const agentic = personal || multiStep || intent === 'practice'
+  // Generic educational questions stay fast even if they mention an interview,
+  // role or CV. Personal context, comparisons, decisions and practice escalate.
+  const agentic = personal || (multiStep && !explainOnly) || practice
 
   return {
     track: agentic ? 'agentic' : 'fast',
