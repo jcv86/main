@@ -1,0 +1,43 @@
+name: Security Wave 5 view preflight
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/20260915173000_harden_security_definer_views.sql'
+      - 'scripts/security-wave5-view-fixture.sql'
+      - 'scripts/security-wave5-view-verify.sql'
+      - '.github/workflows/security-wave5-view-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  disposable-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - name: Start disposable local Supabase database only
+        run: |
+          export WAVE5_ROOT="$RUNNER_TEMP/dtc-wave5"
+          echo "WAVE5_ROOT=$WAVE5_ROOT" >> "$GITHUB_ENV"
+          supabase init --workdir "$WAVE5_ROOT" --yes
+          supabase start --workdir "$WAVE5_ROOT" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$WAVE5_ROOT-start.log" 2>&1
+          supabase status --workdir "$WAVE5_ROOT" -o json > "$WAVE5_ROOT-status.json"
+      - name: Apply view hardening twice and verify privileges
+        run: |
+          DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.WAVE5_ROOT+'-status.json','utf8')).DB_URL)")"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f scripts/security-wave5-view-fixture.sql
+          for pass in 1 2; do
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915173000_harden_security_definer_views.sql
+          done
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f scripts/security-wave5-view-verify.sql
+      - name: Stop disposable local stack
+        if: always()
+        run: supabase stop --workdir "$WAVE5_ROOT" --no-backup > /dev/null 2>&1 || true
