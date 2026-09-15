@@ -6,6 +6,10 @@ import { ArrowRight, BookOpen, Loader2, Target, Zap } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import {
+  createRequestId,
+  DTC_REQUEST_ID_HEADER,
+} from '@/lib/observability/request-id'
 
 export interface A2IntroProfile {
   energia: number
@@ -20,6 +24,7 @@ interface TransitionPayload {
   success?: boolean
   nextPath?: string
   error?: string
+  request_id?: string
 }
 
 export function A2CanonicalIntro({ profile }: { profile: A2IntroProfile }) {
@@ -31,21 +36,25 @@ export function A2CanonicalIntro({ profile }: { profile: A2IntroProfile }) {
     setSubmitting(true)
     setError(null)
     try {
+      const requestId = createRequestId()
       const response = await fetch('/api/journey/transition', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          [DTC_REQUEST_ID_HEADER]: requestId,
+        },
         credentials: 'include',
         body: JSON.stringify({ step: 'a2_intro' }),
       })
       const payload = (await response.json().catch(() => ({}))) as TransitionPayload
+      const supportId = payload.request_id || response.headers.get(DTC_REQUEST_ID_HEADER) || requestId
       if (!response.ok || !payload.nextPath) {
-        throw new Error(payload.error || 'No pudimos iniciar Tu Ruta.')
+        throw new Error(`${payload.error || 'No pudimos iniciar Tu Ruta.'} Código de soporte: ${supportId}`)
       }
 
       router.push(payload.nextPath)
       router.refresh()
     } catch (transitionError) {
-      console.error('[v0] A2 intro transition error:', transitionError)
       setError(
         transitionError instanceof Error
           ? transitionError.message
