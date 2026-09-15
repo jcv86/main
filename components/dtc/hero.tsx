@@ -26,7 +26,7 @@ const PROOF = [
 
 export default function DtcHero() {
   return (
-    <section className="relative overflow-hidden pb-14 pt-24 sm:pb-18 sm:pt-28 lg:pb-20 lg:pt-[118px]">
+    <section className="relative overflow-hidden pb-14 pt-24 sm:pb-20 sm:pt-28 lg:pb-20 lg:pt-[118px]">
       <div
         aria-hidden
         className="pointer-events-none absolute left-1/2 top-20 h-[520px] w-[820px] -translate-x-1/2 rounded-full opacity-50 blur-3xl"
@@ -90,15 +90,11 @@ export default function DtcHero() {
         </div>
 
         <div
-          className="mt-14 grid grid-cols-2 overflow-hidden rounded-2xl md:grid-cols-4"
-          style={{ border: `1px solid ${COLORS.border}`, background: 'rgba(255,255,255,0.02)' }}
+          className="mt-14 grid grid-cols-2 gap-px overflow-hidden rounded-2xl md:grid-cols-4"
+          style={{ border: `1px solid ${COLORS.border}`, background: COLORS.border }}
         >
-          {PROOF.map((item, index) => (
-            <div
-              key={item.label}
-              className="px-4 py-4 text-center sm:px-5 sm:py-5"
-              style={{ borderLeft: index % 2 ? `1px solid ${COLORS.border}` : undefined, borderTop: index > 1 ? `1px solid ${COLORS.border}` : undefined }}
-            >
+          {PROOF.map((item) => (
+            <div key={item.label} className="px-4 py-4 text-center sm:px-5 sm:py-5" style={{ background: 'rgba(5,6,14,0.96)' }}>
               <div className="text-2xl font-bold sm:text-3xl"><GradientText>{item.value}</GradientText></div>
               <div className="mt-1 text-[11px] leading-snug sm:text-xs" style={{ color: COLORS.textMuted }}>{item.label}</div>
             </div>
@@ -117,8 +113,8 @@ function VeraSystemMap() {
           to { transform: rotate(360deg); }
         }
         @keyframes vera-pulse {
-          0%, 65%, 100% { opacity: .62; transform: scale(1); }
-          8%, 22% { opacity: 1; transform: scale(1.035); }
+          0%, 65%, 100% { opacity: .66; filter: brightness(.94); }
+          8%, 22% { opacity: 1; filter: brightness(1.12); }
         }
         .vera-scan { animation: vera-scan 12s linear infinite; }
         .vera-stage { animation: vera-pulse 8s ease-in-out infinite; }
@@ -141,24 +137,24 @@ function VeraSystemMap() {
 
       <div className="absolute inset-0 flex items-center justify-center">
         <div
-          className="relative flex h-[176px] w-[176px] flex-col items-center justify-center rounded-[38%] px-5 text-center sm:h-[190px] sm:w-[190px]"
+          className="relative flex h-[142px] w-[142px] flex-col items-center justify-center rounded-[38%] px-3 text-center sm:h-[190px] sm:w-[190px] sm:px-5"
           style={{
             background: 'linear-gradient(145deg, rgba(18,22,42,0.96), rgba(8,12,28,0.96))',
             border: '1px solid rgba(124,92,255,0.42)',
             boxShadow: '0 0 0 10px rgba(124,92,255,0.035), 0 28px 80px rgba(52,74,180,0.28)',
           }}
         >
-          <div className="mb-2 flex items-center gap-1.5 rounded-full border border-teal-300/20 bg-teal-300/[0.06] px-2.5 py-1 text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: COLORS.teal }}>
+          <div className="mb-1.5 flex items-center gap-1.5 rounded-full border border-teal-300/20 bg-teal-300/[0.06] px-2 py-1 text-[8px] font-bold uppercase tracking-[0.14em] sm:mb-2 sm:px-2.5 sm:text-[9px] sm:tracking-[0.16em]" style={{ color: COLORS.teal }}>
             <span className="h-1.5 w-1.5 rounded-full bg-teal-300" />
             Contexto activo
           </div>
-          <span className="text-3xl font-bold tracking-tight text-white">Vera</span>
-          <span className="mt-1 text-[11px] font-semibold uppercase tracking-[0.16em]" style={{ color: COLORS.textMuted }}>Brain v2</span>
-          <div className="mt-3 flex gap-1.5 text-[9px] font-medium">
-            <span className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-white/70">Fast</span>
-            <span className="rounded-md border border-white/10 bg-white/[0.04] px-2 py-1 text-white/70">Agentic</span>
+          <span className="text-2xl font-bold tracking-tight text-white sm:text-3xl">Vera</span>
+          <span className="mt-1 text-[9px] font-semibold uppercase tracking-[0.14em] sm:text-[11px] sm:tracking-[0.16em]" style={{ color: COLORS.textMuted }}>Brain v2</span>
+          <div className="mt-2 flex gap-1 text-[8px] font-medium sm:mt-3 sm:gap-1.5 sm:text-[9px]">
+            <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-1 text-white/70 sm:px-2">Fast</span>
+            <span className="rounded-md border border-white/10 bg-white/[0.04] px-1.5 py-1 text-white/70 sm:px-2">Agentic</span>
           </div>
-          <span className="mt-3 text-[10px] leading-4" style={{ color: COLORS.textFaint }}>Router → evidencia → intervención</span>
+          <span className="mt-3 hidden text-[10px] leading-4 sm:block" style={{ color: COLORS.textFaint }}>Router → evidencia → intervención</span>
         </div>
       </div>
 
@@ -167,7 +163,7 @@ function VeraSystemMap() {
         return (
           <div
             key={stage.code}
-            className={`vera-stage absolute ${stage.position} flex min-w-[142px] items-center gap-2.5 rounded-xl px-3 py-2.5 sm:min-w-[158px]`}
+            className={`vera-stage absolute ${stage.position} flex min-w-[116px] items-center gap-2 rounded-xl px-2 py-2 sm:min-w-[158px] sm:gap-2.5 sm:px-3 sm:py-2.5`}
             style={{
               animationDelay: `${index * 1.8}s`,
               background: 'rgba(8,11,24,0.92)',
@@ -176,13 +172,13 @@ function VeraSystemMap() {
               backdropFilter: 'blur(12px)',
             }}
           >
-            <span className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg" style={{ background: `${stage.color}14`, border: `1px solid ${stage.color}35` }}>
-              <Icon className="h-4 w-4" style={{ color: stage.color }} aria-hidden />
+            <span className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg sm:h-8 sm:w-8" style={{ background: `${stage.color}14`, border: `1px solid ${stage.color}35` }}>
+              <Icon className="h-3.5 w-3.5 sm:h-4 sm:w-4" style={{ color: stage.color }} aria-hidden />
             </span>
             <span>
-              <span className="block text-[9px] font-bold uppercase tracking-[0.16em]" style={{ color: stage.color }}>{stage.code}</span>
-              <span className="block text-xs font-semibold text-white">{stage.label}</span>
-              <span className="block text-[9px] leading-4" style={{ color: COLORS.textFaint }}>{stage.detail}</span>
+              <span className="block text-[8px] font-bold uppercase tracking-[0.14em] sm:text-[9px] sm:tracking-[0.16em]" style={{ color: stage.color }}>{stage.code}</span>
+              <span className="block text-[10px] font-semibold text-white sm:text-xs">{stage.label}</span>
+              <span className="hidden text-[9px] leading-4 sm:block" style={{ color: COLORS.textFaint }}>{stage.detail}</span>
             </span>
           </div>
         )
