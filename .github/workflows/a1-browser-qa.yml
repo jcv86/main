@@ -15,16 +15,19 @@ on:
       - 'lib/career/**'
       - 'lib/supabase/**'
       - 'lib/observability/**'
+      - 'lib/auth/**'
       - 'middleware.ts'
       - 'app/api/a1/**'
       - 'app/api/a1-cerebral-save/**'
       - 'app/api/a4/**'
+      - 'app/api/auth/invitation/**'
       - 'app/api/gamification/global/**'
       - 'app/api/preferences/**'
       - 'app/despega/a4/**'
       - 'app/despega/settings/**'
       - 'hooks/use-auth-redirect.ts'
       - 'app/globals.css'
+      - 'supabase/migrations/20260825010000_pilot_access_foundation.sql'
       - 'supabase/migrations/*a4*'
       - '.github/workflows/a1-browser-qa.yml'
 permissions:
@@ -65,12 +68,18 @@ jobs:
           node scripts/a1-browser-qa/prepare.mjs
           mkdir -p "$A1_LAB_ROOT/app-runtime/app/api/gamification/global"
           cp app/api/gamification/global/route.ts "$A1_LAB_ROOT/app-runtime/app/api/gamification/global/route.ts"
+          mkdir -p "$A1_LAB_ROOT/app-runtime/app/api/auth/invitation/claim"
+          cp app/api/auth/invitation/claim/route.ts "$A1_LAB_ROOT/app-runtime/app/api/auth/invitation/claim/route.ts"
           node scripts/a1-browser-qa/configure-local.mjs
           supabase init --workdir "$A1_LAB_ROOT/stack" --yes
           supabase start --workdir "$A1_LAB_ROOT/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$A1_LAB_ROOT/stack-start.log" 2>&1
           supabase status --workdir "$A1_LAB_ROOT/stack" -o json > "$A1_LAB_ROOT/status.json"
-      - name: Apply selected real migrations to the empty lab and create synthetic Auth users
-        run: npx tsx scripts/a1-browser-qa/seed.ts
+      - name: Apply selected real migrations and create synthetic Auth users
+        run: |
+          npx tsx scripts/a1-browser-qa/seed.ts
+          npx tsx scripts/a1-browser-qa/seed-invitation.ts
+      - name: Scanner-safe single-use invitation in real browser
+        run: node scripts/a1-browser-qa/invitation-browser.mjs
       - name: Browser, cookies, PostgREST, preferences persistence, mobile and print
         run: node scripts/a1-browser-qa/browser.mjs
       - name: A1-A4 map, persisted progress and navigation in the same local stack
