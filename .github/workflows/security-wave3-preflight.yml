@@ -1,0 +1,43 @@
+name: Security Wave 3 preflight
+
+on:
+  pull_request:
+    paths:
+      - 'supabase/migrations/20260914214527_harden_remaining_active_relations_wave3.sql'
+      - 'scripts/security-wave3-fixture.sql'
+      - 'scripts/security-wave3-verify.sql'
+      - '.github/workflows/security-wave3-preflight.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  disposable-db:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - name: Start disposable local Supabase database only
+        run: |
+          export WAVE3_ROOT="$RUNNER_TEMP/dtc-wave3"
+          echo "WAVE3_ROOT=$WAVE3_ROOT" >> "$GITHUB_ENV"
+          supabase init --workdir "$WAVE3_ROOT" --yes
+          supabase start --workdir "$WAVE3_ROOT" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$WAVE3_ROOT-start.log" 2>&1
+          supabase status --workdir "$WAVE3_ROOT" -o json > "$WAVE3_ROOT-status.json"
+      - name: Build metadata-only fixture and apply Wave 3 twice
+        run: |
+          DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.WAVE3_ROOT+'-status.json','utf8')).DB_URL)")"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f scripts/security-wave3-fixture.sql
+          for pass in 1 2; do
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260914214527_harden_remaining_active_relations_wave3.sql
+          done
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f scripts/security-wave3-verify.sql
+      - name: Stop disposable local stack
+        if: always()
+        run: supabase stop --workdir "$WAVE3_ROOT" --no-backup > /dev/null 2>&1 || true
