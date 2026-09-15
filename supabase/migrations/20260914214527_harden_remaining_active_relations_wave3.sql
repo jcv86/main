@@ -1,12 +1,17 @@
 -- Wave 3: harden every remaining RLS-off public relation with an
 -- unambiguous owner, catalog, or server-only boundary.
+--
+-- Live preflight 2026-09-15 confirmed brain_feedback.user_id and
+-- successful_patterns.user_id are TEXT, not UUID. Both active callsites use
+-- the server-side AdvancedBrainEngine service-role client, so they belong to
+-- the server-only boundary rather than the authenticated UUID-owner group.
 
 do $migration$
 declare
   target_table text;
   policy_record record;
 begin
-  foreach target_table in array array['brain_feedback','cerebro_conversation_memory','cerebro_feedback_learning','cerebro_predictive_insights','cerebro_reasoning_chains','cerebro_user_patterns','successful_patterns','user_chilevalora_interactions','user_journey_progress','cv_data']
+  foreach target_table in array array['cerebro_conversation_memory','cerebro_feedback_learning','cerebro_predictive_insights','cerebro_reasoning_chains','cerebro_user_patterns','user_chilevalora_interactions','user_journey_progress','cv_data']
   loop
     execute format('alter table public.%I enable row level security', target_table);
     for policy_record in
@@ -57,7 +62,7 @@ begin
     );
   end loop;
 
-  foreach target_table in array array['api_usage_tracking','brain_response_cache','embedding_generation_logs']
+  foreach target_table in array array['api_usage_tracking','brain_response_cache','embedding_generation_logs','brain_feedback','successful_patterns']
   loop
     execute format('alter table public.%I enable row level security', target_table);
     for policy_record in
