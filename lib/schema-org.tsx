@@ -8,7 +8,7 @@ export function generateOrganizationSchema() {
     name: "Despega Tu Carrera",
     url: "https://despegatucarrera.com",
     logo: "https://despegatucarrera.com/logo.png",
-    description: "Plataforma de desarrollo profesional impulsada por IA que transforma carreras en 90 días",
+    description: "Plataforma de desarrollo profesional con IA que conecta autoconocimiento, una ruta documentada, práctica y contexto de mercado para apoyar decisiones con más evidencia.",
     sameAs: [
       "https://linkedin.com/company/despega-tu-carrera",
       "https://twitter.com/despegatucarrera",

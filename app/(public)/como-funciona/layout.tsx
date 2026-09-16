@@ -1,24 +1,45 @@
 import type { Metadata } from "next"
-import { generateOrganizationSchema, generateFAQSchema, generateBreadcrumbSchema, generateCourseSchema } from "@/lib/schema-org"
+import { generateOrganizationSchema, generateFAQSchema, generateBreadcrumbSchema } from "@/lib/schema-org"
 
 export const metadata: Metadata = {
   title: "Cómo Funciona | Despega Tu Carrera",
-  description: "Descubre cómo funciona nuestro programa de desarrollo profesional de 90 días. 4 pilares, coaching IA personalizado, y resultados medibles.",
+  description: "Conoce el recorrido A1–A4 de Despega Tu Carrera: autoconocimiento, ruta profesional, práctica y contexto de mercado conectados por evidencia.",
+  alternates: {
+    canonical: "https://www.despegatucarrera.com/como-funciona",
+  },
   openGraph: {
     title: "Cómo Funciona | Despega Tu Carrera",
-    description: "Programa de desarrollo profesional de 90 días con coaching IA personalizado.",
+    description: "Un recorrido conectado de cuatro etapas para comprender tu punto de partida, organizar una ruta, practicar y decidir con más contexto.",
     type: "website",
     url: "https://www.despegatucarrera.com/como-funciona",
   },
 }
 
 const howItWorksFaqs = [
-  { question: "¿Cuánto tiempo dura el programa?", answer: "El programa completo dura 90 días, dividido en 4 pilares de desarrollo profesional." },
-  { question: "¿Cuántas horas a la semana necesito dedicar?", answer: "Recomendamos entre 5 y 7 horas semanales para obtener los mejores resultados." },
-  { question: "¿Necesito experiencia previa?", answer: "No necesitas experiencia previa. El programa se adapta a tu nivel actual." },
-  { question: "¿Qué obtengo al finalizar?", answer: "Recibes un CV optimizado, perfil LinkedIn mejorado, y habilidades de entrevista comprobadas." },
-  { question: "¿Cómo funciona el coaching con IA?", answer: "Nuestros coaches IA te guían de forma personalizada según tu perfil y objetivos." },
-  { question: "¿El programa tiene costo?", answer: "Ofrecemos planes desde gratuitos hasta premium. Visita nuestra página de precios para más detalles." },
+  {
+    question: "¿Cuánto dura el recorrido?",
+    answer: "A2 organiza una ruta profesional de 90 días. A1, A3 y A4 aportan contexto, práctica y evidencia alrededor de esa ruta, y el progreso se guarda para que puedas retomarlo.",
+  },
+  {
+    question: "¿Cuánto tiempo necesito dedicar?",
+    answer: "No necesitas completar todo de una vez. El recorrido está organizado por etapas y actividades que puedes retomar desde tu cuenta, conservando el progreso registrado.",
+  },
+  {
+    question: "¿Necesito experiencia previa?",
+    answer: "No necesitas experiencia previa para comenzar. DTC parte por comprender tu punto de partida y construye el recorrido a partir de la información y evidencia que vayas aportando.",
+  },
+  {
+    question: "¿Qué construyo durante el recorrido?",
+    answer: "Vas construyendo una lectura de tu identidad profesional, una ruta documentada, prácticas y evidencia de progreso, además de contexto para revisar tus próximas decisiones.",
+  },
+  {
+    question: "¿Cómo funciona Vera?",
+    answer: "Vera usa el contexto disponible de tu recorrido para ayudarte a pensar, distinguir evidencia de inferencias y preparar siguientes pasos. La decisión final siempre es tuya.",
+  },
+  {
+    question: "¿Cómo accedo actualmente?",
+    answer: "El acceso actual se gestiona mediante el piloto e invitaciones. Puedes iniciar sesión si ya tienes acceso o contactar al equipo para solicitarlo.",
+  },
 ]
 
 export default function ComoFuncionaLayout({ children }: { children: React.ReactNode }) {
@@ -28,15 +49,6 @@ export default function ComoFuncionaLayout({ children }: { children: React.React
     { name: "Inicio", url: "https://www.despegatucarrera.com" },
     { name: "Cómo Funciona", url: "https://www.despegatucarrera.com/como-funciona" },
   ])
-  const courseSchema = generateCourseSchema({
-    name: "Programa de Desarrollo Profesional DTC",
-    description: "Programa de 90 días para transformar tu carrera profesional con coaching IA personalizado",
-    provider: "Despega Tu Carrera",
-    duration: "P90D",
-    price: "0",
-    currency: "CLP",
-    rating: 4.8,
-  })
 
   return (
     <>
@@ -51,10 +63,6 @@ export default function ComoFuncionaLayout({ children }: { children: React.React
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
-      />
-      <script
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
       />
       {children}
     </>

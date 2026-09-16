@@ -4,76 +4,77 @@ import Link from "next/link"
 
 export const metadata: Metadata = {
   title: "Términos de Servicio - Despega Tu Carrera",
-  description: "Lee nuestros términos y condiciones de uso de Despega Tu Carrera",
+  description: "Lee los términos y condiciones de uso de Despega Tu Carrera",
+  alternates: {
+    canonical: "https://www.despegatucarrera.com/terms",
+  },
 }
 
 export default function TermsPage() {
   return (
     <div className="min-h-screen bg-background">
       <div className="container mx-auto px-4 py-16 max-w-4xl">
-        {/* Header */}
         <div className="mb-12">
           <Link href="/" className="inline-flex items-center gap-2 mb-8 text-purple/40 hover:text-purple/30 transition-colors">
             <Brain className="w-5 h-5" />
             <span>Volver al inicio</span>
           </Link>
           <h1 className="text-5xl font-black text-white mb-4">Términos de Servicio</h1>
-          <p className="text-xl text-muted-foreground">Última actualización: 5 de abril de 2026</p>
+          <p className="text-xl text-muted-foreground">Última revisión: 15 de septiembre de 2026</p>
         </div>
 
-        {/* Content */}
         <div className="space-y-8">
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">1. Aceptación de Términos</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">1. Aceptación de términos</h2>
             <p className="text-white/85 leading-relaxed">
-              Al acceder y usar Despega Tu Carrera, aceptas estar vinculado por estos términos y condiciones. Si no estás de acuerdo con alguna parte de estos términos, no debes usar nuestros servicios.
+              Al acceder y usar Despega Tu Carrera, aceptas estos términos y condiciones. Si no estás de acuerdo con ellos, no debes usar nuestros servicios.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">2. Licencia de Uso</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">2. Licencia de uso</h2>
             <p className="text-white/85 leading-relaxed">
-              Te otorgamos una licencia personal, no exclusiva y no transferible para acceder y usar nuestro sitio y servicios para propósitos legales. No puedes reproducir, distribuir o transmitir el contenido sin nuestro consentimiento previo.
+              Te otorgamos una licencia personal, no exclusiva y no transferible para acceder y usar nuestro sitio y servicios con fines legales. No puedes reproducir, distribuir o transmitir contenido protegido sin autorización cuando corresponda.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">3. Responsabilidades del Usuario</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">3. Responsabilidades del usuario</h2>
             <div className="bg-background">
               <ul className="list-disc list-inside text-white/85 space-y-2">
-                <li>Mantener la confidencialidad de tu cuenta</li>
-                <li>Proporcionar información precisa y completa</li>
-                <li>No usar la plataforma para actividades ilegales</li>
-                <li>Respetar los derechos de propiedad intelectual</li>
+                <li>Mantener la confidencialidad de tu cuenta, contraseña y códigos de verificación</li>
+                <li>Proporcionar información que tengas derecho a compartir</li>
+                <li>No usar la plataforma para actividades ilegales o abusivas</li>
+                <li>Respetar los derechos de propiedad intelectual y de terceros</li>
               </ul>
             </div>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">4. Limitación de Responsabilidad</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">4. Alcance del servicio</h2>
             <p className="text-white/85 leading-relaxed">
-              Despega Tu Carrera se proporciona "tal cual". No garantizamos que los servicios sean ininterrumpidos o libres de errores. No somos responsables por daños indirectos, incidentales o consecuentes.
+              Despega Tu Carrera es una herramienta de desarrollo profesional. No garantiza empleo, ascensos, aumentos de sueldo ni resultados específicos, y no sustituye servicios clínicos ni asesoría legal, financiera, médica u otra asesoría profesional regulada.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">5. Modificaciones del Servicio</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">5. Disponibilidad y cambios</h2>
             <p className="text-white/85 leading-relaxed">
-              Nos reservamos el derecho de modificar o suspender el servicio en cualquier momento. Te notificaremos sobre cambios significativos.
+              El servicio puede cambiar a medida que evoluciona el producto. No garantizamos disponibilidad ininterrumpida ni ausencia total de errores. Cuando corresponda, podremos comunicar cambios relevantes mediante los canales disponibles.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">6. Propiedad Intelectual</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">6. Propiedad intelectual</h2>
             <p className="text-white/85 leading-relaxed">
-              Todo el contenido de la plataforma, incluyendo tests, análisis y recursos, es propiedad de Despega Tu Carrera o de sus licenciantes. No está permitido reproducir o distribuir sin autorización.
+              El contenido propio de la plataforma, incluyendo evaluaciones, análisis, ejercicios, interfaces y recursos, pertenece a Despega Tu Carrera o a sus respectivos licenciantes cuando corresponda. No está permitido reproducirlo o distribuirlo sin autorización salvo los usos permitidos por la ley.
             </p>
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold text-white mb-4">7. Terminación de Cuenta</h2>
+            <h2 className="text-2xl font-bold text-white mb-4">7. Cuenta y acceso</h2>
             <p className="text-white/85 leading-relaxed">
-              Puedes terminar tu cuenta en cualquier momento. También nos reservamos el derecho de terminar cuentas que violen estos términos.
+              El acceso actual puede depender del piloto, una invitación o autorización previa. Podemos restringir o terminar el acceso cuando sea necesario para proteger el servicio, cumplir obligaciones aplicables o responder a incumplimientos de estos términos.
             </p>
           </section>
 

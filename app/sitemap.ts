@@ -3,10 +3,8 @@ import type { MetadataRoute } from "next"
 export default function sitemap(): MetadataRoute.Sitemap {
   const baseUrl = "https://www.despegatucarrera.com"
 
-  // Rutas estáticas principales (solo rutas públicas)
   const routes = [
     "",
-    "/biblioteca",
     "/faq",
     "/privacy",
     "/terms",
@@ -24,5 +22,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
           : 0.6,
   }))
 
-  return [...routes]
+  return routes
 }

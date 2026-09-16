@@ -3,6 +3,8 @@
 import type React from "react"
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 
+const SITE_URL = "https://www.despegatucarrera.com"
+
 interface SEOContentProps {
   children: React.ReactNode
   className?: string
@@ -40,7 +42,7 @@ function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
             className="inline-flex items-center gap-2 text-blue dark:text-blue/40 hover:text-blue dark:hover:text-blue/30 font-medium"
           >
             Ver todas las preguntas frecuentes
-            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
             </svg>
           </a>
@@ -61,7 +63,6 @@ function FAQSection({ faqs, title = "Preguntas Frecuentes" }: FAQSectionProps) {
         </div>
       </div>
 
-      {/* JSON-LD for FAQs */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -112,7 +113,6 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
         </ol>
       </nav>
 
-      {/* JSON-LD for Breadcrumbs */}
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -123,7 +123,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
               "@type": "ListItem",
               position: index + 1,
               name: item.name,
-              item: `https://tucarrera.cl${item.url}`,
+              item: `${SITE_URL}${item.url}`,
             })),
           }),
         }}
@@ -146,19 +146,18 @@ export function TestStructuredData({ name, description, duration, questions }: T
       dangerouslySetInnerHTML={{
         __html: JSON.stringify({
           "@context": "https://schema.org",
-          "@type": "Course",
-          name: name,
-          description: description,
+          "@type": "LearningResource",
+          name,
+          description,
           provider: {
             "@type": "Organization",
-            name: "TuCarrera.cl",
-            url: "https://tucarrera.cl",
+            name: "Despega Tu Carrera",
+            url: SITE_URL,
           },
           educationalLevel: "Professional",
           timeRequired: `PT${duration}M`,
           numberOfQuestions: questions,
           inLanguage: "es-CL",
-          isAccessibleForFree: true,
           learningResourceType: "Assessment",
         }),
       }}

@@ -8,7 +8,7 @@ import { COLORS, GRADIENT, GRADIENT_BTN, ROUTES } from './theme'
 const LINKS = [
   { label: 'Pruébalo', href: '#perfil-vivo' },
   { label: 'Cómo funciona', href: '#como-funciona' },
-  { label: 'Empleo', href: ROUTES.empleo },
+  { label: 'Equipo DTC', href: ROUTES.empleo },
   { label: 'Instituciones', href: ROUTES.instituciones },
   { label: 'Preguntas', href: '#preguntas' },
 ]
@@ -32,7 +32,6 @@ export default function DtcNavbar() {
 
   return (
     <>
-      {/* top progress bar */}
       <div className="fixed top-0 left-0 right-0 z-[60] h-[3px] bg-transparent">
         <div
           className="h-full transition-[width] duration-150 ease-out"
@@ -50,7 +49,6 @@ export default function DtcNavbar() {
         }}
       >
         <nav className="mx-auto flex max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
-          {/* Logo */}
           <Link href="/" className="flex items-center gap-2.5 group">
             <span
               className="flex h-9 w-9 items-center justify-center rounded-xl font-bold text-[#05060e] text-lg"
@@ -63,7 +61,6 @@ export default function DtcNavbar() {
             </span>
           </Link>
 
-          {/* Desktop links */}
           <div className="hidden lg:flex items-center gap-7">
             {LINKS.map((l) => (
               <Link
@@ -77,7 +74,6 @@ export default function DtcNavbar() {
             ))}
           </div>
 
-          {/* Desktop CTAs */}
           <div className="hidden lg:flex items-center gap-3">
             <Link
               href={ROUTES.pruebaEnVivo}
@@ -96,7 +92,6 @@ export default function DtcNavbar() {
             </Link>
           </div>
 
-          {/* Mobile toggle */}
           <button
             onClick={() => setOpen((v) => !v)}
             className="lg:hidden flex items-center justify-center h-10 w-10 rounded-lg border"
@@ -107,7 +102,6 @@ export default function DtcNavbar() {
           </button>
         </nav>
 
-        {/* Mobile menu */}
         {open && (
           <div
             className="lg:hidden border-t px-4 py-4 space-y-1"
