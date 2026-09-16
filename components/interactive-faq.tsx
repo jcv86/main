@@ -240,7 +240,7 @@ export function InteractiveFAQ() {
             </div>
             <div>
               <h2 className="text-lg md:text-xl font-bold text-foreground">¿No encontraste tu respuesta?</h2>
-              <p className="text-sm text-foreground/70">Vera, tu coach con IA, responde al instante 24/7.</p>
+              <p className="text-sm text-foreground/70">Si tu acceso está habilitado, puedes conversar con Vera desde tu cuenta.</p>
             </div>
           </div>
           <Link href="/auth/signin" prefetch={true} className="flex-shrink-0">
