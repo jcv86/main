@@ -27,6 +27,7 @@ const contactLayout = source('app/(public)/contact/layout.tsx')
 const contactPage = source('app/(public)/contact/page.tsx')
 const faqData = source('lib/faq-data.ts')
 const faqPage = source('app/faq/page.tsx')
+const interactiveFaq = source('components/interactive-faq.tsx')
 const schema = source('lib/schema-org.tsx')
 const seoHelpers = source('components/seo-optimized-content.tsx')
 const manifest = source('app/manifest.ts')
@@ -92,16 +93,30 @@ excludes('lib/faq-data.ts', faqData, [
 assert.ok(faqData.includes('Vera es el coach con IA de DTC.'), 'FAQ must describe the current Vera architecture.')
 assert.ok(faqData.includes('no garantiza empleo'), 'FAQ must state that employment outcomes are not guaranteed.')
 assert.ok(faqPage.includes('canonical: `${SITE_URL}/faq`'), 'FAQ page must own its canonical.')
+excludes('components/interactive-faq.tsx', interactiveFaq, ['responde al instante 24/7', 'en línea · responde al instante'])
+assert.ok(
+  interactiveFaq.includes('Si tu acceso está habilitado, puedes conversar con Vera desde tu cuenta.'),
+  'FAQ Vera CTA must describe access truthfully without an unsupported availability SLA.',
+)
 
 excludes('app/(public)/para-empresas/layout.tsx', companies, [
   'price: "2000"',
   'rating: 4.9',
   'ADP',
   'Workday',
-  'white-label',
+  'Sí, nos integramos',
+  'plan Enterprise incluye opciones de personalización',
   'generateProductSchema',
 ])
 assert.ok(companies.includes('no garantiza retención'), 'Enterprise FAQ must explicitly avoid unsupported ROI/outcome guarantees.')
+assert.ok(
+  companies.includes('¿Existen integraciones, white-label o precios estándar?'),
+  'Enterprise FAQ may discuss white-label only as an uncommitted capability question.',
+)
+assert.ok(
+  companies.includes('No se publican como capacidades o condiciones estándar.'),
+  'Enterprise FAQ must explicitly frame integrations, white-label and pricing as non-standard/uncommitted.',
+)
 assert.ok(
   companies.includes('canonical: "https://www.despegatucarrera.com/para-empresas"'),
   'Enterprise page must own its canonical.',
@@ -147,6 +162,7 @@ console.log(
     stalePublicCommercialClaimsExposed: false,
     staleInstitutionalClaimsExposed: false,
     staleFaqClaimsExposed: false,
+    unsupportedVeraAvailabilityClaimExposed: false,
     staleCrawlerContextExposed: false,
     rootCanonicalLeak: false,
     emptyLibraryIndexed: false,
