@@ -104,10 +104,19 @@ excludes('app/(public)/para-empresas/layout.tsx', companies, [
   'rating: 4.9',
   'ADP',
   'Workday',
-  'white-label',
+  'Sí, nos integramos',
+  'plan Enterprise incluye opciones de personalización',
   'generateProductSchema',
 ])
 assert.ok(companies.includes('no garantiza retención'), 'Enterprise FAQ must explicitly avoid unsupported ROI/outcome guarantees.')
+assert.ok(
+  companies.includes('¿Existen integraciones, white-label o precios estándar?'),
+  'Enterprise FAQ may discuss white-label only as an uncommitted capability question.',
+)
+assert.ok(
+  companies.includes('No se publican como capacidades o condiciones estándar.'),
+  'Enterprise FAQ must explicitly frame integrations, white-label and pricing as non-standard/uncommitted.',
+)
 assert.ok(
   companies.includes('canonical: "https://www.despegatucarrera.com/para-empresas"'),
   'Enterprise page must own its canonical.',
