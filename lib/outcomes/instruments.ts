@@ -12,6 +12,21 @@ export const A1_PROFESSIONAL_CLARITY_V1 = {
   ],
 } as const
 
+export const A2_EXECUTION_CAPABILITY_V1 = {
+  outcomeKey: 'execution_capability',
+  instrumentKey: 'a2_execution_checkpoint',
+  instrumentVersion: '1',
+  stage: 'a2',
+  scale: { min: 0, max: 20 },
+  dimensions: [
+    'objective_specificity',
+    'action_quality',
+    'evidence_definition',
+    'obstacle_planning',
+    'review_discipline',
+  ],
+} as const
+
 export const A3_INTERVIEW_CAPABILITY_V1 = {
   outcomeKey: 'interview_capability',
   instrumentKey: 'a3_structured_interview',
@@ -52,7 +67,7 @@ function hasExpectedDimensions(
 export function compareOutcomePair(
   baseline: ComparableObservation,
   followUp: ComparableObservation,
-  instrument: typeof A1_PROFESSIONAL_CLARITY_V1 | typeof A3_INTERVIEW_CAPABILITY_V1,
+  instrument: typeof A1_PROFESSIONAL_CLARITY_V1 | typeof A2_EXECUTION_CAPABILITY_V1 | typeof A3_INTERVIEW_CAPABILITY_V1,
 ) {
   const sameInstrument =
     baseline.instrumentKey === instrument.instrumentKey
