@@ -1,12 +1,23 @@
 import { Metadata } from 'next'
 import { JobMatchingResults } from './job-matching-results'
+import { SearchIntentForm } from './search-intent-form'
+import { createClient } from '@/lib/supabase/server'
+import { resolveServerUser } from '@/lib/auth/server-user'
 
 export const metadata: Metadata = {
   title: 'Oportunidades para ti - A4 | Despega Tu Carrera',
   description: 'Oportunidades laborales reales explicadas con la evidencia disponible en tu recorrido.',
 }
 
-export default function JobMatchingPage() {
+export default async function JobMatchingPage() {
+  const user = await resolveServerUser()
+  let seedRole: string | null = null
+  if (user) {
+    const supabase = await createClient()
+    const { data } = await supabase.from('career_identities').select('target_roles').eq('user_id', user.id).maybeSingle()
+    const roles = Array.isArray(data?.target_roles) ? data.target_roles : []
+    seedRole = typeof roles[0] === 'string' ? roles[0] : null
+  }
   return (
     <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
       <div className="border-b bg-white">
@@ -34,7 +45,8 @@ export default function JobMatchingPage() {
             <p className="mt-2 text-sm text-slate-600">LinkedIn es una fuente objetivo. No afirmamos cobertura completa hasta contar con una vía autorizada y verificable.</p>
           </div>
         </div>
-        <JobMatchingResults />
+        <SearchIntentForm seedRole={seedRole} />
+        <div className="mt-10"><JobMatchingResults /></div>
       </div>
     </main>
   )
