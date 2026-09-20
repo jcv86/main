@@ -2,6 +2,9 @@ import { Metadata } from 'next'
 import { OpportunitySearchExperience } from './opportunity-search-experience'
 import { createClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
+import { PageContainer, PageHeader, PageSection, PageStack } from '@/components/layout/page-foundation'
+import { Badge } from '@/components/ui/badge'
+import { Compass, SearchCheck, ShieldCheck } from 'lucide-react'
 
 export const metadata: Metadata = {
   title: 'Oportunidades para ti - A4 | Despega Tu Carrera',
@@ -18,34 +21,37 @@ export default async function JobMatchingPage() {
     seedRole = typeof roles[0] === 'string' ? roles[0] : null
   }
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="border-b bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">A4 · Oportunidades</p>
-          <h1 className="mt-2 text-4xl font-bold text-slate-900">Trabajos que vale la pena revisar</h1>
-          <p className="mt-3 max-w-3xl text-lg text-slate-600">
-            Priorizamos publicaciones trazables y explicamos la evidencia disponible. Una recomendación no garantiza encaje, entrevista ni oferta.
-          </p>
-        </div>
-      </div>
+    <PageContainer className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <PageStack>
+        <PageHeader
+          eyebrow="A4 · Radar Estratégico"
+          title="Oportunidades que merecen tu atención"
+          description="Define hacia dónde quieres moverte. DTC contrasta esa intención con publicaciones vigentes y conserva la fuente original para que decidas con evidencia."
+          actions={<Badge variant="outline" className="border-border bg-card text-muted-foreground">Beta · Fuentes verificables</Badge>}
+        />
 
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-10 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">Evidencia, no un porcentaje mágico</p>
-            <p className="mt-2 text-sm text-slate-600">Separamos requisitos respaldados, parciales, faltantes y desconocidos.</p>
+        <PageSection>
+          <div className="grid gap-3 md:grid-cols-3">
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[hsl(var(--dtc-indigo-900))] text-white"><Compass className="h-5 w-5"/></div>
+              <p className="font-semibold tracking-tight text-foreground">Tú marcas la dirección</p>
+              <p className="mt-1.5 text-sm leading-6 text-muted-foreground">La búsqueda nace de los cargos y condiciones que confirmas, no de una categoría impuesta por un portal.</p>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[hsl(var(--dtc-indigo-900))] text-white"><SearchCheck className="h-5 w-5"/></div>
+              <p className="font-semibold tracking-tight text-foreground">Relevancia antes que volumen</p>
+              <p className="mt-1.5 text-sm leading-6 text-muted-foreground">Si no encontramos evidencia suficiente de relación con tu búsqueda, preferimos mostrar cero resultados.</p>
+            </div>
+            <div className="rounded-2xl border border-border bg-card p-5 shadow-sm">
+              <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-xl bg-[hsl(var(--dtc-indigo-900))] text-white"><ShieldCheck className="h-5 w-5"/></div>
+              <p className="font-semibold tracking-tight text-foreground">Fuente trazable</p>
+              <p className="mt-1.5 text-sm leading-6 text-muted-foreground">Cada oportunidad conserva su publicación original y su estado de vigencia. Sin fuente verificable, no la recomendamos.</p>
+            </div>
           </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">Publicación original</p>
-            <p className="mt-2 text-sm text-slate-600">Una oportunidad sólo debe recomendarse si existe una fuente original trazable y vigente.</p>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">LinkedIn + fuentes verificables</p>
-            <p className="mt-2 text-sm text-slate-600">LinkedIn es una fuente objetivo. No afirmamos cobertura completa hasta contar con una vía autorizada y verificable.</p>
-          </div>
-        </div>
+        </PageSection>
+
         <OpportunitySearchExperience seedRole={seedRole} />
-      </div>
-    </main>
+      </PageStack>
+    </PageContainer>
   )
 }
