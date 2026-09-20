@@ -79,7 +79,7 @@ export default async function RadarEstrategicoPage() {
     supabase
       .from('a4_decision_log')
       .select(
-        'id,signal_id,decision,rationale,expected_evidence,status,review_on,outcome,reviewed_at,created_at,updated_at',
+        'id,signal_id,decision,rationale,expected_evidence,status,review_on,outcome,reviewed_at,review_classification,external_outcomes,created_at,updated_at',
       )
       .eq('user_id', userId)
       .order('created_at', { ascending: false })
