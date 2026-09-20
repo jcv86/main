@@ -16,7 +16,10 @@ export async function GET() {
  if(!access.canAccess) return NextResponse.json({error:getA4AccessDenialMessage(),code:access.reason},{status:403})
  const {data:intent,error}=await supabase.from('career_search_intents').select('*').eq('user_id',user.id).eq('is_active',true).eq('is_primary',true).maybeSingle()
  if(error) return NextResponse.json({error:'No fue posible cargar tu búsqueda.'},{status:500})
- if(!intent) return NextResponse.json({needs_intent:true,opportunities:[]})
+ if(!intent){
+  const opportunities=await fetchChileTrabajosOpportunities('','Santiago',12)
+  return NextResponse.json({needs_intent:true,mode:'available_now',source:'chiletrabajos',fetched_at:new Date().toISOString(),count:opportunities.length,opportunities})
+ }
  const queries=planOpportunityQueries({targetRoles:Array.isArray(intent.target_roles)?intent.target_roles:[],breadth:intent.breadth,locations:Array.isArray(intent.locations)?intent.locations:[],workModes:Array.isArray(intent.work_modes)?intent.work_modes:[]})
  const location=Array.isArray(intent.locations)&&typeof intent.locations[0]==='string'?intent.locations[0]:'Santiago'
  const collected=[] as Awaited<ReturnType<typeof fetchChileTrabajosOpportunities>>
