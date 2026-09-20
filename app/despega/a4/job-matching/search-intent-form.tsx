@@ -19,8 +19,11 @@ export function SearchIntentForm({seedRole,onSaved}:{seedRole?:string|null;onSav
  const [modes,setModes]=useState<string[]>(['hybrid','remote'])
  const [regionOpen,setRegionOpen]=useState(false)
  const [modeOpen,setModeOpen]=useState(false)
- const [saving,setSaving]=useState(false)\n const [guideOpen,setGuideOpen]=useState(false)
- const [message,setMessage]=useState<string|null>(null)\n const [catalog,setCatalog]=useState<{total:number;areas:{label:string;count:number}[];roles:{label:string;count:number}[];regions:{label:string;count:number}[]}|null>(null)\n useEffect(()=>{fetch('/api/a4/opportunities/catalog',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(v=>{if(v)setCatalog(v)}).catch(()=>{})},[])
+ const [saving,setSaving]=useState(false)
+ const [guideOpen,setGuideOpen]=useState(false)
+ const [message,setMessage]=useState<string|null>(null)
+ const [catalog,setCatalog]=useState<{total:number;areas:{label:string;count:number}[];roles:{label:string;count:number}[];regions:{label:string;count:number}[]}|null>(null)
+ useEffect(()=>{fetch('/api/a4/opportunities/catalog',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(v=>{if(v)setCatalog(v)}).catch(()=>{})},[])
  const modeLabels=useMemo(()=>MODES.filter(([v])=>modes.includes(v)).map(([,l])=>l),[modes])
  function addRole(){const v=role.trim();if(v&&!roles.some(r=>r.toLowerCase()===v.toLowerCase()))setRoles(x=>[...x,v]);setRole('')}
  function toggle(value:string,setter:React.Dispatch<React.SetStateAction<string[]>>){setter(xs=>xs.includes(value)?xs.filter(x=>x!==value):[...xs,value])}
