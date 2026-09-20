@@ -323,6 +323,8 @@ export function StrategicRadarWorkspace({
           status: created.status,
           outcome: created.outcome || '',
           reviewOn: created.review_on,
+          reviewClassification: created.review_classification || '',
+          externalOutcomes: created.external_outcomes || [],
         },
       }))
       setDecisionForm((current) => ({
