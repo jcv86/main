@@ -20,14 +20,14 @@ export async function GET() {
   const opportunities=await fetchChileTrabajosOpportunities('','Santiago',12)
   return NextResponse.json({needs_intent:true,mode:'available_now',source:'chiletrabajos',fetched_at:new Date().toISOString(),count:opportunities.length,opportunities})
  }
- const queries=planOpportunityQueries({targetRoles:Array.isArray(intent.target_roles)?intent.target_roles:[],breadth:intent.breadth,locations:Array.isArray(intent.locations)?intent.locations:[],workModes:Array.isArray(intent.work_modes)?intent.work_modes:[]})
+ const targetRoles=Array.isArray(intent.target_roles)?intent.target_roles:[]\n const queries=planOpportunityQueries({targetRoles,breadth:intent.breadth,locations:Array.isArray(intent.locations)?intent.locations:[],workModes:Array.isArray(intent.work_modes)?intent.work_modes:[]})
  const location=Array.isArray(intent.locations)&&typeof intent.locations[0]==='string'?intent.locations[0]:'Santiago'
  const collected=[] as Awaited<ReturnType<typeof fetchChileTrabajosOpportunities>>
  const seen=new Set<string>()
- for(const query of queries.slice(0,3)){
-   const jobs=await fetchChileTrabajosOpportunities(query,location,5)
+ for(const query of queries.slice(0,6)){
+   const jobs=await fetchChileTrabajosOpportunities(query,location,8)
    for(const job of jobs){if(!seen.has(job.originalUrl)){seen.add(job.originalUrl);collected.push(job)}}
-   if(collected.length>=12) break
+   if(collected.length>=18) break
  }
  return NextResponse.json({
   needs_intent:false,
