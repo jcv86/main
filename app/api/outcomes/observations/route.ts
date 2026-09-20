@@ -51,6 +51,21 @@ export async function POST(request: Request) {
   const instrument = instrumentFor(body.instrumentKey)
   if (!instrument) return NextResponse.json({ error: 'Unknown instrument' }, { status: 400 })
 
+  if (body.instrumentKey === 'a1_professional_clarity') {
+    const requiredResponseKeys = ['target', 'value', 'evidence', 'gap']
+    const payload = body.responsePayload
+    const validPayload = payload
+      && Object.keys(payload).length === requiredResponseKeys.length
+      && requiredResponseKeys.every((key) => {
+        const value = payload[key]
+        return typeof value === 'string' && value.trim().split(/\s+/).filter(Boolean).length >= 5
+      })
+
+    if (!validPayload) {
+      return NextResponse.json({ error: 'A1 response evidence is required' }, { status: 400 })
+    }
+  }
+
   if (
     body.outcomeKey !== instrument.outcomeKey
     || body.instrumentVersion !== instrument.instrumentVersion
