@@ -5,6 +5,8 @@ import { eventSchema } from '../lib/v1-analytics/schema'
 const route = readFileSync('app/api/v1-analytics/route.ts', 'utf8')
 const hook = readFileSync('lib/v1-analytics/use-v1-analytics.ts', 'utf8')
 const schema = readFileSync('lib/v1-analytics/schema.ts', 'utf8')
+const types = readFileSync('lib/v1-analytics/types.ts', 'utf8')
+const c1Page = readFileSync('app/despega/conozcamonos-1/page.tsx', 'utf8')
 
 for (const contract of [
   "supabase.auth.getUser()",
@@ -30,6 +32,13 @@ assert.ok(!route.includes('console.log'), 'analytics endpoint must not log event
 assert.ok(!route.includes("admin.from('v1_analytics').insert"), 'writes must respect owner RLS')
 assert.ok(route.includes("supabase.from('v1_analytics').insert"), 'writes must use authenticated client')
 assert.ok(!hook.includes('[ANALYTICS]'), 'browser must not log analytics payloads')
+assert.ok(!hook.includes('timestamp: new Date().toISOString()'), 'client must not send server-owned timestamp')
+assert.ok(hook.includes("metadata?: V1AnalyticsEvent['metadata']"), 'client metadata must be typed to the allowlist')
+assert.ok(!types.includes('userChoice?:'), 'client types must not permit free-form user choices')
+assert.ok(!types.includes('userId?:'), 'client must not accept user ownership from payloads')
+assert.ok(!types.includes('timestamp: string'), 'client event type must not include server-owned timestamp')
+assert.ok(!c1Page.includes('totalQuestions:'), 'C1 analytics must not send non-allowlisted metadata')
+assert.ok(c1Page.includes("errorType: 'save_failed'"), 'C1 analytics errors must be categorical')
 
 assert.equal(eventSchema.safeParse({
   event: 'a1_completed',
