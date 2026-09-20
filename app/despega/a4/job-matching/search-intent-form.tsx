@@ -11,7 +11,7 @@ const BREADTHS:{value:Breadth;title:string;copy:string}[]=[
  {value:'exploratory',title:'Exploratoria',copy:'Abre caminos cercanos para descubrir opciones que quizás no habías considerado.'},
 ]
 
-export function SearchIntentForm({seedRole}:{seedRole?:string|null}) {
+export function SearchIntentForm({seedRole,onSaved}:{seedRole?:string|null;onSaved?:()=>void}) {
  const [roles,setRoles]=useState<string[]>(seedRole?.trim()?[seedRole.trim()]:[])
  const [role,setRole]=useState('')
  const [breadth,setBreadth]=useState<Breadth>('related')
@@ -22,7 +22,7 @@ export function SearchIntentForm({seedRole}:{seedRole?:string|null}) {
 
  function addRole(){const value=role.trim();if(value&&!roles.some(r=>r.toLowerCase()===value.toLowerCase()))setRoles(v=>[...v,value]);setRole('')}
  async function submit(event:FormEvent){event.preventDefault();setMessage(null);if(!roles.length){setMessage('Agrega al menos un cargo o dirección profesional.');return}setSaving(true)
-  try{const response=await fetch('/api/a4/search-intents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({targetRoles:roles,breadth,locations:location.trim()?[location.trim()]:[],workModes:modes,isPrimary:true})});const data=await response.json();if(!response.ok)throw new Error(data.error||'No fue posible guardar tu búsqueda.');setMessage('Búsqueda guardada. Ya podemos usarla para encontrar oportunidades reales.')}
+  try{const response=await fetch('/api/a4/search-intents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({targetRoles:roles,breadth,locations:location.trim()?[location.trim()]:[],workModes:modes,isPrimary:true})});const data=await response.json();if(!response.ok)throw new Error(data.error||'No fue posible guardar tu búsqueda.');setMessage('Búsqueda guardada. Ya estamos buscando oportunidades reales.');onSaved?.()}
   catch(error){setMessage(error instanceof Error?error.message:'No fue posible guardar tu búsqueda.')}finally{setSaving(false)}
  }
  return <Card className="border-slate-200 shadow-sm"><CardHeader><p className="text-sm font-semibold uppercase tracking-[0.16em] text-emerald-700">Tu búsqueda laboral</p><CardTitle className="text-2xl">¿Qué tipo de oportunidad quieres encontrar ahora?</CardTitle><p className="max-w-3xl text-sm text-slate-600">Ya conocemos parte de tu recorrido. Confirma o ajusta hacia dónde quieres orientar la búsqueda. Tú decides el objetivo; DTC sólo ayuda a traducirlo a las distintas fuentes.</p></CardHeader><CardContent><form onSubmit={submit} className="space-y-7">
