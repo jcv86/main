@@ -35,7 +35,9 @@ assert.ok(!sql.toLowerCase().includes('grant update on table public.dtc_outcome'
 assert.ok(!sql.toLowerCase().includes('grant delete on table public.dtc_outcome'), 'browser roles must not delete outcome evidence')
 assert.ok(design.includes('A completion percentage, XP total or number of modules is not by itself a user outcome.'))
 assert.ok(design.includes('no universal career score'))
-assert.ok(readiness.includes("recommendations.push('¡Listo para aplicar activamente!')"), 'legacy completeness heuristic must remain visible to the audit until explicitly retired')
+assert.ok(readiness.includes('Legacy journey-completeness heuristic'), 'legacy score must be explicitly classified as completeness')
+assert.ok(!readiness.includes('¡Listo para aplicar activamente!'), 'legacy completeness must not claim demonstrated job readiness')
+assert.ok(readiness.includes('esto no demuestra preparación laboral por sí solo'), 'legacy completeness must disclose its evidence limitation')
 
 console.log(JSON.stringify({
   outcomeTaxonomyFrozen: true,
