@@ -1,5 +1,6 @@
-// A4 Progress Calculator - Calcula score de candidato y progreso
+// Legacy journey-completeness heuristic. Do not use as evidence of user outcome or job readiness.
 
+/** @deprecated Completion heuristic only; Outcome Engine owns demonstrated outcomes. */
 export interface ReadinessScore {
   overall_score: number // 0-100
   a1_completeness: number
@@ -11,6 +12,7 @@ export interface ReadinessScore {
   recommendations: string[]
 }
 
+/** @deprecated Use only for legacy completeness displays. Never present this as demonstrated readiness. */
 export function calculateReadinessScore(
   a1_completed: boolean,
   a1_profile: any,
@@ -66,9 +68,9 @@ export function calculateReadinessScore(
 
   if (a4_active) strengths.push('Sistema Radar activo')
 
-  if (overall >= 80) recommendations.push('¡Listo para aplicar activamente!')
-  if (overall >= 60 && overall < 80) recommendations.push('Casi listo - completa los gaps')
-  if (overall < 60) recommendations.push('Continúa el programa - falta preparación')
+  if (overall >= 80) recommendations.push('Recorrido ampliamente completado; esto no demuestra preparación laboral por sí solo.')
+  if (overall >= 60 && overall < 80) recommendations.push('Recorrido avanzado; revisa la evidencia antes de inferir preparación.')
+  if (overall < 60) recommendations.push('Continúa construyendo evidencia en el recorrido.')
 
   return {
     overall_score: overall,

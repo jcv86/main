@@ -1,0 +1,35 @@
+name: Outcome Engine S1
+
+on:
+  pull_request:
+    paths:
+      - 'docs/dtc/DTC_OUTCOME_ENGINE_S1.md'
+      - 'supabase/migrations/*outcome_engine*.sql'
+      - 'scripts/check-outcome-engine-s1-contract.ts'
+      - 'lib/readiness-score.ts'
+      - '.github/workflows/outcome-engine-s1.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'docs/dtc/DTC_OUTCOME_ENGINE_S1.md'
+      - 'supabase/migrations/*outcome_engine*.sql'
+      - 'scripts/check-outcome-engine-s1-contract.ts'
+      - 'lib/readiness-score.ts'
+      - '.github/workflows/outcome-engine-s1.yml'
+
+jobs:
+  outcome-foundation:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/check-outcome-engine-s1-contract.ts
+      - run: pnpm exec tsc --noEmit
