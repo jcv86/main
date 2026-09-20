@@ -188,7 +188,7 @@ export async function PATCH(request: NextRequest) {
     const value = validation.value
     const { data: existing, error: existingError } = await resolved.supabase!
       .from('a4_decision_log')
-      .select('id,signal_id,review_on')
+      .select('id,signal_id,review_on,rationale,expected_evidence')
       .eq('id', decisionId)
       .eq('user_id', resolved.currentUser!.id)
       .maybeSingle()
@@ -251,8 +251,8 @@ export async function PATCH(request: NextRequest) {
       if (signal) {
         const dimensions = {
           evidence_grounding: data.review_classification === 'evidence_supported' ? 4 : data.review_classification === 'inconclusive' ? 2 : 1,
-          rationale_clarity: data.rationale?.length >= 80 ? 4 : 3,
-          falsifiability: data.expected_evidence?.length >= 60 ? 4 : 3,
+          rationale_clarity: existing.rationale.length >= 80 ? 4 : 3,
+          falsifiability: existing.expected_evidence.length >= 60 ? 4 : 3,
           review_discipline: data.reviewed_at ? 4 : 0,
         }
         const score = Object.values(dimensions).reduce((sum, value) => sum + value, 0)
