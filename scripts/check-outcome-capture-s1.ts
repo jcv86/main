@@ -18,6 +18,7 @@ assert.ok(!route.includes('body.userId'), 'client must never choose outcome owne
 assert.ok(!route.includes('userId: z.'), 'payload schema must not accept a user id')
 assert.ok(route.includes('Observation does not match instrument contract'), 'server must reject mismatched instrument payloads')
 assert.ok(route.includes('normalized_delta: result.normalizedDelta'), 'snapshot must persist only comparator output')
+assert.ok(route.includes('dimensions,confidence,observed_at'), 'snapshot derivation must read persisted confidence')
 
 assert.ok(card.includes('Tu evidencia de progreso'))
 assert.ok(card.includes('Todavía no tenemos una medición comparable para afirmar mejora.'))
