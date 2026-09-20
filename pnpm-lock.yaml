@@ -80,12 +80,6 @@ importers:
       '@react-pdf/renderer':
         specifier: ^4.3.2
         version: 4.3.2(react@19.0.0)
-      '@supabase/auth-helpers-nextjs':
-        specifier: ^0.15.0
-        version: 0.15.0(@supabase/supabase-js@2.87.1)
-      '@supabase/auth-helpers-react':
-        specifier: ^0.15.0
-        version: 0.15.0(@supabase/supabase-js@2.87.1)
       '@supabase/ssr':
         specifier: 0.7.0
         version: 0.7.0(@supabase/supabase-js@2.87.1)
