@@ -6,6 +6,7 @@ on:
       - 'docs/dtc/DTC_OUTCOME_ENGINE_S1.md'
       - 'supabase/migrations/*outcome_engine*.sql'
       - 'scripts/check-outcome-engine-s1-contract.ts'
+      - 'lib/readiness-score.ts'
       - '.github/workflows/outcome-engine-s1.yml'
   push:
     branches: [main]
@@ -13,6 +14,7 @@ on:
       - 'docs/dtc/DTC_OUTCOME_ENGINE_S1.md'
       - 'supabase/migrations/*outcome_engine*.sql'
       - 'scripts/check-outcome-engine-s1-contract.ts'
+      - 'lib/readiness-score.ts'
       - '.github/workflows/outcome-engine-s1.yml'
 
 jobs:
