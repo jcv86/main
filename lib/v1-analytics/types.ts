@@ -49,14 +49,11 @@ export type V1EventType =
 export interface V1AnalyticsEvent {
   event: V1EventType
   stage: 'c1' | 'a1' | 'a2' | 'a3' | 'a4' | 'cross'
-  timestamp: string
   sessionId: string
-  userId?: string
   metadata?: {
     questionIndex?: number
     duration?: number
     errorType?: string
-    userChoice?: string
     timeOnPage?: number
     deviceType?: 'mobile' | 'desktop'
     retryCount?: number
