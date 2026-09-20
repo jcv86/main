@@ -7,6 +7,8 @@ const hook = readFileSync('lib/v1-analytics/use-v1-analytics.ts', 'utf8')
 const schema = readFileSync('lib/v1-analytics/schema.ts', 'utf8')
 const types = readFileSync('lib/v1-analytics/types.ts', 'utf8')
 const c1Page = readFileSync('app/despega/conozcamonos-1/page.tsx', 'utf8')
+const journeyTracker = readFileSync('components/analytics/journey-stage-analytics.tsx', 'utf8')
+const despegaLayout = readFileSync('app/despega/layout.tsx', 'utf8')
 
 for (const contract of [
   "supabase.auth.getUser()",
@@ -39,6 +41,17 @@ assert.ok(!types.includes('userId?:'), 'client must not accept user ownership fr
 assert.ok(!types.includes('timestamp: string'), 'client event type must not include server-owned timestamp')
 assert.ok(!c1Page.includes('totalQuestions:'), 'C1 analytics must not send non-allowlisted metadata')
 assert.ok(c1Page.includes("errorType: 'save_failed'"), 'C1 analytics errors must be categorical')
+
+for (const stageEvent of [
+  "a1: 'a1_intro_viewed'",
+  "a2: 'a2_dashboard_viewed'",
+  "a3: 'a3_page_viewed'",
+  "a4: 'a4_page_viewed'",
+]) assert.ok(journeyTracker.includes(stageEvent), `missing funnel stage event: ${stageEvent}`)
+
+assert.ok(journeyTracker.includes('v1_funnel_stage_seen_'), 'funnel stage tracking must dedupe within a browser session')
+assert.ok(!journeyTracker.includes('metadata:'), 'funnel stage entry must not attach arbitrary metadata')
+assert.ok(despegaLayout.includes('<JourneyStageAnalytics />'), 'authenticated journey layout must mount funnel analytics')
 
 assert.equal(eventSchema.safeParse({
   event: 'a1_completed',
