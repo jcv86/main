@@ -1,35 +1,36 @@
 'use client'
 
 import { FormEvent, useState } from 'react'
+import { Search, MapPin, Briefcase } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
-type Breadth='precise'|'related'|'exploratory'
-const BREADTHS:{value:Breadth;title:string;copy:string}[]=[
- {value:'precise',title:'Exacta',copy:'Cargos muy parecidos a los que buscas.'},
- {value:'related',title:'Flexible',copy:'También considera cargos relacionados.'},
- {value:'exploratory',title:'Amplia',copy:'Incluye otras opciones que podrían interesarte.'},
-]
-
 export function SearchIntentForm({seedRole,onSaved}:{seedRole?:string|null;onSaved?:()=>void}) {
- const [roles,setRoles]=useState<string[]>(seedRole?.trim()?[seedRole.trim()]:[])
- const [role,setRole]=useState('')
- const [breadth,setBreadth]=useState<Breadth>('related')
+ const [role,setRole]=useState(seedRole?.trim()||'')
  const [location,setLocation]=useState('Santiago')
- const [modes,setModes]=useState<string[]>(['hybrid','remote'])
+ const [mode,setMode]=useState('flexible')
  const [saving,setSaving]=useState(false)
  const [message,setMessage]=useState<string|null>(null)
 
- function addRole(){const value=role.trim();if(value&&!roles.some(r=>r.toLowerCase()===value.toLowerCase()))setRoles(v=>[...v,value]);setRole('')}
- async function submit(event:FormEvent){event.preventDefault();setMessage(null);if(!roles.length){setMessage('Agrega al menos un cargo.');return}setSaving(true)
-  try{const response=await fetch('/api/a4/search-intents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({targetRoles:roles,breadth,locations:location.trim()?[location.trim()]:[],workModes:modes,isPrimary:true})});const data=await response.json();if(!response.ok)throw new Error(data.error||'No pudimos realizar la búsqueda.');setMessage(null);onSaved?.()}
+ async function submit(event:FormEvent){event.preventDefault();setMessage(null);const target=role.trim();if(!target){setMessage('Escribe el cargo o área que buscas.');return}setSaving(true)
+  try{const response=await fetch('/api/a4/search-intents',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({targetRoles:[target],breadth:'related',locations:location.trim()?[location.trim()]:[],workModes:mode==='flexible'?['onsite','hybrid','remote']:[mode],isPrimary:true})});const data=await response.json();if(!response.ok)throw new Error(data.error||'No pudimos realizar la búsqueda.');onSaved?.()}
   catch(error){setMessage(error instanceof Error?error.message:'No pudimos realizar la búsqueda.')}finally{setSaving(false)}
  }
- return <Card className="overflow-hidden border-border bg-card shadow-sm"><CardHeader><CardTitle className="text-2xl">¿Qué trabajo estás buscando?</CardTitle><p className="text-sm text-muted-foreground">Puedes buscar uno o varios cargos.</p></CardHeader><CardContent><form onSubmit={submit} className="space-y-7">
-  <div><label className="text-sm font-semibold text-foreground">Cargo</label><div className="mt-3 flex flex-wrap gap-2">{roles.map(r=><button type="button" key={r} onClick={()=>setRoles(v=>v.filter(x=>x!==r))} className="rounded-full border border-border bg-muted px-3 py-1.5 text-sm text-foreground">{r} <span aria-hidden>×</span></button>)}</div><div className="mt-3 flex gap-2"><input value={role} onChange={e=>setRole(e.target.value)} onKeyDown={e=>{if(e.key==='Enter'){e.preventDefault();addRole()}}} placeholder="Ej.: Analista de Riesgo" className="h-10 flex-1 rounded-md border border-input bg-background px-3 text-sm"/><Button type="button" variant="outline" onClick={addRole}>Agregar</Button></div></div>
-  <fieldset><legend className="text-sm font-semibold text-foreground">Tipo de búsqueda</legend><div className="mt-3 grid gap-3 md:grid-cols-3">{BREADTHS.map(item=><label key={item.value} className={`cursor-pointer rounded-xl border p-4 ${breadth===item.value?'border-[hsl(var(--dtc-indigo-300))] bg-muted/60 ring-1 ring-[hsl(var(--dtc-indigo-300))]':'border-border bg-card'}`}><input className="sr-only" type="radio" name="breadth" value={item.value} checked={breadth===item.value} onChange={()=>setBreadth(item.value)}/><span className="font-semibold text-foreground">{item.title}</span><span className="mt-1 block text-xs leading-relaxed text-muted-foreground">{item.copy}</span></label>)}</div></fieldset>
-  <div className="grid gap-5 md:grid-cols-2"><div><label className="text-sm font-semibold text-foreground">Ubicación</label><input value={location} onChange={e=>setLocation(e.target.value)} placeholder="Ciudad o región" className="mt-2 h-10 w-full rounded-md border border-input bg-background px-3 text-sm"/></div><fieldset><legend className="text-sm font-semibold text-foreground">Modalidad</legend><div className="mt-3 flex flex-wrap gap-3">{[['onsite','Presencial'],['hybrid','Híbrido'],['remote','Remoto'],['flexible','Cualquiera']].map(([value,label])=><label key={value} className="flex items-center gap-2 text-sm"><input type="checkbox" checked={modes.includes(value)} onChange={()=>setModes(v=>v.includes(value)?v.filter(x=>x!==value):[...v,value])}/>{label}</label>)}</div></fieldset></div>
-  {message&&<p role="status" className="rounded-xl border border-border bg-muted/40 p-3 text-sm text-foreground">{message}</p>}
-  <Button disabled={saving} className="bg-[hsl(var(--dtc-indigo-900))] text-white hover:opacity-90">{saving?'Buscando…':'Buscar oportunidades'}</Button>
- </form></CardContent></Card>
+ return <Card className="overflow-hidden border-border/80 bg-card shadow-sm">
+  <CardHeader className="pb-5">
+   <div className="flex items-start gap-3">
+    <div className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-[hsl(var(--dtc-indigo-900))] text-white sm:flex"><Search className="h-5 w-5"/></div>
+    <div><CardTitle className="text-2xl tracking-tight">¿Qué trabajo estás buscando?</CardTitle><p className="mt-1 text-sm text-muted-foreground">Busca por cargo o área y ajusta tus preferencias.</p></div>
+   </div>
+  </CardHeader>
+  <CardContent><form onSubmit={submit} className="space-y-5">
+   <div className="grid gap-3 lg:grid-cols-[minmax(0,1.35fr)_minmax(220px,.8fr)_minmax(220px,.8fr)_auto] lg:items-end">
+    <div><label className="text-sm font-medium text-foreground">Cargo o área</label><div className="relative mt-2"><Search className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><input value={role} onChange={e=>setRole(e.target.value)} placeholder="Ej.: Analista de Riesgo, Finanzas…" className="h-11 w-full rounded-xl border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"/></div></div>
+    <div><label className="text-sm font-medium text-foreground">Ubicación</label><div className="relative mt-2"><MapPin className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><input value={location} onChange={e=>setLocation(e.target.value)} placeholder="Ciudad o región" className="h-11 w-full rounded-xl border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"/></div></div>
+    <div><label className="text-sm font-medium text-foreground">Modalidad</label><div className="relative mt-2"><Briefcase className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground"/><select value={mode} onChange={e=>setMode(e.target.value)} className="h-11 w-full appearance-none rounded-xl border border-input bg-background pl-10 pr-3 text-sm outline-none focus:ring-2 focus:ring-ring"><option value="flexible">Cualquier modalidad</option><option value="onsite">Presencial</option><option value="hybrid">Híbrido</option><option value="remote">Remoto</option></select></div></div>
+    <Button disabled={saving} className="h-11 rounded-xl bg-[hsl(var(--dtc-indigo-900))] px-6 text-white hover:opacity-90"><Search className="mr-2 h-4 w-4"/>{saving?'Buscando…':'Buscar oportunidades'}</Button>
+   </div>
+   {message&&<p role="status" className="text-sm text-destructive">{message}</p>}
+  </form></CardContent>
+ </Card>
 }
