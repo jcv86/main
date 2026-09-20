@@ -2,10 +2,11 @@ import { Metadata } from 'next'
 import { OpportunitySearchExperience } from './opportunity-search-experience'
 import { createClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 
 export const metadata: Metadata = {
   title: 'Oportunidades para ti - A4 | Despega Tu Carrera',
-  description: 'Oportunidades laborales reales explicadas con la evidencia disponible en tu recorrido.',
+  description: 'Encuentra oportunidades laborales alineadas con lo que estás buscando.',
 }
 
 export default async function JobMatchingPage() {
@@ -18,34 +19,15 @@ export default async function JobMatchingPage() {
     seedRole = typeof roles[0] === 'string' ? roles[0] : null
   }
   return (
-    <main className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100">
-      <div className="border-b bg-white">
-        <div className="mx-auto max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
-          <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">A4 · Oportunidades</p>
-          <h1 className="mt-2 text-4xl font-bold text-slate-900">Trabajos que vale la pena revisar</h1>
-          <p className="mt-3 max-w-3xl text-lg text-slate-600">
-            Priorizamos publicaciones trazables y explicamos la evidencia disponible. Una recomendación no garantiza encaje, entrevista ni oferta.
-          </p>
-        </div>
-      </div>
-
-      <div className="mx-auto max-w-6xl px-4 py-10 sm:px-6 lg:px-8">
-        <div className="mb-10 grid gap-4 md:grid-cols-3">
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">Evidencia, no un porcentaje mágico</p>
-            <p className="mt-2 text-sm text-slate-600">Separamos requisitos respaldados, parciales, faltantes y desconocidos.</p>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">Publicación original</p>
-            <p className="mt-2 text-sm text-slate-600">Una oportunidad sólo debe recomendarse si existe una fuente original trazable y vigente.</p>
-          </div>
-          <div className="rounded-xl border border-slate-200 bg-white p-5">
-            <p className="font-semibold text-slate-900">LinkedIn + fuentes verificables</p>
-            <p className="mt-2 text-sm text-slate-600">LinkedIn es una fuente objetivo. No afirmamos cobertura completa hasta contar con una vía autorizada y verificable.</p>
-          </div>
-        </div>
+    <PageContainer className="px-4 py-6 sm:px-6 sm:py-8 lg:px-8">
+      <PageStack>
+        <PageHeader
+          eyebrow="Oportunidades"
+          title="Encuentra tu próximo trabajo"
+          description="Cuéntanos qué estás buscando y te mostraremos oportunidades que puedan interesarte."
+        />
         <OpportunitySearchExperience seedRole={seedRole} />
-      </div>
-    </main>
+      </PageStack>
+    </PageContainer>
   )
 }
