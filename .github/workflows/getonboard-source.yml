@@ -1,0 +1,26 @@
+name: Get on Board Source
+
+on:
+  pull_request:
+    paths:
+      - 'lib/opportunities/sources/getonboard.ts'
+      - 'app/api/a4/opportunities/getonboard/**'
+      - 'scripts/check-getonboard-source.ts'
+      - '.github/workflows/getonboard-source.yml'
+
+jobs:
+  source-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/check-getonboard-source.ts
+      - run: pnpm exec tsc --noEmit
