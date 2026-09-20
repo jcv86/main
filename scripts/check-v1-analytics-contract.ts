@@ -33,6 +33,7 @@ assert.ok(!route.includes('userChoice:'), 'free-form user choices must not be pe
 assert.ok(!route.includes('console.log'), 'analytics endpoint must not log event data')
 assert.ok(!route.includes("admin.from('v1_analytics').insert"), 'writes must respect owner RLS')
 assert.ok(route.includes("supabase.from('v1_analytics').insert"), 'writes must use authenticated client')
+assert.ok(route.includes(".gt('expires_at', new Date().toISOString())"), 'admin metrics must exclude expired raw rows explicitly')
 assert.ok(!hook.includes('[ANALYTICS]'), 'browser must not log analytics payloads')
 assert.ok(!hook.includes('timestamp: new Date().toISOString()'), 'client must not send server-owned timestamp')
 assert.ok(hook.includes("metadata?: V1AnalyticsEvent['metadata']"), 'client metadata must be typed to the allowlist')
@@ -41,6 +42,7 @@ assert.ok(!types.includes('userId?:'), 'client must not accept user ownership fr
 assert.ok(!types.includes('timestamp: string'), 'client event type must not include server-owned timestamp')
 assert.ok(!c1Page.includes('totalQuestions:'), 'C1 analytics must not send non-allowlisted metadata')
 assert.ok(c1Page.includes("errorType: 'save_failed'"), 'C1 analytics errors must be categorical')
+assert.ok(c1Page.includes('trackPageView()'), 'C1 must initialize page timing before event capture')
 
 for (const stageEvent of [
   "a1: 'a1_intro_viewed'",
