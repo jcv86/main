@@ -66,6 +66,7 @@ export async function GET(request: Request) {
     .from('v1_analytics')
     .select('event_type,stage,session_id')
     .gte('timestamp', since)
+    .gt('expires_at', new Date().toISOString())
     .limit(10_000)
 
   if (error) {
