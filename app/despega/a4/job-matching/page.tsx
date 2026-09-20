@@ -1,6 +1,5 @@
 import { Metadata } from 'next'
-import { JobMatchingResults } from './job-matching-results'
-import { SearchIntentForm } from './search-intent-form'
+import { OpportunitySearchExperience } from './opportunity-search-experience'
 import { createClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
 
@@ -45,8 +44,7 @@ export default async function JobMatchingPage() {
             <p className="mt-2 text-sm text-slate-600">LinkedIn es una fuente objetivo. No afirmamos cobertura completa hasta contar con una vía autorizada y verificable.</p>
           </div>
         </div>
-        <SearchIntentForm seedRole={seedRole} />
-        <div className="mt-10"><JobMatchingResults /></div>
+        <OpportunitySearchExperience seedRole={seedRole} />
       </div>
     </main>
   )
