@@ -487,6 +487,25 @@ export default function A2DashboardPage() {
             </div>
           )}
 
+        <section className="mb-8 rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-6">
+          <p className="text-sm font-semibold text-emerald-200">Tu capacidad de ejecución</p>
+          <p className="mt-1 max-w-3xl text-sm text-slate-400">
+            Se mide aparte del progreso diario. Completar más misiones no se presenta como mejora de capacidad.
+          </p>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <button type="button" onClick={() => router.push('/despega/a2-outcome-baseline')} className="rounded-lg border border-emerald-500/40 px-4 py-2 text-sm font-semibold text-emerald-200 hover:bg-emerald-500/10">
+              Hacer baseline comparable
+            </button>
+            {progress.completed_days.includes(30) ? (
+              <button type="button" onClick={() => router.push('/despega/a2-outcome-follow-up')} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
+                Medir mi cambio en el hito de 30 días
+              </button>
+            ) : (
+              <span className="self-center text-xs text-slate-500">El follow-up se habilita al completar el hito verificable del Día 30.</span>
+            )}
+          </div>
+        </section>
+
         <section className="mb-6 rounded-xl border border-[rgb(80,160,170)] bg-slate-950 p-6">
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>

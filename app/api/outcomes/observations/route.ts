@@ -3,6 +3,7 @@ import { z } from 'zod'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import {
   A1_PROFESSIONAL_CLARITY_V1,
+  A2_EXECUTION_CAPABILITY_V1,
   A3_INTERVIEW_CAPABILITY_V1,
   compareOutcomePair,
 } from '@/lib/outcomes/instruments'
@@ -10,9 +11,9 @@ import {
 const dimensionScore = z.number().int().min(0).max(4)
 
 const payloadSchema = z.object({
-  outcomeKey: z.enum(['professional_clarity', 'interview_capability']),
+  outcomeKey: z.enum(['professional_clarity', 'execution_capability', 'interview_capability']),
   measurementRole: z.enum(['baseline', 'follow_up']),
-  instrumentKey: z.enum(['a1_professional_clarity', 'a3_structured_interview']),
+  instrumentKey: z.enum(['a1_professional_clarity', 'a2_execution_checkpoint', 'a3_structured_interview']),
   instrumentVersion: z.literal('1'),
   score: z.number().int().min(0).max(20),
   scoreScaleMin: z.literal(0),
@@ -28,6 +29,7 @@ const payloadSchema = z.object({
 
 function instrumentFor(key: string) {
   if (key === A1_PROFESSIONAL_CLARITY_V1.instrumentKey) return A1_PROFESSIONAL_CLARITY_V1
+  if (key === A2_EXECUTION_CAPABILITY_V1.instrumentKey) return A2_EXECUTION_CAPABILITY_V1
   if (key === A3_INTERVIEW_CAPABILITY_V1.instrumentKey) return A3_INTERVIEW_CAPABILITY_V1
   return null
 }
@@ -50,6 +52,20 @@ export async function POST(request: Request) {
   const body = parsed.data
   const instrument = instrumentFor(body.instrumentKey)
   if (!instrument) return NextResponse.json({ error: 'Unknown instrument' }, { status: 400 })
+
+  if (body.instrumentKey === 'a2_execution_checkpoint') {
+    const requiredResponseKeys = ['objective', 'actions', 'evidence', 'obstacle', 'review']
+    const payload = body.responsePayload
+    const validPayload = payload
+      && Object.keys(payload).length === requiredResponseKeys.length
+      && requiredResponseKeys.every((key) => {
+        const value = payload[key]
+        return typeof value === 'string' && value.trim().split(/\s+/).filter(Boolean).length >= 6
+      })
+    if (!validPayload) {
+      return NextResponse.json({ error: 'A2 response evidence is required' }, { status: 400 })
+    }
+  }
 
   if (body.instrumentKey === 'a3_structured_interview') {
     const requiredResponseKeys = ['behavioral', 'value_fit', 'challenge']
