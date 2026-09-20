@@ -8,6 +8,11 @@ interface SendEmailParams {
   html: string
   text?: string
   from?: string
+  replyTo?: string
+}
+
+function errorType(error: unknown): string {
+  return error instanceof Error ? error.name : 'UnknownError'
 }
 
 export async function sendEmail({
@@ -16,12 +21,14 @@ export async function sendEmail({
   html,
   text,
   from = 'info@despegatucarrera.com',
+  replyTo,
 }: SendEmailParams) {
   try {
-    // Initialize Resend INSIDE the function, not at module level
+    // Initialize Resend inside the function so builds and routes that do not
+    // deliver email never instantiate a provider client unnecessarily.
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {
-      throw new Error('RESEND_API_KEY is not configured in environment variables')
+      throw new Error('EmailProviderNotConfigured')
     }
 
     const resend = new Resend(apiKey)
@@ -32,19 +39,21 @@ export async function sendEmail({
       subject,
       html,
       text: text || html,
-      replyTo: from,
+      replyTo: replyTo || from,
     })
 
-    // Check if the response has an error
     if (response.error) {
-      throw new Error(`Resend API error: ${response.error.message}`)
+      throw new Error('EmailProviderRejectedRequest')
     }
 
-    console.log('[v0] Email sent successfully. Message ID:', response.data?.id)
+    // Provider message IDs are operational metadata and do not contain the
+    // recipient or message body.
+    console.info('[email] Delivery accepted', { messageId: response.data?.id || null })
     return { success: true, messageId: response.data?.id || '' }
   } catch (error) {
-    console.error('[v0] Error sending email:', error)
-    throw new Error(error instanceof Error ? error.message : 'Failed to send email')
+    // Never emit recipients, subjects, message bodies or provider payloads.
+    console.error('[email] Delivery failed', { errorType: errorType(error) })
+    throw new Error('Email delivery failed')
   }
 }
 

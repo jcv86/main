@@ -131,38 +131,40 @@ export default function ContactPage() {
 
           <div className="md:col-span-2">
             <form onSubmit={handleSubmit} className="space-y-6 rounded-xl border border-purple/10 bg-purple/5 p-8">
-              {formState === "success" && (
-                <div className="flex items-center gap-3 rounded-lg border border-green/30 bg-green/10 p-4">
-                  <Check className="h-5 w-5 text-green" aria-hidden />
-                  <p className="font-medium text-green">¡Mensaje enviado! Revisaremos tu consulta lo antes posible.</p>
-                </div>
-              )}
+              <div aria-live="polite" aria-atomic="true">
+                {formState === "success" && (
+                  <div role="status" className="flex items-center gap-3 rounded-lg border border-green/30 bg-green/10 p-4">
+                    <Check className="h-5 w-5 text-green" aria-hidden />
+                    <p className="font-medium text-green">¡Mensaje enviado! Revisaremos tu consulta lo antes posible.</p>
+                  </div>
+                )}
 
-              {formState === "error" && (
-                <div className="flex items-center gap-3 rounded-lg border border-red/30 bg-red/10 p-4">
-                  <AlertCircle className="h-5 w-5 text-red" aria-hidden />
-                  <p className="font-medium text-red">{errorMessage || "Error al enviar el mensaje"}</p>
-                </div>
-              )}
+                {formState === "error" && (
+                  <div role="alert" className="flex items-center gap-3 rounded-lg border border-red/30 bg-red/10 p-4">
+                    <AlertCircle className="h-5 w-5 text-red" aria-hidden />
+                    <p className="font-medium text-red">{errorMessage || "Error al enviar el mensaje"}</p>
+                  </div>
+                )}
+              </div>
 
               <div>
                 <label htmlFor="name" className="mb-2 block text-sm font-medium text-white">Nombre completo</label>
-                <Input id="name" name="name" type="text" placeholder="Tu nombre" value={formData.name} onChange={handleChange} required disabled={formState === "loading"} className="border-purple/20 bg-background text-white placeholder:text-purple/30" />
+                <Input id="name" name="name" type="text" autoComplete="name" maxLength={100} placeholder="Tu nombre" value={formData.name} onChange={handleChange} required disabled={formState === "loading"} className="border-purple/20 bg-background text-white placeholder:text-purple/30" />
               </div>
 
               <div>
                 <label htmlFor="email" className="mb-2 block text-sm font-medium text-white">Email</label>
-                <Input id="email" name="email" type="email" placeholder="tu@email.com" value={formData.email} onChange={handleChange} required disabled={formState === "loading"} className="border-purple/20 bg-background text-white placeholder:text-purple/30" />
+                <Input id="email" name="email" type="email" autoComplete="email" maxLength={254} placeholder="tu@email.com" value={formData.email} onChange={handleChange} required disabled={formState === "loading"} className="border-purple/20 bg-background text-white placeholder:text-purple/30" />
               </div>
 
               <div>
                 <label htmlFor="subject" className="mb-2 block text-sm font-medium text-white">Asunto</label>
-                <Input id="subject" name="subject" type="text" placeholder="¿Sobre qué es tu consulta?" value={formData.subject} onChange={handleChange} required disabled={formState === "loading"} className="border-purple/20 bg-background text-white placeholder:text-purple/30" />
+                <Input id="subject" name="subject" type="text" maxLength={200} placeholder="¿Sobre qué es tu consulta?" value={formData.subject} onChange={handleChange} required disabled={formState === "loading"} className="border-purple/20 bg-background text-white placeholder:text-purple/30" />
               </div>
 
               <div>
                 <label htmlFor="message" className="mb-2 block text-sm font-medium text-white">Mensaje</label>
-                <Textarea id="message" name="message" placeholder="Cuéntanos con el contexto necesario..." rows={5} value={formData.message} onChange={handleChange} required disabled={formState === "loading"} className="resize-none border-purple/20 bg-background text-white placeholder:text-purple/30" />
+                <Textarea id="message" name="message" maxLength={5000} placeholder="Cuéntanos con el contexto necesario..." rows={5} value={formData.message} onChange={handleChange} required disabled={formState === "loading"} className="resize-none border-purple/20 bg-background text-white placeholder:text-purple/30" />
               </div>
 
               <Button type="submit" disabled={formState === "loading" || formState === "success"} className="h-12 w-full bg-cyan font-semibold text-black hover:bg-cyan/90">
