@@ -249,6 +249,23 @@ export function A3RouteOverview() {
           </Link>
         </div>
 
+        <section className="rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-5">
+          <p className="text-sm font-semibold">Evidencia de capacidad de entrevista</p>
+          <p className="mt-1 text-sm text-muted-foreground">
+            Los puntajes de los módulos miden práctica. Esta medición separada compara tu capacidad antes y después con la misma rúbrica.
+          </p>
+          <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+            <Link href="/despega/a3-outcome-baseline" className="sm:flex-1">
+              <Button variant="outline" className="w-full">Hacer baseline comparable</Button>
+            </Link>
+            {progress?.route.routeCompletedAt ? (
+              <Link href="/despega/a3-outcome-follow-up" className="sm:flex-1">
+                <Button className="w-full">Medir mi cambio después de A3</Button>
+              </Link>
+            ) : null}
+          </div>
+        </section>
+
         <section className="space-y-4">
           <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
             <div className="max-w-3xl space-y-3">
