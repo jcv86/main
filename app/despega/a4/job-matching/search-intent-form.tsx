@@ -39,6 +39,6 @@ export function SearchIntentForm({seedRole,onSaved}:{seedRole?:string|null;onSav
    {(roles.length>0||regions.length>0||modes.length>0)&&<div className="flex flex-wrap items-center gap-2 border-t border-border/70 pt-4">{roles.map(v=><Chip key={`r-${v}`} label={v} onRemove={()=>setRoles(x=>x.filter(i=>i!==v))}/>)}{regions.map(v=><Chip key={`g-${v}`} label={v} onRemove={()=>setRegions(x=>x.filter(i=>i!==v))}/>)}{MODES.filter(([v])=>modes.includes(v)).map(([v,l])=><Chip key={v} label={l} onRemove={()=>setModes(x=>x.filter(i=>i!==v))}/>)}<button type="button" onClick={()=>{setRoles([]);setRegions([]);setModes([])}} className="ml-auto text-xs font-medium text-muted-foreground hover:text-foreground">Limpiar todo</button></div>}
    {message&&<p role="status" className="text-sm text-destructive">{message}</p>}
    <div className="flex justify-end"><Button disabled={saving} className="h-11 rounded-xl bg-[hsl(var(--dtc-indigo-900))] px-7 text-white shadow-sm hover:opacity-90"><Search className="mr-2 h-4 w-4"/>{saving?'Buscando…':'Buscar oportunidades'}</Button></div>
-  </form></CardContent>
+  </form>}</CardContent>
  </Card>
 }
