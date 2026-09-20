@@ -4,5 +4,8 @@ import { SearchIntentForm } from './search-intent-form'
 import { RealOpportunityResults } from './real-opportunity-results'
 export function OpportunitySearchExperience({seedRole}:{seedRole?:string|null}){
  const [refreshKey,setRefreshKey]=useState(0)
- return <div className="space-y-10"><SearchIntentForm seedRole={seedRole} onSaved={()=>setRefreshKey(v=>v+1)}/><RealOpportunityResults refreshKey={refreshKey}/></div>
+ return <div className="space-y-8">
+  <SearchIntentForm seedRole={seedRole} onSaved={()=>setRefreshKey(v=>v+1)}/>
+  <RealOpportunityResults refreshKey={refreshKey}/>
+ </div>
 }
