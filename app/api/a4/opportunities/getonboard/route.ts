@@ -18,13 +18,14 @@ export async function GET(request: Request) {
   }
 
   const { searchParams } = new URL(request.url)
-  const query = (searchParams.get('q') || '').slice(0, 120)
+  const category = (searchParams.get('category') || 'programming').slice(0, 80)
   try {
-    const opportunities = await fetchGetOnBoardJobs(query)
+    const opportunities = await fetchGetOnBoardJobs(category)
     return NextResponse.json({
       success: true,
       source: 'getonboard',
       coverage: 'public_api',
+      category,
       fetched_at: new Date().toISOString(),
       count: opportunities.length,
       opportunities: opportunities.map(({ raw: _raw, ...item }) => item),
