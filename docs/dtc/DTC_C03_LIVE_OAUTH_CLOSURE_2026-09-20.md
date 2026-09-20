@@ -105,17 +105,25 @@ Observed in DTCFINAL:
 
 This verifies that a returning user can complete Google OAuth on the current production release without consuming a new invitation and can recover the server-owned journey state.
 
+## Logout + browser-back live evidence
+
+The same human browser session was signed out through the product.
+
+Observed:
+
+- Auth audit log records a real `logout` at 2026-09-20 12:56:07 UTC.
+- The current-release Auth session was removed from `auth.sessions`.
+- Browser Back did **not** recover authenticated or protected DTC content.
+- The browser could revisit the prior Google OAuth account chooser, but that flow referenced a consumed OAuth state.
+- Supabase correctly rejected the stale transaction and returned `error_code=bad_oauth_state` to the public Site URL.
+
+Therefore the security condition of the browser-history check passed: logout invalidated the server session and Back could not restore protected access.
+
+The stale-state return exposed a separate recovery UX defect: a technical OAuth error was visible on the public landing URL. That defect is isolated in PR #181 (`fix(auth): recover stale OAuth state after browser back`) and does not represent session resurrection or protected-content exposure.
+
 ## Remaining live evidence gap
 
-The current-release OAuth portion is now verified. The only remaining browser-specific sequence is:
-
-1. Sign out through the product UI / sign-out route.
-2. Use browser Back.
-3. Verify protected content cannot be recovered as an authenticated page.
-4. Re-enter through sign-in.
-5. Verify the canonical journey resumes from persisted state.
-
-Because the available automation cannot reuse the user's real browser session cookie, this final browser-history check must be observed in the user's browser.
+After PR #181 is validated and, if authorized, deployed, perform one clean re-entry from the sign-in page and confirm the canonical journey resumes. This is the only remaining observation needed for the complete DTC-C03 sequence.
 
 ## Verdict
 
@@ -125,5 +133,8 @@ Because the available automation cannot reuse the user's real browser session co
 - Google OAuth on exact current production release: **LIVE VERIFIED**
 - Returning access without new invitation: **LIVE VERIFIED**
 - Canonical journey recovery at authentication boundary: **LIVE VERIFIED**
-- Sign-out + browser-back negative check: **PENDING HUMAN BROWSER OBSERVATION**
-- DTC-C03 overall: **IN_PROGRESS — only sign-out/browser-back/re-entry remains**
+- Sign-out invalidates live session: **LIVE VERIFIED**
+- Browser Back cannot restore protected access: **LIVE VERIFIED**
+- Stale OAuth browser-history UX: **BUG IDENTIFIED; FIX IN PR #181**
+- Clean re-entry after logout: **PENDING AFTER RECOVERY FIX**
+- DTC-C03 overall: **IN_PROGRESS — security gate passed; one clean re-entry remains**
