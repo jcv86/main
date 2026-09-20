@@ -11,6 +11,8 @@ const emptyMetrics = () => ({
   uniqueSessions: 0,
   conversionC1toA1: 0,
   conversionA1toA2: 0,
+  conversionA2toA3: 0,
+  conversionA3toA4: 0,
 })
 
 export async function POST(request: Request) {
@@ -98,11 +100,29 @@ export async function GET(request: Request) {
   }
 
   metrics.uniqueSessions = new Set(rows.map(row => row.session_id)).size
-  metrics.conversionC1toA1 = metrics.byStage.c1 ? metrics.byStage.a1 / metrics.byStage.c1 : 0
-  metrics.conversionA1toA2 = metrics.byStage.a1 ? metrics.byStage.a2 / metrics.byStage.a1 : 0
+
+  const conversionBetween = (
+    from: typeof ANALYTICS_STAGES[number],
+    to: typeof ANALYTICS_STAGES[number],
+  ) => {
+    const fromSessions = sessionsByStage[from]
+    if (fromSessions.size === 0) return 0
+    let progressed = 0
+    for (const sessionId of fromSessions) {
+      if (sessionsByStage[to].has(sessionId)) progressed++
+    }
+    return progressed / fromSessions.size
+  }
+
+  metrics.conversionC1toA1 = conversionBetween('c1', 'a1')
+  metrics.conversionA1toA2 = conversionBetween('a1', 'a2')
+  metrics.conversionA2toA3 = conversionBetween('a2', 'a3')
+  metrics.conversionA3toA4 = conversionBetween('a3', 'a4')
   metrics.dropOffPoints = {
-    'C1 → A1': `${Math.max(0, (1 - metrics.conversionC1toA1) * 100).toFixed(1)}%`,
-    'A1 → A2': `${Math.max(0, (1 - metrics.conversionA1toA2) * 100).toFixed(1)}%`,
+    'C1 → A1': `${((1 - metrics.conversionC1toA1) * 100).toFixed(1)}%`,
+    'A1 → A2': `${((1 - metrics.conversionA1toA2) * 100).toFixed(1)}%`,
+    'A2 → A3': `${((1 - metrics.conversionA2toA3) * 100).toFixed(1)}%`,
+    'A3 → A4': `${((1 - metrics.conversionA3toA4) * 100).toFixed(1)}%`,
   }
 
   return NextResponse.json({ metrics, available: true, windowDays: days })
