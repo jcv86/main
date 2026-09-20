@@ -23,6 +23,7 @@ const payloadSchema = z.object({
     ref: z.string().min(1).max(160),
   }).strict()).max(12),
   confidence: z.number().min(0).max(1).nullable().optional(),
+  responsePayload: z.record(z.string(), z.string().trim().min(1).max(900)).optional(),
 }).strict()
 
 function instrumentFor(key: string) {
@@ -74,6 +75,7 @@ export async function POST(request: Request) {
     dimensions: body.dimensions,
     evidence_refs: body.evidenceRefs,
     confidence: body.confidence ?? null,
+    response_payload: body.responsePayload ?? null,
     observed_at: new Date().toISOString(),
   }
 
