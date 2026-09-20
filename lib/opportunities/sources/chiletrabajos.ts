@@ -77,13 +77,20 @@ export async function discoverChileTrabajosJobIds(search = '', location = 'Santi
   return { source: 'chiletrabajos', fetchedAt: new Date().toISOString(), listingUrl: response.url || listingUrl, ids: ids.slice(0, 30) }
 }
 
+function relevantToSearch(job: ChileTrabajosPublicJob, search: string): boolean {
+  const terms = search.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').split(/\s+/).filter(term => term.length >= 4 && !['gerente','manager','jefe','head'].includes(term))
+  if (!terms.length) return true
+  const haystack = `${job.title} ${job.company}`.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'')
+  return terms.some(term => haystack.includes(term))
+}
+
 export async function fetchChileTrabajosOpportunities(search = '', location = 'Santiago', limit = 12): Promise<ChileTrabajosPublicJob[]> {
   const discovery = await discoverChileTrabajosJobIds(search, location)
   const jobs: ChileTrabajosPublicJob[] = []
   for (const id of discovery.ids.slice(0, Math.max(1, Math.min(limit, 20)))) {
     try {
       const job = await probeChileTrabajosJob(id)
-      if (job.verificationStatus === 'verified_active') jobs.push(job)
+      if (job.verificationStatus === 'verified_active' && relevantToSearch(job, search)) jobs.push(job)
     } catch {
       // Individual listing failures do not poison the batch; no synthetic fallback.
     }
