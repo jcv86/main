@@ -49,3 +49,44 @@ export async function probeChileTrabajosJob(id: string): Promise<ChileTrabajosPu
     verificationStatus: expired ? 'stale' : 'verified_active',
   }
 }
+
+
+export interface ChileTrabajosDiscoveryResult {
+  source: 'chiletrabajos'
+  fetchedAt: string
+  listingUrl: string
+  ids: string[]
+}
+
+export async function discoverChileTrabajosJobIds(search = '', location = 'Santiago'): Promise<ChileTrabajosDiscoveryResult> {
+  const params = new URLSearchParams()
+  if (search.trim()) params.set('1', search.trim().slice(0, 100))
+  if (location.trim()) params.set('2', location.trim().slice(0, 100))
+  params.set('action', 'search')
+  params.set('within', '25')
+  const listingUrl = `https://www.chiletrabajos.cl/encuentra-un-empleo?${params}`
+  const response = await fetch(listingUrl, {
+    headers: { Accept: 'text/html,application/xhtml+xml', 'User-Agent': 'DespegaTuCarrera/1.0 (+https://www.despegatucarrera.com)' },
+    cache: 'no-store',
+    redirect: 'follow',
+  })
+  if (!response.ok) throw new Error(`Chiletrabajos listing unavailable: ${response.status} ${response.statusText}`)
+  const html = await response.text()
+  const ids = [...new Set([...html.matchAll(/href=["'](?:https:\/\/www\.chiletrabajos\.cl)?\/trabajo\/(?:[^"'?#/]+-)?(\d{5,10})(?:[?"'#/]|$)/gi)].map((match) => match[1]))]
+  if (!ids.length) throw new Error('Chiletrabajos listing payload shape not recognized')
+  return { source: 'chiletrabajos', fetchedAt: new Date().toISOString(), listingUrl: response.url || listingUrl, ids: ids.slice(0, 30) }
+}
+
+export async function fetchChileTrabajosOpportunities(search = '', location = 'Santiago', limit = 12): Promise<ChileTrabajosPublicJob[]> {
+  const discovery = await discoverChileTrabajosJobIds(search, location)
+  const jobs: ChileTrabajosPublicJob[] = []
+  for (const id of discovery.ids.slice(0, Math.max(1, Math.min(limit, 20)))) {
+    try {
+      const job = await probeChileTrabajosJob(id)
+      if (job.verificationStatus === 'verified_active') jobs.push(job)
+    } catch {
+      // Individual listing failures do not poison the batch; no synthetic fallback.
+    }
+  }
+  return jobs
+}
