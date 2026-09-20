@@ -90,7 +90,7 @@ export async function POST(request: Request) {
 
   const { data: rows, error: readError } = await admin
     .from('dtc_outcome_observations')
-    .select('id,measurement_role,instrument_key,instrument_version,score,score_scale_min,score_scale_max,dimensions,observed_at')
+    .select('id,measurement_role,instrument_key,instrument_version,score,score_scale_min,score_scale_max,dimensions,confidence,observed_at')
     .eq('user_id', user.id)
     .eq('outcome_key', body.outcomeKey)
     .eq('instrument_key', body.instrumentKey)
