@@ -14,6 +14,7 @@
     "check:pilot-invitation-issuer": "tsx scripts/check-pilot-invitation-issuer.ts",
     "check:v1-analytics": "tsx scripts/check-v1-analytics-contract.ts",
     "check:v1-analytics-migration": "tsx scripts/check-v1-analytics-migration-contract.ts",
+    "check:v1-analytics-retention": "tsx scripts/check-v1-analytics-retention-contract.ts",
     "check:sensitive-api-cache": "node --import tsx scripts/check-sensitive-api-cache-contract.ts",
     "check:observability-p0": "tsx scripts/check-observability-p0-contract.ts",
     "check:rls-p1": "tsx scripts/check-rls-p1-contract.ts",

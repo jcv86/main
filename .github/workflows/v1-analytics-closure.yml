@@ -1,0 +1,55 @@
+name: V1 analytics closure
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/v1-analytics/**'
+      - 'app/admin/v1-observation/**'
+      - 'app/despega/conozcamonos-1/**'
+      - 'app/despega/layout.tsx'
+      - 'components/analytics/**'
+      - 'lib/v1-analytics/**'
+      - 'scripts/check-v1-analytics-*.ts'
+      - 'supabase/migrations/*v1_analytics*.sql'
+      - 'docs/v1-analytics-storage.md'
+      - 'package.json'
+      - '.github/workflows/v1-analytics-closure.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/api/v1-analytics/**'
+      - 'app/admin/v1-observation/**'
+      - 'app/despega/conozcamonos-1/**'
+      - 'app/despega/layout.tsx'
+      - 'components/analytics/**'
+      - 'lib/v1-analytics/**'
+      - 'scripts/check-v1-analytics-*.ts'
+      - 'supabase/migrations/*v1_analytics*.sql'
+      - 'docs/v1-analytics-storage.md'
+      - 'package.json'
+      - '.github/workflows/v1-analytics-closure.yml'
+
+jobs:
+  analytics-closure:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      NEXT_TELEMETRY_DISABLED: '1'
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm check:v1-analytics
+      - run: pnpm check:v1-analytics-migration
+      - run: pnpm check:v1-analytics-retention
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm build

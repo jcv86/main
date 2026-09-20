@@ -23,13 +23,14 @@ export default function Conozcamonos1Page() {
   const [validationSuggestions, setValidationSuggestions] = useState('')
   const router = useRouter()
   const supabase = createClient()
-  const { trackEvent } = useV1Analytics()
+  const { trackEvent, trackPageView } = useV1Analytics()
   const { loadDraft, saveDraft, completeDraft, draftError, savingDraft } = useAssessmentDraft('c1')
 
   // Track C1 page entry
   useEffect(() => {
+    trackPageView()
     trackEvent('c1_started', { questionIndex: 0 })
-  }, [trackEvent])
+  }, [trackEvent, trackPageView])
 
   useEffect(() => {
     const checkAuth = async () => {
@@ -225,11 +226,11 @@ export default function Conozcamonos1Page() {
       }
       console.log('[v0] [CANONICAL] C1 completed, redirecting to A1 intro')
       console.log('[v0] User context capture complete → Next: Descubrir cómo funcionas (A1 Cerebral)')
-      trackEvent('c1_completed', { totalQuestions: CONOZCAMONOS_1_QUESTIONS.length })
+      trackEvent('c1_completed')
       router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)
-      trackEvent('c1_error_save', { errorType: err instanceof Error ? err.message : 'unknown' })
+      trackEvent('c1_error_save', { errorType: 'save_failed' })
       setError('No pudimos guardar tus respuestas. Intenta de nuevo.')
     } finally {
       setLoading(false)

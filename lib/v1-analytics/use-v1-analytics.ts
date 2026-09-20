@@ -21,7 +21,7 @@ const getSessionId = () => {
 export const useV1Analytics = () => {
   const pathname = usePathname()
 
-  const trackEvent = useCallback((event: V1EventType, metadata?: Record<string, any>) => {
+  const trackEvent = useCallback((event: V1EventType, metadata?: V1AnalyticsEvent['metadata']) => {
     const sessionId = getSessionId()
     
     // Determine stage from pathname
@@ -35,7 +35,6 @@ export const useV1Analytics = () => {
     const analyticsEvent: V1AnalyticsEvent = {
       event,
       stage: stage as any,
-      timestamp: new Date().toISOString(),
       sessionId,
       metadata: {
         timeOnPage: sessionStorage.getItem(`${stage}_page_start`) 

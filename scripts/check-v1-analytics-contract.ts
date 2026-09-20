@@ -5,6 +5,11 @@ import { eventSchema } from '../lib/v1-analytics/schema'
 const route = readFileSync('app/api/v1-analytics/route.ts', 'utf8')
 const hook = readFileSync('lib/v1-analytics/use-v1-analytics.ts', 'utf8')
 const schema = readFileSync('lib/v1-analytics/schema.ts', 'utf8')
+const types = readFileSync('lib/v1-analytics/types.ts', 'utf8')
+const c1Page = readFileSync('app/despega/conozcamonos-1/page.tsx', 'utf8')
+const journeyTracker = readFileSync('components/analytics/journey-stage-analytics.tsx', 'utf8')
+const despegaLayout = readFileSync('app/despega/layout.tsx', 'utf8')
+const observationDashboard = readFileSync('app/admin/v1-observation/page.tsx', 'utf8')
 
 for (const contract of [
   "supabase.auth.getUser()",
@@ -29,7 +34,42 @@ assert.ok(!route.includes('userChoice:'), 'free-form user choices must not be pe
 assert.ok(!route.includes('console.log'), 'analytics endpoint must not log event data')
 assert.ok(!route.includes("admin.from('v1_analytics').insert"), 'writes must respect owner RLS')
 assert.ok(route.includes("supabase.from('v1_analytics').insert"), 'writes must use authenticated client')
+assert.ok(route.includes(".gt('expires_at', new Date().toISOString())"), 'admin metrics must exclude expired raw rows explicitly')
 assert.ok(!hook.includes('[ANALYTICS]'), 'browser must not log analytics payloads')
+assert.ok(!hook.includes('timestamp: new Date().toISOString()'), 'client must not send server-owned timestamp')
+assert.ok(hook.includes("metadata?: V1AnalyticsEvent['metadata']"), 'client metadata must be typed to the allowlist')
+assert.ok(!types.includes('userChoice?:'), 'client types must not permit free-form user choices')
+assert.ok(!types.includes('userId?:'), 'client must not accept user ownership from payloads')
+assert.ok(!types.includes('timestamp: string'), 'client event type must not include server-owned timestamp')
+assert.ok(!c1Page.includes('totalQuestions:'), 'C1 analytics must not send non-allowlisted metadata')
+assert.ok(c1Page.includes("errorType: 'save_failed'"), 'C1 analytics errors must be categorical')
+assert.ok(c1Page.includes('trackPageView()'), 'C1 must initialize page timing before event capture')
+
+for (const stageEvent of [
+  "a1: 'a1_intro_viewed'",
+  "a2: 'a2_dashboard_viewed'",
+  "a3: 'a3_page_viewed'",
+  "a4: 'a4_page_viewed'",
+]) assert.ok(journeyTracker.includes(stageEvent), `missing funnel stage event: ${stageEvent}`)
+
+assert.ok(journeyTracker.includes('v1_funnel_stage_seen_'), 'funnel stage tracking must dedupe within a browser session')
+assert.ok(!journeyTracker.includes('metadata:'), 'funnel stage entry must not attach arbitrary metadata')
+assert.ok(despegaLayout.includes('<JourneyStageAnalytics />'), 'authenticated journey layout must mount funnel analytics')
+
+for (const conversionKey of [
+  'conversionC1toA1',
+  'conversionA1toA2',
+  'conversionA2toA3',
+  'conversionA3toA4',
+]) {
+  assert.ok(route.includes(conversionKey), `missing funnel conversion: ${conversionKey}`)
+  assert.ok(observationDashboard.includes(conversionKey), `dashboard missing funnel conversion: ${conversionKey}`)
+}
+
+assert.ok(route.includes("'Sin base'"), 'drop-off must distinguish a missing denominator from 100% abandonment')
+assert.ok(observationDashboard.includes("rate === 'Sin base'"), 'dashboard must render missing drop-off base neutrally')
+assert.ok(observationDashboard.includes('Aún no hay una base de sesiones suficiente'), 'zero-data state must not generate false critical alerts')
+assert.ok(!observationDashboard.includes('Bridge CTA no funciona'), 'analytics UI must not infer causal explanations from conversion alone')
 
 assert.equal(eventSchema.safeParse({
   event: 'a1_completed',
