@@ -307,8 +307,6 @@ export function validateDecisionInput(
       expectedEvidence,
       status: status as A4DecisionStatus,
       reviewOn,
-      reviewClassification: reviewClassification ? reviewClassification as A4ReviewClassification : null,
-      externalOutcomes: externalOutcomes as A4ExternalOutcome[],
     },
   }
 }
@@ -358,6 +356,8 @@ export function validateDecisionUpdate(
       status: status as A4DecisionStatus,
       outcome: outcome || null,
       reviewOn,
+      reviewClassification: reviewClassification ? reviewClassification as A4ReviewClassification : null,
+      externalOutcomes: externalOutcomes as A4ExternalOutcome[],
     },
   }
 }
