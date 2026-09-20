@@ -1,0 +1,26 @@
+name: Outcome Instruments S1
+
+on:
+  pull_request:
+    paths:
+      - 'docs/dtc/DTC_OUTCOME_INSTRUMENTS_S1.md'
+      - 'lib/outcomes/**'
+      - 'scripts/check-outcome-instruments-s1.ts'
+      - '.github/workflows/outcome-instruments-s1.yml'
+
+jobs:
+  instrument-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/check-outcome-instruments-s1.ts
+      - run: pnpm exec tsc --noEmit
