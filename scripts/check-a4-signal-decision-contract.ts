@@ -197,6 +197,8 @@ const completedReview = validateDecisionUpdate(
     outcome:
       'La nueva versión generó preguntas más específicas y permitió sostener el relato con evidencia cuantitativa.',
     reviewOn: '2026-08-01',
+    reviewClassification: 'evidence_supported',
+    externalOutcomes: [],
   },
   now,
 )

@@ -1,0 +1,27 @@
+name: A4 Outcome Review
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/a4/decisions/**'
+      - 'lib/a4/strategic-radar.ts'
+      - 'supabase/migrations/*a4_outcome_review.sql'
+      - 'scripts/check-a4-outcome-review.ts'
+      - '.github/workflows/a4-outcome-review.yml'
+
+jobs:
+  a4-review:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/check-a4-outcome-review.ts
+      - run: pnpm exec tsc --noEmit
