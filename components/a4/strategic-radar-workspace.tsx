@@ -20,12 +20,16 @@ import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
 import {
   A4_DECISION_STATUSES,
+  A4_EXTERNAL_OUTCOMES,
+  A4_REVIEW_CLASSIFICATIONS,
   A4_SIGNAL_CATEGORIES,
   A4_SIGNAL_CLASSIFICATIONS,
   A4_SOURCE_TYPES,
   santiagoDateIso,
   type A4Decision,
   type A4DecisionStatus,
+  type A4ExternalOutcome,
+  type A4ReviewClassification,
   type A4VerifiedSignal,
 } from '@/lib/a4/strategic-radar'
 
@@ -38,6 +42,8 @@ interface DecisionEditState {
   status: A4DecisionStatus
   outcome: string
   reviewOn: string
+  reviewClassification: A4ReviewClassification | ''
+  externalOutcomes: A4ExternalOutcome[]
 }
 
 interface DecisionUpdateFeedback {
@@ -144,6 +150,8 @@ export function StrategicRadarWorkspace({
             status: decision.status,
             outcome: decision.outcome || '',
             reviewOn: decision.review_on,
+            reviewClassification: decision.review_classification || '',
+            externalOutcomes: decision.external_outcomes || [],
           },
         ]),
       ),
@@ -315,6 +323,8 @@ export function StrategicRadarWorkspace({
           status: created.status,
           outcome: created.outcome || '',
           reviewOn: created.review_on,
+          reviewClassification: created.review_classification || '',
+          externalOutcomes: created.external_outcomes || [],
         },
       }))
       setDecisionForm((current) => ({
@@ -371,6 +381,8 @@ export function StrategicRadarWorkspace({
           status: updated.status,
           outcome: updated.outcome || '',
           reviewOn: updated.review_on,
+          reviewClassification: updated.review_classification || '',
+          externalOutcomes: updated.external_outcomes || [],
         },
       }))
       setDecisionUpdateFeedback((current) => ({
@@ -858,6 +870,8 @@ export function StrategicRadarWorkspace({
                 status: decision.status,
                 outcome: decision.outcome || '',
                 reviewOn: decision.review_on,
+                reviewClassification: decision.review_classification || '',
+                externalOutcomes: decision.external_outcomes || [],
               }
               return (
                 <Card id={`decision-${decision.id}`} key={decision.id} className="scroll-mt-24 border-slate-800 bg-slate-900/70">
@@ -936,6 +950,78 @@ export function StrategicRadarWorkspace({
                           Si la decisión sigue abierta, programa cuándo volverás a contrastarla.
                         </p>
                       </div>
+                      {edit.status === 'reviewed' && (
+                        <div className="space-y-4 rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-4">
+                          <div>
+                            <p className="text-xs font-semibold uppercase tracking-[0.16em] text-cyan-200">
+                              1 · Contrasta tu hipótesis
+                            </p>
+                            <p className="mt-2 text-sm text-slate-300">
+                              Esperabas observar: <span className="font-medium text-white">{decision.expected_evidence}</span>
+                            </p>
+                          </div>
+                          <div>
+                            <label htmlFor={`decision-classification-${decision.id}`} className="text-sm font-medium text-slate-200">
+                              2 · ¿Qué ocurrió con esa evidencia?
+                            </label>
+                            <select
+                              id={`decision-classification-${decision.id}`}
+                              value={edit.reviewClassification}
+                              onChange={(event) => setDecisionEdits((current) => ({
+                                ...current,
+                                [decision.id]: { ...edit, reviewClassification: event.target.value as A4ReviewClassification },
+                              }))}
+                              className="mt-2 h-10 w-full rounded-md border border-slate-700 bg-slate-950 px-3 text-sm text-white"
+                            >
+                              <option value="">Selecciona una clasificación</option>
+                              {A4_REVIEW_CLASSIFICATIONS.map((value) => (
+                                <option key={value} value={value}>
+                                  {value === 'evidence_supported' ? 'La evidencia respaldó la decisión'
+                                    : value === 'evidence_not_supported' ? 'La evidencia no respaldó la decisión'
+                                    : value === 'inconclusive' ? 'La evidencia fue inconclusa'
+                                    : value === 'decision_changed' ? 'La evidencia me llevó a cambiar la decisión'
+                                    : 'La decisión fue abandonada'}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          <div>
+                            <p className="text-sm font-medium text-slate-200">3 · ¿Qué ocurrió externamente?</p>
+                            <p className="mt-1 text-xs text-slate-500">Marca sólo resultados que realmente observaste después de esta decisión. No implica que DTC los haya causado.</p>
+                            <div className="mt-3 grid gap-2 sm:grid-cols-2">
+                              {A4_EXTERNAL_OUTCOMES.map((value) => {
+                                const checked = edit.externalOutcomes.includes(value)
+                                const label = value === 'application_submitted' ? 'Postulación enviada'
+                                  : value === 'recruiter_response' ? 'Respuesta de recruiter'
+                                  : value === 'interview_reached' ? 'Llegué a entrevista'
+                                  : value === 'process_advanced' ? 'Avancé en el proceso'
+                                  : value === 'offer_received' ? 'Recibí una oferta'
+                                  : value === 'offer_accepted' ? 'Acepté una oferta'
+                                  : value === 'opportunity_declined' ? 'Descarté la oportunidad'
+                                  : 'Sin cambio externo observado'
+                                return (
+                                  <label key={value} className="flex items-center gap-2 rounded-lg border border-white/10 bg-slate-950/50 p-3 text-sm text-slate-300">
+                                    <input
+                                      type="checkbox"
+                                      checked={checked}
+                                      onChange={() => setDecisionEdits((current) => ({
+                                        ...current,
+                                        [decision.id]: {
+                                          ...edit,
+                                          externalOutcomes: checked
+                                            ? edit.externalOutcomes.filter((item) => item !== value)
+                                            : [...edit.externalOutcomes.filter((item) => item !== 'no_external_change'), value],
+                                        },
+                                      }))}
+                                    />
+                                    {label}
+                                  </label>
+                                )
+                              })}
+                            </div>
+                          </div>
+                        </div>
+                      )}
                       <label
                         htmlFor={`decision-outcome-${decision.id}`}
                         className="text-sm font-medium text-slate-200"
