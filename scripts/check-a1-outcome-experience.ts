@@ -15,7 +15,7 @@ assert.ok(baseline.includes("router.push('/despega/a1-cerebral-intro')"), 'basel
 assert.ok(report.includes("router.push('/despega/a1-outcome-follow-up')"), 'A1 report must route to comparable follow-up')
 assert.ok(followUp.includes("router.push('/despega/conozcamonos-2')"), 'follow-up must continue to C2')
 assert.ok(form.includes("role === 'baseline'"))
-assert.ok(form.includes("role === 'follow_up'"))
+assert.ok(form.includes("role === 'baseline' ? 'Guardar baseline y continuar' : 'Guardar y ver mi cambio'"), 'form must distinguish follow-up action')
 assert.ok(form.includes('responsePayload: responses'))
 assert.ok(route.includes('response_payload: body.responsePayload ?? null'))
 assert.ok(migration.includes('response_payload jsonb'))
