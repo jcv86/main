@@ -5,6 +5,8 @@ on:
     paths:
       - 'app/api/v1-analytics/**'
       - 'app/despega/conozcamonos-1/**'
+      - 'app/despega/layout.tsx'
+      - 'components/analytics/**'
       - 'lib/v1-analytics/**'
       - 'scripts/check-v1-analytics-*.ts'
       - 'supabase/migrations/*v1_analytics*.sql'
@@ -16,6 +18,8 @@ on:
     paths:
       - 'app/api/v1-analytics/**'
       - 'app/despega/conozcamonos-1/**'
+      - 'app/despega/layout.tsx'
+      - 'components/analytics/**'
       - 'lib/v1-analytics/**'
       - 'scripts/check-v1-analytics-*.ts'
       - 'supabase/migrations/*v1_analytics*.sql'
