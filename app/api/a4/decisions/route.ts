@@ -17,6 +17,8 @@ const DECISION_COLUMNS = [
   'review_on',
   'outcome',
   'reviewed_at',
+  'review_classification',
+  'external_outcomes',
   'created_at',
   'updated_at',
 ].join(',')
@@ -184,13 +186,43 @@ export async function PATCH(request: NextRequest) {
     }
 
     const value = validation.value
+    const { data: existing, error: existingError } = await resolved.supabase!
+      .from('a4_decision_log')
+      .select('id,signal_id,review_on')
+      .eq('id', decisionId)
+      .eq('user_id', resolved.currentUser!.id)
+      .maybeSingle()
+
+    if (existingError) {
+      console.error('[v0] A4 decision lookup error:', existingError)
+      return NextResponse.json({ error: 'No pudimos verificar la decisión.' }, { status: 500 })
+    }
+    if (!existing) return NextResponse.json({ error: 'Decisión no encontrada.' }, { status: 404 })
+
+    const today = new Intl.DateTimeFormat('en-CA', {
+      timeZone: 'America/Santiago', year: 'numeric', month: '2-digit', day: '2-digit',
+    }).format(new Date())
+    const closingEarly = value.status === 'discarded'
+    if (value.status === 'reviewed' && existing.review_on > today) {
+      return NextResponse.json(
+        { error: 'La revisión sólo puede cerrarse desde su fecha programada.' },
+        { status: 422 },
+      )
+    }
+
     const { data, error } = await resolved.supabase!
       .from('a4_decision_log')
       .update({
         status: value.status,
         outcome: value.outcome,
         review_on: value.reviewOn,
-        reviewed_at: value.status === 'reviewed' ? new Date().toISOString() : null,
+        reviewed_at: value.status === 'reviewed' || closingEarly ? new Date().toISOString() : null,
+        review_classification: value.status === 'reviewed'
+          ? value.reviewClassification
+          : closingEarly ? 'decision_abandoned' : null,
+        external_outcomes: value.status === 'reviewed' || closingEarly
+          ? value.externalOutcomes
+          : [],
       })
       .eq('id', decisionId)
       .eq('user_id', resolved.currentUser!.id)
@@ -206,6 +238,48 @@ export async function PATCH(request: NextRequest) {
     }
     if (!data) {
       return NextResponse.json({ error: 'Decisión no encontrada.' }, { status: 404 })
+    }
+
+    if (data.status === 'reviewed' || data.status === 'discarded') {
+      const { data: signal } = await resolved.supabase!
+        .from('a4_verified_signals')
+        .select('id')
+        .eq('id', data.signal_id)
+        .eq('user_id', resolved.currentUser!.id)
+        .maybeSingle()
+
+      if (signal) {
+        const dimensions = {
+          evidence_grounding: data.review_classification === 'evidence_supported' ? 4 : data.review_classification === 'inconclusive' ? 2 : 1,
+          rationale_clarity: data.rationale?.length >= 80 ? 4 : 3,
+          falsifiability: data.expected_evidence?.length >= 60 ? 4 : 3,
+          review_discipline: data.reviewed_at ? 4 : 0,
+        }
+        const score = Object.values(dimensions).reduce((sum, value) => sum + value, 0)
+        await resolved.supabase!.from('dtc_outcome_observations').insert({
+          user_id: resolved.currentUser!.id,
+          outcome_key: 'career_decision_quality',
+          stage: 'a4',
+          measurement_role: 'external_outcome',
+          instrument_key: 'a4_decision_review',
+          instrument_version: '1',
+          score,
+          score_scale_min: 0,
+          score_scale_max: 16,
+          dimensions,
+          evidence_refs: [
+            { source: 'a4_decision_log', ref: data.id },
+            { source: 'a4_verified_signals', ref: signal.id },
+          ],
+          confidence: 1,
+          response_payload: {
+            observed_result: data.outcome,
+            review_classification: data.review_classification,
+            external_outcomes: data.external_outcomes,
+          },
+          observed_at: data.reviewed_at ?? new Date().toISOString(),
+        })
+      }
     }
 
     return NextResponse.json({ success: true, decision: data })
