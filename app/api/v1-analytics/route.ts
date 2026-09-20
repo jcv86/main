@@ -118,11 +118,18 @@ export async function GET(request: Request) {
   metrics.conversionA1toA2 = conversionBetween('a1', 'a2')
   metrics.conversionA2toA3 = conversionBetween('a2', 'a3')
   metrics.conversionA3toA4 = conversionBetween('a3', 'a4')
+  const dropOffLabel = (
+    from: typeof ANALYTICS_STAGES[number],
+    conversion: number,
+  ) => sessionsByStage[from].size === 0
+    ? 'Sin base'
+    : `${((1 - conversion) * 100).toFixed(1)}%`
+
   metrics.dropOffPoints = {
-    'C1 → A1': `${((1 - metrics.conversionC1toA1) * 100).toFixed(1)}%`,
-    'A1 → A2': `${((1 - metrics.conversionA1toA2) * 100).toFixed(1)}%`,
-    'A2 → A3': `${((1 - metrics.conversionA2toA3) * 100).toFixed(1)}%`,
-    'A3 → A4': `${((1 - metrics.conversionA3toA4) * 100).toFixed(1)}%`,
+    'C1 → A1': dropOffLabel('c1', metrics.conversionC1toA1),
+    'A1 → A2': dropOffLabel('a1', metrics.conversionA1toA2),
+    'A2 → A3': dropOffLabel('a2', metrics.conversionA2toA3),
+    'A3 → A4': dropOffLabel('a3', metrics.conversionA3toA4),
   }
 
   return NextResponse.json({ metrics, available: true, windowDays: days })
