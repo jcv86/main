@@ -4,6 +4,7 @@ import { checkRateLimit, rateLimiters } from '@/lib/middleware/rate-limit'
 import { logger } from '@/lib/logger'
 import { getPillarFromPath, shouldEnforcePillarAccess, getAccessDeniedRedirect } from '@/lib/pillar-access-validation'
 import { DEMO_COOKIE_NAME, demoSessionCookieOptions } from '@/lib/auth/demo-user'
+import { isStaleOAuthStateReturn, OAUTH_STATE_EXPIRED_REASON } from '@/lib/auth/oauth-recovery'
 import {
   DTC_REQUEST_ID_HEADER,
   resolveRequestId,
@@ -102,6 +103,18 @@ export async function middleware(request: NextRequest) {
     const normalizedUrl = new URL(request.nextUrl)
     normalizedUrl.pathname = normalizedPath
     return withRequestId(NextResponse.redirect(normalizedUrl), requestId)
+  }
+
+
+  // A browser Back navigation can revisit a consumed Google/Supabase OAuth
+  // transaction. Supabase correctly rejects the stale state, but sends the
+  // technical error to SITE_URL. Convert only that known condition into a
+  // clean, recoverable sign-in state instead of exposing provider internals on
+  // the public landing URL.
+  if (isStaleOAuthStateReturn(pathname, request.nextUrl.searchParams)) {
+    const recoveryUrl = new URL('/auth/signin', request.url)
+    recoveryUrl.searchParams.set('reason', OAUTH_STATE_EXPIRED_REASON)
+    return withRequestId(NextResponse.redirect(recoveryUrl, 303), requestId)
   }
 
   // Handle API routes with CORS and rate limiting
