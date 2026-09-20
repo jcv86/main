@@ -244,7 +244,7 @@ export default function A1CerebralIntroPage() {
           {/* CTA Button */}
           <div className="flex gap-4 justify-center mt-12">
             <Button
-              onClick={() => router.push('/despega/a1-cerebral')}
+              onClick={() => router.push('/despega/a1-outcome-baseline')}
               size="lg"
               className="px-8 text-lg text-white"
               style={{ backgroundColor: 'rgb(80, 160, 170)', borderRadius: '20px' }}

@@ -402,12 +402,12 @@ export default function A1ReportPage() {
             </p>
           </div>
           <Button 
-            onClick={() => router.push('/despega/conozcamonos-2')} 
+            onClick={() => router.push('/despega/a1-outcome-follow-up')} 
             className="text-white font-bold text-lg px-12 py-6 rounded-xl hover:opacity-90 transition-opacity"
             size="lg"
             style={{ backgroundColor: 'rgb(80, 160, 170)' }}
           >
-            Continuar a Conociéndonos
+            Medir mi claridad después de A1
             <ArrowRight className="w-5 h-5 ml-3" />
           </Button>
         </div>

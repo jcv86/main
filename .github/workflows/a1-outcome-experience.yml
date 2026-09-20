@@ -1,0 +1,38 @@
+name: A1 Outcome Experience
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/outcomes/**'
+      - 'app/despega/a1-cerebral-intro/**'
+      - 'app/despega/a1-report/**'
+      - 'app/despega/a1-outcome-*/**'
+      - 'components/outcomes/**'
+      - 'lib/outcomes/**'
+      - 'supabase/migrations/*outcome*.sql'
+      - 'scripts/check-a1-outcome-experience.ts'
+      - '.github/workflows/a1-outcome-experience.yml'
+
+jobs:
+  a1-outcome:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/check-a1-outcome-experience.ts
+      - run: pnpm exec tsx scripts/check-outcome-capture-s1.ts
+      - run: pnpm exec tsx scripts/check-outcome-instruments-s1.ts
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm build
