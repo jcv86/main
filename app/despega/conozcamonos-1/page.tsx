@@ -225,11 +225,11 @@ export default function Conozcamonos1Page() {
       }
       console.log('[v0] [CANONICAL] C1 completed, redirecting to A1 intro')
       console.log('[v0] User context capture complete → Next: Descubrir cómo funcionas (A1 Cerebral)')
-      trackEvent('c1_completed', { totalQuestions: CONOZCAMONOS_1_QUESTIONS.length })
+      trackEvent('c1_completed')
       router.push('/despega/a1-cerebral-intro')
     } catch (err) {
       console.error('[v0] Error:', err)
-      trackEvent('c1_error_save', { errorType: err instanceof Error ? err.message : 'unknown' })
+      trackEvent('c1_error_save', { errorType: 'save_failed' })
       setError('No pudimos guardar tus respuestas. Intenta de nuevo.')
     } finally {
       setLoading(false)
@@ -338,56 +338,3 @@ export default function Conozcamonos1Page() {
                   value={responses[question.id] || ''}
                   onChange={(e) => handleAnswer(e.target.value)}
                   className="flex-1 p-4 bg-background border border-border text-foreground"
-                  style={{ borderRadius: '2px' }}
-                  rows={4}
-                  placeholder="Escribe tu respuesta aquí o usa el micrófono..."
-                />
-              </div>
-              <div className="flex gap-2 items-center">
-                <VoiceInput
-                  onTranscript={(text) => {
-                    handleAnswer((responses[question.id] || '') + (responses[question.id] ? ' ' : '') + text)
-                  }}
-                  isDisabled={loading || validating}
-                />
-                <span className="text-xs text-muted-foreground dark:text-muted-foreground">
-                  O habla para dictar tu respuesta
-                </span>
-              </div>
-              <AIAssistant
-                question={question.question}
-                currentResponse={(typeof responses[question.id] === 'string' ? (responses[question.id] as string) : '') || ''}
-                onUseSuggestion={(suggestion) => {
-                  handleAnswer(suggestion)
-                }}
-                buttonLabel="Asistencia Tu Coach"
-                title="Tu Coach IA"
-              />
-            </div>
-          )}
-
-          {(error || draftError) && (
-            <div className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
-              <p className="text-sm font-semibold text-red dark:text-red">{error || draftError}</p>
-            </div>
-          )}
-        </div>
-
-        <div className="flex gap-4">
-          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0 || savingDraft} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
-          <Button 
-            onClick={handleNext} 
-            disabled={!isAnswered() || loading || validating || savingDraft}
-            className="flex-1"
-            style={{
-              backgroundColor: 'rgba(80, 160, 170, 0.6)',
-              borderRadius: '20px'
-            }}
-          >
-            {validating ? 'Validando...' : loading || savingDraft ? 'Guardando...' : isLastQuestion ? 'Continuar' : 'Siguiente'}
-          </Button>
-        </div>
-      </div>
-    </div>
-  )
-}
