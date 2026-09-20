@@ -1,0 +1,33 @@
+name: Outcome Capture S1
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/outcomes/**'
+      - 'components/outcomes/**'
+      - 'lib/outcomes/**'
+      - 'scripts/check-outcome-capture-s1.ts'
+      - '.github/workflows/outcome-capture-s1.yml'
+
+jobs:
+  capture-contract:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      NEXT_PUBLIC_SUPABASE_URL: https://example.supabase.co
+      NEXT_PUBLIC_SUPABASE_ANON_KEY: test-anon-key
+      SUPABASE_SERVICE_ROLE_KEY: test-service-role-key
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm exec tsx scripts/check-outcome-capture-s1.ts
+      - run: pnpm exec tsx scripts/check-outcome-instruments-s1.ts
+      - run: pnpm exec tsc --noEmit
+      - run: pnpm build
