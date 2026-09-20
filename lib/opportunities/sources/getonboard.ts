@@ -80,30 +80,26 @@ export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().t
   }
 }
 
-export async function fetchGetOnBoardJobs(query = '', page = 1): Promise<CanonicalOpportunity[]> {
+export async function fetchGetOnBoardJobs(category = 'programming', page = 1): Promise<CanonicalOpportunity[]> {
+  const safeCategory = category.trim().toLowerCase().replace(/[^a-z0-9-]/g, '') || 'programming'
   const params = new URLSearchParams()
-  if (query.trim()) params.set('query', query.trim())
   params.set('page', String(Math.max(1, page)))
-  const candidates = [
-    `https://www.getonbrd.com/api/v0/search/jobs?${params}`,
-    `https://www.getonbrd.com/api/v0/jobs/search?${params}`,
-  ]
-  let lastError = ''
-  for (const url of candidates) {
-    try {
-      const response = await fetch(url, { headers: { Accept: 'application/json', 'User-Agent': 'DespegaTuCarrera/1.0' }, cache: 'no-store' })
-      if (!response.ok) {
-        lastError = `${response.status} ${response.statusText}`
-        continue
-      }
-      const payload = await response.json()
-      const root = object(payload)
-      const rows = Array.isArray(root.data) ? root.data : Array.isArray(payload) ? payload : []
-      const verifiedAt = new Date().toISOString()
-      return rows.map((row) => normalizeGetOnBoardJob(row, verifiedAt)).filter((row): row is CanonicalOpportunity => row !== null)
-    } catch (error) {
-      lastError = error instanceof Error ? error.message : 'unknown error'
-    }
+  params.append('expand[]', 'company')
+  const url = `https://www.getonbrd.com/api/v0/categories/${encodeURIComponent(safeCategory)}/jobs?${params}`
+
+  const response = await fetch(url, {
+    headers: { Accept: 'application/json', 'User-Agent': 'DespegaTuCarrera/1.0' },
+    cache: 'no-store',
+  })
+  if (!response.ok) {
+    throw new Error(`Get on Board public jobs endpoint unavailable: ${response.status} ${response.statusText}`)
   }
-  throw new Error(`Get on Board public jobs endpoint unavailable: ${lastError}`)
+
+  const payload = await response.json()
+  const root = object(payload)
+  const rows = Array.isArray(root.data) ? root.data : []
+  const verifiedAt = new Date().toISOString()
+  return rows
+    .map((row) => normalizeGetOnBoardJob(row, verifiedAt))
+    .filter((row): row is CanonicalOpportunity => row !== null)
 }
