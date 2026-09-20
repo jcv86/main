@@ -33,6 +33,26 @@ export type A4SignalClassification =
 export type A4SourceType = (typeof A4_SOURCE_TYPES)[number]['id']
 export type A4DecisionStatus = (typeof A4_DECISION_STATUSES)[number]['id']
 
+export const A4_REVIEW_CLASSIFICATIONS = [
+  'evidence_supported',
+  'evidence_not_supported',
+  'inconclusive',
+  'decision_changed',
+  'decision_abandoned',
+] as const
+export const A4_EXTERNAL_OUTCOMES = [
+  'application_submitted',
+  'recruiter_response',
+  'interview_reached',
+  'process_advanced',
+  'offer_received',
+  'offer_accepted',
+  'opportunity_declined',
+  'no_external_change',
+] as const
+export type A4ReviewClassification = (typeof A4_REVIEW_CLASSIFICATIONS)[number]
+export type A4ExternalOutcome = (typeof A4_EXTERNAL_OUTCOMES)[number]
+
 export interface A4VerifiedSignal {
   id: string
   title: string
@@ -67,6 +87,8 @@ export interface A4Decision {
   review_on: string
   outcome: string | null
   reviewed_at: string | null
+  review_classification?: A4ReviewClassification | null
+  external_outcomes?: A4ExternalOutcome[]
   created_at: string
   updated_at: string
 }
@@ -98,6 +120,8 @@ export interface ValidatedDecisionUpdate {
   status: A4DecisionStatus
   outcome: string | null
   reviewOn: string
+  reviewClassification: A4ReviewClassification | null
+  externalOutcomes: A4ExternalOutcome[]
 }
 
 export interface ValidationResult<T> {
@@ -116,6 +140,8 @@ const SOURCE_TYPE_IDS = new Set<string>(A4_SOURCE_TYPES.map((item) => item.id))
 const DECISION_STATUS_IDS = new Set<string>(
   A4_DECISION_STATUSES.map((item) => item.id),
 )
+const REVIEW_CLASSIFICATION_IDS = new Set<string>(A4_REVIEW_CLASSIFICATIONS)
+const EXTERNAL_OUTCOME_IDS = new Set<string>(A4_EXTERNAL_OUTCOMES)
 
 function objectValue(input: unknown): Record<string, unknown> {
   return input && typeof input === 'object' && !Array.isArray(input)
@@ -281,6 +307,8 @@ export function validateDecisionInput(
       expectedEvidence,
       status: status as A4DecisionStatus,
       reviewOn,
+      reviewClassification: reviewClassification ? reviewClassification as A4ReviewClassification : null,
+      externalOutcomes: externalOutcomes as A4ExternalOutcome[],
     },
   }
 }
@@ -293,6 +321,10 @@ export function validateDecisionUpdate(
   const status = cleanText(body.status)
   const outcome = cleanLongText(body.outcome)
   const reviewOn = cleanText(body.reviewOn)
+  const reviewClassification = cleanText(body.reviewClassification)
+  const externalOutcomes = Array.isArray(body.externalOutcomes)
+    ? [...new Set(body.externalOutcomes.map(cleanText).filter(Boolean))]
+    : []
   const errors: string[] = []
 
   if (!DECISION_STATUS_IDS.has(status)) {
@@ -303,6 +335,12 @@ export function validateDecisionUpdate(
   }
   if (status === 'reviewed' && !outcome) {
     errors.push('Una decisión revisada debe registrar el resultado observado.')
+  }
+  if (status === 'reviewed' && !REVIEW_CLASSIFICATION_IDS.has(reviewClassification)) {
+    errors.push('Clasifica qué ocurrió con la evidencia esperada.')
+  }
+  if (externalOutcomes.some((item) => !EXTERNAL_OUTCOME_IDS.has(item))) {
+    errors.push('Hay un resultado externo no reconocido.')
   }
   const isClosed = status === 'reviewed' || status === 'discarded'
   if (!validDate(reviewOn)) {
