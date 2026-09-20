@@ -55,7 +55,7 @@ export async function POST(request: Request) {
     || body.instrumentVersion !== instrument.instrumentVersion
     || body.scoreScaleMin !== instrument.scale.min
     || body.scoreScaleMax !== instrument.scale.max
-    || !instrument.dimensions.every((key) => Number.isFinite(body.dimensions[key]))
+    || !([...instrument.dimensions] as readonly string[]).every((key) => Number.isFinite(body.dimensions[key]))
   ) {
     return NextResponse.json({ error: 'Observation does not match instrument contract' }, { status: 400 })
   }
