@@ -23,13 +23,14 @@ export default function Conozcamonos1Page() {
   const [validationSuggestions, setValidationSuggestions] = useState('')
   const router = useRouter()
   const supabase = createClient()
-  const { trackEvent } = useV1Analytics()
+  const { trackEvent, trackPageView } = useV1Analytics()
   const { loadDraft, saveDraft, completeDraft, draftError, savingDraft } = useAssessmentDraft('c1')
 
   // Track C1 page entry
   useEffect(() => {
+    trackPageView()
     trackEvent('c1_started', { questionIndex: 0 })
-  }, [trackEvent])
+  }, [trackEvent, trackPageView])
 
   useEffect(() => {
     const checkAuth = async () => {
