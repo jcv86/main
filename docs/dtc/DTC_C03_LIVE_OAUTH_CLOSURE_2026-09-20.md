@@ -84,44 +84,46 @@ The current application code:
 
 DTCFINAL historical `auth.flow_state` confirms real provider flows have existed for:
 
-- Google: 40 historical OAuth flows; latest observed 2026-09-08
-- LinkedIn OIDC: 34 historical OAuth flows; latest observed 2026-08-27
+- Google: 40 historical OAuth flows observed before this release audit
+- LinkedIn OIDC: 34 historical OAuth flows observed before this release audit
 
-The current release has not yet received a new OAuth flow.
+## Fresh OAuth on the exact production release
 
-## Fresh-release evidence gap
+A human sign-in was completed on 2026-09-20 against the current production release.
 
-From the current production release timestamp onward:
+Observed in DTCFINAL:
 
-- Google users with a new `last_sign_in_at`: 0
-- new Auth sessions: 0
-- redeemed pilot invitations: 0
-- OAuth flow_state rows created: 0
+- one new Auth session created at 2026-09-20 12:53:42 UTC
+- Auth audit entries at the same time record `provider=google` and `provider_type=google`
+- the authenticated account has both email and Google identities
+- session AAL: `aal1`
+- the returning account already had an allowed pilot membership
+- access kind: `grandfathered`
+- the membership does not depend on an invitation
+- redeemed invitations since the current release: 0
+- a canonical journey state exists and was recovered for the returning account
 
-So there is no factual basis to mark DTC-C03 `verified` yet.
+This verifies that a returning user can complete Google OAuth on the current production release without consuming a new invitation and can recover the server-owned journey state.
 
-## Exact final live test required
+## Remaining live evidence gap
 
-One human OAuth run on the current production release is still required.
+The current-release OAuth portion is now verified. The only remaining browser-specific sequence is:
 
-Acceptance sequence:
+1. Sign out through the product UI / sign-out route.
+2. Use browser Back.
+3. Verify protected content cannot be recovered as an authenticated page.
+4. Re-enter through sign-in.
+5. Verify the canonical journey resumes from persisted state.
 
-1. Open `https://www.despegatucarrera.com/auth/signin`.
-2. Sign in with an already-authorized returning Google account, or use a fresh pilot invitation followed by Google/LinkedIn.
-3. Confirm redirect returns to the intended DTC route.
-4. Confirm a new Auth session exists in DTCFINAL after the release timestamp.
-5. Confirm returning access does not require a new invitation when membership already exists.
-6. POST sign-out through the product UI / sign-out route.
-7. Use browser Back and verify protected content cannot be recovered as an authenticated page.
-8. Re-enter through sign-in and confirm the canonical journey resumes from persisted state.
-
-Until that sequence is observed on this exact release, DTC-C03 remains `in_progress`.
+Because the available automation cannot reuse the user's real browser session cookie, this final browser-history check must be observed in the user's browser.
 
 ## Verdict
 
 - Invitation single-use semantics: **LIVE VERIFIED**
 - Scanner-safe GET: **LIVE VERIFIED**
-- Callback/access logic: **SOURCE + EXISTING CI VERIFIED**
-- Google and LinkedIn OIDC historical provider operation: **OBSERVED**
-- Fresh OAuth on exact current production release: **NOT YET OBSERVED**
-- DTC-C03 overall: **IN_PROGRESS — one human OAuth run remains**
+- Callback/access logic: **LIVE + SOURCE VERIFIED**
+- Google OAuth on exact current production release: **LIVE VERIFIED**
+- Returning access without new invitation: **LIVE VERIFIED**
+- Canonical journey recovery at authentication boundary: **LIVE VERIFIED**
+- Sign-out + browser-back negative check: **PENDING HUMAN BROWSER OBSERVATION**
+- DTC-C03 overall: **IN_PROGRESS — only sign-out/browser-back/re-entry remains**
