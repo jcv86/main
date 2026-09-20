@@ -121,9 +121,22 @@ Therefore the security condition of the browser-history check passed: logout inv
 
 The stale-state return exposed a separate recovery UX defect: a technical OAuth error was visible on the public landing URL. That defect is isolated in PR #181 (`fix(auth): recover stale OAuth state after browser back`) and does not represent session resurrection or protected-content exposure.
 
-## Remaining live evidence gap
+## Clean re-entry after the recovery fix
 
-After PR #181 is validated and, if authorized, deployed, perform one clean re-entry from the sign-in page and confirm the canonical journey resumes. This is the only remaining observation needed for the complete DTC-C03 sequence.
+PR #181 was merged to `main` as `f0751cc4d9da0e5ae86f815b5c2e46acb57edf9b` and deployed to production in Vercel deployment `dpl_3R9VshmcqouMMB9DH15QdPpraP33` (READY).
+
+The user then repeated the recovery flow in production.
+
+Observed in DTCFINAL after the earlier logout:
+
+- Google login at 2026-09-20 13:10:33 UTC.
+- Logout at 2026-09-20 13:10:45 UTC.
+- Second clean Google login at 2026-09-20 13:11:23 UTC.
+- A live Auth session exists after the second re-entry.
+- The account remains `grandfathered`, with no invitation dependency.
+- The canonical journey state remains present and recoverable.
+
+The user also confirmed the browser UX now behaves correctly: the stale OAuth state is converted into a controlled sign-in recovery message instead of exposing the provider error on the public landing page.
 
 ## Verdict
 
@@ -135,6 +148,6 @@ After PR #181 is validated and, if authorized, deployed, perform one clean re-en
 - Canonical journey recovery at authentication boundary: **LIVE VERIFIED**
 - Sign-out invalidates live session: **LIVE VERIFIED**
 - Browser Back cannot restore protected access: **LIVE VERIFIED**
-- Stale OAuth browser-history UX: **BUG IDENTIFIED; FIX IN PR #181**
-- Clean re-entry after logout: **PENDING AFTER RECOVERY FIX**
-- DTC-C03 overall: **IN_PROGRESS — security gate passed; one clean re-entry remains**
+- Stale OAuth browser-history UX recovery: **LIVE VERIFIED IN PRODUCTION**
+- Clean re-entry after logout: **LIVE VERIFIED**
+- DTC-C03 overall: **VERIFIED**
