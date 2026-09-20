@@ -1,6 +1,6 @@
 # DTC closure ledger — canonical
 
-Last grounded: 2026-09-16 UTC
+Last grounded: 2026-09-20 UTC
 
 This is the **single canonical closure ledger** for Despega Tu Carrera. Historical detail remains available in Git history; this file keeps the current release state and only the evidence that still matters for closure decisions.
 
@@ -10,8 +10,8 @@ A status is `verified` only when there is observable evidence. Allowed states: `
 
 - Repository: `jcv86/main`
 - Canonical branch: `main`
-- Current application-code baseline: PR #177 merge `6246497b96c22a1bba3ea1510ba4a9e27d14e98c`
-- Production release with that application tree plus release documentation: `dpl_AGJHyBed66ioWT4bsfztXSM2yJvY`
+- Current application-code baseline: PR #181 merge `f0751cc4d9da0e5ae86f815b5c2e46acb57edf9b`
+- Current production deployment: `dpl_3R9VshmcqouMMB9DH15QdPpraP33` (READY)
 - Production domains: `despegatucarrera.com`, `www.despegatucarrera.com`
 - Supabase production project: DTCFINAL `dcfrbwxbejtbcouionna`
 - Production smoke after the final public hotfix: FAQ 200 with access-aware Vera copy, `/api/health/live` 200 `ok`, `/api/health/ready` 200 `ready`, `/demo` 404, and no Vercel runtime error clusters in the final one-hour scan.
@@ -22,7 +22,7 @@ A status is `verified` only when there is observable evidence. Allowed states: `
 |---|---|---|---|---|
 | DTC-C01 | Production and canonical code contain the approved release | #176 and #177 merged; final Production deployment READY and serves the #177 Vera hotfix on the public domain | `verified` | yes |
 | DTC-C02 | Signed-in users can save and resume C1/A1 | Approved authenticated production QA previously proved C1/A1 save-refresh-resume, all 28 A1 answers persisted, C2 saved 8 answers, integral report rendered and transition reached A2 | `verified` | yes |
-| DTC-C03 | Pilot invitation / returning OAuth continuity remains reliable | Real production invitation was previously issued, claimed and verified single-use; current scanner-safe invitation browser gate passes against real local Auth/JWT/PostgREST; current production anonymous boundaries are correct. A fresh end-to-end Google/LinkedIn invitation + sign-out + browser-back rerun on the exact current production release has not been reproduced in this session | `in_progress` | yes |
+| DTC-C03 | Pilot invitation / returning OAuth continuity remains reliable | Live production evidence on 2026-09-20 verified scanner-safe GET, single-use claim semantics, Google OAuth on the exact current release, returning access without a new invitation, logout invalidation, browser-Back unable to restore protected content, stale-OAuth-state recovery, clean Google re-entry and canonical journey resume | `verified` | yes |
 | DTC-C04 | Browser/server data access is least-privilege and owner-bound | DTCFINAL now has 369 public tables with **0 RLS-disabled tables**; 20/20 public views use `security_invoker=true`; 0 `SECURITY DEFINER` functions are executable by `anon`; only intentional `complete_a2_mission(uuid,jsonb)` is executable by `authenticated`, checks `auth.uid()`, and has empty `search_path`; OAuth creation trigger remains active | `verified` | yes |
 | DTC-C05 | Production build is reproducible | #177 passed Production public QA, TypeScript and full build; exact Preview READY; final Production build completed successfully and is READY | `verified` | yes |
 | DTC-C06 | Users see one coherent DTC product, not test/internal surfaces | Route-authentication contracts, laboratory-bypass retirement and public credibility gates pass; `/demo` is 404 in final production; sitemap/FAQ/public CTAs expose the intended product surfaces | `verified` | yes |
@@ -73,7 +73,7 @@ These are tracked as hardening/administration work; they are not equivalent to t
 
 ## Remaining release-quality gap
 
-Only one product-flow release blocker remains evidence-incomplete: **DTC-C03**, a fresh end-to-end pilot/OAuth rerun on the exact current deployed release. Existing evidence already covers a real single-use invitation, authenticated production use, current local real-Auth scanner protection and current anonymous production boundaries; this ledger does not pretend those separate proofs are the same as one fresh current-release OAuth run.
+All product-flow release blockers DTC-C01 through DTC-C15 are now `verified`. DTC-C16 remains `in_progress`, but it is explicitly non-blocking for the current product release. Remaining work is administrative/platform hardening rather than a known broken user flow.
 
 ## Administrative / platform follow-up
 
@@ -87,4 +87,4 @@ These do not represent a broken DTC user flow, but they should be closed for str
 
 ## Score criterion
 
-A practical **9.7** requires the current product blockers to be `verified` and the administrative controls above either completed or explicitly accepted/deferred by the owner. The ledger must not mark a missing live OAuth proof as complete simply to reach a target score.
+A practical **9.7** now has its product-flow blocker condition satisfied: DTC-C01 through DTC-C15 are `verified`. The remaining requirement is to complete the administrative controls above or explicitly accept/defer them as owner decisions. DTC-C16 is non-blocking.
