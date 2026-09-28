@@ -125,7 +125,7 @@ export default async function RadarEstrategicoPage() {
           <Card
             role="alert"
             aria-live="assertive"
-            className="w-full border-amber-400/30 bg-slate-900/90"
+            className="w-full border-amber-400/30 bg-card"
           >
             <CardContent className="space-y-6 p-6 sm:p-8">
               <div className="flex items-start gap-4">
@@ -139,7 +139,7 @@ export default async function RadarEstrategicoPage() {
                   <h1 className="text-2xl font-bold sm:text-3xl">
                     No pudimos cargar tu Radar
                   </h1>
-                  <p className="leading-relaxed text-slate-300">
+                  <p className="leading-relaxed text-muted-foreground">
                     No mostramos cifras parciales para evitar que un problema temporal
                     parezca un resultado real. Tus datos no fueron reemplazados ni
                     reiniciados.
@@ -147,11 +147,11 @@ export default async function RadarEstrategicoPage() {
                 </div>
               </div>
 
-              <div className="rounded-xl border border-white/10 bg-slate-950/50 p-4">
-                <p className="text-sm font-medium text-slate-200">
+              <div className="rounded-xl border border-border bg-muted/30 p-4">
+                <p className="text-sm font-medium text-foreground">
                   Secciones pendientes de recuperar:
                 </p>
-                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-slate-400">
+                <ul className="mt-2 list-disc space-y-1 pl-5 text-sm text-muted-foreground">
                   {loadFailures.map((failure) => (
                     <li key={failure}>{failure}</li>
                   ))}
@@ -164,7 +164,7 @@ export default async function RadarEstrategicoPage() {
                     Reintentar
                   </Button>
                 </form>
-                <Button asChild variant="outline" className="border-white/20">
+                <Button asChild variant="outline" className="border-border">
                   <Link href="/despega">Volver al panel</Link>
                 </Button>
               </div>
@@ -213,7 +213,7 @@ export default async function RadarEstrategicoPage() {
         <div className="space-y-8">
         <header className="space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
-            <Button asChild variant="ghost" className="text-slate-300">
+            <Button asChild variant="ghost" className="text-muted-foreground">
               <Link href="/despega">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Volver al panel
               </Link>
@@ -225,7 +225,7 @@ export default async function RadarEstrategicoPage() {
 
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
             <div className="rounded-2xl border border-border bg-card p-5 text-sm text-muted-foreground">
-              El Radar conserva fuente, fecha y clasificación de cada señal. No inventa noticias, puntajes ni conclusiones para completar espacios vacíos.
+              El Radar conserva fuente, fecha y clasificación de cada señal: no inventa noticias, puntajes ni conclusiones para completar espacios vacíos.
             </div>
             <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 lg:min-w-72">
               <p className="flex items-center gap-2 font-semibold text-emerald-200">
@@ -268,14 +268,14 @@ export default async function RadarEstrategicoPage() {
               icon: <ShieldCheck className="h-5 w-5 text-rose-300" />,
             },
           ].map((item) => (
-            <Card key={item.label} className="border-slate-800 bg-slate-900/70">
+            <Card key={item.label} className="border-border bg-card">
               <CardContent className="space-y-3 p-5">
                 <div className="flex items-center justify-between gap-3">
-                  <p className="text-sm text-slate-400">{item.label}</p>
+                  <p className="text-sm text-muted-foreground">{item.label}</p>
                   {item.icon}
                 </div>
-                <p className="text-3xl font-bold text-white">{item.value}</p>
-                <p className="text-xs leading-relaxed text-slate-500">{item.detail}</p>
+                <p className="text-3xl font-bold text-foreground">{item.value}</p>
+                <p className="text-xs leading-relaxed text-muted-foreground">{item.detail}</p>
               </CardContent>
             </Card>
           ))}
@@ -288,10 +288,10 @@ export default async function RadarEstrategicoPage() {
               ['2', 'Distinguir', 'Marca si es un hecho verificado o una hipótesis todavía abierta.'],
               ['3', 'Revisar', 'Vincula decisiones a evidencia futura y registra el resultado observado.'],
             ].map(([number, title, detail]) => (
-              <div key={number} className="rounded-xl border border-white/10 bg-slate-950/35 p-4">
+              <div key={number} className="rounded-xl border border-white/10 bg-muted/30 p-4">
                 <p className="text-xs font-semibold text-rose-300">PASO {number}</p>
-                <p className="mt-2 font-semibold text-white">{title}</p>
-                <p className="mt-2 text-sm leading-relaxed text-slate-400">{detail}</p>
+                <p className="mt-2 font-semibold text-foreground">{title}</p>
+                <p className="mt-2 text-sm leading-relaxed text-muted-foreground">{detail}</p>
               </div>
             ))}
           </CardContent>
@@ -304,10 +304,10 @@ export default async function RadarEstrategicoPage() {
                 <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">
                   Tu preparación para actuar
                 </p>
-                <h2 className="mt-2 text-2xl font-bold text-white">
+                <h2 className="mt-2 text-2xl font-bold text-foreground">
                   Lo que A1, A2 y A3 ya saben de ti
                 </h2>
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
                   El Radar usa tu evidencia persistida para convertir oportunidades en decisiones
                   concretas. Estos indicadores no reemplazan una evaluación humana ni inventan
                   información cuando todavía falta evidencia.
@@ -328,16 +328,16 @@ export default async function RadarEstrategicoPage() {
                     ['CV', liveProfile.cvReadiness],
                     ['Entrevista', liveProfile.interviewReadiness],
                   ].map(([label, value]) => (
-                    <div key={String(label)} className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
-                      <p className="text-sm text-slate-400">{label}</p>
-                      <p className="mt-2 text-3xl font-bold text-white">{Number(value)}/100</p>
+                    <div key={String(label)} className="rounded-xl border border-white/10 bg-muted/30 p-4">
+                      <p className="text-sm text-muted-foreground">{label}</p>
+                      <p className="mt-2 text-3xl font-bold text-foreground">{Number(value)}/100</p>
                     </div>
                   ))}
                 </div>
                 <div className="grid gap-4 lg:grid-cols-3">
                   <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4">
                     <p className="font-semibold text-emerald-200">Fortalezas que ya puedes usar</p>
-                    <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                       {(liveProfile.strengths.length ? liveProfile.strengths.slice(0, 3) : ['Aún falta evidencia suficiente para destacar fortalezas.']).map((item) => (
                         <li key={item}>• {item}</li>
                       ))}
@@ -345,7 +345,7 @@ export default async function RadarEstrategicoPage() {
                   </div>
                   <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
                     <p className="font-semibold text-amber-200">Brechas antes de postular</p>
-                    <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                       {(liveProfile.missingProof.length ? liveProfile.missingProof.slice(0, 3) : ['No hay brechas de evidencia prioritarias registradas.']).map((item) => (
                         <li key={item}>• {item}</li>
                       ))}
@@ -353,7 +353,7 @@ export default async function RadarEstrategicoPage() {
                   </div>
                   <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-4">
                     <p className="font-semibold text-cyan-200">Siguiente mejor acción</p>
-                    <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
                       {(liveProfile.nextBestActions.length ? liveProfile.nextBestActions.slice(0, 3) : ['Registra evidencia y objetivos para recibir acciones personalizadas.']).map((item) => (
                         <li key={item}>• {item}</li>
                       ))}
@@ -362,7 +362,7 @@ export default async function RadarEstrategicoPage() {
                 </div>
               </>
             ) : (
-              <div className="rounded-xl border border-white/10 bg-slate-950/40 p-5 text-sm leading-relaxed text-slate-300">
+              <div className="rounded-xl border border-white/10 bg-muted/30 p-5 text-sm leading-relaxed text-muted-foreground">
                 Todavía no hay suficiente evidencia consolidada para construir tu perfil de acción.
                 Puedes seguir usando el Radar y completar entregables de A1–A3; el perfil se irá
                 enriqueciendo sin bloquearte.
@@ -382,19 +382,19 @@ export default async function RadarEstrategicoPage() {
           />
         </div>
 
-        <Card className="border-slate-800 bg-slate-900/70">
+        <Card className="border-border bg-card">
           <CardContent className="flex flex-col gap-5 p-6 md:flex-row md:items-center md:justify-between">
             <div>
-              <p className="flex items-center gap-2 font-semibold text-white">
+              <p className="flex items-center gap-2 font-semibold text-foreground">
                 <Radar className="h-5 w-5 text-rose-300" /> El Radar conserva el contexto
               </p>
-              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-slate-300">
+              <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
                 Puedes volver a Entrenamiento para revisar entregables. Las señales y
                 decisiones permanecen separadas de los XP y no alteran resultados anteriores.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
-              <Button asChild variant="outline" className="shrink-0 border-white/20">
+              <Button asChild variant="outline" className="shrink-0 border-border">
                 <Link href="/despega/a3">Revisar Entrenamiento</Link>
               </Button>
               <Button asChild className="shrink-0 bg-rose-500 hover:bg-rose-400">
