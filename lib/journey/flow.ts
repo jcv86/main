@@ -41,6 +41,7 @@ export interface FlowInput {
   completedA2Days: unknown[]
   completedA3Modules: unknown[]
   a3RouteClosed: boolean
+  outcomes?: { a1BaselineCompleted: boolean; a1FollowUpCompleted: boolean }
 }
 const checkpoint = 'career-mirror'
 const stages = [
@@ -49,7 +50,7 @@ const stages = [
   { id: 'A3', title: 'Entrenamiento', href: '/despega/a3', purpose: 'Practicar y contrastar las hipótesis con experiencias.', carried: 'El primer checkpoint aparece desde el Día 7 de A2; no exige esperar 30 días.' },
   { id: 'A4', title: 'Radar Estratégico', href: '/despega/a4', purpose: 'Contrastar tu dirección con señales y decisiones.', carried: 'Se habilita con el cierre verificado de la ruta A3, no por contar sesiones.' },
 ] as const
-const onboardingCopy: Record<OnboardingPath, [string,string]> = {
+const onboardingCopy: Record<string, [string,string]> = {
   '/despega/conozcamonos-1': ['Completar mi contexto inicial', 'Ubica tu punto de partida antes de interpretar preferencias.'],
   '/despega/a1-cerebral-intro': ['Conocer Despega Cerebral', 'Revisa cómo responder y qué puede aportar esta evaluación.'],
   '/despega/a1-cerebral': ['Continuar mi evaluación A1', 'Completa las elecciones pendientes sin fabricar resultados.'],
@@ -57,6 +58,8 @@ const onboardingCopy: Record<OnboardingPath, [string,string]> = {
   '/despega/a1-report': ['Revisar mi lectura individual', 'Revisa tu informe y sus matices antes de introducir Tu Ruta.'],
   '/despega/a2/intro': ['Conocer mi Ruta de 30 días', 'Revisa el ciclo inicial, sus ampliaciones y los checkpoints de entrenamiento.'],
   '/despega/a2': ['Continuar Tu Ruta', 'Retoma las acciones habilitadas de tu recorrido.'],
+  '/despega/a1-outcome-baseline': ['Hacer mi medición inicial', 'Registra una línea base comparable antes de comenzar el análisis cerebral.'],
+  '/despega/a1-outcome-follow-up': ['Medir mi cambio después de A1', 'Completa la medición comparable antes de continuar con tu contexto posterior.'],
 }
 
 function days(value: unknown[]): number[] {
@@ -64,7 +67,11 @@ function days(value: unknown[]): number[] {
 }
 
 export function buildJourneyFlow(input: FlowInput) {
-  const onboardingPath = canonicalOnboardingPath(input.profile)
+  let onboardingPath: string = canonicalOnboardingPath(input.profile)
+  if (input.outcomes && input.profile.onboarding_conozcamonos_1_completed) {
+    if (!input.outcomes.a1BaselineCompleted && !input.profile.a1_cerebral_completed) onboardingPath = '/despega/a1-outcome-baseline'
+    else if (input.outcomes.a1BaselineCompleted && (input.profile.a1_report_seen || input.profile.a1_results_saved) && !input.outcomes.a1FollowUpCompleted) onboardingPath = '/despega/a1-outcome-follow-up'
+  }
   const onboardingComplete = onboardingPath === '/despega/a2'
   const completedDays = days(input.completedA2Days)
   const completed = new Set(completedDays)

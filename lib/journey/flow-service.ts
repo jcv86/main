@@ -8,6 +8,7 @@ type FlowJourney = {
   profile: FlowInput['profile']
   access: FlowInput['access']
   state: { currentModule: string; highestA2DayUnlocked: number }
+  outcomes?: FlowInput['outcomes']
 }
 
 /** Shared read boundary for the dashboard, integral report and journey map. */
@@ -32,6 +33,7 @@ export async function readJourneyFlow(journey: FlowJourney, client: Awaited<Retu
     completedA3Modules: Array.isArray(a3.data?.completed_module_ids) ? a3.data.completed_module_ids : [],
     // The connected legacy column has no timezone. Use only the completion marker, not an inferred instant.
     a3RouteClosed: closure.data?.route_completed_at != null,
+    outcomes: journey.outcomes,
   })
 }
 

@@ -11,6 +11,8 @@ import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-f
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
+  const [baselineCompleted, setBaselineCompleted] = useState(false)
+  const [outcomeStatusReady, setOutcomeStatusReady] = useState(false)
   const router = useRouter()
   const supabase = createClient()
 
@@ -39,6 +41,16 @@ export default function A1CerebralIntroPage() {
         console.log('[v0] [CANONICAL] A1 intro marked as seen')
       }
       
+      try {
+        const statusResponse = await fetch('/api/outcomes/a1-status', { cache: 'no-store', credentials: 'include' })
+        if (statusResponse.ok) {
+          const status = await statusResponse.json()
+          setBaselineCompleted(status.baselineCompleted === true)
+        }
+      } finally {
+        setOutcomeStatusReady(true)
+      }
+
       setAuthOk(true)
     }
     check()
@@ -232,12 +244,13 @@ export default function A1CerebralIntroPage() {
           {/* CTA Button */}
           <div className="flex gap-4 justify-center mt-12">
             <Button
-              onClick={() => router.push('/despega/a1-outcome-baseline')}
+              onClick={() => router.push(baselineCompleted ? '/despega/a1-cerebral' : '/despega/a1-outcome-baseline')}
+              disabled={!outcomeStatusReady}
               size="lg"
               className="px-8 text-lg text-foreground"
               style={{ backgroundColor: 'rgb(80, 160, 170)',  }}
             >
-              Comenzar Análisis Cerebral
+              {!outcomeStatusReady ? 'Verificando…' : baselineCompleted ? 'Comenzar Análisis Cerebral' : 'Hacer medición inicial'}
             </Button>
             <Button
               onClick={() => router.push('/despega')}
