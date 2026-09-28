@@ -244,7 +244,7 @@ export default function A1CerebralPage() {
             </div>
           )}
 
-          <div className="grid gap-6 mb-8 md:grid-cols-2 md:gap-8">
+          <div className="grid gap-4 sm:p-6 mb-6 sm:mb-8 md:grid-cols-2 md:gap-8">
             <div
               role="group"
               aria-labelledby={`a1-question-${q.id} a1-more-label`}
@@ -271,7 +271,7 @@ export default function A1CerebralPage() {
                       setError('')
                     }}
                     disabled={less[q.id] === option.texto}
-                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                    className={`min-h-14 w-full rounded-xl p-4 text-left sm:p-5 border-2 transition-all font-semibold text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                       more[q.id] === option.texto
                         ? 'border-green bg-green/25 text-white shadow-lg shadow-green/20'
                         : less[q.id] === option.texto
@@ -311,7 +311,7 @@ export default function A1CerebralPage() {
                       setError('')
                     }}
                     disabled={more[q.id] === option.texto}
-                    className={`w-full text-left p-5 rounded-xl border-2 transition-all font-semibold text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
+                    className={`min-h-14 w-full rounded-xl p-4 text-left sm:p-5 border-2 transition-all font-semibold text-base focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-offset-background ${
                       less[q.id] === option.texto
                         ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20'
                         : more[q.id] === option.texto
@@ -339,7 +339,7 @@ export default function A1CerebralPage() {
           )}
         </div>
 
-        <div className="flex gap-4" style={{ borderRadius: '30px' }}>
+        <div className="sticky bottom-2 z-10 flex gap-3 rounded-2xl border border-border bg-background/95 p-2 shadow-lg backdrop-blur sm:static sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none">
           <Button
             onClick={async () => {
               if (idx <= 0) return
@@ -352,7 +352,7 @@ export default function A1CerebralPage() {
             }}
             variant="outline"
             disabled={idx === 0 || savingDraft}
-            className="flex-1 py-6 text-base font-semibold"
+            className="min-h-12 flex-1 py-3 text-sm font-semibold sm:py-4 sm:text-base"
             style={{
               borderRadius: '20px',
               borderColor: 'rgba(80, 160, 170, 0.6)',
@@ -366,7 +366,7 @@ export default function A1CerebralPage() {
           <Button
             onClick={handleNext}
             disabled={!bothAnswered || loading || savingDraft}
-            className="flex-1 py-6 text-base font-semibold text-white"
+            className="min-h-12 flex-1 py-3 text-sm font-semibold text-white sm:py-4 sm:text-base"
             style={{
               backgroundColor: 'rgba(80, 160, 170, 0.6)',
               borderRadius: '20px',
