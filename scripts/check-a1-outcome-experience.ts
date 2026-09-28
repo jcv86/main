@@ -10,10 +10,10 @@ const form = readFileSync('components/outcomes/a1-professional-clarity-form.tsx'
 const route = readFileSync('app/api/outcomes/observations/route.ts', 'utf8')
 const migration = readFileSync('supabase/migrations/20260920141000_outcome_response_payload.sql', 'utf8')
 
-assert.ok(intro.includes("router.push('/despega/a1-outcome-baseline')"), 'A1 intro must route to baseline before assessment')
+assert.ok(intro.includes("baselineCompleted ? '/despega/a1-cerebral' : '/despega/a1-outcome-baseline'"), 'A1 intro must require baseline before assessment and resume assessment after baseline')
 assert.ok(baseline.includes("router.push('/despega/a1-cerebral-intro')"), 'baseline must return to canonical A1 intro')
 assert.ok(report.includes("router.push('/despega/a1-outcome-follow-up')"), 'A1 report must route to comparable follow-up')
-assert.ok(followUp.includes("router.push('/despega/conozcamonos-2')"), 'follow-up must continue to C2')
+assert.ok(followUp.includes("router.push('/despega/a2/intro')"), 'follow-up must continue to A2 intro after canonical C2-before-report flow')
 assert.ok(form.includes("role === 'baseline'"))
 assert.ok(form.includes("role === 'baseline' ? 'Guardar baseline y continuar' : 'Guardar y ver mi cambio'"), 'form must distinguish follow-up action')
 assert.ok(form.includes('responsePayload: responses'))
