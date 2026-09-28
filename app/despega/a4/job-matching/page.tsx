@@ -67,7 +67,15 @@ export default async function JobMatchingPage() {
             </CardContent>
           </Card>
         ) : null}
-        <OpportunitySearchExperience seedRole={seedRole} />
+        <OpportunitySearchExperience
+          seedRole={seedRole}
+          profileEvidence={liveProfile ? {
+            targetRole: liveProfile.targetRole,
+            strengths: liveProfile.strengths,
+            missingProof: liveProfile.missingProof,
+            nextBestActions: liveProfile.nextBestActions,
+          } : null}
+        />
       </PageStack>
     </PageContainer>
   )
