@@ -1,7 +1,8 @@
 'use client'
 
 import { useEffect, useState } from 'react'
-import { ExternalLink, MapPin, CalendarDays, SearchX } from 'lucide-react'
+import { ExternalLink, MapPin, CalendarDays, SearchX, ArrowRight } from 'lucide-react'
+import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { OpportunityProfileEvidence } from './opportunity-search-experience'
 import { Button } from '@/components/ui/button'
@@ -10,6 +11,12 @@ interface Opportunity {sourceId:string;title:string;company:string;location:stri
 interface Payload {needs_intent:boolean;mode?:'available_now';count?:number;source?:string;fetched_at?:string;query_plan?:string[];intent?:{target_roles:string[];breadth:string;locations:string[];work_modes:string[]};opportunities:Opportunity[]}
 
 const normalize=(value:string)=>value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ')
+function actionFor(items:string[],fallback?:string){
+ const text=normalize([...items,fallback||''].join(' '))
+ if(/cv|curriculum|resume/.test(text)) return {href:'/despega/a3/cv-builder-studio',label:'Mejorar mi CV'}
+ if(/entrevista|interview|respuesta/.test(text)) return {href:'/despega/a3/simulations',label:'Practicar entrevista'}
+ return {href:'/despega/a3',label:'Trabajar esta brecha'}
+}
 function evidenceFor(job:Opportunity,profile?:OpportunityProfileEvidence|null){
  const published=[job.title,...(job.requirements||[]),...(job.skills||[])].map(normalize).join(' ')
  const strengths=(profile?.strengths||[]).filter(item=>{const terms=normalize(item).split(/\s+/).filter(x=>x.length>=4);return terms.some(term=>published.includes(term))}).slice(0,3)
@@ -44,6 +51,7 @@ export function RealOpportunityResults({refreshKey=0,profileEvidence}:{refreshKe
     <div className="rounded-xl border border-amber-200 bg-amber-50/60 p-3 dark:border-amber-900/50 dark:bg-amber-950/20">
      <p className="text-xs font-semibold uppercase tracking-wide text-amber-800 dark:text-amber-300">Antes de postular</p>
      {evidence.gaps.length?<ul className="mt-2 space-y-1 text-sm text-foreground">{evidence.gaps.map(item=><li key={item}>• Falta evidencia registrada sobre: {item}</li>)}</ul>:<p className="mt-2 text-sm text-foreground">{profileEvidence?.nextBestActions?.[0]||'Confirma en la publicación original los requisitos que no estén estructurados.'}</p>}
+     {(()=>{const action=actionFor(evidence.gaps,profileEvidence?.nextBestActions?.[0]);return <Button asChild variant="outline" size="sm" className="mt-3"><Link href={action.href}>{action.label}<ArrowRight className="ml-2 h-3.5 w-3.5"/></Link></Button>})()}
     </div>
    </div>:null})()}
    <Button asChild className="bg-[hsl(var(--dtc-indigo-900))] text-white hover:opacity-90"><a href={job.originalUrl} target="_blank" rel="noopener noreferrer">Ver oferta <ExternalLink className="ml-2 h-4 w-4"/></a></Button>
