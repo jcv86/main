@@ -16,6 +16,9 @@ import {
   Unlock,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 import {
   A2CycleReviewCard,
   type A2CycleReviewView,
@@ -368,34 +371,32 @@ export default function A2DashboardPage() {
     }
   }
 
+  const currentMission = A2_DAILY_MISSIONS[progress.current_day]
+
   return (
-    <div className="min-h-screen bg-slate-950 p-6 text-white">
-      <div className="mx-auto max-w-7xl">
-        <header className="mb-8 space-y-2">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-400">
-            Tu Ruta
-          </p>
-          <h1 className="text-4xl font-bold">Tu ciclo de avance</h1>
-          <p className="max-w-3xl text-slate-400">
-            {progress.route?.description ||
-              'Comienza con un ciclo de 30 días y extiéndelo a 60 o 90 según tu contexto y resultados.'}
-          </p>
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            {progress.route && (
-              <Badge className="border-cyan-500/30 bg-cyan-500/10 text-cyan-300">
-                {progress.route.name}
-              </Badge>
-            )}
-            <Badge className="border-purple-500/30 bg-purple-500/10 text-purple-300">
-              Horizonte activo · {progress.active_horizon} días
-            </Badge>
-            {progress.route && (
-              <span className="text-xs text-slate-500">
-                Seleccionada desde tu diagnóstico de Despega Cerebral
-              </span>
-            )}
-          </div>
-        </header>
+    <PageContainer>
+      <PageStack>
+        <PageHeader
+          eyebrow="A2 · Tu Ruta"
+          title="Tu ciclo de avance"
+          description={progress.route?.description || 'Comienza con un ciclo de 30 días y extiéndelo a 60 o 90 según tu contexto y resultados.'}
+          actions={<Badge className="border-purple-500/30 bg-purple-500/10 text-purple-700 dark:text-purple-300">Horizonte activo · {progress.active_horizon} días</Badge>}
+        />
+        <Card className="border-cyan-500/25 bg-cyan-500/5">
+          <CardContent className="flex flex-col gap-4 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tu misión de hoy</p>
+              <p className="mt-2 text-xl font-semibold text-foreground">Día {progress.current_day}{currentMission ? ` · ${currentMission.title}` : ''}</p>
+              <p className="mt-1 text-sm text-muted-foreground">Disponible hasta el Día {progress.highest_unlocked_day}. Tu avance y evidencia permanecen guardados.</p>
+              {progress.route ? <p className="mt-2 text-xs text-muted-foreground">Ruta: {progress.route.name} · seleccionada desde tu diagnóstico de Despega Cerebral.</p> : null}
+            </div>
+            {currentMission && progress.current_day <= progress.highest_unlocked_day ? (
+              <Button onClick={() => router.push(`/despega/a2/dia-${progress.current_day}`)} className="shrink-0">
+                Continuar Día {progress.current_day}<ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            ) : null}
+          </CardContent>
+        </Card>
 
         {progress.extension_available && progress.next_horizon && (
           <section className="mb-8 space-y-5 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-500/15 to-cyan-500/5 p-6">
@@ -694,7 +695,7 @@ export default function A2DashboardPage() {
             No encontramos misiones con esos filtros.
           </p>
         )}
-      </div>
-    </div>
+      </PageStack>
+    </PageContainer>
   )
 }
