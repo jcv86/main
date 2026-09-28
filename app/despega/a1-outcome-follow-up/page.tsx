@@ -19,11 +19,11 @@ export default function A1OutcomeFollowUpPage() {
         />
         <Button
           type="button"
-          onClick={() => router.push('/despega/conozcamonos-2')}
+          onClick={() => router.push('/despega/a2/intro')}
           disabled={!followUpCompleted}
           className="w-full"
         >
-          {followUpCompleted ? 'Continuar a Conozcámonos 2' : 'Guarda la medición para continuar'}
+          {followUpCompleted ? 'Continuar a Tu Ruta' : 'Guarda la medición para continuar'}
         </Button>
       </PageStack>
     </PageContainer>
