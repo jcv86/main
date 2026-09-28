@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Brain, CheckCircle2, Zap } from 'lucide-react'
-import { StepHeader } from '@/components/step-header'
-import { getDemoMode } from '@/lib/despega/demo-user'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -18,19 +18,11 @@ export default function A1CerebralIntroPage() {
     const check = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       
-      // Check if user exists in Supabase or is in demo mode
-      let userId = user?.id
       if (!user) {
-        // Issue #8: Check demo mode flag (no PII in localStorage)
-        const isDemoMode = getDemoMode()
-        if (isDemoMode) {
-          userId = 'demo-user-' + Math.random().toString(36).substr(2, 9)
-          console.log('[v0] Demo mode active for A1 intro')
-        } else {
-          router.push('/auth/signin')
-          return
-        }
+        router.replace('/auth/signin')
+        return
       }
+      const userId = user.id
       
       // Mark A1 intro as seen (CANONICAL FLAG)
       const { error: updateError } = await supabase
@@ -53,25 +45,21 @@ export default function A1CerebralIntroPage() {
   }, [supabase, router])
 
   if (!authOk) {
-    return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
+    return <PageContainer className="flex min-h-[50vh] items-center justify-center"><p role="status" aria-live="polite">Verificando…</p></PageContainer>
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <StepHeader
-          stepNumber={1}
-          pillarName="El Ritual"
+    <PageContainer>
+      <PageStack>
+        <PageHeader
           title="Descubre Tu Perfil Cerebral"
-          description="Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único. Responde 28 preguntas simples y obtén insights personalizados sobre tu perfil."
-          estimatedTime="~10 min"
-          pillarColor="teal"
+          description="Una evaluación de cómo tiendes a comunicarte y actuar. Responde 28 preguntas y obtén un perfil que podrás usar como evidencia en tu recorrido."
+          actions={<Badge variant="outline">~10 min</Badge>}
         />
 
-        {/* Main Content */}
         <div className="space-y-8">
           {/* What is Cerebral Assessment */}
-          <Card className="border-0 shadow-lg">
+          <Card className="border border-border bg-card shadow-sm">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
                 <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
@@ -79,32 +67,32 @@ export default function A1CerebralIntroPage() {
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
-              <p className="text-lg text-white/90 leading-relaxed" style={{ fontSize: '14px', fontWeight: '400' }}>
+              <p className="text-lg text-foreground leading-relaxed" style={{ fontSize: '14px', fontWeight: '400' }}>
                 El Análisis Cerebral identifica tu estilo natural de comunicación y liderazgo según cuatro dimensiones:
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)', borderRadius: '2px' }}>
+                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)',  }}>
                   <p className="font-bold text-red mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔴 Impulsor</p>
-                  <p className="text-white/85 text-sm">Enfocado en resultados, decisivo, impulsivo</p>
+                  <p className="text-foreground text-sm">Enfocado en resultados, decisivo, impulsivo</p>
                 </div>
-                <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl" style={{ borderColor: 'rgba(255, 200, 0, 0.4)', backgroundColor: 'rgba(255, 200, 0, 0.15)', borderRadius: '2px' }}>
+                <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl" style={{ borderColor: 'rgba(255, 200, 0, 0.4)', backgroundColor: 'rgba(255, 200, 0, 0.15)',  }}>
                   <p className="font-bold text-yellow mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🟡 Catalizador</p>
-                  <p className="text-white/85 text-sm">Comunicativo, entusiasta, orientado a personas</p>
+                  <p className="text-foreground text-sm">Comunicativo, entusiasta, orientado a personas</p>
                 </div>
-                <div className="p-5 bg-green/20 dark:bg-green/25 border-2 border-green rounded-xl" style={{ borderColor: 'rgba(0, 128, 0, 0.4)', backgroundColor: 'rgba(0, 128, 0, 0.15)', borderRadius: '2px' }}>
+                <div className="p-5 bg-green/20 dark:bg-green/25 border-2 border-green rounded-xl" style={{ borderColor: 'rgba(0, 128, 0, 0.4)', backgroundColor: 'rgba(0, 128, 0, 0.15)',  }}>
                   <p className="font-bold text-green mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🟢 Estabilizador</p>
-                  <p className="text-white/85 text-sm">Estable, cooperativo, confiable, paciente</p>
+                  <p className="text-foreground text-sm">Estable, cooperativo, confiable, paciente</p>
                 </div>
-                <div className="p-5 bg-blue/20 dark:bg-blue/25 border-2 border-blue rounded-xl" style={{ borderColor: 'rgb(0, 0, 255, 0.4)', backgroundColor: 'rgba(0, 0, 255, 0.15)', borderRadius: '2px' }}>
+                <div className="p-5 bg-blue/20 dark:bg-blue/25 border-2 border-blue rounded-xl" style={{ borderColor: 'rgb(0, 0, 255, 0.4)', backgroundColor: 'rgba(0, 0, 255, 0.15)',  }}>
                   <p className="font-bold text-blue mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔵 Arquitecto</p>
-                  <p className="text-white/85 text-sm">Analítico, detallista, exigente con calidad</p>
+                  <p className="text-foreground text-sm">Analítico, detallista, exigente con calidad</p>
                 </div>
               </div>
             </CardContent>
           </Card>
 
           {/* How it Works */}
-          <Card className="border-0 shadow-lg">
+          <Card className="border border-border bg-card shadow-sm">
             <CardHeader className="pb-4">
               <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
                 <CheckCircle2 className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
@@ -114,24 +102,24 @@ export default function A1CerebralIntroPage() {
             <CardContent className="space-y-4">
               <div className="space-y-3">
                 <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full text-white border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>1</div>
+                  <div className="w-14 h-14 rounded-full text-foreground border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>1</div>
                   <div>
-                    <p className="font-semibold text-muted/90 dark:text-white">28 preguntas</p>
-                    <p className="text-sm text-white/75 dark:text-white/75">Responde 28 preguntas simples sobre tu comportamiento</p>
+                    <p className="font-semibold text-foreground dark:text-foreground">28 preguntas</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde 28 preguntas simples sobre tu comportamiento</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full text-white border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>2</div>
+                  <div className="w-14 h-14 rounded-full text-foreground border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>2</div>
                   <div>
-                    <p className="font-semibold text-muted/90 dark:text-white">Dos selecciones por pregunta</p>
-                    <p className="text-sm text-white/75 dark:text-white/75">Para cada pregunta, selecciona la opción que más y menos te describe</p>
+                    <p className="font-semibold text-foreground dark:text-foreground">Dos selecciones por pregunta</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Para cada pregunta, selecciona la opción que más y menos te describe</p>
                   </div>
                 </div>
                 <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full text-white border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>3</div>
+                  <div className="w-14 h-14 rounded-full text-foreground border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>3</div>
                   <div>
-                    <p className="font-semibold text-muted/90 dark:text-white">Análisis automático</p>
-                    <p className="text-sm text-white/75 dark:text-white/75">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
+                    <p className="font-semibold text-foreground dark:text-foreground">Análisis automático</p>
+                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
                   </div>
                 </div>
               </div>
@@ -139,14 +127,14 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Example Question */}
-          <Card className="border-0 shadow-lg bg-muted/90 dark:bg-card">
+          <Card className="border border-border bg-card shadow-sm bg-muted/90 dark:bg-card">
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-white">Ejemplo Real de Pregunta</CardTitle>
-              <CardDescription className="text-white/75">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
+              <CardTitle className="text-2xl text-foreground">Ejemplo Real de Pregunta</CardTitle>
+              <CardDescription className="text-muted-foreground">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-              <div className="p-8 rounded-[28px]" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
-                <p className="text-xl font-semibold text-white mb-8 text-center">
+              <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
+                <p className="text-xl font-semibold text-foreground mb-8 text-center">
                   "Cuando enfrento un desafío importante, tiendo a ser más:"
                 </p>
                 
@@ -154,25 +142,25 @@ export default function A1CerebralIntroPage() {
                   {/* MÁS column */}
                   <div>
                     <p className="text-base font-bold text-green mb-6 flex items-center gap-2">
-                      <span className="bg-green text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">+</span>
+                      <span className="bg-green text-foreground rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">+</span>
                       MÁS como yo
                     </p>
                     <div className="space-y-3">
                       <button className="w-full p-4 border-2 border-green bg-green/20 rounded-lg text-left hover:bg-green/30 transition-all">
-                        <p className="font-medium text-white">Decidido y directo</p>
-                        <p className="text-xs text-white/75 mt-1">Impulsor</p>
+                        <p className="font-medium text-foreground">Decidido y directo</p>
+                        <p className="text-xs text-muted-foreground mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-white/85">Optimista e inspirador</p>
-                        <p className="text-xs text-white/75 mt-1">Catalizador</p>
+                        <p className="text-foreground">Optimista e inspirador</p>
+                        <p className="text-xs text-muted-foreground mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-white/85">Paciente y considerado</p>
-                        <p className="text-xs text-white/75 mt-1">Estabilizador</p>
+                        <p className="text-foreground">Paciente y considerado</p>
+                        <p className="text-xs text-muted-foreground mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-white/85">Analítico y preciso</p>
-                        <p className="text-xs text-white/75 mt-1">Arquitecto</p>
+                        <p className="text-foreground">Analítico y preciso</p>
+                        <p className="text-xs text-muted-foreground mt-1">Arquitecto</p>
                       </button>
                     </div>
                   </div>
@@ -180,33 +168,33 @@ export default function A1CerebralIntroPage() {
                   {/* MENOS column */}
                   <div>
                     <p className="text-base font-bold text-red mb-6 flex items-center gap-2">
-                      <span className="bg-red text-white rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">−</span>
+                      <span className="bg-red text-foreground rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">−</span>
                       MENOS como yo
                     </p>
                     <div className="space-y-3">
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-white/85">Decidido y directo</p>
-                        <p className="text-xs text-white/75 mt-1">Impulsor</p>
+                        <p className="text-foreground">Decidido y directo</p>
+                        <p className="text-xs text-muted-foreground mt-1">Impulsor</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-white/85">Optimista e inspirador</p>
-                        <p className="text-xs text-white/75 mt-1">Catalizador</p>
+                        <p className="text-foreground">Optimista e inspirador</p>
+                        <p className="text-xs text-muted-foreground mt-1">Catalizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-white/85">Paciente y considerado</p>
-                        <p className="text-xs text-white/75 mt-1">Estabilizador</p>
+                        <p className="text-foreground">Paciente y considerado</p>
+                        <p className="text-xs text-muted-foreground mt-1">Estabilizador</p>
                       </button>
                       <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-[rgba(80,160,170,0.6)]/30 transition-all">
-                        <p className="font-medium text-white">Analítico y preciso</p>
-                        <p className="text-xs text-white/75 mt-1">Arquitecto</p>
+                        <p className="font-medium text-foreground">Analítico y preciso</p>
+                        <p className="text-xs text-muted-foreground mt-1">Arquitecto</p>
                       </button>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="bg-purple/20 p-4 rounded-[28px] border" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgba(80, 160, 170, 0.4)' }}>
-                <p className="text-sm text-purple/90 dark:text-white">
+              <div className="bg-purple/20 p-4 rounded-xl border" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgba(80, 160, 170, 0.4)' }}>
+                <p className="text-sm text-purple/90 dark:text-foreground">
                   <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
                 </p>
               </div>
@@ -214,14 +202,14 @@ export default function A1CerebralIntroPage() {
           </Card>
 
           {/* Benefits */}
-          <Card className="border-0 shadow-lg border-l-4" style={{ borderRadius: '2px', backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgb(80, 160, 170)' }}>
+          <Card className="border border-border bg-card shadow-sm border-l-4" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgb(80, 160, 170)' }}>
             <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-white flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
+              <CardTitle className="text-2xl text-foreground flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
                 <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
                 ¿Por qué es importante?
               </CardTitle>
             </CardHeader>
-            <CardContent className="space-y-4 text-white/85">
+            <CardContent className="space-y-4 text-foreground">
               <div className="flex gap-3 items-start">
                 <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
                 <p className="leading-relaxed">Entiende tu estilo de comunicación natural para adaptarte mejor en entrevistas</p>
@@ -246,8 +234,8 @@ export default function A1CerebralIntroPage() {
             <Button
               onClick={() => router.push('/despega/a1-outcome-baseline')}
               size="lg"
-              className="px-8 text-lg text-white"
-              style={{ backgroundColor: 'rgb(80, 160, 170)', borderRadius: '20px' }}
+              className="px-8 text-lg text-foreground"
+              style={{ backgroundColor: 'rgb(80, 160, 170)',  }}
             >
               Comenzar Análisis Cerebral
             </Button>
@@ -256,13 +244,13 @@ export default function A1CerebralIntroPage() {
               size="lg"
               variant="outline"
               className="px-8 text-lg"
-              style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderRadius: '20px', borderColor: 'rgb(80, 160, 170)', color: 'rgb(80, 160, 170)' }}
+              style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgb(80, 160, 170)', color: 'rgb(80, 160, 170)' }}
             >
               Volver al Dashboard
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+      </PageStack>
+    </PageContainer>
   )
 }
