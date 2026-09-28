@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
 import { QuestionProgress } from '@/components/question-progress'
+import { PageContainer, PageStack } from '@/components/layout/page-foundation'
 import { useAssessmentDraft } from '@/lib/use-assessment-draft'
 
 type QuestionTiming = {
@@ -80,12 +81,12 @@ export default function A1CerebralPage() {
 
   if (!authOk) {
     if (error) {
-      return <div ref={errorRef} role="alert" tabIndex={-1} className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center outline-none"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div>
+      return <PageContainer ref={errorRef} role="alert" tabIndex={-1} className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center outline-none"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></PageContainer>
     }
     return (
-      <div className="min-h-screen flex items-center justify-center">
+      <PageContainer className="flex min-h-[50vh] items-center justify-center">
         <p role="status" aria-live="polite">Verificando…</p>
-      </div>
+      </PageContainer>
     )
   }
 
@@ -182,8 +183,8 @@ export default function A1CerebralPage() {
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-3xl">
+    <PageContainer className="max-w-3xl">
+      <PageStack>
         <div
           style={{
             borderRadius: '2px',
@@ -274,8 +275,8 @@ export default function A1CerebralPage() {
                       more[q.id] === option.texto
                         ? 'border-green bg-green/25 text-white shadow-lg shadow-green/20'
                         : less[q.id] === option.texto
-                          ? 'border-muted/20 bg-muted/5 text-white/70 opacity-50 cursor-not-allowed'
-                          : 'border-green/40 text-white/90 hover:border-green hover:bg-green/15 hover:text-white'
+                          ? 'border-muted/20 bg-muted/5 text-muted-foreground opacity-50 cursor-not-allowed'
+                          : 'border-green/40 text-foreground hover:border-green hover:bg-green/15 hover:text-white'
                     }`}
                   >
                     {option.texto}
@@ -314,8 +315,8 @@ export default function A1CerebralPage() {
                       less[q.id] === option.texto
                         ? 'border-red bg-red/25 text-white shadow-lg shadow-red/20'
                         : more[q.id] === option.texto
-                          ? 'border-muted/20 bg-muted/5 text-white/70 opacity-50 cursor-not-allowed'
-                          : 'border-red/40 text-white/90 hover:border-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.6)]/15 hover:text-white'
+                          ? 'border-muted/20 bg-muted/5 text-muted-foreground opacity-50 cursor-not-allowed'
+                          : 'border-red/40 text-foreground hover:border-[rgb(80,160,170)] hover:bg-[rgba(80,160,170,0.6)]/15 hover:text-white'
                     }`}
                   >
                     {option.texto}
@@ -374,7 +375,7 @@ export default function A1CerebralPage() {
             {loading || savingDraft ? 'Guardando...' : isLast ? 'Ver Resultados →' : 'Siguiente →'}
           </Button>
         </div>
-      </div>
-    </div>
+      </PageStack>
+    </PageContainer>
   )
 }
