@@ -3,11 +3,11 @@
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
 import { Brain, CheckCircle2, Zap } from 'lucide-react'
-import { StepHeader } from '@/components/step-header'
-import { getDemoMode } from '@/lib/despega/demo-user'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
@@ -18,19 +18,11 @@ export default function A1CerebralIntroPage() {
     const check = async () => {
       const { data: { user } } = await supabase.auth.getUser()
       
-      // Check if user exists in Supabase or is in demo mode
-      let userId = user?.id
       if (!user) {
-        // Issue #8: Check demo mode flag (no PII in localStorage)
-        const isDemoMode = getDemoMode()
-        if (isDemoMode) {
-          userId = 'demo-user-' + Math.random().toString(36).substr(2, 9)
-          console.log('[v0] Demo mode active for A1 intro')
-        } else {
-          router.push('/auth/signin')
-          return
-        }
+        router.replace('/auth/signin')
+        return
       }
+      const userId = user.id
       
       // Mark A1 intro as seen (CANONICAL FLAG)
       const { error: updateError } = await supabase
@@ -53,22 +45,18 @@ export default function A1CerebralIntroPage() {
   }, [supabase, router])
 
   if (!authOk) {
-    return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
+    return <PageContainer className="flex min-h-[50vh] items-center justify-center"><p role="status" aria-live="polite">Verificando…</p></PageContainer>
   }
 
   return (
-    <div className="min-h-screen bg-background">
-      <div className="container mx-auto px-4 py-12 max-w-4xl">
-        <StepHeader
-          stepNumber={1}
-          pillarName="El Ritual"
+    <PageContainer>
+      <PageStack>
+        <PageHeader
           title="Descubre Tu Perfil Cerebral"
-          description="Una evaluación profunda de cómo funcionas, tu estilo de comunicación y tu potencial único. Responde 28 preguntas simples y obtén insights personalizados sobre tu perfil."
-          estimatedTime="~10 min"
-          pillarColor="teal"
+          description="Una evaluación de cómo tiendes a comunicarte y actuar. Responde 28 preguntas y obtén un perfil que podrás usar como evidencia en tu recorrido."
+          actions={<Badge variant="outline">~10 min</Badge>}
         />
 
-        {/* Main Content */}
         <div className="space-y-8">
           {/* What is Cerebral Assessment */}
           <Card className="border-0 shadow-lg">
@@ -262,7 +250,7 @@ export default function A1CerebralIntroPage() {
             </Button>
           </div>
         </div>
-      </div>
-    </div>
+      </PageStack>
+    </PageContainer>
   )
 }
