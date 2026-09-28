@@ -7,6 +7,7 @@ export interface ChileTrabajosPublicJob {
   publishedAt: string | null
   expiresAt: string | null
   originalUrl: string
+  description?: string
   verificationStatus: 'verified_active' | 'stale' | 'unavailable' | 'unknown'
 }
 
@@ -35,6 +36,11 @@ export async function probeChileTrabajosJob(id: string): Promise<ChileTrabajosPu
   const location = decode(html.match(/Ubicaci[oó]n\s*<\/[^>]+>\s*<[^>]+>([\s\S]*?)<\//i)?.[1] || '') || null
   const date = decode(html.match(/Fecha\s*<\/[^>]+>\s*<[^>]+>([\s\S]*?)<\//i)?.[1] || '') || null
   const expires = decode(html.match(/Expira\s*<\/[^>]+>\s*<[^>]+>([\s\S]*?)<\//i)?.[1] || '') || null
+  const description = decode(
+    html.match(/(?:Descripci[oó]n|Detalle(?:s)? del (?:cargo|trabajo)|Oferta)[\s\S]{0,500}?<div[^>]*>([\s\S]*?)<\/div>/i)?.[1] ||
+    html.match(/<meta[^>]+name=["']description["'][^>]+content=["']([^"']+)["']/i)?.[1] ||
+    ''
+  )
   const expired = /ha expirado|ha sido desactivado/i.test(html)
   if (!title) throw new Error('Chiletrabajos payload shape not recognized')
   return {
@@ -46,6 +52,7 @@ export async function probeChileTrabajosJob(id: string): Promise<ChileTrabajosPu
     publishedAt: date,
     expiresAt: expires,
     originalUrl: response.url || originalUrl,
+    description: description || undefined,
     verificationStatus: expired ? 'stale' : 'verified_active',
   }
 }
