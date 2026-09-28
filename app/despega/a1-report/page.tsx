@@ -11,7 +11,7 @@ import { EnhancedInsightsGrid } from '@/components/a1-enhanced-insights-grid'
 import { A1WowReport } from '@/components/a1-wow-report'
 import { ASection, ASectionPart } from '@/components/a-section-layout'
 import { DESPEGA_PROFILES } from '@/lib/despega-profiles'
-import { StepHeader } from '@/components/step-header'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 
 interface CerebroProfile {
   D: number
@@ -197,9 +197,9 @@ export default function A1ReportPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-background">
+      <PageContainer className="flex min-h-[50vh] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-purple" />
-      </div>
+      </PageContainer>
     )
   }
 
@@ -267,8 +267,13 @@ export default function A1ReportPage() {
   const secondaryLabel = discToDespega[profile.secondary as keyof typeof discToDespega]
 
   return (
-    <ASection title="Tu Perfil Cerebral" subtitle="Descubre Tu Tipo de Personalidad" icon="" colorClass="from-purple/50">
-      <ASectionPart title="Tu Perfil Cerebral Completo" icon={<Target />}>
+    <PageContainer>
+      <PageStack>
+        <PageHeader
+          title="Tu Perfil Cerebral"
+          description="Revisa tus dimensiones, fortalezas y evidencia antes de continuar al siguiente paso de tu recorrido."
+        />
+        <ASectionPart title="Tu Perfil Cerebral Completo" icon={<Target />}>
         <div className="space-y-8">
           {/* Primary and Secondary Profile Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -412,6 +417,7 @@ export default function A1ReportPage() {
           </Button>
         </div>
       </ASectionPart>
-    </ASection>
+      </PageStack>
+    </PageContainer>
   )
 }
