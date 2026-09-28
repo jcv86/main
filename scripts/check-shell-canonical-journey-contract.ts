@@ -29,6 +29,27 @@ function flow(overrides: Partial<FlowInput>) {
   })
 }
 
+const baselinePending = flow({
+  profile: {
+    ...profile,
+    a1_cerebral_completed: false,
+    a1_report_seen: false,
+    conozcamonos_2_completed: false,
+    a2_intro_seen: false,
+  },
+  access: { a1: true, a2: false, a3: false, a4: false },
+  currentModule: 'A1',
+  outcomes: { a1BaselineCompleted: false, a1FollowUpCompleted: false },
+})
+assert.equal(baselinePending.next.href, '/despega/a1-outcome-baseline')
+
+const followUpPending = flow({
+  access: { a1: true, a2: true, a3: false, a4: false },
+  currentModule: 'A1',
+  outcomes: { a1BaselineCompleted: true, a1FollowUpCompleted: false },
+})
+assert.equal(followUpPending.next.href, '/despega/a1-outcome-follow-up')
+
 const day7 = flow({
   access: { a1: true, a2: true, a3: true, a4: false },
   highestA2DayUnlocked: 7,
@@ -88,7 +109,7 @@ assert.ok(gamificationSummary.includes('xpProgressPercent'))
 
 console.log(JSON.stringify({
   evidenceLevel: 'runtime_and_source_contract',
-  scenarios: ['day_7_checkpoint', 'day_30', 'a3_closed'],
+  scenarios: ['a1_baseline_pending', 'a1_follow_up_pending', 'day_7_checkpoint', 'day_30', 'a3_closed'],
   navigationStates: ['completed', 'active', 'available', 'locked'],
   lockedNavigation: false,
   duplicateJourneyReadWithinRequest: false,
