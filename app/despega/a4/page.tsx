@@ -24,6 +24,7 @@ import { getJourneyForCurrentUser } from '@/lib/journey/service'
 import { createAdminClient } from '@/lib/supabase/server'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
 import { getLiveUserProfile } from '@/lib/a4/profile-snapshot'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 
 function numberValue(value: unknown): number | null {
   const numeric = Number(value)
@@ -119,8 +120,8 @@ export default async function RadarEstrategicoPage() {
 
   if (loadFailures.length > 0) {
     return (
-      <main className="min-h-screen bg-slate-950 px-4 py-10 text-white">
-        <div className="mx-auto flex min-h-[70vh] max-w-2xl items-center">
+      <PageContainer className="py-8">
+        <div className="mx-auto flex min-h-[60vh] max-w-2xl items-center">
           <Card
             role="alert"
             aria-live="assertive"
@@ -170,7 +171,7 @@ export default async function RadarEstrategicoPage() {
             </CardContent>
           </Card>
         </div>
-      </main>
+      </PageContainer>
     )
   }
 
@@ -197,8 +198,19 @@ export default async function RadarEstrategicoPage() {
   )
 
   return (
-    <main className="min-h-screen bg-slate-950 px-4 py-10 text-white">
-      <div className="mx-auto max-w-7xl space-y-8">
+    <PageContainer>
+      <PageStack>
+        <PageHeader
+          eyebrow="A4 · Radar Estratégico"
+          title="Bitácora de Señales y Decisiones"
+          description="Conecta señales externas con tu evidencia profesional, distingue hechos de hipótesis y convierte el contexto del mercado en decisiones revisables."
+          actions={
+            <Badge className="border-rose-400/30 bg-rose-400/10 text-rose-700 dark:text-rose-200">
+              Evidencia antes que opinión
+            </Badge>
+          }
+        />
+        <div className="space-y-8">
         <header className="space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Button asChild variant="ghost" className="text-slate-300">
@@ -212,18 +224,8 @@ export default async function RadarEstrategicoPage() {
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">
-            <div>
-              <p className="text-sm font-semibold uppercase tracking-[0.2em] text-rose-300">
-                Evidencia antes que opinión
-              </p>
-              <h1 className="mt-3 text-4xl font-bold md:text-6xl">
-                Bitácora de Señales y Decisiones
-              </h1>
-              <p className="mt-4 max-w-3xl text-lg leading-relaxed text-slate-300">
-                Registra cambios relevantes, conserva su fuente y fecha, distingue hechos
-                de hipótesis y deja cada decisión vinculada a una revisión futura. El Radar
-                no inventa noticias, puntajes ni conclusiones para completar espacios vacíos.
-              </p>
+            <div className="rounded-2xl border border-border bg-card p-5 text-sm text-muted-foreground">
+              El Radar conserva fuente, fecha y clasificación de cada señal. No inventa noticias, puntajes ni conclusiones para completar espacios vacíos.
             </div>
             <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 lg:min-w-72">
               <p className="flex items-center gap-2 font-semibold text-emerald-200">
@@ -401,7 +403,8 @@ export default async function RadarEstrategicoPage() {
             </div>
           </CardContent>
         </Card>
-      </div>
-    </main>
+        </div>
+      </PageStack>
+    </PageContainer>
   )
 }
