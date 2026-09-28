@@ -387,7 +387,7 @@ export default function A2DashboardPage() {
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tu misión de hoy</p>
               <p className="mt-2 text-xl font-semibold text-foreground">Día {progress.current_day}{currentMission ? ` · ${currentMission.title}` : ''}</p>
               <p className="mt-1 text-sm text-muted-foreground">Disponible hasta el Día {progress.highest_unlocked_day}. Tu avance y evidencia permanecen guardados.</p>
-              {progress.route ? <p className="mt-2 text-xs text-muted-foreground">Ruta: {progress.route.name} · seleccionada desde tu diagnóstico de Despega Cerebral.</p> : null}
+              {progress.route ? <p className="mt-2 text-xs text-muted-foreground">Ruta: {progress.route.name} · Seleccionada desde tu diagnóstico de Despega Cerebral.</p> : null}
             </div>
             {currentMission && progress.current_day <= progress.highest_unlocked_day ? (
               <Button onClick={() => router.push(`/despega/a2/dia-${progress.current_day}`)} className="shrink-0">
