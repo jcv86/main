@@ -209,14 +209,14 @@ export default function A1ReportPage() {
         <ASectionPart title="Completar Evaluación" icon={<Zap />}>
           <div className="space-y-4">
             <div className="p-6 rounded-lg" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-              <p className="text-white font-semibold text-lg">{error}</p>
-              <p className="text-white/85 text-base mt-3 leading-relaxed">
+              <p className="text-foreground font-semibold text-lg">{error}</p>
+              <p className="text-foreground text-base mt-3 leading-relaxed">
                 Por favor completa la evaluación de Perfil Cerebral para ver tus resultados. El proceso toma aproximadamente 10-15 minutos.
               </p>
             </div>
             <Button 
               onClick={() => router.push('/despega/a1-cerebral')} 
-              className="w-full text-white font-semibold py-6 text-lg"
+              className="w-full text-foreground font-semibold py-6 text-lg"
               style={{ backgroundColor: 'rgba(80, 160, 170, 0.6)', borderRadius: '20px' }}
             >
               <Target className="w-5 h-5 mr-2" />
@@ -239,20 +239,20 @@ export default function A1ReportPage() {
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-16">
             <Loader2 className="h-8 w-8 animate-spin text-purple mb-4" />
-            <p className="text-white text-lg font-semibold">Analizando tu perfil con IA...</p>
-            <p className="text-white/75 text-sm mt-2">Esto toma unos segundos</p>
+            <p className="text-foreground text-lg font-semibold">Analizando tu perfil con IA...</p>
+            <p className="text-muted-foreground text-sm mt-2">Esto toma unos segundos</p>
           </div>
         ) : insights ? (
           <div className="space-y-6">
             <div className="bg-background">
-              <p className="text-white/85 text-center text-lg">
+              <p className="text-foreground text-center text-lg">
                 Basado en tu perfil y contexto personal, aquí está tu análisis completo:
               </p>
             </div>
             <EnhancedInsightsGrid insights={insights} />
           </div>
         ) : (
-          <p className="text-white/75 text-center py-8">Los insights no pudieron ser generados en este momento. Intenta de nuevo más tarde.</p>
+          <p className="text-muted-foreground text-center py-8">Los insights no pudieron ser generados en este momento. Intenta de nuevo más tarde.</p>
         )}
       </ASectionPart>
       </ASection>
@@ -278,35 +278,35 @@ export default function A1ReportPage() {
           {/* Primary and Secondary Profile Cards */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             {/* Primary Profile Card */}
-            <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-              <p className="font-bold text-sm uppercase tracking-wide mb-3" style={{ color: 'rgb(80, 160, 170)' }}>Tu Tipo Principal</p>
-              <h2 className="text-5xl font-black text-white mb-2">{primaryLabel.split(' - ')[0]}</h2>
-              <p className="text-white/75 text-base mb-6 leading-relaxed">{primaryLabel.split(' - ')[1]}</p>
+            <div className="rounded-2xl border border-border bg-card p-5 sm:p-8">
+              <p className="mb-3 text-sm font-bold uppercase tracking-wide text-[hsl(var(--dtc-indigo-300))]">Tu Tipo Principal</p>
+              <h2 className="text-3xl font-black sm:text-5xl text-foreground mb-2">{primaryLabel.split(' - ')[0]}</h2>
+              <p className="text-muted-foreground text-base mb-6 leading-relaxed">{primaryLabel.split(' - ')[1]}</p>
               <div className="flex items-center gap-4">
-                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                   <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${Math.max(0, profile.primaryScore)}%` }} />
                 </div>
-                <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.primaryScore))}%</p>
+                <p className="text-2xl font-bold text-foreground w-16 text-right">{Math.max(0, Math.round(profile.primaryScore))}%</p>
               </div>
             </div>
 
             {/* Secondary Profile Card */}
-            <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-              <p className="font-bold text-sm uppercase tracking-wide mb-3" style={{ color: 'rgb(80, 160, 170)' }}>Tu Tipo Secundario</p>
-              <h2 className="text-5xl font-black text-white mb-2">{secondaryLabel.split(' - ')[0]}</h2>
-              <p className="text-white/75 text-base mb-6 leading-relaxed">{secondaryLabel.split(' - ')[1]}</p>
+            <div className="rounded-2xl border border-border bg-card p-5 sm:p-8">
+              <p className="mb-3 text-sm font-bold uppercase tracking-wide text-[hsl(var(--dtc-indigo-300))]">Tu Tipo Secundario</p>
+              <h2 className="text-3xl font-black sm:text-5xl text-foreground mb-2">{secondaryLabel.split(' - ')[0]}</h2>
+              <p className="text-muted-foreground text-base mb-6 leading-relaxed">{secondaryLabel.split(' - ')[1]}</p>
               <div className="flex items-center gap-4">
-                <div className="flex-1 h-3 bg-white/20 rounded-full overflow-hidden">
+                <div className="flex-1 h-3 bg-muted rounded-full overflow-hidden">
                   <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${Math.max(0, profile.secondaryScore)}%` }} />
                 </div>
-                <p className="text-2xl font-bold text-white w-16 text-right">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
+                <p className="text-2xl font-bold text-foreground w-16 text-right">{Math.max(0, Math.round(profile.secondaryScore))}%</p>
               </div>
             </div>
           </div>
 
           {/* All 4 Profiles Breakdown */}
-          <div className="rounded-2xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-            <h3 className="font-bold text-2xl text-white mb-8">Desglose Completo de Dimensiones</h3>
+          <div className="rounded-2xl border border-border bg-card p-5 sm:p-8">
+            <h3 className="font-bold text-2xl text-foreground mb-8">Desglose Completo de Dimensiones</h3>
             <div className="space-y-5">
               {[
                 { label: 'Impulsor', score: profile.D, color: 'from-red-500', icon: '', description: 'Orientado a resultados' },
@@ -314,19 +314,19 @@ export default function A1ReportPage() {
                 { label: 'Estabilizador', score: profile.S, color: 'from-green', icon: '🛡️', description: 'Constante y confiable' },
                 { label: 'Arquitecto', score: profile.C, color: 'from-blue', icon: '🏗️', description: 'Analítico y preciso' }
               ].map((dim, idx) => (
-                <div key={idx} className="flex items-center gap-4 p-4 hover:bg-background transition-all rounded-xl" style={{ backgroundColor: 'rgba(0, 0, 0, 0.3)' }}>
+                <div key={idx} className="flex flex-col gap-3 rounded-xl border border-border bg-muted/30 p-4 transition hover:bg-muted/50 sm:flex-row sm:items-center sm:gap-4">
                   <span className="text-3xl">{dim.icon}</span>
                   <div className="flex-1">
                     <div className="flex items-baseline gap-2">
-                      <p className="font-bold text-white text-lg">{dim.label}</p>
-                      <p className="text-white/60 text-sm">{dim.description}</p>
+                      <p className="font-bold text-foreground text-lg">{dim.label}</p>
+                      <p className="text-muted-foreground text-sm">{dim.description}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 w-40">
-                    <div className="flex-1 h-2 bg-white/20 rounded-full overflow-hidden">
+                    <div className="flex-1 h-2 bg-muted rounded-full overflow-hidden">
                       <div className="h-full" style={{ backgroundColor: 'rgb(80, 160, 170)', width: `${(dim.score / 10) * 100}%` }} />
                     </div>
-                    <p className="text-lg font-bold text-white w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
+                    <p className="text-lg font-bold text-foreground w-10 text-right">{Math.max(0, Math.round(dim.score))}%</p>
                   </div>
                 </div>
               ))}
@@ -340,17 +340,17 @@ export default function A1ReportPage() {
         {insightsLoading ? (
           <div className="flex flex-col items-center justify-center py-20">
             <Loader2 className="h-10 w-10 animate-spin text-purple mb-4" />
-            <p className="text-white text-lg font-semibold">Generando tu análisis con IA...</p>
-            <p className="text-white/75 text-sm mt-2">Analizando tu perfil personalizado</p>
+            <p className="text-foreground text-lg font-semibold">Generando tu análisis con IA...</p>
+            <p className="text-muted-foreground text-sm mt-2">Analizando tu perfil personalizado</p>
           </div>
         ) : insights ? (
           <div className="space-y-8">
             {/* Executive Summary */}
-            <div className="rounded-xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-              <h3 className="text-3xl font-bold text-white mb-4">
+            <div className="rounded-xl border border-border bg-card p-5 sm:p-8">
+              <h3 className="text-3xl font-bold text-foreground mb-4">
                 Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
               </h3>
-              <p className="text-white/85 text-lg leading-relaxed">
+              <p className="text-foreground text-lg leading-relaxed">
                 Eres una persona con características únicas. Tu combinación te hace especial en cómo tomas decisiones, te relacionas con otros, y enfrentas desafíos. 
                 Los siguientes insights te mostrarán exactamente qué te hace diferente y cómo aprovecharlo en tu carrera.
               </p>
@@ -368,11 +368,11 @@ export default function A1ReportPage() {
             />
           </div>
         ) : (
-          <div className="rounded-xl p-8" style={{ backgroundColor: 'rgba(80, 160, 170, 0.2)' }}>
-            <h3 className="text-3xl font-bold text-white mb-4">
+          <div className="rounded-xl border border-border bg-card p-5 sm:p-8">
+            <h3 className="text-3xl font-bold text-foreground mb-4">
               Tu Perfil: {primaryLabel.split(' - ')[0]} + {secondaryLabel.split(' - ')[0]}
             </h3>
-            <p className="text-white/85 text-lg leading-relaxed">
+            <p className="text-foreground text-lg leading-relaxed">
               Combinas la fortaleza de ser <strong>{primaryLabel.split(' - ')[0]}</strong> con características de <strong>{secondaryLabel.split(' - ')[0]}</strong>. 
               Esta combinación única te permite destacar tanto en análisis como en ejecución. 
               Continúa al siguiente paso para descubrir cómo aprovechar tu perfil al máximo.
@@ -384,7 +384,7 @@ export default function A1ReportPage() {
       {/* Wow Report - Action Map */}
       <ASectionPart title=" Tu Mapa de Acción" icon={<Sparkles />}>
         <div className="mb-8">
-          <p className="text-white/85 text-center text-lg leading-relaxed">
+          <p className="text-foreground text-center text-lg leading-relaxed">
             Ahora que entiendes tu perfil cerebral, aquí está tu mapa de acción personalizado. Estas son las 5 herramientas clave que te hacen imprescindible.
           </p>
         </div>
@@ -401,14 +401,14 @@ export default function A1ReportPage() {
       <ASectionPart title="Siguiente Paso" icon={<CheckCircle2 />}>
         <div className="flex flex-col items-center text-center space-y-6 py-8">
           <div className="max-w-2xl">
-            <h3 className="text-2xl font-bold text-white mb-4">Ahora que conoces tu perfil, es hora de profundizar</h3>
-            <p className="text-lg text-white/85 leading-relaxed">
+            <h3 className="text-2xl font-bold text-foreground mb-4">Ahora que conoces tu perfil, es hora de profundizar</h3>
+            <p className="text-lg text-foreground leading-relaxed">
               En el siguiente paso, exploraremos tus metas, desafíos y cómo tu perfil cerebral puede ayudarte a alcanzar tus objetivos profesionales.
             </p>
           </div>
           <Button 
             onClick={() => router.push('/despega/a1-outcome-follow-up')} 
-            className="text-white font-bold text-lg px-12 py-6 rounded-xl hover:opacity-90 transition-opacity"
+            className="text-foreground font-bold text-lg px-12 py-6 rounded-xl hover:opacity-90 transition-opacity"
             size="lg"
             style={{ backgroundColor: 'rgb(80, 160, 170)' }}
           >
