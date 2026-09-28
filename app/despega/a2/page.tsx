@@ -16,6 +16,9 @@ import {
   Unlock,
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent } from '@/components/ui/card'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 import {
   A2CycleReviewCard,
   type A2CycleReviewView,
@@ -368,34 +371,31 @@ export default function A2DashboardPage() {
     }
   }
 
+  const currentMission = A2_DAILY_MISSIONS[progress.current_day]
+
   return (
-    <div className="min-h-screen bg-slate-950 p-6 text-white">
-      <div className="mx-auto max-w-7xl">
-        <header className="mb-8 space-y-2">
-          <p className="text-sm font-medium uppercase tracking-[0.2em] text-cyan-400">
-            Tu Ruta
-          </p>
-          <h1 className="text-4xl font-bold">Tu ciclo de avance</h1>
-          <p className="max-w-3xl text-slate-400">
-            {progress.route?.description ||
-              'Comienza con un ciclo de 30 días y extiéndelo a 60 o 90 según tu contexto y resultados.'}
-          </p>
-          <div className="flex flex-wrap items-center gap-2 pt-2">
-            {progress.route && (
-              <Badge className="border-cyan-500/30 bg-cyan-500/10 text-cyan-300">
-                {progress.route.name}
-              </Badge>
-            )}
-            <Badge className="border-purple-500/30 bg-purple-500/10 text-purple-300">
-              Horizonte activo · {progress.active_horizon} días
-            </Badge>
-            {progress.route && (
-              <span className="text-xs text-slate-500">
-                Seleccionada desde tu diagnóstico de Despega Cerebral
-              </span>
-            )}
-          </div>
-        </header>
+    <PageContainer>
+      <PageStack>
+        <PageHeader
+          title="Tu ciclo de avance"
+          description={progress.route?.description || 'Comienza con un ciclo de 30 días y extiéndelo a 60 o 90 según tu contexto y resultados.'}
+          actions={<Badge className="border-purple-500/30 bg-purple-500/10 text-purple-700 dark:text-purple-300">Horizonte activo · {progress.active_horizon} días</Badge>}
+        />
+        <Card className="border-cyan-500/25 bg-cyan-500/5">
+          <CardContent className="flex flex-col gap-4 p-5 sm:p-6 lg:flex-row lg:items-center lg:justify-between">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tu misión de hoy</p>
+              <p className="mt-2 text-xl font-semibold text-foreground">Día {progress.current_day}{currentMission ? ` · ${currentMission.title}` : ''}</p>
+              <p className="mt-1 text-sm text-muted-foreground">Disponible hasta el Día {progress.highest_unlocked_day}. Tu avance y evidencia permanecen guardados.</p>
+              {progress.route ? <p className="mt-2 text-xs text-muted-foreground">Ruta: {progress.route.name} · Seleccionada desde tu diagnóstico de Despega Cerebral.</p> : null}
+            </div>
+            {currentMission && progress.current_day <= progress.highest_unlocked_day ? (
+              <Button onClick={() => router.push(`/despega/a2/dia-${progress.current_day}`)} className="shrink-0">
+                Continuar Día {progress.current_day}<ArrowRight className="ml-2 h-4 w-4" />
+              </Button>
+            ) : null}
+          </CardContent>
+        </Card>
 
         {progress.extension_available && progress.next_horizon && (
           <section className="mb-8 space-y-5 rounded-2xl border border-emerald-500/35 bg-gradient-to-br from-emerald-500/15 to-cyan-500/5 p-6">
@@ -404,7 +404,7 @@ export default function A2DashboardPage() {
                 <p className="text-xs font-semibold uppercase tracking-[0.18em] text-emerald-300">
                   Ciclo de {progress.active_horizon} días completado
                 </p>
-                <h2 className="mt-2 text-2xl font-bold text-white">
+                <h2 className="mt-2 text-2xl font-bold text-foreground">
                   Tú decides si Tu Ruta continúa
                 </h2>
                 <p className="mt-2 max-w-3xl text-sm leading-relaxed text-emerald-50/75">
@@ -444,7 +444,7 @@ export default function A2DashboardPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.18em] text-purple-300">
                 Integración completada
               </p>
-              <h2 className="mt-2 text-2xl font-bold text-white">
+              <h2 className="mt-2 text-2xl font-bold text-foreground">
                 Cerraste los 90 días de Tu Ruta
               </h2>
               <p className="mt-2 text-sm text-purple-100/70">
@@ -458,7 +458,7 @@ export default function A2DashboardPage() {
           </section>
         )}
 
-        <div className="mb-6 flex flex-wrap gap-2">
+        <div className="-mx-1 mb-6 flex gap-2 overflow-x-auto px-1 pb-2">
           {HORIZONS.map((option) => {
             const isPreview = option.value > progress.active_horizon
             return (
@@ -469,7 +469,7 @@ export default function A2DashboardPage() {
                 className={`rounded-full border px-4 py-2 text-sm font-medium transition ${
                   horizon === option.value
                     ? 'border-cyan-400 bg-cyan-500/15 text-cyan-200'
-                    : 'border-slate-700 text-slate-400 hover:border-slate-500 hover:text-white'
+                    : 'border-border text-muted-foreground hover:border-border hover:text-foreground'
                 }`}
               >
                 {option.label}
@@ -489,7 +489,7 @@ export default function A2DashboardPage() {
 
         <section className="mb-8 rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-6">
           <p className="text-sm font-semibold text-emerald-200">Tu capacidad de ejecución</p>
-          <p className="mt-1 max-w-3xl text-sm text-slate-400">
+          <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
             Se mide aparte del progreso diario. Completar más misiones no se presenta como mejora de capacidad.
           </p>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
@@ -497,33 +497,33 @@ export default function A2DashboardPage() {
               Hacer baseline comparable
             </button>
             {progress.completed_days.includes(30) ? (
-              <button type="button" onClick={() => router.push('/despega/a2-outcome-follow-up')} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-white hover:bg-emerald-500">
+              <button type="button" onClick={() => router.push('/despega/a2-outcome-follow-up')} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-foreground hover:bg-emerald-500">
                 Medir mi cambio en el hito de 30 días
               </button>
             ) : (
-              <span className="self-center text-xs text-slate-500">El follow-up se habilita al completar el hito verificable del Día 30.</span>
+              <span className="self-center text-xs text-muted-foreground">El follow-up se habilita al completar el hito verificable del Día 30.</span>
             )}
           </div>
         </section>
 
-        <section className="mb-6 rounded-xl border border-[rgb(80,160,170)] bg-slate-950 p-6">
+        <section className="mb-6 rounded-xl border border-[rgb(80,160,170)] bg-card p-6">
           <div className="mb-4 flex items-center justify-between gap-4">
             <div>
               <h2 className="text-xl font-bold">Tu progreso verificable</h2>
-              <p className="text-sm text-slate-400">
+              <p className="text-sm text-muted-foreground">
                 Día actual {progress.current_day} · Disponible hasta el Día{' '}
                 {progress.highest_unlocked_day}
               </p>
             </div>
             <p className="text-3xl font-bold text-cyan-400">{progressPercent}%</p>
           </div>
-          <div className="h-3 w-full rounded-full bg-slate-900">
+          <div className="h-3 w-full rounded-full bg-muted">
             <div
               className="h-3 rounded-full bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 transition-all duration-300"
               style={{ width: `${progressPercent}%` }}
             />
           </div>
-          {loading && <p className="mt-3 text-xs text-slate-500">Cargando avance…</p>}
+          {loading && <p className="mt-3 text-xs text-muted-foreground">Cargando avance…</p>}
           {error && <p className="mt-3 text-sm text-amber-300">{error}</p>}
         </section>
 
@@ -531,42 +531,42 @@ export default function A2DashboardPage() {
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="rounded-xl border border-slate-800 bg-slate-900/40 p-4"
+              className="rounded-xl border border-border bg-muted/30 p-4"
             >
               <div className="mb-3 flex items-center justify-between">
-                <p className="text-xs font-semibold uppercase tracking-wider text-slate-500">
+                <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
                   {stat.label}
                 </p>
                 {stat.icon}
               </div>
-              <p className="text-2xl font-bold text-white">{stat.value}</p>
-              <p className="mt-1 text-xs text-slate-500">{stat.description}</p>
+              <p className="text-2xl font-bold text-foreground">{stat.value}</p>
+              <p className="mt-1 text-xs text-muted-foreground">{stat.description}</p>
             </div>
           ))}
         </section>
 
         <div className="mb-6 grid gap-4 lg:grid-cols-[1fr_auto]">
           <div className="relative">
-            <Search className="absolute left-3 top-3 h-5 w-5 text-slate-500" />
+            <Search className="absolute left-3 top-3 h-5 w-5 text-muted-foreground" />
             <input
               type="search"
               placeholder="Buscar por misión, objetivo o entregable…"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              className="w-full rounded-lg border border-[rgb(80,160,170)] bg-slate-950 px-4 py-2 pl-10 text-white placeholder-slate-500 focus:border-cyan-500 focus:outline-none"
+              className="w-full rounded-lg border border-[rgb(80,160,170)] bg-card px-4 py-2 pl-10 text-foreground placeholder:text-muted-foreground focus:border-cyan-500 focus:outline-none"
             />
           </div>
 
-          <div className="flex gap-2 overflow-x-auto">
+          <div className="flex gap-2 overflow-x-auto pb-1">
             {(Object.keys(GROUP_LABEL) as MissionGroup[]).map((option) => (
               <button
                 key={option}
                 type="button"
                 onClick={() => setGroup(option)}
-                className={`whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
+                className={`min-h-11 whitespace-nowrap rounded-lg px-3 py-2 text-sm font-medium transition-colors ${
                   group === option
-                    ? 'bg-cyan-600 text-white'
-                    : 'bg-slate-900 text-slate-300 hover:bg-slate-800'
+                    ? 'bg-cyan-600 text-foreground'
+                    : 'bg-muted text-foreground hover:bg-slate-800'
                 }`}
               >
                 {GROUP_LABEL[option]}
@@ -599,7 +599,7 @@ export default function A2DashboardPage() {
                 }`}
               >
                 <div
-                  className={`h-full rounded-xl border bg-slate-950 p-4 ${
+                  className={`h-full rounded-xl border bg-card p-4 ${
                     isCurrent
                       ? 'border-cyan-400 ring-1 ring-cyan-400/30'
                       : isCompleted
@@ -616,7 +616,7 @@ export default function A2DashboardPage() {
                         <CheckCircle2 className="h-5 w-5 text-emerald-400" />
                       )}
                     </div>
-                    {!isUnlocked && <Lock className="h-4 w-4 text-slate-600" />}
+                    {!isUnlocked && <Lock className="h-4 w-4 text-muted-foreground" />}
                   </div>
 
                   <div className="mb-3 flex flex-wrap items-center gap-2">
@@ -632,10 +632,10 @@ export default function A2DashboardPage() {
                     )}
                   </div>
 
-                  <h3 className="mb-1 line-clamp-2 font-bold text-white">
+                  <h3 className="mb-1 line-clamp-2 font-bold text-foreground">
                     {mission.title}
                   </h3>
-                  <p className="mb-3 line-clamp-2 text-sm text-slate-400">
+                  <p className="mb-3 line-clamp-2 text-sm text-muted-foreground">
                     {mission.subtitle}
                   </p>
 
@@ -643,7 +643,7 @@ export default function A2DashboardPage() {
                     <div
                       className={`mb-3 rounded-lg border px-3 py-2 ${
                         record?.validation_status === 'legacy'
-                          ? 'border-slate-700 bg-slate-900/60 text-slate-400'
+                          ? 'border-border bg-muted/40 text-muted-foreground'
                           : 'border-emerald-500/30 bg-emerald-500/10 text-emerald-300'
                       }`}
                     >
@@ -667,16 +667,16 @@ export default function A2DashboardPage() {
                     </div>
                   )}
 
-                  <p className="mb-3 line-clamp-2 text-xs text-slate-500">
+                  <p className="mb-3 line-clamp-2 text-xs text-muted-foreground">
                     Entregable: {mission.deliverable}
                   </p>
 
                   <div className="flex items-end justify-between gap-3">
-                    <span className="flex items-center gap-1 text-xs text-slate-400">
+                    <span className="flex items-center gap-1 text-xs text-muted-foreground">
                       <Calendar className="h-3 w-3" />
                       {mission.estimatedMinutes.min}-{mission.estimatedMinutes.max} min
                     </span>
-                    <span className="line-clamp-1 text-right text-xs text-slate-600">
+                    <span className="line-clamp-1 text-right text-xs text-muted-foreground">
                       {PHASE_LABEL[mission.phaseLabel]}
                     </span>
                     {isUnlocked && (
@@ -690,11 +690,11 @@ export default function A2DashboardPage() {
         </section>
 
         {missions.length === 0 && (
-          <p className="rounded-xl border border-slate-800 bg-slate-900/30 p-8 text-center text-slate-400">
+          <p className="rounded-xl border border-border bg-muted/30 p-8 text-center text-muted-foreground">
             No encontramos misiones con esos filtros.
           </p>
         )}
-      </div>
-    </div>
+      </PageStack>
+    </PageContainer>
   )
 }
