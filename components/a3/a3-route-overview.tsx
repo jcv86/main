@@ -20,6 +20,7 @@ import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
+import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 import {
   A3_MODULES,
   A3_TOTAL_XP,
@@ -181,18 +182,18 @@ export function A3RouteOverview() {
 
   if (loading) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background">
+      <PageContainer className="flex min-h-[50vh] items-center justify-center">
         <div className="flex flex-col items-center gap-3 text-muted-foreground">
           <Loader2 className="h-8 w-8 animate-spin" />
           <p>Cargando tu ruta de Entrenamiento…</p>
         </div>
-      </main>
+      </PageContainer>
     )
   }
 
   if (loadError || !progress) {
     return (
-      <main className="flex min-h-screen items-center justify-center bg-background px-4 py-8">
+      <PageContainer className="flex min-h-[50vh] items-center justify-center py-8">
         <Card
           role="alert"
           aria-live="assertive"
@@ -225,7 +226,7 @@ export function A3RouteOverview() {
             </div>
           </div>
         </Card>
-      </main>
+      </PageContainer>
     )
   }
 
@@ -239,15 +240,49 @@ export function A3RouteOverview() {
     : null
 
   return (
-    <main className="min-h-screen bg-background">
-      <div className="container mx-auto max-w-6xl space-y-8 px-4 py-8 sm:py-12">
-        <div>
-          <Link href="/despega">
-            <Button variant="ghost" size="sm">
-              <ArrowLeft className="mr-2 h-4 w-4" /> Volver a Despega
-            </Button>
-          </Link>
-        </div>
+    <PageContainer>
+      <PageStack>
+        <PageHeader
+          eyebrow="A3 · Entrenamiento"
+          title="Ruta básica de preparación para entrevistas"
+          description="Diez módulos conectados que transforman tu experiencia en evidencia, respuestas practicadas y una entrevista final verificable."
+          actions={
+            <Link href="/despega">
+              <Button variant="outline" size="sm">
+                <ArrowLeft className="mr-2 h-4 w-4" /> Volver a Despega
+              </Button>
+            </Link>
+          }
+        />
+
+        <Card className="border-fuchsia-500/25 bg-fuchsia-500/5 p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tu siguiente paso</p>
+              {routeCompleted ? (
+                <>
+                  <p className="mt-2 text-xl font-semibold text-foreground">Ruta básica completada</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Tu cierre quedó registrado. El journey central confirmará cuándo corresponde habilitar el Radar Estratégico.</p>
+                </>
+              ) : nextModule ? (
+                <>
+                  <p className="mt-2 text-xl font-semibold text-foreground">{nextModule.number}. {nextModule.title}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Checkpoint Día {nextModule.checkpointDay} · {nextModule.xp} XP · disponible según tu progreso verificado.</p>
+                </>
+              ) : (
+                <>
+                  <p className="mt-2 text-xl font-semibold text-foreground">Continúa avanzando en Tu Ruta</p>
+                  <p className="mt-1 text-sm text-muted-foreground">No hay un módulo A3 disponible ahora. Revisa los checkpoints y prerrequisitos indicados más abajo.</p>
+                </>
+              )}
+            </div>
+            {nextModule && !routeCompleted ? (
+              <Link href={nextModule.route} className="shrink-0">
+                <Button className="w-full sm:w-auto"><Play className="mr-2 h-4 w-4" /> Continuar entrenamiento</Button>
+              </Link>
+            ) : null}
+          </div>
+        </Card>
 
         <section className="rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-5">
           <p className="text-sm font-semibold">Evidencia de capacidad de entrevista</p>
@@ -267,14 +302,7 @@ export function A3RouteOverview() {
         </section>
 
         <section className="space-y-4">
-          <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
-            <div className="max-w-3xl space-y-3">
-              <Badge variant="outline">A3 · Entrenamiento</Badge>
-              <h1 className="text-3xl font-bold sm:text-4xl">Ruta básica de preparación para entrevistas</h1>
-              <p className="text-base text-muted-foreground sm:text-lg">
-                Diez módulos conectados que transforman tu experiencia en evidencia, respuestas practicadas y una entrevista final verificable.
-              </p>
-            </div>
+          <div className="flex justify-end">
             <div className="rounded-xl border bg-card p-4 text-sm sm:min-w-52">
               <p className="text-muted-foreground">Estado observado</p>
               <p className="mt-1 text-lg font-semibold">
@@ -495,7 +523,7 @@ export function A3RouteOverview() {
             <p><strong className="text-foreground">3. Persistencia.</strong> Sesión, puntaje, progreso y XP se guardan juntos; repetir no duplica XP.</p>
           </div>
         </Card>
-      </div>
-    </main>
+      </PageStack>
+    </PageContainer>
   )
 }
