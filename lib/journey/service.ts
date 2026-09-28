@@ -1,11 +1,9 @@
 import 'server-only'
 
 import { cache } from 'react'
-import { cookies } from 'next/headers'
 import { redirect } from 'next/navigation'
 import { resolveA2DayAccess } from './a2-day-access'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
-import { DEMO_COOKIE_NAME, verifyDemoSessionToken } from '@/lib/auth/demo-user'
 import { canonicalOnboardingPath } from './flow'
 
 export type JourneyModule = 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
@@ -153,33 +151,13 @@ export function getModuleAccess(
   }
 }
 
-async function getVerifiedDemoUser() {
-  const cookieStore = await cookies()
-  const demoUser = await verifyDemoSessionToken(
-    cookieStore.get(DEMO_COOKIE_NAME)?.value,
-  )
-  if (!demoUser) return null
-
-  return {
-    id: demoUser.id,
-    email: demoUser.email,
-    user_metadata: {
-      full_name: demoUser.name,
-      name: demoUser.name,
-    },
-  }
-}
-
 async function getCurrentIdentity() {
   const supabase = await createClient()
   const {
     data: { user },
   } = await supabase.auth.getUser()
 
-  if (user) return { user, isDemo: false as const }
-
-  const demoUser = await getVerifiedDemoUser()
-  return demoUser ? { user: demoUser, isDemo: true as const } : null
+  return user ? { user, isDemo: false as const } : null
 }
 
 async function loadJourneyEvidence(
