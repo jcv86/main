@@ -245,11 +245,12 @@ export default function A1CerebralIntroPage() {
           <div className="flex gap-4 justify-center mt-12">
             <Button
               onClick={() => router.push(baselineCompleted ? '/despega/a1-cerebral' : '/despega/a1-outcome-baseline')}
+              disabled={!outcomeStatusReady}
               size="lg"
               className="px-8 text-lg text-foreground"
               style={{ backgroundColor: 'rgb(80, 160, 170)',  }}
             >
-              Comenzar Análisis Cerebral
+              {!outcomeStatusReady ? 'Verificando…' : baselineCompleted ? 'Comenzar Análisis Cerebral' : 'Hacer medición inicial'}
             </Button>
             <Button
               onClick={() => router.push('/despega')}
