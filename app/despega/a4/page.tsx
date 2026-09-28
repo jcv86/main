@@ -164,7 +164,7 @@ export default async function RadarEstrategicoPage() {
                   </Button>
                 </form>
                 <Button asChild variant="outline" className="border-white/20">
-                  <Link href="/despega/dashboard">Volver al panel</Link>
+                  <Link href="/despega">Volver al panel</Link>
                 </Button>
               </div>
             </CardContent>
@@ -202,7 +202,7 @@ export default async function RadarEstrategicoPage() {
         <header className="space-y-6">
           <div className="flex flex-wrap items-center justify-between gap-3">
             <Button asChild variant="ghost" className="text-slate-300">
-              <Link href="/despega/dashboard">
+              <Link href="/despega">
                 <ArrowLeft className="mr-2 h-4 w-4" /> Volver al panel
               </Link>
             </Button>
