@@ -255,6 +255,35 @@ export function A3RouteOverview() {
           }
         />
 
+        <Card className="border-fuchsia-500/25 bg-fuchsia-500/5 p-5 sm:p-6">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div className="min-w-0">
+              <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tu siguiente paso</p>
+              {routeCompleted ? (
+                <>
+                  <p className="mt-2 text-xl font-semibold text-foreground">Ruta básica completada</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Tu cierre quedó registrado. El journey central confirmará cuándo corresponde habilitar el Radar Estratégico.</p>
+                </>
+              ) : nextModule ? (
+                <>
+                  <p className="mt-2 text-xl font-semibold text-foreground">{nextModule.number}. {nextModule.title}</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Checkpoint Día {nextModule.checkpointDay} · {nextModule.xp} XP · disponible según tu progreso verificado.</p>
+                </>
+              ) : (
+                <>
+                  <p className="mt-2 text-xl font-semibold text-foreground">Continúa avanzando en Tu Ruta</p>
+                  <p className="mt-1 text-sm text-muted-foreground">No hay un módulo A3 disponible ahora. Revisa los checkpoints y prerrequisitos indicados más abajo.</p>
+                </>
+              )}
+            </div>
+            {nextModule && !routeCompleted ? (
+              <Link href={nextModule.route} className="shrink-0">
+                <Button className="w-full sm:w-auto"><Play className="mr-2 h-4 w-4" /> Continuar entrenamiento</Button>
+              </Link>
+            ) : null}
+          </div>
+        </Card>
+
         <section className="rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-5">
           <p className="text-sm font-semibold">Evidencia de capacidad de entrevista</p>
           <p className="mt-1 text-sm text-muted-foreground">
