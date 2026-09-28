@@ -66,6 +66,8 @@ interface JourneyEvidence {
   a3CompletedModules: string[]
   a3UpdatedAt: string | null
   a3RouteCompletedAt: string | null
+  a1OutcomeBaseline: boolean
+  a1OutcomeFollowUp: boolean
 }
 
 const MODULE_ENTRY: Record<Exclude<JourneyModule, 'COMPLETED'>, string> = {
@@ -191,6 +193,7 @@ async function loadJourneyEvidence(
     a2RouteResult,
     a3Result,
     a3RouteResult,
+    a1OutcomeResult,
   ] = await Promise.all([
     supabase
       .from('a1_tests_results')
@@ -231,6 +234,12 @@ async function loadJourneyEvidence(
       .select('route_completed_at, updated_at')
       .eq('user_id', userId)
       .maybeSingle(),
+    supabase
+      .from('dtc_outcome_observations')
+      .select('measurement_role')
+      .eq('user_id', userId)
+      .eq('instrument_key', 'a1_professional_clarity')
+      .eq('instrument_version', '1'),
   ])
 
   const a1CompletedAt =
@@ -261,6 +270,8 @@ async function loadJourneyEvidence(
     a3UpdatedAt:
       a3Result.data?.updated_at || a3Result.data?.created_at || null,
     a3RouteCompletedAt: a3RouteResult.data?.route_completed_at || null,
+    a1OutcomeBaseline: (a1OutcomeResult.data ?? []).some((row) => row.measurement_role === 'baseline'),
+    a1OutcomeFollowUp: (a1OutcomeResult.data ?? []).some((row) => row.measurement_role === 'follow_up'),
   }
 }
 
