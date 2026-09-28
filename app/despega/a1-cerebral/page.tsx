@@ -81,7 +81,7 @@ export default function A1CerebralPage() {
 
   if (!authOk) {
     if (error) {
-      return <PageContainer ref={errorRef} role="alert" tabIndex={-1} className="flex min-h-[50vh] flex-col items-center justify-center gap-4 text-center outline-none"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></PageContainer>
+      return <PageContainer className="flex min-h-[50vh] items-center justify-center"><div ref={errorRef} role="alert" tabIndex={-1} className="flex flex-col items-center gap-4 text-center outline-none"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div></PageContainer>
     }
     return (
       <PageContainer className="flex min-h-[50vh] items-center justify-center">
