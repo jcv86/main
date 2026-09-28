@@ -87,14 +87,14 @@ const navigation: NavGroup[] = [
       },
       {
         label: 'A2 · Tu Ruta',
-        href: '/despega/conozcamonos-2',
+        href: '/despega/a2',
         icon: Compass,
         stageId: 'A2',
         match: (pathname) => pathname.includes('conozcamonos-2') || pathname.includes('/a2'),
       },
       {
         label: 'A3 · Entrenamiento',
-        href: '/despega/a3-intro',
+        href: '/despega/a3',
         icon: Target,
         stageId: 'A3',
         match: (pathname) => pathname.includes('/a3') || pathname.includes('interview'),
