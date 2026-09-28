@@ -399,6 +399,10 @@ export const getJourneyForCurrentUser = cache(async function getJourneyForCurren
     profile,
     access: getModuleAccess(state, profile),
     isDemo: identity.isDemo,
+    outcomes: {
+      a1BaselineCompleted: evidence.a1OutcomeBaseline,
+      a1FollowUpCompleted: evidence.a1OutcomeFollowUp,
+    },
   }
 })
 
