@@ -23,6 +23,7 @@ import {
 import { getJourneyForCurrentUser } from '@/lib/journey/service'
 import { createAdminClient } from '@/lib/supabase/server'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
+import { getLiveUserProfile } from '@/lib/a4/profile-snapshot'
 
 function numberValue(value: unknown): number | null {
   const numeric = Number(value)
@@ -56,6 +57,7 @@ export default async function RadarEstrategicoPage() {
     signalsResult,
     decisionsResult,
     snapshotsResult,
+    liveProfile,
   ] = await Promise.all([
     supabase
       .from('a3_session_attempts')
@@ -92,6 +94,7 @@ export default async function RadarEstrategicoPage() {
       .eq('user_id', userId)
       .order('snapshot_date', { ascending: false })
       .limit(31),
+    getLiveUserProfile(userId),
   ])
 
   if (a3Result.error) console.error('[v0] A4 A3 context error:', a3Result.error)
@@ -289,6 +292,80 @@ export default async function RadarEstrategicoPage() {
                 <p className="mt-2 text-sm leading-relaxed text-slate-400">{detail}</p>
               </div>
             ))}
+          </CardContent>
+        </Card>
+
+        <Card className="border-cyan-400/25 bg-gradient-to-br from-cyan-400/10 via-slate-900/70 to-emerald-400/5">
+          <CardContent className="space-y-6 p-6">
+            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
+              <div>
+                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">
+                  Tu preparación para actuar
+                </p>
+                <h2 className="mt-2 text-2xl font-bold text-white">
+                  Lo que A1, A2 y A3 ya saben de ti
+                </h2>
+                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-slate-300">
+                  El Radar usa tu evidencia persistida para convertir oportunidades en decisiones
+                  concretas. Estos indicadores no reemplazan una evaluación humana ni inventan
+                  información cuando todavía falta evidencia.
+                </p>
+              </div>
+              {liveProfile?.targetRole ? (
+                <Badge className="w-fit border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
+                  Objetivo: {liveProfile.targetRole}
+                </Badge>
+              ) : null}
+            </div>
+
+            {liveProfile ? (
+              <>
+                <div className="grid gap-4 sm:grid-cols-3">
+                  {[
+                    ['Preparación para postular', liveProfile.applicationReadiness],
+                    ['CV', liveProfile.cvReadiness],
+                    ['Entrevista', liveProfile.interviewReadiness],
+                  ].map(([label, value]) => (
+                    <div key={String(label)} className="rounded-xl border border-white/10 bg-slate-950/40 p-4">
+                      <p className="text-sm text-slate-400">{label}</p>
+                      <p className="mt-2 text-3xl font-bold text-white">{Number(value)}/100</p>
+                    </div>
+                  ))}
+                </div>
+                <div className="grid gap-4 lg:grid-cols-3">
+                  <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4">
+                    <p className="font-semibold text-emerald-200">Fortalezas que ya puedes usar</p>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                      {(liveProfile.strengths.length ? liveProfile.strengths.slice(0, 3) : ['Aún falta evidencia suficiente para destacar fortalezas.']).map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
+                    <p className="font-semibold text-amber-200">Brechas antes de postular</p>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                      {(liveProfile.missingProof.length ? liveProfile.missingProof.slice(0, 3) : ['No hay brechas de evidencia prioritarias registradas.']).map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                  <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-4">
+                    <p className="font-semibold text-cyan-200">Siguiente mejor acción</p>
+                    <ul className="mt-3 space-y-2 text-sm text-slate-300">
+                      {(liveProfile.nextBestActions.length ? liveProfile.nextBestActions.slice(0, 3) : ['Registra evidencia y objetivos para recibir acciones personalizadas.']).map((item) => (
+                        <li key={item}>• {item}</li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </>
+            ) : (
+              <div className="rounded-xl border border-white/10 bg-slate-950/40 p-5 text-sm leading-relaxed text-slate-300">
+                Todavía no hay suficiente evidencia consolidada para construir tu perfil de acción.
+                Puedes seguir usando el Radar y completar entregables de A1–A3; el perfil se irá
+                enriqueciendo sin bloquearte.
+              </div>
+            )}
           </CardContent>
         </Card>
 
