@@ -70,7 +70,7 @@ export function buildJourneyFlow(input: FlowInput) {
   let onboardingPath: string = canonicalOnboardingPath(input.profile)
   if (input.outcomes && input.profile.onboarding_conozcamonos_1_completed) {
     if (!input.outcomes.a1BaselineCompleted && !input.profile.a1_cerebral_completed) onboardingPath = '/despega/a1-outcome-baseline'
-    else if ((input.profile.a1_report_seen || input.profile.a1_results_saved) && !input.outcomes.a1FollowUpCompleted) onboardingPath = '/despega/a1-outcome-follow-up'
+    else if (input.outcomes.a1BaselineCompleted && (input.profile.a1_report_seen || input.profile.a1_results_saved) && !input.outcomes.a1FollowUpCompleted) onboardingPath = '/despega/a1-outcome-follow-up'
   }
   const onboardingComplete = onboardingPath === '/despega/a2'
   const completedDays = days(input.completedA2Days)
