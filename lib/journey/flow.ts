@@ -41,7 +41,7 @@ export interface FlowInput {
   completedA2Days: unknown[]
   completedA3Modules: unknown[]
   a3RouteClosed: boolean
-  outcomes?: { a1BaselineCompleted: boolean; a1FollowUpCompleted: boolean }
+  outcomes?: { a1BaselineCompleted: boolean; a1FollowUpCompleted: boolean; a2BaselineCompleted?: boolean; a2FollowUpCompleted?: boolean; a3BaselineCompleted?: boolean; a3FollowUpCompleted?: boolean }
 }
 const checkpoint = 'career-mirror'
 const stages = [
@@ -89,6 +89,10 @@ export function buildJourneyFlow(input: FlowInput) {
   if (!onboardingComplete) {
     const [label,description]=onboardingCopy[onboardingPath]
     next={href:onboardingPath,label,title:'Completa tu punto de partida',description}
+  } else if (input.outcomes?.a2BaselineCompleted && initialDays >= 30 && !input.outcomes.a2FollowUpCompleted) {
+    next={href:'/despega/a2-outcome-follow-up',label:'Medir mi cambio de ejecución',title:'Compara tu capacidad después del Día 30',description:'Tu baseline está registrado y completaste el hito verificable del Día 30. Guarda la medición comparable antes de seguir ampliando el ciclo.'}
+  } else if (input.outcomes?.a3BaselineCompleted && input.a3RouteClosed && !input.outcomes.a3FollowUpCompleted) {
+    next={href:'/despega/a3-outcome-follow-up',label:'Medir mi cambio de entrevista',title:'Cierra Entrenamiento con evidencia comparable',description:'Tu baseline de entrevista está registrado y la ruta A3 está cerrada. Completa el follow-up antes de pasar al Radar Estratégico.'}
   } else if (!input.access.a2) {
     next={href:'/despega/a2/intro',label:'Revisar acceso a Tu Ruta',title:'Tu acceso requiere comprobación',description:'La navegación no sustituye las comprobaciones del servidor ni habilita etapas por sí sola.'}
   } else if (radarAvailable) {
