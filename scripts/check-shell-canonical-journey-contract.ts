@@ -50,6 +50,25 @@ const followUpPending = flow({
 })
 assert.equal(followUpPending.next.href, '/despega/a1-outcome-follow-up')
 
+const a2FollowUpPending = flow({
+  access: { a1: true, a2: true, a3: true, a4: false },
+  highestA2DayUnlocked: 30,
+  completedA2Days: Array.from({ length: 30 }, (_, index) => index + 1),
+  outcomes: { a1BaselineCompleted: true, a1FollowUpCompleted: true, a2BaselineCompleted: true, a2FollowUpCompleted: false, a3BaselineCompleted: false, a3FollowUpCompleted: false },
+})
+assert.equal(a2FollowUpPending.next.href, '/despega/a2-outcome-follow-up')
+
+const a3FollowUpPending = flow({
+  access: { a1: true, a2: true, a3: true, a4: true },
+  currentModule: 'A4',
+  highestA2DayUnlocked: 30,
+  completedA2Days: Array.from({ length: 30 }, (_, index) => index + 1),
+  completedA3Modules: ['career-mirror'],
+  a3RouteClosed: true,
+  outcomes: { a1BaselineCompleted: true, a1FollowUpCompleted: true, a2BaselineCompleted: false, a2FollowUpCompleted: false, a3BaselineCompleted: true, a3FollowUpCompleted: false },
+})
+assert.equal(a3FollowUpPending.next.href, '/despega/a3-outcome-follow-up')
+
 const day7 = flow({
   access: { a1: true, a2: true, a3: true, a4: false },
   highestA2DayUnlocked: 7,
@@ -109,7 +128,7 @@ assert.ok(gamificationSummary.includes('xpProgressPercent'))
 
 console.log(JSON.stringify({
   evidenceLevel: 'runtime_and_source_contract',
-  scenarios: ['a1_baseline_pending', 'a1_follow_up_pending', 'day_7_checkpoint', 'day_30', 'a3_closed'],
+  scenarios: ['a1_baseline_pending', 'a1_follow_up_pending', 'a2_follow_up_pending', 'a3_follow_up_pending', 'day_7_checkpoint', 'day_30', 'a3_closed'],
   navigationStates: ['completed', 'active', 'available', 'locked'],
   lockedNavigation: false,
   duplicateJourneyReadWithinRequest: false,
