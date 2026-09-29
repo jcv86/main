@@ -175,7 +175,7 @@ async function loadJourneyEvidence(
     a2RouteResult,
     a3Result,
     a3RouteResult,
-    a1OutcomeResult,
+    outcomeResult,
   ] = await Promise.all([
     supabase
       .from('a1_tests_results')
@@ -252,12 +252,12 @@ async function loadJourneyEvidence(
     a3UpdatedAt:
       a3Result.data?.updated_at || a3Result.data?.created_at || null,
     a3RouteCompletedAt: a3RouteResult.data?.route_completed_at || null,
-    a1OutcomeBaseline: (a1OutcomeResult.data ?? []).some((row) => row.measurement_role === 'baseline'),
-    a1OutcomeFollowUp: (a1OutcomeResult.data ?? []).some((row) => row.measurement_role === 'follow_up'),
-    a2OutcomeBaseline: (a1OutcomeResult.data ?? []).some((row) => row.instrument_key === 'a2_execution_checkpoint' && row.measurement_role === 'baseline'),
-    a2OutcomeFollowUp: (a1OutcomeResult.data ?? []).some((row) => row.instrument_key === 'a2_execution_checkpoint' && row.measurement_role === 'follow_up'),
-    a3OutcomeBaseline: (a1OutcomeResult.data ?? []).some((row) => row.instrument_key === 'a3_structured_interview' && row.measurement_role === 'baseline'),
-    a3OutcomeFollowUp: (a1OutcomeResult.data ?? []).some((row) => row.instrument_key === 'a3_structured_interview' && row.measurement_role === 'follow_up'),
+    a1OutcomeBaseline: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a1_professional_clarity' && row.measurement_role === 'baseline'),
+    a1OutcomeFollowUp: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a1_professional_clarity' && row.measurement_role === 'follow_up'),
+    a2OutcomeBaseline: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a2_execution_checkpoint' && row.measurement_role === 'baseline'),
+    a2OutcomeFollowUp: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a2_execution_checkpoint' && row.measurement_role === 'follow_up'),
+    a3OutcomeBaseline: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a3_structured_interview' && row.measurement_role === 'baseline'),
+    a3OutcomeFollowUp: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a3_structured_interview' && row.measurement_role === 'follow_up'),
   }
 }
 
