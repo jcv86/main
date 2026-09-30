@@ -40,7 +40,8 @@
     "generate:docs": "node scripts/generate-docx.js",
     "db:reset-progress": "node --env-file-if-exists=/vercel/share/.env.project --env-file-if-exists=/vercel/share/.env.snowflake --loader tsx scripts/reset-pillar-progress.ts",
     "check:outcomes-chile": "tsx scripts/check-outcomes-chile-foundation.ts",
-    "check:outcomes-chile-metrics": "tsx scripts/check-outcomes-chile-metrics.ts"
+    "check:outcomes-chile-metrics": "tsx scripts/check-outcomes-chile-metrics.ts",
+    "check:outcomes-chile-capture": "tsx scripts/check-outcomes-chile-capture.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",
