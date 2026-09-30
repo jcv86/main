@@ -66,6 +66,10 @@ interface JourneyEvidence {
   a3RouteCompletedAt: string | null
   a1OutcomeBaseline: boolean
   a1OutcomeFollowUp: boolean
+  a2OutcomeBaseline: boolean
+  a2OutcomeFollowUp: boolean
+  a3OutcomeBaseline: boolean
+  a3OutcomeFollowUp: boolean
 }
 
 const MODULE_ENTRY: Record<Exclude<JourneyModule, 'COMPLETED'>, string> = {
@@ -171,7 +175,7 @@ async function loadJourneyEvidence(
     a2RouteResult,
     a3Result,
     a3RouteResult,
-    a1OutcomeResult,
+    outcomeResult,
   ] = await Promise.all([
     supabase
       .from('a1_tests_results')
@@ -214,9 +218,9 @@ async function loadJourneyEvidence(
       .maybeSingle(),
     supabase
       .from('dtc_outcome_observations')
-      .select('measurement_role')
+      .select('instrument_key,measurement_role')
       .eq('user_id', userId)
-      .eq('instrument_key', 'a1_professional_clarity')
+      .in('instrument_key', ['a1_professional_clarity', 'a2_execution_checkpoint', 'a3_structured_interview'])
       .eq('instrument_version', '1'),
   ])
 
@@ -248,8 +252,12 @@ async function loadJourneyEvidence(
     a3UpdatedAt:
       a3Result.data?.updated_at || a3Result.data?.created_at || null,
     a3RouteCompletedAt: a3RouteResult.data?.route_completed_at || null,
-    a1OutcomeBaseline: (a1OutcomeResult.data ?? []).some((row) => row.measurement_role === 'baseline'),
-    a1OutcomeFollowUp: (a1OutcomeResult.data ?? []).some((row) => row.measurement_role === 'follow_up'),
+    a1OutcomeBaseline: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a1_professional_clarity' && row.measurement_role === 'baseline'),
+    a1OutcomeFollowUp: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a1_professional_clarity' && row.measurement_role === 'follow_up'),
+    a2OutcomeBaseline: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a2_execution_checkpoint' && row.measurement_role === 'baseline'),
+    a2OutcomeFollowUp: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a2_execution_checkpoint' && row.measurement_role === 'follow_up'),
+    a3OutcomeBaseline: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a3_structured_interview' && row.measurement_role === 'baseline'),
+    a3OutcomeFollowUp: (outcomeResult.data ?? []).some((row) => row.instrument_key === 'a3_structured_interview' && row.measurement_role === 'follow_up'),
   }
 }
 
@@ -380,6 +388,10 @@ export const getJourneyForCurrentUser = cache(async function getJourneyForCurren
     outcomes: {
       a1BaselineCompleted: evidence.a1OutcomeBaseline,
       a1FollowUpCompleted: evidence.a1OutcomeFollowUp,
+      a2BaselineCompleted: evidence.a2OutcomeBaseline,
+      a2FollowUpCompleted: evidence.a2OutcomeFollowUp,
+      a3BaselineCompleted: evidence.a3OutcomeBaseline,
+      a3FollowUpCompleted: evidence.a3OutcomeFollowUp,
     },
   }
 })
