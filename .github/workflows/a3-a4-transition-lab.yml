@@ -1,0 +1,57 @@
+name: A3 to A4 atomic transition lab
+on:
+  pull_request:
+    paths:
+      - 'migrations/06-a3-a4-atomic-transition.sql'
+      - 'supabase/migrations/a3_session_tracking.sql'
+      - 'lib/journey/**'
+      - 'app/despega/a4/**'
+      - 'scripts/a3-a4-transition-lab.mjs'
+      - '.github/workflows/a3-a4-transition-lab.yml'
+permissions:
+  contents: read
+jobs:
+  a3-a4-transition:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      A3_A4_TRANSITION_LAB: 'yes'
+      A3_A4_SOURCE_COMMIT: ${{ github.event.pull_request.head.sha }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - uses: supabase/setup-cli@v1
+        with:
+          version: 2.117.0
+      - name: Prepare disposable transition stack
+        run: |
+          export A3_A4_LAB_ROOT="$RUNNER_TEMP/dtc-a3-a4"
+          echo "A3_A4_LAB_ROOT=$A3_A4_LAB_ROOT" >> "$GITHUB_ENV"
+          mkdir -p "$A3_A4_LAB_ROOT/stack"
+          npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
+          supabase init --workdir "$A3_A4_LAB_ROOT/stack" --yes
+          supabase start --workdir "$A3_A4_LAB_ROOT/stack" -x realtime,storage-api,imgproxy,postgres-meta,studio,edge-runtime,logflare,vector,supavisor > "$A3_A4_LAB_ROOT/stack-start.log" 2>&1
+          supabase status --workdir "$A3_A4_LAB_ROOT/stack" -o json > "$A3_A4_LAB_ROOT/status.json"
+      - name: Install production transition schema and synthetic fixture
+        run: |
+          node - <<'NODE'
+          const fs=require('fs'),{createClient}=require('@supabase/supabase-js');(async()=>{const root=process.env.A3_A4_LAB_ROOT,status=JSON.parse(fs.readFileSync(root+'/status.json','utf8')),admin=createClient(status.API_URL,status.SERVICE_ROLE_KEY,{auth:{persistSession:false}}),r=await admin.auth.admin.createUser({email:'a3-a4-lab@example.invalid',password:'Lab-Only-Transition-123!',email_confirm:true});if(r.error)throw r.error;fs.writeFileSync(root+'/fixture.private.json',JSON.stringify({userId:r.data.user.id}),{mode:0o600})})().catch(e=>{console.error(e);process.exit(1)})
+          NODE
+          DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.A3_A4_LAB_ROOT+'/status.json','utf8')).DB_URL)")"
+          USER_ID="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.A3_A4_LAB_ROOT+'/fixture.private.json','utf8')).userId)")"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/a3_session_tracking.sql
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -c "create table public.a3_user_progress(user_id text primary key,module_states jsonb not null default '{}'::jsonb,completed_module_ids text[] not null default '{}',total_xp integer not null default 0,current_module text,created_at timestamptz default now(),updated_at timestamptz default now());"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160000_canonical_journey_foundation.sql
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -c "alter table public.despega_user_profiles add column if not exists a4_unlocked_at timestamptz; alter table public.despega_user_profiles add column if not exists current_stage text;"
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -f migrations/06-a3-a4-atomic-transition.sql
+          psql "$DB_URL" -v ON_ERROR_STOP=1 -c "insert into public.a3_user_progress(user_id,current_module) values ('$USER_ID','basic-interview-mission'); insert into public.a3_route_progression(user_id) values ('$USER_ID'); insert into public.despega_user_profiles(user_id,onboarding_conozcamonos_1_completed,a1_cerebral_completed,a1_results_saved,a1_report_seen,conozcamonos_2_completed,a2_intro_seen,a2_route_generated,a4_unlocked) values ('$USER_ID',true,true,true,true,true,true,true,false) on conflict(user_id) do update set a4_unlocked=false; select public.ensure_despega_journey_state('$USER_ID'::uuid); notify pgrst, 'reload schema';"
+      - name: Execute real atomic A3 to A4 transition
+        run: node scripts/a3-a4-transition-lab.mjs
+      - name: Stop disposable stack
+        if: always()
+        run: supabase stop --workdir "$A3_A4_LAB_ROOT/stack" --no-backup > /dev/null 2>&1 || true
