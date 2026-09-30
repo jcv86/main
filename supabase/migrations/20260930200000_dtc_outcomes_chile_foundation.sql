@@ -71,7 +71,7 @@ create table if not exists public.dtc_chile_benchmarks (
   id uuid primary key default gen_random_uuid(),
   source_key text not null check (source_key in ('ine_esi','ine_ene','sence_enadel','other_official')),
   source_period text not null check (char_length(source_period) between 4 and 40),
-  metric_key text not null check (metric_key in ('monthly_net_income_mean','monthly_net_income_median','employment_rate','unemployment_rate','vacancy_demand','skill_demand')),
+  metric_key text not null check (metric_key in ('monthly_labor_income_mean','monthly_labor_income_median','employment_rate','unemployment_rate','vacancy_demand','skill_demand')),
   region_code text null check (region_code is null or char_length(region_code) <= 20),
   occupation_code text null check (occupation_code is null or char_length(occupation_code) <= 40),
   education_level text null check (education_level is null or char_length(education_level) <= 80),
