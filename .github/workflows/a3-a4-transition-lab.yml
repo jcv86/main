@@ -36,6 +36,8 @@ jobs:
       - uses: supabase/setup-cli@v1
         with:
           version: 2.117.0
+      - name: Prepare isolated A3-A4 browser runtime
+        run: node scripts/prepare-a3-a4-browser.mjs
       - name: Prepare disposable transition stack
         run: |
           export A3_A4_LAB_ROOT="$RUNNER_TEMP/dtc-a3-a4"
