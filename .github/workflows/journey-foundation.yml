@@ -55,6 +55,7 @@ jobs:
             psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160000_canonical_journey_foundation.sql
             psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160100_canonical_journey_security.sql
             psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260915160200_retire_legacy_progress_rpc_access.sql
+            psql "$DB_URL" -v ON_ERROR_STOP=1 -f supabase/migrations/20260920135500_outcome_engine_s1_foundation.sql
           done
       - name: Seed synthetic Day 7 state
         run: |
