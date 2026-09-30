@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+const route=readFileSync('app/api/outcomes/chile/route.ts','utf8')
+const capture=readFileSync('lib/outcomes-chile/capture.ts','utf8')
+assert.ok(route.includes('resolveServerUser'))
+assert.ok(route.includes('recordJobSearchEvent(user.id'))
+assert.ok(route.includes('recordEmploymentOutcome(user.id'))
+assert.ok(route.includes('recordSalaryOutcome(user.id'))
+assert.ok(!route.includes('body.userId'))
+assert.ok(!route.includes('verification_status'))
+assert.ok(capture.match(/verification_status:'self_reported'/g)?.length>=3)
+assert.ok(!capture.includes("verification_status:input"))
+assert.ok(capture.includes('[30,90,180]'))
+assert.ok(capture.includes("evidence_refs:[]"))
+assert.ok(capture.includes('monthlyNetClp'))
+console.log(JSON.stringify({outcomesChileCapture:'PASS',identity:'server-session',initialVerification:'self_reported',followups:[30,90,180],clientVerificationPromotion:false}))
