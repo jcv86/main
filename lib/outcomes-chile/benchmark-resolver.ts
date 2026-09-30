@@ -3,7 +3,7 @@ import { createAdminClient } from '@/lib/supabase/server'
 export type BenchmarkSpecificity = 'region_occupation_education'|'region_occupation'|'occupation'|'region'|'national'
 
 export interface ChileBenchmarkRequest {
-  metricKey: 'monthly_net_income_mean'|'monthly_net_income_median'|'employment_rate'|'unemployment_rate'|'vacancy_demand'|'skill_demand'
+  metricKey: 'monthly_labor_income_mean'|'monthly_labor_income_median'|'employment_rate'|'unemployment_rate'|'vacancy_demand'|'skill_demand'
   regionCode?: string | null
   occupationCode?: string | null
   educationLevel?: string | null
