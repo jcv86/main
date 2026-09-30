@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict'
+import { readFileSync } from 'node:fs'
+const source=readFileSync('lib/outcomes-chile/benchmark-resolver.ts','utf8')
+const migration=readFileSync('supabase/migrations/20260930200000_dtc_outcomes_chile_foundation.sql','utf8')
+for(const level of ['region_occupation_education','region_occupation','occupation','region','national']) assert.ok(source.includes(level))
+assert.ok(source.includes("reliability_status==='suppressed_low_sample'"))
+assert.ok(source.includes(".neq('reliability_status','suppressed_low_sample')"))
+assert.ok(source.includes('sourcePeriod'))
+assert.ok(source.includes('sourceRef'))
+assert.ok(source.includes('sampleSize'))
+assert.ok(migration.includes('monthly_labor_income_mean'))
+assert.ok(migration.includes('monthly_labor_income_median'))
+assert.ok(!migration.includes('monthly_net_income_mean'))
+assert.ok(!migration.includes('monthly_net_income_median'))
+console.log(JSON.stringify({benchmarkResolver:'PASS',fallback:['region+occupation+education','region+occupation','occupation','region','national'],lowSampleSuppressed:true,sourceDisclosure:true}))
