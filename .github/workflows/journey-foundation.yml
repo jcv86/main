@@ -5,6 +5,7 @@ on:
       - 'supabase/migrations/20260915160*.sql'
       - 'scripts/a1-browser-qa/a2-day-guard-browser.mjs'
       - 'scripts/a1-browser-qa/legacy-resume-browser.mjs'
+      - 'scripts/a1-browser-qa/canonical-a0-a4-browser.mjs'
       - 'lib/journey/**'
       - 'app/despega/a2/**'
       - 'app/despega/conozcamonos/**'
@@ -66,6 +67,8 @@ jobs:
         run: node scripts/a1-browser-qa/a2-day-guard-browser.mjs
       - name: Legacy URLs resume the canonical journey flow
         run: node scripts/a1-browser-qa/legacy-resume-browser.mjs
+      - name: Canonical A0-A4 browser foundation
+        run: node scripts/a1-browser-qa/canonical-a0-a4-browser.mjs
       - name: Stop disposable local stack
         if: always()
         run: supabase stop --workdir "$A1_LAB_ROOT/stack" --no-backup > /dev/null 2>&1 || true
