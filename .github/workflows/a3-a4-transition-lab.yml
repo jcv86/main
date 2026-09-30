@@ -40,7 +40,7 @@ jobs:
       - name: Install production transition schema and synthetic fixture
         run: |
           node - <<'NODE'
-          const fs=require('fs'),{createClient}=require('@supabase/supabase-js');(async()=>{const root=process.env.A3_A4_LAB_ROOT,status=JSON.parse(fs.readFileSync(root+'/status.json','utf8')),admin=createClient(status.API_URL,status.SERVICE_ROLE_KEY,{auth:{persistSession:false}}),r=await admin.auth.admin.createUser({email:'a3-a4-lab@example.invalid',password:'Lab-Only-Transition-123!',email_confirm:true});if(r.error)throw r.error;fs.writeFileSync(root+'/fixture.private.json',JSON.stringify({userId:r.data.user.id}),{mode:0o600})})().catch(e=>{console.error(e);process.exit(1)})
+          const fs=require('fs'),crypto=require('crypto'),{createClient}=require('@supabase/supabase-js');(async()=>{const root=process.env.A3_A4_LAB_ROOT,status=JSON.parse(fs.readFileSync(root+'/status.json','utf8')),admin=createClient(status.API_URL,status.SERVICE_ROLE_KEY,{auth:{persistSession:false}}),email='a3-a4-lab@example.invalid',password='Lab-'+crypto.randomBytes(24).toString('hex'),r=await admin.auth.admin.createUser({email,password,email_confirm:true});if(r.error)throw r.error;console.log('::add-mask::'+password);fs.writeFileSync(root+'/fixture.private.json',JSON.stringify({userId:r.data.user.id,email,password}),{mode:0o600})})().catch(e=>{console.error(e);process.exit(1)})
           NODE
           DB_URL="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.A3_A4_LAB_ROOT+'/status.json','utf8')).DB_URL)")"
           USER_ID="$(node -e "const fs=require('fs');process.stdout.write(JSON.parse(fs.readFileSync(process.env.A3_A4_LAB_ROOT+'/fixture.private.json','utf8')).userId)")"
