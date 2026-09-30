@@ -25,6 +25,14 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
+      - name: Install browser tools
+        run: |
+          export A3_A4_TOOLS_ROOT="$RUNNER_TEMP/dtc-a3-a4-tools"
+          echo "A3_A4_TOOLS_ROOT=$A3_A4_TOOLS_ROOT" >> "$GITHUB_ENV"
+          mkdir -p "$A3_A4_TOOLS_ROOT" && cd "$A3_A4_TOOLS_ROOT"
+          npm init -y >/dev/null
+          npm install playwright@1.55.0 --no-audit --no-fund
+          npx playwright install --with-deps chromium
       - uses: supabase/setup-cli@v1
         with:
           version: 2.117.0
@@ -53,6 +61,8 @@ jobs:
           psql "$DB_URL" -v ON_ERROR_STOP=1 -c "insert into public.a3_user_progress(user_id,current_module) values ('$USER_ID','basic-interview-mission'); insert into public.a3_route_progression(user_id) values ('$USER_ID'); insert into public.despega_user_profiles(user_id,onboarding_conozcamonos_1_completed,a1_cerebral_completed,a1_results_saved,a1_report_seen,conozcamonos_2_completed,a2_intro_seen,a2_route_generated,a4_unlocked) values ('$USER_ID',true,true,true,true,true,true,true,false) on conflict(user_id) do update set a4_unlocked=false; insert into public.despega_journey_state(user_id,current_module,current_a2_day,highest_a2_day_unlocked,version,metadata) values ('$USER_ID'::uuid,'A3',30,30,1,'{}'::jsonb) on conflict(user_id) do update set current_module='A3',a4_unlocked_at=null; notify pgrst, 'reload schema';"
       - name: Execute real atomic A3 to A4 transition
         run: node scripts/a3-a4-transition-lab.mjs
+      - name: Verify A4 browser entry after atomic transition
+        run: node scripts/a3-a4-transition-browser.mjs
       - name: Stop disposable stack
         if: always()
         run: supabase stop --workdir "$A3_A4_LAB_ROOT/stack" --no-backup > /dev/null 2>&1 || true
