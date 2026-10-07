@@ -153,6 +153,17 @@ function harness(options = {}) {
     '@/components/ui/button': ui('Button'), '@/components/ui/badge': ui('Badge'),
     '@/components/ui/card': ui('Card', 'CardContent'),
     '@/components/a4/daily-snapshot-history': ui('DailySnapshotHistory'),
+    '@/components/a4/journey-context-card': ui('JourneyContextCard'),
+    '@/lib/a4/journey-context': { loadA4JourneyContext: async id => {
+      assert.equal(id, USER)
+      return options.journeyContext ?? {
+        status: 'available',
+        identity: { status: 'available', targetRole: 'Objetivo sintético existente', updatedAt: null },
+        a1: { status: 'empty', completedAt: null },
+        a2: { status: 'empty', completedDays: 0, lastCompletedAt: null },
+        a3: { status: 'empty', completedModules: 0, lastCompletedAt: null },
+      }
+    } },
     '@/components/a4/evidence-pulse': ui('EvidencePulse'),
     '@/components/a4/strategic-radar-workspace': ui('StrategicRadarWorkspace'),
     '@/lib/a4/daily-snapshots': { normalizeA4DailySnapshot: () => assert.fail('No synthetic daily snapshots') },
@@ -369,34 +380,40 @@ test('valid existing signals preserve calculations, meaningful values, ownership
   assert.deepEqual(h.logs, [])
 })
 
-test('landing and job matching render unavailable state without baseline scores or a no-gaps claim', async () => {
+test('active pages preserve empty and degraded canonical context without requesting legacy signals', async () => {
   for (const path of ['app/despega/a4/page.tsx', 'app/despega/a4/job-matching/page.tsx']) {
-    for (const config of [{ signals: [] }, { fault: () => ({ error: { code: '42P01' } }) }]) {
-      const h = harness(config)
-      const tree = await h.load(path).default()
-      const text = visibleText(tree)
-      assert.match(text, /no está disponible/i)
+    for (const status of ['empty', 'degraded']) {
+      const journeyContext = { status, identity: { status: status === 'empty' ? 'empty' : 'unavailable', targetRole: null, updatedAt: null }, a3: { status: status === 'empty' ? 'empty' : 'unavailable', completedModules: status === 'empty' ? 0 : null, lastCompletedAt: null } }
+      const h = harness({ journeyContext, fault: () => ({ error: { code: '42P01' } }) })
+      const tree = await h.load(path).default(), text = visibleText(tree)
+      const card = nodes(tree).find(node => node?.type === 'ui:JourneyContextCard')
+      assert.deepEqual(card?.props.context, journeyContext)
       assert.doesNotMatch(text, /\b(?:50|60|53)\s*(?:\/\s*100|%)/)
       assert.doesNotMatch(text, /No hay brechas de evidencia|no tienes brechas/i)
       assert.ok(!text.includes(PRIVATE_ERROR))
       if (path.includes('job-matching')) {
         const search = nodes(tree).find(node => node?.type === 'ui:OpportunitySearchExperience')
-        assert.ok(search, 'Search must remain available without a calculated profile')
+        assert.ok(search, 'Search remains available without canonical context')
         assert.equal(search.props.profileEvidence, null)
-        assert.equal(search.props.seedRole, 'Objetivo sintético existente')
+        assert.equal(search.props.seedRole, null)
       }
-      assert.equal(signalQueries(h).length, 1)
+      assert.equal(signalQueries(h).length, 0)
+      assert.deepEqual(h.logs, [])
     }
   }
 })
 
-test('valid profiles still render their existing scores on landing and job matching', async () => {
+test('active pages use declared target role only and never revive legacy readiness scores', async () => {
   for (const path of ['app/despega/a4/page.tsx', 'app/despega/a4/job-matching/page.tsx']) {
-    const h = harness()
-    const text = visibleText(await h.load(path).default())
-    for (const value of [47, 63, 56]) assert.match(text, new RegExp('\\b' + value + '\\s*/\\s*100'))
-    assert.doesNotMatch(text, /Tu perfil de acción no está disponible|Tu contexto de búsqueda aún no está disponible/)
-    assertOwnerActive(h)
+    const h = harness(), tree = await h.load(path).default(), text = visibleText(tree)
+    assert.doesNotMatch(text, /\b(?:47|63|56)\s*\/\s*100/)
+    const card = nodes(tree).find(node => node?.type === 'ui:JourneyContextCard')
+    assert.equal(card?.props.context.identity.targetRole, 'Objetivo sintético existente')
+    if (path.includes('job-matching')) {
+      const search = nodes(tree).find(node => node?.type === 'ui:OpportunitySearchExperience')
+      assert.deepEqual(search.props.profileEvidence, { targetRole: 'Objetivo sintético existente', strengths: [], missingProof: [], nextBestActions: [] })
+    }
+    assert.equal(signalQueries(h).length, 0)
   }
 })
 

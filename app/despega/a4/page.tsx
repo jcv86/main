@@ -22,16 +22,14 @@ import {
 import { requireJourneyModule } from '@/lib/journey/service'
 import { createAdminClient } from '@/lib/supabase/server'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
-import { getLiveUserProfile } from '@/lib/a4/profile-snapshot'
+import { loadA4JourneyContext } from '@/lib/a4/journey-context'
+import { JourneyContextCard } from '@/components/a4/journey-context-card'
 import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
 
 function numberValue(value: unknown): number | null {
+  if (typeof value !== 'number' && (typeof value !== 'string' || !/^(?:\d+(?:\.\d*)?|\.\d+)$/.test(value.trim()))) return null
   const numeric = Number(value)
-  return Number.isFinite(numeric) ? numeric : null
-}
-
-function textValue(value: unknown): string {
-  return typeof value === 'string' ? value : ''
+  return Number.isFinite(numeric) && numeric >= 0 && numeric <= 100 ? numeric : null
 }
 
 function formatDate(value: unknown): string {
@@ -50,19 +48,21 @@ export default async function RadarEstrategicoPage() {
 
   const supabase = createAdminClient()
   const userId = journey.user.id
+  const a3Read = Promise.resolve(supabase
+    .from('a3_session_attempts')
+    .select('module_id,status,score,created_at,session_completed_at', { count: 'exact' })
+    .eq('user_id', userId)
+    .order('created_at', { ascending: false }))
+    .catch(() => ({ data: null, error: { code: 'a3_read_unavailable' }, count: null }))
   const [
     a3Result,
     documentsResult,
     signalsResult,
     decisionsResult,
     snapshotsResult,
-    liveProfile,
+    journeyContext,
   ] = await Promise.all([
-    supabase
-      .from('a3_session_attempts')
-      .select('module_id,status,score,created_at')
-      .eq('user_id', userId)
-      .order('created_at', { ascending: false }),
+    a3Read,
     supabase
       .from('dtc_documents')
       .select('id,title,type,status,created_at')
@@ -93,10 +93,10 @@ export default async function RadarEstrategicoPage() {
       .eq('user_id', userId)
       .order('snapshot_date', { ascending: false })
       .limit(31),
-    getLiveUserProfile(userId),
+    loadA4JourneyContext(userId, { a3Sessions: a3Read }),
   ])
 
-  if (a3Result.error) console.error('[v0] A4 A3 context error:', a3Result.error)
+  if (a3Result.error) console.error('[A4] Training context unavailable')
   if (documentsResult.error) {
     console.error('[v0] A4 document context error:', documentsResult.error)
   }
@@ -109,7 +109,6 @@ export default async function RadarEstrategicoPage() {
   }
 
   const loadFailures = [
-    a3Result.error && 'progreso de Entrenamiento',
     documentsResult.error && 'documentos',
     signalsResult.error && 'señales verificadas',
     decisionsResult.error && 'decisiones',
@@ -173,14 +172,12 @@ export default async function RadarEstrategicoPage() {
     )
   }
 
-  const completedSessions = (a3Result.data ?? []).filter(
+  // Share the canonical validation used by the context: complete owner count,
+  // known modules and valid completion dates. Partial rows never become KPIs.
+  const a3Available = journeyContext.a3.status !== 'unavailable'
+  const completedSessions = a3Available ? (a3Result.data ?? []).filter(
     (session) => session.status === 'completed',
-  )
-  const uniqueModules = new Set(
-    completedSessions
-      .map((session) => textValue(session.module_id))
-      .filter(Boolean),
-  )
+  ) : []
   const scores = completedSessions
     .map((session) => numberValue(session.score))
     .filter((score): score is number => score !== null)
@@ -246,14 +243,14 @@ export default async function RadarEstrategicoPage() {
           {[
             {
               label: 'Módulos A3 verificados',
-              value: `${uniqueModules.size}/10`,
-              detail: `${completedSessions.length} sesiones persistidas`,
+              value: a3Available ? `${journeyContext.a3.completedModules}/10` : '—',
+              detail: a3Available ? `${completedSessions.length} ${completedSessions.length === 1 ? 'sesión completada registrada' : 'sesiones completadas registradas'}` : 'No pudimos verificar la lectura completa de Entrenamiento',
               icon: <Target className="h-5 w-5 text-emerald-400" />,
             },
             {
               label: 'Promedio de Entrenamiento',
               value: averageScore === null ? '—' : `${averageScore}/100`,
-              detail: 'Calculado solo desde sesiones completadas',
+              detail: !a3Available ? 'No disponible hasta verificar todas las sesiones' : scores.length ? `Basado en ${scores.length} ${scores.length === 1 ? 'sesión completada' : 'sesiones completadas'} con puntaje válido` : 'Sin puntajes válidos registrados',
               icon: <BarChart3 className="h-5 w-5 text-cyan-400" />,
             },
             {
@@ -298,78 +295,7 @@ export default async function RadarEstrategicoPage() {
           </CardContent>
         </Card>
 
-        <Card className="border-cyan-400/25 bg-gradient-to-br from-cyan-400/10 via-slate-900/70 to-emerald-400/5">
-          <CardContent className="space-y-6 p-6">
-            <div className="flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
-              <div>
-                <p className="text-sm font-semibold uppercase tracking-[0.18em] text-cyan-300">
-                  Tu preparación para actuar
-                </p>
-                <h2 className="mt-2 text-2xl font-bold text-foreground">
-                  Lo que A1, A2 y A3 ya saben de ti
-                </h2>
-                <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted-foreground">
-                  El Radar usa tu evidencia persistida para convertir oportunidades en decisiones
-                  concretas. Estos indicadores no reemplazan una evaluación humana ni inventan
-                  información cuando todavía falta evidencia.
-                </p>
-              </div>
-              {liveProfile?.targetRole ? (
-                <Badge className="w-fit border-cyan-400/30 bg-cyan-400/10 text-cyan-100">
-                  Objetivo: {liveProfile.targetRole}
-                </Badge>
-              ) : null}
-            </div>
-
-            {liveProfile ? (
-              <>
-                <div className="grid gap-4 sm:grid-cols-3">
-                  {[
-                    ['Preparación para postular', liveProfile.applicationReadiness],
-                    ['CV', liveProfile.cvReadiness],
-                    ['Entrevista', liveProfile.interviewReadiness],
-                  ].map(([label, value]) => (
-                    <div key={String(label)} className="rounded-xl border border-white/10 bg-muted/30 p-4">
-                      <p className="text-sm text-muted-foreground">{label}</p>
-                      <p className="mt-2 text-3xl font-bold text-foreground">{Number(value)}/100</p>
-                    </div>
-                  ))}
-                </div>
-                <div className="grid gap-4 lg:grid-cols-3">
-                  <div className="rounded-xl border border-emerald-400/20 bg-emerald-400/5 p-4">
-                    <p className="font-semibold text-emerald-200">Fortalezas que ya puedes usar</p>
-                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                      {(liveProfile.strengths.length ? liveProfile.strengths.slice(0, 3) : ['Aún falta evidencia suficiente para destacar fortalezas.']).map((item) => (
-                        <li key={item}>• {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-xl border border-amber-400/20 bg-amber-400/5 p-4">
-                    <p className="font-semibold text-amber-200">Brechas antes de postular</p>
-                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                      {(liveProfile.missingProof.length ? liveProfile.missingProof.slice(0, 3) : ['No hay brechas de evidencia prioritarias registradas.']).map((item) => (
-                        <li key={item}>• {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                  <div className="rounded-xl border border-cyan-400/20 bg-cyan-400/5 p-4">
-                    <p className="font-semibold text-cyan-200">Siguiente mejor acción</p>
-                    <ul className="mt-3 space-y-2 text-sm text-muted-foreground">
-                      {(liveProfile.nextBestActions.length ? liveProfile.nextBestActions.slice(0, 3) : ['Registra evidencia y objetivos para recibir acciones personalizadas.']).map((item) => (
-                        <li key={item}>• {item}</li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              </>
-            ) : (
-              <div className="rounded-xl border border-white/10 bg-muted/30 p-5 text-sm leading-relaxed text-muted-foreground">
-                Tu perfil de acción no está disponible todavía. Puedes seguir usando el Radar
-                y revisar tus entregables de A1–A3.
-              </div>
-            )}
-          </CardContent>
-        </Card>
+        <JourneyContextCard context={journeyContext} canOpenA2={journey.access.a2} canOpenA3={journey.access.a3} />
 
         <EvidencePulse signals={signals} decisions={decisions} />
 

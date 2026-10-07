@@ -1,6 +1,7 @@
 import { load } from 'cheerio'
 import type { CanonicalOpportunity } from '../types'
 import { sourceRetryAfterUntil } from './retry-after'
+import { isOpportunityPublished } from '../temporal-filter'
 export type { CanonicalOpportunity, OpportunityVerificationStatus } from '../types'
 
 type JsonObject = Record<string, unknown>
@@ -140,6 +141,7 @@ export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().t
     ...strings(attrs.tags),
   ])].slice(0, 100)
   const publishedAt = normalizeGetOnBoardPublishedAt(attrs.published_at ?? attrs.created_at)
+  if (!isOpportunityPublished(publishedAt, new Date(verifiedAt))) return null
   const remoteRaw = attrs.remote ?? attrs.remote_allowed
   const remote = typeof remoteRaw === 'boolean' ? remoteRaw : null
 

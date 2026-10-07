@@ -13,6 +13,7 @@ import {
 } from '../lib/opportunities/refresh-catalog.ts'
 import { acquireOpportunityRefreshLease } from '../lib/opportunities/refresh-lease.ts'
 import { fetchGetOnBoardJobs } from '../lib/opportunities/sources/getonboard.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const NOW = new Date('2026-10-07T17:00:00.000Z')
 const SECRET = 'local-test-cron-secret-with-32-characters'
@@ -115,6 +116,7 @@ function memoryDb(initialRows = [], config = {}) {
     eq(field, value) { this.filters.push((row) => row[field] === value); return this }
     gte(field, value) { this.filters.push((row) => row[field] >= value); return this }
     lte(field, value) { this.filters.push((row) => row[field] <= value); return this }
+    or(expression) { this.filters.push((row) => matchesPostgrestFilter(row, expression)); return this }
     in(field, values) { this.filters.push((row) => values.includes(row[field])); return this }
     not(field, operator, value) {
       assert.equal(operator, 'is')

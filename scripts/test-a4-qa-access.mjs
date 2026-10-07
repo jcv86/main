@@ -4,6 +4,8 @@ import { dirname, relative, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import ts from 'typescript'
 import { NextRequest, NextResponse } from 'next/server'
+import { createHash } from 'node:crypto'
+import * as searchQuery from '../lib/opportunities/search-query.ts'
 
 // This suite executes production module, route and component bodies against
 // synthetic boundaries. It has no credentials, network access or database writes.
@@ -147,6 +149,8 @@ function harness(options = {}) {
   const loaded = new Map()
   const modules = {
     'server-only': {},
+    'node:crypto': { createHash },
+    '@/lib/opportunities/search-query': searchQuery,
     'react': {
       cache: fn => fn, useState: value => [value, () => {}],
       useRef: value => ({ current: value }), useEffect: () => {},
@@ -173,7 +177,11 @@ function harness(options = {}) {
     '@/components/a4/strategic-radar-workspace': ui('StrategicRadarWorkspace'),
     '@/components/reports/print-report-button': ui('PrintReportButton'),
     '@/lib/a4/daily-snapshots': { normalizeA4DailySnapshot: () => assert.fail('Empty synthetic data must not produce snapshots') },
-    '@/lib/a4/profile-snapshot': { getLiveUserProfile: async id => { assert.equal(id, USER); return null } },
+    '@/components/a4/journey-context-card': ui('JourneyContextCard'),
+    '@/lib/a4/journey-context': { loadA4JourneyContext: async id => {
+      assert.equal(id, USER)
+      return { status: 'empty', identity: { status: 'empty', targetRole: null, updatedAt: null }, a1: { status: 'empty', completedAt: null }, a2: { status: 'empty', completedDays: 0, lastCompletedAt: null }, a3: { status: 'empty', completedModules: 0, lastCompletedAt: null } }
+    } },
     '@/lib/a4/evidence-pulse': { pulsePriorityLabel: () => ({ label: 'Sin evidencia', detail: 'Sin señales registradas.' }) },
     '@/lib/reports/user-report-data': { loadA4Report: async id => {
       calls.report++; assert.equal(id, USER)
@@ -183,8 +191,8 @@ function harness(options = {}) {
     '@/lib/a1/individual-evidence': { record: value => value },
     '@/lib/observability/request-id': { createRequestId: () => 'synthetic-access-check' },
     '@/lib/observability/server-log': { logOperationalError: () => {}, logOperationalEvent: () => {} },
-    '@/lib/opportunities/verified-index': { readVerifiedOpportunities: async client => {
-      calls.protectedReads++; assert.equal(client, db); return []
+    '@/lib/opportunities/verified-index': { readVerifiedOpportunityInventory: async client => {
+      calls.protectedReads++; assert.equal(client, db); return { opportunities: [], scope: { limit: 500, limitReached: false } }
     } },
     '@/lib/opportunities/matching': {
       filterOpportunities: rows => rows,

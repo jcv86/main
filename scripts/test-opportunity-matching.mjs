@@ -1,9 +1,14 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import ts from 'typescript'
+import { createHash } from 'node:crypto'
+import { createClient } from '@supabase/supabase-js'
 import * as matching from '../lib/opportunities/matching.ts'
 import * as taxonomy from '../lib/opportunities/taxonomy.ts'
 import { planOpportunityQueries } from '../lib/opportunities/search-intent.ts'
+import * as searchQuery from '../lib/opportunities/search-query.ts'
+import { readVerifiedOpportunities, readVerifiedOpportunityInventory } from '../lib/opportunities/verified-index.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const { createOpportunityMatcher, filterOpportunities, searchFiltersFromStoredIntent } = matching
 const tests = []
@@ -208,11 +213,18 @@ function routeHarness(path, { user = { id: 'test-user' }, allowed = true, intent
     },
     '@/lib/opportunities/matching': matching,
     '@/lib/opportunities/taxonomy': taxonomy,
+    '@/lib/opportunities/search-query': searchQuery,
+    'node:crypto': { createHash },
     '@/lib/opportunities/verified-index': { readVerifiedOpportunities: async (_db, limit) => {
       calls.index++
       assert.equal(limit, 500)
       if (indexError) throw new Error('Simulated unavailable index')
       return rows
+    }, readVerifiedOpportunityInventory: async (_db, limit) => {
+      calls.index++
+      assert.equal(limit, 500)
+      if (indexError) throw new Error('Simulated unavailable index')
+      return { opportunities: rows, scope: { limit: 500, limitReached: false } }
     } },
   }
   const source = fs.readFileSync(new URL('../' + path, import.meta.url), 'utf8')
@@ -336,6 +348,132 @@ test('unavailable index reports an error instead of a healthy empty catalog', as
     assert.equal(typeof body.error, 'string')
     assert.equal(body.inventory_status, undefined)
   }
+})
+
+const READ_NOW = new Date('2026-10-08T02:59:59.999Z')
+const readableRow = (id, overrides = {}) => job({
+  source_id: String(id), original_url: 'https://www.chiletrabajos.cl/trabajo/' + id,
+  published_at: '2026-10-07', last_verified_at: '2026-10-07T22:00:00.000Z',
+  ...overrides,
+})
+
+function indexDb(rows, { ignoreFilters = false } = {}) {
+  const calls = []
+  return { calls, from(table) {
+    assert.equal(table, 'a4_verified_opportunities')
+    const filters = [], orders = [], log = { limit: null, logical: [], orders }
+    const query = {
+      select() { return query },
+      eq(field, value) { filters.push(row => row[field] === value); return query },
+      gte(field, value) { filters.push(row => row[field] >= value); return query },
+      lte(field, value) { filters.push(row => row[field] <= value); return query },
+      or(expression) { log.logical.push(expression); filters.push(row => matchesPostgrestFilter(row, expression)); return query },
+      order(field, { ascending }) { orders.push([field, ascending]); return query },
+      limit(value) { log.limit = value; return query },
+      then(resolve, reject) {
+        const selected = rows.filter(row => ignoreFilters || filters.every(filter => filter(row)))
+        selected.sort((a, b) => {
+          for (const [field, ascending] of orders) if (a[field] !== b[field]) return (a[field] < b[field] ? -1 : 1) * (ascending ? 1 : -1)
+          return 0
+        })
+        calls.push(log)
+        return Promise.resolve({ data: selected.slice(0, log.limit), error: null }).then(resolve, reject)
+      },
+    }
+    return query
+  } }
+}
+
+test('five hundred expired rows cannot hide a valid row beyond the previous window', async () => {
+  for (const expires_at of ['2026-10-06', READ_NOW.toISOString()]) {
+    const expired = Array.from({ length: 500 }, (_, index) => readableRow(7100000 + index, { expires_at }))
+    const db = indexDb([...expired, readableRow(7200000)])
+    const inventory = await readVerifiedOpportunityInventory(db, 500, { now: READ_NOW })
+    assert.deepEqual(inventory.opportunities.map(row => row.source_id), ['7200000'])
+    assert.deepEqual(inventory.scope, { limit: 500, limitReached: false })
+    assert.equal(db.calls.length, 1)
+    assert.equal(db.calls[0].limit, 500)
+  }
+})
+
+test('five hundred scheduled publications are excluded before the bounded selection', async () => {
+  for (const published_at of ['2026-10-08', '2026-10-08T03:00:00.000Z']) {
+    const scheduled = Array.from({ length: 500 }, (_, index) => readableRow(7100000 + index, { published_at }))
+    const rows = await readVerifiedOpportunities(indexDb([...scheduled, readableRow(7200000)]), 500, { now: READ_NOW })
+    assert.deepEqual(rows.map(row => row.source_id), ['7200000'])
+  }
+})
+
+test('expiry and publication guards are conjunctive and defend against ignored database filters', async () => {
+  const rows = [
+    readableRow(7100001, { expires_at: '2026-10-06', published_at: null }),
+    readableRow(7100002, { expires_at: null, published_at: '2026-10-09' }),
+    readableRow(7100003, { expires_at: 'bad', published_at: null }),
+    readableRow(7100004, { expires_at: null, published_at: 'bad' }),
+    readableRow(7100005, { expires_at: null, published_at: null }),
+  ]
+  for (const ignoreFilters of [false, true]) {
+    const result = await readVerifiedOpportunities(indexDb(rows, { ignoreFilters }), 500, { now: READ_NOW })
+    assert.deepEqual(result.map(row => row.source_id), ['7100005'])
+  }
+})
+
+test('date-only expiry and publication follow Chile midnight in summer and winter', async () => {
+  for (const [day, before, midnight] of [
+    ['2026-10-07', '2026-10-08T02:59:59.999Z', '2026-10-08T03:00:00.000Z'],
+    ['2026-07-07', '2026-07-08T03:59:59.999Z', '2026-07-08T04:00:00.000Z'],
+  ]) {
+    const rows = [readableRow(7100001, { published_at: day, expires_at: day, last_verified_at: before })]
+    assert.equal((await readVerifiedOpportunities(indexDb(rows), 500, { now: new Date(before) })).length, 1)
+    assert.equal((await readVerifiedOpportunities(indexDb(rows), 500, { now: new Date(midnight) })).length, 0)
+  }
+})
+
+test('explicit-offset legacy timestamps retain their real instant semantics', async () => {
+  const now = new Date('2026-10-07T21:00:00.000Z')
+  const rows = [
+    readableRow(7100001, { expires_at: '2026-10-07T18:00:00-03:00' }),
+    readableRow(7100002, { expires_at: '2026-10-07T18:00:01-03:00' }),
+    readableRow(7100003, { published_at: '2026-10-07T18:00:01-03:00' }),
+    readableRow(7100004, { published_at: '2026-10-07T18:00:00-03:00' }),
+  ].map(row => ({ ...row, last_verified_at: now.toISOString() }))
+  assert.deepEqual((await readVerifiedOpportunities(indexDb(rows), 500, { now })).map(row => row.source_id), ['7100002', '7100004'])
+})
+
+test('a bounded inventory has stable ties and never claims completeness at the cap', async () => {
+  const rows = [readableRow(7100003), readableRow(7100001), readableRow(7100002)]
+  for (const order of [rows, rows.toReversed()]) {
+    const db = indexDb(order)
+    const result = await readVerifiedOpportunityInventory(db, 2, { now: READ_NOW })
+    assert.deepEqual(result.opportunities.map(row => row.source_id), ['7100001', '7100002'])
+    assert.deepEqual(result.scope, { limit: 2, limitReached: true })
+    assert.deepEqual(db.calls[0].orders, [['last_verified_at', false], ['source', true], ['source_id', true]])
+  }
+})
+
+test('the real Supabase builder sends one combined temporal filter without overwriting clauses', async () => {
+  let calls = 0
+  const client = createClient('https://synthetic.supabase.co', 'synthetic-anon-key', {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: { fetch: async (input, init) => {
+      calls++
+      assert.equal(init.method, 'GET')
+      const url = new URL(String(input))
+      const clauses = url.searchParams.getAll('or')
+      assert.equal(clauses.length, 1)
+      const expression = clauses[0].slice(1, -1)
+      assert.ok(expression.startsWith('and(or(expires_at.'))
+      assert.ok(expression.includes('or(published_at.'))
+      assert.equal(matchesPostgrestFilter(readableRow(7100001, { expires_at: '2026-10-06' }), expression), false)
+      assert.equal(matchesPostgrestFilter(readableRow(7100001, { published_at: '2026-10-09' }), expression), false)
+      assert.equal(matchesPostgrestFilter(readableRow(7100001), expression), true)
+      assert.equal(url.searchParams.get('limit'), '500')
+      assert.equal(url.searchParams.get('order'), 'last_verified_at.desc,source.asc,source_id.asc')
+      return new Response('[]', { status: 200, headers: { 'content-type': 'application/json' } })
+    } },
+  })
+  await readVerifiedOpportunityInventory(client, 500, { now: READ_NOW })
+  assert.equal(calls, 1)
 })
 
 for (const { name, run } of tests) {

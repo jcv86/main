@@ -1,5 +1,7 @@
 import assert from 'node:assert/strict'
 import { readChileTrabajosRefreshCandidates } from '../lib/opportunities/refresh-candidates.ts'
+import { opportunityTemporalFilter } from '../lib/opportunities/temporal-filter.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const TABLE = 'a4_verified_opportunities'
 const NOW = new Date('2026-10-07T21:00:00.000Z')
@@ -36,6 +38,7 @@ function memoryDb(initialRows = [], options = {}) {
     eq(field, value) { this.filters.push(['eq', field, value]); return this }
     in(field, value) { this.filters.push(['in', field, value]); return this }
     lte(field, value) { this.filters.push(['lte', field, value]); return this }
+    or(expression) { this.filters.push(['logical', expression]); return this }
     order(field, { ascending = true } = {}) { this.sort.push([field, ascending]); return this }
     limit(size) { this.size = size; return this }
     abortSignal(signal) { this.signal = signal; return this }
@@ -49,6 +52,7 @@ function memoryDb(initialRows = [], options = {}) {
       if (options.reject) throw options.reject
       if (Object.hasOwn(options, 'response')) return options.response
       const chosen = rows.filter(candidate => this.filters.every(([operator, field, value]) => {
+        if (operator === 'logical') return matchesPostgrestFilter(candidate, field)
         const actual = candidate[field]
         if (operator === 'eq') return actual === value
         if (operator === 'in') return value.includes(actual)
@@ -89,6 +93,7 @@ test('the three eligible states are selected with an exact regional metadata-onl
     ['eq', 'source', 'chiletrabajos'], ['eq', 'region', 'Metropolitana'],
     ['in', 'verification_status', ['verified_active', 'unavailable', 'unknown']],
     ['lte', 'last_verified_at', CUTOFF], ['lte', 'updated_at', NOW.toISOString()],
+    ['logical', opportunityTemporalFilter(NOW, false)],
   ])
   assert.deepEqual(call.sort, [['updated_at', true], ['last_verified_at', true], ['source_id', true]])
   assert.equal(call.limit, 30)
@@ -172,6 +177,26 @@ test('date-only expiry lasts through the final second of the day in Chile', asyn
   const rows = [row('7000001', { expires_at: '2026-10-07' }), row('7000002', { expires_at: '2026-10-07 (en 1 día)' })]
   assert.deepEqual(await readChileTrabajosRefreshCandidates(memoryDb(rows), 'Santiago', { now: new Date('2026-10-08T02:59:59Z') }), ['7000001', '7000002'])
   assert.deepEqual(await readChileTrabajosRefreshCandidates(memoryDb(rows), 'Santiago', { now: new Date('2026-10-08T03:00:00Z') }), [])
+})
+
+test('thirty canonical expired rows cannot starve an eligible thirty-first maintenance candidate', async () => {
+  for (const expires_at of ['2026-10-06', '2026-10-07T20:59:59.999Z', NOW.toISOString()]) {
+    const expired = Array.from({ length: 30 }, (_, index) => row(String(7000000 + index), { expires_at }))
+    const db = memoryDb([...expired, row('7000031')])
+    assert.deepEqual(await readChileTrabajosRefreshCandidates(db, 'Santiago', { now: NOW }), ['7000031'])
+    assert.equal(db.calls[0].returned, 1)
+    assert.equal(db.calls[0].limit, 30)
+    assert.equal(db.writes, 0)
+  }
+})
+
+test('legacy timestamp offsets are parsed by instant rather than compared as text', async () => {
+  const rows = [
+    row('7000001', { expires_at: '2026-10-07T18:00:00-03:00' }),
+    row('7000002', { expires_at: '2026-10-07T18:00:01-03:00' }),
+    row('7000003', { expires_at: '2026-10-07T21:00:01Z' }),
+  ]
+  assert.deepEqual(await readChileTrabajosRefreshCandidates(memoryDb(rows), 'Santiago', { now: NOW }), ['7000002', '7000003'])
 })
 
 test('expired instants and malformed expiry are excluded while null and future deadlines remain eligible', async () => {

@@ -11,6 +11,7 @@ import {
 } from '../lib/opportunities/verified-index.ts'
 import { filterOpportunities } from '../lib/opportunities/matching.ts'
 import { runOpportunityRefreshCron } from '../lib/opportunities/refresh-catalog.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const NOW = new Date('2026-10-07T20:00:00.000Z')
 const OLD = new Date(NOW.getTime() - 60_000).toISOString()
@@ -134,6 +135,7 @@ function memoryDb(initialRows = [], options = {}) {
     in(field, values) { this.filters.push(['in', field, values]); return this }
     gte(field, value) { this.filters.push(['gte', field, value]); return this }
     lte(field, value) { this.filters.push(['lte', field, value]); return this }
+    or(expression) { this.filters.push(['logical', expression]); return this }
     like(field, value) { this.filters.push(['like', field, value]); return this }
     not(field, operator, value) {
       assert.equal(operator, 'is')
@@ -149,6 +151,7 @@ function memoryDb(initialRows = [], options = {}) {
     abortSignal(signal) { this.signal = signal; return this }
     matches(row) {
       return this.filters.every(([operator, field, value]) => {
+        if (operator === 'logical') return matchesPostgrestFilter(row, field)
         const actual = fieldValue(row, field)
         if (operator === 'eq') return actual === value
         if (operator === 'in') return value.includes(actual)

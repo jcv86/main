@@ -1,43 +1,63 @@
 import { NextResponse } from 'next/server'
+import { createHash } from 'node:crypto'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { createAdminClient } from '@/lib/supabase/server'
 import { checkA4Access, getA4AccessDenialMessage } from '@/lib/a4/access-control'
 import { filterOpportunities, normalizeOpportunityWorkMode, searchFiltersFromStoredIntent } from '@/lib/opportunities/matching'
-import { readVerifiedOpportunities } from '@/lib/opportunities/verified-index'
+import { readVerifiedOpportunityInventory } from '@/lib/opportunities/verified-index'
+import { OPPORTUNITY_PAGE_SIZE, OpportunityQueryError, parseOpportunityQuery } from '@/lib/opportunities/search-query'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+const headers = { 'Cache-Control': 'private, no-store, max-age=0', 'CDN-Cache-Control': 'no-store' }
+const json = (body: unknown, status = 200) => NextResponse.json(body, { status, headers })
 
-export async function GET() {
+export async function GET(request?: Request) {
+  try {
   const user = await resolveServerUser()
-  if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+  if (!user) return json({ error: 'No autenticado' }, 401)
   const supabase = createAdminClient()
   const access = await checkA4Access(user.id, supabase)
   if (!access.canAccess) {
-    return NextResponse.json({ error: getA4AccessDenialMessage(), code: access.reason }, { status: 403 })
+    return json({ error: getA4AccessDenialMessage(), code: access.reason }, 403)
   }
-  const { data: intent, error } = await supabase.from('career_search_intents').select('*')
-    .eq('user_id', user.id).eq('is_active', true).eq('is_primary', true).maybeSingle()
-  if (error) return NextResponse.json({ error: 'No fue posible cargar tu búsqueda.' }, { status: 500 })
-
-  try {
+    const query = parseOpportunityQuery(new URL(request?.url ?? 'https://www.despegatucarrera.com/api/a4/opportunities/for-me'))
+    let intent = null
+    if (query.view === 'saved') {
+      const result = await supabase.from('career_search_intents').select('target_roles,breadth,locations,work_modes')
+        .eq('user_id', user.id).eq('is_active', true).eq('is_primary', true).maybeSingle()
+      if (result.error) return json({ error: 'No fue posible cargar tu búsqueda.' }, 500)
+      intent = result.data
+    }
     // GET only reads the verified index. A scheduled refresh owns provider calls and writes.
-    const index = await readVerifiedOpportunities(supabase, 500)
-    const matches = intent ? filterOpportunities(index, searchFiltersFromStoredIntent(intent)) : index
-    const opportunities = matches.slice(0, 18).map(toPublic)
-    return NextResponse.json({
-      needs_intent: !intent,
-      ...(!intent ? { mode: 'available_now' } : {}),
+    const { opportunities: index, scope } = await readVerifiedOpportunityInventory(supabase, 500)
+    const filters = query.view === 'explore' ? query.filters : searchFiltersFromStoredIntent(intent)
+    const matches = filterOpportunities(index, filters)
+    const snapshot = createHash('sha256').update(JSON.stringify({ filters, rows: matches.map(job => [job.source, job.source_id, job.last_verified_at, job.expires_at]) })).digest('hex')
+    if (query.snapshot && query.snapshot !== snapshot) {
+      return json({ error: 'Las ofertas cambiaron. Vuelve a cargar los resultados.', code: 'inventory_changed' }, 409)
+    }
+    if (query.offset > 0 && query.offset >= matches.length) return json({ error: 'Vuelve a la primera página de resultados.' }, 400)
+    const opportunities = matches.slice(query.offset, query.offset + OPPORTUNITY_PAGE_SIZE).map(toPublic)
+    const nextOffset = query.offset + opportunities.length
+    return json({
+      needs_intent: query.view === 'saved' && !intent,
+      mode: query.view === 'explore' ? 'explore' : intent ? 'saved' : 'available_now',
+      applied_filters: filters,
+      scope,
       source: 'verified_index',
       inventory_status: index.length ? 'ready' : 'empty',
       result_status: !index.length ? 'inventory_empty' : !matches.length ? 'no_matches' : 'matches',
       fetched_at: new Date().toISOString(),
       coverage: { verified_jobs: index.length, matching_jobs: matches.length },
+      total_matching: matches.length,
+      pagination: { offset: query.offset, page_size: OPPORTUNITY_PAGE_SIZE, next_offset: nextOffset < matches.length ? nextOffset : null, snapshot },
       count: opportunities.length,
       opportunities,
     })
-  } catch {
-    return NextResponse.json({ error: 'No fue posible cargar las oportunidades.' }, { status: 503 })
+  } catch (error) {
+    if (error instanceof OpportunityQueryError) return json({ error: error.message }, 400)
+    return json({ error: 'No fue posible cargar las oportunidades.' }, 503)
   }
 }
 

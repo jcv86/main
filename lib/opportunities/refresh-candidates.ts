@@ -1,5 +1,6 @@
 import type { AdminDbClient } from './verified-index'
 import { inferChileRegion } from './taxonomy'
+import { opportunityTemporalFilter } from './temporal-filter'
 import {
   isChileTrabajosExpired,
   isChileTrabajosJobUrl,
@@ -58,6 +59,7 @@ export async function readChileTrabajosRefreshCandidates(
     .in('verification_status', ELIGIBLE_STATES)
     .lte('last_verified_at', new Date(cutoffMs).toISOString())
     .lte('updated_at', nowIso)
+    .or(opportunityTemporalFilter(now, false))
     .order('updated_at', { ascending: true })
     .order('last_verified_at', { ascending: true })
     .order('source_id', { ascending: true })

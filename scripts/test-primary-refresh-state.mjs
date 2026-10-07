@@ -6,6 +6,7 @@ import {
 import { runOpportunityRefreshCron, OPPORTUNITY_REFRESH_BUDGET_MS } from '../lib/opportunities/refresh-catalog.ts'
 import { readChileTrabajosRefreshCandidates } from '../lib/opportunities/refresh-candidates.ts'
 import { fetchGetOnBoardBatch } from '../lib/opportunities/sources/getonboard.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const NOW = new Date('2026-10-07T21:15:00.000Z')
 const SECRET = 'synthetic-primary-refresh-test-secret'
@@ -75,6 +76,7 @@ function memoryDb({ rows = [], executions = [], ...config } = {}) {
     in(field, values) { this.filters.push(row => values.includes(fieldValue(row, field))); return this }
     lte(field, value) { this.filters.push(row => fieldValue(row, field) != null && fieldValue(row, field) <= value); return this }
     gte(field, value) { this.filters.push(row => fieldValue(row, field) != null && fieldValue(row, field) >= value); return this }
+    or(expression) { this.filters.push(row => matchesPostgrestFilter(row, expression)); return this }
     not(field, operator, value) {
       assert.equal(operator, 'is'); assert.equal(value, null)
       if (field.startsWith('execution_summary->')) this.stateKey = field.split('->')[1]
