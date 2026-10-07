@@ -2,7 +2,7 @@
 
 Date: 2026-10-07
 Delivery item: DTC-A4-S01
-State: initial ingestion, authenticated Radar access and PR #239 publication verified; remaining employer cycles and native effects of bounded freshness improvement in_progress
+State: initial ingestion, authenticated Radar access and PR #240 search/context publication verified; remaining employer cycles and native effects of bounded freshness improvement in_progress
 Application baseline: `jcv86/main` at `7ce45b5c77f844081a97a3f023fbc346ee9350e7`.
 
 ## User outcome
@@ -59,6 +59,7 @@ The actual verification constraint accepts `verified_active`, `stale`, `unavaila
 pnpm run test:a4-employers
 pnpm run test:a4-opportunities
 pnpm run test:getonboard
+pnpm run test:a4-closure
 pnpm exec tsc --noEmit
 pnpm run build
 ```
@@ -254,3 +255,102 @@ All **10 CI workflows** for the exact final candidate passed; the [A4 engine wor
 **Read-only inventory evidence:** DTCFINAL at **22:18:52.262055 UTC** still has **110 stored verified-active rows / 44 verified within 24 hours**: Chiletrabajos 90/24, Greenhouse 14/14, Lever 6/6, Get on Board 0/0. Slot `165871` remains the latest execution, with the original start/completion, 32 upserts, zero invalidations/rejections, complete Checkr 14/14 and APPLY Digital 6/23 snapshots (17 excluded). The baseline-to-inventory increase from 78 to 110 supports 32 net-new rows from that earlier native run. No new ingestion is attributed to PR #239 and its new per-source persistence fields have not yet been observed on a native execution.
 
 **Next native evidence:** Coderio/PagerDuty are expected in slot `165872` at **2026-10-08 00:15 UTC / October 7 21:15 Chile**; Fintual/Cabify in slot `165873` at **October 8 03:15 UTC / 00:15 Chile**. Primary maintenance and cooldown behavior require their corresponding natural source/region visits. `DTC-A4-A01` stays verified; `DTC-A4-S01` and `DTC-A4-S02` stay in_progress. This two-document follow-up records publication evidence without another application-code merge or deployment.
+
+## Search and context closure candidate — 2026-10-07
+
+The owner's subsequent request to finish the Radar authorizes this scoped implementation after PR #239. The candidate branch is `codex/a4-final-closure-20261007`, based on main `4c0322a929b51aa79dc9c3acce4225032d661b49`. The rollback baseline is its verified production deployment `dpl_2paWuyve2aB6y2GYdrj2WyYZmeLN`. Publication identity and post-release observations belong in the candidate PR's preserved release record; this section records the pre-publication work.
+
+### Verified catalog reads and maintenance selection
+
+The actual DTCFINAL metadata identifies `expires_at` and `published_at` as TEXT, and `last_verified_at` as a timestamp. The new shared temporal filter therefore handles normalized date-only values using the Chilean calendar and normalized UTC timestamps using the actual instant. It applies expiration and publication bounds before the database row limit. A second parser check remains after reading. Legacy offset or noncanonical date text is retained for that real parser rather than rejected by an incorrect lexical comparison; this compatibility path is not a guarantee of exhaustive selection for arbitrary legacy text.
+
+Regressions reproduce and resolve two starvation cases: thirty expired maintenance rows hiding the next valid candidate, and five hundred expired catalog rows hiding the next current vacancy. Future Get on Board publication dates are rejected before persistence. Maintenance remains SELECT-only until a normal provider verification; no lease, cron schedule, probe limit or source budget changes.
+
+The public reader retains its explicit 18-field projection, deterministic verification/source/ID ordering and 24-hour freshness boundary. It returns a scope marker when the bounded 500-row read fills. All counts and filters then describe that consulted set; no broader national coverage is implied.
+
+### Exploration, saved search and complete result navigation
+
+- The initial view explores current Metropolitana vacancies across all roles and modalities. The user can switch to their actual saved primary search without changing it.
+- Draft inputs and applied filters are separate. The API returns the filters actually used, and changing a draft does not silently relabel the displayed results. An unadded role survives switching views.
+- **Ver ofertas** and **Limpiar filtros** only lead to catalog/index GET reads. **Guardar como mi búsqueda** is the explicit owner-authorized save action.
+- Results paginate in groups of 18. A fingerprint binds later pages to the filters and current matching inventory. If either changes, the route rejects the stale page and the UI restarts the first page with the same filters. Old asynchronous responses cannot replace a newer view.
+- A failed later page preserves existing cards and offers retry. An expired session or unavailable A4 access offers the appropriate recovery. An empty catalog remains distinct from zero matches for a saved search.
+- Saving an existing primary now updates that same owner-scoped row in one compare-and-set statement. It no longer demotes the old primary before a potentially failing insert. The existing unique primary index arbitrates concurrent first saves; a competing update returns a clear conflict. Optional advanced preferences omitted by the form are preserved. No automatic save retry occurs after a lost acknowledgment.
+- Both search-intent methods require verified authentication and effective A4 access, select explicit fields and return private/no-store responses. User input cannot choose an owner, source or existing row ID.
+
+### Context grounded in the existing journey
+
+The two active A4 pages now describe existing career identity, completed A1, A2 task days and A3 sessions. Reads are bounded, owner-scoped and explicitly projected. Independent source failures preserve successful sections and display the unavailable section. The job-search context starts collapsed for optional detail.
+
+No missing legacy profile tables are created or migrated. The active pages no longer depend on `dtc_profile_signals` or calculate readiness from absent data. A declared target role is described as a declaration, not as proof of competence. Completion counts are descriptive and do not establish a match to job requirements.
+
+The Radar's upper A3 indicators share the same completeness validation as the context, including the exact owner count, known module IDs and valid completion dates. Partial reads cannot appear as verified totals. Scores that are absent, malformed, non-finite or outside 0–100 are excluded; a genuine zero remains valid. The regression `[null, '', 80]` yields 80/100 from one valid completed session, while a 1,001-row count with only 1,000 returned rows yields unavailable KPIs and keeps the Radar and opportunity entry usable.
+
+### Candidate evidence and native-cycle limits
+
+The focused synthetic suites pass **357/357 cases**: primary provider/matching/maintenance/refresh 124; employer sources/index/refresh 82; Get on Board 38; access 25; legacy profile availability 14; canonical context and Radar indicators 29; atomic search-intent saves 21; paginated search experience 24. They perform no provider requests or real database writes. All relevant new scripts and the shared PostgREST fixture are wired into CI. Critical security, auth, journey and reporting contracts also pass. A rejected A3 transport promise is converted to a sanitized unavailable result; it cannot reject the whole Radar page.
+
+The actual changed pages, shell, styles and local Montserrat fonts passed isolated Chromium checks at **390×844 and 1440×1000**, with no external requests or page errors. Both viewports had no horizontal overflow and passed keyboard-focus/44px-action checks. Exploration preserved the stored synthetic search, an unadded role survived a view round trip, pagination advanced 18→36→40 without duplicates, and later-page failure/retry, changed-inventory restart, expired-session recovery, empty inventory and partial context were checked. The only POST was an explicit save against synthetic in-memory IO. Automated axe checks found no violations in the changed page scope; two incomplete rule categories (`aria-prohibited-attr` and `color-contrast`) are retained as tool limits rather than claimed complete automated certification. Visual inspection resolved the active-button contrast and checkbox-width defects.
+
+The local complete Next.js build passed with 356 static pages, report-quality contracts and TypeScript, before the final narrowly scoped A3 rejected-promise guard; the guard's additional regression passed afterward. Existing local missing-credential and middleware SDK/Edge warnings are not authenticated-runtime proof. The exact final candidate must also pass clean CI/build gates before publication. Synthetic tests and build success are not production ingestion evidence.
+
+A read-only DTCFINAL query at **2026-10-07 22:51:53.179569 UTC / 19:51:53 Chile** reconfirmed **110 stored verified-active rows and 44 verified within 24 hours**: Chiletrabajos 90/24, Greenhouse 14/14, Lever 6/6 and Get on Board 0/0. Slot `165871` is still the latest completed native run: success/ok, 32 upserts, zero invalidations/rejections; Checkr accepted and returned 14/14, APPLY Digital 6/23 with 17 excluded, both complete. Its new primary persistence/cooldown fields are absent because that run preceded PR #239. No additional rows or native effects are attributed to this candidate.
+
+Remaining natural observations retain their real schedule: Coderio/PagerDuty at **2026-10-08 00:15 UTC / October 7 21:15 Chile**, Fintual/Cabify at **03:15 UTC / 00:15 Chile**, and the Get on Board primary visit at **09:15 UTC / 06:15 Chile**. The bounded three-known-offer maintenance per region does not promise to refresh all 66 older Chiletrabajos records within 24 hours. `DTC-A4-S01` and `DTC-A4-S02` remain in progress until their actual native evidence is observed. This implementation changes no production account, evaluation, entitlement, schema, RLS, credential, environment variable, schedule or lease.
+
+## Post-publication verification — PR #240, 2026-10-07
+
+The owner-authorized search/context closure is published. This follow-up records actual production observations; it does not initiate another application-code merge or production deployment.
+
+| Identity | Verified value |
+|---|---|
+| Reviewed PR / head | [PR #240](https://github.com/jcv86/main/pull/240), `1461739c800dee09e00b6773413f7f0db3202387` |
+| Reviewed and merged tree | `073793eb9500723a122de9519a29e5ec9b583c94` |
+| Current main / squash merge | `8b776e9c171ec0c755fd3829b19bca804e8e74f8`, merged 2026-10-07 23:03:33 UTC |
+| Production deployment | `dpl_957qm7APiGXMd1MguMWSZxoZSn14` |
+| Production READY | **2026-10-07 23:06:27.882 UTC / 20:06:27 Chile** |
+| Canonical domain | `https://www.despegatucarrera.com`; connector resolved the same deployment and commit at 23:06:53 UTC and reconfirmed the identity at 23:13 UTC |
+| Rollback baseline | PR #239 main `4c0322a929b51aa79dc9c3acce4225032d661b49`, deployment `dpl_2paWuyve2aB6y2GYdrj2WyYZmeLN` |
+
+**Release gates.** All **357 focused synthetic regressions** and full TypeScript passed. The exact final candidate passed **all 10 CI workflows**, including the [A4 engine / isolated PostgreSQL lease gate](https://github.com/jcv86/main/actions/runs/37699435032), [A4 review UX](https://github.com/jcv86/main/actions/runs/37699434988), [clean production build](https://github.com/jcv86/main/actions/runs/37699434992) and [A1 isolated Auth/browser gate](https://github.com/jcv86/main/actions/runs/37699435035). The earlier local build timing and the final transport-guard regression are preserved in the candidate record. Preview `dpl_4Xg2475vPh6iQYwLCow72zTZBo29` and the exact-tree production build both became READY. Final pre-merge reads confirmed the expected main, clean/mergeable PR, reviewed head/tree and completed checks. The merged tree was read back independently. No preview-protection bypass was used.
+
+**Authenticated production journey.** The authorized session entered normal A4 and followed **Explorar oportunidades** to `https://www.despegatucarrera.com/despega/a4/job-matching`. The landing displayed descriptive existing journey records and honest unavailable scores. Its active context no longer depended on the missing auxiliary profile relation.
+
+- Metropolitana exploration loaded **18 → 32 of 32** real cards: 12 Chiletrabajos, 14 Greenhouse and 6 Lever, with **32 distinct original URLs**.
+- **Mi búsqueda guardada** independently showed its current no-matches state. Switching back preserved it; no real save POST was performed.
+- **Limpiar filtros** changed the draft to all regions, while the displayed results retained the applied Metropolitana label and count until **Ver ofertas** was used.
+- All-region exploration then loaded **18 → 36 → 44 of 44** real cards: **24 Chiletrabajos, 14 Greenhouse and 6 Lever**, with **44 distinct original URLs**. This is observed rendered production content, separately verified from SQL counts.
+- The page was left open with the 44 results loaded. A production screenshot was delivered privately to the owner. Personal identifiers, criteria and journey values are omitted from this public record.
+
+The live checks used ordinary navigation and GET exploration only. Explicit primary-save behavior and concurrency were verified with synthetic/isolated tests, not by changing a production search. Mobile/desktop recovery, focus, layout and accessibility scope remain as documented in the candidate evidence.
+
+**Anonymous boundary and runtime.** Ten anonymous GET checks passed between **23:06:52.160 and 23:07:19.631 UTC**: home and live/ready health returned 200; four protected APIs returned 401; the three A4 APIs returned private/no-store; both A4 pages redirected to signin with the intended return path; the apex redirected to www. Vercel project `runtime_errors` returned no groups since this release's READY time. Exact-deployment production `runtime_logs`, filtered to warning/error/fatal with limit 20, returned no records for **23:06:27.882–23:13:52.088 UTC**. This is a bounded initial window, not a perpetual zero-error claim. Earlier PR #239 auxiliary-profile diagnostics retain their historical deployment identity.
+
+**Read-only DTCFINAL evidence at 2026-10-07 23:10:13.712436 UTC / 20:10:13 Chile.**
+
+| Source | Stored status | Stored rows | Verified within 24 hours |
+|---|---|---:|---:|
+| Chiletrabajos | `verified_active` | 90 | 24 |
+| Greenhouse | `verified_active` | 14 | 14 |
+| Lever | `verified_active` | 6 | 6 |
+| Get on Board | No rows | 0 | 0 |
+| **Total** | | **110** | **44** |
+
+The aggregate covers every stored source/status. Freshness requires `observed_at - 24 hours <= last_verified_at <= observed_at`; no future verification is counted. The 66 older Chiletrabajos rows remain outside the current 24-hour catalog.
+
+Only two A4 execution rows exist. Slot `165871` is still the latest: start **21:15:00.909321 UTC**, completion **21:15:07.636 UTC**, `success/ok`, 6,727 ms, **32 upserts / 0 invalidations / 0 index rejections**. Chiletrabajos-Valparaíso discovered 30 and probed/returned 12 active vacancies, without failure or exhausted budget. Checkr (`greenhouse:chile`) received/accepted/returned **14/14/14**, excluding/rejecting zero. APPLY Digital (`lever:applydigital`) received **23**, accepted/returned **6**, excluded **17** and rejected zero. Both employer snapshots were complete; source errors were absent and employer cooldowns empty.
+
+The pre-run 78-row catalog increased to 110, supporting **32 net-new stored rows from that earlier native execution**. An upsert by itself can be an insert or update. No additional ingestion is attributed to PR #239 or PR #240, and the earlier 47-offer public smoke was not an insertion. New primary persistence/cooldown fields remain absent on this pre-improvement run. Slot `165870` remains the earlier consumed Santiago execution with 12 upserts.
+
+**Remaining native acceptance.** `DTC-A4-A01` remains verified and `DTC-A4-A02` is verified for the published read-only exploration, navigation, saved-view separation and truthful context, with save behavior scoped to its synthetic tests. `DTC-A4-S01` and `DTC-A4-S02` remain **in_progress**. Expected next observations are:
+
+| Native slot | Primary / employers | UTC target | Chile target |
+|---|---|---|---|
+| 165872 | Chiletrabajos-Concepción / Coderio and PagerDuty | Oct 8 00:15 | Oct 7 21:15 |
+| 165873 | Chiletrabajos-Antofagasta / Fintual and Cabify | Oct 8 03:15 | Oct 8 00:15 |
+| 165874 | Chiletrabajos-Puerto Montt / Checkr and APPLY Digital | Oct 8 06:15 | Oct 8 03:15 |
+| 165875 | Get on Board programming / Coderio and PagerDuty | Oct 8 09:15 | Oct 8 06:15 |
+
+These are scheduled targets, not successful-run claims. Native effects of maintenance, cooldown persistence, fair coverage and per-source write counters require their natural visits. The three-known-offer maintenance cap per region cannot promise to refresh all 66 older rows within 24 hours.
+
+All Supabase operations in this check were read-only and restricted to DTCFINAL `dcfrbwxbejtbcouionna`; no profiles, evaluations, personal data or offer source payloads were retrieved through SQL. No manual cron, retries, lease/schedule/schema/RLS/environment/credential or account changes were made. This checkpoint does not re-score or re-certify unrelated DTC areas.
