@@ -7,7 +7,10 @@ export const maxDuration = 60
 
 export async function GET(request: Request) {
   return runOpportunityRefreshCron(request, {
-    env: process.env,
+    env: {
+      VERCEL_ENV: process.env.VERCEL_ENV,
+      CRON_SECRET: process.env.CRON_SECRET,
+    },
     createDb: createAdminClient,
   })
 }
