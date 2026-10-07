@@ -48,7 +48,7 @@ El índice exige verificación durante las últimas 24 horas, descarta fechas de
 
 ### Exclusión de ejecuciones duplicadas
 
-La migración `20261007180000_a4_opportunity_refresh_lease.sql` crea `public.acquire_a4_opportunity_refresh()` y reutiliza `public.cron_job_executions`, sin crear tablas.
+La migración `20261007173326_a4_opportunity_refresh_lease.sql` crea `public.acquire_a4_opportunity_refresh()` y reutiliza `public.cron_job_executions`, sin crear tablas.
 
 La función usa `SECURITY INVOKER`, nombres calificados y `search_path` vacío. Solo `service_role` tiene permiso de ejecución. Un advisory lock protege adquisición e inserción y el registro mantiene un lease de 120 segundos. Un intento consume su turno de tres horas, incluso si falla. El servidor comprueba propiedad antes de persistir y finaliza por ID y estado. Las ejecuciones propias vencidas se registran como fallidas; no se crean notificaciones.
 

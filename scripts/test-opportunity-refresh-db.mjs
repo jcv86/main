@@ -24,7 +24,7 @@ let workerAConnected = false
 let workerBConnected = false
 const passed = []
 const migration = await readFile(
-  new URL('../supabase/migrations/20261007180000_a4_opportunity_refresh_lease.sql', import.meta.url),
+  new URL('../supabase/migrations/20261007173326_a4_opportunity_refresh_lease.sql', import.meta.url),
   'utf8',
 )
 
