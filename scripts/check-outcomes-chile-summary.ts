@@ -63,7 +63,7 @@ async function main() {
   const record = { created_at: '2026-10-01T12:00:00Z', verification_status: 'self_reported' }
   const data: Record<string, unknown[]> = {
     dtc_job_search_events: [{ ...record, id: 'application', event_type: 'application', occurred_at: '2026-08-15T12:00:00Z' }],
-    dtc_employment_outcomes: [{ ...record, id: 'job', outcome_type: 'job_started', effective_date: '2026-09-01', region_code: '13', occupation_code: '2411', employment_category: 'private_employee' }],
+    dtc_employment_outcomes: [{ ...record, id: 'job', role_title: 'Analista', outcome_type: 'job_started', effective_date: '2026-09-01', region_code: '13', occupation_code: '2411', employment_category: 'private_employee' }],
     dtc_salary_outcomes: [
       { ...record, id: 'baseline', measurement_role: 'baseline', monthly_net_clp: 900000, measured_at: '2026-08-01', employment_outcome_id: null },
       { ...record, id: 'latest', measurement_role: 'new_role', monthly_net_clp: 1200000, measured_at: '2026-10-01', employment_outcome_id: 'job' },
@@ -85,6 +85,11 @@ async function main() {
     metricKey: 'monthly_labor_income_median', asOf: '2026-10-01', regionCode: '13', occupationCode: '2411', employmentCategory: 'private_employee',
   })
   assert.equal(summary.attribution, 'observed_not_causal')
+  assert.equal(summary.workspace.employmentOptions[0].roleTitle, 'Analista')
+  assert.equal(summary.workspace.historyCount, 4)
+  assert.equal(summary.workspace.asOfDate, '2026-10-07')
+  assert.ok(mock.requests.find((url) => url.pathname.endsWith('/dtc_employment_outcomes'))?.searchParams.get('select')?.split(',').includes('role_title'))
+  assert.ok(mock.requests.find((url) => url.pathname.endsWith('/dtc_job_search_events'))?.searchParams.get('select')?.split(',').includes('target_role'))
   assert.deepEqual(summary.funnel, summary.impact.observed.jobSearch)
   assert.deepEqual(summary.economic, { ...summary.impact.observed.economic, annualizedLiftClp: summary.impact.projection.annualizedLiftClp })
 

@@ -1,7 +1,7 @@
 import { type NextRequest, NextResponse } from 'next/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
-import { recordEmploymentOutcome, recordJobSearchEvent, recordSalaryOutcome } from '@/lib/outcomes-chile/capture'
-import { isCaptureInput, OutcomeCaptureValidationError } from '@/lib/outcomes-chile/capture-validation'
+import { completeOutcomeFollowup, recordEmploymentOutcome, recordJobSearchEvent, recordSalaryOutcome } from '@/lib/outcomes-chile/capture'
+import { isCaptureInput, OutcomeCaptureConflictError, OutcomeCaptureNotFoundError, OutcomeCaptureValidationError } from '@/lib/outcomes-chile/capture-validation'
 import { loadOutcomesChileSummary } from '@/lib/outcomes-chile/service'
 
 export const dynamic = 'force-dynamic'
@@ -46,9 +46,12 @@ export async function POST(request: NextRequest) {
     if (body.action === 'job_search_event') return privateJson({ data: await recordJobSearchEvent(user.id, body) }, 201)
     if (body.action === 'employment_outcome') return privateJson({ data: await recordEmploymentOutcome(user.id, body) }, 201)
     if (body.action === 'salary_outcome') return privateJson({ data: await recordSalaryOutcome(user.id, body) }, 201)
+    if (body.action === 'complete_followup') return privateJson({ data: await completeOutcomeFollowup(user.id, body) })
     return privateJson({ error: 'Acción no soportada' }, 400)
   } catch (error) {
     if (error instanceof OutcomeCaptureValidationError) return privateJson({ error: error.message }, 422)
+    if (error instanceof OutcomeCaptureConflictError) return privateJson({ error: error.message }, 409)
+    if (error instanceof OutcomeCaptureNotFoundError) return privateJson({ error: error.message }, 404)
     logFailure('capture', error)
     return privateJson({ error: 'No pudimos registrar el resultado.' }, 500)
   }

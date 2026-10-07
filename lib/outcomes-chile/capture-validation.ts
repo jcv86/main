@@ -13,6 +13,20 @@ export class OutcomeCaptureValidationError extends Error {
   }
 }
 
+export class OutcomeCaptureConflictError extends Error {
+  constructor(code: string) {
+    super(code)
+    this.name = 'OutcomeCaptureConflictError'
+  }
+}
+
+export class OutcomeCaptureNotFoundError extends Error {
+  constructor() {
+    super('FOLLOWUP_NOT_FOUND')
+    this.name = 'OutcomeCaptureNotFoundError'
+  }
+}
+
 export function isCaptureInput(value: unknown): value is Record<string, unknown> {
   return typeof value === 'object' && value !== null && !Array.isArray(value)
 }
@@ -20,6 +34,30 @@ export function isCaptureInput(value: unknown): value is Record<string, unknown>
 function inputRecord(input: unknown): Record<string, unknown> {
   if (!isCaptureInput(input)) throw new OutcomeCaptureValidationError('INVALID_INPUT')
   return input
+}
+
+function uuid(value: unknown, code: string): string {
+  if (typeof value !== 'string' || !UUID.test(value)) throw new OutcomeCaptureValidationError(code)
+  return value.toLowerCase()
+}
+
+export function validateCaptureRequestId(input: unknown): string {
+  return uuid(inputRecord(input).requestId, 'INVALID_REQUEST_ID')
+}
+
+export function captureTodayChile(now = new Date()): string {
+  if (!Number.isFinite(now.getTime())) throw new Error('OUTCOME_CLOCK_INVALID')
+  const parts = new Intl.DateTimeFormat('en', {
+    timeZone: 'America/Santiago', year: 'numeric', month: '2-digit', day: '2-digit',
+  }).formatToParts(now)
+  const part = (type: Intl.DateTimeFormatPartTypes) => parts.find(value => value.type === type)?.value
+  return `${part('year')}-${part('month')}-${part('day')}`
+}
+
+function observedDate(value: unknown, code: string, futureCode: string, now: Date): string {
+  const date = dateOnly(value, code)
+  if (date > captureTodayChile(now)) throw new OutcomeCaptureValidationError(futureCode)
+  return date
 }
 
 function enumValue(value: unknown, allowed: Set<string>, code: string): string {
@@ -67,11 +105,14 @@ function timestamp(value: unknown): string {
   return normalized
 }
 
-export function validateJobSearchEvent(input: unknown) {
+export function validateJobSearchEvent(input: unknown, now = new Date()) {
   const body = inputRecord(input)
+  const occurredAt = timestamp(body.occurredAt)
+  if (!Number.isFinite(now.getTime())) throw new Error('OUTCOME_CLOCK_INVALID')
+  if (Date.parse(occurredAt) > now.getTime()) throw new OutcomeCaptureValidationError('FUTURE_OCCURRED_AT')
   return {
     event_type: enumValue(body.eventType, EVENT_TYPES, 'INVALID_EVENT_TYPE'),
-    occurred_at: timestamp(body.occurredAt),
+    occurred_at: occurredAt,
     source_channel: optionalEnum(body.sourceChannel, SOURCE_CHANNELS, 'INVALID_SOURCE_CHANNEL'),
     target_role: optionalText(body.targetRole, 160, 'INVALID_TARGET_ROLE'),
     occupation_code: optionalText(body.occupationCode, 40, 'INVALID_OCCUPATION_CODE'),
@@ -79,13 +120,13 @@ export function validateJobSearchEvent(input: unknown) {
   }
 }
 
-export function validateEmploymentOutcome(input: unknown) {
+export function validateEmploymentOutcome(input: unknown, now = new Date()) {
   const body = inputRecord(input)
   const roleTitle = optionalText(body.roleTitle, 160, 'INVALID_ROLE_TITLE')
   if (!roleTitle) throw new OutcomeCaptureValidationError('ROLE_REQUIRED')
   return {
     outcome_type: enumValue(body.outcomeType, OUTCOME_TYPES, 'INVALID_OUTCOME_TYPE'),
-    effective_date: dateOnly(body.effectiveDate, 'INVALID_EFFECTIVE_DATE'),
+    effective_date: observedDate(body.effectiveDate, 'INVALID_EFFECTIVE_DATE', 'FUTURE_EFFECTIVE_DATE', now),
     role_title: roleTitle,
     occupation_code: optionalText(body.occupationCode, 40, 'INVALID_OCCUPATION_CODE'),
     region_code: optionalText(body.regionCode, 20, 'INVALID_REGION_CODE'),
@@ -95,20 +136,27 @@ export function validateEmploymentOutcome(input: unknown) {
   }
 }
 
-export function validateSalaryOutcome(input: unknown) {
+export function validateSalaryOutcome(input: unknown, now = new Date()) {
   const body = inputRecord(input)
   const amount = body.monthlyNetClp
   if (typeof amount !== 'number' || !Number.isInteger(amount) || amount < 0 || amount > 100000000) {
     throw new OutcomeCaptureValidationError('INVALID_MONTHLY_NET_CLP')
   }
-  const employmentOutcomeId = body.employmentOutcomeId ?? null
-  if (employmentOutcomeId !== null && (typeof employmentOutcomeId !== 'string' || !UUID.test(employmentOutcomeId))) {
-    throw new OutcomeCaptureValidationError('INVALID_EMPLOYMENT_OUTCOME_ID')
-  }
+  const employmentOutcomeId = body.employmentOutcomeId == null ? null : uuid(body.employmentOutcomeId, 'INVALID_EMPLOYMENT_OUTCOME_ID')
   return {
-    employment_outcome_id: employmentOutcomeId as string | null,
+    employment_outcome_id: employmentOutcomeId,
     measurement_role: enumValue(body.measurementRole, MEASUREMENT_ROLES, 'INVALID_MEASUREMENT_ROLE'),
     monthly_net_clp: amount,
-    measured_at: dateOnly(body.measuredAt, 'INVALID_MEASURED_AT'),
+    measured_at: observedDate(body.measuredAt, 'INVALID_MEASURED_AT', 'FUTURE_MEASURED_AT', now),
   }
+}
+
+export function validateFollowupCompletion(input: unknown) {
+  const body = inputRecord(input)
+  const followupId = uuid(body.followupId, 'INVALID_FOLLOWUP_ID')
+  if (typeof body.employmentActive !== 'boolean') throw new OutcomeCaptureValidationError('INVALID_EMPLOYMENT_ACTIVE')
+  const sameRole = body.sameRole ?? null
+  if (sameRole !== null && typeof sameRole !== 'boolean') throw new OutcomeCaptureValidationError('INVALID_SAME_ROLE')
+  if (!body.employmentActive && sameRole !== null) throw new OutcomeCaptureValidationError('INVALID_SAME_ROLE')
+  return { followup_id: followupId, employment_active: body.employmentActive, same_role: sameRole }
 }

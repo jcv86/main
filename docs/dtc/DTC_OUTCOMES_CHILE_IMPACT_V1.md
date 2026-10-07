@@ -6,7 +6,7 @@ Development block: 2026-10-07. Repository: `jcv86/main`. PR: [#233](https://gith
 
 Turn a person's recorded job-search, employment, salary and follow-up evidence into an interpretable result. Every salary comparison identifies the actual measurements and their verification. Official labor-market references retain their source, period, publication and scope. No result establishes a causal effect of DTC.
 
-This block completes the calculation and API boundary. It does not launch a capture/review screen, import official benchmark values or install the schema in production.
+The initial block completed the calculation and API boundary. The subsequent [Mis resultados laborales experience](DTC_OUTCOMES_CHILE_EXPERIENCE.md) adds capture/review UI, safe retries and due follow-up completion in the same PR. Official benchmark ingestion and production schema activation remain pending.
 
 ## Grounded release identity
 
@@ -52,7 +52,7 @@ The current database calls its official salary benchmarks `monthly_labor_income_
 
 The legacy top-level `economic` object exposes an explicitly named `annualizedLiftClp`. The earlier, unlaunched `observedAnnualLiftClp` field is removed. Within `impact`, all projected amounts live exclusively in `projection`.
 
-`POST` retains `job_search_event`, `employment_outcome` and `salary_outcome` actions. The session supplies identity. The client cannot set verification or evidence references. Salary must be a JSON integer; dates must be real calendar dates; timestamps require an explicit zone. Optional employment links are checked by both ID and owner before salary insertion and are also constrained in PostgreSQL.
+`POST` supports `job_search_event`, `employment_outcome`, `salary_outcome` and `complete_followup`. Every request requires a UUID `requestId`; the session supplies identity. The client cannot set verification or evidence references. Salary must be a JSON integer; dates must be real calendar dates; timestamps require an explicit zone. New observations cannot be future-dated. Optional employment links are checked by ID and owner inside the service-only atomic RPC, and are also constrained in PostgreSQL. The experience document describes the per-owner request ledger, replay and conflict rules.
 
 All responses, including errors, are private and `no-store` for browser and CDN. Missing or unavailable summary storage returns HTTP 503 without personal data. Logs expose only bounded error codes.
 
@@ -68,8 +68,9 @@ Run `npm run check:outcomes-chile-all` for:
 - Pure benchmark selection and actual SDK pagination with synthetic transport, including a candidate after row 1,000.
 - Fourteen grouped impact scenarios, including ambiguous measurements, zero baseline, negative change, Chile calendar boundaries, early follow-ups and conservative verification.
 - Owner-scoped summary queries, 1,201-row pagination, a lower server page cap, failed/incomplete/duplicate reads, and linked employment dimensions.
+- Shared eligibility for the presentation view, Chile midnight boundaries, reviewed/early/future follow-ups, truthful zero amounts, and presentation caps that do not truncate aggregate evidence.
 
-The separate SQL runner is `scripts/outcomes-chile-database-lab.mjs`. Local evidence uses PostgreSQL 18.3 in PGlite 0.5.8, with real transactions, roles, constraints and RLS. It proves automatic dates, rollback after an injected day-90 failure, six rejected cross-owner mutations, owner-read isolation across five personal tables, 36 rejected client-role writes, explicit server-role privileges, salary-preserving deletion and migration repeatability. It does not test PostgREST, GoTrue or multiple-connection concurrency.
+The separate SQL runner is `scripts/outcomes-chile-database-lab.mjs`. Local evidence uses PostgreSQL 18.3 in PGlite 0.5.8, with real transactions, roles, constraints and RLS. It proves automatic dates, rollback after an injected day-90 failure, cross-owner isolation, rejected client-role writes, explicit server-role privileges, salary-preserving deletion and migration repeatability. The second block adds request replay for all four actions, rollback of reserved keys, conflicts and protected follow-up completion. PGlite does not test multiple-connection concurrency; the native PostgreSQL path adds two-connection lock/contention scenarios. Neither SQL path exercises PostgREST or GoTrue.
 
 `.github/workflows/outcomes-chile.yml` repeats the runtime checks and SQL lab against a disposable `postgres:17` service, matching the production major version. The workflow also checks repository types; the existing validation workflow and Vercel verify the full production build. Remote results belong to the exact commit shown in the PR checks.
 
@@ -77,12 +78,12 @@ The separate SQL runner is `scripts/outcomes-chile-database-lab.mjs`. Local evid
 
 Development evidence is distinct from release approval. Before activating Outcomes Chile:
 
-1. Review and apply both ordered migrations in the intended environment: `20260930200000_dtc_outcomes_chile_foundation.sql`, then `20261007131735_dtc_outcomes_chile_atomic_capture.sql`.
+1. Review and apply the three ordered migrations in the intended environment: `20260930200000_dtc_outcomes_chile_foundation.sql`, then `20261007131735_dtc_outcomes_chile_atomic_capture.sql`, then `20261007133636_dtc_outcomes_chile_idempotent_capture.sql`.
 2. Verify live owner reads, server-only writes, schema access and atomic capture with synthetic accounts.
-3. Complete capture/review UI, repeated-submission idempotency, follow-up completion and evidence-verification operations.
+3. Verify the implemented capture/review UI, repeated-submission idempotency and follow-up completion against live synthetic accounts; complete the separate evidence-verification operations.
 4. Import reviewed official benchmarks with documented definitions, dimensions, periods and immutable source versions.
 5. Verify the complete user flow in a Preview, including 390×844 mobile, before production release.
 
-Known calculation limits: reads have a fixed creation cutoff and explicit pagination/count/duplicate checks, but the four tables are not read in a single transactional snapshot; same-count concurrent updates can change evidence. A per-table 20,000-row safety cap fails explicitly instead of returning partial metrics. Net salary changes are nominal and are not normalized for hours, inflation or changed functions. A successful complete POST retried after loss of its response is not yet deduplicated by a client idempotency key.
+Known calculation limits: reads have a fixed creation cutoff and explicit pagination/count/duplicate checks, but the four tables are not read in a single transactional snapshot; same-count concurrent updates can change evidence. A per-table 20,000-row safety cap fails explicitly instead of returning partial metrics. Net salary changes are nominal and are not normalized for hours, inflation or changed functions. A late follow-up records the person's state when answering and does not independently establish their state on the exact horizon date.
 
 Production schema and public UI were not changed in this development block. The canonical ledger is `docs/dtc/DTC_CLOSURE_LEDGER.md`.

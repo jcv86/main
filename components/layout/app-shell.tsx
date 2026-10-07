@@ -72,6 +72,7 @@ const navigation: NavGroup[] = [
     items: [
       { label: 'Inicio', href: '/despega', icon: Home, match: (pathname) => pathname === '/despega' },
       { label: 'Mi evolución', href: '/despega/gamificacion', icon: BarChart3 },
+      { label: 'Resultados laborales', href: '/despega/resultados-laborales', icon: Briefcase },
     ],
   },
   {
@@ -174,6 +175,14 @@ const routeContexts: Array<{ match: (pathname: string) => boolean; context: Rout
       eyebrow: 'Mi evolución',
       title: 'Mide avance, no actividad vacía',
       description: 'Observa consistencia, evidencia y progreso acumulado en tu recorrido.',
+    },
+  },
+  {
+    match: (pathname) => pathname.includes('resultados-laborales'),
+    context: {
+      eyebrow: 'Resultados laborales',
+      title: 'Reconoce tus avances con evidencia',
+      description: 'Registra tu búsqueda, empleo y renta, y revisa cómo cambian en el tiempo.',
     },
   },
   {

@@ -46,7 +46,9 @@
     "check:outcomes-chile-benchmark-query": "node --import tsx scripts/check-outcomes-chile-benchmark-query.ts",
     "check:outcomes-chile-impact": "node --import tsx scripts/check-outcomes-chile-impact.ts",
     "check:outcomes-chile-summary": "node --import tsx scripts/check-outcomes-chile-summary.ts",
-    "check:outcomes-chile-all": "npm run check:outcomes-chile && npm run check:outcomes-chile-metrics && npm run check:outcomes-chile-capture && npm run check:outcomes-chile-benchmarks && npm run check:outcomes-chile-benchmark-query && npm run check:outcomes-chile-impact && npm run check:outcomes-chile-summary"
+    "check:outcomes-chile-workspace": "node --import tsx scripts/check-outcomes-chile-workspace.ts",
+    "check:outcomes-chile-ui": "node --import tsx scripts/outcomes-chile-ui-lab/run.mjs",
+    "check:outcomes-chile-all": "npm run check:outcomes-chile && npm run check:outcomes-chile-metrics && npm run check:outcomes-chile-capture && npm run check:outcomes-chile-benchmarks && npm run check:outcomes-chile-benchmark-query && npm run check:outcomes-chile-impact && npm run check:outcomes-chile-summary && npm run check:outcomes-chile-workspace"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",

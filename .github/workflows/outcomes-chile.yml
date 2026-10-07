@@ -4,10 +4,19 @@ on:
   pull_request:
     paths:
       - 'app/api/outcomes/chile/**'
+      - 'app/despega/resultados-laborales/**'
+      - 'components/outcomes-chile/**'
+      - 'components/layout/**'
+      - 'components/ui/**'
+      - 'app/globals.css'
+      - 'app/design-system.css'
+      - 'tailwind.config.ts'
       - 'lib/outcomes-chile/**'
       - 'supabase/migrations/*outcomes_chile*.sql'
       - 'scripts/check-outcomes-chile*.ts'
       - 'scripts/outcomes-chile-database-lab.mjs'
+      - 'scripts/fixtures/outcomes-chile-idempotency-lab.mjs'
+      - 'scripts/outcomes-chile-ui-lab/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/outcomes-chile.yml'
@@ -15,10 +24,19 @@ on:
     branches: [main]
     paths:
       - 'app/api/outcomes/chile/**'
+      - 'app/despega/resultados-laborales/**'
+      - 'components/outcomes-chile/**'
+      - 'components/layout/**'
+      - 'components/ui/**'
+      - 'app/globals.css'
+      - 'app/design-system.css'
+      - 'tailwind.config.ts'
       - 'lib/outcomes-chile/**'
       - 'supabase/migrations/*outcomes_chile*.sql'
       - 'scripts/check-outcomes-chile*.ts'
       - 'scripts/outcomes-chile-database-lab.mjs'
+      - 'scripts/fixtures/outcomes-chile-idempotency-lab.mjs'
+      - 'scripts/outcomes-chile-ui-lab/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/outcomes-chile.yml'
@@ -66,3 +84,18 @@ jobs:
         run: node scripts/outcomes-chile-database-lab.mjs
       - name: Full repository types
         run: pnpm exec tsc --noEmit
+      - name: Install isolated browser laboratory tools
+        run: npm install --prefix "$RUNNER_TEMP/dtc-outcomes-ui-tools" --no-save --package-lock=false --ignore-scripts --no-audit --no-fund playwright@1.62.1 @sparticuz/chromium@153.0.0 axe-core@4.14.0
+      - name: Render actual experience on mobile and desktop with synthetic API
+        env:
+          DTC_OUTCOMES_UI_TOOLS_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-tools
+          DTC_OUTCOMES_UI_EVIDENCE_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-evidence
+        run: node --import tsx scripts/outcomes-chile-ui-lab/run.mjs
+      - name: Upload rendered synthetic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: outcomes-chile-ui-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/dtc-outcomes-ui-evidence
+          if-no-files-found: ignore
+          retention-days: 7

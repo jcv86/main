@@ -3,13 +3,15 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { isAbsolute } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { Client } from 'pg'
+import { checkOutcomeConcurrency, checkOutcomeIdempotency } from './fixtures/outcomes-chile-idempotency-lab.mjs'
 
 // This laboratory never reads app credentials. Native runs require an empty,
 // explicitly named local database; PGlite always starts with a new in-memory DB.
-// Everything, including fixture roles, is rolled back at the end of the run.
+// Sequential fixtures are rolled back. Native contention tests temporarily
+// commit only laboratory fixtures, then explicitly remove those exact objects.
 assert.equal(process.env.DTC_OUTCOMES_DATABASE_LAB, 'yes', 'Set DTC_OUTCOMES_DATABASE_LAB=yes for the disposable SQL laboratory')
 
-let query, execute, close
+let query, execute, close, connectNative
 let engine = 'postgres'
 const pgliteModule = process.env.DTC_OUTCOMES_PGLITE_MODULE
 if (pgliteModule) {
@@ -30,7 +32,7 @@ if (pgliteModule) {
   // Keep every connection setting explicit; query-string host overrides could
   // otherwise replace the local hostname that was just checked.
   assert.equal(target.search, '', 'Connection-string query overrides are not allowed')
-  const db = new Client({
+  const nativeConfig = {
     host: target.hostname === '[::1]' ? '::1' : target.hostname,
     port: target.port ? Number(target.port) : 5432,
     database: target.pathname.slice(1),
@@ -38,11 +40,18 @@ if (pgliteModule) {
     password: decodeURIComponent(target.password),
     ssl: false,
     connectionTimeoutMillis: 5000,
-  })
+    statement_timeout: 10000,
+  }
+  const db = new Client(nativeConfig)
   await db.connect()
   query = (sql, parameters = []) => db.query(sql, parameters)
   execute = sql => db.query(sql)
   close = () => db.end()
+  connectNative = async () => {
+    const worker = new Client(nativeConfig)
+    await worker.connect()
+    return worker
+  }
 }
 
 const migrations = new URL('../supabase/migrations/', import.meta.url)
@@ -50,6 +59,9 @@ const atomicFiles = readdirSync(migrations).filter(name => /^\d{14}_dtc_outcomes
 assert.equal(atomicFiles.length, 1, 'Expected exactly one atomic capture migration')
 const foundation = readFileSync(new URL('20260930200000_dtc_outcomes_chile_foundation.sql', migrations), 'utf8')
 const atomic = readFileSync(new URL(atomicFiles[0], migrations), 'utf8')
+const retryFiles = readdirSync(migrations).filter(name => /^\d{14}_dtc_outcomes_chile_idempotent_capture\.sql$/.test(name))
+assert.equal(retryFiles.length, 1, 'Expected exactly one idempotent capture migration')
+const retryMigration = readFileSync(new URL(retryFiles[0], migrations), 'utf8')
 
 const ownerA = '00000000-0000-4000-8000-000000000001'
 const ownerB = '00000000-0000-4000-8000-000000000002'
@@ -81,6 +93,7 @@ const count = async (table, column, id) => Number((await query(`select count(*):
 const employmentInsert = 'insert into public.dtc_employment_outcomes (id,user_id,outcome_type,effective_date,role_title) values ($1,$2,\'job_started\',$3,\'Laboratory role\') returning id'
 
 let transactionOpen = false
+let fixtureCommitted = false
 try {
   await query('begin')
   transactionOpen = true
@@ -89,6 +102,8 @@ try {
   assert.equal(superuser, true, 'Fixture setup needs a disposable local superuser')
   const existingTables = (await query("select count(*)::integer as count from pg_catalog.pg_class c join pg_catalog.pg_namespace n on n.oid=c.relnamespace where n.nspname in ('public','auth') and c.relkind in ('r','p')")).rows[0].count
   assert.equal(existingTables, 0, 'Refusing to use a database containing application tables')
+  assert.equal((await query("select count(*)::integer as count from pg_catalog.pg_proc p join pg_catalog.pg_namespace n on n.oid=p.pronamespace where n.nspname in ('public','auth')")).rows[0].count, 0, 'Refusing to replace existing application functions')
+  assert.equal((await query("select count(*)::integer as count from pg_catalog.pg_namespace where nspname='auth'")).rows[0].count, 0, 'Fixture auth schema must not already exist')
   const existingRoles = (await query("select rolname from pg_catalog.pg_roles where rolname in ('anon','authenticated','service_role')")).rows
   assert.deepEqual(existingRoles, [], 'Use a fresh local cluster: laboratory roles must not already exist')
 
@@ -112,6 +127,7 @@ try {
   await expectError(employmentInsert, [employmentA, ownerA, '2026-09-01'], '42501')
   await query('reset role')
   await execute(atomic)
+  await execute(retryMigration)
   const serviceRole = (await query("select rolsuper,rolbypassrls from pg_catalog.pg_roles where rolname='service_role'")).rows[0]
   assert.deepEqual(serviceRole, { rolsuper: false, rolbypassrls: true })
 
@@ -128,6 +144,16 @@ try {
   assert.deepEqual(fn.proconfig, ['search_path=pg_catalog'])
   assert.equal(fn.anon_execute, false)
   assert.equal(fn.authenticated_execute, false)
+
+  if (connectNative) {
+    // Other connections must be able to see the schema for genuine lock
+    // contention. The empty-DB/role checks above bound the explicit cleanup.
+    await query('commit')
+    transactionOpen = false
+    fixtureCommitted = true
+    await query('begin')
+    transactionOpen = true
+  }
 
   await query('insert into auth.users (id) values ($1),($2)', [ownerA, ownerB])
   await query('set role service_role')
@@ -213,6 +239,7 @@ try {
 
   await query('reset role')
   await execute(atomic)
+  await execute(retryMigration)
   assert.equal((await query("select count(*)::integer as count from pg_catalog.pg_trigger where tgname='dtc_schedule_employment_followups' and tgrelid='public.dtc_employment_outcomes'::regclass")).rows[0].count, 1)
   assert.equal(await count('dtc_outcome_followups', 'employment_outcome_id', employmentA), 3)
   await query('set role service_role')
@@ -223,6 +250,13 @@ try {
   assert.equal((await query("select count(*)::integer as count from public.dtc_salary_outcomes where user_id=$1 and measurement_role='baseline' and employment_outcome_id is null", [ownerA])).rows[0].count, 1)
   assert.equal(await count('dtc_outcome_followups', 'employment_outcome_id', employmentB), 3)
 
+  const retryEvidence = await checkOutcomeIdempotency({ query, execute, expectError, ownerA, ownerB })
+  await query('rollback')
+  transactionOpen = false
+  const contentionEvidence = connectNative
+    ? await checkOutcomeConcurrency({ query, connectNative, ownerA })
+    : { nativeConcurrentRetry: false, contendedFollowupCannotOverwrite: false, reason: 'PGlite has one connection; native PostgreSQL CI runs the contention cases' }
+
   console.log(JSON.stringify({
     outcomesChileDatabase: 'PASS', engine, version,
     migration: atomicFiles[0], followups: [30, 90, 180], calendarArithmetic: true,
@@ -230,11 +264,27 @@ try {
     ownerIsolatedTables: ownerTables.length, browserWritesRejected: rejectedWrites,
     explicitServiceGrants: tables.length, invokerTrigger: true,
     salaryOwnerPreservedOnEmploymentDelete: true, repeatableMigration: true,
+    idempotency: retryEvidence, concurrency: contentionEvidence,
     runtimeBoundary: engine === 'pglite' ? 'SQL engine only; no PostgREST, GoTrue, or concurrent connections' : 'Local PostgreSQL SQL boundary; no PostgREST or GoTrue',
   }, null, 2))
 } finally {
   try {
     if (transactionOpen) await query('rollback')
+    if (fixtureCommitted) {
+      await execute(`
+        reset role;
+        begin;
+        drop function if exists public.capture_dtc_chile_outcome(uuid,uuid,text,jsonb);
+        drop function if exists public.dtc_schedule_employment_followups() cascade;
+        drop table public.dtc_outcome_write_requests,public.dtc_outcome_verifications,
+          public.dtc_outcome_followups,public.dtc_salary_outcomes,
+          public.dtc_employment_outcomes,public.dtc_job_search_events,public.dtc_chile_benchmarks cascade;
+        drop schema auth cascade;
+        drop owned by anon,authenticated,service_role;
+        drop role anon,authenticated,service_role;
+        commit;
+      `)
+    }
   } finally {
     await close()
   }

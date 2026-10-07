@@ -7,6 +7,7 @@ import { ChevronRight, Home } from 'lucide-react'
 const routeLabels: Record<string, string> = {
   despega: 'Inicio',
   gamificacion: 'Mi evolución',
+  'resultados-laborales': 'Mis resultados laborales',
   'conozcamonos-1': 'Conozcámonos',
   'a1-cerebral-intro': 'Despega Cerebral',
   'a1-cerebral': 'Despega Cerebral',

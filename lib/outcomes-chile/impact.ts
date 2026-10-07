@@ -12,6 +12,8 @@ interface EvidenceRecord {
 export interface ChileSearchEvent extends EvidenceRecord {
   event_type: string
   occurred_at: string
+  target_role?: string | null
+  source_channel?: string | null
 }
 
 export interface ChileEmploymentOutcome extends EvidenceRecord {
@@ -20,6 +22,7 @@ export interface ChileEmploymentOutcome extends EvidenceRecord {
   region_code: string | null
   occupation_code: string | null
   employment_category: string | null
+  role_title?: string | null
 }
 
 export interface ChileSalaryMeasurement extends EvidenceRecord {
@@ -143,11 +146,8 @@ export function chileCalendarDate(timestamp: string): string {
   return `${part('year')}-${part('month')}-${part('day')}`
 }
 
-export function buildChileImpact(
-  evidence: ChileImpactEvidence,
-  benchmark: ResolvedChileBenchmark | null,
-  computedAt: string,
-) {
+/** Shared eligibility keeps the displayed history and the calculation on the same cutoff. */
+export function selectEligibleChileEvidence(evidence: ChileImpactEvidence, computedAt: string) {
   if (!Number.isFinite(Date.parse(computedAt))) throw new Error('INVALID_IMPACT_COMPUTED_AT')
   const asOf = new Date(computedAt).toISOString()
   const asOfDate = chileCalendarDate(asOf)
@@ -158,6 +158,30 @@ export function buildChileImpact(
     && isDateOnly(row.effective_date) && row.effective_date <= asOfDate)
     .sort((a, b) => a.effective_date.localeCompare(b.effective_date) || a.id.localeCompare(b.id))
   const salary = visibleSalary(evidence.salary, asOf)
+  const employmentById = new Map(employment.map((row) => [row.id, row]))
+  const followups = evidence.followups.filter((row) => {
+    const parent = employmentById.get(row.employment_outcome_id ?? '')
+    if (!visibleRecord(row, asOf) || !parent || ![30, 90, 180].includes(row.followup_day) || !isDateOnly(row.due_at)) return false
+    const expected = new Date(Date.parse(`${parent.effective_date}T00:00:00Z`) + row.followup_day * DAY_MS).toISOString().slice(0, 10)
+    return row.due_at === expected
+  })
+  return { events, employment, salary, followups }
+}
+
+export function isCompletedChileFollowup(row: ChileFollowup, asOf: string): boolean {
+  return Boolean(row.completed_at
+    && Number.isFinite(Date.parse(row.completed_at)) && Date.parse(row.completed_at) <= Date.parse(asOf)
+    && chileCalendarDate(row.completed_at) >= row.due_at)
+}
+
+export function buildChileImpact(
+  evidence: ChileImpactEvidence,
+  benchmark: ResolvedChileBenchmark | null,
+  computedAt: string,
+) {
+  const { events, employment, salary, followups } = selectEligibleChileEvidence(evidence, computedAt)
+  const asOf = new Date(computedAt).toISOString()
+  const asOfDate = chileCalendarDate(asOf)
   const pair = selectChileSalaryPair(salary, asOf)
   const economic = deriveEconomicOutcome(pair.baseline?.monthly_net_clp ?? null, pair.latest?.monthly_net_clp ?? null)
   const { annualizedLiftClp, ...observedEconomic } = economic
@@ -169,17 +193,9 @@ export function buildChileImpact(
     firstApplicationDate ? new Date(`${firstApplicationDate}T00:00:00Z`) : null,
     firstJob ? new Date(`${firstJob.effective_date}T00:00:00Z`) : null,
   )
-  const followups = evidence.followups.filter((row) => {
-    const parent = employment.find((job) => job.id === row.employment_outcome_id)
-    if (!visibleRecord(row, asOf) || !parent || ![30, 90, 180].includes(row.followup_day) || !isDateOnly(row.due_at)) return false
-    const expected = new Date(Date.parse(`${parent.effective_date}T00:00:00Z`) + row.followup_day * DAY_MS).toISOString().slice(0, 10)
-    return row.due_at === expected
-  })
   const retention = ([30, 90, 180] as const).map((day) => {
     const rows = followups.filter((row) => row.followup_day === day)
-    const isComplete = (row: ChileFollowup) => Boolean(row.completed_at
-      && Number.isFinite(Date.parse(row.completed_at)) && Date.parse(row.completed_at) <= Date.parse(asOf)
-      && chileCalendarDate(row.completed_at) >= row.due_at)
+    const isComplete = (row: ChileFollowup) => isCompletedChileFollowup(row, asOf)
     const complete = rows.filter(isComplete)
     return {
       day,

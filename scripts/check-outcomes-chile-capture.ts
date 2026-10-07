@@ -2,15 +2,19 @@ import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
 import { createClient } from '@supabase/supabase-js'
 import ts from 'typescript'
-import { recordEmploymentOutcome, recordJobSearchEvent, recordSalaryOutcome } from '../lib/outcomes-chile/capture'
+import { completeOutcomeFollowup, recordEmploymentOutcome, recordJobSearchEvent, recordSalaryOutcome } from '../lib/outcomes-chile/capture'
 import * as validation from '../lib/outcomes-chile/capture-validation'
 
 const USER = '00000000-0000-4000-8000-000000000001'
 const OTHER_USER = '00000000-0000-4000-8000-000000000002'
 const EMPLOYMENT = '00000000-0000-4000-8000-000000000003'
-const event = { eventType: 'interview', occurredAt: '2026-10-07T10:00:00-03:00' }
-const employment = { outcomeType: 'job_started', effectiveDate: '2026-10-07', roleTitle: 'Analista' }
-const salary = { measurementRole: 'baseline', monthlyNetClp: 850000, measuredAt: '2026-10-07' }
+const REQUEST = '10000000-0000-4000-8000-000000000001'
+const NOW = new Date('2026-10-08T02:30:00.000Z') // Still October 7 in Santiago.
+const event = { requestId: REQUEST, eventType: 'interview', occurredAt: '2026-10-07T10:00:00-03:00' }
+const employment = { requestId: REQUEST, outcomeType: 'job_started', effectiveDate: '2026-10-07', roleTitle: 'Analista' }
+const salary = { requestId: REQUEST, measurementRole: 'baseline', monthlyNetClp: 850000, measuredAt: '2026-10-07' }
+
+const followup = { requestId: REQUEST, followupId: EMPLOYMENT, employmentActive: true, sameRole: null }
 
 type RecordedRequest = { url: URL; method: string; body: Record<string, unknown> | null }
 type MockResponse = { body: unknown; status?: number }
@@ -44,82 +48,115 @@ const invalid = (code: string) => (error: unknown) => error instanceof validatio
 async function checkValidation() {
   const mock = database()
   for (const input of [undefined, null, [], false, 0, 'salary']) {
-    await assert.rejects(recordJobSearchEvent(USER, input, mock.db), invalid('INVALID_INPUT'))
-    await assert.rejects(recordEmploymentOutcome(USER, input, mock.db), invalid('INVALID_INPUT'))
-    await assert.rejects(recordSalaryOutcome(USER, input, mock.db), invalid('INVALID_INPUT'))
+    await assert.rejects(recordJobSearchEvent(USER, input, mock.db, NOW), invalid('INVALID_INPUT'))
+    await assert.rejects(recordEmploymentOutcome(USER, input, mock.db, NOW), invalid('INVALID_INPUT'))
+    await assert.rejects(recordSalaryOutcome(USER, input, mock.db, NOW), invalid('INVALID_INPUT'))
   }
   for (const amount of [undefined, null, '', ' ', '850000', true, false, [], {}, NaN, Infinity, -1, 100000001, 850000.5]) {
-    await assert.rejects(recordSalaryOutcome(USER, { ...salary, monthlyNetClp: amount }, mock.db), invalid('INVALID_MONTHLY_NET_CLP'))
+    await assert.rejects(recordSalaryOutcome(USER, { ...salary, monthlyNetClp: amount }, mock.db, NOW), invalid('INVALID_MONTHLY_NET_CLP'))
   }
   for (const date of ['2025-02-29', '2026-02-30', '2026-04-31', '2026-13-01', '2026-01-00', '0000-01-01', '2026-1-07', '2026-10-07T00:00:00Z']) {
-    await assert.rejects(recordEmploymentOutcome(USER, { ...employment, effectiveDate: date }, mock.db), invalid('INVALID_EFFECTIVE_DATE'))
-    await assert.rejects(recordSalaryOutcome(USER, { ...salary, measuredAt: date }, mock.db), invalid('INVALID_MEASURED_AT'))
+    await assert.rejects(recordEmploymentOutcome(USER, { ...employment, effectiveDate: date }, mock.db, NOW), invalid('INVALID_EFFECTIVE_DATE'))
+    await assert.rejects(recordSalaryOutcome(USER, { ...salary, measuredAt: date }, mock.db, NOW), invalid('INVALID_MEASURED_AT'))
   }
   for (const date of ['2025-02-29T10:00:00Z', '2026-02-30T10:00:00Z', '2026-10-07', '2026-10-07T10:00:00', '2026-10-07T24:00:00Z', '2026-10-07T10:60:00Z', '2026-10-07T10:00:60Z', '2026-10-07T10:00:00+24:00', 'October 7, 2026']) {
-    await assert.rejects(recordJobSearchEvent(USER, { ...event, occurredAt: date }, mock.db), invalid('INVALID_OCCURRED_AT'))
+    await assert.rejects(recordJobSearchEvent(USER, { ...event, occurredAt: date }, mock.db, NOW), invalid('INVALID_OCCURRED_AT'))
   }
   for (const id of ['', false, 1, [], {}, 'another-person', EMPLOYMENT + ' ']) {
-    await assert.rejects(recordSalaryOutcome(USER, { ...salary, employmentOutcomeId: id }, mock.db), invalid('INVALID_EMPLOYMENT_OUTCOME_ID'))
+    await assert.rejects(recordSalaryOutcome(USER, { ...salary, employmentOutcomeId: id }, mock.db, NOW), invalid('INVALID_EMPLOYMENT_OUTCOME_ID'))
   }
-  await assert.rejects(recordEmploymentOutcome(USER, { ...employment, roleTitle: ' ' }, mock.db), invalid('ROLE_REQUIRED'))
-  await assert.rejects(recordEmploymentOutcome(USER, { ...employment, roleTitle: 'x'.repeat(161) }, mock.db), invalid('INVALID_ROLE_TITLE'))
-  await assert.rejects(recordEmploymentOutcome(USER, { ...employment, workMode: false }, mock.db), invalid('INVALID_WORK_MODE'))
-  await assert.rejects(recordJobSearchEvent(USER, { ...event, eventType: ['interview'] }, mock.db), invalid('INVALID_EVENT_TYPE'))
-  await assert.rejects(recordJobSearchEvent(USER, { ...event, sourceChannel: '' }, mock.db), invalid('INVALID_SOURCE_CHANNEL'))
+  await assert.rejects(recordEmploymentOutcome(USER, { ...employment, roleTitle: ' ' }, mock.db, NOW), invalid('ROLE_REQUIRED'))
+  await assert.rejects(recordEmploymentOutcome(USER, { ...employment, roleTitle: 'x'.repeat(161) }, mock.db, NOW), invalid('INVALID_ROLE_TITLE'))
+  await assert.rejects(recordEmploymentOutcome(USER, { ...employment, workMode: false }, mock.db, NOW), invalid('INVALID_WORK_MODE'))
+  await assert.rejects(recordJobSearchEvent(USER, { ...event, eventType: ['interview'] }, mock.db, NOW), invalid('INVALID_EVENT_TYPE'))
+  await assert.rejects(recordJobSearchEvent(USER, { ...event, sourceChannel: '' }, mock.db, NOW), invalid('INVALID_SOURCE_CHANNEL'))
   assert.equal(mock.requests.length, 0, 'invalid input must fail before any database access')
   assert.equal(validation.validateEmploymentOutcome({ ...employment, effectiveDate: '2024-02-29' }).effective_date, '2024-02-29')
   assert.equal(validation.validateSalaryOutcome({ ...salary, monthlyNetClp: 0 }).monthly_net_clp, 0)
   assert.equal(validation.validateSalaryOutcome({ ...salary, monthlyNetClp: 100000000 }).monthly_net_clp, 100000000)
+  for (const requestId of [undefined, null, '', 1, false, [], 'bad-uuid']) {
+    await assert.rejects(recordEmploymentOutcome(USER, { ...employment, requestId }, mock.db, NOW), invalid('INVALID_REQUEST_ID'))
+    await assert.rejects(completeOutcomeFollowup(USER, { ...followup, requestId }, mock.db), invalid('INVALID_REQUEST_ID'))
+  }
+  assert.equal(validation.captureTodayChile(NOW), '2026-10-07')
+  assert.equal(validation.captureTodayChile(new Date('2026-10-08T03:00:00Z')), '2026-10-08')
+  assert.throws(() => validation.validateEmploymentOutcome({ ...employment, effectiveDate: '2026-10-08' }, NOW), invalid('FUTURE_EFFECTIVE_DATE'))
+  assert.throws(() => validation.validateSalaryOutcome({ ...salary, measuredAt: '2026-10-08' }, NOW), invalid('FUTURE_MEASURED_AT'))
+  assert.throws(() => validation.validateJobSearchEvent({ ...event, occurredAt: '2026-10-08T02:30:00.001Z' }, NOW), invalid('FUTURE_OCCURRED_AT'))
+  assert.equal(validation.validateJobSearchEvent({ ...event, occurredAt: NOW.toISOString() }, NOW).occurred_at, NOW.toISOString())
+  for (const employmentActive of [undefined, null, '', 'true', 0, 1]) {
+    await assert.rejects(completeOutcomeFollowup(USER, { ...followup, employmentActive }, mock.db), invalid('INVALID_EMPLOYMENT_ACTIVE'))
+  }
+  for (const sameRole of ['true', 0, [], {}]) {
+    await assert.rejects(completeOutcomeFollowup(USER, { ...followup, sameRole }, mock.db), invalid('INVALID_SAME_ROLE'))
+  }
+  await assert.rejects(completeOutcomeFollowup(USER, { ...followup, followupId: 'other-user' }, mock.db), invalid('INVALID_FOLLOWUP_ID'))
+  await assert.rejects(completeOutcomeFollowup(USER, { ...followup, employmentActive: false, sameRole: false }, mock.db), invalid('INVALID_SAME_ROLE'))
+  assert.deepEqual(validation.validateFollowupCompletion({ ...followup, employmentActive: false }), { followup_id: EMPLOYMENT, employment_active: false, same_role: null })
+  assert.equal(mock.requests.length, 0)
 }
 
 async function checkPersistence() {
-  const hostile = { userId: OTHER_USER, user_id: OTHER_USER, verification_status: 'verified', verificationStatus: 'verified', evidence_refs: ['forged'] }
-  for (const [record, input, table] of [
-    [recordJobSearchEvent, event, 'dtc_job_search_events'],
-    [recordEmploymentOutcome, employment, 'dtc_employment_outcomes'],
-    [recordSalaryOutcome, { ...salary, monthlyNetClp: 0 }, 'dtc_salary_outcomes'],
+  const hostile = { userId: OTHER_USER, user_id: OTHER_USER, verification_status: 'verified', verificationStatus: 'verified', evidence_refs: ['forged'], completedAt: '1990-01-01', monthlyNetClp: 999999 }
+  for (const [record, input, action] of [
+    [recordJobSearchEvent, event, 'job_search_event'],
+    [recordEmploymentOutcome, employment, 'employment_outcome'],
+    [recordSalaryOutcome, { ...salary, monthlyNetClp: 0 }, 'salary_outcome'],
   ] as const) {
     const returned = { id: EMPLOYMENT, verification_status: 'self_reported' }
-    const mock = database([{ body: returned, status: 201 }])
-    assert.deepEqual(await record(USER, { ...input, ...hostile }, mock.db), returned)
+    const mock = database([{ body: returned }])
+    assert.deepEqual(await record(USER, { ...hostile, ...input }, mock.db, NOW), returned)
     mock.assertDrained()
     assert.equal(mock.requests.length, 1)
     assert.equal(mock.requests[0].method, 'POST')
-    assert.equal(mock.requests[0].url.pathname, '/rest/v1/' + table)
-    assert.equal(mock.requests[0].body?.user_id, USER)
-    assert.equal(mock.requests[0].body?.verification_status, 'self_reported')
-    assert.deepEqual(mock.requests[0].body?.evidence_refs, [])
-    if (table === 'dtc_job_search_events') assert.equal(mock.requests[0].body?.occurred_at, '2026-10-07T13:00:00.000Z')
-    if (table === 'dtc_salary_outcomes') {
-      assert.equal(mock.requests[0].body?.monthly_net_clp, 0)
-      assert.equal(mock.requests[0].body?.employment_outcome_id, null)
+    assert.equal(mock.requests[0].url.pathname, '/rest/v1/rpc/capture_dtc_chile_outcome')
+    assert.equal(mock.requests[0].body?.p_user_id, USER)
+    assert.equal(mock.requests[0].body?.p_request_id, REQUEST)
+    assert.equal(mock.requests[0].body?.p_action, action)
+    const payload = mock.requests[0].body?.p_payload as Record<string, unknown>
+    for (const key of ['user_id', 'userId', 'requestId', 'verification_status', 'verificationStatus', 'evidence_refs', 'completedAt']) assert.ok(!(key in payload))
+    if (action === 'job_search_event') assert.equal(payload.occurred_at, '2026-10-07T13:00:00.000Z')
+    if (action === 'salary_outcome') {
+      assert.equal(payload.monthly_net_clp, 0)
+      assert.equal(payload.employment_outcome_id, null)
     }
   }
 
-  const linked = database([{ body: [{ id: EMPLOYMENT }] }, { body: { id: 'salary' }, status: 201 }])
-  await recordSalaryOutcome(USER, { ...salary, measurementRole: 'new_role', employmentOutcomeId: EMPLOYMENT }, linked.db)
+  const linked = database([{ body: { id: 'salary' } }])
+  await recordSalaryOutcome(USER, { ...salary, measurementRole: 'new_role', employmentOutcomeId: EMPLOYMENT }, linked.db, NOW)
   linked.assertDrained()
-  assert.equal(linked.requests[0].method, 'GET')
-  assert.equal(linked.requests[0].url.pathname, '/rest/v1/dtc_employment_outcomes')
-  assert.equal(linked.requests[0].url.searchParams.get('id'), 'eq.' + EMPLOYMENT)
-  assert.equal(linked.requests[0].url.searchParams.get('user_id'), 'eq.' + USER)
-  assert.equal(linked.requests[1].body?.employment_outcome_id, EMPLOYMENT)
-  assert.equal(linked.requests[1].body?.user_id, USER)
+  assert.equal(linked.requests.length, 1, 'ownership and persistence must share the RPC transaction')
+  assert.equal((linked.requests[0].body?.p_payload as Record<string, unknown>).employment_outcome_id, EMPLOYMENT)
 
-  // A missing outcome and an outcome owned by someone else have the same reply.
-  const missing = database([{ body: [] }])
-  await assert.rejects(recordSalaryOutcome(USER, { ...salary, employmentOutcomeId: EMPLOYMENT }, missing.db), invalid('INVALID_EMPLOYMENT_OUTCOME_ID'))
-  assert.equal(missing.requests.length, 1, 'ownership rejection must not write salary')
+  const completed = { id: EMPLOYMENT, employment_active: false, same_role: null, completed_at: '2026-10-07T14:00:00Z', verification_status: 'self_reported' }
+  const complete = database([{ body: completed }])
+  assert.deepEqual(await completeOutcomeFollowup(USER, { ...hostile, ...followup, employmentActive: false }, complete.db), completed)
+  assert.equal(complete.requests.length, 1)
+  assert.equal(complete.requests[0].body?.p_action, 'complete_followup')
+  assert.deepEqual(complete.requests[0].body?.p_payload, { followup_id: EMPLOYMENT, employment_active: false, same_role: null })
 
-  const lookupFailed = database([{ body: { code: '42501', message: 'lookup unavailable' }, status: 400 }])
-  await assert.rejects(recordSalaryOutcome(USER, { ...salary, employmentOutcomeId: EMPLOYMENT }, lookupFailed.db), (error: { code?: string }) => error.code === '42501')
-  assert.equal(lookupFailed.requests.length, 1, 'lookup failure must not write salary')
+  // Normalize before reserving a key: object order, text padding and UUID case
+  // must not create a different request payload when the UI retries.
+  const replay = database([{ body: completed }, { body: completed }])
+  await recordEmploymentOutcome(USER, { ...employment, roleTitle: '  Analista  ', requestId: REQUEST.toUpperCase() }, replay.db, NOW)
+  await recordEmploymentOutcome(USER, employment, replay.db, NOW)
+  assert.deepEqual(replay.requests[0].body, replay.requests[1].body)
 
+  for (const code of ['IDEMPOTENCY_KEY_REUSED', 'FOLLOWUP_NOT_DUE', 'FOLLOWUP_ALREADY_COMPLETED', 'FOLLOWUP_VERIFICATION_LOCKED']) {
+    const mock = database([{ body: { code: 'PT409', message: code }, status: 409 }])
+    await assert.rejects(completeOutcomeFollowup(USER, followup, mock.db), (error: unknown) => error instanceof validation.OutcomeCaptureConflictError && error.message === code)
+  }
+  const missing = database([{ body: { code: 'PT404', message: 'FOLLOWUP_NOT_FOUND' }, status: 404 }])
+  await assert.rejects(completeOutcomeFollowup(USER, followup, missing.db), validation.OutcomeCaptureNotFoundError)
+  const wrongOwner = database([{ body: { code: 'PT422', message: 'INVALID_EMPLOYMENT_OUTCOME_ID' }, status: 422 }])
+  await assert.rejects(recordSalaryOutcome(USER, { ...salary, employmentOutcomeId: EMPLOYMENT }, wrongOwner.db, NOW), invalid('INVALID_EMPLOYMENT_OUTCOME_ID'))
   const scheduleFailed = database([{ body: { code: 'P0001', message: 'followup scheduling failed' }, status: 400 }])
-  await assert.rejects(recordEmploymentOutcome(USER, employment, scheduleFailed.db), (error: { code?: string }) => error.code === 'P0001')
-  assert.equal(scheduleFailed.requests.length, 1, 'capture must use only the atomic employment insert')
-  const emptyResult = database([{ body: null, status: 201 }])
-  await assert.rejects(recordEmploymentOutcome(USER, employment, emptyResult.db), /OUTCOME_CAPTURE_FAILED/)
+  await assert.rejects(recordEmploymentOutcome(USER, employment, scheduleFailed.db, NOW), (error: { code?: string }) => error.code === 'P0001')
+  assert.equal(scheduleFailed.requests.length, 1)
+  const unknownConflict = database([{ body: { code: 'PT409', message: 'PRIVATE_DATABASE_DETAIL' }, status: 409 }])
+  await assert.rejects(completeOutcomeFollowup(USER, followup, unknownConflict.db), (error: unknown) => !(error instanceof validation.OutcomeCaptureConflictError))
+  const emptyResult = database([{ body: null }])
+  await assert.rejects(recordEmploymentOutcome(USER, employment, emptyResult.db, NOW), /OUTCOME_CAPTURE_FAILED/)
 }
 
 // Execute the actual route with external services replaced at its import
@@ -132,9 +169,10 @@ const instantiateRoute = new Function('require', 'module', 'exports', 'console',
 function httpHarness(options: { unauthenticated?: boolean; authError?: unknown; captureError?: unknown; summaryError?: unknown } = {}) {
   const calls: Array<{ action: string; userId: string }> = []
   const logs: unknown[] = []
-  const capture = (action: string, validate: (body: unknown) => unknown) => async (userId: string, body: unknown) => {
+  const capture = (action: string, validate: (body: unknown, now?: Date) => unknown) => async (userId: string, body: unknown) => {
     calls.push({ action, userId })
-    validate(body)
+    validation.validateCaptureRequestId(body)
+    validate(body, NOW)
     if (options.captureError) throw options.captureError
     return { id: EMPLOYMENT, verification_status: 'self_reported' }
   }
@@ -149,6 +187,7 @@ function httpHarness(options: { unauthenticated?: boolean; authError?: unknown; 
       recordJobSearchEvent: capture('job_search_event', validation.validateJobSearchEvent),
       recordEmploymentOutcome: capture('employment_outcome', validation.validateEmploymentOutcome),
       recordSalaryOutcome: capture('salary_outcome', validation.validateSalaryOutcome),
+      completeOutcomeFollowup: capture('complete_followup', validation.validateFollowupCompletion),
     },
     '@/lib/outcomes-chile/capture-validation': validation,
     '@/lib/outcomes-chile/service': { loadOutcomesChileSummary: async (userId: string) => {
@@ -198,8 +237,20 @@ async function checkHttp() {
     await responseBody(await healthy.POST(request({ action, ...input, userId: OTHER_USER, user_id: OTHER_USER, verification_status: 'verified' })), 201)
     assert.deepEqual(healthy.calls.pop(), { action, userId: USER })
   }
+  await responseBody(await healthy.POST(request({ action: 'complete_followup', ...followup })), 200)
+  assert.deepEqual(healthy.calls.pop(), { action: 'complete_followup', userId: USER })
+  const missingKey = await responseBody(await healthy.POST(request({ action: 'employment_outcome', ...employment, requestId: undefined })), 422)
+  assert.equal(missingKey.error, 'INVALID_REQUEST_ID')
   const badSalary = await responseBody(await healthy.POST(request({ action: 'salary_outcome', ...salary, monthlyNetClp: null })), 422)
   assert.equal(badSalary.error, 'INVALID_MONTHLY_NET_CLP')
+
+  for (const code of ['IDEMPOTENCY_KEY_REUSED', 'FOLLOWUP_NOT_DUE', 'FOLLOWUP_ALREADY_COMPLETED', 'FOLLOWUP_VERIFICATION_LOCKED']) {
+    const conflicted = httpHarness({ captureError: new validation.OutcomeCaptureConflictError(code) })
+    assert.equal((await responseBody(await conflicted.POST(request({ action: 'complete_followup', ...followup })), 409)).error, code)
+    assert.equal(conflicted.logs.length, 0)
+  }
+  const missingFollowup = httpHarness({ captureError: new validation.OutcomeCaptureNotFoundError() })
+  assert.equal((await responseBody(await missingFollowup.POST(request({ action: 'complete_followup', ...followup })), 404)).error, 'FOLLOWUP_NOT_FOUND')
 
   const sensitiveError = { code: '23514', message: 'private employment detail', details: 'private salary detail' }
   const failedWrite = httpHarness({ captureError: sensitiveError })
@@ -228,11 +279,14 @@ async function main() {
     identity: 'server-session',
     salaryType: 'explicit-number',
     calendarDates: 'strict',
-    linkedOutcomeOwnership: 'enforced-before-write',
-    employmentWrite: 'single-insert-with-database-trigger',
+    linkedOutcomeOwnership: 'checked-inside-rpc',
+    requestId: 'required-normalized-owner-scoped',
+    observedDates: 'server-now-and-chile-calendar',
+    followupCompletion: 'service-rpc-with-conflict-codes',
+    employmentWrite: 'single-idempotent-rpc-with-database-trigger',
     databaseAtomicity: 'requires-separate-SQL-verification',
     initialVerification: 'self_reported',
-    privateResponses: [200, 201, 400, 401, 422, 500, 503],
+    privateResponses: [200, 201, 400, 401, 404, 409, 422, 500, 503],
   }))
 }
 

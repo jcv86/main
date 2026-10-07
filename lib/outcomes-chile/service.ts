@@ -5,6 +5,7 @@ import {
   buildChileImpact, chileCalendarDate, selectChileSalaryPair,
   type ChileEmploymentOutcome, type ChileFollowup, type ChileSalaryMeasurement, type ChileSearchEvent,
 } from './impact'
+import { buildChileWorkspace, type OutcomesChileSummary } from './workspace'
 
 type OutcomesDatabase = ReturnType<typeof createAdminClient>
 const PAGE_SIZE = 500
@@ -47,16 +48,16 @@ export async function loadOwnedOutcomeRows<T>(
   }
 }
 
-export async function loadOutcomesChileSummary(userId: string, dependencies: SummaryDependencies = {}) {
+export async function loadOutcomesChileSummary(userId: string, dependencies: SummaryDependencies = {}): Promise<OutcomesChileSummary> {
   const db = dependencies.db ?? createAdminClient()
   const now = dependencies.now ?? new Date()
   if (!Number.isFinite(now.getTime())) throw new Error('INVALID_IMPACT_COMPUTED_AT')
   const cutoff = now.toISOString()
   const [events, employment, salary, followups] = await Promise.all([
     loadOwnedOutcomeRows<ChileSearchEvent>(db, 'dtc_job_search_events',
-      'id,event_type,occurred_at,verification_status,created_at', userId, cutoff),
+      'id,event_type,occurred_at,target_role,source_channel,verification_status,created_at', userId, cutoff),
     loadOwnedOutcomeRows<ChileEmploymentOutcome>(db, 'dtc_employment_outcomes',
-      'id,outcome_type,effective_date,region_code,occupation_code,employment_category,verification_status,created_at', userId, cutoff),
+      'id,outcome_type,effective_date,role_title,region_code,occupation_code,employment_category,verification_status,created_at', userId, cutoff),
     loadOwnedOutcomeRows<ChileSalaryMeasurement>(db, 'dtc_salary_outcomes',
       'id,employment_outcome_id,measurement_role,monthly_net_clp,measured_at,verification_status,created_at', userId, cutoff),
     loadOwnedOutcomeRows<ChileFollowup>(db, 'dtc_outcome_followups',
@@ -82,5 +83,6 @@ export async function loadOutcomesChileSummary(userId: string, dependencies: Sum
     verification: impact.verification,
     attribution: impact.attribution.classification,
     impact,
+    workspace: buildChileWorkspace({ events, employment, salary, followups }, cutoff),
   }
 }
