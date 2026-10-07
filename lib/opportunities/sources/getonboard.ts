@@ -1,5 +1,6 @@
 import { load } from 'cheerio'
 import type { CanonicalOpportunity } from '../types'
+import { sourceRetryAfterUntil } from './retry-after'
 export type { CanonicalOpportunity, OpportunityVerificationStatus } from '../types'
 
 type JsonObject = Record<string, unknown>
@@ -182,6 +183,7 @@ export class GetOnBoardProviderError extends Error {
   constructor(
     public readonly kind: 'invalid_request' | 'parse_failed' | 'unavailable',
     public readonly code: string,
+    public readonly retryAfterUntil?: string,
   ) {
     super(kind === 'invalid_request' ? 'Invalid Get on Board request' :
       kind === 'parse_failed' ? 'Get on Board response could not be normalized' :
@@ -311,8 +313,9 @@ export async function fetchGetOnBoardBatch(
     })
     ensureActive()
     if (!response.ok) {
+      const retryAfterUntil = sourceRetryAfterUntil(response.status, response.headers.get('retry-after'), (options.now ?? Date.now)())
       await response.body?.cancel()
-      throw new GetOnBoardProviderError('unavailable', 'http_' + response.status)
+      throw new GetOnBoardProviderError('unavailable', 'http_' + response.status, retryAfterUntil)
     }
     const payload = await readGetOnBoardPayload(response, controller.signal, ensureActive)
     ensureActive()

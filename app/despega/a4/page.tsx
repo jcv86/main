@@ -216,9 +216,12 @@ export default async function RadarEstrategicoPage() {
                 <ArrowLeft className="mr-2 h-4 w-4" /> Volver al panel
               </Link>
             </Button>
-            <Badge className="border-rose-400/30 bg-rose-400/10 text-rose-200">
-              Radar Estratégico · A4
-            </Badge>
+            <Button asChild variant="outline" className="w-full sm:w-auto">
+              <Link href="/despega/a4/job-matching">
+                <Radar aria-hidden="true" className="mr-2 h-4 w-4" />
+                Explorar oportunidades
+              </Link>
+            </Button>
           </div>
 
           <div className="grid gap-6 lg:grid-cols-[1fr_auto] lg:items-end">

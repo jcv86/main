@@ -25,8 +25,8 @@ const row = (id = source.id, attributes = {}) => ({
   attributes: { ...structuredClone(source.attributes), ...attributes },
   links: { public_url: 'https://www.getonbrd.com/jobs/' + id },
 })
-const response = (body, status = 200) => new Response(JSON.stringify(body), {
-  status, headers: { 'Content-Type': 'application/json' },
+const response = (body, status = 200, headers = {}) => new Response(JSON.stringify(body), {
+  status, headers: { 'Content-Type': 'application/json', ...headers },
 })
 const isError = (kind, code) => error => error instanceof GetOnBoardProviderError && error.kind === kind && error.code === code
 
@@ -279,6 +279,57 @@ test('HTTP, network and JSON errors expose only controlled error metadata', asyn
   await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
     fetchImpl: async () => new Response('<html>not JSON</html>', { status: 200 }),
   }), isError('parse_failed', 'invalid_json'))
+})
+
+test('429 carries seconds or HTTP-date pauses and falls back to three hours for invalid headers', async () => {
+  const fallback = new Date(now() + 3 * 3600_000).toISOString()
+  for (const [header, expected] of [
+    ['86400', new Date(now() + 86400_000).toISOString()],
+    [new Date(now() + 6 * 3600_000).toUTCString(), new Date(now() + 6 * 3600_000).toISOString()],
+    ['Thursday, 08-Oct-26 18:00:00 GMT', '2026-10-08T18:00:00.000Z'],
+    ['Thu Oct  8 18:00:00 2026', '2026-10-08T18:00:00.000Z'],
+    [undefined, fallback], ['', fallback], ['-1', fallback], ['1.5', fallback],
+    ['tomorrow', fallback], ['9'.repeat(500), fallback], ['0', fallback],
+    ['Wed, 31 Feb 2027 18:00:00 GMT', fallback],
+    [new Date(now() - 1000).toUTCString(), fallback],
+  ]) {
+    let calls = 0
+    await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+      now,
+      fetchImpl: async () => {
+        calls++
+        return response({ private: 'PRIVATE_RATE_LIMIT_BODY' }, 429, header === undefined ? {} : { 'Retry-After': header })
+      },
+    }), error => error.kind === 'unavailable' && error.code === 'http_429'
+      && error.retryAfterUntil === expected && !error.message.includes('PRIVATE_RATE_LIMIT_BODY'))
+    assert.equal(calls, 1)
+  }
+})
+
+test('503 exposes only a valid future Retry-After and preserves the error code', async () => {
+  for (const [header, expected] of [
+    ['3600', new Date(now() + 3600_000).toISOString()],
+    [new Date(now() + 86400_000).toUTCString(), new Date(now() + 86400_000).toISOString()],
+    [undefined, undefined], ['-1', undefined], ['1.5', undefined], ['unknown', undefined],
+    ['Wed, 31 Feb 2027 18:00:00 GMT', undefined],
+    [new Date(now() - 1000).toUTCString(), undefined],
+  ]) {
+    await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+      now, fetchImpl: async () => response({}, 503, header === undefined ? {} : { 'Retry-After': header }),
+    }), error => error.code === 'http_503' && error.retryAfterUntil === expected)
+  }
+})
+
+test('rate-limit bodies are cancelled without reading them and access denials do not become cooldowns', async () => {
+  let cancelled = false
+  const body = new ReadableStream({ cancel() { cancelled = true } })
+  await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+    now, fetchImpl: async () => new Response(body, { status: 429, headers: { 'Retry-After': '60' } }),
+  }), error => error.code === 'http_429' && error.retryAfterUntil === new Date(now() + 60_000).toISOString())
+  assert.equal(cancelled, true)
+  await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+    now, fetchImpl: async () => response({}, 403, { 'Retry-After': '86400' }),
+  }), error => error.code === 'http_403' && error.retryAfterUntil === undefined)
 })
 
 test('response bytes are bounded while streaming even without Content-Length', async () => {

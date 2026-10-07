@@ -4,6 +4,7 @@ on:
   pull_request:
     paths:
       - 'lib/opportunities/sources/getonboard.ts'
+      - 'lib/opportunities/sources/retry-after.ts'
       - 'lib/opportunities/types.ts'
       - 'lib/opportunities/verified-index.ts'
       - 'app/api/a4/opportunities/getonboard/**'
