@@ -1,4 +1,5 @@
 export interface JobSearchFunnel {
+  rateBasis: 'recorded_event_ratio_not_process_conversion'
   applications: number
   employerResponses: number
   interviews: number
@@ -15,7 +16,7 @@ export interface EconomicOutcome {
   latestMonthlyNetClp: number | null
   monthlyLiftClp: number | null
   salaryLiftPct: number | null
-  observedAnnualLiftClp: number | null
+  annualizedLiftClp: number | null
 }
 
 export function safeRate(numerator: number, denominator: number): number | null {
@@ -31,6 +32,7 @@ export function deriveJobSearchFunnel(types: string[]): JobSearchFunnel {
   const processAdvances = count('process_advance')
   const offers = count('offer')
   return {
+    rateBasis: 'recorded_event_ratio_not_process_conversion',
     applications,
     employerResponses,
     interviews,
@@ -47,8 +49,12 @@ export function deriveEconomicOutcome(
   baselineMonthlyNetClp: number | null,
   latestMonthlyNetClp: number | null,
 ): EconomicOutcome {
+  const validAmount = (amount: number | null) =>
+    amount !== null && Number.isInteger(amount) && amount >= 0 && amount <= 100_000_000 ? amount : null
+  baselineMonthlyNetClp = validAmount(baselineMonthlyNetClp)
+  latestMonthlyNetClp = validAmount(latestMonthlyNetClp)
   if (baselineMonthlyNetClp === null || latestMonthlyNetClp === null) {
-    return { baselineMonthlyNetClp, latestMonthlyNetClp, monthlyLiftClp: null, salaryLiftPct: null, observedAnnualLiftClp: null }
+    return { baselineMonthlyNetClp, latestMonthlyNetClp, monthlyLiftClp: null, salaryLiftPct: null, annualizedLiftClp: null }
   }
   const monthlyLiftClp = latestMonthlyNetClp - baselineMonthlyNetClp
   return {
@@ -56,12 +62,13 @@ export function deriveEconomicOutcome(
     latestMonthlyNetClp,
     monthlyLiftClp,
     salaryLiftPct: baselineMonthlyNetClp > 0 ? safeRate(monthlyLiftClp, baselineMonthlyNetClp) : null,
-    observedAnnualLiftClp: monthlyLiftClp * 12,
+    // A constant-monthly-difference projection; not twelve months of observed income.
+    annualizedLiftClp: monthlyLiftClp * 12,
   }
 }
 
 export function deriveTimeToJobDays(startedAt: Date | null, effectiveDate: Date | null): number | null {
-  if (!startedAt || !effectiveDate) return null
+  if (!startedAt || !effectiveDate || !Number.isFinite(startedAt.getTime()) || !Number.isFinite(effectiveDate.getTime())) return null
   const days = Math.floor((effectiveDate.getTime() - startedAt.getTime()) / 86_400_000)
   return days >= 0 ? days : null
 }

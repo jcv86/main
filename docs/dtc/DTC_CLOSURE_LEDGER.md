@@ -1,22 +1,32 @@
 # DTC closure ledger — canonical
 
-Last grounded: 2026-09-20 UTC
+Last grounded: 2026-10-07 UTC (release identity and Outcomes Chile block; earlier journey evidence retains its original date)
 
 This is the **single canonical closure ledger** for Despega Tu Carrera. Historical detail remains available in Git history; this file keeps the current release state and only the evidence that still matters for closure decisions.
 
-A status is `verified` only when there is observable evidence. Allowed states: `in_progress`, `verified`, `deferred_by_user`. A green CI run is evidence, but it is not treated as a substitute for a live check when the acceptance criterion explicitly requires one.
+A status is `verified` only when there is observable evidence. Allowed states: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`. A green CI run is evidence, but it is not treated as a substitute for a live check when the acceptance criterion explicitly requires one.
 
 ## Current release identity
 
 - Repository: `jcv86/main`
 - Canonical branch: `main`
-- Current application-code baseline: PR #181 merge `f0751cc4d9da0e5ae86f815b5c2e46acb57edf9b`
-- Current production deployment: `dpl_3R9VshmcqouMMB9DH15QdPpraP33` (READY)
+- Current application-code baseline: PR #232 merge `7f56e2599d05edd04890901e17e6d64d7be0fdbb`
+- Current production deployment: `dpl_Fm9pmGFsD1hXELa1cSQFNNSpQb6c` (READY, `main`, verified by both exact deployment and public domain on 2026-10-07)
+- Work in progress: PR #233, `agent/dtc-outcomes-chile-data-foundation`; Outcomes Chile is not in production.
 - Production domains: `despegatucarrera.com`, `www.despegatucarrera.com`
 - Supabase production project: DTCFINAL `dcfrbwxbejtbcouionna`
 - Production smoke after the final public hotfix: FAQ 200 with access-aware Vera copy, `/api/health/live` 200 `ok`, `/api/health/ready` 200 `ready`, `/demo` 404, and no Vercel runtime error clusters in the final one-hour scan.
 
-## Closure matrix
+## Outcomes Chile development block — 2026-10-07
+
+| ID | User outcome and acceptance criteria | Evidence / boundary | Owner | Dependency | Status | Release blocker |
+|---|---|---|---|---|---|---|
+| DTC-C17 | Interpret observed labor/economic results with dated evidence, conservative benchmark selection, explicit verification, and no causal or realized-annual-income claim | Runtime/capture/query tests PASS, 1,201-row pagination checks PASS, independent review fixes verified, full types/build PASS with known Edge warning; local SQL atomicity/RLS PASS. Reproducible evidence and limitations: [Impact Engine v1](DTC_OUTCOMES_CHILE_IMPACT_V1.md); dedicated PostgreSQL 17 CI in PR #233 | `dtc-build-experience` / `dtc-supabase-backend` / `dtc-quality-gate` | Implementation verified; production activation depends on C18 and both ordered migrations | `verified` | yes, for Outcomes Chile |
+| DTC-C18 | Use Outcomes Chile end to end with installed schema, owner isolation, atomic employment/followups, real versioned benchmark sources and capture/review UI | Read-only production catalog inspection on 2026-10-07: all six Outcomes Chile tables absent; no production schema mutation performed | `dtc-supabase-backend` / `dtc-release-production` | C17, reviewed migration, benchmark ingestion and live user-flow evidence | `blocked` | yes, for Outcomes Chile |
+
+The release evidence below describes earlier product journeys, not the unlaunched Outcomes Chile feature. A READY Preview alone does not verify its database or user flow.
+
+## Closure matrix (earlier product-flow evidence)
 
 | ID | User outcome | Current evidence | Status | Release blocker |
 |---|---|---|---|---|
@@ -71,9 +81,9 @@ The advisor still reports lower-priority platform hygiene:
 
 These are tracked as hardening/administration work; they are not equivalent to the earlier high-risk RLS-disabled / public privileged-RPC findings, which are now closed.
 
-## Remaining release-quality gap
+## Earlier core release-quality position (2026-09-20)
 
-All product-flow release blockers DTC-C01 through DTC-C15 are now `verified`. DTC-C16 remains `in_progress`, but it is explicitly non-blocking for the current product release. Remaining work is administrative/platform hardening rather than a known broken user flow.
+The earlier evidence marked product-flow blockers DTC-C01 through DTC-C15 `verified`. DTC-C16 remains `in_progress` and was non-blocking for that release. Outcomes Chile has its own current development and activation conditions in C17/C18 above; this historical position does not certify that new feature.
 
 ## Administrative / platform follow-up
 

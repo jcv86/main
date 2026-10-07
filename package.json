@@ -39,10 +39,14 @@
     "check:report-quality": "node --import tsx scripts/check-report-evidence-contract.ts && node --import tsx scripts/check-a1-professional-report-contract.ts && node --import tsx scripts/check-a1-individual-understanding-contract.ts && node --import tsx scripts/check-a1-a2-a3-journey-contract.ts && node --import tsx scripts/check-reporting-contract.ts && node --import tsx scripts/check-dtc-credibility-contract.ts && tsc --noEmit",
     "generate:docs": "node scripts/generate-docx.js",
     "db:reset-progress": "node --env-file-if-exists=/vercel/share/.env.project --env-file-if-exists=/vercel/share/.env.snowflake --loader tsx scripts/reset-pillar-progress.ts",
-    "check:outcomes-chile": "tsx scripts/check-outcomes-chile-foundation.ts",
-    "check:outcomes-chile-metrics": "tsx scripts/check-outcomes-chile-metrics.ts",
-    "check:outcomes-chile-capture": "tsx scripts/check-outcomes-chile-capture.ts",
-    "check:outcomes-chile-benchmarks": "tsx scripts/check-outcomes-chile-benchmark-resolver.ts"
+    "check:outcomes-chile": "node --import tsx scripts/check-outcomes-chile-foundation.ts",
+    "check:outcomes-chile-metrics": "node --import tsx scripts/check-outcomes-chile-metrics.ts",
+    "check:outcomes-chile-capture": "node --import tsx scripts/check-outcomes-chile-capture.ts",
+    "check:outcomes-chile-benchmarks": "node --import tsx scripts/check-outcomes-chile-benchmark-resolver.ts",
+    "check:outcomes-chile-benchmark-query": "node --import tsx scripts/check-outcomes-chile-benchmark-query.ts",
+    "check:outcomes-chile-impact": "node --import tsx scripts/check-outcomes-chile-impact.ts",
+    "check:outcomes-chile-summary": "node --import tsx scripts/check-outcomes-chile-summary.ts",
+    "check:outcomes-chile-all": "npm run check:outcomes-chile && npm run check:outcomes-chile-metrics && npm run check:outcomes-chile-capture && npm run check:outcomes-chile-benchmarks && npm run check:outcomes-chile-benchmark-query && npm run check:outcomes-chile-impact && npm run check:outcomes-chile-summary"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",

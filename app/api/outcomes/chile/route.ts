@@ -1,29 +1,55 @@
-import { NextRequest, NextResponse } from 'next/server'
+import { type NextRequest, NextResponse } from 'next/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { recordEmploymentOutcome, recordJobSearchEvent, recordSalaryOutcome } from '@/lib/outcomes-chile/capture'
+import { isCaptureInput, OutcomeCaptureValidationError } from '@/lib/outcomes-chile/capture-validation'
 import { loadOutcomesChileSummary } from '@/lib/outcomes-chile/service'
 
+export const dynamic = 'force-dynamic'
+
+function privateJson(body: unknown, status = 200) {
+  return NextResponse.json(body, {
+    status,
+    headers: {
+      'Cache-Control': 'private, no-store, max-age=0',
+      'CDN-Cache-Control': 'no-store',
+      'Vercel-CDN-Cache-Control': 'no-store',
+    },
+  })
+}
+
+function logFailure(operation: string, error: unknown) {
+  const code = error && typeof error === 'object' && 'code' in error && typeof error.code === 'string'
+    && /^[A-Z0-9_]{1,40}$/.test(error.code) ? error.code : 'OUTCOMES_CHILE_FAILED'
+  // Database error details can contain personal salary or employment values.
+  console.error(`[outcomes-chile] ${operation}`, { code })
+}
+
 export async function GET() {
-  const user=await resolveServerUser()
-  if(!user) return NextResponse.json({error:'No autenticado'},{status:401})
-  try { return NextResponse.json(await loadOutcomesChileSummary(user.id)) }
-  catch(error){ console.error('[outcomes-chile] summary',error); return NextResponse.json({error:'No pudimos cargar tus resultados.'},{status:500}) }
+  try {
+    const user = await resolveServerUser()
+    if (!user) return privateJson({ error: 'No autenticado' }, 401)
+    return privateJson(await loadOutcomesChileSummary(user.id))
+  } catch (error) {
+    logFailure('summary', error)
+    return privateJson({ error: 'Tus resultados aún no están disponibles. Intenta nuevamente más tarde.' }, 503)
+  }
 }
 
 export async function POST(request: NextRequest) {
-  const user=await resolveServerUser()
-  if(!user) return NextResponse.json({error:'No autenticado'},{status:401})
-  let body:Record<string,unknown>
-  try{body=await request.json()}catch{return NextResponse.json({error:'Solicitud inválida'},{status:400})}
-  try{
-    if(body.action==='job_search_event') return NextResponse.json({data:await recordJobSearchEvent(user.id,body)},{status:201})
-    if(body.action==='employment_outcome') return NextResponse.json({data:await recordEmploymentOutcome(user.id,body)},{status:201})
-    if(body.action==='salary_outcome') return NextResponse.json({data:await recordSalaryOutcome(user.id,body)},{status:201})
-    return NextResponse.json({error:'Acción no soportada'},{status:400})
-  }catch(error){
-    const code=error instanceof Error?error.message:'OUTCOME_CAPTURE_FAILED'
-    const validation=code.startsWith('INVALID_')||code==='ROLE_REQUIRED'
-    if(!validation) console.error('[outcomes-chile] capture',error)
-    return NextResponse.json({error:validation?code:'No pudimos registrar el resultado.'},{status:validation?422:500})
+  try {
+    const user = await resolveServerUser()
+    if (!user) return privateJson({ error: 'No autenticado' }, 401)
+    let body: unknown
+    try { body = await request.json() } catch { return privateJson({ error: 'Solicitud inválida' }, 400) }
+    if (!isCaptureInput(body)) return privateJson({ error: 'Solicitud inválida' }, 400)
+
+    if (body.action === 'job_search_event') return privateJson({ data: await recordJobSearchEvent(user.id, body) }, 201)
+    if (body.action === 'employment_outcome') return privateJson({ data: await recordEmploymentOutcome(user.id, body) }, 201)
+    if (body.action === 'salary_outcome') return privateJson({ data: await recordSalaryOutcome(user.id, body) }, 201)
+    return privateJson({ error: 'Acción no soportada' }, 400)
+  } catch (error) {
+    if (error instanceof OutcomeCaptureValidationError) return privateJson({ error: error.message }, 422)
+    logFailure('capture', error)
+    return privateJson({ error: 'No pudimos registrar el resultado.' }, 500)
   }
 }
