@@ -1,6 +1,9 @@
 import type { ChileTrabajosPublicJob } from './sources/chiletrabajos'
 import { isChileTrabajosExpired, normalizeChileTrabajosDate } from './sources/chiletrabajos'
-import type { CanonicalOpportunity, OpportunityVerificationStatus } from './sources/getonboard'
+import { isGetOnBoardJobUrl } from './sources/getonboard'
+import { EMPLOYER_BOARDS, isEmployerJobUrl, type EmployerBoardResult } from './sources/employers'
+import { employerJobId } from './sources/employer-registry'
+import type { CanonicalOpportunity, OpportunitySource, OpportunityVerificationStatus } from './types'
 import { categorizeOpportunity, inferChileRegion, normalizeRoleTitle } from './taxonomy'
 
 export type AdminDbClient = { from: (table: string) => any }
@@ -9,7 +12,7 @@ export const OPPORTUNITY_FRESHNESS_MS = 24 * 60 * 60 * 1000
 const TABLE = 'a4_verified_opportunities'
 
 export interface VerifiedOpportunityRow {
-  source: 'chiletrabajos' | 'getonboard'
+  source: OpportunitySource
   source_id: string
   original_url: string
   title: string
@@ -45,14 +48,16 @@ function queryWithSignal(query: any, signal?: AbortSignal): any {
 }
 
 function knownSource(value: unknown): value is VerifiedOpportunityRow['source'] {
-  return value === 'chiletrabajos' || value === 'getonboard'
+  return value === 'chiletrabajos' || value === 'getonboard' || value === 'lever' || value === 'greenhouse'
 }
 
 function safeOriginalUrl(source: string, id: string, value: string): boolean {
   try {
     const url = new URL(value)
-    if (url.protocol !== 'https:' || url.username || url.password) return false
-    if (source !== 'chiletrabajos') return source === 'getonboard'
+    if (url.protocol !== 'https:' || url.username || url.password || url.port || url.search || url.hash) return false
+    if (source === 'getonboard') return isGetOnBoardJobUrl(value, id)
+    if (source === 'lever' || source === 'greenhouse') return isEmployerJobUrl(source, id, value)
+    if (source !== 'chiletrabajos') return false
     if (!['www.chiletrabajos.cl', 'chiletrabajos.cl'].includes(url.hostname)) return false
     const match = url.pathname.match(/^\/trabajo\/(?:[^/]+-)?(\d{5,10})\/?$/)
     return Boolean(match && match[1] === id)
@@ -112,7 +117,9 @@ export async function invalidateOpportunityVerifications(
       .map((failure) => failure.sourceId)
     if (!ids.length) continue
     const query = supabase.from(TABLE)
-      .update({ verification_status: status, updated_at: now }, { count: 'exact' })
+      // The existing catalog constraint has four states; restricted access is
+      // insufficient verification and must never make a write violate it.
+      .update({ verification_status: status === 'verified_restricted' ? 'unknown' : status, updated_at: now }, { count: 'exact' })
       .eq('source', source)
       .in('source_id', ids)
     const { error, count } = await queryWithSignal(query, options.signal)
@@ -120,6 +127,55 @@ export async function invalidateOpportunityVerifications(
     affected += typeof count === 'number' ? count : 0
   }
   return affected
+}
+
+/**
+ * Absence means withdrawn only after a complete, well-formed company snapshot.
+ * A failed/truncated response never closes vacancies. The prefix is drawn from
+ * the reviewed registry, not from a request or a provider-controlled SQL filter.
+ */
+export async function reconcileEmployerSnapshot(
+  supabase: AdminDbClient,
+  snapshot: EmployerBoardResult,
+  options: IndexWriteOptions = {},
+): Promise<number> {
+  if (!snapshot.completeSnapshot || !['ok', 'no_matches'].includes(snapshot.outcome)) return 0
+  const board = EMPLOYER_BOARDS.find(item => item.source === snapshot.source && item.board === snapshot.board)
+  if (!board || snapshot.boardKey !== board.source + ':' + board.board
+      || !/^[a-z0-9-]+$/.test(board.board)) throw new Error('Invalid employer snapshot scope')
+  const prefix = board.board + ':'
+  if (!Array.isArray(snapshot.observedSourceIds)
+      || snapshot.observedSourceIds.length > 500
+      || snapshot.observedSourceIds.some(id => typeof id !== 'string' || !id.startsWith(prefix)
+        || !employerJobId(board.source, id.slice(prefix.length)))) {
+    throw new Error('Invalid employer snapshot identities')
+  }
+  const counts = [snapshot.received, snapshot.accepted, snapshot.rejected, snapshot.excluded, snapshot.returned]
+  const observed = new Set(snapshot.observedSourceIds)
+  if (counts.some(count => !Number.isSafeInteger(count) || count < 0)
+      || snapshot.rejected !== 0
+      || snapshot.received !== snapshot.accepted + snapshot.excluded
+      || snapshot.returned !== snapshot.accepted
+      || snapshot.accepted !== snapshot.observedSourceIds.length
+      || observed.size !== snapshot.observedSourceIds.length
+      || (snapshot.outcome === 'no_matches' ? snapshot.accepted !== 0 : snapshot.accepted === 0)) {
+    throw new Error('Inconsistent employer snapshot')
+  }
+  if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+  const query = supabase.from(TABLE)
+    .select('source_id')
+    .eq('source', board.source)
+    .like('source_id', prefix + '%')
+    .eq('verification_status', 'verified_active')
+    .limit(1000)
+  const { data, error } = await queryWithSignal(query, options.signal)
+  if (error) throw error
+  if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+  const missing = (data ?? [])
+    .filter((row: { source_id: string }) => typeof row.source_id === 'string'
+      && row.source_id.startsWith(prefix) && !observed.has(row.source_id))
+    .map((row: { source_id: string }) => ({ sourceId: row.source_id, verificationStatus: 'stale' as const }))
+  return invalidateOpportunityVerifications(supabase, board.source, missing, options)
 }
 
 export async function upsertVerifiedOpportunities(

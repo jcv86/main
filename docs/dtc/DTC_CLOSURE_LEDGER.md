@@ -88,3 +88,9 @@ These do not represent a broken DTC user flow, but they should be closed for str
 ## Score criterion
 
 A practical **9.7** now has its product-flow blocker condition satisfied: DTC-C01 through DTC-C15 are `verified`. The remaining requirement is to complete the administrative controls above or explicitly accept/defer them as owner decisions. DTC-C16 is non-blocking.
+
+## A4 source expansion — 2026-10-07
+
+| ID | User outcome | Evidence and acceptance contract | Status |
+|---|---|---|---|
+| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | `docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md`; implemented from main `7ce45b5`, full build and focused regressions pass. Read-only public smoke: 187 postings, 47 accepted; Coderio's 3 missing descriptions are reported as partial. Production activation and scheduled ingestion evidence remain pending. | `in_progress` |

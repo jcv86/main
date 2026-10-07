@@ -1,29 +1,6 @@
 import { load } from 'cheerio'
-
-export type OpportunityVerificationStatus =
-  | 'verified_active'
-  | 'verified_restricted'
-  | 'stale'
-  | 'unavailable'
-  | 'unknown'
-
-export interface CanonicalOpportunity {
-  source: 'getonboard'
-  sourceId: string
-  title: string
-  company: string
-  location: string | null
-  remote: boolean | null
-  workMode?: 'remote' | 'hybrid' | 'onsite' | null
-  description: string
-  requirements: string[]
-  skills: string[]
-  originalUrl: string
-  publishedAt: string | null
-  lastVerifiedAt: string
-  verificationStatus: OpportunityVerificationStatus
-  raw: unknown
-}
+import type { CanonicalOpportunity } from '../types'
+export type { CanonicalOpportunity, OpportunityVerificationStatus } from '../types'
 
 type JsonObject = Record<string, unknown>
 
