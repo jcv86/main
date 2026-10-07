@@ -6,6 +6,7 @@ import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import type { OpportunityProfileEvidence } from './opportunity-search-experience'
 import { Button } from '@/components/ui/button'
+import { OPPORTUNITY_SOURCE_LABELS, type OpportunitySource } from '@/lib/opportunities/types'
 
 interface Opportunity {sourceId:string;title:string;company:string;location:string|null;publishedAt:string|null;expiresAt:string|null;originalUrl:string;verificationStatus:'verified_active';description?:string|null;requirements?:string[];skills?:string[];source?:string;region?:string|null;workMode?:'onsite'|'hybrid'|'remote'|null;lastVerifiedAt?:string}
 interface Payload {needs_intent:boolean;mode?:'available_now';count?:number;source?:string;inventory_status?:'ready'|'empty';result_status?:'inventory_empty'|'no_matches'|'matches';fetched_at?:string;query_plan?:string[];intent?:{target_roles:string[];breadth:string;locations:string[];work_modes:string[]};opportunities:Opportunity[]}
@@ -23,6 +24,19 @@ function PublishedDate({value}:{value:string|null}) {
   timeZone:dateOnly?'UTC':'America/Santiago',
  }).format(date)
  return <span className="flex items-center gap-1"><CalendarDays className="h-4 w-4"/><time dateTime={normalized}>{label}</time></span>
+}
+
+function SourceDetails({source,verifiedAt}:{source?:string;verifiedAt?:string}) {
+ const sourceLabel=source&&Object.prototype.hasOwnProperty.call(OPPORTUNITY_SOURCE_LABELS,source)
+  ?OPPORTUNITY_SOURCE_LABELS[source as OpportunitySource]:null
+ const checked=verifiedAt?new Date(verifiedAt):null
+ const checkedLabel=checked&&Number.isFinite(checked.getTime())
+  ?new Intl.DateTimeFormat('es-CL',{day:'2-digit',month:'2-digit',year:'numeric',hour:'2-digit',minute:'2-digit',timeZone:'America/Santiago'}).format(checked):null
+ if(!sourceLabel&&!checkedLabel)return null
+ return <div className="flex flex-wrap gap-x-4 gap-y-1 text-xs text-muted-foreground">
+  {sourceLabel&&<span>Fuente: {sourceLabel}</span>}
+  {checkedLabel&&<span>Verificada el <time dateTime={verifiedAt}>{checkedLabel}</time> (Chile)</span>}
+ </div>
 }
 
 const normalize=(value:string)=>value.toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g,'').replace(/[^a-z0-9 ]/g,' ')
@@ -52,6 +66,7 @@ export function RealOpportunityResults({refreshKey=0,profileEvidence}:{refreshKe
   <div><h2 id="real-jobs-heading" className="text-2xl font-semibold tracking-tight text-foreground">{data.needs_intent?'Oportunidades disponibles ahora':'Oportunidades para ti'}</h2>{data.opportunities.length>0&&<p className="mt-1 text-sm text-muted-foreground">{data.count||0} oportunidades encontradas</p>}</div>
   {data.opportunities.length===0?<Card className="border-dashed border-border bg-card shadow-none"><CardContent className="flex flex-col items-center px-6 py-10 text-center"><div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-muted"><SearchX className="h-5 w-5 text-muted-foreground"/></div><p className="font-semibold text-foreground">{data.inventory_status==='empty'?'No hay ofertas verificadas disponibles en este momento':'No encontramos coincidencias con estos filtros'}</p><p className="mt-2 max-w-lg text-sm text-muted-foreground">{data.inventory_status==='empty'?'Vuelve a consultar más tarde. No necesitas cambiar tus filtros por este estado del catálogo.':'Prueba quitando un filtro o eligiendo otra área. Cuando eliges una región o una modalidad concreta, solo mostramos ofertas que informan ese dato.'}</p></CardContent></Card>:<div className="grid gap-4">{data.opportunities.map(job=><Card key={job.originalUrl} className="group overflow-hidden border-border bg-card shadow-sm transition-shadow hover:shadow-md"><CardHeader className="pb-3"><CardTitle className="text-xl tracking-tight text-foreground">{job.title}</CardTitle><p className="mt-1 text-sm font-medium text-muted-foreground">{job.company}</p></CardHeader><CardContent className="space-y-4">
    <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground">{job.location&&<span className="flex items-center gap-1"><MapPin className="h-4 w-4"/>{job.location}</span>}{job.workMode&&<span>{WORK_MODE_LABELS[job.workMode]}</span>}<PublishedDate value={job.publishedAt}/></div>
+   <SourceDetails source={job.source} verifiedAt={job.lastVerifiedAt}/>
    {(job.description||job.requirements?.length||job.skills?.length)?<div className="space-y-3 rounded-xl border border-border bg-muted/30 p-4">
     <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Evidencia publicada por la fuente</p>
     {job.description&&<p className="line-clamp-4 text-sm leading-relaxed text-foreground">{job.description}</p>}

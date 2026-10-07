@@ -6,7 +6,7 @@ import {
   OPPORTUNITY_FRESHNESS_MS,
 } from '../lib/opportunities/verified-index.ts'
 import {
-  runOpportunityRefreshCron,
+  runOpportunityRefreshCron as runProductionOpportunityRefreshCron,
   planOpportunityRefresh,
   OPPORTUNITY_REFRESH_BUDGET_MS,
 } from '../lib/opportunities/refresh-catalog.ts'
@@ -16,6 +16,16 @@ import { fetchGetOnBoardJobs } from '../lib/opportunities/sources/getonboard.ts'
 const NOW = new Date('2026-10-07T17:00:00.000Z')
 const SECRET = 'local-test-cron-secret-with-32-characters'
 const executed = []
+
+// Legacy provider cases remain hermetic while the production route also runs ATS.
+function runOpportunityRefreshCron(request, dependencies) {
+  return runProductionOpportunityRefreshCron(request, {
+    fetchEmployerBatch: async () => ({ jobs: [], boards: [] }),
+    ...dependencies,
+  })
+}
+
+const catalogCalls = (db) => db.calls.filter((call) => call.table === 'a4_verified_opportunities')
 async function test(name, action) {
   await action()
   executed.push(name)
@@ -39,9 +49,10 @@ function chileJob(overrides = {}) {
 }
 
 function boardJob(overrides = {}) {
+  const sourceId = overrides.sourceId ?? 'software-developer-empresa-real'
   return {
     source: 'getonboard',
-    sourceId: 'technology-123',
+    sourceId,
     title: 'Software Developer',
     company: 'Empresa de tecnología',
     location: null,
@@ -49,11 +60,11 @@ function boardJob(overrides = {}) {
     description: '<p>Desarrollar aplicaciones web.</p>',
     requirements: ['Experiencia en desarrollo'],
     skills: ['TypeScript'],
-    originalUrl: 'https://www.getonbrd.com/jobs/programming/software-developer-123',
+    originalUrl: 'https://www.getonbrd.com/jobs/programming/' + sourceId,
     publishedAt: '2026-10-01',
     lastVerifiedAt: NOW.toISOString(),
     verificationStatus: 'verified_active',
-    raw: { data: { id: 'technology-123' } },
+    raw: { data: { id: sourceId } },
     ...overrides,
   }
 }
@@ -103,6 +114,12 @@ function memoryDb(initialRows = [], config = {}) {
     gte(field, value) { this.filters.push((row) => row[field] >= value); return this }
     lte(field, value) { this.filters.push((row) => row[field] <= value); return this }
     in(field, values) { this.filters.push((row) => values.includes(row[field])); return this }
+    not(field, operator, value) {
+      assert.equal(operator, 'is')
+      assert.equal(value, null)
+      this.filters.push((row) => field.split('->').reduce((item, key) => item?.[key], row) != null)
+      return this
+    }
     order() { return this }
     limit(value) { this.resultLimit = value; return this }
     maybeSingle() { this.single = true; return this }
@@ -365,7 +382,7 @@ await test('Lost lease prevents catalog writes and records failure', async () =>
   })
   assert.equal(response.status, 503)
   assert.equal((await response.json()).error, 'LEASE_LOST')
-  assert.equal(db.calls.length, 0)
+  assert.equal(catalogCalls(db).length, 0)
   assert.equal(fixture.completed[0].success, false)
 })
 
@@ -383,7 +400,7 @@ await test('Provider outage preserves older verification and records a failed ru
   })
   assert.equal(response.status, 503)
   assert.equal((await response.json()).upserted, 0)
-  assert.equal(db.calls.length, 0)
+  assert.equal(catalogCalls(db).length, 0)
   assert.equal(db.tables.a4_verified_opportunities[0].last_verified_at, '2026-10-07T16:00:00.000Z')
   assert.equal(fixture.completed[0].success, false)
 })
@@ -421,7 +438,7 @@ await test('Global work budget aborts before persistence (accelerated timer)', a
     })
     assert.equal(response.status, 503)
     assert.equal((await response.json()).error, 'REFRESH_BUDGET_EXHAUSTED')
-    assert.equal(db.calls.length, 0)
+    assert.equal(catalogCalls(db).length, 0)
     assert.equal(fixture.completed[0].success, false)
   } finally {
     globalThis.setTimeout = realSetTimeout
