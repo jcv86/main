@@ -2,7 +2,7 @@
 
 Date: 2026-10-07
 Delivery item: DTC-A4-S01
-State: published; scheduled ingestion and authenticated Radar verification in_progress
+State: initial ingestion, authenticated Radar access and PR #239 publication verified; remaining employer cycles and native effects of bounded freshness improvement in_progress
 Application baseline: `jcv86/main` at `7ce45b5c77f844081a97a3f023fbc346ee9350e7`.
 
 ## User outcome
@@ -117,7 +117,7 @@ The user explicitly authorized production publication at 20:30:41 UTC / 17:30:41
 - Production deployment: `dpl_FFvpPvdufqrMyjUB3uWPahJbE2Vd`, **READY** at 20:36:01 UTC / 17:36:01 Chile.
 - Main commit: `27941276ebf92f29c2bf08b94687261078a60da8`.
 - Deployment URL: https://v0-fork-of-despega-tu-carrera-clone-2drojjvv1.vercel.app
-- Both `www.despegatucarrera.com` and `despegatucarrera.com` resolve through Vercel to this deployment; the apex redirects to the canonical www domain.
+- At this initial publication checkpoint, both `www.despegatucarrera.com` and `despegatucarrera.com` resolved through Vercel to this deployment; the apex redirected to the canonical www domain. Later PR #238 and #239 production identities are recorded below.
 - Vercel reported no runtime error clusters in the immediate post-release query beginning at 20:36:01 UTC. This is a short observation window, not a claim about future executions.
 
 Anonymous GET checks ran from 20:36:37 to 20:37:36 UTC. They sent no cookies or authorization and did not follow redirects.
@@ -134,14 +134,123 @@ Anonymous GET checks ran from 20:36:37 to 20:37:36 UTC. They sent no cookies or 
 
 Health responses were `no-store`; both private APIs were `private, no-store` with CDN caching disabled. These checks verify public availability and the anonymous authentication boundary. They do not prove an authenticated Radar journey.
 
-The current cloud-browser tab was an error page; the browser security policy rejected inspection of its `chrome-error:` protocol. No browser-policy workaround or protection change was attempted. Therefore the live authenticated Radar remains **not verified** in this release. Prior isolated component and real local Auth/PostgREST CI evidence remains useful within its original scope.
+During the initial publication check, the existing cloud-browser tab was an error page and browser policy rejected inspection of its internal `chrome-error:` protocol. A subsequent visit to the public HTTPS application succeeded. The follow-up evidence below supersedes the initial browser limitation. Prior isolated component and real local Auth/PostgREST CI evidence retains its original scope.
 
-### First scheduled ingestion and follow-up
+### Follow-up before the first cron — 2026-10-07, 20:45–20:55 UTC
+
+The Vercel API reconfirmed the same production deployment and main SHA. The one-time verification task remained enabled for 21:18:18 UTC.
+
+The project connector did not expose cron enablement. Read-only inspection of the actual [Vercel Cron Jobs settings](https://vercel.com/despega-tu-carrera/v0-fork-of-despega-tu-carrera-clone/settings/cron-jobs) resolved that gap: the feature is **Enabled**, the checkbox is checked, and `/api/cron/a4-opportunities` is listed as running at 15 minutes past the hour, every three hours. The page explicitly states UTC. No Run button or configuration switch was used.
+
+The public HTTPS browser journey reached a signed-in DTC session. Opening A4 redirected to `/despega/a1-cerebral`, and the navigation marked A4 as blocked. Opening the workspace returned to `/despega/conozcamonos-1`. This account has not established the prerequisite journey state needed for the positive Radar check. No assessment answers or progress were changed to unlock it.
+
+Sign-out was observed returning to `/auth/signin`. The user selected Google through the secure authentication capability, and a later fresh DTC page showed the signed-in application again. Returning Google authentication therefore worked for the observed account; at this pre-activation checkpoint the account still had A4 blocked. A direct browser navigation to the catalog API returned `ERR_BLOCKED_BY_CLIENT`, so that browser attempt supplies no authenticated API response evidence.
+
+### Owner-authorized temporary A4 access — 2026-10-07, 21:00 UTC
+
+The owner then explicitly requested A4 access for the existing pilot. A read-only identity check resolved exactly one account, an existing pilot membership and a previously expired row in the server-only `a4_qa_entitlements` table. A guarded update renewed only that existing permission for 30 days, until **2026-11-06 21:00:13 UTC / 18:00:13 Chile**. The original creation metadata was retained. No answers, scores, completion records, memberships, roles, grants or schema were changed. A subsequent read confirmed the permission is active. No account identifier is included in this public record.
+
+The authenticated production page `/despega/a4/job-matching` then opened successfully and its draft-filter catalog showed **12 current opportunities for Metropolitana**. The saved-search results panel showed a truthful no-matches state; the saved preferences were not changed to manufacture a positive match. A catalog count is not evidence that 12 result cards were displayed.
+
+The same permission was still being discarded by the landing/results/navigation interpretation of the journey. [PR #238](https://github.com/jcv86/main/pull/238) fixes that inconsistency with a shared server-side check and an effective A4 access source separate from real progress. Local evidence: 25 permission regressions, 28 continuity checks, 10 transition-evidence cases, focused guard/cache/auth contracts, TypeScript and a full 357-page build passed. Independent review returned GO. Isolated mobile/desktop checks verified A4 navigation and truthful temporary-access copy. All 14 CI workflows passed for the first candidate `3d3e706f68c4adc487f8c6eeaee1d4bf15a8d024`.
+
+### Profile availability found during live verification
+
+A later runtime scan of the original production deployment identified the absent auxiliary `dtc_profile_signals` relation (`42P01`): 18 signal-query and 3 weakness-query errors at 21:01:14 UTC. The helpers converted those errors to empty arrays, then calculated baseline readiness values; the live job-search page also showed those unsupported values. This was a pre-existing profile presentation defect, independent of the collector and the report's verified-signal data.
+
+The final PR #238 candidate `c63e058313b7d98a52b04010f8f837feab1f6078`, tree `a632e3e5f5fb84eac126bf340e400cff40b70d86`, corrects that behavior. Unavailable reads propagate a fixed-code, sanitized error. One bounded active-signal check precedes further profile reads; missing data or any later read failure returns an unavailable profile. Landing and job matching keep the Radar/search usable and explicitly show that availability state. No historical migration, schema or role change was used. The source remains unavailable; the correction makes that fact visible.
+
+Fourteen additional availability regressions passed, covering initial and later errors, successful empty reads, owner/active filters, valid calculations, sanitized logging, context consumers and both pages. The 25 access regressions and full TypeScript/357-page build passed again on the final candidate. All 14 workflows for the final candidate completed successfully before the authorized squash merge. The exact-tree production and authenticated checks are recorded below.
+
+### First scheduled ingestion — verified 2026-10-07
 
 Read-only DTCFINAL counts before the new scheduler ran: 78 Chiletrabajos rows marked `verified_active`, of which 12 had a verification within 24 hours; zero Get on Board, Lever or Greenhouse rows. The previous successful A4 execution began at 19:35:07 UTC, recorded slot `165870` and upserted 12 Chiletrabajos rows. That three-hour slot was already consumed before the new deployment.
 
-The existing Vercel cron is `15 */3 * * *` UTC. The next expected run is **2026-10-07 21:15 UTC / 18:15 Chile**, slot `165871`: Chiletrabajos/Valparaíso, Checkr Chile (`greenhouse:chile`) and APPLY Digital (`lever:applydigital`). The following employer pairs are Coderio/PagerDuty at 21:15 Chile and Fintual/Cabify at 00:15 Chile on October 8. These are scheduled plans, not observed ingestion outcomes.
+The existing Vercel cron is `15 */3 * * *` UTC. The native run for slot `165871` started at **2026-10-07 21:15:00.909321 UTC / 18:15:00 Chile** and completed at **21:15:07.636 UTC**, with status `success`, outcome `ok` and a recorded duration of 6.727 seconds. It reported **32 upserts, 0 invalidations and 0 index rejections**, with no recorded error codes.
 
-A one-time verification task was successfully created for **2026-10-07 21:18:18 UTC / 18:18:18 Chile**. It will inspect the completed execution, bounded employer diagnostics, fresh source counts and deployment errors, and update the release evidence. It is a follow-up check; the native Vercel cron performs ingestion. No manual cron attempt, lease reset, schedule change or direct catalog insertion was used to accelerate the first run.
+| Source and scope | Received | Accepted / returned | Excluded | Rejected | Result |
+|---|---:|---:|---:|---:|---|
+| Chiletrabajos / Valparaíso | Not separately asserted | 12 | Not separately asserted | Not separately asserted | Successful primary refresh |
+| Greenhouse / `chile` / Checkr | 14 | 14 | 0 | 0 | `ok`, complete snapshot |
+| Lever / `applydigital` / APPLY Digital | 23 | 6 | 17 | 0 | `ok`, complete snapshot |
 
-**Scoped release verdict: CONDITIONAL_GO.** The reviewed code is published; all seven public HTTP checks pass. Scheduled employer ingestion and the authenticated Radar remain pending. `DTC-A4-S01` stays `in_progress` until those acceptance criteria have observable evidence. A successful first run proves only the boards it actually processes; it does not prove all six boards have completed their production cycle.
+Both employer boards recorded no failure code or retry-after cooldown. A read-only database observation at **21:16:08.841850 UTC** confirmed these persisted counts:
+
+| Source | Stored `verified_active` rows | Verified within 24 hours |
+|---|---:|---:|
+| Chiletrabajos | 90 | 24 |
+| Greenhouse | 14 | 14 |
+| Lever | 6 | 6 |
+| Get on Board | 0 | 0 |
+| **Total** | **110** | **44** |
+
+The other 66 Chiletrabajos rows retain their stored active status but are older than the 24-hour verification window; they were not counted as fresh. The **14 Checkr and 6 APPLY Digital jobs are actually persisted**. This is distinct from the 47 accepted postings in the earlier non-persisting smoke.
+
+At the subsequent authenticated job-search reload on the original production deployment, the Metropolitana draft-filter catalog increased from **12 to 32 opportunities** and displayed the updated category counts. This is direct application evidence that the expanded inventory reaches the catalog UI. The saved-search panel still showed no matches; no search intent was changed and no result-card rendering for those saved filters is claimed.
+
+The following employer pairs remain scheduled but unverified in production: Coderio/PagerDuty at 21:15 Chile and Fintual/Cabify at 00:15 Chile on October 8. No manual cron attempt, lease reset, schedule change or direct catalog insertion was used. The follow-up made only read-only execution and inventory checks, without profiles, assessments, personal data or source payloads.
+
+**Scoped release verdict: CONDITIONAL_GO.** The reviewed collector is published and its first native employer ingestion is verified. Returning Google authentication and the existing authenticated job-search catalog were observed. PR #238 subsequently verified normal authenticated Radar entry, report and the updated catalog, as recorded below. SQL counts alone do not close `DTC-A4-S01`. A successful first run proves only the two employer boards it processed, not all six boards' production cycles.
+
+
+### Authenticated access publication completed — 2026-10-07, 21:44–21:50 UTC
+
+PR #238 was squash-merged as `79ec6b6111a501d5feef8ee71663121efeb4d517`. Its tree `a632e3e5f5fb84eac126bf340e400cff40b70d86` exactly equals the reviewed candidate. All 14 workflows passed for that final candidate. Vercel deployment `dpl_46FMoqfXDGfcgnSCGmunbQYx3H3m` became production READY at **21:44:04.225 UTC / 18:44:04 Chile**; the connector subsequently resolved the canonical domain to the same deployment and commit.
+
+The existing authorized pilot session then opened `/despega/a4`, `/despega/a4/resultados` and `/despega/a4/job-matching`. The normal A4 navigation is available, the temporary-access notice is visible, and the real A1–A3 states remain unchanged. The job-search draft-filter catalog shows **32 Metropolitana opportunities**. The saved-search panel remains without matches; these checks did not save preferences, assessments, progress or signals. Unavailable auxiliary profile evidence is presented honestly, without the former unsupported default readiness scores.
+
+Seven anonymous checks completed at **21:49:51 UTC**: both health endpoints returned 200, A4 access/context/catalog returned 401, and landing/report redirected to sign-in. A4 access and catalog use private/no-store; that header is not asserted for the context error. Runtime inspection since publication reported two sanitized `schema_unavailable` diagnostics from the unavailable auxiliary profile source. The pages remained usable. This is not a zero-error claim or a schema repair.
+
+`DTC-A4-A01` is verified for the authorized temporary-access acceptance criterion. `DTC-A4-S01` remains in_progress because four employer boards have no observed native production cycle yet. This access release's rollback baseline is `dpl_FFvpPvdufqrMyjUB3uWPahJbE2Vd` / main `27941276ebf92f29c2bf08b94687261078a60da8`.
+
+## Bounded freshness and coverage improvement — 2026-10-07
+
+The owner requested further scraper development after the first native ingestion. The observed inventory had 66 older Chiletrabajos rows outside the 24-hour freshness window, while a large employer board could repeatedly return the same first 50 eligible vacancies. This block addresses those coverage gaps and makes partial persistence measurable.
+
+- **Chiletrabajos maintenance:** the existing cron's 12-probe / 35-second batch interleaves three discovered IDs and one known ID, with at most three known candidates. The read-only selector uses the existing verified index, the target region, recoverable states and a verification age of at least 18 hours. Oldest attempted rows lead the queue. Selecting a row does not refresh its verification timestamp; only a successful current provider observation can do that. Unused maintenance capacity remains available to discovery. Generic on-demand callers retain their previous limits of 20 results and 30 candidates.
+- **Primary-source backoff:** Chiletrabajos and Get on Board persist valid Retry-After dates in `cron_job_executions.execution_summary.primary_cooldowns`. A 429 without a usable date waits three hours; a 503 requires a valid header. The last completed state survives visits to the other source. A failed state read prevents that primary request while independent employer work can continue; no missing state is overwritten with an invented empty map. State and maintenance reads have a three-second deadline inside the existing global budget.
+- **Employer coverage:** eligible vacancies already received in a bounded response rotate across the 50-return limit using the existing scheduled slot. A 75-vacancy fixture is fully covered over two board visits, with 50 returned per visit and the same number of requests. No new pages or provider calls are added. Truncated results remain partial and cannot trigger absence reconciliation. A malformed duplicate no longer hides a later valid copy, while the rejected observation remains visible in diagnostics.
+- **Persistence evidence:** `primary_persistence` and each `employer_boards[].persistence` report confirmed upserts, invalidations, rejected rows and outcome. Upserts include inserts and updates; they are not a count of newly discovered jobs. An internal observer records each confirmed statement immediately; later errors cannot erase it or count it twice. The observer closes when the operation finishes or is cancelled, so late replies cannot change the completed ledger. Unknown write outcomes are not estimated.
+- **Catalog read and entry:** catalog reads select only the 18 public fields used by matching/display, excluding raw source payloads and write bookkeeping. The normal A4 landing provides an `Explorar oportunidades` link to the existing authenticated search.
+
+No new provider, dependency, migration, RLS rule, environment variable, credential or cron schedule is introduced. The primary-city cycle remains 18 hours and each employer board's visit cycle remains nine hours. The 50-second global work budget and lease protections remain in force. No manual cron or production data write is part of development verification.
+
+### Validation checkpoint
+
+The final focused regression run passed **273/273 cases across 12 suites**: Chiletrabajos 33, Get on Board provider/routes 24+13, matching 22, maintenance selection 17, primary state and persistence 27, primary refresh 16, employer sources/index/refresh 40+24+18, A4 access 25 and profile availability 14. Critical contracts and TypeScript pass. Independent review returned GO after reproducing and closing loss of earlier confirmed counts during statement failure and hard cancellation. The improvement PR records the final build and publication checks. The actual A4 landing and shell were rendered at **390×844 and 1440×1000**, using synthetic data and real styles/fonts: no horizontal overflow, a 44px catalog link, visible keyboard focus and successful Enter activation. Axe found zero violations within the changed link in both viewports; this does not certify unchanged shell widgets. No provider or production requests were made by these tests.
+
+PR #239 publication has now resolved the canonical domain to the exact reviewed application tree, preserved the anonymous authentication boundaries and verified the new link in the authorized production session, as recorded below. The next native execution remains the evidence needed for the new maintenance/cooldown statistics. A READY deployment or synthetic fixture result does not establish new production ingestion.
+
+### Remaining scoped work
+
+- Observe native Coderio/PagerDuty and Fintual/Cabify cycles; the earlier non-persisting smoke is not evidence of their stored inventory.
+- Observe maintenance selection/probe and persistence counters in the next natural primary-source cycles. Fresh inventory growth cannot be promised from code changes alone.
+- Keep the auxiliary action-profile source visibly unavailable until a separately scoped backend decision repairs it.
+- Results still cap displayed matches at 18 without pagination. The catalog selects a bounded set before its in-memory expiry filter; a synthetic large-inventory case exposes that limitation, but no current loss was demonstrated with 110 stored rows and a 500-row catalog read. Stable catalog tie ordering is also separate follow-up work. No approximate cross-source deduplication was added without evidence of real duplicates.
+
+### Bounded improvement published — PR #239, 2026-10-07
+
+[PR #239](https://github.com/jcv86/main/pull/239) was squash-merged after the final authorization and identity gate. The final read confirmed an open, mergeable/clean PR, the exact reviewed head/tree, main still at the verified PR #238 baseline, all 10 CI workflows successful and the reviewed Vercel preview READY. No preview-protection bypass was used.
+
+| Release identity | Verified value |
+|---|---|
+| Reviewed candidate | `e85294fd753ff6a4c510755b4687380e0ce6201d` |
+| Exact reviewed / merged tree | `7181105474831cf823745fa971b6ef1a95b55582` |
+| Main squash merge | `4c0322a929b51aa79dc9c3acce4225032d661b49` |
+| Parent / prior production baseline | `79ec6b6111a501d5feef8ee71663121efeb4d517` |
+| Preview deployment | `dpl_HmRBDnWnm4Jh3U4tAdCRPZXgaQUL`, READY 22:13:07.013 UTC |
+| Production deployment | `dpl_2paWuyve2aB6y2GYdrj2WyYZmeLN`, READY **22:17:29.612 UTC / 19:17:29 Chile** |
+| Canonical domain | https://www.despegatucarrera.com, resolved by the connector to the same production deployment and main SHA at 22:18 UTC |
+| Rollback for this improvement | `dpl_46FMoqfXDGfcgnSCGmunbQYx3H3m` / main `79ec6b6111a501d5feef8ee71663121efeb4d517` |
+
+All **10 CI workflows** for the exact final candidate passed; the [A4 engine workflow](https://github.com/jcv86/main/actions/runs/37694298011) includes contract/regression, TypeScript and isolated PostgreSQL lease/concurrency verification. [Design enforcement](https://github.com/jcv86/main/actions/runs/37694298004) completed a clean production build. Vercel preview logs independently confirmed `Build Completed in /vercel/output [4m]` and `Deployment completed`; the exact-tree production build also became READY. The final local build attempts had font-loader errors (`next/font` extension-regex null and a later `undefined.length` failure), whose external cause was not proven. They are preserved as local failures in PR #239. Successful clean CI/Vercel builds establish the release build gate without changing fonts, dependencies, environment or security controls.
+
+**Live application evidence:** after production was READY, the authorized session opened the normal A4 landing and followed its new **Explorar oportunidades** link to `https://www.despegatucarrera.com/despega/a4/job-matching`. At 22:21 UTC the Metropolitana draft-filter catalog showed **32 available opportunities** and updated category counts. The saved-search results still showed no matches. A catalog availability count is not evidence of 32 rendered result cards. No search intent, assessments, profile data, signals or progress were saved during this check. A4 remains available while real A1–A3 state is retained. The auxiliary action profile remains unavailable and is explicitly described that way.
+
+**Anonymous boundary evidence:** seven checks completed at **22:18:56.076 UTC**: live/ready returned 200; module access, journey context and catalog returned 401; normal A4 and report returned 307 to sign-in. Module access and catalog were private/no-store; this cache claim is not made for the context error. These requests carried no session and made no cron or provider calls.
+
+**Runtime evidence:** the exact production deployment's log query covered **22:17:29.612–22:22:16.700 UTC**, filtered to warning/error/fatal, limit 20. It returned two sanitized `[A4 Snapshot]` / `schema_unavailable` diagnostics: **22:19:00.436** on `GET /despega/a4` and **22:21:26.061** on `GET /despega/a4/job-matching`. Both use the existing controlled unavailable-profile path. No other diagnostic was returned in that bounded response, and no zero-error or schema-repair claim is made. The aggregated error-group first-seen timestamp predated PR #239, so the exact deployment-filtered log timestamps are the evidence used here.
+
+**Read-only inventory evidence:** DTCFINAL at **22:18:52.262055 UTC** still has **110 stored verified-active rows / 44 verified within 24 hours**: Chiletrabajos 90/24, Greenhouse 14/14, Lever 6/6, Get on Board 0/0. Slot `165871` remains the latest execution, with the original start/completion, 32 upserts, zero invalidations/rejections, complete Checkr 14/14 and APPLY Digital 6/23 snapshots (17 excluded). The baseline-to-inventory increase from 78 to 110 supports 32 net-new rows from that earlier native run. No new ingestion is attributed to PR #239 and its new per-source persistence fields have not yet been observed on a native execution.
+
+**Next native evidence:** Coderio/PagerDuty are expected in slot `165872` at **2026-10-08 00:15 UTC / October 7 21:15 Chile**; Fintual/Cabify in slot `165873` at **October 8 03:15 UTC / 00:15 Chile**. Primary maintenance and cooldown behavior require their corresponding natural source/region visits. `DTC-A4-A01` stays verified; `DTC-A4-S01` and `DTC-A4-S02` stay in_progress. This two-document follow-up records publication evidence without another application-code merge or deployment.
