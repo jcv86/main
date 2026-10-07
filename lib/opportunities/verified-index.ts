@@ -5,6 +5,7 @@ import { EMPLOYER_BOARDS, isEmployerJobUrl, type EmployerBoardResult } from './s
 import { employerJobId } from './sources/employer-registry'
 import type { CanonicalOpportunity, OpportunitySource, OpportunityVerificationStatus } from './types'
 import { categorizeOpportunity, inferChileRegion, normalizeRoleTitle } from './taxonomy'
+import { isOpportunityPublished, opportunityTemporalFilter } from './temporal-filter'
 
 export type AdminDbClient = { from: (table: string) => any }
 export type VerifiedOpportunityInput = ChileTrabajosPublicJob | CanonicalOpportunity
@@ -301,12 +302,18 @@ export async function upsertVerifiedOpportunities(
   return { upserted: uniqueRows.length, invalidated, rejected }
 }
 
-/** Read only: expiration and old derived metadata are corrected in memory. */
-export async function readVerifiedOpportunities(
+export interface VerifiedOpportunityInventory {
+  opportunities: VerifiedOpportunityRow[]
+  /** A full bounded read may omit inventory; this is never a global total. */
+  scope: { limit: number; limitReached: boolean }
+}
+
+/** Read only: temporal filters precede LIMIT; legacy values are checked in memory. */
+export async function readVerifiedOpportunityInventory(
   supabase: AdminDbClient,
   limit = 100,
   options: { now?: Date; signal?: AbortSignal } = {},
-): Promise<VerifiedOpportunityRow[]> {
+): Promise<VerifiedOpportunityInventory> {
   const now = options.now ?? new Date()
   const cutoff = new Date(now.getTime() - OPPORTUNITY_FRESHNESS_MS).toISOString()
   const safeLimit = Math.max(1, Math.min(1000, Number.isFinite(limit) ? Math.floor(limit) : 100))
@@ -315,12 +322,15 @@ export async function readVerifiedOpportunities(
     .eq('verification_status', 'verified_active')
     .gte('last_verified_at', cutoff)
     .lte('last_verified_at', now.toISOString())
+    .or(opportunityTemporalFilter(now))
     .order('last_verified_at', { ascending: false })
+    .order('source', { ascending: true })
+    .order('source_id', { ascending: true })
     .limit(safeLimit)
   const { data, error } = await queryWithSignal(query, options.signal)
   if (error) throw error
 
-  return (data ?? []).filter((row: VerifiedOpportunityRow) => {
+  const opportunities = (data ?? []).filter((row: VerifiedOpportunityRow) => {
     const verifiedMs = Date.parse(row.last_verified_at)
     return knownSource(row.source)
       && row.verification_status === 'verified_active'
@@ -330,6 +340,7 @@ export async function readVerifiedOpportunities(
       && typeof row.title === 'string' && Boolean(row.title.trim())
       && safeOriginalUrl(row.source, row.source_id, row.original_url)
       && validExpiry(row.expires_at, now)
+      && isOpportunityPublished(row.published_at, now)
   }).map((row: VerifiedOpportunityRow) => {
     const category = categorizeOpportunity(row.title)
     const location = row.location?.trim() || null
@@ -347,4 +358,14 @@ export async function readVerifiedOpportunities(
       expires_at: row.expires_at ? normalizeChileTrabajosDate(row.expires_at) : null,
     }
   })
+  return { opportunities, scope: { limit: safeLimit, limitReached: (data ?? []).length >= safeLimit } }
+}
+
+/** Compatibility for existing callers that only need the bounded rows. */
+export async function readVerifiedOpportunities(
+  supabase: AdminDbClient,
+  limit = 100,
+  options: { now?: Date; signal?: AbortSignal } = {},
+): Promise<VerifiedOpportunityRow[]> {
+  return (await readVerifiedOpportunityInventory(supabase, limit, options)).opportunities
 }

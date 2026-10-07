@@ -7,11 +7,13 @@ on:
       - 'docs/dtc/DTC_CHILETRABAJOS_RELIABILITY.md'
       - 'docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md'
       - 'app/despega/a4/**'
+      - 'components/a4/journey-context-card.tsx'
       - 'app/api/journey/**'
       - 'lib/a4/**'
       - 'lib/journey/**'
       - 'lib/opportunities/**'
       - 'app/api/a4/opportunities/**'
+      - 'app/api/a4/search-intents/**'
       - 'app/api/health/opportunities/**'
       - 'app/api/cron/a4-opportunities/**'
       - 'scripts/check-a4-opportunity-engine.ts'
@@ -20,6 +22,9 @@ on:
       - 'scripts/test-primary-refresh-state.mjs'
       - 'scripts/test-a4-qa-access.mjs'
       - 'scripts/test-a4-profile-availability.mjs'
+      - 'scripts/test-a4-journey-context.mjs'
+      - 'scripts/test-a4-search-intents.mjs'
+      - 'scripts/lib/postgrest-filter-fixture.mjs'
       - 'scripts/test-employer-*.mjs'
       - 'scripts/smoke-employer-sources.mjs'
       - 'scripts/fixtures/employers/**'
@@ -57,6 +62,8 @@ jobs:
         run: pnpm run test:a4-qa-access
       - name: Missing profile evidence does not produce readiness scores
         run: pnpm run test:a4-profile-availability
+      - name: Canonical journey context, explicit intent saving and paginated exploration
+        run: pnpm run test:a4-closure
       - name: TypeScript full-repository check
         run: pnpm exec tsc --noEmit
 

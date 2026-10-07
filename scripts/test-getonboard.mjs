@@ -63,6 +63,21 @@ test('flattened compatibility form keeps a matching provider identity', () => {
   assert.equal(job.workMode, 'remote')
 })
 
+test('scheduled publication is not verified active before its actual date or instant', () => {
+  for (const published_at of ['2026-10-08', '2026-10-07T18:00:00.001Z', Date.parse('2026-10-07T18:00:01Z') / 1000]) {
+    assert.equal(normalizeGetOnBoardJob(row(source.id, { published_at }), verifiedAt), null)
+  }
+  assert.ok(normalizeGetOnBoardJob(row(source.id, { published_at: verifiedAt }), verifiedAt))
+  const midnight = '2026-10-08T02:59:59.999Z'
+  assert.ok(normalizeGetOnBoardJob(row(source.id, { published_at: '2026-10-07' }), midnight))
+  assert.equal(normalizeGetOnBoardJob(row(source.id, { published_at: '2026-10-08' }), midnight), null)
+  assert.ok(normalizeGetOnBoardJob(row(source.id, { published_at: '2026-10-08' }), '2026-10-08T03:00:00.000Z'))
+  const batch = normalizeGetOnBoardPayload({ data: [source, row('scheduled-synthetic', { published_at: '2026-10-09' })] }, verifiedAt)
+  assert.equal(batch.jobs.length, 1)
+  assert.equal(batch.diagnostics.outcome, 'partial')
+  assert.equal(batch.diagnostics.rejected, 1)
+})
+
 test('expanded fields can exist at the resource level as in the official SDK', () => {
   const sample = row()
   sample.company = sample.attributes.company
