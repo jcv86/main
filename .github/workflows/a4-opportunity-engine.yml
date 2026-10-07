@@ -6,7 +6,10 @@ on:
       - 'docs/dtc/DTC_A4_OPPORTUNITY_ENGINE_V1.md'
       - 'docs/dtc/DTC_CHILETRABAJOS_RELIABILITY.md'
       - 'docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md'
-      - 'app/despega/a4/job-matching/**'
+      - 'app/despega/a4/**'
+      - 'app/api/journey/**'
+      - 'lib/a4/**'
+      - 'lib/journey/**'
       - 'lib/opportunities/**'
       - 'app/api/a4/opportunities/**'
       - 'app/api/health/opportunities/**'
@@ -14,6 +17,7 @@ on:
       - 'scripts/check-a4-opportunity-engine.ts'
       - 'scripts/test-chiletrabajos.mjs'
       - 'scripts/test-opportunity-*.mjs'
+      - 'scripts/test-a4-qa-access.mjs'
       - 'scripts/test-employer-*.mjs'
       - 'scripts/smoke-employer-sources.mjs'
       - 'scripts/fixtures/employers/**'
@@ -47,6 +51,8 @@ jobs:
         run: pnpm run test:a4-opportunities
       - name: Employer sources, catalog and isolated failure regressions
         run: pnpm run test:a4-employers
+      - name: Explicit A4 access and truthful journey regressions
+        run: pnpm run test:a4-qa-access
       - name: TypeScript full-repository check
         run: pnpm exec tsc --noEmit
 
