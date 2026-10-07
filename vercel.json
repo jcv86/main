@@ -7,13 +7,19 @@
     {
       "path": "/api/cron/a4-daily-snapshots-utc12",
       "schedule": "0 12 * * *"
+    },
+    {
+      "path": "/api/cron/a4-opportunities",
+      "schedule": "15 */3 * * *"
     }
   ],
   "buildCommand": "npm run build",
   "devCommand": "npm run dev",
   "installCommand": "npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false",
   "framework": "nextjs",
-  "regions": ["sfo1"],
+  "regions": [
+    "sfo1"
+  ],
   "headers": [
     {
       "source": "/api/a1(.*)",

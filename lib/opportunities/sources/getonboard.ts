@@ -80,26 +80,49 @@ export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().t
   }
 }
 
-export async function fetchGetOnBoardJobs(category = 'programming', page = 1): Promise<CanonicalOpportunity[]> {
+export interface GetOnBoardFetchOptions {
+  signal?: AbortSignal
+  timeoutMs?: number
+}
+
+export async function fetchGetOnBoardJobs(
+  category = 'programming',
+  page = 1,
+  options: GetOnBoardFetchOptions = {},
+): Promise<CanonicalOpportunity[]> {
   const safeCategory = category.trim().toLowerCase().replace(/[^a-z0-9-]/g, '') || 'programming'
   const params = new URLSearchParams()
   params.set('page', String(Math.max(1, page)))
   params.append('expand[]', 'company')
-  const url = `https://www.getonbrd.com/api/v0/categories/${encodeURIComponent(safeCategory)}/jobs?${params}`
+  const url = 'https://www.getonbrd.com/api/v0/categories/' + encodeURIComponent(safeCategory) + '/jobs?' + params
+  const controller = new AbortController()
+  const timeoutMs = Math.max(1, Math.min(8000,
+    Number.isFinite(options.timeoutMs) ? options.timeoutMs! : 6000))
+  const timeout = setTimeout(() => controller.abort(), timeoutMs)
+  const abort = () => controller.abort()
+  if (options.signal?.aborted) controller.abort()
+  else options.signal?.addEventListener('abort', abort, { once: true })
 
-  const response = await fetch(url, {
-    headers: { Accept: 'application/json', 'User-Agent': 'DespegaTuCarrera/1.0' },
-    cache: 'no-store',
-  })
-  if (!response.ok) {
-    throw new Error(`Get on Board public jobs endpoint unavailable: ${response.status} ${response.statusText}`)
+  try {
+    const response = await fetch(url, {
+      headers: { Accept: 'application/json', 'User-Agent': 'DespegaTuCarrera/1.0' },
+      cache: 'no-store',
+      signal: controller.signal,
+      redirect: 'error',
+    })
+    if (!response.ok) {
+      throw new Error('Get on Board public jobs endpoint unavailable: ' + response.status)
+    }
+
+    const payload = await response.json()
+    const root = object(payload)
+    const rows = Array.isArray(root.data) ? root.data.slice(0, 30) : []
+    const verifiedAt = new Date().toISOString()
+    return rows
+      .map((row) => normalizeGetOnBoardJob(row, verifiedAt))
+      .filter((row): row is CanonicalOpportunity => row !== null)
+  } finally {
+    clearTimeout(timeout)
+    options.signal?.removeEventListener('abort', abort)
   }
-
-  const payload = await response.json()
-  const root = object(payload)
-  const rows = Array.isArray(root.data) ? root.data : []
-  const verifiedAt = new Date().toISOString()
-  return rows
-    .map((row) => normalizeGetOnBoardJob(row, verifiedAt))
-    .filter((row): row is CanonicalOpportunity => row !== null)
 }
