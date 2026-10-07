@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation'
 import { resolveA2DayAccess } from './a2-day-access'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { canonicalOnboardingPath } from './flow'
+import { hasActiveA4QaEntitlement } from '@/lib/a4/qa-entitlement'
 
 export type JourneyModule = 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
 
@@ -378,12 +379,17 @@ export const getJourneyForCurrentUser = cache(async function getJourneyForCurren
   const rawProfile = (profileResult.data ?? {}) as ProfileFlags
   const profile = hydrateProfileFlags(rawProfile, evidence)
   const state = hydrateJourneyState(rawState, profile, evidence)
+  const access = getModuleAccess(state, profile)
+  const a4AccessSource = access.a4
+    ? 'journey' as const
+    : await hasActiveA4QaEntitlement(userId, admin) ? 'qa_entitlement' as const : null
 
   return {
     user: identity.user,
     state,
     profile,
-    access: getModuleAccess(state, profile),
+    access: { ...access, a4: Boolean(a4AccessSource) },
+    a4AccessSource,
     isDemo: identity.isDemo,
     outcomes: {
       a1BaselineCompleted: evidence.a1OutcomeBaseline,

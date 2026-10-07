@@ -34,7 +34,7 @@ export function JourneyFlowPanel({ flow }: { flow: JourneyFlow }) {
     <section aria-label="Cómo se cuenta el progreso" className="rounded-2xl border border-border p-5">
       <h2 className="text-lg font-semibold">Progreso registrado, no supuesto</h2>
       <p className="mt-3 text-sm leading-relaxed text-muted-foreground">Tu ciclo activo de A2 es de {flow.activeHorizon} días: {flow.cycleCompletedDays} tienen una finalización registrada. Un día habilitado no se cuenta como completado y una ampliación a 60/90 no ocurre desde esta página.</p>
-      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">A4 necesita el cierre registrado de la ruta de Entrenamiento y acceso autorizado. No basta con llegar a diez sesiones ni con una etiqueta antigua.</p>
+      <p className="mt-3 text-sm leading-relaxed text-muted-foreground">{flow.a4QaAccess ? 'Tienes acceso temporal de prueba a A4. El avance de las etapas anteriores sigue mostrando únicamente sus registros reales.' : 'A4 necesita el cierre registrado de la ruta de Entrenamiento y acceso autorizado. No basta con llegar a diez sesiones ni con una etiqueta antigua.'}</p>
     </section>
     <div className="flex flex-wrap gap-3"><Button asChild variant="outline"><Link href="/despega/dashboard">Volver al panel</Link></Button><Button asChild variant="outline"><Link href="/despega/reporte-integral">Ver mi reporte integral</Link></Button></div>
   </section>

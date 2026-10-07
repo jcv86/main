@@ -1,4 +1,5 @@
 import type { createAdminClient } from '@/lib/supabase/server'
+import { hasActiveA4QaEntitlement } from './qa-entitlement'
 
 interface A4AccessResult {
   canAccess: boolean
@@ -24,14 +25,9 @@ export async function checkA4Access(
   const routeCompletedAt = data?.route_completed_at || null
   if (routeCompletedAt) return { canAccess: true, routeCompletedAt, reason: null, accessSource: 'journey' }
 
-  const { data: qa, error: qaError } = await supabase
-    .from('a4_qa_entitlements')
-    .select('expires_at')
-    .eq('user_id', userId)
-    .gt('expires_at', new Date().toISOString())
-    .maybeSingle()
-  if (qaError) throw new Error(`Unable to verify A4 QA entitlement: ${qaError.message}`)
-  if (qa?.expires_at) return { canAccess: true, routeCompletedAt: null, reason: null, accessSource: 'qa_entitlement' }
+  if (await hasActiveA4QaEntitlement(userId, supabase)) {
+    return { canAccess: true, routeCompletedAt: null, reason: null, accessSource: 'qa_entitlement' }
+  }
 
   return { canAccess: false, routeCompletedAt: null, reason: 'A3_ROUTE_NOT_COMPLETED' }
 }

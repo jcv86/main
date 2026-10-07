@@ -7,6 +7,7 @@ type FlowJourney = {
   user: { id: string }
   profile: FlowInput['profile']
   access: FlowInput['access']
+  a4AccessSource?: FlowInput['a4AccessSource']
   state: { currentModule: string; highestA2DayUnlocked: number }
   outcomes?: FlowInput['outcomes']
 }
@@ -26,6 +27,7 @@ export async function readJourneyFlow(journey: FlowJourney, client: Awaited<Retu
   return buildJourneyFlow({
     profile: journey.profile,
     access: journey.access,
+    a4AccessSource: journey.a4AccessSource,
     currentModule: journey.state.currentModule,
     highestA2DayUnlocked: journey.state.highestA2DayUnlocked,
     horizonMetadata: state.data?.metadata,

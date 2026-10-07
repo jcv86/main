@@ -12,6 +12,47 @@ import type {
   DTCSourceModule,
 } from './types'
 
+type ProfileSignalsAvailabilityCode =
+  | 'client_unavailable'
+  | 'schema_unavailable'
+  | 'read_failed'
+  | 'invalid_response'
+
+export class A4ProfileSignalsUnavailableError extends Error {
+  constructor(readonly code: ProfileSignalsAvailabilityCode) {
+    super('A4 profile signals are unavailable')
+    this.name = 'A4ProfileSignalsUnavailableError'
+  }
+}
+
+function requireSignalsClient() {
+  const supabase = createClient()
+  if (!supabase) throw new A4ProfileSignalsUnavailableError('client_unavailable')
+  return supabase
+}
+
+/** Keep unavailable reads distinct from a successful query with no signals. */
+async function readProfileSignals<T>(
+  read: () => PromiseLike<{ data: T[] | null; error: unknown }>
+): Promise<T[]> {
+  try {
+    const { data, error } = await read()
+    if (error) throw error
+    if (!Array.isArray(data)) {
+      throw new A4ProfileSignalsUnavailableError('invalid_response')
+    }
+    return data
+  } catch (error) {
+    if (error instanceof A4ProfileSignalsUnavailableError) throw error
+    const code = typeof error === 'object' && error !== null && 'code' in error
+      ? error.code
+      : undefined
+    throw new A4ProfileSignalsUnavailableError(
+      code === '42P01' || code === 'PGRST205' ? 'schema_unavailable' : 'read_failed'
+    )
+  }
+}
+
 // ============================================
 // PROFILE SIGNALS CRUD
 // ============================================
@@ -29,41 +70,34 @@ export async function getUserSignals(
     limit?: number
   }
 ): Promise<DTCProfileSignal[]> {
-  const supabase = createClient()
-  if (!supabase) return []
+  return readProfileSignals<DTCProfileSignal>(() => {
+    const supabase = requireSignalsClient()
+    let query = supabase
+      .from('dtc_profile_signals')
+      .select('*')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+      .order('weight', { ascending: false })
+      .order('confidence', { ascending: false })
 
-  let query = supabase
-    .from('dtc_profile_signals')
-    .select('*')
-    .eq('user_id', userId)
-    .eq('is_active', true)
-    .order('weight', { ascending: false })
-    .order('confidence', { ascending: false })
+    if (options?.signalType) {
+      query = query.eq('signal_type', options.signalType)
+    }
+    if (options?.sourceModule) {
+      query = query.eq('source_module', options.sourceModule)
+    }
+    if (options?.polarity) {
+      query = query.eq('polarity', options.polarity)
+    }
+    if (options?.minConfidence) {
+      query = query.gte('confidence', options.minConfidence)
+    }
+    if (options?.limit) {
+      query = query.limit(options.limit)
+    }
 
-  if (options?.signalType) {
-    query = query.eq('signal_type', options.signalType)
-  }
-  if (options?.sourceModule) {
-    query = query.eq('source_module', options.sourceModule)
-  }
-  if (options?.polarity) {
-    query = query.eq('polarity', options.polarity)
-  }
-  if (options?.minConfidence) {
-    query = query.gte('confidence', options.minConfidence)
-  }
-  if (options?.limit) {
-    query = query.limit(options.limit)
-  }
-
-  const { data, error } = await query
-
-  if (error) {
-    console.error('[A4 Signals] Error fetching signals:', error)
-    return []
-  }
-
-  return (data || []) as DTCProfileSignal[]
+    return query
+  })
 }
 
 /**
@@ -97,9 +131,6 @@ export async function getWeaknesses(
   userId: string,
   limit: number = 5
 ): Promise<DTCProfileSignal[]> {
-  const supabase = createClient()
-  if (!supabase) return []
-
   const weaknessTypes: DTCSignalType[] = [
     'weakness',
     'cv_gap',
@@ -108,21 +139,14 @@ export async function getWeaknesses(
     'missing_metric',
   ]
 
-  const { data, error } = await supabase
+  return readProfileSignals<DTCProfileSignal>(() => requireSignalsClient()
     .from('dtc_profile_signals')
     .select('*')
     .eq('user_id', userId)
     .eq('is_active', true)
     .in('signal_type', weaknessTypes)
     .order('weight', { ascending: false })
-    .limit(limit)
-
-  if (error) {
-    console.error('[A4 Signals] Error fetching weaknesses:', error)
-    return []
-  }
-
-  return (data || []) as DTCProfileSignal[]
+    .limit(limit))
 }
 
 /**
@@ -156,23 +180,15 @@ export async function getSignalStats(userId: string): Promise<{
   byPolarity: Record<string, number>
   avgConfidence: number
 }> {
-  const supabase = createClient()
-  if (!supabase) {
-    return {
-      total: 0,
-      byType: {} as Record<DTCSignalType, number>,
-      byPolarity: {},
-      avgConfidence: 0,
-    }
-  }
+  const data = await readProfileSignals<Pick<DTCProfileSignal, 'signal_type' | 'polarity' | 'confidence'>>(
+    () => requireSignalsClient()
+      .from('dtc_profile_signals')
+      .select('signal_type, polarity, confidence')
+      .eq('user_id', userId)
+      .eq('is_active', true)
+  )
 
-  const { data } = await supabase
-    .from('dtc_profile_signals')
-    .select('signal_type, polarity, confidence')
-    .eq('user_id', userId)
-    .eq('is_active', true)
-
-  if (!data || data.length === 0) {
+  if (data.length === 0) {
     return {
       total: 0,
       byType: {} as Record<DTCSignalType, number>,

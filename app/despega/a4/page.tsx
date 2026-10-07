@@ -1,5 +1,4 @@
 import Link from 'next/link'
-import { redirect } from 'next/navigation'
 import {
   AlertTriangle,
   ArrowLeft,
@@ -20,7 +19,7 @@ import {
   normalizeA4DailySnapshot,
   type A4DailyEvidenceSnapshot,
 } from '@/lib/a4/daily-snapshots'
-import { getJourneyForCurrentUser } from '@/lib/journey/service'
+import { requireJourneyModule } from '@/lib/journey/service'
 import { createAdminClient } from '@/lib/supabase/server'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
 import { getLiveUserProfile } from '@/lib/a4/profile-snapshot'
@@ -46,9 +45,8 @@ function formatDate(value: unknown): string {
 }
 
 export default async function RadarEstrategicoPage() {
-  const journey = await getJourneyForCurrentUser()
-  if (!journey) redirect('/auth/signin')
-  if (!journey.access.a4) redirect('/despega/a3')
+  const journey = await requireJourneyModule('A4')
+  const qaAccess = journey.a4AccessSource === 'qa_entitlement'
 
   const supabase = createAdminClient()
   const userId = journey.user.id
@@ -229,13 +227,13 @@ export default async function RadarEstrategicoPage() {
             </div>
             <div className="rounded-2xl border border-emerald-500/30 bg-emerald-500/10 p-5 lg:min-w-72">
               <p className="flex items-center gap-2 font-semibold text-emerald-200">
-                <CheckCircle2 className="h-5 w-5" /> Acceso verificado
+                <CheckCircle2 className="h-5 w-5" /> {qaAccess ? 'Acceso de prueba' : 'Acceso verificado'}
               </p>
               <p className="mt-2 text-sm text-emerald-100/70">
-                Habilitado por el cierre persistido de Entrenamiento.
+                {qaAccess ? 'Permiso temporal para revisar el Radar Estratégico.' : 'Habilitado por el cierre persistido de Entrenamiento.'}
               </p>
-              <p className="mt-3 text-xs text-emerald-100/50">
-                {formatDate(journey.state.a4UnlockedAt)}
+              <p className="mt-3 text-xs text-emerald-100/80">
+                {qaAccess ? 'Tu avance en A1, A2 y A3 conserva su estado real.' : formatDate(journey.state.a4UnlockedAt)}
               </p>
             </div>
           </div>
@@ -363,9 +361,8 @@ export default async function RadarEstrategicoPage() {
               </>
             ) : (
               <div className="rounded-xl border border-white/10 bg-muted/30 p-5 text-sm leading-relaxed text-muted-foreground">
-                Todavía no hay suficiente evidencia consolidada para construir tu perfil de acción.
-                Puedes seguir usando el Radar y completar entregables de A1–A3; el perfil se irá
-                enriqueciendo sin bloquearte.
+                Tu perfil de acción no está disponible todavía. Puedes seguir usando el Radar
+                y revisar tus entregables de A1–A3.
               </div>
             )}
           </CardContent>
@@ -389,13 +386,13 @@ export default async function RadarEstrategicoPage() {
                 <Radar className="h-5 w-5 text-rose-300" /> El Radar conserva el contexto
               </p>
               <p className="mt-2 max-w-2xl text-sm leading-relaxed text-muted-foreground">
-                Puedes volver a Entrenamiento para revisar entregables. Las señales y
+                Puedes retomar tu recorrido para revisar entregables. Las señales y
                 decisiones permanecen separadas de los XP y no alteran resultados anteriores.
               </p>
             </div>
             <div className="flex flex-wrap gap-3">
               <Button asChild variant="outline" className="shrink-0 border-border">
-                <Link href="/despega/a3">Revisar Entrenamiento</Link>
+                <Link href={journey.access.a3 ? '/despega/a3' : '/despega/recorrido'}>{journey.access.a3 ? 'Revisar Entrenamiento' : 'Ver mi recorrido'}</Link>
               </Button>
               <Button asChild className="shrink-0 bg-rose-500 hover:bg-rose-400">
                 <Link href="/despega/a4/resultados">Ver reporte A4</Link>
