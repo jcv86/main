@@ -195,7 +195,7 @@ assert.equal(select([
 
 // Supplement behavior checks with the adapter/schema boundary contracts.
 const source = readFileSync('lib/outcomes-chile/benchmark-resolver.ts', 'utf8')
-const migration = readFileSync('supabase/migrations/20260930200000_dtc_outcomes_chile_foundation.sql', 'utf8')
+const migration = readFileSync('supabase/migrations/20261007143246_dtc_outcomes_chile_foundation.sql', 'utf8')
 assert.ok(source.includes('industry_code'), 'The adapter must retrieve the dimension it matches')
 assert.ok(source.includes("{ count: 'exact' }") && source.includes('.range('), 'The adapter must not silently select from one API page')
 assert.ok(source.includes('CHILE_BENCHMARK_RESULT_LIMIT_EXCEEDED') && source.includes('CHILE_BENCHMARK_INCOMPLETE_READ'))

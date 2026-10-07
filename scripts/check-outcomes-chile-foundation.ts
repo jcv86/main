@@ -1,6 +1,6 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
-const sql=readFileSync('supabase/migrations/20260930200000_dtc_outcomes_chile_foundation.sql','utf8')
+const sql=readFileSync('supabase/migrations/20261007143246_dtc_outcomes_chile_foundation.sql','utf8')
 for(const table of ['dtc_job_search_events','dtc_employment_outcomes','dtc_salary_outcomes','dtc_outcome_followups','dtc_chile_benchmarks','dtc_outcome_verifications']) assert.ok(sql.includes('public.'+table),table)
 for(const status of ['self_reported','corroborated','verified']) assert.ok(sql.includes(status),'verification '+status)
 for(const day of ['30','90','180']) assert.ok(sql.includes(day),'followup '+day)

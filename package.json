@@ -9,6 +9,7 @@
     "lint": "next lint",
     "start": "next start",
     "test:pilot-access": "node --import tsx scripts/test-pilot-auth-flow.mjs && node --import tsx scripts/test-pilot-access-decisions.mjs",
+    "test:rate-limit": "node --import tsx scripts/test-rate-limit.mjs",
     "test:assessment-drafts": "node --import tsx scripts/test-assessment-drafts.mjs",
     "check:pilot-access": "tsx scripts/check-pilot-access-contract.ts",
     "check:pilot-invitation-issuer": "tsx scripts/check-pilot-invitation-issuer.ts",
@@ -48,7 +49,8 @@
     "check:outcomes-chile-summary": "node --import tsx scripts/check-outcomes-chile-summary.ts",
     "check:outcomes-chile-workspace": "node --import tsx scripts/check-outcomes-chile-workspace.ts",
     "check:outcomes-chile-ui": "node --import tsx scripts/outcomes-chile-ui-lab/run.mjs",
-    "check:outcomes-chile-all": "npm run check:outcomes-chile && npm run check:outcomes-chile-metrics && npm run check:outcomes-chile-capture && npm run check:outcomes-chile-benchmarks && npm run check:outcomes-chile-benchmark-query && npm run check:outcomes-chile-impact && npm run check:outcomes-chile-summary && npm run check:outcomes-chile-workspace"
+    "check:outcomes-chile-all": "npm run check:outcomes-chile && npm run check:outcomes-chile-metrics && npm run check:outcomes-chile-capture && npm run check:outcomes-chile-benchmarks && npm run check:outcomes-chile-benchmark-query && npm run check:outcomes-chile-impact && npm run check:outcomes-chile-summary && npm run check:outcomes-chile-workspace && npm run check:outcomes-chile-official-import",
+    "check:outcomes-chile-official-import": "node --import tsx scripts/check-outcomes-chile-official-import.ts"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",

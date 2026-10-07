@@ -17,6 +17,8 @@ on:
       - 'scripts/outcomes-chile-database-lab.mjs'
       - 'scripts/fixtures/outcomes-chile-idempotency-lab.mjs'
       - 'scripts/outcomes-chile-ui-lab/**'
+      - 'scripts/outcomes-chile-live/**'
+      - 'data/outcomes-chile/official/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/outcomes-chile.yml'
@@ -37,6 +39,8 @@ on:
       - 'scripts/outcomes-chile-database-lab.mjs'
       - 'scripts/fixtures/outcomes-chile-idempotency-lab.mjs'
       - 'scripts/outcomes-chile-ui-lab/**'
+      - 'scripts/outcomes-chile-live/**'
+      - 'data/outcomes-chile/official/**'
       - 'package.json'
       - 'pnpm-lock.yaml'
       - '.github/workflows/outcomes-chile.yml'
@@ -86,6 +90,10 @@ jobs:
         run: pnpm exec tsc --noEmit
       - name: Install isolated browser laboratory tools
         run: npm install --prefix "$RUNNER_TEMP/dtc-outcomes-ui-tools" --no-save --package-lock=false --ignore-scripts --no-audit --no-fund playwright@1.62.1 @sparticuz/chromium@153.0.0 axe-core@4.14.0
+      - name: Verify live runner safety without remote credentials
+        env:
+          DTC_OUTCOMES_UI_TOOLS_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-tools
+        run: node scripts/outcomes-chile-live/check.mjs
       - name: Render actual experience on mobile and desktop with synthetic API
         env:
           DTC_OUTCOMES_UI_TOOLS_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-tools

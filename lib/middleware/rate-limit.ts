@@ -16,9 +16,6 @@ interface RequestData {
   resetTime: number
 }
 
-// In-memory store (use Redis in production for distributed systems)
-const requestStore = new Map<string, RequestData>()
-
 const DEFAULT_CONFIG: RateLimitConfig = {
   windowMs: 15 * 60 * 1000, // 15 minutes
   maxRequests: 100,
@@ -28,6 +25,10 @@ const DEFAULT_CONFIG: RateLimitConfig = {
 
 export function createRateLimiter(config: Partial<RateLimitConfig> = {}) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config }
+  // Each policy owns its counter and window. Sharing the store lets ordinary
+  // API reads exhaust the stricter auth limit for the same client.
+  // This store remains local to the running process, not distributed.
+  const requestStore = new Map<string, RequestData>()
 
   const keyGenerator = finalConfig.keyGenerator || ((req: Request) => {
     // Use IP address as key (from headers or fallback)
@@ -36,13 +37,13 @@ export function createRateLimiter(config: Partial<RateLimitConfig> = {}) {
     return ip
   })
 
-  return async (req: Request): Promise<{ allowed: boolean; remaining: number; resetTime: number }> => {
+  return async (req: Request): Promise<{ allowed: boolean; remaining: number; resetTime: number; limit: number }> => {
     const key = keyGenerator(req)
     const now = Date.now()
 
     // Clean up expired entries
     const data = requestStore.get(key)
-    if (data && now > data.resetTime) {
+    if (data && now >= data.resetTime) {
       requestStore.delete(key)
     }
 
@@ -63,6 +64,7 @@ export function createRateLimiter(config: Partial<RateLimitConfig> = {}) {
       allowed,
       remaining,
       resetTime: entry.resetTime,
+      limit: finalConfig.maxRequests,
     }
   }
 }
@@ -113,7 +115,7 @@ export async function checkRateLimit(
         status: 429,
         headers: {
           'Retry-After': Math.ceil((limit.resetTime - Date.now()) / 1000).toString(),
-          'X-RateLimit-Limit': '100',
+          'X-RateLimit-Limit': limit.limit.toString(),
           'X-RateLimit-Remaining': '0',
           'X-RateLimit-Reset': limit.resetTime.toString(),
           'Content-Type': 'application/json',

@@ -3,7 +3,7 @@ import { readFileSync, readdirSync } from 'node:fs'
 import { isAbsolute } from 'node:path'
 import { pathToFileURL } from 'node:url'
 import { Client } from 'pg'
-import { checkOutcomeConcurrency, checkOutcomeIdempotency } from './fixtures/outcomes-chile-idempotency-lab.mjs'
+import { checkOutcomeConcurrency, checkOutcomeIdempotency, checkOutcomePrivileges } from './fixtures/outcomes-chile-idempotency-lab.mjs'
 
 // This laboratory never reads app credentials. Native runs require an empty,
 // explicitly named local database; PGlite always starts with a new in-memory DB.
@@ -57,11 +57,14 @@ if (pgliteModule) {
 const migrations = new URL('../supabase/migrations/', import.meta.url)
 const atomicFiles = readdirSync(migrations).filter(name => /^\d{14}_dtc_outcomes_chile_atomic_capture\.sql$/.test(name))
 assert.equal(atomicFiles.length, 1, 'Expected exactly one atomic capture migration')
-const foundation = readFileSync(new URL('20260930200000_dtc_outcomes_chile_foundation.sql', migrations), 'utf8')
+const foundation = readFileSync(new URL('20261007143246_dtc_outcomes_chile_foundation.sql', migrations), 'utf8')
 const atomic = readFileSync(new URL(atomicFiles[0], migrations), 'utf8')
 const retryFiles = readdirSync(migrations).filter(name => /^\d{14}_dtc_outcomes_chile_idempotent_capture\.sql$/.test(name))
 assert.equal(retryFiles.length, 1, 'Expected exactly one idempotent capture migration')
 const retryMigration = readFileSync(new URL(retryFiles[0], migrations), 'utf8')
+const privilegeFiles = readdirSync(migrations).filter(name => /^\d{14}_dtc_outcomes_chile_explicit_privileges\.sql$/.test(name))
+assert.equal(privilegeFiles.length, 1, 'Expected exactly one explicit privileges migration')
+const privilegeMigration = readFileSync(new URL(privilegeFiles[0], migrations), 'utf8')
 
 const ownerA = '00000000-0000-4000-8000-000000000001'
 const ownerB = '00000000-0000-4000-8000-000000000002'
@@ -119,26 +122,32 @@ try {
     grant usage on schema public,auth to anon,authenticated,service_role;
     grant execute on function auth.uid() to anon,authenticated,service_role;
   `)
+  // First retain the stricter-default assertion: BYPASSRLS alone does not
+  // grant INSERT. Then rebuild inside the same disposable setup using the
+  // actual legacy Supabase defaults observed during the activation preflight.
+  await query('savepoint without_default_grants')
   await execute(foundation)
-
-  // No default table grants are installed in the fixture. A role with BYPASSRLS
-  // must still be unable to insert until the explicit server grants are applied.
   await query('set role service_role')
   await expectError(employmentInsert, [employmentA, ownerA, '2026-09-01'], '42501')
   await query('reset role')
+  await query('rollback to savepoint without_default_grants')
+  await query('release savepoint without_default_grants')
+  await execute(`
+    alter default privileges in schema public
+      grant all on tables to anon,authenticated,service_role;
+    alter default privileges in schema public
+      grant execute on functions to anon,authenticated,service_role;
+  `)
+  await execute(foundation)
   await execute(atomic)
   await execute(retryMigration)
+  const inheritedLedgerRights = (await query("select has_table_privilege('service_role','public.dtc_outcome_write_requests','DELETE') as can_delete,has_table_privilege('service_role','public.dtc_outcome_write_requests','TRUNCATE') as can_truncate")).rows[0]
+  assert.deepEqual(inheritedLedgerRights, { can_delete: true, can_truncate: true }, 'Reproduce the real Supabase default-ACL gap before its correction')
+  await execute(privilegeMigration)
+  const privilegeEvidence = await checkOutcomePrivileges({ query, tables })
   const serviceRole = (await query("select rolsuper,rolbypassrls from pg_catalog.pg_roles where rolname='service_role'")).rows[0]
   assert.deepEqual(serviceRole, { rolsuper: false, rolbypassrls: true })
 
-  for (const table of tables) {
-    for (const privilege of ['SELECT', 'INSERT', 'UPDATE', 'DELETE']) {
-      const grants = (await query('select has_table_privilege(\'service_role\',$1,$2) as server,has_table_privilege(\'authenticated\',$1,$2) as owner,has_table_privilege(\'anon\',$1,$2) as anonymous', [`public.${table}`, privilege])).rows[0]
-      assert.deepEqual(grants, { server: true, owner: privilege === 'SELECT', anonymous: false }, `${table} ${privilege}`)
-    }
-    const rls = (await query('select relrowsecurity,relforcerowsecurity from pg_catalog.pg_class where oid=$1::regclass', [`public.${table}`])).rows[0]
-    assert.deepEqual(rls, { relrowsecurity: true, relforcerowsecurity: true }, table)
-  }
   const fn = (await query("select prosecdef,proconfig,has_function_privilege('anon',oid,'EXECUTE') as anon_execute,has_function_privilege('authenticated',oid,'EXECUTE') as authenticated_execute from pg_catalog.pg_proc where oid='public.dtc_schedule_employment_followups()'::regprocedure")).rows[0]
   assert.equal(fn.prosecdef, false)
   assert.deepEqual(fn.proconfig, ['search_path=pg_catalog'])
@@ -240,6 +249,8 @@ try {
   await query('reset role')
   await execute(atomic)
   await execute(retryMigration)
+  await execute(privilegeMigration)
+  await checkOutcomePrivileges({ query, tables })
   assert.equal((await query("select count(*)::integer as count from pg_catalog.pg_trigger where tgname='dtc_schedule_employment_followups' and tgrelid='public.dtc_employment_outcomes'::regclass")).rows[0].count, 1)
   assert.equal(await count('dtc_outcome_followups', 'employment_outcome_id', employmentA), 3)
   await query('set role service_role')
@@ -263,6 +274,8 @@ try {
     employmentAndFollowupsRollbackTogether: true, crossOwnerRejections,
     ownerIsolatedTables: ownerTables.length, browserWritesRejected: rejectedWrites,
     explicitServiceGrants: tables.length, invokerTrigger: true,
+    privilegeMigration: privilegeFiles[0],
+    privileges: { ...privilegeEvidence, supabaseLegacyDefaultsReproduced: true, inheritedLedgerDeleteAndTruncateRemoved: true },
     salaryOwnerPreservedOnEmploymentDelete: true, repeatableMigration: true,
     idempotency: retryEvidence, concurrency: contentionEvidence,
     runtimeBoundary: engine === 'pglite' ? 'SQL engine only; no PostgREST, GoTrue, or concurrent connections' : 'Local PostgreSQL SQL boundary; no PostgREST or GoTrue',

@@ -25,6 +25,7 @@ jobs:
           cache: pnpm
       - run: pnpm install --frozen-lockfile
       - run: pnpm test:pilot-access
+      - run: pnpm test:rate-limit
       - run: pnpm check:pilot-access
       - run: pnpm exec tsx scripts/check-global-auth-boundary-contract.ts
       - run: pnpm check:production-laboratory-boundary

@@ -78,7 +78,7 @@ The separate SQL runner is `scripts/outcomes-chile-database-lab.mjs`. Local evid
 
 Development evidence is distinct from release approval. Before activating Outcomes Chile:
 
-1. Review and apply the three ordered migrations in the intended environment: `20260930200000_dtc_outcomes_chile_foundation.sql`, then `20261007131735_dtc_outcomes_chile_atomic_capture.sql`, then `20261007133636_dtc_outcomes_chile_idempotent_capture.sql`.
+1. Confirm the four ordered migrations in the intended environment: `20261007143246_dtc_outcomes_chile_foundation.sql`, `20261007143340_dtc_outcomes_chile_atomic_capture.sql`, `20261007143341_dtc_outcomes_chile_idempotent_capture.sql`, then `20261007143343_dtc_outcomes_chile_explicit_privileges.sql`. All four were installed in DTCFINAL on 2026-10-07; filenames match the remote migration history. The fourth normalizes inherited default grants without changing RLS or existing rows. See the [activation record](DTC_OUTCOMES_CHILE_ACTIVATION.md).
 2. Verify live owner reads, server-only writes, schema access and atomic capture with synthetic accounts.
 3. Verify the implemented capture/review UI, repeated-submission idempotency and follow-up completion against live synthetic accounts; complete the separate evidence-verification operations.
 4. Import reviewed official benchmarks with documented definitions, dimensions, periods and immutable source versions.

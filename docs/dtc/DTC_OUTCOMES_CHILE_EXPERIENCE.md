@@ -70,6 +70,12 @@ The eight runtime groups, repository types, existing critical/authentication and
 
 The CI browser runner uses the same pinned isolated tools. When no Next font output is present, it records an explicit Arial fallback; the local Montserrat review remains separately identified. The release verdict for this development block is **CONDITIONAL_GO**: code and isolated behavior are verified, with production activation still governed by C18.
 
-Activation requires the ordered migrations `20260930200000_dtc_outcomes_chile_foundation.sql`, `20261007131735_dtc_outcomes_chile_atomic_capture.sql`, then `20261007133636_dtc_outcomes_chile_idempotent_capture.sql`. The first two alone do not support the new RPC capture path. Operator verification, official benchmark ingestion, and a live authenticated journey remain tracked under DTC-C18 in the [canonical closure ledger](DTC_CLOSURE_LEDGER.md).
+### Supabase activation — 2026-10-07
 
-This development block does not mutate the production schema or promote a deployment to production.
+The user authorized continuation into integration and activation after reviewing the development block. Four ordered migrations are now installed in DTCFINAL: `20261007143246_dtc_outcomes_chile_foundation.sql`, `20261007143340_dtc_outcomes_chile_atomic_capture.sql`, `20261007143341_dtc_outcomes_chile_idempotent_capture.sql`, then `20261007143343_dtc_outcomes_chile_explicit_privileges.sql`. Local filenames match the versions assigned by the migration service; the three original SQL bodies retain their reviewed SHA-256 hashes.
+
+The fourth migration removes privileges inherited from Supabase defaults, then grants only the intended operations. Remote checks confirmed seven RLS-enabled and forced tables, 168 correct effective privilege assertions, six SELECT policies, two service-only invoker functions, the owner-bound constraints and the employment trigger. No existing application rows were rewritten.
+
+The national INE ESI 2025 mean and median are installed with their publication date and exact source reference. The [reviewed manifest and import contract](DTC_OUTCOMES_CHILE_OFFICIAL_IMPORT.md) retain the source definitions and limitations; the personal income gap remains unavailable until definitions are harmonized.
+
+The real Auth → Next → PostgREST → database → browser test is maintained in `scripts/outcomes-chile-live/`. The [activation record](DTC_OUTCOMES_CHILE_ACTIVATION.md) identifies its evidence and the remaining production release boundary under DTC-C18. The separate [operator review procedure](DTC_OUTCOMES_CHILE_OPERATOR_REVIEW.md) is retained as DTC-C20 in the [canonical closure ledger](DTC_CLOSURE_LEDGER.md): capture remains `self_reported`, and corroboration, verification, rejection and correction require that future operation.

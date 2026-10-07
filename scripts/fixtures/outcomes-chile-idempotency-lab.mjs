@@ -4,6 +4,23 @@ const rpcSql = 'select public.capture_dtc_chile_outcome($1::uuid,$2::uuid,$3::te
 const args = (user, request, action, payload) => [user, request, action, JSON.stringify(payload)]
 const uuid = n => `20000000-0000-4000-8000-${String(n).padStart(12, '0')}`
 
+export async function checkOutcomePrivileges({ query, tables }) {
+  const ledger = 'dtc_outcome_write_requests'
+  const privileges = ['SELECT', 'INSERT', 'UPDATE', 'DELETE', 'TRUNCATE', 'REFERENCES', 'TRIGGER', 'MAINTAIN']
+  let assertions = 0
+  for (const table of [...tables, ledger]) {
+    for (const privilege of privileges) {
+      const grants = (await query("select has_table_privilege('service_role',$1,$2) as server,has_table_privilege('authenticated',$1,$2) as owner,has_table_privilege('anon',$1,$2) as anonymous", [`public.${table}`, privilege])).rows[0]
+      const expectedServer = ['SELECT', 'INSERT', 'UPDATE'].includes(privilege) || (table !== ledger && privilege === 'DELETE')
+      assert.deepEqual(grants, { server: expectedServer, owner: table !== ledger && privilege === 'SELECT', anonymous: false }, `${table} ${privilege}: effective privileges must match the contract`)
+      assertions++
+    }
+    const protection = (await query("select c.relrowsecurity,c.relforcerowsecurity,not exists (select 1 from pg_catalog.aclexplode(coalesce(c.relacl,pg_catalog.acldefault('r',c.relowner))) a where a.grantee=0) as no_public_grants from pg_catalog.pg_class c where c.oid=$1::regclass", [`public.${table}`])).rows[0]
+    assert.deepEqual(protection, { relrowsecurity: true, relforcerowsecurity: true, no_public_grants: true }, table)
+  }
+  return { tables: tables.length + 1, privilegeChecks: assertions, effectiveMatrixVerified: true, noPublicTableGrants: true }
+}
+
 export async function checkOutcomeIdempotency({ query, execute, expectError, ownerA, ownerB }) {
   await query('reset role')
   const clock = (await query("select (statement_timestamp() at time zone 'America/Santiago')::date::text as today, ((statement_timestamp() at time zone 'America/Santiago')::date-200)::text as old, ((statement_timestamp() at time zone 'America/Santiago')::date+1)::text as tomorrow, (statement_timestamp()-interval '1 hour')::text as past_at, (statement_timestamp()+interval '1 day')::text as future_at")).rows[0]
@@ -21,6 +38,11 @@ export async function checkOutcomeIdempotency({ query, execute, expectError, own
   const employment = { outcome_type: 'job_started', effective_date: clock.old, role_title: 'Idempotency laboratory role' }
   const eventResult = await rpc(ownerA, uuid(1), 'job_search_event', event)
   assert.deepEqual(await rpc(ownerA, uuid(1), 'job_search_event', { ...event }), eventResult)
+  assert.equal(await requestCount(ownerA, uuid(1)), 1)
+  // Supabase's legacy ALL defaults must not let the application role erase
+  // a request key and thereby turn a retry into another mutation.
+  await expectError('delete from public.dtc_outcome_write_requests where user_id=$1 and request_id=$2', [ownerA, uuid(1)], '42501')
+  await expectError('truncate table public.dtc_outcome_write_requests', [], '42501')
   assert.equal(await requestCount(ownerA, uuid(1)), 1)
   const storedEvent = (await query('select user_id,verification_status,evidence_refs from public.dtc_job_search_events where id=$1', [eventResult.id])).rows[0]
   assert.deepEqual(storedEvent, { user_id: ownerA, verification_status: 'self_reported', evidence_refs: [] })
@@ -104,6 +126,15 @@ export async function checkOutcomeIdempotency({ query, execute, expectError, own
   // A replay remains stable even if the optional employment link later goes.
   await query('delete from public.dtc_employment_outcomes where id=$1', [employmentResult.id])
   assert.deepEqual(await rpc(ownerA, uuid(3), 'salary_outcome', salary), salaryResult)
+  // Removing application DELETE rights must preserve the owner's documented
+  // auth deletion cascade. Keep this fixture deletion inside a savepoint.
+  await query('reset role')
+  await query('savepoint owner_deletion')
+  await query('delete from auth.users where id=$1', [ownerB])
+  assert.equal((await query('select count(*)::integer as count from public.dtc_outcome_write_requests where user_id=$1', [ownerB])).rows[0].count, 0)
+  await query('rollback to savepoint owner_deletion')
+  await query('release savepoint owner_deletion')
+  assert.equal(await requestCount(ownerB, uuid(1)), 1)
   for (const role of ['anon', 'authenticated']) {
     await query('reset role')
     await query(`set role ${role}`)
@@ -115,7 +146,7 @@ export async function checkOutcomeIdempotency({ query, execute, expectError, own
     await expectError('update public.dtc_outcome_write_requests set action=action', [], '42501')
   }
   await query('reset role')
-  return { actionsWithStableReplay: 4, ownerScopedKeys: true, differentPayloadAndActionConflict: true, requestReservationRollsBack: true, serverTimestampAndVerification: true, futureObservationRejections: 3, followupStateGuards: true, browserCannotReadRequestPayloads: true }
+  return { actionsWithStableReplay: 4, ownerScopedKeys: true, differentPayloadAndActionConflict: true, requestReservationRollsBack: true, serverTimestampAndVerification: true, futureObservationRejections: 3, followupStateGuards: true, browserCannotReadRequestPayloads: true, serverCannotDeleteOrTruncateRequestHistory: true, authOwnerDeletionStillCascades: true }
 }
 
 async function waitForLock(query, pid, settled) {
