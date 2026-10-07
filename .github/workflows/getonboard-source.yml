@@ -4,9 +4,19 @@ on:
   pull_request:
     paths:
       - 'lib/opportunities/sources/getonboard.ts'
+      - 'lib/opportunities/verified-index.ts'
       - 'app/api/a4/opportunities/getonboard/**'
+      - 'app/api/health/opportunities/getonboard/**'
       - 'scripts/check-getonboard-source.ts'
+      - 'scripts/test-getonboard*.mjs'
+      - 'scripts/fixtures/getonboard/**'
+      - 'docs/dtc/DTC_GETONBOARD_RELIABILITY.md'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
       - '.github/workflows/getonboard-source.yml'
+
+permissions:
+  contents: read
 
 jobs:
   source-contract:
@@ -22,5 +32,9 @@ jobs:
           node-version: 24
           cache: pnpm
       - run: pnpm install --frozen-lockfile
-      - run: pnpm exec tsx scripts/check-getonboard-source.ts
-      - run: pnpm exec tsc --noEmit
+      - name: Existing source contract
+        run: pnpm exec tsx scripts/check-getonboard-source.ts
+      - name: Provider and authenticated route regressions
+        run: pnpm run test:getonboard
+      - name: TypeScript full-repository check
+        run: pnpm exec tsc --noEmit

@@ -1,0 +1,69 @@
+{
+  "data": [
+    {
+      "id": "desarrollador-pruebas-dtc-santiago-0001",
+      "type": "job",
+      "attributes": {
+        "title": "Desarrollador de pruebas",
+        "published_at": 1790946882,
+        "remote": false,
+        "remote_modality": "hybrid",
+        "countries": [
+          "Chile"
+        ],
+        "description_headline": "<p>Empresa sintética para pruebas del conector.</p>",
+        "functions": "<p>Revisar datos y desarrollar aplicaciones accesibles.</p>",
+        "description": "<p>Se requiere experiencia en desarrollo y comunicación clara.</p><script>UNSAFE_SCRIPT_SENTINEL</script><style>.secret { color: red }</style>",
+        "company": {
+          "data": {
+            "id": "empresa-sintetica-dtc",
+            "type": "company",
+            "attributes": {
+              "name": "Empresa sintética DTC"
+            }
+          }
+        },
+        "location_cities": {
+          "data": [
+            {
+              "id": "1",
+              "type": "tenant_city",
+              "attributes": {
+                "name": "Santiago",
+                "country": "Chile"
+              }
+            }
+          ]
+        },
+        "tags": {
+          "data": [
+            {
+              "id": "typescript",
+              "type": "tag",
+              "attributes": {
+                "name": "TypeScript",
+                "keywords": "DO_NOT_INFER_THIS_KEYWORD"
+              }
+            },
+            {
+              "id": "nodejs",
+              "type": "tag",
+              "attributes": {
+                "name": "Node.js",
+                "keywords": "Server backend JavaScript"
+              }
+            }
+          ]
+        }
+      },
+      "links": {
+        "public_url": "https://www.getonbrd.com/jobs/desarrollador-pruebas-dtc-santiago-0001"
+      }
+    }
+  ],
+  "meta": {
+    "page": 1,
+    "per_page": 30,
+    "total_pages": 1
+  }
+}
