@@ -1,0 +1,154 @@
+{
+  "scope": "live-next-supabase-outcomes-chile",
+  "mode": "preflight",
+  "runReference": "3e7ad410-9a25-4be7-bbfe-86b5c11dc77f",
+  "verdict": "CONDITIONAL_GO",
+  "startedAt": "2026-10-07T15:38:16.253Z",
+  "cases": [
+    {
+      "name": "anonymous-api-and-private-page-boundary",
+      "status": "PASS",
+      "milliseconds": 21667,
+      "facts": {
+        "apiReadsAndWritesRequireSession": true,
+        "privatePageRequiresSession": true
+      }
+    },
+    {
+      "name": "supabase-schema-and-preview-readiness",
+      "status": "PASS",
+      "milliseconds": 57265,
+      "facts": {
+        "outcomesRelations": 6,
+        "previewDatabaseReady": true,
+        "pilotCapacityAvailable": true
+      }
+    },
+    {
+      "name": "browser-tooling-preflight",
+      "status": "PASS",
+      "milliseconds": 7492,
+      "facts": {
+        "chromium": "153.0.8010.0",
+        "browserLaunchVerified": true,
+        "contextAndPageVerified": true,
+        "cookieImportVerified": true,
+        "managedProxyConfigured": true,
+        "previewHealthVerified": true
+      }
+    }
+  ],
+  "httpDiagnostics": [
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/despega/resultados-laborales",
+      "method": "GET",
+      "status": 307,
+      "contentType": "html",
+      "bodyKind": "unread",
+      "responseKeys": [],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "supabase-schema-and-preview-readiness",
+      "transport": "http",
+      "path": "/api/health/ready",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "status"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "browser-tooling-preflight",
+      "transport": "browser",
+      "path": "/api/health/live",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "status"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    }
+  ],
+  "browserDiagnostics": [],
+  "cleanup": {
+    "required": false,
+    "completed": true,
+    "remoteWrites": 0
+  },
+  "limitations": [
+    "Deployment identity is a recent operator-provided Vercel attestation, checked against local HEAD; the runner does not call Vercel management APIs.",
+    "Synthetic password sessions are issued by real Supabase Auth. Google/LinkedIn OAuth and email delivery are outside this test.",
+    "The database is the explicitly allowlisted DTCFINAL project. Writes are restricted to new synthetic identities and their disposable invitations.",
+    "Benchmark values are never inserted, changed or asserted as product outcomes by this runner."
+  ],
+  "target": {
+    "origin": "https://v0-fork-of-despega-tu-carrera-clone-6ukwtlrn7.vercel.app",
+    "environment": "preview",
+    "readyState": "READY",
+    "deploymentId": "dpl_5LusyUP6ikW6qRB1kJpWQE2ACZ3K",
+    "vercelProjectId": "prj_SvrOCS2CtFQunqirMeYidZRHZKpm",
+    "supabaseProjectRef": "dcfrbwxbejtbcouionna",
+    "commitSha": "f3f2110c5f67416bc0973d098d1391d8a438d6c8",
+    "verifiedAt": "2026-10-07T15:37:06Z",
+    "identitySource": "operator-vercel-attestation"
+  },
+  "source": {
+    "commitSha": "f3f2110c5f67416bc0973d098d1391d8a438d6c8",
+    "workingTreeDirty": true,
+    "runnerSources": {
+      "run.mjs": "5264008866ae5f5eca745e1ec9eb77a7851818b08adefe1b816c9a865e6a5315",
+      "guards.mjs": "7610ba371074e91d6fc13e57bb7d52ff9c9cbc2739ff6c95cf2b45e846d13ac2",
+      "browser.mjs": "f73f1060f876625cb77e69ce6199fdac9337bcec536f63810900a4bc32c1e3fe"
+    }
+  },
+  "conditions": [
+    "Live synthetic writes, two-owner isolation, browser persistence and cleanup still require --execute."
+  ],
+  "finishedAt": "2026-10-07T15:39:42.700Z",
+  "passed": 3,
+  "failed": 0
+}

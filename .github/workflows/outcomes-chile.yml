@@ -1,0 +1,109 @@
+name: Outcomes Chile evidence
+
+on:
+  pull_request:
+    paths:
+      - 'app/api/outcomes/chile/**'
+      - 'app/despega/resultados-laborales/**'
+      - 'components/outcomes-chile/**'
+      - 'components/layout/**'
+      - 'components/ui/**'
+      - 'app/globals.css'
+      - 'app/design-system.css'
+      - 'tailwind.config.ts'
+      - 'lib/outcomes-chile/**'
+      - 'supabase/migrations/*outcomes_chile*.sql'
+      - 'scripts/check-outcomes-chile*.ts'
+      - 'scripts/outcomes-chile-database-lab.mjs'
+      - 'scripts/fixtures/outcomes-chile-idempotency-lab.mjs'
+      - 'scripts/outcomes-chile-ui-lab/**'
+      - 'scripts/outcomes-chile-live/**'
+      - 'data/outcomes-chile/official/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/outcomes-chile.yml'
+  push:
+    branches: [main]
+    paths:
+      - 'app/api/outcomes/chile/**'
+      - 'app/despega/resultados-laborales/**'
+      - 'components/outcomes-chile/**'
+      - 'components/layout/**'
+      - 'components/ui/**'
+      - 'app/globals.css'
+      - 'app/design-system.css'
+      - 'tailwind.config.ts'
+      - 'lib/outcomes-chile/**'
+      - 'supabase/migrations/*outcomes_chile*.sql'
+      - 'scripts/check-outcomes-chile*.ts'
+      - 'scripts/outcomes-chile-database-lab.mjs'
+      - 'scripts/fixtures/outcomes-chile-idempotency-lab.mjs'
+      - 'scripts/outcomes-chile-ui-lab/**'
+      - 'scripts/outcomes-chile-live/**'
+      - 'data/outcomes-chile/official/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/outcomes-chile.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  outcomes-chile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    services:
+      postgres:
+        image: postgres:17
+        env:
+          POSTGRES_DB: dtc_outcomes_chile_lab
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: disposable-ci-only
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - name: Install exact locked dependencies
+        run: pnpm install --frozen-lockfile --ignore-scripts
+      - name: Runtime evidence and synthetic API transport
+        run: npm run check:outcomes-chile-all
+      - name: Atomic capture and owner isolation on PostgreSQL 17
+        env:
+          DTC_OUTCOMES_DATABASE_LAB: 'yes'
+          DTC_OUTCOMES_LAB_DATABASE_URL: postgresql://postgres:disposable-ci-only@127.0.0.1:5432/dtc_outcomes_chile_lab
+        run: node scripts/outcomes-chile-database-lab.mjs
+      - name: Full repository types
+        run: pnpm exec tsc --noEmit
+      - name: Install isolated browser laboratory tools
+        run: npm install --prefix "$RUNNER_TEMP/dtc-outcomes-ui-tools" --no-save --package-lock=false --ignore-scripts --no-audit --no-fund playwright@1.62.1 @sparticuz/chromium@153.0.0 axe-core@4.14.0
+      - name: Verify live runner safety without remote credentials
+        env:
+          DTC_OUTCOMES_UI_TOOLS_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-tools
+        run: node scripts/outcomes-chile-live/check.mjs
+      - name: Render actual experience on mobile and desktop with synthetic API
+        env:
+          DTC_OUTCOMES_UI_TOOLS_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-tools
+          DTC_OUTCOMES_UI_EVIDENCE_ROOT: ${{ runner.temp }}/dtc-outcomes-ui-evidence
+        run: node --import tsx scripts/outcomes-chile-ui-lab/run.mjs
+      - name: Upload rendered synthetic evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: outcomes-chile-ui-${{ github.event.pull_request.head.sha || github.sha }}
+          path: ${{ runner.temp }}/dtc-outcomes-ui-evidence
+          if-no-files-found: ignore
+          retention-days: 7

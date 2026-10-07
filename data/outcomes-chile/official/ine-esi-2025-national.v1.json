@@ -1,0 +1,137 @@
+{
+  "schemaVersion": "dtc-chile-official-national-income-v1",
+  "sourceVersion": "ine-esi-2025-national-20260714-v1",
+  "preparedAsOf": "2026-10-07",
+  "sourceKey": "ine_esi",
+  "publisher": "Instituto Nacional de Estadísticas de Chile",
+  "sourcePeriod": "2025",
+  "originalPeriodLabel": "ESI 2025; recolección octubre-diciembre de 2025",
+  "publishedAt": "2026-07-14",
+  "publicationEvidenceUrl": "https://www.ine.gob.cl/sala-de-prensa/prensa/general/noticia/2026/07/14/la-mitad-de-las-personas-ocupadas-en-chile-percibieron-ingresos-menores-o-iguales-a-%24680.000-en-2025",
+  "catalogUrl": "https://www.ine.gob.cl/estadisticas-por-tema/mercado-laboral/encuesta-suplementaria-de-ingresos",
+  "sourceDocumentId": "national-synthesis",
+  "documents": [
+    {
+      "id": "national-synthesis",
+      "title": "Síntesis de principales resultados. Encuesta Suplementaria de Ingresos 2025",
+      "url": "https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/publicaciones-y-anuarios/s%C3%ADntesis-de-resultados/2025/sintesis-nacional-esi-2025.pdf?sfvrsn=dff970f3_4",
+      "filename": "sintesis-nacional-esi-2025.pdf",
+      "mediaType": "application/pdf",
+      "sha256": "60a791b268316192f3e119ad7deb047e100dcdad6548d87fbfe1c23c7259ec35",
+      "byteLength": 10824430,
+      "retrievedAt": "2026-10-07",
+      "pageCount": 26
+    },
+    {
+      "id": "methodology",
+      "title": "Documento metodológico. Encuesta Suplementaria de Ingresos 2025",
+      "url": "https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/metodologia/documento-metodol%C3%B3gico/metodologia-esi-2025.pdf?sfvrsn=61122f15_4",
+      "filename": "metodologia-esi-2025.pdf",
+      "mediaType": "application/pdf",
+      "sha256": "7c45a311d83237807f513c8f7d32d36d5b3aa4a1713684bf6029d32591f8fc7c",
+      "byteLength": 2100190,
+      "retrievedAt": "2026-10-07",
+      "pageCount": 88
+    },
+    {
+      "id": "quality-report",
+      "title": "Reporte de calidad. Encuesta Suplementaria de Ingresos 2025",
+      "url": "https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/metodologia/documento-metodol%C3%B3gico/calidad-esi-2025.pdf?sfvrsn=41e6c9f4_4",
+      "filename": "calidad-esi-2025.pdf",
+      "mediaType": "application/pdf",
+      "sha256": "568fe8126cb128dfd578282ff6f82910cea664c82f3964f0fb3954ab46394599",
+      "byteLength": 191389,
+      "retrievedAt": "2026-10-07",
+      "pageCount": 33
+    },
+    {
+      "id": "methodology-factsheet",
+      "title": "Ficha metodológica. Encuesta Suplementaria de Ingresos 2025, versión 01",
+      "url": "https://www.ine.gob.cl/docs/default-source/encuesta-suplementaria-de-ingresos/metodologia/documento-metodol%C3%B3gico/ficha-esi-2025.pdf?sfvrsn=9c47dc8_6",
+      "filename": "ficha-esi-2025.pdf",
+      "mediaType": "application/pdf",
+      "sha256": "9f3bb69b1321880de048d944ad1ad95addc70f60da9491619adf5bcf63d5e122",
+      "byteLength": 628253,
+      "retrievedAt": "2026-10-07",
+      "pageCount": 2
+    }
+  ],
+  "scope": {
+    "level": "national",
+    "country": "CL",
+    "sex": "all",
+    "employmentCategories": "all",
+    "populationDefinition": "Personas ocupadas de 15 años o más, residentes habituales en viviendas particulares, con al menos un mes en la misma ocupación principal (ocup_ref = 1). Incluye servicio doméstico y empleo independiente.",
+    "geographicCoverage": "Cobertura nacional de la ESI, urbana y rural, con las exclusiones geográficas del marco ENE. No representa cada comuna ni cada profesión.",
+    "evidence": [
+      { "documentId": "methodology-factsheet", "pdfPage": 1, "locator": "Población objetivo, cobertura geográfica y variables principales" },
+      { "documentId": "methodology", "pdfPage": 73, "locator": "Tabla 13 y explicación de ocup_ref" },
+      { "documentId": "quality-report", "pdfPage": 13, "locator": "Tabla 4, notas (*) y (**)" }
+    ]
+  },
+  "incomeDefinition": {
+    "variable": "ing_t_p",
+    "occupationScope": "principal",
+    "measure": "net_labor_income",
+    "currency": "CLP",
+    "priceBasis": "2025-10",
+    "collectionPeriod": "2025-10/2025-12",
+    "referencePeriod": "2025-09/2025-11",
+    "referenceRule": "Ingreso mensual del mes calendario anterior al levantamiento, llevado por INE a precios de octubre de 2025. La etiqueta anual identifica la edición, no un promedio de doce meses.",
+    "components": "Dependientes: ingreso después de descontar previsión, salud e impuestos; incluye componentes variables y pagos en especie y reincorpora descuentos voluntarios. Independientes: ingresos netos de costos y componentes imputados definidos por ESI.",
+    "dtcComparability": "context_only_not_harmonized",
+    "comparabilityReason": "La captura monthly_net_clp de DTC no verifica aún componentes ESI, ocupación principal, elegibilidad ocup_ref, horas ni base de precios. No calcular una brecha personal contra esta referencia.",
+    "evidence": [
+      { "documentId": "national-synthesis", "pdfPage": 3, "locator": "Nota sobre aproximación y pesos de octubre de cada año" },
+      { "documentId": "methodology-factsheet", "pdfPage": 2, "locator": "Periodo de referencia de los datos" },
+      { "documentId": "methodology", "pdfPage": 66, "locator": "Tabla 9, deflactores de septiembre/octubre/noviembre" },
+      { "documentId": "quality-report", "pdfPage": 27, "locator": "Conceptos de salario neto e ingreso neto" },
+      { "documentId": "quality-report", "pdfPage": 7, "locator": "Ingresos netos excluyen descuentos legales e impuestos, apartado de indicadores de sueldo mínimo" }
+    ]
+  },
+  "quality": {
+    "reliabilityStatus": "official_published",
+    "sampleSize": null,
+    "sampleSizeStatus": "estimate_person_count_not_published_in_reviewed_documents",
+    "sampleSizeReason": "Los documentos revisados no indican el número no ponderado de personas usado en cada estimación nacional. No sustituirlo por población expandida ni por viviendas logradas.",
+    "achievedDwellings": 34460,
+    "expandedEmployedPopulation": 9022697,
+    "nationalMeanAbsoluteErrorClp": 22551,
+    "nationalMeanRelativeErrorPercent": 2.3,
+    "nationalMedianError": null,
+    "assessment": "INE clasifica como fiables todas las estimaciones de los tabulados 1_1 (media) y 2_1 (mediana) de la síntesis nacional: tabla 14 del reporte de calidad. Esa tasa de fiabilidad del tabulado no significa certeza estadística del 100%. El error de la media no se atribuye a la mediana ni se renombra como coeficiente de variación.",
+    "evidence": [
+      { "documentId": "national-synthesis", "pdfPage": 5, "locator": "Total país, media, población expandida y nota de intervalo de confianza" },
+      { "documentId": "national-synthesis", "pdfPage": 6, "locator": "Total país, mediana y nota de intervalo de confianza" },
+      { "documentId": "quality-report", "pdfPage": 13, "locator": "Tabla 4, fila Total País" },
+      { "documentId": "quality-report", "pdfPage": 15, "locator": "Tabla 6, fila Trimestre OND, unidad viviendas" },
+      { "documentId": "quality-report", "pdfPage": 22, "locator": "Tabla 14, tabulados 1_1 y 2_1, tasa de fiabilidad de las estimaciones 100,0%" }
+    ]
+  },
+  "observations": [
+    {
+      "metricKey": "monthly_labor_income_mean",
+      "valueNumeric": 962945,
+      "unit": "clp_month",
+      "evidence": [
+        { "documentId": "national-synthesis", "pdfPage": 5, "locator": "Título y serie Ambos sexos, 2025; monto completo en pesos" },
+        { "documentId": "quality-report", "pdfPage": 13, "locator": "Tabla 4, Total País, Ingreso medio" }
+      ]
+    },
+    {
+      "metricKey": "monthly_labor_income_median",
+      "valueNumeric": 680000,
+      "unit": "clp_month",
+      "evidence": [
+        { "documentId": "national-synthesis", "pdfPage": 6, "locator": "Título y primer párrafo, ingreso mediano mensual de 2025" }
+      ]
+    }
+  ],
+  "exclusions": [
+    "Regiones, ocupaciones, educación, sexo, industria y categoría ocupacional: fuera de este primer manifiesto; requieren contratos de dimensión y evidencia de calidad por celda.",
+    "No se importan cifras de empleo ENE, vacantes ni habilidades ENADEL a partir de referencias bibliográficas generales.",
+    "No se ingiere población expandida ni viviendas logradas como sample_size.",
+    "No se deriva un ranking individual, causalidad DTC, salario esperado ni brecha salarial comparable.",
+    "No se estiman valores a partir de microdatos; official_microdata_derived no corresponde a este lote."
+  ]
+}

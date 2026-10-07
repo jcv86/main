@@ -1,0 +1,16 @@
+{
+  "scope": "identity-scoped-recovery",
+  "runReference": "f8d857f0-d147-4534-9c42-4b95edcac93e",
+  "startedAt": "2026-10-07T15:27:29.291Z",
+  "verdict": "RECOVERED",
+  "originalRunVerdict": "NO_GO",
+  "usersDeletedNow": 1,
+  "usersAlreadyAbsent": 1,
+  "invitationsDeletedNow": 0,
+  "invitationsAlreadyAbsent": 2,
+  "authAbsenceChecks": 2,
+  "cascadeChecks": 18,
+  "ownedRowsRemaining": 0,
+  "sessionRevocation": "Original tokens unavailable; verified Auth deletion and cascades independently. Original run remains NO_GO.",
+  "finishedAt": "2026-10-07T15:28:15.141Z"
+}
