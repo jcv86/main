@@ -1,6 +1,6 @@
 # DTC closure ledger — canonical
 
-Last grounded: 2026-09-20 UTC
+Last full product closure: 2026-09-20 UTC. Latest scoped A4 release evidence: 2026-10-07 UTC.
 
 This is the **single canonical closure ledger** for Despega Tu Carrera. Historical detail remains available in Git history; this file keeps the current release state and only the evidence that still matters for closure decisions.
 
@@ -10,21 +10,21 @@ A status is `verified` only when there is observable evidence. Allowed states: `
 
 - Repository: `jcv86/main`
 - Canonical branch: `main`
-- Current application-code baseline: PR #181 merge `f0751cc4d9da0e5ae86f815b5c2e46acb57edf9b`
-- Current production deployment: `dpl_3R9VshmcqouMMB9DH15QdPpraP33` (READY)
+- Current application-code baseline: PR #236 merge `27941276ebf92f29c2bf08b94687261078a60da8`
+- Current production deployment: `dpl_FFvpPvdufqrMyjUB3uWPahJbE2Vd` (READY, 2026-10-07 20:36:01 UTC)
 - Production domains: `despegatucarrera.com`, `www.despegatucarrera.com`
 - Supabase production project: DTCFINAL `dcfrbwxbejtbcouionna`
-- Production smoke after the final public hotfix: FAQ 200 with access-aware Vera copy, `/api/health/live` 200 `ok`, `/api/health/ready` 200 `ready`, `/demo` 404, and no Vercel runtime error clusters in the final one-hour scan.
+- Latest scoped production smoke: homepage 200, `/api/health/live` 200 `ok`, `/api/health/ready` 200 `ready`, both A4 opportunity APIs reject anonymous requests with 401/private no-store, A4 redirects anonymous visitors to sign-in, and the apex redirects to www. The immediate runtime-error query beginning at 20:36:01 UTC found no clusters. Historical full-product evidence below retains its original scope and dates.
 
 ## Closure matrix
 
 | ID | User outcome | Current evidence | Status | Release blocker |
 |---|---|---|---|---|
-| DTC-C01 | Production and canonical code contain the approved release | #176 and #177 merged; final Production deployment READY and serves the #177 Vera hotfix on the public domain | `verified` | yes |
+| DTC-C01 | Production and canonical code contain the approved release | PR #236 merged after explicit authorization; main `27941276` has the exact reviewed tree, and both public domains point to its READY production deployment | `verified` | yes |
 | DTC-C02 | Signed-in users can save and resume C1/A1 | Approved authenticated production QA previously proved C1/A1 save-refresh-resume, all 28 A1 answers persisted, C2 saved 8 answers, integral report rendered and transition reached A2 | `verified` | yes |
 | DTC-C03 | Pilot invitation / returning OAuth continuity remains reliable | Live production evidence on 2026-09-20 verified scanner-safe GET, single-use claim semantics, Google OAuth on the exact current release, returning access without a new invitation, logout invalidation, browser-Back unable to restore protected content, stale-OAuth-state recovery, clean Google re-entry and canonical journey resume | `verified` | yes |
 | DTC-C04 | Browser/server data access is least-privilege and owner-bound | DTCFINAL now has 369 public tables with **0 RLS-disabled tables**; 20/20 public views use `security_invoker=true`; 0 `SECURITY DEFINER` functions are executable by `anon`; only intentional `complete_a2_mission(uuid,jsonb)` is executable by `authenticated`, checks `auth.uid()`, and has empty `search_path`; OAuth creation trigger remains active | `verified` | yes |
-| DTC-C05 | Production build is reproducible | #177 passed Production public QA, TypeScript and full build; exact Preview READY; final Production build completed successfully and is READY | `verified` | yes |
+| DTC-C05 | Production build is reproducible | PR #236 reviewed tree passed TypeScript, full build, 168 focused regressions and all ten CI workflows; its exact-tree main merge completed the production build and is READY | `verified` | yes |
 | DTC-C06 | Users see one coherent DTC product, not test/internal surfaces | Route-authentication contracts, laboratory-bypass retirement and public credibility gates pass; `/demo` is 404 in final production; sitemap/FAQ/public CTAs expose the intended product surfaces | `verified` | yes |
 | DTC-C07 | Core journey is usable on desktop/mobile with recovery states | Authenticated production QA exists for C1/A1/A2/A3/A4 evidence paths; isolated browser gates use real Auth/JWT/PostgREST/RLS and exact 390×844 plus desktop coverage; cross-owner access is denied; Spanish 404 recovery is live | `verified` | yes |
 | DTC-C08 | Scores, progress, limitations and next action are truthful | Report evidence contract passes 103 cases; A1 professional report contract passes populated/partial/invalid/empty/tied/legacy/provenance cases; A2/A3/A4 continuity and limitations are covered by evidence-aware gates | `verified` | yes |
@@ -93,4 +93,13 @@ A practical **9.7** now has its product-flow blocker condition satisfied: DTC-C0
 
 | ID | User outcome | Evidence and acceptance contract | Status |
 |---|---|---|---|
-| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | `docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md`; implemented from main `7ce45b5`, full build and focused regressions pass. Read-only public smoke: 187 postings, 47 accepted; Coderio's 3 missing descriptions are reported as partial. Production activation and scheduled ingestion evidence remain pending. | `in_progress` |
+| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | `docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md`; PR #236 published as main `27941276`, production READY and seven public HTTP checks pass. Read-only provider smoke: 187 postings, 47 accepted; Coderio's 3 missing descriptions are reported as partial. First scheduled ingestion and authenticated production Radar evidence remain pending. | `in_progress` |
+
+### A4 publication checkpoint
+
+- **Published:** user authorization on 2026-10-07, PR #236 merged, production `dpl_FFvpPvdufqrMyjUB3uWPahJbE2Vd` serves the exact reviewed application tree `723643040e2fcbf7ed1d095d88c83e5b25c130c7` on the canonical domain.
+- **Observed catalog baseline:** 78 Chiletrabajos rows, 12 verified within 24 hours, no Lever/Greenhouse rows before the new scheduled run. The 47 accepted public-smoke jobs were not inserted by that diagnostic.
+- **Next native run:** 2026-10-07 21:15 UTC / 18:15 Chile, slot `165871`, with Checkr and APPLY Digital. A one-time follow-up check is scheduled for 21:18:18 UTC / 18:18:18 Chile.
+- **Remaining evidence:** completed scheduled execution with source counters and corresponding fresh catalog rows; then the authenticated Radar displaying the resulting catalog. Browser policy prevented the latter check in this release session. Neither a scheduled task nor a READY deployment substitutes for those results.
+- **Rollback:** `dpl_HGrjKkC4HxGeYj8AZ915ZWMdHCTD`, main `7ce45b5c77f844081a97a3f023fbc346ee9350e7`; no database migration or new environment variable is required by this release.
+- **Scoped verdict:** `CONDITIONAL_GO` for the publication checkpoint; DTC-A4-S01 remains `in_progress`. This update does not re-score or re-certify the rest of the product.

@@ -2,7 +2,7 @@
 
 Date: 2026-10-07
 Delivery item: DTC-A4-S01
-State: implemented; production activation in_progress
+State: published; scheduled ingestion and authenticated Radar verification in_progress
 Application baseline: `jcv86/main` at `7ce45b5c77f844081a97a3f023fbc346ee9350e7`.
 
 ## User outcome
@@ -106,6 +106,42 @@ The verification environment used Node 24's standard `--use-env-proxy` option to
 
 The actual results component was rendered with its real UI primitives, Tailwind configuration, styles and Montserrat font at 390×844 and 1440×1000. Source and verification text remain visible without horizontal overflow; Chile time formatting correctly handles a UTC date crossing to the previous local day. Keyboard focus and 44px action targets were checked. The browser used synthetic responses in an isolated local harness and made no authenticated requests or provider calls. Loading, empty inventory, no matches and network error states were also rendered.
 
-Reviewed branch: `codex/a4-multisource-scraper`, based on the main commit above. The pull request records the immutable reviewed commit and exact CI runs. Passing these checks does not mean the new sources have been published or ingested into production.
+Reviewed branch: `codex/a4-multisource-scraper`, based on the main commit above. [PR #236](https://github.com/jcv86/main/pull/236) records reviewed commit `a9600bc6f5a0b8d878aeee761a97bb22891bbe8f` and all ten successful CI workflows. The authorized squash merge is `27941276ebf92f29c2bf08b94687261078a60da8`; its tree `723643040e2fcbf7ed1d095d88c83e5b25c130c7` exactly matches the reviewed tree.
 
-Release preparation rechecked production as `dpl_HGrjKkC4HxGeYj8AZ915ZWMdHCTD`, main `7ce45b5c77f844081a97a3f023fbc346ee9350e7`, project `prj_SvrOCS2CtFQunqirMeYidZRHZKpm`, team `team_VvIPBATpeoA0eQw8fIx4rhan`. That deployment remains the rollback baseline. Required Supabase variable names and CRON_SECRET exist in production and preview; the current private production CRON_SECRET is sensitive. This change adds no environment variable or database migration. Activation requires the reviewed commit to be released, followed by evidence from a scheduled production run and the authenticated Radar.
+Release preparation rechecked production as `dpl_HGrjKkC4HxGeYj8AZ915ZWMdHCTD`, main `7ce45b5c77f844081a97a3f023fbc346ee9350e7`, project `prj_SvrOCS2CtFQunqirMeYidZRHZKpm`, team `team_VvIPBATpeoA0eQw8fIx4rhan`. That deployment remains the rollback baseline. Required Supabase variable names and CRON_SECRET exist in production and preview. This change adds no environment variable or database migration. Existing catalog rows remain compatible with the rollback application.
+
+## Authorized production release — 2026-10-07
+
+The user explicitly authorized production publication at 20:30:41 UTC / 17:30:41 Chile. Git integration built the approved main merge without a separate manual deployment.
+
+- Production deployment: `dpl_FFvpPvdufqrMyjUB3uWPahJbE2Vd`, **READY** at 20:36:01 UTC / 17:36:01 Chile.
+- Main commit: `27941276ebf92f29c2bf08b94687261078a60da8`.
+- Deployment URL: https://v0-fork-of-despega-tu-carrera-clone-2drojjvv1.vercel.app
+- Both `www.despegatucarrera.com` and `despegatucarrera.com` resolve through Vercel to this deployment; the apex redirects to the canonical www domain.
+- Vercel reported no runtime error clusters in the immediate post-release query beginning at 20:36:01 UTC. This is a short observation window, not a claim about future executions.
+
+Anonymous GET checks ran from 20:36:37 to 20:37:36 UTC. They sent no cookies or authorization and did not follow redirects.
+
+| Route | Observed response | Result |
+|---|---|---|
+| `https://www.despegatucarrera.com/` | 200, expected DTC HTML and title | pass |
+| `/api/health/live` | 200, `{"status":"ok"}` | pass |
+| `/api/health/ready` | 200, `{"status":"ready"}` | pass |
+| `/api/a4/opportunities/catalog` | 401, `{"error":"No autenticado"}` | pass |
+| `/api/a4/opportunities/for-me` | 401, `{"error":"No autenticado"}` | pass |
+| `/despega/a4` | 307 to `/auth/signin?next=%2Fdespega%2Fa4` | pass |
+| `https://despegatucarrera.com/` | 307 to `https://www.despegatucarrera.com/` | pass |
+
+Health responses were `no-store`; both private APIs were `private, no-store` with CDN caching disabled. These checks verify public availability and the anonymous authentication boundary. They do not prove an authenticated Radar journey.
+
+The current cloud-browser tab was an error page; the browser security policy rejected inspection of its `chrome-error:` protocol. No browser-policy workaround or protection change was attempted. Therefore the live authenticated Radar remains **not verified** in this release. Prior isolated component and real local Auth/PostgREST CI evidence remains useful within its original scope.
+
+### First scheduled ingestion and follow-up
+
+Read-only DTCFINAL counts before the new scheduler ran: 78 Chiletrabajos rows marked `verified_active`, of which 12 had a verification within 24 hours; zero Get on Board, Lever or Greenhouse rows. The previous successful A4 execution began at 19:35:07 UTC, recorded slot `165870` and upserted 12 Chiletrabajos rows. That three-hour slot was already consumed before the new deployment.
+
+The existing Vercel cron is `15 */3 * * *` UTC. The next expected run is **2026-10-07 21:15 UTC / 18:15 Chile**, slot `165871`: Chiletrabajos/Valparaíso, Checkr Chile (`greenhouse:chile`) and APPLY Digital (`lever:applydigital`). The following employer pairs are Coderio/PagerDuty at 21:15 Chile and Fintual/Cabify at 00:15 Chile on October 8. These are scheduled plans, not observed ingestion outcomes.
+
+A one-time verification task was successfully created for **2026-10-07 21:18:18 UTC / 18:18:18 Chile**. It will inspect the completed execution, bounded employer diagnostics, fresh source counts and deployment errors, and update the release evidence. It is a follow-up check; the native Vercel cron performs ingestion. No manual cron attempt, lease reset, schedule change or direct catalog insertion was used to accelerate the first run.
+
+**Scoped release verdict: CONDITIONAL_GO.** The reviewed code is published; all seven public HTTP checks pass. Scheduled employer ingestion and the authenticated Radar remain pending. `DTC-A4-S01` stays `in_progress` until those acceptance criteria have observable evidence. A successful first run proves only the boards it actually processes; it does not prove all six boards have completed their production cycle.
