@@ -1,0 +1,616 @@
+{
+  "scope": "live-next-supabase-outcomes-chile",
+  "mode": "execute",
+  "runReference": "f8d857f0-d147-4534-9c42-4b95edcac93e",
+  "verdict": "NO_GO",
+  "startedAt": "2026-10-07T15:15:54.957Z",
+  "cases": [
+    {
+      "name": "anonymous-api-and-private-page-boundary",
+      "status": "PASS",
+      "milliseconds": 19665,
+      "facts": {
+        "apiReadsAndWritesRequireSession": true,
+        "privatePageRequiresSession": true
+      }
+    },
+    {
+      "name": "supabase-schema-and-preview-readiness",
+      "status": "PASS",
+      "milliseconds": 53428,
+      "facts": {
+        "outcomesRelations": 6,
+        "previewDatabaseReady": true,
+        "pilotCapacityAvailable": true
+      }
+    },
+    {
+      "name": "browser-tooling-preflight",
+      "status": "PASS",
+      "milliseconds": 309,
+      "facts": {
+        "chromium": "153.0.8010.0",
+        "browserLaunchVerified": true
+      }
+    },
+    {
+      "name": "real-supabase-sessions-and-pilot-entitlements",
+      "status": "PASS",
+      "milliseconds": 27099,
+      "facts": {
+        "newSyntheticIdentities": 2,
+        "serverVerifiedAuthSessions": 2,
+        "existingPilotRpcGrants": 2,
+        "emailsSent": 0
+      }
+    },
+    {
+      "name": "fresh-owners-have-empty-workspaces",
+      "status": "PASS",
+      "milliseconds": 2081
+    },
+    {
+      "name": "search-and-baseline-capture-through-next",
+      "status": "PASS",
+      "milliseconds": 18305
+    },
+    {
+      "name": "concurrent-http-retry-is-one-employment-and-three-followups",
+      "status": "PASS",
+      "milliseconds": 25785,
+      "facts": {
+        "concurrentRequests": 2,
+        "savedEmployments": 1,
+        "savedFollowups": 3,
+        "savedReservations": 1
+      }
+    },
+    {
+      "name": "linked-income-persists-in-fresh-summary",
+      "status": "PASS",
+      "milliseconds": 12378
+    },
+    {
+      "name": "retry-after-new-session-preserves-original-response",
+      "status": "PASS",
+      "milliseconds": 23801
+    },
+    {
+      "name": "second-owner-cannot-read-or-change-first-owner-outcomes",
+      "status": "PASS",
+      "milliseconds": 80651,
+      "facts": {
+        "ownerScopedSummary": true,
+        "directRlsIsolation": true,
+        "foreignSalaryRejected": true,
+        "foreignFollowupRejected": true,
+        "serviceRpcDenied": true,
+        "privateLedgerDenied": true
+      }
+    },
+    {
+      "name": "request-key-is-scoped-to-owner",
+      "status": "PASS",
+      "milliseconds": 12258
+    },
+    {
+      "name": "future-followup-rejected-without-reservation",
+      "status": "PASS",
+      "milliseconds": 14629
+    },
+    {
+      "name": "contended-due-followup-first-response-cannot-be-overwritten",
+      "status": "PASS",
+      "milliseconds": 8605,
+      "facts": {
+        "concurrentReplies": 2,
+        "savedReply": 1,
+        "overwriteRejected": true,
+        "replayStable": true
+      }
+    },
+    {
+      "name": "real-browser-capture-refresh-followup-mobile-and-desktop",
+      "status": "FAIL",
+      "code": "LIVE_BROWSER_MOBILE_ENTRY_FAILED",
+      "milliseconds": 87
+    }
+  ],
+  "httpDiagnostics": [
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/despega/resultados-laborales",
+      "method": "GET",
+      "status": 307,
+      "contentType": "html",
+      "bodyKind": "unread",
+      "responseKeys": [],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "supabase-schema-and-preview-readiness",
+      "transport": "http",
+      "path": "/api/health/ready",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "status"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "real-supabase-sessions-and-pilot-entitlements",
+      "transport": "http",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "accessKind",
+        "allowed"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "real-supabase-sessions-and-pilot-entitlements",
+      "transport": "http",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "accessKind",
+        "allowed"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "fresh-owners-have-empty-workspaces",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "attribution",
+        "economic",
+        "funnel",
+        "impact",
+        "timeToJobDays",
+        "verification",
+        "workspace"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "fresh-owners-have-empty-workspaces",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "attribution",
+        "economic",
+        "funnel",
+        "impact",
+        "timeToJobDays",
+        "verification",
+        "workspace"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "search-and-baseline-capture-through-next",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "search-and-baseline-capture-through-next",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "concurrent-http-retry-is-one-employment-and-three-followups",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "concurrent-http-retry-is-one-employment-and-three-followups",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "linked-income-persists-in-fresh-summary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "linked-income-persists-in-fresh-summary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "attribution",
+        "economic",
+        "funnel",
+        "impact",
+        "timeToJobDays",
+        "verification",
+        "workspace"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "retry-after-new-session-preserves-original-response",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "retry-after-new-session-preserves-original-response",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 409,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "second-owner-cannot-read-or-change-first-owner-outcomes",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "attribution",
+        "economic",
+        "funnel",
+        "impact",
+        "timeToJobDays",
+        "verification",
+        "workspace"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "second-owner-cannot-read-or-change-first-owner-outcomes",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 422,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "second-owner-cannot-read-or-change-first-owner-outcomes",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 404,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "request-key-is-scoped-to-owner",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 201,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "future-followup-rejected-without-reservation",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "attribution",
+        "economic",
+        "funnel",
+        "impact",
+        "timeToJobDays",
+        "verification",
+        "workspace"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "future-followup-rejected-without-reservation",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 409,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "contended-due-followup-first-response-cannot-be-overwritten",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "contended-due-followup-first-response-cannot-be-overwritten",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 409,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "contended-due-followup-first-response-cannot-be-overwritten",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "data"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "contended-due-followup-first-response-cannot-be-overwritten",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "attribution",
+        "economic",
+        "funnel",
+        "impact",
+        "timeToJobDays",
+        "verification",
+        "workspace"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "cleanup",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    }
+  ],
+  "cleanup": {
+    "required": true,
+    "completed": false,
+    "usersCreatedOrAttempted": 2,
+    "usersDeleted": 1,
+    "usersAlreadyAbsent": 0,
+    "invitationsCreatedOrAttempted": 2,
+    "invitationsDeleted": 2,
+    "ownedRowsRemaining": 0,
+    "cascadeRelationsVerified": [
+      "dtc_job_search_events",
+      "dtc_employment_outcomes",
+      "dtc_salary_outcomes",
+      "dtc_outcome_followups",
+      "dtc_outcome_verifications",
+      "dtc_outcome_write_requests",
+      "despega_journey_state",
+      "despega_user_profiles",
+      "pilot_memberships"
+    ],
+    "errors": [
+      "CLEANUP_SESSION_REVOCATION_FAILED"
+    ]
+  },
+  "limitations": [
+    "Deployment identity is a recent operator-provided Vercel attestation, checked against local HEAD; the runner does not call Vercel management APIs.",
+    "Synthetic password sessions are issued by real Supabase Auth. Google/LinkedIn OAuth and email delivery are outside this test.",
+    "The database is the explicitly allowlisted DTCFINAL project. Writes are restricted to new synthetic identities and their disposable invitations.",
+    "Benchmark values are never inserted, changed or asserted as product outcomes by this runner."
+  ],
+  "target": {
+    "origin": "https://v0-fork-of-despega-tu-carrera-clone-he0zewf6k.vercel.app",
+    "environment": "preview",
+    "readyState": "READY",
+    "deploymentId": "dpl_AwjNwcSPehHjvY3kiuoNgML72yeq",
+    "vercelProjectId": "prj_SvrOCS2CtFQunqirMeYidZRHZKpm",
+    "supabaseProjectRef": "dcfrbwxbejtbcouionna",
+    "commitSha": "f3f2110c5f67416bc0973d098d1391d8a438d6c8",
+    "verifiedAt": "2026-10-07T15:14:56Z",
+    "identitySource": "operator-vercel-attestation"
+  },
+  "source": {
+    "commitSha": "f3f2110c5f67416bc0973d098d1391d8a438d6c8",
+    "workingTreeDirty": false,
+    "runnerSources": {
+      "run.mjs": "e18fd74fe2aaaf50c36bc5d1b74bd281d63c1ce3fa801eff8d3e69e05f660c44",
+      "guards.mjs": "b6ec4ae7b05bd416eb7f86339d215641a8eaf41c4a1fe7cb47b8529128f34694",
+      "browser.mjs": "c9684081fb79148076457eca84a824fadace628aca0ea47a77c490ac15170b1b"
+    }
+  },
+  "failure": "LIVE_BROWSER_MOBILE_ENTRY_FAILED",
+  "finishedAt": "2026-10-07T15:23:08.903Z",
+  "passed": 13,
+  "failed": 1
+}

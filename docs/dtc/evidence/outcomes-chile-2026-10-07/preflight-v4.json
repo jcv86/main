@@ -1,0 +1,183 @@
+{
+  "scope": "live-next-supabase-outcomes-chile",
+  "mode": "preflight",
+  "runReference": "afdb6c72-86b7-4286-9a17-f20d1037cab1",
+  "verdict": "CONDITIONAL_GO",
+  "startedAt": "2026-10-07T16:13:49.707Z",
+  "cases": [
+    {
+      "name": "anonymous-api-and-private-page-boundary",
+      "status": "PASS",
+      "milliseconds": 22104,
+      "facts": {
+        "apiReadsAndWritesRequireSession": true,
+        "privatePageRequiresSession": true
+      }
+    },
+    {
+      "name": "supabase-schema-and-preview-readiness",
+      "status": "PASS",
+      "milliseconds": 59718,
+      "facts": {
+        "outcomesRelations": 6,
+        "previewDatabaseReady": true,
+        "pilotCapacityAvailable": true
+      }
+    },
+    {
+      "name": "browser-tooling-preflight",
+      "status": "PASS",
+      "milliseconds": 35250,
+      "facts": {
+        "chromium": "153.0.8010.0",
+        "browserLaunchVerified": true,
+        "contextAndPageVerified": true,
+        "cookieImportVerified": true,
+        "managedProxyConfigured": true,
+        "previewHealthVerified": true,
+        "anonymousPrivateRedirectVerified": true,
+        "nativeRedirectGuardVerified": true
+      }
+    }
+  ],
+  "httpDiagnostics": [
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "GET",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/api/outcomes/chile",
+      "method": "POST",
+      "status": 401,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "error"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "anonymous-api-and-private-page-boundary",
+      "transport": "http",
+      "path": "/despega/resultados-laborales",
+      "method": "GET",
+      "status": 307,
+      "contentType": "html",
+      "bodyKind": "unread",
+      "responseKeys": [],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "supabase-schema-and-preview-readiness",
+      "transport": "http",
+      "path": "/api/health/ready",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "status"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "browser-tooling-preflight",
+      "transport": "browser",
+      "path": "/api/health/live",
+      "method": "GET",
+      "status": 200,
+      "contentType": "json",
+      "bodyKind": "object",
+      "responseKeys": [
+        "status"
+      ],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "browser-tooling-preflight",
+      "transport": "browser",
+      "path": "/despega/resultados-laborales",
+      "method": "GET",
+      "status": 307,
+      "contentType": "html",
+      "bodyKind": "unread",
+      "responseKeys": [],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    },
+    {
+      "case": "browser-tooling-preflight",
+      "transport": "browser",
+      "path": "/auth/signin",
+      "method": "GET",
+      "status": 200,
+      "contentType": "html",
+      "bodyKind": "unread",
+      "responseKeys": [],
+      "omittedResponseKeyCount": 0,
+      "retryAfterPresent": false,
+      "retryAfterSeconds": null
+    }
+  ],
+  "browserDiagnostics": [],
+  "cleanup": {
+    "required": false,
+    "completed": true,
+    "remoteWrites": 0
+  },
+  "limitations": [
+    "Deployment identity is a recent operator-provided Vercel attestation, checked against local HEAD; the runner does not call Vercel management APIs.",
+    "Synthetic password sessions are issued by real Supabase Auth. Google/LinkedIn OAuth and email delivery are outside this test.",
+    "The database is the explicitly allowlisted DTCFINAL project. Writes are restricted to new synthetic identities and their disposable invitations.",
+    "Benchmark values are never inserted, changed or asserted as product outcomes by this runner."
+  ],
+  "target": {
+    "origin": "https://v0-fork-of-despega-tu-carrera-clone-6ukwtlrn7.vercel.app",
+    "environment": "preview",
+    "readyState": "READY",
+    "deploymentId": "dpl_5LusyUP6ikW6qRB1kJpWQE2ACZ3K",
+    "vercelProjectId": "prj_SvrOCS2CtFQunqirMeYidZRHZKpm",
+    "supabaseProjectRef": "dcfrbwxbejtbcouionna",
+    "commitSha": "f3f2110c5f67416bc0973d098d1391d8a438d6c8",
+    "verifiedAt": "2026-10-07T16:11:05Z",
+    "identitySource": "operator-vercel-attestation"
+  },
+  "source": {
+    "commitSha": "f3f2110c5f67416bc0973d098d1391d8a438d6c8",
+    "workingTreeDirty": true,
+    "runnerSources": {
+      "run.mjs": "a0bf43b413f8b3525cf085ac6ee4016b3607cebe52a2f202bdd8be5cfb4dc18a",
+      "guards.mjs": "36a60b40b8f604c2023193a42cbf693c6b3e5519c6ef688612a3b8f24a2ddab8",
+      "browser.mjs": "73dc2965da9d2623384c0bbb7a1f6b7f25fdf30ad868dc68a9daa9afd5ba25e8",
+      "nss-trust.py": "d7c49ea003fa5172e93fd23f3c7fe683d80da4ac3a26d9ff17eae619c399d480"
+    }
+  },
+  "conditions": [
+    "Live synthetic writes, two-owner isolation, browser persistence and cleanup still require --execute."
+  ],
+  "finishedAt": "2026-10-07T16:15:46.800Z",
+  "passed": 3,
+  "failed": 0
+}

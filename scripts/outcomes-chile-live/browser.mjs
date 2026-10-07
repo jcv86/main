@@ -1,6 +1,6 @@
 import { createRequire } from 'node:module'
 import { join, resolve } from 'node:path'
-import { API_PATH, PAGE_PATH, HTTP_DIAGNOSTIC_PATHS, LiveFailure, check, chileDate, cooperativeCancellation, httpDiagnostic, requestTracker, repository, sameJson } from './guards.mjs'
+import { API_PATH, PAGE_PATH, HTTP_DIAGNOSTIC_PATHS, LiveFailure, browserFailureCategory, check, chileDate, configuredBrowserProxy, cooperativeCancellation, httpDiagnostic, managedBrowserTrust, requestTracker, repository, sameJson } from './guards.mjs'
 
 function tools(browserConfig = {}) {
   const root = browserConfig.toolsRoot ?? process.env.DTC_OUTCOMES_UI_TOOLS_ROOT
@@ -14,13 +14,180 @@ async function launch(browserConfig = {}) {
   const { playwright, distribution } = tools(browserConfig)
   const binary = distribution.default ?? distribution
   const executablePath = browserConfig.executablePath ?? await binary.executablePath()
-  return playwright.chromium.launch({ executablePath, headless: true, args: ['--single-process', '--no-zygote', '--disable-gpu'] })
+  const proxy = configuredBrowserProxy()
+  const trust = managedBrowserTrust()
+  try {
+    const browser = await playwright.chromium.launch({ executablePath, headless: true, args: ['--single-process', '--no-zygote', '--disable-gpu'],
+      ...(proxy ? { proxy } : {}), ...(trust ? { env: trust.environment } : {}),
+    })
+    // Keep all existing close/finally paths responsible for their own ephemeral trust directory.
+    const close = browser.close.bind(browser)
+    browser.close = async (...args) => { try { await close(...args) } finally { trust?.remove() } }
+    return browser
+  } catch (error) { trust?.remove(); throw error }
 }
 
-export async function browserPreflight(browserConfig) {
-  const browser = await launch(browserConfig)
-  try { return { chromium: browser.version(), browserLaunchVerified: true } }
-  finally { await browser.close() }
+/** The same local setup is exercised before any synthetic identities are created. */
+export async function prepareBrowserContext({ browserConfig, origin, cookies = [], viewport = { width: 390, height: 844 }, onBrowserDiagnostic = () => {} }) {
+  let browser
+  let stage = 'LAUNCH'
+  try {
+    browser = await launch(browserConfig)
+    stage = 'CONTEXT'
+    const context = await browser.newContext({ viewport, locale: 'es-CL', timezoneId: 'America/Santiago', reducedMotion: 'reduce', serviceWorkers: 'block' })
+    stage = 'COOKIES'
+    if (cookies.length) {
+      check(typeof origin === 'string' && new URL(origin).origin === origin, 'LIVE_BROWSER_COOKIE_ORIGIN_INVALID')
+      for (const cookie of cookies) {
+        check(typeof cookie.name === 'string' && typeof cookie.value === 'string', 'LIVE_BROWSER_COOKIE_TYPE_INVALID')
+        check(Buffer.byteLength(cookie.name) + Buffer.byteLength(cookie.value) <= 4096, 'LIVE_BROWSER_COOKIE_TOO_LARGE')
+      }
+      await context.addCookies(cookies.map(({ name, value }) => ({ name, value, url: origin, secure: true, sameSite: 'Lax' })))
+    }
+    stage = 'NEW_PAGE'
+    const page = await context.newPage()
+    page.setDefaultTimeout(25_000)
+    page.setDefaultNavigationTimeout(45_000)
+    return { browser, context, page }
+  } catch (error) {
+    const category = error instanceof LiveFailure ? 'GUARD' : browserFailureCategory(error)
+    onBrowserDiagnostic({ stage, category })
+    if (browser) await browser.close()
+    if (error instanceof LiveFailure) throw error
+    throw new LiveFailure(`LIVE_BROWSER_${stage}_${category}`)
+  }
+}
+
+/** One policy is applied both to Playwright's relay and to every native redirect hop. */
+export function browserRequestDecision({ url, method, targetOrigin, supabaseOrigin, readOnly = false }) {
+  let parsed
+  try { parsed = new URL(url) } catch { return { allowed: false, category: 'INVALID_REQUEST' } }
+  if (parsed.username || parsed.password) return { allowed: false, category: 'INVALID_REQUEST' }
+  const read = ['GET', 'HEAD', 'OPTIONS'].includes(method)
+  const application = parsed.origin === targetOrigin
+  const supabase = Boolean(supabaseOrigin) && parsed.origin === supabaseOrigin
+  const font = ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(parsed.origin)
+  if (!application && !supabase && !font) return { allowed: false, category: read ? 'EXTERNAL_REQUEST' : 'MUTATION' }
+  if (read) return { allowed: true }
+  const permittedWrite = !readOnly && method === 'POST' && ((application && [API_PATH, '/api/auth/signout'].includes(parsed.pathname))
+    || (supabase && ['/auth/v1/token', '/auth/v1/logout'].includes(parsed.pathname)))
+  return permittedWrite ? { allowed: true } : { allowed: false, category: 'MUTATION' }
+}
+
+/**
+ * Playwright continues redirected requests without invoking context.route again.
+ * This independent CDP session only allows or fails the real native request; it
+ * never replaces a response, changes a header, or relaxes certificate checks.
+ */
+export async function installNativeRequestGuard({ context, page, policy, requests = requestTracker(),
+  cancellation = cooperativeCancellation(), onBlocked = () => {}, onFailure = () => {},
+}) {
+  const cdp = await context.newCDPSession(page)
+  const origins = new Map()
+  const state = { requestsChecked: 0, redirectsChecked: 0, blockedRedirects: 0, blockedMutations: 0, blockedExternalRequests: 0, failures: 0 }
+  let stopped = false
+  cdp.on('Fetch.requestPaused', (event) => {
+    let allowed = false
+    let category
+    let cancelled = stopped
+    try { cancellation.check() } catch { cancelled = true }
+    if (!cancelled) {
+      state.requestsChecked++
+      try {
+        const url = new URL(event.request.url)
+        const redirected = Boolean(event.redirectedRequestId)
+        if (redirected) state.redirectsChecked++
+        // A redirect may never change origin, even to another separately allowed service.
+        const sameOriginChain = !redirected || origins.get(event.redirectedRequestId) === url.origin
+        const decision = browserRequestDecision({ url: event.request.url, method: event.request.method, ...policy })
+        allowed = sameOriginChain && decision.allowed
+        category = !sameOriginChain ? 'REDIRECT' : decision.category
+        origins.set(event.requestId, url.origin)
+      } catch { category = 'INVALID_REQUEST' }
+      if (!allowed) {
+        if (category === 'REDIRECT') state.blockedRedirects++
+        else if (category === 'MUTATION') state.blockedMutations++
+        else if (category === 'EXTERNAL_REQUEST') state.blockedExternalRequests++
+        else state.failures++
+        onBlocked(category)
+      }
+    }
+    // Attach the handler immediately: closing the browser must not strand a rejected command.
+    requests.track(() => cdp.send(allowed ? 'Fetch.continueRequest' : 'Fetch.failRequest', allowed
+      ? { requestId: event.requestId }
+      : { requestId: event.requestId, errorReason: 'BlockedByClient' },
+    )).catch((error) => {
+      if (!stopped) { state.failures++; onFailure(browserFailureCategory(error)) }
+    })
+  })
+  await cdp.send('Fetch.enable', { patterns: [{ urlPattern: '*', requestStage: 'Request' }] })
+  return { state, stop: () => { stopped = true } }
+}
+
+export async function browserPreflight(browserConfig, { target, supabaseOrigin, vercelProtectionCookies = [], vercelProtectionBypass,
+  requests = requestTracker(), cancellation = cooperativeCancellation(), onHttpDiagnostic = () => {}, onBrowserDiagnostic = () => {},
+} = {}) {
+  const view = await prepareBrowserContext({ browserConfig, origin: target?.origin, cookies: vercelProtectionCookies, onBrowserDiagnostic })
+  let stopped = false
+  let relayFailure
+  let blockedRedirect = false
+  let nativeGuard
+  let privateResponseStatus
+  let stage = 'PREFLIGHT_ROUTING'
+  try {
+    cancellation.check()
+    if (target) {
+      const policy = { targetOrigin: target.origin, supabaseOrigin, readOnly: true }
+      nativeGuard = await installNativeRequestGuard({ context: view.context, page: view.page, policy, requests, cancellation,
+        onBlocked: (category) => { if (category === 'REDIRECT') blockedRedirect = true },
+        onFailure: (category) => onBrowserDiagnostic({ stage: 'PREFLIGHT_NATIVE_GUARD', category }),
+      })
+      await view.context.route('**/*', async (route) => {
+        if (stopped) return route.abort('blockedbyclient')
+        try { cancellation.check() } catch { return route.abort('blockedbyclient') }
+        const request = route.request()
+        const url = new URL(request.url())
+        if (!browserRequestDecision({ url: request.url(), method: request.method(), ...policy }).allowed) return route.abort('blockedbyclient')
+        const headers = { ...await request.allHeaders() }
+        delete headers['x-vercel-protection-bypass']
+        if (url.origin === target.origin && vercelProtectionBypass) headers['x-vercel-protection-bypass'] = vercelProtectionBypass
+        const result = await relayRealRoute(route, { expectedOrigin: url.origin, headers, requests })
+        if (result.diagnostic) onHttpDiagnostic(result.diagnostic)
+        if (url.origin === target.origin && url.pathname === PAGE_PATH) privateResponseStatus = result.diagnostic?.status
+        if (result.blockedRedirect) blockedRedirect = true
+        if (result.transportFailure) { relayFailure = result.transportCategory; onBrowserDiagnostic({ stage: 'PREFLIGHT_RELAY', category: result.transportCategory }) }
+      })
+      stage = 'PREFLIGHT_HEALTH'
+      const response = await view.page.goto(target.origin + '/api/health/live', { waitUntil: 'domcontentloaded' })
+      check(response?.status() !== 429, 'LIVE_BROWSER_RATE_LIMITED')
+      check(response?.status() === 200, 'LIVE_BROWSER_HEALTH_HTTP_FAILED')
+      const health = await response.json()
+      check(health?.status === 'ok', 'LIVE_BROWSER_HEALTH_CONTRACT_FAILED')
+      check(!blockedRedirect && !relayFailure, 'LIVE_BROWSER_HEALTH_RELAY_FAILED')
+      stage = 'PREFLIGHT_ANONYMOUS_REDIRECT'
+      const signin = await view.page.goto(target.origin + PAGE_PATH, { waitUntil: 'domcontentloaded' })
+      check(privateResponseStatus === 307, 'LIVE_BROWSER_ANONYMOUS_PRIVATE_REDIRECT_MISSING')
+      const destination = new URL(view.page.url())
+      check(destination.origin === target.origin && destination.pathname === '/auth/signin', 'LIVE_BROWSER_ANONYMOUS_SIGNIN_DESTINATION_FAILED')
+      onHttpDiagnostic(httpDiagnostic({ path: '/auth/signin', method: 'GET', status: signin?.status(), contentType: signin?.headers()['content-type'] }))
+      check(signin?.status() === 200, 'LIVE_BROWSER_ANONYMOUS_SIGNIN_HTTP_FAILED')
+      check(nativeGuard.state.redirectsChecked >= 1, 'LIVE_BROWSER_NATIVE_REDIRECT_NOT_OBSERVED')
+      check(nativeGuard.state.failures === 0 && nativeGuard.state.blockedMutations === 0, 'LIVE_BROWSER_PREFLIGHT_NATIVE_GUARD_FAILED')
+      check(!blockedRedirect && !relayFailure, 'LIVE_BROWSER_PREFLIGHT_RELAY_FAILED')
+      cancellation.check()
+    }
+    return { chromium: view.browser.version(), browserLaunchVerified: true, contextAndPageVerified: true,
+      cookieImportVerified: true, managedProxyConfigured: Boolean(configuredBrowserProxy()), previewHealthVerified: Boolean(target),
+      anonymousPrivateRedirectVerified: Boolean(target), nativeRedirectGuardVerified: Boolean(nativeGuard?.state.redirectsChecked),
+    }
+  } catch (error) {
+    const category = error instanceof LiveFailure ? 'GUARD' : browserFailureCategory(error)
+    onBrowserDiagnostic({ stage, category })
+    if (blockedRedirect) throw new LiveFailure('LIVE_BROWSER_PREFLIGHT_CROSS_ORIGIN_REDIRECT')
+    if (relayFailure) throw new LiveFailure(`LIVE_BROWSER_PREFLIGHT_RELAY_${relayFailure}`)
+    if (error instanceof LiveFailure) throw error
+    throw new LiveFailure(`LIVE_BROWSER_${stage}_${category}`)
+  } finally { stopped = true; nativeGuard?.stop(); await requests.drain(); await view.browser.close() }
 }
 
 /** A real, single-hop HTTP relay: never let Playwright propagate credential overrides across redirects. */
@@ -54,24 +221,33 @@ export async function relayRealRoute(route, { expectedOrigin, headers, requests 
       // This is the untouched real HTTP response, including the real JSON and Set-Cookie headers.
       await route.fulfill({ response })
       return { blockedRedirect: false, ...(diagnostic ? { diagnostic } : {}) }
-    } catch {
+    } catch (error) {
       try { await route.abort('failed') } catch { /* The request may already be closed. */ }
-      return { transportFailure: true, ...(diagnostic ? { diagnostic } : {}) }
+      return { transportFailure: true, transportCategory: browserFailureCategory(error), ...(diagnostic ? { diagnostic } : {}) }
     } finally { if (response) await response.dispose() }
   })
 }
 
-/** All allowed requests use the real relay; no fixture or fabricated API response exists here. */
-async function openOwner({ config, owner, viewport, cancellation, requests, onHttpDiagnostic }) {
-  const browser = await launch(config.browser)
+/** Initial requests use the real relay; native redirects retain real HTTP under the CDP guard. */
+async function openOwner({ config, owner, viewport, cancellation, requests, onHttpDiagnostic, onBrowserDiagnostic }) {
+  const { browser, context, page } = await prepareBrowserContext({ browserConfig: config.browser, origin: config.target.origin,
+    cookies: [...owner.cookies.getAll(), ...config.vercelProtectionCookies], viewport, onBrowserDiagnostic,
+  })
   let stopNewRequests = false
+  let nativeGuard
+  let stage = 'ROUTING'
   try {
-    const context = await browser.newContext({ viewport, locale: 'es-CL', timezoneId: 'America/Santiago', reducedMotion: 'reduce', serviceWorkers: 'block' })
-    await context.addCookies([...owner.cookies.getAll(), ...config.vercelProtectionCookies].map(({ name, value }) => ({ name, value, url: config.target.origin, secure: true, sameSite: 'Lax' })))
-    const page = await context.newPage()
-    page.setDefaultTimeout(25_000)
-    page.setDefaultNavigationTimeout(45_000)
-    const state = { runtimeErrors: 0, consoleErrors: 0, blockedExternalRequests: 0, blockedMutations: 0, blockedRedirects: 0, relayFailures: 0, outcomesHttpErrors: 0, writes: [] }
+    const state = { runtimeErrors: 0, consoleErrors: 0, blockedExternalRequests: 0, blockedMutations: 0, blockedRedirects: 0, relayFailures: 0, nativeGuardFailures: 0, outcomesHttpErrors: 0, writes: [] }
+    const policy = { targetOrigin: config.target.origin, supabaseOrigin: config.supabase.url }
+    nativeGuard = await installNativeRequestGuard({ context, page, policy, requests, cancellation,
+      onBlocked: (category) => {
+        if (category === 'REDIRECT') state.blockedRedirects++
+        else if (category === 'MUTATION') state.blockedMutations++
+        else if (category === 'EXTERNAL_REQUEST') state.blockedExternalRequests++
+        else state.nativeGuardFailures++
+      },
+      onFailure: (category) => { state.nativeGuardFailures++; onBrowserDiagnostic({ stage: 'NATIVE_GUARD', category }) },
+    })
     page.on('pageerror', () => { state.runtimeErrors++ })
     page.on('console', (message) => { if (message.type() === 'error') state.consoleErrors++ })
     page.on('response', (response) => {
@@ -82,46 +258,51 @@ async function openOwner({ config, owner, viewport, cancellation, requests, onHt
       try { cancellation.check() } catch { return route.abort('blockedbyclient') }
       const request = route.request()
       const url = new URL(request.url())
-      const write = !['GET', 'HEAD', 'OPTIONS'].includes(request.method())
+      const decision = browserRequestDecision({ url: request.url(), method: request.method(), ...policy })
+      if (!decision.allowed) {
+        if (decision.category === 'MUTATION') state.blockedMutations++
+        else state.blockedExternalRequests++
+        return route.abort('blockedbyclient')
+      }
       const relay = async (headers) => {
         const result = await relayRealRoute(route, { expectedOrigin: url.origin, headers, requests })
         if (result.diagnostic) onHttpDiagnostic(result.diagnostic)
         if (result.blockedRedirect) state.blockedRedirects++
-        if (result.transportFailure) state.relayFailures++
+        if (result.transportFailure) { state.relayFailures++; onBrowserDiagnostic({ stage: 'RELAY', category: result.transportCategory }) }
       }
       if (url.origin === config.target.origin) {
-        if (write && ![API_PATH, '/api/auth/signout'].includes(url.pathname)) {
-          state.blockedMutations++
-          return route.abort('blockedbyclient')
-        }
         if (url.pathname === API_PATH && request.method() === 'POST') {
           // Only synthetic in-memory payloads. Never persist this collection or browser storage state.
           state.writes.push(request.postDataJSON())
         }
-        return relay({ ...request.headers(), ...(config.vercelProtectionBypass ? { 'x-vercel-protection-bypass': config.vercelProtectionBypass } : {}) })
+        return relay({ ...await request.allHeaders(), ...(config.vercelProtectionBypass ? { 'x-vercel-protection-bypass': config.vercelProtectionBypass } : {}) })
       }
       if (url.origin === config.supabase.url) {
-        if (write && !['/auth/v1/token', '/auth/v1/logout'].includes(url.pathname)) {
-          state.blockedMutations++
-          return route.abort('blockedbyclient')
-        }
-        const headers = { ...request.headers() }
+        const headers = { ...await request.allHeaders() }
         delete headers['x-vercel-protection-bypass']
         return relay(headers)
       }
-      if (!write && ['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin)) {
-        const headers = { ...request.headers() }
+      if (['https://fonts.googleapis.com', 'https://fonts.gstatic.com'].includes(url.origin)) {
+        const headers = { ...await request.allHeaders() }
         delete headers['x-vercel-protection-bypass']
         return relay(headers)
       }
       state.blockedExternalRequests++
       return route.abort('blockedbyclient')
     })
+    stage = 'NAVIGATION'
     await page.goto(config.target.origin + PAGE_PATH, { waitUntil: 'domcontentloaded' })
+    stage = 'READY'
     await ready(page)
     cancellation.check()
-    return { browser, context, page, state, stopRequests: () => { stopNewRequests = true } }
-  } catch (error) { stopNewRequests = true; await requests.drain(); await browser.close(); throw error }
+    return { browser, context, page, state, stopRequests: () => { stopNewRequests = true; nativeGuard.stop() } }
+  } catch (error) {
+    const category = error instanceof LiveFailure ? 'GUARD' : browserFailureCategory(error)
+    onBrowserDiagnostic({ stage, category })
+    stopNewRequests = true; nativeGuard?.stop(); await requests.drain(); await browser.close()
+    if (error instanceof LiveFailure) throw error
+    throw new LiveFailure(`LIVE_BROWSER_${stage}_${category}`)
+  }
 }
 
 async function ready(page) {
@@ -148,14 +329,19 @@ async function safeCapture(view, config, label, screenshots) {
   // Main excludes the account email in the actual app sidebar; every visible result is synthetic.
   await view.page.locator('#main-content').screenshot({ path: join(config.evidenceDirectory, filename), animations: 'disabled' })
   screenshots.push({ filename, viewport: view.page.viewportSize(), contents: 'real-preview-main-with-synthetic-outcomes' })
+  checkBrowserState(view)
+}
+
+function checkBrowserState(view, expectedOutcomesHttpErrors = 0) {
   check(view.state.runtimeErrors === 0, 'LIVE_BROWSER_RUNTIME_ERROR')
   check(view.state.blockedMutations === 0, 'LIVE_BROWSER_UNEXPECTED_MUTATION')
   check(view.state.blockedRedirects === 0, 'LIVE_BROWSER_CROSS_ORIGIN_REDIRECT')
   check(view.state.relayFailures === 0, 'LIVE_BROWSER_RELAY_FAILURE')
-  check(view.state.outcomesHttpErrors === 0, 'LIVE_BROWSER_OUTCOMES_HTTP_FAILURE')
+  check(view.state.nativeGuardFailures === 0, 'LIVE_BROWSER_NATIVE_GUARD_FAILURE')
+  check(view.state.outcomesHttpErrors === expectedOutcomesHttpErrors, 'LIVE_BROWSER_OUTCOMES_HTTP_FAILURE')
 }
 
-export async function runBrowserJourney({ config, a, b, getSummary, post, cancellation = cooperativeCancellation(), requests = requestTracker(), onHttpDiagnostic = () => {} }) {
+export async function runBrowserJourney({ config, a, b, getSummary, post, cancellation = cooperativeCancellation(), requests = requestTracker(), onHttpDiagnostic = () => {}, onBrowserDiagnostic = () => {} }) {
   const evidence = { cases: [], screenshots: [], apiMocks: 0, credentialStorage: 'process-and-browser-context-memory-only' }
   let view
   let rateLimited = false
@@ -163,7 +349,7 @@ export async function runBrowserJourney({ config, a, b, getSummary, post, cancel
   let stage = 'MOBILE_ENTRY'
   try {
     cancellation.check()
-    view = await openOwner({ config, owner: a, viewport: { width: 390, height: 844 }, cancellation, requests, onHttpDiagnostic: observe })
+    view = await openOwner({ config, owner: a, viewport: { width: 390, height: 844 }, cancellation, requests, onHttpDiagnostic: observe, onBrowserDiagnostic })
     const mobileRole = 'DTC control sintético móvil'
     stage = 'MOBILE_CAPTURE'
     await view.page.getByRole('tab', { name: 'Trabajo', exact: true }).click()
@@ -212,7 +398,7 @@ export async function runBrowserJourney({ config, a, b, getSummary, post, cancel
 
     stage = 'DESKTOP_SECOND_OWNER'
     cancellation.check()
-    view = await openOwner({ config, owner: b, viewport: { width: 1440, height: 960 }, cancellation, requests, onHttpDiagnostic: observe })
+    view = await openOwner({ config, owner: b, viewport: { width: 1440, height: 960 }, cancellation, requests, onHttpDiagnostic: observe, onBrowserDiagnostic })
     const mainText = await view.page.locator('#main-content').innerText()
     check(mainText.includes('DTC control sintético B') && !mainText.includes('DTC control sintético A') && !mainText.includes(mobileRole), 'LIVE_UI_SECOND_OWNER_LEAK')
     await safeCapture(view, config, 'desktop-live-owner-isolation', evidence.screenshots)
@@ -223,14 +409,20 @@ export async function runBrowserJourney({ config, a, b, getSummary, post, cancel
     await view.page.waitForURL((url) => url.pathname === '/auth/signin')
     const status = await view.page.evaluate(async (path) => (await fetch(path, { cache: 'no-store', redirect: 'manual' })).status, API_PATH)
     check(status === 401, 'SIGNED_OUT_BROWSER_API_ACCESS_REMAINS')
-    await view.page.goto(config.target.origin + PAGE_PATH, { waitUntil: 'domcontentloaded' })
-    check(new URL(view.page.url()).pathname === '/auth/signin', 'SIGNED_OUT_BROWSER_PRIVATE_PAGE_REMAINS')
+    const signedOutPage = await view.page.goto(config.target.origin + PAGE_PATH, { waitUntil: 'domcontentloaded' })
+    const signedOutDestination = new URL(view.page.url())
+    observe(httpDiagnostic({ path: signedOutDestination.pathname, method: 'GET', status: signedOutPage?.status(), contentType: signedOutPage?.headers()['content-type'] }))
+    check(signedOutDestination.origin === config.target.origin && signedOutDestination.pathname === '/auth/signin', 'SIGNED_OUT_BROWSER_PRIVATE_PAGE_REMAINS')
+    check(signedOutPage?.status() === 200, 'SIGNED_OUT_BROWSER_SIGNIN_HTTP_FAILED')
+    checkBrowserState(view, 1) // The explicit anonymous API check above must be the only rejected Outcomes response.
     evidence.cases.push({ name: 'actual-app-signout-removes-private-page-and-api-access', status: 'PASS' })
     check(!rateLimited, 'LIVE_BROWSER_RATE_LIMITED')
     return evidence
   } catch (error) {
     if (rateLimited) throw new LiveFailure('LIVE_BROWSER_RATE_LIMITED')
     if (error instanceof LiveFailure) throw error
-    throw new LiveFailure(`LIVE_BROWSER_${stage}_FAILED`)
+    const category = browserFailureCategory(error)
+    onBrowserDiagnostic({ stage, category })
+    throw new LiveFailure(`LIVE_BROWSER_${stage}_${category}`)
   } finally { view?.stopRequests(); await requests.drain(); if (view) await view.browser.close() }
 }

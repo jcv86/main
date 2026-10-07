@@ -1,0 +1,150 @@
+{
+  "scope": "identity-scoped-recovery",
+  "runReference": "b828f115-ccfb-451b-a988-db66d446080d",
+  "projectRef": "dcfrbwxbejtbcouionna",
+  "verdict": "RECOVERED",
+  "originalRunVerdict": "NO_GO",
+  "startedAt": "2026-10-07T16:35:41Z",
+  "finishedAt": "2026-10-07T16:36:16Z",
+  "method": "Supabase connector execute_sql; exact marked resources in one transaction, followed by independent read-only queries",
+  "originalReport": {
+    "filename": "integration-v4.json",
+    "sha256": "925110bbd8e4468daa1735a4b753fa9c6f5997df07e8ed076e003935187f9798"
+  },
+  "reviewedTemplate": {
+    "filename": "recovery-v4-template.sql",
+    "sha256": "6c2fb2d8fdc400f4fdc044dddfdb23b12c2b68454d0b0eace94b28fe08d52958"
+  },
+  "executedQuerySha256": "3dcc7f21b072e4d2e536dab0d5883f7f11dad7814d1972d7a526c70e196f232a",
+  "preconditions": {
+    "manifestValidated": true,
+    "allResourceMarkersVerified": true,
+    "authUsersPresent": 1,
+    "authUsersAlreadyAbsent": 1,
+    "authSessions": 0,
+    "refreshTokens": 0,
+    "storageObjects": 0,
+    "invitationsPresent": 2,
+    "foreignMembershipReferences": 0,
+    "ownedRowsRemaining": 7,
+    "exactInvitationClaimAndOwnerStateVerified": true
+  },
+  "transaction": {
+    "committed": true,
+    "authUsersDeletedNow": 1,
+    "invitationsDeletedNow": 2,
+    "authUsersAlreadyAbsent": 1,
+    "cascadeChecks": 18,
+    "authAbsenceChecks": 2,
+    "invitationAbsenceChecks": 2,
+    "resourcesAbsentBeforeCommit": true,
+    "allWritesRollbackOnMismatch": true
+  },
+  "verification": {
+    "method": "independent post-commit SQL reads",
+    "completed": true,
+    "resourcesAbsent": true,
+    "authUsersVerifiedAbsent": 2,
+    "authIdentitiesRemaining": 0,
+    "authSessionsRemaining": 0,
+    "refreshTokensRemaining": 0,
+    "storageObjectsRemaining": 0,
+    "invitationsVerifiedAbsent": 2,
+    "cascadeChecks": 18,
+    "ownedRowsRemaining": 0,
+    "foreignMembershipReferences": 0,
+    "ownerRelations": [
+      {
+        "owner": "A",
+        "relations": [
+          {
+            "relation": "despega_journey_state",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "despega_user_profiles",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_employment_outcomes",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_job_search_events",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_outcome_followups",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_outcome_verifications",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_outcome_write_requests",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_salary_outcomes",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "pilot_memberships",
+            "rows_remaining": 0
+          }
+        ]
+      },
+      {
+        "owner": "B",
+        "relations": [
+          {
+            "relation": "despega_journey_state",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "despega_user_profiles",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_employment_outcomes",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_job_search_events",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_outcome_followups",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_outcome_verifications",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_outcome_write_requests",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "dtc_salary_outcomes",
+            "rows_remaining": 0
+          },
+          {
+            "relation": "pilot_memberships",
+            "rows_remaining": 0
+          }
+        ]
+      }
+    ]
+  },
+  "errors": [],
+  "limitations": [
+    "The original V4 run and its NO_GO/cleanup errors remain unchanged; this is a separate recovery of the same run.",
+    "Auth absence was verified through SQL, not a new Auth Admin HTTP 404 check.",
+    "Original access and refresh tokens were unavailable after the execution process ended. No subsequent request with those discarded tokens was made.",
+    "Zero auth.users/auth.sessions/refresh_tokens rows does not claim retroactive cryptographic invalidation of already issued access JWTs.",
+    "The original functional journey passed 14 cases including four real-browser subcases. Console error event counts of 15 mobile and 4 desktop remain unclassified and are a production quality condition.",
+    "No application, schema, policy, privilege, auth-provider or project configuration was changed by recovery."
+  ]
+}

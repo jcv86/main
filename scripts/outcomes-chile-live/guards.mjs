@@ -1,12 +1,16 @@
-import { createHash, randomUUID } from 'node:crypto'
+import { createHash, randomUUID, X509Certificate } from 'node:crypto'
 import { execFileSync } from 'node:child_process'
-import { closeSync, constants, fchmodSync, fstatSync, fsyncSync, openSync, readFileSync, realpathSync, renameSync, unlinkSync, writeFileSync } from 'node:fs'
+import { chmodSync, closeSync, constants, existsSync, fchmodSync, fstatSync, fsyncSync, mkdtempSync, openSync, readFileSync, realpathSync, renameSync, rmSync, unlinkSync, writeFileSync } from 'node:fs'
 import { basename, dirname, join, resolve, sep } from 'node:path'
+import { homedir, tmpdir } from 'node:os'
 import { fileURLToPath } from 'node:url'
+import { isAuthApiError, isAuthSessionMissingError } from '@supabase/supabase-js'
 
 export const repository = resolve(dirname(fileURLToPath(import.meta.url)), '../..')
 export const PROJECT_REF = 'dcfrbwxbejtbcouionna'
 export const VERCEL_PROJECT_ID = 'prj_SvrOCS2CtFQunqirMeYidZRHZKpm'
+const MANAGED_CA_PATH = '/usr/local/share/ca-certificates/nebula-dns.crt'
+const MANAGED_CA_FINGERPRINT = 'c71b4d1e9d7775c538c688ab10cea9ce417d7312e89838f9d15ff73256cd7fc3'
 export const API_PATH = '/api/outcomes/chile'
 export const PAGE_PATH = '/despega/resultados-laborales'
 export const HTTP_DIAGNOSTIC_PATHS = [API_PATH, PAGE_PATH, '/api/health/live', '/api/health/ready', '/api/auth/pilot-status', '/api/auth/signout', '/auth/signin']
@@ -29,6 +33,104 @@ export function failureCode(error) {
 export function sdkData(result, code) {
   check(result && !result.error, code)
   return result.data
+}
+
+/** Auth v2.87 maps session_not_found to AuthSessionMissingError (400 without code). */
+export function sessionRevocationDiagnostic(error) {
+  if (!error) return { outcome: 'revoked', category: 'SUCCESS', status: null }
+  const status = Number.isInteger(error.status) && error.status >= 100 && error.status <= 599 ? error.status : null
+  if (isAuthSessionMissingError(error) || (isAuthApiError(error) && error.code === 'session_not_found')) {
+    return { outcome: 'already_absent', category: 'SESSION_ALREADY_ABSENT', status }
+  }
+  const category = isAuthApiError(error) && error.code === 'not_admin' ? 'ADMIN_PERMISSION_DENIED'
+    : isAuthApiError(error) && error.code === 'bad_jwt' ? 'INVALID_SESSION_TOKEN'
+      : status === 429 ? 'RATE_LIMITED' : status === null ? 'TRANSPORT_OR_UNEXPECTED_ERROR' : 'AUTH_REQUEST_FAILED'
+  return { outcome: 'failed', category, status }
+}
+
+/** Caller must verify the exact synthetic owner marker before entering this function. */
+export async function revokeThenRemove({ tokens, revoke, remove, onRevocation }) {
+  for (const token of tokens) {
+    let error
+    try {
+      const result = await revoke(token)
+      error = result && typeof result === 'object' && Object.hasOwn(result, 'error') ? result.error : new LiveFailure('INVALID_REVOCATION_RESPONSE')
+    } catch (failure) { error = failure }
+    onRevocation(sessionRevocationDiagnostic(error))
+  }
+  // Failed revocation stays in the report, but cannot strand an already-verified synthetic owner.
+  await remove()
+}
+
+/** Use the configured HTTP proxy explicitly; Playwright does not inherit Node's env-proxy fetch. */
+export function configuredBrowserProxy(environment = process.env) {
+  const secure = environment.HTTPS_PROXY || environment.https_proxy
+  const plain = environment.HTTP_PROXY || environment.http_proxy
+  const configured = secure || plain
+  if (!configured) {
+    check(environment.NODE_USE_ENV_PROXY !== 'true' && !environment.ALL_PROXY && !environment.all_proxy, 'BROWSER_CONFIGURED_HTTP_PROXY_REQUIRED')
+    return undefined
+  }
+  let proxy
+  try { proxy = new URL(configured) } catch { throw new LiveFailure('BROWSER_CONFIGURED_PROXY_INVALID') }
+  check(['http:', 'https:'].includes(proxy.protocol) && proxy.hostname && !proxy.username && !proxy.password
+    && proxy.pathname === '/' && !proxy.search && !proxy.hash, 'BROWSER_CONFIGURED_PROXY_INVALID')
+  return { server: proxy.origin }
+}
+
+/** Chromium >=146 supports a child-specific XDG database when no legacy NSS database exists. */
+export function createNssTrustDirectory({ certificatePath, fingerprint }) {
+  check(!existsSync(join(homedir(), '.pki', 'nssdb')), 'BROWSER_LEGACY_NSS_DATABASE_PRESENT')
+  check(typeof fingerprint === 'string' && /^[a-f0-9]{64}$/.test(fingerprint), 'BROWSER_CA_FINGERPRINT_REQUIRED')
+  let certificate
+  try { certificate = new X509Certificate(readFileSync(certificatePath)) } catch { throw new LiveFailure('BROWSER_PUBLIC_CA_UNREADABLE') }
+  check(certificate.ca && certificate.fingerprint256.replaceAll(':', '').toLowerCase() === fingerprint, 'BROWSER_CA_FINGERPRINT_MISMATCH')
+  check(Date.parse(certificate.validFrom) <= Date.now() && Date.parse(certificate.validTo) > Date.now(), 'BROWSER_CA_OUTSIDE_VALIDITY')
+  const root = mkdtempSync(join(tmpdir(), 'dtc-browser-trust-'))
+  chmodSync(root, 0o700)
+  writeFileSync(join(root, 'dtc-public-ca-only'), fingerprint, { mode: 0o600, flag: 'wx' })
+  let removed = false
+  const remove = () => {
+    if (removed) return
+    check(basename(root).startsWith('dtc-browser-trust-') && readFileSync(join(root, 'dtc-public-ca-only'), 'utf8') === fingerprint, 'BROWSER_TRUST_CLEANUP_MARKER_MISMATCH')
+    rmSync(root, { recursive: true, force: false })
+    check(!existsSync(root), 'BROWSER_TRUST_CLEANUP_FAILED')
+    removed = true
+  }
+  try {
+    const output = execFileSync('python3', [join(repository, 'scripts/outcomes-chile-live/nss-trust.py')], {
+      input: JSON.stringify({ root, certificatePath, fingerprint }), encoding: 'utf8', timeout: 15_000, stdio: ['pipe', 'pipe', 'pipe'],
+    })
+    const result = JSON.parse(output)
+    check(result.status === 'CREATED' && result.fingerprint === fingerprint && result.publicCertificatesImported === 1 && result.trust === 'C,,', 'BROWSER_TRUST_IMPORT_NOT_VERIFIED')
+    return { environment: { ...process.env, XDG_DATA_HOME: root }, fingerprint, remove, get removed() { return removed } }
+  } catch (error) {
+    remove()
+    if (error instanceof LiveFailure) throw error
+    throw new LiveFailure('BROWSER_NSS_TRUST_SETUP_FAILED')
+  }
+}
+
+/** Import only the existing, pinned managed CA already configured for Node. */
+export function managedBrowserTrust() {
+  if (!process.env.NODE_EXTRA_CA_CERTS) return undefined
+  check(process.env.NODE_EXTRA_CA_CERTS === MANAGED_CA_PATH, 'BROWSER_MANAGED_CA_PATH_NOT_ALLOWLISTED')
+  return createNssTrustDirectory({ certificatePath: MANAGED_CA_PATH, fingerprint: MANAGED_CA_FINGERPRINT })
+}
+
+/** Inspect errors only to choose a fixed category; never emit their messages, URLs, names or stacks. */
+export function browserFailureCategory(error) {
+  const message = typeof error?.message === 'string' ? error.message : ''
+  if (/Invalid cookie fields|cookie.*(?:too large|must be|expected)/i.test(message)) return 'COOKIE_INVALID'
+  if (/ERR_PROXY|ERR_TUNNEL|proxy.*(?:failed|unsupported|refused)/i.test(message)) return 'PROXY'
+  if (/ERR_NAME_NOT_RESOLVED|ENOTFOUND|EAI_AGAIN|getaddrinfo/i.test(message)) return 'DNS'
+  if (/ERR_NETWORK_ACCESS_DENIED|ERR_BLOCKED_BY_CLIENT|blockedbyclient|EACCES|EPERM|Operation not permitted/i.test(message)) return 'NETWORK_BLOCKED'
+  if (/ERR_CONNECTION_REFUSED|ECONNREFUSED/i.test(message)) return 'CONNECTION_REFUSED'
+  if (/ERR_CERT|certificate|\bTLS\b|\bSSL\b/i.test(message)) return 'TLS'
+  if (error?.name === 'TimeoutError' || /timed?\s*out/i.test(message)) return 'TIMEOUT'
+  if (/Target page, context or browser has been closed|browser has been closed/i.test(message)) return 'BROWSER_CLOSED'
+  if (/Executable doesn't exist|ENOENT/i.test(message)) return 'EXECUTABLE_MISSING'
+  return 'UNEXPECTED'
 }
 
 /** Record response structure only: arbitrary JSON keys can themselves contain personal data. */
@@ -114,7 +216,7 @@ export function validateConfig(input, now = Date.now()) {
     source: {
       commitSha,
       workingTreeDirty: Boolean(execFileSync('git', ['status', '--porcelain', '--untracked-files=normal'], { cwd: repository, encoding: 'utf8' }).trim()),
-      runnerSources: Object.fromEntries(['run.mjs', 'guards.mjs', 'browser.mjs'].map((name) => [name,
+      runnerSources: Object.fromEntries(['run.mjs', 'guards.mjs', 'browser.mjs', 'nss-trust.py'].map((name) => [name,
         createHash('sha256').update(readFileSync(resolve(repository, 'scripts/outcomes-chile-live', name))).digest('hex'),
       ])),
     },

@@ -8,7 +8,7 @@ import { createServerClient } from '@supabase/ssr'
 import {
   API_PATH, PAGE_PATH, OWNED_TABLES, CASCADE_TABLES, PROJECT_REF, VERCEL_PROJECT_ID, LiveFailure,
   atomicPrivateJson, check, chileDate, cooperativeCancellation, failureCode, httpDiagnostic, memoryCookies,
-  requestTracker, sameJson, sdkData, settledValues, validateConfig,
+  requestTracker, revokeThenRemove, sameJson, sdkData, settledValues, validateConfig,
 } from './guards.mjs'
 import { browserPreflight, runBrowserJourney } from './browser.mjs'
 
@@ -29,7 +29,7 @@ const startedAt = new Date().toISOString()
 const report = {
   scope: 'live-next-supabase-outcomes-chile', mode: execute ? 'execute' : 'preflight',
   runReference: runId,
-  verdict: 'NO_GO', startedAt, cases: [], httpDiagnostics: [], cleanup: { required: execute, completed: false },
+  verdict: 'NO_GO', startedAt, cases: [], httpDiagnostics: [], browserDiagnostics: [], cleanup: { required: execute, completed: false },
   limitations: [
     'Deployment identity is a recent operator-provided Vercel attestation, checked against local HEAD; the runner does not call Vercel management APIs.',
     'Synthetic password sessions are issued by real Supabase Auth. Google/LinkedIn OAuth and email delivery are outside this test.',
@@ -80,6 +80,10 @@ async function runCase(name, callback) {
 
 function recordHttpDiagnostic(diagnostic, transport = 'http') {
   report.httpDiagnostics.push({ case: activeCase, transport, ...diagnostic })
+}
+
+function recordBrowserDiagnostic(diagnostic) {
+  report.browserDiagnostics.push({ case: activeCase, ...diagnostic })
 }
 
 async function readInput() {
@@ -230,30 +234,42 @@ async function grantPilotThroughExistingRpc(owner) {
 }
 
 async function cleanup() {
-  const result = { required: true, completed: false, usersCreatedOrAttempted: users.length, usersDeleted: 0, usersAlreadyAbsent: 0, invitationsCreatedOrAttempted: invitations.length, invitationsDeleted: 0, ownedRowsRemaining: 0, cascadeRelationsVerified: CASCADE_TABLES, errors: [] }
+  const result = { required: true, completed: false, resourcesAbsent: false, usersCreatedOrAttempted: users.length, usersDeleted: 0, usersAlreadyAbsent: 0,
+    usersVerifiedAbsent: 0, ownersWithCascadesVerified: 0, invitationsCreatedOrAttempted: invitations.length, invitationsDeleted: 0, invitationsVerifiedAbsent: 0,
+    ownedRowsRemaining: 0, cascadeRelationsVerified: CASCADE_TABLES, revocations: [], errors: [] }
   for (const owner of users) {
     try {
       const found = await admin.auth.admin.getUserById(owner.id)
       if (found.error?.status === 404 && !found.data?.user) {
         result.usersAlreadyAbsent++
+        result.usersVerifiedAbsent++
         for (const table of CASCADE_TABLES) result.ownedRowsRemaining += await ownedCount(table, owner)
+        result.ownersWithCascadesVerified++
         continue
       }
       const user = sdkData(found, 'CLEANUP_USER_LOOKUP_FAILED')?.user
       check(user?.id === owner.id && user.email === owner.email && user.app_metadata?.dtc_live_run === runId && user.app_metadata.synthetic === true, 'CLEANUP_OWNER_MARKER_MISMATCH')
-      for (const token of owner.tokens) {
-        const revoked = await admin.auth.admin.signOut(token, 'global')
-        check(!revoked.error || [401, 403, 404].includes(revoked.error.status), 'CLEANUP_SESSION_REVOCATION_FAILED')
-      }
-      sdkData(await admin.auth.admin.deleteUser(owner.id), 'CLEANUP_USER_DELETE_FAILED')
-      const absent = await admin.auth.admin.getUserById(owner.id)
-      check(absent.error?.status === 404 && !absent.data?.user, 'CLEANUP_AUTH_USER_REMAINS')
-      result.usersDeleted++
-      for (const table of CASCADE_TABLES) result.ownedRowsRemaining += await ownedCount(table, owner)
-      if (owner.cookies.header()) {
-        const oldSession = await app(API_PATH, { owner })
-        check(oldSession.response.status === 401, 'DELETED_SYNTHETIC_SESSION_STILL_AUTHENTICATED')
-      }
+      await revokeThenRemove({
+        tokens: owner.tokens,
+        revoke: (token) => admin.auth.admin.signOut(token, 'global'),
+        onRevocation(diagnostic) {
+          result.revocations.push(diagnostic)
+          if (diagnostic.outcome === 'failed') result.errors.push('CLEANUP_SESSION_REVOCATION_FAILED')
+        },
+        async remove() {
+          sdkData(await admin.auth.admin.deleteUser(owner.id), 'CLEANUP_USER_DELETE_FAILED')
+          const absent = await admin.auth.admin.getUserById(owner.id)
+          check(absent.error?.status === 404 && !absent.data?.user, 'CLEANUP_AUTH_USER_REMAINS')
+          result.usersDeleted++
+          result.usersVerifiedAbsent++
+          for (const table of CASCADE_TABLES) result.ownedRowsRemaining += await ownedCount(table, owner)
+          result.ownersWithCascadesVerified++
+          if (owner.cookies.header()) {
+            const oldSession = await app(API_PATH, { owner })
+            check(oldSession.response.status === 401, 'DELETED_SYNTHETIC_SESSION_STILL_AUTHENTICATED')
+          }
+        },
+      })
     } catch (error) { result.errors.push(failureCode(error)) }
     finally { owner.password = ''; owner.tokens.clear(); owner.cookies.clear() }
   }
@@ -261,7 +277,7 @@ async function cleanup() {
     try {
       const found = await admin.from('pilot_invitations').select('id,token_hash,claimed_by_claim_id,claimed_by_user_id').eq('id', invitation.id).maybeSingle()
       const row = sdkData(found, 'CLEANUP_INVITATION_LOOKUP_FAILED')
-      if (!row) continue
+      if (!row) { result.invitationsVerifiedAbsent++; continue }
       check(row.token_hash === invitation.hash
         && (row.claimed_by_claim_id === null || row.claimed_by_claim_id === invitation.claimId)
         && (row.claimed_by_user_id === null || row.claimed_by_user_id === invitation.userId), 'CLEANUP_INVITATION_MARKER_MISMATCH')
@@ -273,9 +289,12 @@ async function cleanup() {
       sdkData(remaining, 'CLEANUP_INVITATION_CHECK_FAILED')
       check(remaining.count === 0, 'CLEANUP_INVITATION_REMAINS')
       result.invitationsDeleted++
+      result.invitationsVerifiedAbsent++
     } catch (error) { result.errors.push(failureCode(error)) }
   }
-  result.completed = result.errors.length === 0 && result.ownedRowsRemaining === 0
+  result.resourcesAbsent = result.usersVerifiedAbsent === users.length && result.ownersWithCascadesVerified === users.length
+    && result.invitationsVerifiedAbsent === invitations.length && result.ownedRowsRemaining === 0
+  result.completed = result.errors.length === 0 && result.resourcesAbsent
   return result
 }
 
@@ -322,7 +341,10 @@ try {
     check(Number.isInteger(capacity.count) && capacity.count <= 98, 'TWO_SYNTHETIC_PILOT_PLACES_REQUIRED')
     return { outcomesRelations: OWNED_TABLES.length, previewDatabaseReady: true, pilotCapacityAvailable: true }
   })
-  await runCase('browser-tooling-preflight', async () => browserPreflight(config.browser))
+  await runCase('browser-tooling-preflight', async () => browserPreflight(config.browser, {
+    target: config.target, supabaseOrigin: config.supabase.url, vercelProtectionBypass: config.vercelProtectionBypass, vercelProtectionCookies: config.vercelProtectionCookies,
+    requests, cancellation, onHttpDiagnostic: (diagnostic) => recordHttpDiagnostic(diagnostic, 'browser'), onBrowserDiagnostic: recordBrowserDiagnostic,
+  }))
   if (!execute) {
     report.verdict = 'CONDITIONAL_GO'
     report.conditions = ['Live synthetic writes, two-owner isolation, browser persistence and cleanup still require --execute.']
@@ -433,6 +455,7 @@ try {
       }
       const browser = await runBrowserJourney({ config: browserConfig, a, b, getSummary, post, cancellation, requests,
         onHttpDiagnostic: (diagnostic) => recordHttpDiagnostic(diagnostic, 'browser'),
+        onBrowserDiagnostic: recordBrowserDiagnostic,
       })
       report.browser = browser
       return { browserCases: browser.cases.length, screenshots: browser.screenshots.length, apiMocks: 0 }
