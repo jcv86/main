@@ -18,6 +18,7 @@ on:
       - 'scripts/test-chiletrabajos.mjs'
       - 'scripts/test-opportunity-*.mjs'
       - 'scripts/test-a4-qa-access.mjs'
+      - 'scripts/test-a4-profile-availability.mjs'
       - 'scripts/test-employer-*.mjs'
       - 'scripts/smoke-employer-sources.mjs'
       - 'scripts/fixtures/employers/**'
@@ -53,6 +54,8 @@ jobs:
         run: pnpm run test:a4-employers
       - name: Explicit A4 access and truthful journey regressions
         run: pnpm run test:a4-qa-access
+      - name: Missing profile evidence does not produce readiness scores
+        run: pnpm run test:a4-profile-availability
       - name: TypeScript full-repository check
         run: pnpm exec tsc --noEmit
 

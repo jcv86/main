@@ -358,7 +358,7 @@ async function getCoachingHistory(userId: string): Promise<DTCDocument[]> {
  * Calculate recommended focus areas based on profile
  */
 function calculateRecommendedFocus(profile: LiveUserProfile | null): string[] {
-  if (!profile) return ['Completar perfil inicial']
+  if (!profile) return ['Revisar tu perfil y la evidencia disponible']
 
   const focus: string[] = []
 

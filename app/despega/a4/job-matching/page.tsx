@@ -66,7 +66,18 @@ export default async function JobMatchingPage() {
               </div>
             </CardContent>
           </Card>
-        ) : null}
+        ) : (
+          <Card className="border-border bg-card shadow-sm">
+            <CardContent className="p-5 sm:p-6">
+              <p className="text-sm font-semibold text-foreground">
+                Tu contexto de búsqueda aún no está disponible
+              </p>
+              <p className="mt-1 text-sm leading-relaxed text-muted-foreground">
+                Puedes buscar y revisar ofertas con los filtros que elijas.
+              </p>
+            </CardContent>
+          </Card>
+        )}
         <OpportunitySearchExperience
           seedRole={seedRole}
           profileEvidence={liveProfile ? {

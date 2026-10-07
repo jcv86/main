@@ -361,9 +361,8 @@ export default async function RadarEstrategicoPage() {
               </>
             ) : (
               <div className="rounded-xl border border-white/10 bg-muted/30 p-5 text-sm leading-relaxed text-muted-foreground">
-                Todavía no hay suficiente evidencia consolidada para construir tu perfil de acción.
-                Puedes seguir usando el Radar y completar entregables de A1–A3; el perfil se irá
-                enriqueciendo sin bloquearte.
+                Tu perfil de acción no está disponible todavía. Puedes seguir usando el Radar
+                y revisar tus entregables de A1–A3.
               </div>
             )}
           </CardContent>

@@ -42,6 +42,7 @@
     "test:a4-opportunities": "node --import tsx scripts/test-chiletrabajos.mjs && node --import tsx scripts/test-opportunity-matching.mjs && node --import tsx scripts/test-opportunity-refresh.mjs",
     "test:a4-opportunity-db": "node --import tsx scripts/test-opportunity-refresh-db.mjs",
     "test:a4-qa-access": "node --import tsx scripts/test-a4-qa-access.mjs",
+    "test:a4-profile-availability": "node --import tsx scripts/test-a4-profile-availability.mjs",
     "test:getonboard": "node --import tsx scripts/test-getonboard.mjs && node --import tsx scripts/test-getonboard-routes.mjs",
     "test:a4-employers": "node --import tsx scripts/test-employer-sources.mjs && node --import tsx scripts/test-employer-index.mjs && node --import tsx scripts/test-employer-refresh.mjs",
     "smoke:a4-employers": "node --import tsx scripts/smoke-employer-sources.mjs --live"
