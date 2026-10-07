@@ -3,6 +3,7 @@ import { normalizeEmployerJob } from '../lib/opportunities/sources/employer-norm
 import { EMPLOYER_BOARDS } from '../lib/opportunities/sources/employer-registry.ts'
 import {
   invalidateOpportunityVerifications,
+  OpportunityPersistenceError,
   OPPORTUNITY_FRESHNESS_MS,
   readVerifiedOpportunities,
   reconcileEmployerSnapshot,
@@ -381,6 +382,31 @@ test('read freshness and expiry checks prevent legacy future and expired rows fr
   assert.deepEqual(db.tables[TABLE], before)
 })
 
+test('catalog reads project matching fields without provider payloads or write bookkeeping', async () => {
+  const input = rowOf(normalized(fintual), {
+    source_payload: { synthetic: 'payload not needed by catalog or matching' },
+    id: 'synthetic-internal-row-id',
+    description: 'Oferta sintética de QA: evaluar riesgo y preparar informes de crédito.',
+  })
+  const db = memoryDb([input])
+  const before = structuredClone(db.tables[TABLE])
+  const [result] = await readVerifiedOpportunities(db, 100, { now: NOW })
+  const columns = db.calls[0].columns.split(',')
+  assert.ok(!columns.includes('*') && !columns.includes('source_payload'))
+  assert.equal(Object.hasOwn(result, 'source_payload'), false)
+  assert.equal(Object.hasOwn(result, 'updated_at'), false)
+  assert.equal(Object.hasOwn(result, 'id'), false)
+  for (const field of ['source', 'source_id', 'original_url', 'title', 'company', 'published_at', 'expires_at', 'verification_status', 'last_verified_at', 'description', 'requirements', 'skills']) {
+    assert.deepEqual(result[field], input[field], field + ' must preserve the public/matching value')
+  }
+  assert.equal(result.region, 'Metropolitana')
+  assert.equal(result.category_key, 'risk')
+  assert.equal(result.work_mode, 'hybrid')
+  assert.equal(filterOpportunities([result], { targetRoles: ['Analista de crédito'], locations: ['Metropolitana'], workModes: ['hybrid'] }).length, 1)
+  assert.deepEqual(db.tables[TABLE], before)
+  assert.equal(db.mutations.length, 0)
+})
+
 test('restricted verification maps to the database unknown state and retains historical evidence', async () => {
   const job = normalized(fintual)
   for (const viaUpsert of [false, true]) {
@@ -481,9 +507,10 @@ test('pre-cancelled writes and cancellation after reconciliation read leave the 
   ]) {
     const db = memoryDb([rowOf(job)])
     const before = structuredClone(db.tables[TABLE])
-    await assert.rejects(action(db), /Aborted/)
+    await assert.rejects(action(db), { name: 'AbortError' })
     assert.deepEqual(db.tables[TABLE], before)
     assert.equal(db.mutations.length, 0)
+    assert.equal(db.calls.length, 0, 'Pre-cancelled operations must not reach the database')
   }
   const duringRead = new AbortController()
   const db = memoryDb([rowOf(job)], { afterSelect() { duringRead.abort() } })
@@ -499,9 +526,43 @@ test('database read or update errors propagate without falsely reporting withdra
   for (const failOperation of ['select', 'update']) {
     const db = memoryDb([rowOf(job)], { failOperation })
     const before = structuredClone(db.tables[TABLE])
-    await assert.rejects(reconcileEmployerSnapshot(db, snapshot(fintual), { now: NOW }), /Synthetic database failure/)
+    await assert.rejects(reconcileEmployerSnapshot(db, snapshot(fintual), { now: NOW }), error => {
+      if (failOperation === 'select') {
+        assert.equal(error instanceof OpportunityPersistenceError, false, 'A failed read confirms no persistence attempt')
+        assert.equal(error.code, 'XX000')
+      } else {
+        assert.ok(error instanceof OpportunityPersistenceError)
+        assert.deepEqual(error.confirmed, { upserted: 0, invalidated: 0, rejected: 0 })
+        assert.ok(Object.isFrozen(error.confirmed))
+        assert.equal(error.message, 'Opportunity persistence did not complete')
+        assert.equal(Object.hasOwn(error, 'cause'), false)
+        assert.equal(JSON.stringify(error).includes('Synthetic database failure'), false)
+      }
+      return true
+    })
     assert.deepEqual(db.tables[TABLE], before)
     assert.equal(db.mutations.length, 0)
+  }
+})
+
+test('cancellation at a write boundary reports zero confirmed changes and does not proceed to another write', async () => {
+  const job = normalized(fintual)
+  for (const invalidate of [false, true]) {
+    const controller = new AbortController()
+    const db = memoryDb([rowOf(job)], { beforeCommit: () => controller.abort() })
+    const before = structuredClone(db.tables[TABLE])
+    const action = invalidate
+      ? invalidateOpportunityVerifications(db, job.source, [{ sourceId: job.sourceId, verificationStatus: 'stale' }], { now: NOW, signal: controller.signal })
+      : upsertVerifiedOpportunities(db, [job], { now: NOW, signal: controller.signal })
+    await assert.rejects(action, error => {
+      assert.ok(error instanceof OpportunityPersistenceError)
+      assert.deepEqual(error.confirmed, { upserted: 0, invalidated: 0, rejected: 0 })
+      assert.equal(Object.hasOwn(error, 'cause'), false)
+      return true
+    })
+    assert.deepEqual(db.tables[TABLE], before)
+    assert.equal(db.mutations.length, 0)
+    assert.equal(db.calls.length, 1)
   }
 })
 
@@ -525,6 +586,7 @@ async function runCron(db, employers, leaseOverrides = {}) {
       complete: async (success, summary) => completed.push({ success, summary }),
       ...leaseOverrides,
     }),
+    readChileCandidates: async () => [],
     fetchChileBatch: async () => primaryBatch(),
     fetchGetOnBoard: async () => { assert.fail('Slot 0 must not query Get on Board') },
     fetchEmployerBatch: async () => employers,

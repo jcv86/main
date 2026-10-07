@@ -17,6 +17,7 @@ on:
       - 'scripts/check-a4-opportunity-engine.ts'
       - 'scripts/test-chiletrabajos.mjs'
       - 'scripts/test-opportunity-*.mjs'
+      - 'scripts/test-primary-refresh-state.mjs'
       - 'scripts/test-a4-qa-access.mjs'
       - 'scripts/test-a4-profile-availability.mjs'
       - 'scripts/test-employer-*.mjs'

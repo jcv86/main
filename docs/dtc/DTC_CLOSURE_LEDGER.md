@@ -1,35 +1,35 @@
 # DTC closure ledger — canonical
 
-Last grounded: 2026-09-20 UTC
+Last full product closure: 2026-09-20 UTC. Latest scoped A4 release evidence: 2026-10-07 UTC.
 
 This is the **single canonical closure ledger** for Despega Tu Carrera. Historical detail remains available in Git history; this file keeps the current release state and only the evidence that still matters for closure decisions.
 
 A status is `verified` only when there is observable evidence. Allowed states: `in_progress`, `verified`, `deferred_by_user`. A green CI run is evidence, but it is not treated as a substitute for a live check when the acceptance criterion explicitly requires one.
 
-## Current release identity
+## Last verified production checkpoint
 
 - Repository: `jcv86/main`
 - Canonical branch: `main`
-- Current application-code baseline: PR #181 merge `f0751cc4d9da0e5ae86f815b5c2e46acb57edf9b`
-- Current production deployment: `dpl_3R9VshmcqouMMB9DH15QdPpraP33` (READY)
+- Verified application-code baseline before the new scraper improvement: PR #238 merge `79ec6b6111a501d5feef8ee71663121efeb4d517`, exact reviewed tree `a632e3e5f5fb84eac126bf340e400cff40b70d86`
+- Verified production deployment: `dpl_46FMoqfXDGfcgnSCGmunbQYx3H3m` (READY, 2026-10-07 21:44:04 UTC)
 - Production domains: `despegatucarrera.com`, `www.despegatucarrera.com`
 - Supabase production project: DTCFINAL `dcfrbwxbejtbcouionna`
-- Production smoke after the final public hotfix: FAQ 200 with access-aware Vera copy, `/api/health/live` 200 `ok`, `/api/health/ready` 200 `ready`, `/demo` 404, and no Vercel runtime error clusters in the final one-hour scan.
+- Latest scoped production evidence: PR #238 final CI 14/14; seven anonymous checks pass; the authorized pilot opened normal A4 landing, report and job matching, whose Metropolitana draft-filter catalog shows 32 opportunities. The unavailable auxiliary profile is explicit. Two sanitized `schema_unavailable` runtime diagnostics were observed after this release; no zero-error claim is made. Historical full-product evidence below retains its original scope and dates. The improvement PR records the subsequent publication checkpoint.
 
 ## Closure matrix
 
 | ID | User outcome | Current evidence | Status | Release blocker |
 |---|---|---|---|---|
-| DTC-C01 | Production and canonical code contain the approved release | #176 and #177 merged; final Production deployment READY and serves the #177 Vera hotfix on the public domain | `verified` | yes |
+| DTC-C01 | Production and canonical code contain the approved release | Latest verified checkpoint: PR #238 merged after owner authorization; main `79ec6b6` has the exact reviewed tree and the canonical domain resolves to its READY deployment | `verified` | yes |
 | DTC-C02 | Signed-in users can save and resume C1/A1 | Approved authenticated production QA previously proved C1/A1 save-refresh-resume, all 28 A1 answers persisted, C2 saved 8 answers, integral report rendered and transition reached A2 | `verified` | yes |
 | DTC-C03 | Pilot invitation / returning OAuth continuity remains reliable | Live production evidence on 2026-09-20 verified scanner-safe GET, single-use claim semantics, Google OAuth on the exact current release, returning access without a new invitation, logout invalidation, browser-Back unable to restore protected content, stale-OAuth-state recovery, clean Google re-entry and canonical journey resume | `verified` | yes |
 | DTC-C04 | Browser/server data access is least-privilege and owner-bound | DTCFINAL now has 369 public tables with **0 RLS-disabled tables**; 20/20 public views use `security_invoker=true`; 0 `SECURITY DEFINER` functions are executable by `anon`; only intentional `complete_a2_mission(uuid,jsonb)` is executable by `authenticated`, checks `auth.uid()`, and has empty `search_path`; OAuth creation trigger remains active | `verified` | yes |
-| DTC-C05 | Production build is reproducible | #177 passed Production public QA, TypeScript and full build; exact Preview READY; final Production build completed successfully and is READY | `verified` | yes |
+| DTC-C05 | Production build is reproducible | PR #238 final candidate passed TypeScript, full build, 25 access + 14 profile regressions and all 14 workflows; its exact-tree merge completed the production build and is READY | `verified` | yes |
 | DTC-C06 | Users see one coherent DTC product, not test/internal surfaces | Route-authentication contracts, laboratory-bypass retirement and public credibility gates pass; `/demo` is 404 in final production; sitemap/FAQ/public CTAs expose the intended product surfaces | `verified` | yes |
 | DTC-C07 | Core journey is usable on desktop/mobile with recovery states | Authenticated production QA exists for C1/A1/A2/A3/A4 evidence paths; isolated browser gates use real Auth/JWT/PostgREST/RLS and exact 390×844 plus desktop coverage; cross-owner access is denied; Spanish 404 recovery is live | `verified` | yes |
 | DTC-C08 | Scores, progress, limitations and next action are truthful | Report evidence contract passes 103 cases; A1 professional report contract passes populated/partial/invalid/empty/tied/legacy/provenance cases; A2/A3/A4 continuity and limitations are covered by evidence-aware gates | `verified` | yes |
 | DTC-C09 | Public launch surfaces are credible and crawlable | #176/#177 cleaned unsupported pricing, ratings, guarantees, institutional claims, SLA, Schema.org, FAQ, manifest, sitemap and crawler/LLM context; live FAQ canonical + FAQPage JSON-LD verified; empty legacy library is noindex and absent from sitemap | `verified` | yes |
-| DTC-C10 | Operators can diagnose failures without leaking assessment data | `x-dtc-request-id` browser→middleware→API correlation is tested; controlled failure logs are redacted; live/ready health endpoints work; final runtime error scan is clean | `verified` | no |
+| DTC-C10 | Operators can diagnose failures without leaking assessment data | `x-dtc-request-id` browser→middleware→API correlation is tested; controlled failure logs are redacted; live/ready health endpoints work; earlier closure evidence recorded a clean runtime scan; the current scoped A4 checkpoint reports two sanitized auxiliary-profile availability diagnostics | `verified` | no |
 | DTC-C11 | A2 is coherent Spanish-language work across 90 days | 90 missions reviewed and covered by focused Spanish/content contracts including unsupported-claim rejection | `verified` | yes |
 | DTC-C12 | Signed-in users can review real A2/A3/A4 evidence and one A1–A4 report | Authenticated production evidence shows A2 90/90, A3 10/10 with 95/100 average, truthful empty A4, coherent integral report/PDF action and zero cross-user documents | `verified` | yes |
 | DTC-C13 | Despega Cerebral is the professional interpretive core | A1 dossier/report contracts, DISC correction, C1/C2 context integration, methodology/limitations, print/mobile browser gate and integral-report consistency all pass; later public-only releases did not change the private report path | `verified` | yes |
@@ -93,4 +93,23 @@ A practical **9.7** now has its product-flow blocker condition satisfied: DTC-C0
 
 | ID | User outcome | Evidence and acceptance contract | Status |
 |---|---|---|---|
-| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | `docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md`; implemented from main `7ce45b5`, full build and focused regressions pass. Read-only public smoke: 187 postings, 47 accepted; Coderio's 3 missing descriptions are reported as partial. Production activation and scheduled ingestion evidence remain pending. | `in_progress` |
+| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | `docs/dtc/DTC_MULTISOURCE_OPPORTUNITY_COLLECTOR.md`; PR #236 is published. Native slot `165871` completed successfully: 32 upserts, no invalidations/rejections, Checkr 14 and APPLY Digital 6 accepted and persisted. Inventory has 110 rows, 44 verified within 24 hours. The updated catalog shows 32 Metropolitana opportunities; PR #238 normal entry and report are verified in the authorized session. Four other employers' production cycles are unverified. | `in_progress` |
+| DTC-A4-A01 | An explicitly authorized pilot can open A4 consistently while keeping real A1–A3 progress | Existing temporary entitlement renewed for 30 days, without completion or assessment writes. PR #238 final candidate `c63e058` passed 25 permission + 14 availability regressions, full build and 14 CI workflows; merge `79ec6b6` is production READY. Authorized normal entry, report and catalog were verified at 21:45–21:46 UTC. Real A1–A3 progress and saved search remain unchanged; unavailable profile data is explicit. | `verified` |
+| DTC-A4-S02 | Freshness maintenance, fair bounded employer coverage and truthful per-source persistence | Current improvement adds up to three known Chiletrabajos candidates within the existing 12 probes, durable primary cooldowns, fair rotation among received eligible employer jobs under the 50-return cap, confirmed-write counters and a visible catalog entry. Final local regressions 273/273, TypeScript, critical contracts and independent review pass; the improvement PR records build/CI/publication. Native effects remain unobserved. See the collector record and improvement PR for final validation. | `in_progress` |
+
+### A4 publication checkpoint
+
+- **Initial collector publication:** after user authorization on 2026-10-07, PR #236 merged and deployment `dpl_FFvpPvdufqrMyjUB3uWPahJbE2Vd` served the exact reviewed application tree `723643040e2fcbf7ed1d095d88c83e5b25c130c7` on the canonical domain. The later verified PR #238 deployment is identified above.
+- **Observed catalog baseline:** 78 Chiletrabajos rows, 12 verified within 24 hours, no Lever/Greenhouse rows before the new scheduled run. The 47 accepted public-smoke jobs were not inserted by that diagnostic.
+- **Native scheduler and execution:** the Vercel Cron Jobs UI confirms Enabled. Slot `165871` started 2026-10-07 21:15:00.909321 UTC and completed 21:15:07.636 UTC with `success/ok`: 32 upserts, 0 invalidations/rejections. Checkr accepted 14/14 and APPLY Digital 6/23, excluding 17; both snapshots were complete, without cooldown or failure codes. A 21:16:08 UTC read confirmed 90 Chiletrabajos (24 fresh), 14 Greenhouse (all fresh), 6 Lever (all fresh), 0 Get on Board: 110 total, 44 fresh.
+- **Authentication/access evidence:** public HTTPS navigation, sign-out and user-selected returning Google login were observed. The owner explicitly requested A4 for the existing pilot; its server-only temporary entitlement was renewed until 2026-11-06 21:00:13 UTC. After PR #238, normal A4 landing, report and job search open; the draft-filter catalog shows 32 current Metropolitana opportunities. The saved-search no-matches state was preserved. No answers or progress were changed to grant access. PR #238 is published and the landing/report/navigation consistency is verified in the authorized production session.
+- **Remaining evidence and owners:** scheduled execution and persistence are now verified. PR #238 exact-commit publication, authenticated normal entry/report and the updated catalog are verified; all 14 workflows on its final reviewed SHA passed. The new bounded-maintenance improvement still needs its own publication and native-effect evidence. The four remaining employers' native cycles are not yet observed. SQL counts alone do not close the user-facing acceptance criteria.
+- **Rollback:** `dpl_HGrjKkC4HxGeYj8AZ915ZWMdHCTD`, main `7ce45b5c77f844081a97a3f023fbc346ee9350e7`; no database migration or new environment variable is required by this release.
+- **Scoped verdict:** `CONDITIONAL_GO` for the publication checkpoint; DTC-A4-S01 remains `in_progress`. This update does not re-score or re-certify the rest of the product.
+
+
+### Bounded scraper improvement checkpoint
+
+Development continues from the verified PR #238 deployment after the owner's request. The existing cron, lease, 12-probe/35-second primary budget, 18-second employer budget and 50-second global budget are preserved. Read-only maintenance selection does not advance freshness. Primary Retry-After state and confirmed per-source persistence counters use the existing execution-summary field. The normal landing gains an accessible catalog entry; the actual component passed isolated mobile/desktop overflow, focus, target-size and keyboard-activation checks. The improvement PR is the final exact-commit CI/publication record. Until its next natural executions are observed, DTC-A4-S02 remains in_progress.
+
+Operational fallback for this improvement is the verified PR #238 deployment `dpl_46FMoqfXDGfcgnSCGmunbQYx3H3m` / main `79ec6b6111a501d5feef8ee71663121efeb4d517`. Existing rows and additive execution-summary metadata remain readable by that application. This work does not re-score or re-certify unrelated product areas.

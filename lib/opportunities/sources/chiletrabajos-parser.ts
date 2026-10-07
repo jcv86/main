@@ -21,6 +21,7 @@ export class ChileTrabajosProviderError extends Error {
     public readonly kind: 'invalid_request' | 'parse_failed' | 'unavailable',
     public readonly code: string,
     message: string,
+    public readonly retryAfterUntil?: string,
   ) {
     super(message)
     this.name = 'ChileTrabajosProviderError'

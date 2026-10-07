@@ -10,6 +10,8 @@ export type AdminDbClient = { from: (table: string) => any }
 export type VerifiedOpportunityInput = ChileTrabajosPublicJob | CanonicalOpportunity
 export const OPPORTUNITY_FRESHNESS_MS = 24 * 60 * 60 * 1000
 const TABLE = 'a4_verified_opportunities'
+// Raw provider payloads and write bookkeeping are not needed by catalog/matching readers.
+const READ_COLUMNS = 'source,source_id,original_url,title,normalized_title,category_key,category_label,company,location,region,work_mode,published_at,expires_at,verification_status,last_verified_at,description,requirements,skills'
 
 export interface VerifiedOpportunityRow {
   source: OpportunitySource
@@ -36,6 +38,25 @@ export interface VerifiedOpportunityRow {
 export interface IndexWriteOptions {
   now?: Date
   signal?: AbortSignal
+  /** Deltas confirmed before a later statement or its deadline can fail. */
+  onConfirmed?: (counts: Readonly<OpportunityPersistenceCounts>) => void
+}
+
+export interface OpportunityPersistenceCounts {
+  upserted: number
+  invalidated: number
+  rejected: number
+}
+
+/** A later statement failure must not erase earlier confirmed database changes. */
+export class OpportunityPersistenceError extends Error {
+  readonly confirmed: Readonly<OpportunityPersistenceCounts>
+
+  constructor(confirmed: OpportunityPersistenceCounts) {
+    super('Opportunity persistence did not complete')
+    this.name = 'OpportunityPersistenceError'
+    this.confirmed = Object.freeze({ ...confirmed })
+  }
 }
 
 export interface OpportunityVerificationFailure {
@@ -107,24 +128,32 @@ export async function invalidateOpportunityVerifications(
   options: IndexWriteOptions = {},
 ): Promise<number> {
   if (!failures.length) return 0
+  if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
   const now = (options.now ?? new Date()).toISOString()
   const byId = new Map(failures.map((failure) => [failure.sourceId, failure]))
   let affected = 0
 
-  for (const status of ['stale', 'unavailable', 'unknown', 'verified_restricted'] as const) {
-    const ids = [...byId.values()]
-      .filter((failure) => failure.verificationStatus === status && failure.sourceId)
-      .map((failure) => failure.sourceId)
-    if (!ids.length) continue
-    const query = supabase.from(TABLE)
-      // The existing catalog constraint has four states; restricted access is
-      // insufficient verification and must never make a write violate it.
-      .update({ verification_status: status === 'verified_restricted' ? 'unknown' : status, updated_at: now }, { count: 'exact' })
-      .eq('source', source)
-      .in('source_id', ids)
-    const { error, count } = await queryWithSignal(query, options.signal)
-    if (error) throw error
-    affected += typeof count === 'number' ? count : 0
+  try {
+    for (const status of ['stale', 'unavailable', 'unknown', 'verified_restricted'] as const) {
+      const ids = [...byId.values()]
+        .filter((failure) => failure.verificationStatus === status && failure.sourceId)
+        .map((failure) => failure.sourceId)
+      if (!ids.length) continue
+      if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+      const query = supabase.from(TABLE)
+        // The existing catalog constraint has four states; restricted access is
+        // insufficient verification and must never make a write violate it.
+        .update({ verification_status: status === 'verified_restricted' ? 'unknown' : status, updated_at: now }, { count: 'exact' })
+        .eq('source', source)
+        .in('source_id', ids)
+      const { error, count } = await queryWithSignal(query, options.signal)
+      if (error) throw error
+      const confirmed = typeof count === 'number' ? count : 0
+      affected += confirmed
+      options.onConfirmed?.({ upserted: 0, invalidated: confirmed, rejected: 0 })
+    }
+  } catch {
+    throw new OpportunityPersistenceError({ upserted: 0, invalidated: affected, rejected: 0 })
   }
   return affected
 }
@@ -182,7 +211,8 @@ export async function upsertVerifiedOpportunities(
   supabase: AdminDbClient,
   jobs: VerifiedOpportunityInput[],
   options: IndexWriteOptions = {},
-): Promise<{ upserted: number; invalidated: number; rejected: number }> {
+): Promise<OpportunityPersistenceCounts> {
+  if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
   const now = options.now ?? new Date()
   const nowIso = now.toISOString()
   const rows: Array<Record<string, unknown>> = []
@@ -251,13 +281,22 @@ export async function upsertVerifiedOpportunities(
     .map((row) => [String(row.source) + ':' + String(row.source_id), row])).values()]
 
   let invalidated = 0
-  for (const [source, items] of failures) {
-    invalidated += await invalidateOpportunityVerifications(supabase, source, items, options)
-  }
-  if (uniqueRows.length) {
-    const query = supabase.from(TABLE).upsert(uniqueRows, { onConflict: 'source,source_id' })
-    const { error } = await queryWithSignal(query, options.signal)
-    if (error) throw error
+  if (rejected) options.onConfirmed?.({ upserted: 0, invalidated: 0, rejected })
+  try {
+    for (const [source, items] of failures) {
+      invalidated += await invalidateOpportunityVerifications(supabase, source, items, options)
+    }
+    if (uniqueRows.length) {
+      if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+      const query = supabase.from(TABLE).upsert(uniqueRows, { onConflict: 'source,source_id' })
+      const { error } = await queryWithSignal(query, options.signal)
+      if (error) throw error
+      options.onConfirmed?.({ upserted: uniqueRows.length, invalidated: 0, rejected: 0 })
+    }
+  } catch (error) {
+    // A failed source group has not yet been added to invalidated above.
+    const partial = error instanceof OpportunityPersistenceError ? error.confirmed.invalidated : 0
+    throw new OpportunityPersistenceError({ upserted: 0, invalidated: invalidated + partial, rejected })
   }
   return { upserted: uniqueRows.length, invalidated, rejected }
 }
@@ -272,7 +311,7 @@ export async function readVerifiedOpportunities(
   const cutoff = new Date(now.getTime() - OPPORTUNITY_FRESHNESS_MS).toISOString()
   const safeLimit = Math.max(1, Math.min(1000, Number.isFinite(limit) ? Math.floor(limit) : 100))
   const query = supabase.from(TABLE)
-    .select('*')
+    .select(READ_COLUMNS)
     .eq('verification_status', 'verified_active')
     .gte('last_verified_at', cutoff)
     .lte('last_verified_at', now.toISOString())
