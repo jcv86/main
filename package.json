@@ -45,6 +45,7 @@
     "test:a4-profile-availability": "node --import tsx scripts/test-a4-profile-availability.mjs",
     "test:a4-closure": "node --import tsx scripts/test-a4-journey-context.mjs && node --import tsx scripts/test-a4-search-intents.mjs && node --import tsx scripts/test-opportunity-search-experience.mjs",
     "test:a4-catalog-quality": "node --import tsx scripts/test-opportunity-evidence.mjs && node --import tsx scripts/test-opportunity-diagnostics.mjs && node --import tsx scripts/test-opportunity-result-detail.mjs",
+    "test:a4-personal-orientation": "node --import tsx scripts/test-opportunity-personal-context.mjs && node --import tsx scripts/test-opportunity-personal-orientation.mjs && node --import tsx scripts/test-opportunity-personal-detail.mjs",
     "test:getonboard": "node --import tsx scripts/test-getonboard.mjs && node --import tsx scripts/test-getonboard-routes.mjs",
     "test:a4-employers": "node --import tsx scripts/test-employer-sources.mjs && node --import tsx scripts/test-employer-index.mjs && node --import tsx scripts/test-employer-refresh.mjs",
     "smoke:a4-employers": "node --import tsx scripts/smoke-employer-sources.mjs --live"

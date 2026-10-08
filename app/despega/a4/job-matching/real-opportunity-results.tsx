@@ -4,12 +4,13 @@ import { useEffect, useRef, useState } from 'react'
 import { ExternalLink, MapPin, CalendarDays, SearchX, ChevronDown } from 'lucide-react'
 import Link from 'next/link'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import type { OpportunityProfileEvidence } from './opportunity-search-experience'
+import { PersonalContextStatus, PersonalOrientation } from './personal-orientation'
 import { Button } from '@/components/ui/button'
 import { OPPORTUNITY_SOURCE_LABELS, type OpportunitySource } from '@/lib/opportunities/types'
 import { opportunityFilterParams, type OpportunityFilters, type OpportunityView } from '@/lib/opportunities/search-query'
 import type { OpportunityMatch } from '@/lib/opportunities/matching'
 import type { OpportunityFieldEvidence } from '@/lib/opportunities/opportunity-evidence'
+import type { OpportunityPersonalOrientation, PersonalContextSummary } from '@/lib/opportunities/personal-orientation-types'
 
 interface Opportunity {
  sourceId: string
@@ -29,6 +30,7 @@ interface Opportunity {
  lastVerifiedAt?: string
  match?: OpportunityMatch
  fieldEvidence?: OpportunityFieldEvidence[]
+ orientation?: OpportunityPersonalOrientation
 }
 interface Payload {
  needs_intent: boolean
@@ -40,6 +42,7 @@ interface Payload {
  total_matching?: number
  scope?: { limit: number; limitReached: boolean }
  pagination?: { offset: number; next_offset: number | null; snapshot: string }
+ personal_context?: PersonalContextSummary
 }
 interface ResultError { message: string; status?: number; code?: string }
 const EMPTY_FILTERS: OpportunityFilters = { targetRoles: [], locations: [], workModes: [], breadth: 'related' }
@@ -154,7 +157,7 @@ export function PublishedOpportunityDetail({ job }: { job: Opportunity }) {
 }
 
 export function RealOpportunityResults({ view = 'saved', filters = EMPTY_FILTERS, refreshKey = 0, onExplore }: {
- view?: OpportunityView; filters?: OpportunityFilters; refreshKey?: number; profileEvidence?: OpportunityProfileEvidence | null; onExplore?: () => void
+ view?: OpportunityView; filters?: OpportunityFilters; refreshKey?: number; onExplore?: () => void
 }) {
  const [data, setData] = useState<Payload | null>(null)
  const [loading, setLoading] = useState(true)
@@ -209,7 +212,7 @@ export function RealOpportunityResults({ view = 'saved', filters = EMPTY_FILTERS
    if (failure.status === 401 || failure.status === 403) {
     setError(failure); setData(null)
    } else if (failure.code === 'inventory_changed') {
-    setNotice('Las ofertas se actualizaron. Volvimos a cargar la primera página con los mismos filtros.')
+    setNotice('Las ofertas o tu contexto de búsqueda cambiaron. Volvimos a cargar la primera página con los mismos filtros.')
     setRetry(value => value + 1)
    } else setMoreError('No pudimos cargar más ofertas. Las que ya abriste siguen disponibles; puedes reintentar.')
   } finally { if (generation.current === current && !pending.signal.aborted) setLoadingMore(false) }
@@ -229,10 +232,12 @@ export function RealOpportunityResults({ view = 'saved', filters = EMPTY_FILTERS
    {data.scope?.limitReached && <p className="text-xs text-muted-foreground">El catálogo consultado incluye hasta {data.scope.limit} ofertas verificadas recientes. Los conteos y filtros se aplican a ese conjunto.</p>}
    {notice && <p role="status" className="text-sm text-muted-foreground">{notice}</p>}
   </div>
+  <PersonalContextStatus context={data.personal_context} onRefresh={() => setRetry(value => value + 1)} />
   {data.opportunities.length === 0 ? <Card className="border-dashed border-border bg-card shadow-none"><CardContent className="flex flex-col items-center px-6 py-10 text-center"><SearchX aria-hidden="true" className="mb-4 h-6 w-6 text-muted-foreground" /><p className="font-semibold text-foreground">{data.inventory_status === 'empty' ? 'No hay ofertas verificadas disponibles en este momento' : view === 'saved' ? 'Tu búsqueda guardada no tiene coincidencias ahora' : 'No encontramos coincidencias con los filtros aplicados'}</p><p className="mt-2 max-w-lg text-sm text-muted-foreground">{data.inventory_status === 'empty' ? 'Vuelve a consultar más tarde. No necesitas cambiar tus filtros por este estado del catálogo.' : view === 'saved' ? 'Puedes explorar otras ofertas sin cambiar tu búsqueda guardada.' : 'Prueba otro cargo o quita un filtro y pulsa Ver ofertas. Solo incluimos una región o modalidad concreta cuando la fuente informa ese dato.'}</p>{view === 'saved' && onExplore && <Button type="button" variant="outline" className="mt-4 min-h-11" onClick={onExplore}>Explorar sin cambiar mi búsqueda</Button>}</CardContent></Card> : <div className="grid min-w-0 gap-4">{data.opportunities.map(job=><Card key={job.originalUrl} className="group min-w-0 overflow-hidden border-border bg-card shadow-sm transition-shadow hover:shadow-md"><CardHeader className="pb-3"><CardTitle className="break-words text-xl tracking-tight text-foreground">{job.title}</CardTitle><p className="mt-1 break-words text-sm font-medium text-muted-foreground">{job.company}</p></CardHeader><CardContent className="min-w-0 space-y-4">
    <div className="flex flex-wrap gap-x-5 gap-y-2 text-sm text-muted-foreground"><span className="flex min-w-0 items-start gap-1"><MapPin aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0"/><span className="break-words">{job.location?.trim() || 'Ubicación: No informada en esta ficha'}</span></span><span>{job.workMode ? WORK_MODE_LABELS[job.workMode] : 'Modalidad: No informada en esta ficha'}</span><PublishedDate value={job.publishedAt}/></div>
    <SourceDetails source={job.source} verifiedAt={job.lastVerifiedAt}/>
    <OpportunityMatchReasons match={job.match}/>
+   <PersonalOrientation orientation={job.orientation} title={job.title}/>
    <PublishedOpportunityDetail job={job}/>
    <Button asChild className="min-h-11 bg-[#3730a3] text-white hover:bg-[#312e81] hover:text-white"><a href={job.originalUrl} target="_blank" rel="noopener noreferrer">Ver oferta <span className="sr-only">original de {job.title} (abre otra pestaña)</span><ExternalLink aria-hidden="true" className="ml-2 h-4 w-4 shrink-0"/></a></Button>
   </CardContent></Card>)}</div>}

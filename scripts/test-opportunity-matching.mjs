@@ -7,6 +7,7 @@ import * as matching from '../lib/opportunities/matching.ts'
 import * as taxonomy from '../lib/opportunities/taxonomy.ts'
 import { planOpportunityQueries } from '../lib/opportunities/search-intent.ts'
 import * as searchQuery from '../lib/opportunities/search-query.ts'
+import * as personalOrientation from '../lib/opportunities/personal-orientation.ts'
 import { readVerifiedOpportunities, readVerifiedOpportunityInventory } from '../lib/opportunities/verified-index.ts'
 import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
@@ -308,7 +309,7 @@ test('clear English occupation families receive useful categories without substr
 // Execute the real route bodies with controlled boundaries. Any new provider dependency,
 // database mutation or second index read fails these fixtures instead of making a network call.
 function routeHarness(path, { user = { id: 'test-user' }, allowed = true, intent = null, rows = [], indexError = false } = {}) {
-  const calls = { admin: 0, index: 0, tables: [], predicates: [] }
+  const calls = { admin: 0, index: 0, personal: 0, tables: [], predicates: [] }
   const query = {
     select() { return query },
     eq(key, value) { calls.predicates.push([key, value]); return query },
@@ -334,6 +335,11 @@ function routeHarness(path, { user = { id: 'test-user' }, allowed = true, intent
     '@/lib/opportunities/matching': matching,
     '@/lib/opportunities/taxonomy': taxonomy,
     '@/lib/opportunities/search-query': searchQuery,
+    '@/lib/opportunities/personal-orientation': personalOrientation,
+    '@/lib/opportunities/personal-context': { loadOpportunityPersonalContext: async (userId) => {
+      calls.personal++; assert.equal(userId, user.id)
+      return { version: 1, status: 'empty', revision: 'synthetic-empty', sources: [], evidence: [] }
+    } },
     'node:crypto': { createHash },
     '@/lib/opportunities/verified-index': { readVerifiedOpportunities: async (_db, limit) => {
       calls.index++
@@ -369,6 +375,7 @@ test('both actual GET routes stop before database reads for unauthenticated user
     assert.equal(response.status, 401)
     assert.equal(route.calls.admin, 0)
     assert.equal(route.calls.index, 0)
+    assert.equal(route.calls.personal, 0)
   }
 })
 
@@ -378,6 +385,7 @@ test('both actual GET routes preserve the A4 access guard', async () => {
     const response = await route.GET(new Request('https://dtc.test/api'))
     assert.equal(response.status, 403)
     assert.equal(route.calls.index, 0)
+    assert.equal(route.calls.personal, 0)
     assert.deepEqual(route.calls.tables, [])
   }
 })

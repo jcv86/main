@@ -60,6 +60,8 @@ jobs:
         run: pnpm run test:a4-employers
       - name: Source evidence, reconciled diagnostics and complete opportunity details
         run: pnpm run test:a4-catalog-quality
+      - name: Private personal context, source-backed orientation and transparent guidance
+        run: pnpm run test:a4-personal-orientation
       - name: Explicit A4 access and truthful journey regressions
         run: pnpm run test:a4-qa-access
       - name: Missing profile evidence does not produce readiness scores
