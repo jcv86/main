@@ -58,6 +58,8 @@ jobs:
         run: pnpm run test:a4-opportunities
       - name: Employer sources, catalog and isolated failure regressions
         run: pnpm run test:a4-employers
+      - name: Source evidence, reconciled diagnostics and complete opportunity details
+        run: pnpm run test:a4-catalog-quality
       - name: Explicit A4 access and truthful journey regressions
         run: pnpm run test:a4-qa-access
       - name: Missing profile evidence does not produce readiness scores

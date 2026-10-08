@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import ts from 'typescript'
-import { GetOnBoardProviderError, isGetOnBoardJobUrl } from '../lib/opportunities/sources/getonboard.ts'
+import { GetOnBoardProviderError, isGetOnBoardJobUrl, normalizeGetOnBoardJob } from '../lib/opportunities/sources/getonboard.ts'
 import { upsertVerifiedOpportunities } from '../lib/opportunities/verified-index.ts'
 import { filterOpportunities } from '../lib/opportunities/matching.ts'
 
@@ -140,6 +140,26 @@ test('direct results retain public metadata and hybrid without exposing raw prov
   assert.equal(body.opportunities[0].privateUnexpectedField, undefined)
   assert.equal(body.diagnostics.privateUnexpectedField, undefined)
   assert.equal(route.calls.provider[0][2].signal, request.signal)
+})
+
+test('direct DTO never announces remote work from a contradictory or temporary source flag', async () => {
+  for (const [remote_modality, remote, description, expected] of [
+    ['fully_remote', false, 'This role is remote.', null],
+    ['no_remote', true, 'Modalidad presencial.', null],
+    ['temporarily_remote', true, 'This role is remote.', null],
+    ['hybrid', true, 'Modalidad híbrida.', 'hybrid'],
+  ]) {
+    const sourceId = 'analista-sintetico-modalidad'
+    const normalized = normalizeGetOnBoardJob({
+      id: sourceId, type: 'job', links: { public_url: 'https://www.getonbrd.com/jobs/' + sourceId },
+      attributes: { title: 'Analista', company_name: 'Empresa sintética', remote_modality, remote, description },
+    }, verifiedAt)
+    assert.ok(normalized)
+    const route = routeHarness(directPath, { response: batch([normalized]) })
+    const { body } = await readResponse(route)
+    assert.equal(body.opportunities[0].workMode, expected)
+    assert.equal(body.opportunities[0].remote, expected ? false : null)
+  }
 })
 
 test('public health requires no user or database and limits its sample to three jobs', async () => {

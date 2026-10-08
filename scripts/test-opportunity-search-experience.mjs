@@ -366,12 +366,11 @@ test('a page failure retains existing offers and retries that page without dupli
     ui.unmount()
   })
 })
-test('a declared goal never fabricates a skill gap or matches inside another title word', async () => {
+test('the client never invents match reasons or skill gaps from a profile goal', async () => {
   for (const title of ['Subdirector', 'Director de Operaciones']) await mockedFetch(async () => response(payload(['7000001'], { opportunities: [{ ...publicJob('7000001'), title }] })), async () => {
     const ui = renderer(COMPONENT, 'RealOpportunityResults', { view: 'explore', filters: BASE, profileEvidence: { targetRole: 'Director', strengths: [], missingProof: [], nextBestActions: [] } }); await ui.flush()
     assert.doesNotMatch(textOf(ui.tree), /Trabajar esta brecha|El cargo se alinea|Evidencia de tu perfil relacionada/)
-    if (title === 'Subdirector') assert.doesNotMatch(textOf(ui.tree), /Coincidencia de título/)
-    else assert.match(textOf(ui.tree), /Coincidencia de título con tu objetivo declarado: Director/)
+    assert.doesNotMatch(textOf(ui.tree), /Coincidencia de título|Por qué aparece|Coincidencia con tu búsqueda/)
     ui.unmount()
   })
 })

@@ -5,6 +5,7 @@ import { fetchEmployerBatch, type EmployerBoardResult } from './sources/employer
 import { upsertVerifiedOpportunities, invalidateOpportunityVerifications, reconcileEmployerSnapshot, OpportunityPersistenceError, type OpportunityPersistenceCounts, type IndexWriteOptions } from './verified-index'
 import { acquireOpportunityRefreshLease, type RefreshDbClient, type RefreshLease } from './refresh-lease'
 import { readChileTrabajosRefreshCandidates } from './refresh-candidates'
+import { opportunityContentCoverage, safeOpportunityContentCoverage, safeOpportunityReasonCounts } from './source-diagnostics'
 import {
   activePrimaryCooldowns,
   carryPrimaryCooldowns,
@@ -140,12 +141,17 @@ async function fetchPrimaryRefresh(
       const failures = batch.failedJobs.slice(0, CHILETRABAJOS_REFRESH_MAX_CANDIDATES)
       const failedIds = new Set(failures.map((failure) => failure.sourceId))
       const providerFailed = !['ok', 'no_matches'].includes(batch.diagnostics.outcome)
+      const jobs = batch.verifiedJobs.filter((job) => !failedIds.has(job.sourceId))
+        .slice(0, CHILETRABAJOS_REFRESH_MAX_CANDIDATES)
       return {
         failures,
-        jobs: batch.verifiedJobs.filter((job) => !failedIds.has(job.sourceId))
-          .slice(0, CHILETRABAJOS_REFRESH_MAX_CANDIDATES),
+        jobs,
         diagnostics: {
           ...diagnostics,
+          diagnostics_version: 1,
+          content_coverage: opportunityContentCoverage(jobs.map(job => ({
+            requirements: job.requirements ?? [], skills: job.skills ?? [], workMode: job.workMode,
+          }))),
           maintenance_selection_status: maintenanceFailed ? 'unavailable' : 'ok',
           ...(maintenanceFailed ? { maintenance_failure_code: 'maintenance_candidate_read_failed' } : {}),
           ...(retryAfterUntil && state.cooldowns[plan.source] ? { retryAfterUntil: state.cooldowns[plan.source] } : {}),
@@ -220,6 +226,15 @@ function employerBoardSummary(board: EmployerBoardResult): Record<string, unknow
     excluded: board.excluded,
     returned: board.returned,
     complete_snapshot: board.completeSnapshot,
+    ...(board.diagnosticsVersion === 1 ? {
+      diagnostics_version: 1,
+      considered: board.considered,
+      not_considered: board.notConsidered,
+      deferred_eligible: board.deferredEligible,
+      excluded_reasons: safeOpportunityReasonCounts(board.excludedReasons),
+      rejected_reasons: safeOpportunityReasonCounts(board.rejectedReasons),
+      content_coverage: safeOpportunityContentCoverage(board.contentCoverage),
+    } : {}),
     ...(board.retryAfterUntil ? { retry_after_until: board.retryAfterUntil } : {}),
     ...(board.failureCode ? { failure_code: board.failureCode } : {}),
   }
@@ -294,7 +309,11 @@ export async function runOpportunityRefreshCron(
     if (primary.failed) sourceErrors[plan.source] = primary.error ?? 'PROVIDER_UNAVAILABLE'
     if (employerState.error) sourceErrors.employers = employerState.error
     for (const board of boards) {
-      if (!employerBoardIsHealthy(board)) sourceErrors[board.boardKey] = 'PROVIDER_UNAVAILABLE'
+      if (!employerBoardIsHealthy(board)) {
+        const rejectedData = board.rejected > 0 && ['partial', 'parse_failed'].includes(board.outcome)
+          && Boolean(board.failureCode && Object.hasOwn(safeOpportunityReasonCounts(board.rejectedReasons), board.failureCode))
+        sourceErrors[board.boardKey] = rejectedData ? 'SOURCE_DATA_PARTIAL' : 'PROVIDER_UNAVAILABLE'
+      }
     }
     let persistenceFailed = false
     const availableSource = ['ok', 'no_matches'].includes(String(primary.diagnostics.outcome))

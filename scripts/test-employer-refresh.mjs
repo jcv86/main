@@ -305,6 +305,16 @@ await test('partial Get on Board normalization stays visible as partial even whe
   assert.equal(body.success, false)
 })
 
+await test('Chiletrabajos content coverage counts only returned verified records before persistence', async () => {
+  const db = memoryDb()
+  const { body } = await run(db)
+  assert.equal(body.diagnostics.diagnostics_version, 1)
+  assert.deepEqual(body.diagnostics.content_coverage, {
+    measured: 'returned', total: 1, with_requirements: 0, with_skills: 0, with_work_mode: 1,
+  })
+  assert.equal(body.primary_persistence.upserted, 1)
+})
+
 await test('an employer provider failure preserves primary work and carries unrelated cooldowns', async () => {
   const cooldowns = hostCooldowns(OTHER_BOARD, later(9))
   const db = memoryDb([], [execution(cooldowns)])

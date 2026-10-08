@@ -1,4 +1,4 @@
-import { load } from 'cheerio'
+import { deriveOpportunityEvidence, readableOpportunitySection, readableOpportunityText, readableOpportunityTextResult } from '../opportunity-evidence'
 import type { CanonicalOpportunity } from '../types'
 import { employerBoardKey, employerJobId, isEmployerJobUrl, type EmployerBoard } from './employer-registry'
 
@@ -24,17 +24,7 @@ function string(value: unknown): string {
 }
 
 function plain(value: unknown): string {
-  let content = string(value)
-  if (!content || content.length > 200_000) return ''
-  // Greenhouse encodes job HTML as entities; never retain executable markup.
-  for (let pass = 0; pass < 2; pass++) {
-    const $ = load(content, null, false)
-    $('script,style,noscript,iframe,object,embed').remove()
-    $('br,p,li,div,section,h1,h2,h3,h4,h5').after('\n')
-    content = $.root().text()
-    if (!/<\/?[a-z][^>]*>/i.test(content)) break
-  }
-  return content.replace(/[ \t\r]+/g, ' ').replace(/\n\s*\n+/g, '\n\n').trim()
+  return readableOpportunityText(value)
 }
 
 function firstVisible(...values: unknown[]): string {
@@ -108,46 +98,6 @@ function geography(board: EmployerBoard, row: ObjectValue): { location: string |
   return { location, eligible: !unique.some(excludesChile) && (country === 'CL' || unique.some(hasChileLocation)), malformed, country, names: unique }
 }
 
-function workMode(board: EmployerBoard, row: ObjectValue, location: string | null, description: string): CanonicalOpportunity['workMode'] {
-  if (board.source === 'lever') {
-    const declared = row.workplaceType
-    if (declared === 'remote' || declared === 'hybrid') return declared
-    return declared === 'on-site' ? 'onsite' : null
-  }
-  const place = folded(location || '')
-  const modes = new Set<NonNullable<CanonicalOpportunity['workMode']>>()
-  if (/^(?:remote|remot[oa])(?:$|\s*[-,:(·])/.test(place)) modes.add('remote')
-  if (/^(?:hybrid|hibrid[oa])(?:$|\s*[-,:(·])/.test(place)) modes.add('hybrid')
-  if (/^(?:on[- ]site|presencial)(?:$|\s*[-,:(·])/.test(place)) modes.add('onsite')
-  const statements = description.split(/[\n.!?]+/).map(folded)
-  for (const line of statements) {
-    // Conditions, negations and past experience are not an assertion about this role.
-    if (/\b(?:if|unless|not|never|no|sin|experience|experienced|experiencia|previous|previously|worked|trabajado|familiarity|familiar)\b/.test(line)) continue
-    if (/\b(?:hybrid (?:work |working )?(?:environment|model|workplace)|(?:modelo|modalidad|trabajo|formato|esquema) hibrid[oa])\b/.test(line) &&
-      /\b(?:we (?:believe|offer|operate|use|provide|embrace)|(?:is|are|will be)\b.{0,40}\bhybrid|hybrid workplace|(?:modelo|modalidad|trabajo|formato|esquema) hibrid[oa])\b/.test(line)) modes.add('hybrid')
-    if (/^(?:(?:this (?:role|position|job)|the (?:role|position)) (?:is|will be) (?:fully |100% )?remote\b|(?:100%|fully) remote\b|(?:modalidad|trabajo)\s*:\s*(?:100% )?remoto\b|100% remoto\b)/.test(line)) modes.add('remote')
-    if (/^(?:(?:this (?:role|position|job)|the (?:role|position)) (?:is|will be) (?:fully )?on[- ]site\b|(?:modalidad|trabajo)\s*:?\s*presencial\b)/.test(line)) modes.add('onsite')
-  }
-  return modes.size === 1 ? [...modes][0] : null
-}
-
-function requirements(row: ObjectValue): string[] {
-  if (!Array.isArray(row.lists)) return []
-  const result: string[] = []
-  for (const value of row.lists.slice(0, 30)) {
-    const list = object(value)
-    if (!/requirements|requisitos|qualifications|what you bring/i.test(string(list.text))) continue
-    const html = string(list.content)
-    if (html.length > 50_000) continue
-    const $ = load(html, null, false)
-    $('li').each((_, item) => {
-      const requirement = plain($(item).html())
-      if (requirement && requirement.length <= 2_000) result.push(requirement)
-    })
-  }
-  return [...new Set(result)].slice(0, 50)
-}
-
 /** Geography is proved only by the provider's location fields, never company boilerplate. */
 export function normalizeEmployerJob(board: EmployerBoard, input: unknown, verifiedAt: string): EmployerNormalization {
   const row = object(input)
@@ -178,21 +128,31 @@ export function normalizeEmployerJob(board: EmployerBoard, input: unknown, verif
   const geographic = geography(board, row)
   if (geographic.malformed) return { kind: 'rejected', reason: 'invalid_location' }
   if (!geographic.eligible) return { kind: 'excluded', reason: 'geography_unconfirmed' }
-  const listContents = Array.isArray(row.lists) ? row.lists.slice(0, 30).map(value => object(value).content) : []
+  const lists = Array.isArray(row.lists) ? row.lists.slice(0, 30).map(object) : []
+  const listContents = lists.map(value => value.content)
+  // List labels identify requirement/benefit boundaries; a label alone is not
+  // a description. Preserve them so the same evidence can be read after saving.
+  const listSections = lists.map(value => readableOpportunitySection(value.text, value.content)).filter(Boolean)
   const contentFields = board.source === 'lever'
     ? [row.descriptionPlain, row.description, row.openingPlain, row.opening, row.descriptionBodyPlain, row.descriptionBody, ...listContents, row.additionalPlain, row.additional]
     : [row.content]
-  if (contentFields.some(value => typeof value === 'string' && value.length > 200_000)) return { kind: 'rejected', reason: 'description_too_large' }
+  if (contentFields.some(value => readableOpportunityTextResult(value).exceedsLimit)) return { kind: 'rejected', reason: 'description_too_large' }
   // Lever documents both the combined description and its separate opening/body.
   // Prefer a non-empty combined value so the same sections are not duplicated.
   const combined = firstVisible(row.descriptionPlain, row.description)
   const parts = board.source === 'lever'
     ? [combined || [...new Set([firstVisible(row.openingPlain, row.opening), firstVisible(row.descriptionBodyPlain, row.descriptionBody)].filter(Boolean))].join('\n\n'),
-      ...listContents.map(plain), firstVisible(row.additionalPlain, row.additional)]
+      ...listSections, readableOpportunitySection('Información adicional', firstVisible(row.additionalPlain, row.additional))]
     : [plain(row.content)]
   const description = [...new Set(parts.filter(Boolean))].join('\n\n')
   if (!description || description.length > MAX_TEXT) return { kind: 'rejected', reason: description ? 'description_too_large' : 'missing_description' }
-  const mode = workMode(board, row, geographic.location, description)
+  const declaredWorkplace = row.workplaceType === 'remote' || row.workplaceType === 'hybrid' || row.workplaceType === 'on-site'
+    ? row.workplaceType : null
+  const derived = deriveOpportunityEvidence({
+    description: board.source === 'greenhouse' ? row.content : description,
+    workModeText: board.source === 'lever' ? declaredWorkplace : geographic.location,
+  })
+  const mode = derived.workMode
   const created = typeof row.createdAt === 'number' && Number.isSafeInteger(row.createdAt) && row.createdAt >= 0 && row.createdAt <= Date.parse(verifiedAt)
     ? new Date(row.createdAt).toISOString() : null
   return {
@@ -200,7 +160,7 @@ export function normalizeEmployerJob(board: EmployerBoard, input: unknown, verif
     job: {
       source: board.source, sourceId, title, company: board.company,
       location: geographic.location, remote: mode === 'remote' ? true : mode ? false : null,
-      workMode: mode, description, requirements: requirements(row), skills: [], originalUrl,
+      workMode: mode, description, requirements: derived.requirements, skills: derived.skills, originalUrl,
       publishedAt,
       expiresAt, lastVerifiedAt: verifiedAt, verificationStatus: 'verified_active',
       raw: {

@@ -6,6 +6,7 @@ import ts from 'typescript'
 import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'node:crypto'
 import * as searchQuery from '../lib/opportunities/search-query.ts'
+import * as opportunityMatching from '../lib/opportunities/matching.ts'
 
 // This suite executes production module, route and component bodies against
 // synthetic boundaries. It has no credentials, network access or database writes.
@@ -194,11 +195,7 @@ function harness(options = {}) {
     '@/lib/opportunities/verified-index': { readVerifiedOpportunityInventory: async client => {
       calls.protectedReads++; assert.equal(client, db); return { opportunities: [], scope: { limit: 500, limitReached: false } }
     } },
-    '@/lib/opportunities/matching': {
-      filterOpportunities: rows => rows,
-      normalizeOpportunityWorkMode: value => value,
-      searchFiltersFromStoredIntent: () => ({}),
-    },
+    '@/lib/opportunities/matching': opportunityMatching,
     '@/lib/opportunities/taxonomy': { catalogFromJobs: () => ({ areas: [], roles: [] }), regionCatalogFromJobs: () => [] },
   }
   const realDependencies = new Set([
