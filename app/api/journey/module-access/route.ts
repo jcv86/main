@@ -3,10 +3,11 @@ import { resolveServerUser } from '@/lib/auth/server-user'
 import {
   getCanonicalNextPath,
   getJourneyForCurrentUser,
-  getModuleAccess,
   type JourneyModule,
 } from '@/lib/journey/service'
 import { repairLegacyC2Completion } from '@/lib/journey/transitions'
+
+const NO_STORE_HEADERS = { 'Cache-Control': 'private, no-store' }
 
 const MODULES: Array<Exclude<JourneyModule, 'COMPLETED'>> = [
   'A1',
@@ -19,13 +20,13 @@ export async function GET(request: Request) {
   try {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
-      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401, headers: NO_STORE_HEADERS })
     }
 
     await repairLegacyC2Completion(currentUser.id)
     const journey = await getJourneyForCurrentUser()
     if (!journey) {
-      return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+      return NextResponse.json({ error: 'No autenticado' }, { status: 401, headers: NO_STORE_HEADERS })
     }
 
     const moduleValue = new URL(request.url).searchParams.get('module')
@@ -35,26 +36,29 @@ export async function GET(request: Request) {
       ? (moduleValue as Exclude<JourneyModule, 'COMPLETED'>)
       : null
     if (!module) {
-      return NextResponse.json({ error: 'Módulo inválido' }, { status: 400 })
+      return NextResponse.json({ error: 'Módulo inválido' }, { status: 400, headers: NO_STORE_HEADERS })
     }
 
-    const access = getModuleAccess(journey.state, journey.profile)
+    const access = journey.access
     const canAccess = access[module.toLowerCase() as keyof typeof access]
 
     return NextResponse.json({
       success: true,
       module,
       canAccess,
-      reason: canAccess ? 'Acceso habilitado' : 'Recorrido anterior incompleto',
+      reason: canAccess
+        ? module === 'A4' && journey.a4AccessSource === 'qa_entitlement'
+          ? 'Acceso de prueba autorizado' : 'Acceso habilitado'
+        : 'Recorrido anterior incompleto',
       nextPath: canAccess
         ? null
         : await getCanonicalNextPath(journey.profile),
-    })
+    }, { headers: NO_STORE_HEADERS })
   } catch (error) {
     console.error('[v0] Journey module access error:', error)
     return NextResponse.json(
       { error: 'No pudimos verificar el acceso.' },
-      { status: 500 },
+      { status: 500, headers: NO_STORE_HEADERS },
     )
   }
 }

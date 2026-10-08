@@ -180,7 +180,7 @@ test('Lever falls back to documented opening/body/closing fields only when combi
   })
   const result = normalizeEmployerJob(board('lever:fintual'), input, verifiedAt)
   assert.equal(result.kind, 'accepted')
-  assert.equal(result.job.description, 'Introducción del empleador.\n\nConstruir sistemas y revisar resultados.\n\nCondiciones de la convocatoria.')
+  assert.equal(result.job.description, 'Introducción del empleador.\n\nConstruir sistemas y revisar resultados.\n\nInformación adicional:\nCondiciones de la convocatoria.')
 })
 
 test('genuinely empty Lever descriptions are still rejected and undocumented closing fields are ignored', () => {
@@ -241,6 +241,96 @@ test('more than fifty eligible jobs is a partial snapshot with at most fifty ret
   assert.equal(gh(result).observedSourceIds.length, 51)
   assert.equal(gh(result).completeSnapshot, false)
   assert.equal(gh(result).failureCode, 'eligible_limit')
+})
+
+test('successive visits cover eligible Greenhouse rows beyond the first fifty without extra requests', async () => {
+  const payload = ghPayload(Array.from({ length: 75 }, (_, i) => greenhouse(i + 1)))
+  let jobsCalls = 0
+  const fetchImpl = async url => {
+    if (url.endsWith('/robots.txt')) return robots()
+    jobsCalls++
+    assert.equal(new URL(url).pathname, '/v1/boards/cabify/jobs')
+    return json(payload)
+  }
+  const visits = []
+  for (const slot of [0, 3, 6, 3]) {
+    const result = await fetchEmployerBatch(slot, { ...onlyGreenhouse, fetchImpl })
+    assert.equal(gh(result).received, 75)
+    assert.equal(gh(result).accepted, 75)
+    assert.equal(gh(result).returned, 50)
+    assert.equal(gh(result).completeSnapshot, false)
+    assert.equal(gh(result).outcome, 'partial')
+    assert.equal(gh(result).failureCode, 'eligible_limit')
+    const ids = result.jobs.map(job => job.sourceId)
+    assert.equal(new Set(ids).size, 50)
+    assert.ok(result.jobs.every(job => job.lastVerifiedAt === verifiedAt))
+    visits.push(ids)
+  }
+  assert.equal(jobsCalls, 4, 'one existing jobs request per visit, with no extra pages')
+  assert.equal(new Set([...visits[0], ...visits[1]]).size, 75)
+  assert.deepEqual(visits[1], visits[3], 'the same slot and payload select the same window')
+  assert.notDeepEqual(visits[0], visits[1])
+})
+
+test('Lever rotates within its existing first-page cap and keeps the snapshot partial', async () => {
+  const payload = Array.from({ length: 100 }, (_, i) => lever(i + 1))
+  const visits = []
+  let jobsCalls = 0
+  for (const slot of [0, 3]) {
+    const result = await fetchEmployerBatch(slot, { ...onlyLever, fetchImpl: async url => {
+      if (url.endsWith('/robots.txt')) return robots()
+      jobsCalls++
+      assert.equal(new URL(url).searchParams.get('skip'), '0')
+      return json(payload)
+    } })
+    assert.equal(lv(result).accepted, 100)
+    assert.equal(lv(result).returned, 50)
+    assert.equal(lv(result).completeSnapshot, false)
+    assert.equal(lv(result).outcome, 'partial')
+    visits.push(result.jobs.map(job => job.sourceId))
+  }
+  assert.equal(jobsCalls, 2)
+  assert.equal(new Set(visits.flat()).size, 100)
+})
+
+test('a complete small board preserves provider order across visits', async () => {
+  const payload = ghPayload([greenhouse(9), greenhouse(2), greenhouse(7)])
+  for (const slot of [0, 3, 6]) {
+    const result = await fetchEmployerBatch(slot, { ...onlyGreenhouse, fetchImpl: fakeGH(payload) })
+    assert.equal(gh(result).completeSnapshot, true)
+    assert.deepEqual(result.jobs.map(job => job.sourceId), ['cabify:9', 'cabify:2', 'cabify:7'])
+  }
+})
+
+test('a later valid duplicate recovers a rejected copy but keeps rejection evidence', async () => {
+  const result = await fetchEmployerBatch(0, { ...onlyGreenhouse, fetchImpl: fakeGH(ghPayload([
+    greenhouse(1, { content: '' }), greenhouse(1),
+  ])) })
+  assert.equal(gh(result).received, 2)
+  assert.equal(gh(result).accepted, 1)
+  assert.equal(gh(result).rejected, 1)
+  assert.equal(gh(result).returned, 1)
+  assert.equal(gh(result).failureCode, 'missing_description')
+  assert.equal(gh(result).completeSnapshot, false)
+  assert.equal(gh(result).outcome, 'partial')
+  assert.deepEqual(gh(result).observedSourceIds, ['cabify:1'])
+  assert.ok(result.jobs[0].description.length > 0)
+})
+
+test('duplicate recovery never replaces accepted or explicitly excluded evidence', async () => {
+  const accepted = await fetchEmployerBatch(0, { ...onlyGreenhouse, fetchImpl: fakeGH(ghPayload([
+    greenhouse(1), greenhouse(1, { title: 'A different copy' }),
+  ])) })
+  assert.equal(accepted.jobs[0].title, 'Analista de operaciones de prueba')
+  assert.equal(gh(accepted).rejected, 1)
+  assert.equal(gh(accepted).completeSnapshot, false)
+  const excluded = await fetchEmployerBatch(0, { ...onlyGreenhouse, fetchImpl: fakeGH(ghPayload([
+    greenhouse(1, { application_deadline: '2026-01-01T00:00:00Z' }), greenhouse(1),
+  ])) })
+  assert.equal(excluded.jobs.length, 0)
+  assert.equal(gh(excluded).excluded, 1)
+  assert.equal(gh(excluded).rejected, 1)
+  assert.equal(gh(excluded).completeSnapshot, false)
 })
 
 test('row budgets prevent oversized snapshots from being treated as complete', async () => {

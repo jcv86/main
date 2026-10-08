@@ -35,6 +35,7 @@ export interface FlowAction { href: string; label: string; title: string; descri
 export interface FlowInput {
   profile: OnboardingFlags
   access: { a1: boolean; a2: boolean; a3: boolean; a4: boolean }
+  a4AccessSource?: 'journey' | 'qa_entitlement' | null
   currentModule: string
   highestA2DayUnlocked: number
   horizonMetadata?: unknown
@@ -84,7 +85,9 @@ export function buildJourneyFlow(input: FlowInput) {
   const cycleComplete = cycleCompletedDays === activeHorizon
   const resumeDay = Array.from({length:unlocked},(_,i)=>i+1).find(day=>!completed.has(day)) ?? unlocked
   const checkpointPending = input.access.a3 && unlocked>=7 && !modules.includes(checkpoint)
-  const radarAvailable = onboardingComplete && input.access.a4 && input.a3RouteClosed
+  const radarJourneyAvailable = onboardingComplete && input.access.a4 && input.a3RouteClosed && input.a4AccessSource !== 'qa_entitlement'
+  const a4QaAccess = input.access.a4 && input.a4AccessSource === 'qa_entitlement'
+  const radarAvailable = radarJourneyAvailable || a4QaAccess
   let next: FlowAction
   if (!onboardingComplete) {
     const [label,description]=onboardingCopy[onboardingPath]
@@ -95,7 +98,7 @@ export function buildJourneyFlow(input: FlowInput) {
     next={href:'/despega/a3-outcome-follow-up',label:'Medir mi cambio de entrevista',title:'Cierra Entrenamiento con evidencia comparable',description:'Tu baseline de entrevista está registrado y la ruta A3 está cerrada. Completa el follow-up antes de pasar al Radar Estratégico.'}
   } else if (!input.access.a2) {
     next={href:'/despega/a2/intro',label:'Revisar acceso a Tu Ruta',title:'Tu acceso requiere comprobación',description:'La navegación no sustituye las comprobaciones del servidor ni habilita etapas por sí sola.'}
-  } else if (radarAvailable) {
+  } else if (radarJourneyAvailable) {
     next={href:'/despega/a4',label:'Abrir Radar Estratégico',title:'Conecta tu avance con decisiones',description:'El cierre de A3 está registrado. Revisa señales, decisiones y sus resultados.'}
   } else if (checkpointPending) {
     next={href:'/despega/a3/career-mirror',label:'Realizar el checkpoint del Día 7',title:'Tu Ruta y Entrenamiento se conectan aquí',description:'Completa Career Mirror y vuelve a Tu Ruta. Entrenamiento no exige terminar primero los 30 días.'}
@@ -109,14 +112,15 @@ export function buildJourneyFlow(input: FlowInput) {
   const cards=stages.map(stage=>{
     const allowed=stage.id==='A4'?radarAvailable:stage.id==='A1'?input.access.a1:onboardingComplete&&input.access.a2&&input.access[stage.id.toLowerCase() as keyof FlowInput['access']]
     const done=stage.id==='A1'?onboardingComplete:stage.id==='A2'?completedDays.length===90:stage.id==='A3'?input.a3RouteClosed:false
-    const active=allowed&&(stage.id==='A4'?radarAvailable:stage.id==='A1'?!onboardingComplete:next.href.startsWith(`/despega/${stage.id.toLowerCase()}`))
+    const active=allowed&&(stage.id==='A4'?radarJourneyAvailable:stage.id==='A1'?!onboardingComplete:next.href.startsWith(`/despega/${stage.id.toLowerCase()}`))
     const state=!allowed?'locked':done?'completed':active?'active':'available'
     const detail=stage.id==='A1'?(onboardingComplete?'Lectura y contexto revisados':'Contexto, evaluación, C2 e informe antes de A2')
       :stage.id==='A2'?`${cycleCompletedDays}/${activeHorizon} días del ciclo activo · ${completedDays.length} días registrados en total`
       :stage.id==='A3'?(input.a3RouteClosed?'Cierre de ruta registrado':modules.includes(checkpoint)?'Primer checkpoint registrado; continúa los módulos habilitados':'Primer checkpoint desde el Día 7 de A2')
-      :radarAvailable?'Acceso respaldado por el cierre de A3':'Pendiente de cierre verificado de A3 y acceso autorizado'
-    return {...stage,state,detail,href:allowed?(stage.id==='A1'&&!onboardingComplete?onboardingPath:stage.href):null}
+      :a4QaAccess?'Acceso de prueba autorizado':radarAvailable?'Acceso respaldado por el cierre de A3':'Pendiente de cierre verificado de A3 y acceso autorizado'
+    const carried=stage.id==='A4'&&a4QaAccess?'Puedes revisar A4 durante esta prueba. Tu avance en A1, A2 y A3 conserva su estado real.':stage.carried
+    return {...stage,state,detail,carried,href:allowed?(stage.id==='A1'&&!onboardingComplete?onboardingPath:stage.href):null}
   })
-  return {version:FLOW_VERSION,onboardingPath,next,cards,completedDays,initialDays,activeHorizon,cycleCompletedDays,cycleProgress:Math.round(cycleCompletedDays/activeHorizon*100),initialProgress:Math.round(initialDays/30*100),resumeDay,checkpointPending,radarAvailable,completedStages:cards.filter(c=>c.state==='completed').length}
+  return {version:FLOW_VERSION,onboardingPath,next,cards,completedDays,initialDays,activeHorizon,cycleCompletedDays,cycleProgress:Math.round(cycleCompletedDays/activeHorizon*100),initialProgress:Math.round(initialDays/30*100),resumeDay,checkpointPending,radarAvailable,a4QaAccess,completedStages:cards.filter(c=>c.state==='completed').length}
 }
 export type JourneyFlow = ReturnType<typeof buildJourneyFlow>

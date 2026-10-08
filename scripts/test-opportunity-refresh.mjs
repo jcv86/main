@@ -4,6 +4,7 @@ import {
   upsertVerifiedOpportunities,
   invalidateOpportunityVerifications,
   OPPORTUNITY_FRESHNESS_MS,
+  OpportunityPersistenceError,
 } from '../lib/opportunities/verified-index.ts'
 import {
   runOpportunityRefreshCron as runProductionOpportunityRefreshCron,
@@ -12,6 +13,7 @@ import {
 } from '../lib/opportunities/refresh-catalog.ts'
 import { acquireOpportunityRefreshLease } from '../lib/opportunities/refresh-lease.ts'
 import { fetchGetOnBoardJobs } from '../lib/opportunities/sources/getonboard.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const NOW = new Date('2026-10-07T17:00:00.000Z')
 const SECRET = 'local-test-cron-secret-with-32-characters'
@@ -21,6 +23,7 @@ const executed = []
 function runOpportunityRefreshCron(request, dependencies) {
   return runProductionOpportunityRefreshCron(request, {
     fetchEmployerBatch: async () => ({ jobs: [], boards: [] }),
+    readChileCandidates: async () => [],
     ...dependencies,
   })
 }
@@ -113,6 +116,7 @@ function memoryDb(initialRows = [], config = {}) {
     eq(field, value) { this.filters.push((row) => row[field] === value); return this }
     gte(field, value) { this.filters.push((row) => row[field] >= value); return this }
     lte(field, value) { this.filters.push((row) => row[field] <= value); return this }
+    or(expression) { this.filters.push((row) => matchesPostgrestFilter(row, expression)); return this }
     in(field, values) { this.filters.push((row) => values.includes(row[field])); return this }
     not(field, operator, value) {
       assert.equal(operator, 'is')
@@ -279,12 +283,20 @@ await test('Expired active input is invalidated and a negative duplicate wins', 
 
 await test('Persistence failures propagate instead of reporting imported jobs', async () => {
   const db = memoryDb([], { failUpsert: true })
-  await assert.rejects(upsertVerifiedOpportunities(db, [chileJob()], { now: NOW }), /Upsert failed/)
+  const unconfirmed = (error) => {
+    assert.ok(error instanceof OpportunityPersistenceError)
+    assert.deepEqual(error.confirmed, { upserted: 0, invalidated: 0, rejected: 0 })
+    assert.equal(Object.isFrozen(error.confirmed), true)
+    assert.equal(Object.hasOwn(error, 'cause'), false)
+    assert.doesNotMatch(error.message, /Upsert failed|Update failed/)
+    return true
+  }
+  await assert.rejects(upsertVerifiedOpportunities(db, [chileJob()], { now: NOW }), unconfirmed)
   assert.equal(db.tables.a4_verified_opportunities.length, 0)
   const invalidationDb = memoryDb([indexedRow()], { failUpdate: true })
   await assert.rejects(invalidateOpportunityVerifications(invalidationDb, 'chiletrabajos', [
     { sourceId: '3666989', verificationStatus: 'unknown' },
-  ], { now: NOW }), /Update failed/)
+  ], { now: NOW }), unconfirmed)
 })
 
 await test('Cron environment and authorization gates perform no I/O', async () => {
@@ -332,6 +344,7 @@ await test('Scheduled Chiletrabajos refresh has one bounded fetch and invalidate
       assert.equal(options.budgetMs, 35000)
       assert.equal(options.timeoutMs, 5000)
       assert.ok(options.signal instanceof AbortSignal)
+      assert.deepEqual(options.preferredIds, [])
       return batchFixture({
         verifiedJobs: [
           chileJob(),
@@ -347,6 +360,7 @@ await test('Scheduled Chiletrabajos refresh has one bounded fetch and invalidate
   assert.equal(calls, 1)
   assert.equal(body.upserted, 1)
   assert.equal(body.invalidated, 2)
+  assert.deepEqual(body.primary_persistence, { upserted: 1, invalidated: 2, rejected: 0, outcome: 'ok' })
   assert.equal(fixture.completed[0].success, true)
   for (const id of ['3666990', '3666991']) {
     const row = db.tables.a4_verified_opportunities.find((item) => item.source_id === id)

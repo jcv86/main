@@ -6,6 +6,7 @@ import {
   isChileTrabajosListingUrl,
   type ChileTrabajosPublicJob,
 } from './chiletrabajos-parser'
+import { sourceRetryAfterUntil } from './retry-after'
 
 export {
   ChileTrabajosProviderError,
@@ -26,6 +27,8 @@ export interface ChileTrabajosRequestOptions {
 
 export interface ChileTrabajosBatchOptions extends ChileTrabajosRequestOptions {
   maxCandidates?: number
+  /** Valid source IDs already selected for revalidation by the caller. */
+  preferredIds?: readonly string[]
 }
 
 export interface ChileTrabajosDiscoveryResult {
@@ -49,6 +52,9 @@ export interface ChileTrabajosBatchDiagnostics {
   discovery_status: 'ok' | 'empty' | 'parse_failed' | 'unavailable'
   outcome: 'ok' | 'partial' | 'no_matches' | 'parse_failed' | 'unavailable'
   failure_code?: string
+  retryAfterUntil?: string
+  maintenance_selected?: number
+  maintenance_probed?: number
 }
 
 export interface ChileTrabajosBatchResult {
@@ -172,8 +178,9 @@ async function fetchHtml(initialUrl: string, ctx: RequestContext, id?: string): 
         continue
       }
       if (!response.ok) {
+        const retryAfterUntil = sourceRetryAfterUntil(response.status, response.headers.get('retry-after'), ctx.now())
         await response.body?.cancel()
-        throw new ChileTrabajosProviderError('unavailable', 'http_' + response.status, 'Chiletrabajos returned HTTP ' + response.status)
+        throw new ChileTrabajosProviderError('unavailable', 'http_' + response.status, 'Chiletrabajos returned HTTP ' + response.status, retryAfterUntil)
       }
       const finalUrl = response.url || url
       assertRequestUrl(finalUrl, id)
@@ -219,6 +226,11 @@ export function buildChileTrabajosListingUrl(search = '', location = 'Santiago')
 
 async function discover(search: string, location: string, ctx: RequestContext): Promise<ChileTrabajosDiscoveryResult> {
   const response = await fetchHtml(buildChileTrabajosListingUrl(search, location), ctx)
+  // A challenge page is not a listing parser change and must not trigger probes
+  // of known IDs as a fallback around the provider's access boundary.
+  if (/<(?:title|h1)\b[^>]*>[^<]*(?:access denied|just a moment|attention required|verifica(?:r)? tu identidad|captcha)/i.test(response.html)) {
+    throw new ChileTrabajosProviderError('parse_failed', 'access_challenge', 'Chiletrabajos discovery was not available')
+  }
   const ids = parseChileTrabajosListingHtml(response.html, response.url)
   return { source: 'chiletrabajos', fetchedAt: new Date(ctx.now()).toISOString(), listingUrl: response.url, ids }
 }
@@ -250,16 +262,43 @@ function relevantToSearch(job: ChileTrabajosPublicJob, search: string): boolean 
 }
 
 function batchOutcome(diagnostics: ChileTrabajosBatchDiagnostics): ChileTrabajosBatchDiagnostics['outcome'] {
-  if (diagnostics.discovery_status === 'unavailable') return 'unavailable'
-  if (diagnostics.discovery_status === 'parse_failed') return 'parse_failed'
-  if (diagnostics.discovery_status === 'empty') return 'no_matches'
+  const hasObservations = diagnostics.active + diagnostics.stale > 0
+  if (diagnostics.discovery_status === 'unavailable') return hasObservations ? 'partial' : 'unavailable'
+  if (diagnostics.discovery_status === 'parse_failed') return hasObservations ? 'partial' : 'parse_failed'
   const failures = diagnostics.parse_failed + diagnostics.unavailable
-  if (diagnostics.active + diagnostics.stale > 0) {
+  if (hasObservations) {
     if (failures || diagnostics.budget_exhausted) return 'partial'
     return diagnostics.returned ? 'ok' : 'no_matches'
   }
   if (diagnostics.parse_failed > 0) return 'parse_failed'
+  if (diagnostics.unavailable || diagnostics.budget_exhausted) return 'unavailable'
+  if (diagnostics.discovery_status === 'empty') return 'no_matches'
   return 'unavailable'
+}
+
+function maintenanceIds(values: readonly string[] | undefined): string[] {
+  const ids = new Set<string>()
+  if (Array.isArray(values)) {
+    for (const value of values.slice(0, 100)) {
+      if (typeof value === 'string' && /^\d{5,10}$/.test(value)) ids.add(value)
+      if (ids.size === 3) break
+    }
+  }
+  return [...ids]
+}
+
+/** Three discoveries, then one known ID; empty queues yield their remaining places. */
+function interleavedCandidates(discovered: readonly string[], preferred: readonly string[]): string[] {
+  const maintenance = new Set(preferred)
+  const fresh = [...new Set(discovered)].filter(id => !maintenance.has(id))
+  const result: string[] = []
+  let freshIndex = 0
+  let preferredIndex = 0
+  while (freshIndex < fresh.length || preferredIndex < preferred.length) {
+    for (let count = 0; count < 3 && freshIndex < fresh.length; count++) result.push(fresh[freshIndex++])
+    if (preferredIndex < preferred.length) result.push(preferred[preferredIndex++])
+  }
+  return result
 }
 
 export async function fetchChileTrabajosBatch(
@@ -271,19 +310,23 @@ export async function fetchChileTrabajosBatch(
   const ctx = context(options)
   const target = bounded(limit, 12, 1, 20)
   const maxCandidates = bounded(options.maxCandidates, Math.max(target, 20), 1, 30)
+  const preferred = maintenanceIds(options.preferredIds)
+  const maintenance = new Set(preferred)
   const diagnostics: ChileTrabajosBatchDiagnostics = {
     discovered: 0, probed: 0, active: 0, stale: 0, parse_failed: 0, unavailable: 0, irrelevant: 0, returned: 0,
     budget_exhausted: false, candidate_limit_reached: false, discovery_status: 'unavailable', outcome: 'unavailable',
+    maintenance_selected: preferred.length, maintenance_probed: 0,
   }
   const result: ChileTrabajosBatchResult = {
     source: 'chiletrabajos', fetchedAt: new Date(ctx.now()).toISOString(), listingUrl: 'https://www.chiletrabajos.cl/encuentra-un-empleo',
     jobs: [], verifiedJobs: [], failedJobs: [], diagnostics,
   }
-  let discovered: ChileTrabajosDiscoveryResult
+  let discoveredIds: string[] = []
   try {
     // Exactly one discovery response supplies both the counters and the candidate IDs.
     result.listingUrl = buildChileTrabajosListingUrl(search, location)
-    discovered = await discover(search, location, ctx)
+    const discovered = await discover(search, location, ctx)
+    discoveredIds = discovered.ids
     result.listingUrl = discovered.listingUrl
     diagnostics.discovered = discovered.ids.length
     diagnostics.discovery_status = discovered.ids.length ? 'ok' : 'empty'
@@ -291,12 +334,16 @@ export async function fetchChileTrabajosBatch(
     const failure = error instanceof ChileTrabajosProviderError ? error : new ChileTrabajosProviderError('unavailable', 'network_error', 'Chiletrabajos request failed')
     diagnostics.discovery_status = failure.kind === 'parse_failed' ? 'parse_failed' : 'unavailable'
     diagnostics.failure_code = failure.code
+    if (failure.retryAfterUntil) diagnostics.retryAfterUntil = failure.retryAfterUntil
     diagnostics.budget_exhausted = failure.code === 'budget_exhausted'
     diagnostics.outcome = batchOutcome(diagnostics)
     result.fetchedAt = new Date(ctx.now()).toISOString()
-    return result
+    // Revalidation can survive an ordinary listing markup change. Transport,
+    // access challenges and invalid request identities remain fail closed.
+    if (failure.code !== 'listing_shape' || !preferred.length) return result
   }
-  for (const id of discovered.ids.slice(0, maxCandidates)) {
+  const candidates = interleavedCandidates(discoveredIds, preferred)
+  for (const id of candidates.slice(0, maxCandidates)) {
     if (result.jobs.length >= target) break
     if (ctx.now() >= ctx.deadline || ctx.signal?.aborted) {
       diagnostics.budget_exhausted = true
@@ -304,6 +351,7 @@ export async function fetchChileTrabajosBatch(
       break
     }
     diagnostics.probed++
+    if (maintenance.has(id)) diagnostics.maintenance_probed = (diagnostics.maintenance_probed ?? 0) + 1
     try {
       const job = await probe(id, ctx)
       result.verifiedJobs.push(job)
@@ -321,13 +369,14 @@ export async function fetchChileTrabajosBatch(
       else diagnostics.unavailable++
       result.failedJobs.push({ sourceId: id, verificationStatus: parseFailed ? 'unknown' : 'unavailable' })
       diagnostics.failure_code = failure.code
+      if (failure.retryAfterUntil) diagnostics.retryAfterUntil = failure.retryAfterUntil
       if (failure.code === 'budget_exhausted') diagnostics.budget_exhausted = true
       // Respect provider throttling and cancellation; do not retry the entire listing.
-      if (['http_429', 'http_403', 'aborted', 'budget_exhausted'].includes(failure.code)) break
+      if (failure.retryAfterUntil || ['http_429', 'http_403', 'aborted', 'budget_exhausted'].includes(failure.code)) break
     }
   }
   diagnostics.returned = result.jobs.length
-  diagnostics.candidate_limit_reached = result.jobs.length < target && diagnostics.probed >= maxCandidates && diagnostics.probed < diagnostics.discovered
+  diagnostics.candidate_limit_reached = result.jobs.length < target && diagnostics.probed >= maxCandidates && diagnostics.probed < candidates.length
   diagnostics.budget_exhausted ||= ctx.now() >= ctx.deadline
   diagnostics.outcome = batchOutcome(diagnostics)
   result.fetchedAt = new Date(ctx.now()).toISOString()
@@ -346,6 +395,7 @@ export async function fetchChileTrabajosOpportunities(
       result.diagnostics.outcome,
       result.diagnostics.failure_code || result.diagnostics.outcome,
       'Chiletrabajos offers could not be verified',
+      result.diagnostics.retryAfterUntil,
     )
   }
   return result.jobs

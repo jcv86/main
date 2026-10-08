@@ -11,6 +11,8 @@ import type {
   LiveUserProfile,
 } from './types'
 import {
+  A4ProfileSignalsUnavailableError,
+  getUserSignals,
   getTopStrengths,
   getWeaknesses,
   getCareerGoals,
@@ -35,6 +37,10 @@ import { getDocumentsByUser, getDocumentsByType } from './document-engine'
  */
 export async function getLiveUserProfile(userId: string): Promise<LiveUserProfile | null> {
   try {
+    // Do not calculate readiness or fan out queries without available evidence.
+    const availableSignals = await getUserSignals(userId, { limit: 1 })
+    if (availableSignals.length === 0) return null
+
     // Get all signals and computed scores
     const [
       strengths,
@@ -100,7 +106,9 @@ export async function getLiveUserProfile(userId: string): Promise<LiveUserProfil
       lastUpdated: new Date().toISOString(),
     }
   } catch (error) {
-    console.error('[A4 Snapshot] Error building live profile:', error)
+    console.error('[A4 Snapshot] Error building live profile:', {
+      code: error instanceof A4ProfileSignalsUnavailableError ? error.code : 'profile_build_failed',
+    })
     return null
   }
 }

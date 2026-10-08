@@ -1,6 +1,6 @@
 # DTC closure ledger — canonical
 
-Last full product closure: 2026-09-20 UTC. Latest scoped A4 production evidence: 2026-10-08 UTC.
+Last full product closure: 2026-09-20 UTC. Latest scoped A4 production evidence: 2026-10-08 03:41:53 UTC.
 
 This is the **single canonical closure ledger** for Despega Tu Carrera. Historical detail remains available in Git history; this file keeps the current release state and only the evidence that still matters for closure decisions.
 
@@ -8,28 +8,30 @@ A status is `verified` only when there is observable evidence. Allowed states: `
 
 ## Last verified production checkpoint
 
+Dated sections below preserve their historical status; this checkpoint and the final publication section state the current scoped result.
+
 - Repository: `jcv86/main`
 - Canonical branch: `main`
-- Verified application code: [PR #240](https://github.com/jcv86/main/pull/240) merge `8b776e9c171ec0c755fd3829b19bca804e8e74f8`, exact reviewed tree `073793eb9500723a122de9519a29e5ec9b583c94`
-- Verified production deployment: `dpl_957qm7APiGXMd1MguMWSZxoZSn14` (READY, 2026-10-07 23:06:27.882 UTC / 20:06:27 Chile); canonical-domain connector read confirmed this identity at 23:06:53 UTC
+- Verified application code: [PR #242](https://github.com/jcv86/main/pull/242) merge `172a09b94e266084c9d79be235053893db5ef549`, exact reviewed/deployed tree `1e5a41e906216e33a121c89f0cf62cf2d2d6b086`, including PR #241 source-content and matching improvements
+- Verified production deployment: `dpl_JDvrrvfSwMdmghUionzASdAsEyDU` (READY, 2026-10-08 03:35:24.835 UTC / 00:35:24.835 Chile); final authenticated canonical-domain observation at 03:41:53 UTC
 - Production domains: `despegatucarrera.com`, `www.despegatucarrera.com`
 - Supabase production project: DTCFINAL `dcfrbwxbejtbcouionna`
-- Latest scoped production evidence: PR #240 publication, its 357 focused regressions, 10 CI workflows and authenticated 32/44-card journey retain the historical evidence below. Read-only DTCFINAL at 2026-10-08 01:45:52.143582 UTC confirms 121 stored / 59 fresh and native slot 165872 completed as failure/partial with 15 confirmed upserts: Chiletrabajos 12, Coderio 2 and PagerDuty 1. Three maintenance selections/probes are now observed; Coderio rejected three records with missing_description. The increase from 110 to 121 is 11 net-new stored rows. The canonical deployment remains PR #240; the new catalog-quality work is a separate candidate. Historical full-product evidence retains its original scope and dates.
+- Latest scoped production evidence: PR #242 final tree passed 542 focused synthetic regressions and 10/10 exact-head CI workflows; 10/10 anonymous checks completed at 03:37:04.913 UTC. The authorized 03:41:53 UTC journey rendered 93 unique all-region offers (47 Chiletrabajos / 26 Greenhouse / 20 Lever), correct filtered search reasons, complete available details and preserved pagination/saved-view state. Q01 is verified for content/matching/detail UI; the five personal sources were empty, so P01 remains in_progress without a positive CV/DTC/offer path. Read-only DTCFINAL at 03:22:24.699865 UTC had 153 stored (152 active + 1 stale) / 93 fresh. Its earlier slot 165873 produced 34 confirmed upserts and 1 invalidation, with 32 net-new stored rows since 121/59; none are attributed to this later publication. S01/S02 remain in_progress. The 03:35:24.835–03:42:20 UTC runtime aggregate returned 0 groups; 38 browser-extension console records were separately classified, with no DTC errors observed in that set. Independent scoped verdict: CONDITIONAL_GO. Historical evidence retains its original scope and dates.
 
 ## Closure matrix
 
 | ID | User outcome | Current evidence | Status | Release blocker |
 |---|---|---|---|---|
-| DTC-C01 | Production and canonical code contain the approved release | Latest verified checkpoint: PR #240 merged after owner authorization; main `8b776e9` has exact reviewed tree `073793e` and the canonical domain resolves to READY deployment `dpl_957qm7APiGXMd1MguMWSZxoZSn14` | `verified` | yes |
+| DTC-C01 | Production and canonical code contain the approved release | Owner-authorized PR #241/#242 publication is observed: main `172a09b` has exact reviewed tree `1e5a41e`, production `dpl_JDvrrvfSwMdmghUionzASdAsEyDU` became READY at 03:35:24.835 UTC and the authenticated canonical-domain journey was observed at 03:41:53 UTC | `verified` | yes |
 | DTC-C02 | Signed-in users can save and resume C1/A1 | Approved authenticated production QA previously proved C1/A1 save-refresh-resume, all 28 A1 answers persisted, C2 saved 8 answers, integral report rendered and transition reached A2 | `verified` | yes |
 | DTC-C03 | Pilot invitation / returning OAuth continuity remains reliable | Live production evidence on 2026-09-20 verified scanner-safe GET, single-use claim semantics, Google OAuth on the exact current release, returning access without a new invitation, logout invalidation, browser-Back unable to restore protected content, stale-OAuth-state recovery, clean Google re-entry and canonical journey resume | `verified` | yes |
 | DTC-C04 | Browser/server data access is least-privilege and owner-bound | DTCFINAL now has 369 public tables with **0 RLS-disabled tables**; 20/20 public views use `security_invoker=true`; 0 `SECURITY DEFINER` functions are executable by `anon`; only intentional `complete_a2_mission(uuid,jsonb)` is executable by `authenticated`, checks `auth.uid()`, and has empty `search_path`; OAuth creation trigger remains active | `verified` | yes |
-| DTC-C05 | Production build is reproducible | PR #240 final candidate passed 357 focused regressions, TypeScript and all 10 CI workflows, including a clean production build; preview and exact-tree production builds are READY. The local build passed before the final A3 transport guard; its new regression and final exact-head CI passed afterward. Historical PR #239 local font failures remain in that release record | `verified` | yes |
+| DTC-C05 | Production build is reproducible | The final PR #242 application tree passed 542 focused synthetic regressions, full quality gate/TypeScript/build and 10/10 exact-head CI workflows after synchronization; exact-tree production is READY. Historical PR #239 local font failures and later successful clean builds retain their own release records | `verified` | yes |
 | DTC-C06 | Users see one coherent DTC product, not test/internal surfaces | Route-authentication contracts, laboratory-bypass retirement and public credibility gates pass; `/demo` is 404 in final production; sitemap/FAQ/public CTAs expose the intended product surfaces | `verified` | yes |
 | DTC-C07 | Core journey is usable on desktop/mobile with recovery states | Authenticated production QA exists for C1/A1/A2/A3/A4 evidence paths; isolated browser gates use real Auth/JWT/PostgREST/RLS and exact 390×844 plus desktop coverage; cross-owner access is denied; Spanish 404 recovery is live | `verified` | yes |
 | DTC-C08 | Scores, progress, limitations and next action are truthful | Report evidence contract passes 103 cases; A1 professional report contract passes populated/partial/invalid/empty/tied/legacy/provenance cases; A2/A3/A4 continuity and limitations are covered by evidence-aware gates | `verified` | yes |
 | DTC-C09 | Public launch surfaces are credible and crawlable | #176/#177 cleaned unsupported pricing, ratings, guarantees, institutional claims, SLA, Schema.org, FAQ, manifest, sitemap and crawler/LLM context; live FAQ canonical + FAQPage JSON-LD verified; empty legacy library is noindex and absent from sitemap | `verified` | yes |
-| DTC-C10 | Operators can diagnose failures without leaking assessment data | Request correlation and redacted-failure contracts pass; production live/ready health works. PR #240 initial runtime queries returned no project error groups and no warning/error/fatal events in its exact deployment for 23:06:27.882–23:13:52.088 UTC. Earlier PR #239 auxiliary-profile diagnostics remain historical evidence; no perpetual zero-error claim is made | `verified` | no |
+| DTC-C10 | Operators can diagnose failures without leaking assessment data | Request correlation/redacted-failure contracts pass. After PR #242 READY, the project runtime aggregate returned 0 error groups for 2026-10-08 03:35:24.835–03:42:20 UTC, including the authenticated journey. All 38 reviewed browser-console records originated from an extension content script, with 0 DTC application errors observed in that set; this is not a console-wide or ongoing zero-error claim. Earlier runtime windows retain their historical deployment scope | `verified` | no |
 | DTC-C11 | A2 is coherent Spanish-language work across 90 days | 90 missions reviewed and covered by focused Spanish/content contracts including unsupported-claim rejection | `verified` | yes |
 | DTC-C12 | Signed-in users can review real A2/A3/A4 evidence and one A1–A4 report | Authenticated production evidence shows A2 90/90, A3 10/10 with 95/100 average, truthful empty A4, coherent integral report/PDF action and zero cross-user documents | `verified` | yes |
 | DTC-C13 | Despega Cerebral is the professional interpretive core | A1 dossier/report contracts, DISC correction, C1/C2 context integration, methodology/limitations, print/mobile browser gate and integral-report consistency all pass; later public-only releases did not change the private report path | `verified` | yes |
@@ -93,10 +95,11 @@ A practical **9.7** now has its product-flow blocker condition satisfied: DTC-C0
 
 | ID | User outcome | Evidence and acceptance contract | Status |
 |---|---|---|---|
-| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | Slot 165871 saved Checkr 14 and APPLY Digital 6. Native slot 165872 added Coderio 2 / PagerDuty 1 and Chiletrabajos 12 confirmed upserts; Coderio is partial with three missing-description rejections. DTCFINAL at 2026-10-08 01:45:52 UTC has 121 stored / 59 fresh, 11 net-new rows since 110/44. Fintual/Cabify and the Get on Board primary visit remain unobserved. Prior authenticated UI evidence retains its 32/44-card scope; SQL counts alone do not close this criterion. | `in_progress` |
+| DTC-A4-S01 | The Radar includes current public employer vacancies relevant to Chile, with reliable verification and isolated source failures | Native slots 165871–165873 cover all six registered employer boards. Slot 165873 completed success/ok with 34 upserts / 1 invalidation; the 03:22:24.699865 UTC baseline has 153 stored / 93 fresh, 32 net-new stored rows since 121/59. At 03:41:53 UTC the final published UI rendered all 93 unique cards: Chiletrabajos 47, Greenhouse 26, Lever 20. This is browser evidence for the existing inventory, not a new ingestion. Coderio remains partial with three rejections and only a first recorded failure code; the Get on Board natural primary visit remains unobserved at this cutoff. | `in_progress` |
 | DTC-A4-A01 | An explicitly authorized pilot can open A4 consistently while keeping real A1–A3 progress | Existing temporary entitlement renewed for 30 days, without completion or assessment writes. PR #238 final candidate `c63e058` passed 25 permission + 14 availability regressions, full build and 14 CI workflows; merge `79ec6b6` is production READY. Authorized normal entry, report and catalog were verified at 21:45–21:46 UTC. Real A1–A3 progress and saved search remain unchanged; unavailable profile data is explicit. | `verified` |
-| DTC-A4-S02 | Freshness maintenance, fair bounded employer coverage and truthful per-source persistence | PR #239 maintenance and confirmed-write counters are now observed in native slot 165872: selected/probed 3, primary upserts 12 and employer upserts 2/1, with empty cooldown maps. PR #240 temporal filtering remains published. Complete source coverage and an actual cooldown-trigger/recovery cycle remain unverified; the bounded maintenance policy does not promise every older row will be refreshed within 24h. | `in_progress` |
-| DTC-A4-Q01 | Offers retain useful source content and explain why they appear without inventing qualifications or candidate affinity | Candidate codex/a4-catalog-quality-20261008 adds source-backed extraction, reviewed ES/EN role equivalents, shared matcher reasons, bounded per-source quality diagnostics and expandable complete available detail. Isolated 390px/1440px UI verification passes; exact commit/CI/publication evidence is maintained in the candidate PR. No new production behavior is claimed by this row. | `in_progress` |
+| DTC-A4-S02 | Freshness maintenance, fair bounded employer coverage and truthful per-source persistence | Native slots 165872 and 165873 each selected/probed 3 maintenance candidates. Slot 165873 confirms primary upserts 11 / invalidations 1 and Fintual/Cabify upserts 12/11, with successful persistence and empty cooldown maps. All six employer boards have now had a natural visit; the current catalog retains 60 rows older than 24h, including 1 stale row whose verification date was not advanced. Get on Board, a real cooldown-trigger/recovery cycle and large-board rotation across visits remain unverified. The bounded maintenance policy does not promise every older row will be refreshed within 24h. | `in_progress` |
+| DTC-A4-Q01 | Offers retain useful source content and explain why they appear without inventing qualifications or candidate affinity | PR #241/#242 final production tree `1e5a41e` is published. Authorized 03:41:53 UTC acceptance observed real useful complete available descriptions, correct exact-role/region/mode search reasons, offer details opened by click and preserved through pagination, Enter activation of the source-summary disclosure, 93 unique all-region cards and saved-view independence. Legacy requirements/skills may remain explicitly unidentified. This verifies the content/matcher/detail UI scope, not native histogram execution, retroactive structured-field coverage or new ingestion. | `verified` |
+| DTC-A4-P01 | Every personal recommendation explains its relationship to DTC, the CV, current preferences and the actual offer, with evidence, uncertainty and a next action | PR #242 is published on exact tree `1e5a41e`; 96 personal checks and all 542 focused regressions, independent review, isolated UI and 10/10 exact-head CI passed. The real authorized session showed all five personal sources empty, no dates and zero support disclosures, with truthful search-only guidance. The CV action href was inspected but not followed. The positive real CV/DTC/offer path remains unobserved and requires a legitimate structured A3 CV plus relevant persisted DTC evidence; empty context is not full P01 acceptance. | `in_progress` |
 
 ### A4 publication checkpoint
 
@@ -274,3 +277,203 @@ DTC-A4-Q01 remains in_progress until this candidate's publication and relevant l
 
 
 **Integrated candidate gate:** all **441 focused regressions** passed (138 opportunity/provider/matching/refresh, 88 employer/index/refresh, 41 Get on Board/routes, 61 new quality checks, 74 journey/search, 25 A4 access, 14 profile-availability). Full TypeScript, critical contracts, both source-contract scripts, scoped ESLint and the production build passed. The build retained the existing Supabase Edge-import and outdated Browserslist warnings; no dependency or environment change was made to suppress them. The independent review closed its 22 focused reproductions with GO; the isolated UI gate also returned GO. Exact remote commit/CI evidence is maintained in the candidate PR.
+
+## Personal orientation candidate — 2026-10-08
+
+**Outcome DTC-A4-P01.** The owner confirmed that the Radar must explain recommendations using the person's DTC work and analysis, CV and current search preferences, tied to actual offer evidence. The acceptance contract is [DTC_A4_PERSONAL_ORIENTATION.md](DTC_A4_PERSONAL_ORIENTATION.md). Implementation owner: DTC application work; skills: `dtc-build-experience` and `dtc-supabase-backend`; verification owner: `dtc-quality-gate`. Dependency: source-content and matching candidate PR #241, head `f6259b72cdba808d5004c335895fd02855c995d7`, tree `d07436567787cab31fdd6be7fdbe50d8bb467991`.
+
+The new branch `codex/a4-personal-orientation-20261008` is independent of other active work. Before publication of this candidate PR, connector reads reconfirmed PR #241 open, main `8b776e9c171ec0c755fd3829b19bca804e8e74f8` and canonical production `dpl_957qm7APiGXMd1MguMWSZxoZSn14` READY on that main SHA. Exact candidate commit/tree, CI and preview observations belong to its PR record. A preview is not a production release.
+
+### Private context and personal evidence
+
+Five bounded, owner-filtered reads use the authenticated SSR client, with `auth.getUser()` identity validation before personal access. Live SQL was limited to DTCFINAL `dcfrbwxbejtbcouionna` schema, RLS, SELECT grants and timezone metadata. The four existing relations are `career_identities`, `a1_cerebral_assessment`, `career_evidence` and `a3_module_completion`; all have owner-read policies and RLS enabled. No personal records were inspected through SQL.
+
+The selected CV fields are the structured A3 skills, experience title and achievements. Target roles remain goals. A1 supplies canonical self-reported situational preferences for preparation, never aptitude or ranking scores. Validated A2 mission submissions remain recorded exercises. A3 Value Mining Lab descriptions of past work are explicitly declared experience. Generic module completion, DISC scores and aspirational text cannot become demonstrated skills.
+
+The server retains bounded source clauses and dates, rejects invalid/future/expired records, and separates available, empty, partial and unavailable sources. The API returns only the summary and references actually used for visible guidance. No full CV, full response set, unrelated personal evidence or offer source payload is exported. Context is private/no-store and is not cached between requests.
+
+### Search, explanation and recovery
+
+Current filters continue to control inclusion and the primary relevance order. Visible, distinct supported topics may break ties within the same search relationship; repetition does not increase weight. Goals and A1 contribute no topic count. No fit or employability percentage is produced, and missing evidence does not remove offers or assert missing ability.
+
+Each card shows reasons, requirements to confirm, a next step and a closed native disclosure with personal/source excerpts, their nature and Chile-time dates. Level, years, certification and conditions remain to confirm when only the topic is supported. Source links use exact reviewed DTC routes and retain destination access guards. A context refresh is a GET of the existing results API, not an ingestion or saved-search write.
+
+The pagination snapshot includes owner, relevant personal revision, filters and ordered public results. A changed CV, evidence or source availability cannot append a page from an older context. Unavailable personal sources keep the verified catalog usable; session expiry removes personal support from the visible UI.
+
+### Candidate evidence and remaining acceptance
+
+**542 focused regressions passed:** 138 opportunity/provider/matching/refresh, 88 employer/index/refresh, 41 Get on Board/routes, 61 catalog-quality/detail, 79 journey/search/API, 25 access, 14 profile-availability and 96 personal-context/orientation/UI cases (38 + 42 + 16). The two existing A4 source-contract scripts and scoped ESLint also pass. The A4 CI workflow now includes `test:a4-personal-orientation`.
+
+Independent cross review returned GO after fixing and repeating concrete negation, multiline-list, indirect-attribution, skill-boundary and requirement-level cases. A3's nature was corrected using the actual writer prompts; reader→engine tests prove its displayed declared-experience wording. A2 canonical-reference reservation is a defensive parser safeguard, not a reported production incident.
+
+The final isolated visual pass used the real page, components, matching/orientation engine, shell, styles and fonts with synthetic profiles and I/O. At **390×844 and 1440×1000**, it confirmed distinct guidance for two profiles, correct CV/A1/A2/A3 attribution, six pertinent support records, **18→36→40** unique cards with both disclosures preserved, keyboard/focus/44px controls, long-text layout, partial/empty/unavailable states and 503/409/401 recovery. It made zero external requests and recorded zero page errors. Axe detected zero violations; `aria-prohibited-attr` and `color-contrast` checks remained incomplete and are not claimed as a complete accessibility certification.
+
+Full `quality:gate` passed: TypeScript, critical contracts, report contracts and the production build. Existing Supabase Edge-import and outdated Browserslist warnings remain classified separately. Exact remote head-specific checks are maintained in the PR. **DTC-A4-P01 remains in_progress** until production publication and the authenticated journey on that version are verified. This first release reads the structured A3 CV; automatic interpretation of other uploaded PDF/documents is outside its implemented boundary. No account data, RLS, schema, variables, credentials, schedules or leases were changed, no cron/retry was invoked, and no other PR was merged. The ingestion and other A4 criteria retain their separate recorded acceptance states.
+
+
+## Native ingestion baseline before PR #241/#242 publication — 2026-10-08, 03:22 UTC
+
+This checkpoint records a completed natural scheduler execution and its catalog aggregates. Its observation time is **2026-10-08 03:22:24.699865 UTC / 00:22:24.699865 Chile**. The code semantics were read from main `8b776e9c171ec0c755fd3829b19bca804e8e74f8`, the PR #240 application baseline: `lib/opportunities/refresh-lease.ts`, `employer-refresh.ts`, `refresh-catalog.ts`, the reviewed employer registry/normalizers, `verified-index.ts` and `vercel.json`. This run predates publication of PR #241/#242; neither their new diagnostics nor their personal-orientation behavior is claimed from it. The recorded production identity and browser evidence above retain their own observation times.
+
+The existing durable execution relation is `public.cron_job_executions`, filtered to `job_name = 'a4-opportunities'`. The catalog relation is `public.a4_verified_opportunities`. The existing schedule is `15 */3 * * *` UTC, with one attempt per three-hour slot, a 120-second lease and a 50-second work budget. The read used explicit fixed summary fields and source/status/freshness aggregates; it did not retrieve arbitrary offer text or complete source payloads.
+
+### Completed slot 165873
+
+| Execution field | Observed value |
+|---|---|
+| Natural target | 2026-10-08 03:15:00 UTC / 00:15 Chile |
+| Slot / primary scope | `165873` / Chiletrabajos — Antofagasta |
+| Started | `2026-10-08T03:15:00.897341+00:00` |
+| Completed / checked | `2026-10-08T03:15:05.576+00:00` |
+| Recorded duration | **4,679 ms** |
+| Durable status / outcome / success | **`success` / `ok` / `true`** |
+| Execution error | `null` |
+| Confirmed upserts / invalidations / index rejections | **34 / 1 / 0** |
+| Source errors / primary cooldowns / employer cooldowns | `{}` / `{}` / `{}` |
+
+| Source / board | Discovered or received | Probed | Active or accepted | Returned | Excluded | Source rejections | Confirmed upserts | Confirmed invalidations | Result |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|---|
+| Chiletrabajos — Antofagasta | 30 discovered | 12 | 11 active | 11 | 0 irrelevant | 0 parse failures | 11 | 1 | `ok`; 1 stale probe |
+| Lever — Fintual (`lever:fintual`) | 13 received | not a primary probe metric | 12 accepted | 12 | 1 | 0 | 12 | 0 | `ok`, complete snapshot |
+| Greenhouse — Cabify (`greenhouse:cabify`) | 68 received | not a primary probe metric | 11 accepted | 11 | 57 | 0 | 11 | 0 | `ok`, complete snapshot |
+
+Chiletrabajos recorded **maintenance_selected 3 / maintenance_probed 3 / maintenance_selection_status ok**, with no maintenance failure. Discovery was `ok`; `candidate_limit_reached` was true and `budget_exhausted` false. Stale probes were 1; unavailable, irrelevant and parse-failed probes were all 0. Its failure code and retry-after were null. The primary persistence result was `ok`, with 11 upserts, 1 invalidation and 0 rejected rows. The stale observation is evidence of invalidation, not a new current verification.
+
+Both employer persistence results were `ok`, with 0 invalidations and 0 index rejections. Fintual and Cabify each had null failure/retry-after fields and a complete snapshot. Their confirmed writes establish native persistence for the two previously unobserved boards. Received/accepted/excluded are collection counters; confirmed upserts are separate database-write counters. This historical implementation did not emit the new versioned considered/deferred/content-coverage histograms, so none are inferred here.
+
+### Catalog at the exact observation time
+
+| Source | Stored status | Stored rows | Verified within 24 hours | Older than 24 hours | Future verification |
+|---|---|---:|---:|---:|---:|
+| Chiletrabajos | `verified_active` | 106 | 47 | 59 | 0 |
+| Chiletrabajos | `stale` | 1 | 0 | 1 | 0 |
+| Greenhouse | `verified_active` | 26 | 26 | 0 | 0 |
+| Lever | `verified_active` | 20 | 20 | 0 | 0 |
+| Get on Board | no stored rows | 0 | 0 | 0 | 0 |
+| **Total** | **152 active + 1 stale** | **153** | **93** | **60** | **0** |
+
+Freshness is measured as `observed_at - 24 hours <= last_verified_at <= observed_at`. The aggregate includes every stored source/status; all 93 fresh rows at this cutoff are `verified_active`. It does not assert that every such row matches the current user's filters or was rendered in the browser.
+
+| Source / status | Earliest `last_verified_at` UTC | Latest `last_verified_at` UTC |
+|---|---|---|
+| Chiletrabajos / active | `2026-09-20T22:13:12.751Z` | `2026-10-08T03:15:04.161Z` |
+| Chiletrabajos / stale | `2026-09-20T22:13:12.751Z` | `2026-09-20T22:13:12.751Z` |
+| Greenhouse / active | `2026-10-07T21:15:01.240Z` | `2026-10-08T03:15:01.287Z` |
+| Lever / active | `2026-10-07T21:15:06.106Z` | `2026-10-08T03:15:02.346Z` |
+
+Invalidation intentionally preserves the previous `last_verified_at`. The stale Chiletrabajos row therefore retains its old successful-verification date; the current negative observation does not make it fresh.
+
+Against the **2026-10-08 01:45:52.143582 UTC** baseline of **121 stored / 121 active / 59 fresh**, the inventory now has **32 net-new stored rows**, **31 net additional active rows** and **34 additional fresh rows**. Source totals increased from 98 to **107 Chiletrabajos rows (+9, including the now-stale row)**, from 15 to **26 Greenhouse (+11)**, and from 8 to **20 Lever (+12)**. Get on Board remains 0. The **34 confirmed upserts are not 34 inserts**: an upsert can insert or update. The 32-row figure is the net stored-inventory difference between the two observations. Neither number derives from the earlier non-persisting 47-offer smoke.
+
+### Prior execution continuity and remaining acceptance
+
+The same bounded read retained these earlier completed executions; their results are historical and are not reruns:
+
+| Slot | Start UTC | Completion UTC | Duration | Durable status / outcome | Confirmed upserts / invalidations / index rejections | Scope and employer result |
+|---|---|---|---:|---|---|---|
+| 165872 | `2026-10-08T00:15:01.081795Z` | `2026-10-08T00:15:05.353Z` | 4,272 ms | `failure` / `partial` | 15 / 0 / 0 | Concepción 12, Coderio 2, PagerDuty 1 |
+| 165871 | `2026-10-07T21:15:00.909321Z` | `2026-10-07T21:15:07.636Z` | 6,727 ms | `success` / `ok` | 32 / 0 / 0 | Valparaíso 12, Checkr 14, APPLY Digital 6; employer snapshots complete |
+| 165870 | `2026-10-07T19:35:07.917139Z` | `2026-10-07T19:35:11.296Z` | 3,379 ms | `success` / outcome absent | 12 / 0 / 0 | Earlier consumed Santiago slot; no employer batch recorded |
+
+Coderio's slot 165872 remains a partial snapshot: 17 received, 2 accepted/returned, 12 excluded and 3 source records rejected. Its first recorded failure code was `missing_description`, with the old generic source error `PROVIDER_UNAVAILABLE` and durable execution error `PARTIAL_REFRESH`. That single failure code is not a per-rejection histogram and does not establish the reason for each of the three rejections. PagerDuty received 51, accepted/returned 1, excluded 50 and rejected 0. Primary and both employer persistence outcomes were `ok`, and maintenance selected/probed 3/3. Historical per-source persistence fields are absent for slots 165871/165870; absent fields are not manufactured as confirmed counters. This does not change the earlier catalog-growth evidence for slot 165871.
+
+All six registered employer boards now have a native visit with confirmed stored-inventory evidence across slots 165871–165873; Coderio still has an incomplete source snapshot. **DTC-A4-S01 and DTC-A4-S02 remain `in_progress`.** The Get on Board primary visit remains unobserved at this cutoff, with its natural target **2026-10-08 09:15 UTC / 06:15 Chile, slot 165875**. Slot 165874's Puerto Montt / Checkr / APPLY Digital target is **06:15 UTC / 03:15 Chile**. These future targets are not successful-run claims. No actual cooldown-trigger/recovery cycle or large-board rotation across multiple bounded visits is established by the empty cooldown maps and these small accepted snapshots. The three-known-offer maintenance cap does not guarantee refreshing every older row within 24 hours.
+
+The full user-facing source criterion still needs its relevant live acceptance; SQL totals and deployment READY alone do not close it. **DTC-A4-Q01 and DTC-A4-P01 are unchanged by this baseline.** Catalog-quality publication, personal support, current account evidence availability and the authenticated journey on the new version require their own observations. The stored-content presence counts measured at 01:45 remain historical; this 03:22 read did not remeasure requirement/skill/work-mode presence.
+
+All Supabase access for this checkpoint was read-only and restricted to DTCFINAL `dcfrbwxbejtbcouionna`. No profiles, evaluations, personal records, arbitrary offer text or `source_payload` were retrieved. No manual cron, retry, lease/schedule change, production data write, account change, schema/RLS change, environment change or credential change was performed by the verification. These documentary copies do not publish code or certify unrelated DTC areas.
+
+
+## Publication progression after the native baseline — intermediate record, 2026-10-08
+
+**Historical intermediate state:** the final READY and browser observations in the last section below supersede this section's BUILDING/pending status.
+
+The following identities were confirmed by the active release verification after the 03:22 UTC ingestion observation. They do not attribute slot 165873 to the later code. This intermediate documentary cut preserves the distinction between the completed #241 release and the still-pending final #242 deployment acceptance.
+
+| Step | Confirmed identity / observation | Scope at this cut |
+|---|---|---|
+| PR #241 source-content and matching merge | [PR #241](https://github.com/jcv86/main/pull/241), squash `a1f6e03243fc2d6f614796f8d17c6fddfee58dda`, tree `d07436567787cab31fdd6be7fdbe50d8bb467991` | Merged after slot 165873 |
+| PR #241 production | `dpl_Cr59jPuVQwdm2GWTYzJuQP8CcBuA`, READY `2026-10-08T03:29:26.573Z` | Nine of nine anonymous checks passed; the authorized session rendered the first 18 of 54 Metropolitana results on this version. This is not a 54-card rendering or a #242 personal-orientation check |
+| PR #242 final candidate | [PR #242](https://github.com/jcv86/main/pull/242), synchronized head `8e7f50814980f0db1dd44e4a7e08fcd2e6602f51`, tree `1e5a41e906216e33a121c89f0cf62cf2d2d6b086` | Ten of ten head-specific CI workflows passed after retargeting; synchronization retained the reviewed application tree |
+| PR #242 canonical merge | main `172a09b94e266084c9d79be235053893db5ef549`, tree `1e5a41e906216e33a121c89f0cf62cf2d2d6b086` | Merged; final production acceptance pending |
+| PR #242 deployment | `dpl_JDvrrvfSwMdmghUionzASdAsEyDU` | `BUILDING` at the supplied release observation; no READY or canonical-domain acceptance is asserted by this intermediate record |
+
+At this intermediate cut, final deployment and browser observations were pending, and **DTC-A4-Q01 and DTC-A4-P01 were `in_progress`**. The final checkpoint below supersedes that state; the runtime-log window was also pending at that intermediate point. The #241 initial 18-card observation does not close the complete quality criterion; it cannot establish personal evidence availability or the personal-orientation path. No later database observation, native execution, private CV content or personal account data is inferred from these release identities.
+
+The provisional #241 browser observation found a real employer card with a useful complete available description while Requirements and Skills were explicitly not identified. That row was ingested before the new normalizer and retained single-line content; deployment did not reingest it or establish retroactive structured-field coverage. No new cron run is inferred. Q01 may close only after the final version's real offer content, correct search reason, accessible detail and pagination are observed. P01 remains open if the live account yields only empty/search-only or goal context: a positive real CV/DTC/offer evidence path is still required. This acceptance does not open the A3 preparation destinations; inspecting their href is separate from executing those routes.
+
+
+## Final production publication and scoped A4 acceptance — 2026-10-08, 03:41:53 UTC
+
+This is the final application-publication and browser checkpoint for PR #241/#242. It supersedes the intermediate BUILDING/pending statements above. The natural slot 165873 and the database aggregate at 03:22 remain the separately dated pre-publication ingestion baseline; the following browser observation does not create or establish a newer ingestion.
+
+| Release identity | Confirmed value |
+|---|---|
+| Repository / canonical branch | `jcv86/main` / `main` |
+| PR #241 squash / reviewed tree | `a1f6e03243fc2d6f614796f8d17c6fddfee58dda` / `d07436567787cab31fdd6be7fdbe50d8bb467991` |
+| PR #241 production | `dpl_Cr59jPuVQwdm2GWTYzJuQP8CcBuA`, READY `2026-10-08T03:29:26.573Z`; 9/9 anonymous checks completed `03:31:07.483Z` |
+| PR #242 reviewed original candidate | `e7da081347237e1b3fa393fcf3dca6c6bbe95c52` |
+| PR #242 synchronized final candidate | `8e7f50814980f0db1dd44e4a7e08fcd2e6602f51`; synchronization preserved the reviewed application tree |
+| Current main / PR #242 merge | `172a09b94e266084c9d79be235053893db5ef549` |
+| Exact reviewed / merged / deployed tree | `1e5a41e906216e33a121c89f0cf62cf2d2d6b086` |
+| Final production deployment | `dpl_JDvrrvfSwMdmghUionzASdAsEyDU` |
+| Final production READY | **`2026-10-08T03:35:24.835Z` / 00:35:24.835 Chile** |
+| Canonical application | `https://www.despegatucarrera.com` |
+| Anonymous acceptance | **10/10**, completed **`2026-10-08T03:37:04.913Z`** |
+| Authenticated browser observation | **2026-10-08 03:41:53 UTC / 00:41:53 Chile**, `/despega/a4/job-matching` |
+| Operational rollback baseline | PR #240 main `8b776e9c171ec0c755fd3829b19bca804e8e74f8`, deployment `dpl_957qm7APiGXMd1MguMWSZxoZSn14` |
+
+No migration or new environment variable accompanies these releases. Existing data remains compatible with the recorded rollback application. The 542 focused synthetic regressions, full quality gate, independent review and isolated mobile/desktop evidence retain their earlier documented scope. The synchronized final candidate passed all ten head-specific CI workflows:
+
+| Exact-head workflow | Observed final result |
+|---|---|
+| [A4 Opportunity Engine](https://github.com/jcv86/main/actions/runs/37722663791) | completed / success |
+| [A4 Review UX](https://github.com/jcv86/main/actions/runs/37722663787) | completed / success |
+| [Get on Board Source](https://github.com/jcv86/main/actions/runs/37722663828) | completed / success |
+| [Career Identity validation](https://github.com/jcv86/main/actions/runs/37722664022) | completed / success |
+| [A3 to A4 atomic transition lab](https://github.com/jcv86/main/actions/runs/37722663830) | completed / success |
+| [Evidence-aware validation](https://github.com/jcv86/main/actions/runs/37722663844) | completed / success |
+| [V1 analytics closure](https://github.com/jcv86/main/actions/runs/37722663786) | completed / success |
+| [Pilot access](https://github.com/jcv86/main/actions/runs/37722663794) | completed / success |
+| [Design enforcement](https://github.com/jcv86/main/actions/runs/37722663805) | completed / success |
+| [A1 browser and local Auth](https://github.com/jcv86/main/actions/runs/37722663915) | completed / success |
+
+### Authenticated exploration, matching and available source detail
+
+The existing owner-authorized A4 session used the published page without changing an account, assessment, journey state or saved search. Only the scoped A4 exploration, reads and disclosure interactions are claimed here; this is not a claim that arbitrary GET navigation is free of side effects.
+
+- Metropolitana exploration rendered **18 → 36 of 54** results, with **36 distinct original URLs** at that point.
+- A controlled exact-role search with region and hybrid-mode filters rendered **1** matching offer. The displayed search reasons correctly reflected the applied constraints. The public record omits the individual filter text.
+- All-region exploration rendered **18 → 36 → 54 → 72 → 90 → 93 of 93** real cards, with **93 distinct original URLs**. The load-more action disappeared at the end. The rendered sources were **47 Chiletrabajos, 26 Greenhouse and 20 Lever**.
+- Real employer and Chiletrabajos details exposed useful complete available descriptions; the inspected detail text lengths were **4,459** and **1,758** characters respectively. Enter opened the **Qué datos usamos** source-summary disclosure. Offer details were opened by click and remained open after pagination; keyboard operation of offer details retains the earlier isolated/synthetic test scope. Only lengths and behavior are retained here, not quoted offer or personal text.
+- Draft filters stayed separate from the applied result state. The existing saved-search view retained its no-matches result independently; no real save POST was made.
+
+Some legacy ingested content remained single-line and its requirements/skills were explicitly not identified. Useful available description text does not establish that structured requirements or skills were extracted for that row. Publication does not reingest it, refresh its verification date or prove improved stored-field coverage. The 03:41 browser source totals agree with the earlier 93-fresh inventory, but agreement is not a new SQL observation or a new cron execution.
+
+### Personal evidence and next action
+
+The five personal source summaries — **CV, declared goal, A1, A2 and A3** — were all shown as **empty** in this authorized session. No source dates were displayed and **0 personal-support disclosures** were shown. The actual result was a truthful **search-only** explanation: no personal competence, date, support fragment or positive match was invented when personal evidence was absent. This observes the empty-context path and does not prove the positive personal-evidence path.
+
+The offered **Revisar mi CV** next action had the inspected href **`/despega/a3/cv-builder-studio`**. It was **not followed**. No A3 preparation destination was opened. Code review found that A3 navigation can invoke `repairLegacyC2Completion` or `markA3JourneyVisited`; inspecting the link is therefore recorded separately from executing the destination. Neither an A3 journey write nor a completed preparation flow is claimed.
+
+### Closure decision and limits
+
+| Item | State after this observation | Basis and remaining limit |
+|---|---|---|
+| DTC-A4-Q01 | **`verified`** | Published exact tree plus real offer content, correct shared-matcher reasons, accessible details and complete 93-card pagination. This closes the scoped content/matching/detail UI criterion; it does not establish native execution of the new diagnostic histograms, retroactive structuring of legacy rows or a new ingestion |
+| DTC-A4-P01 | **`in_progress`** | Publication and the honest empty-context/search-only path are observed. A legitimate structured A3 CV and relevant persisted DTC evidence must still support a positive real CV/DTC/offer explanation, with both sides visible. No synthetic personal evidence is inserted to close this gap |
+| DTC-A4-S01 | **`in_progress`** | All six employer boards have native-visit evidence, and 93 current offers from three stored sources were rendered. Coderio remains partial and the Get on Board natural primary visit remains unobserved at this cutoff |
+| DTC-A4-S02 | **`in_progress`** | Native maintenance 3/3, per-source persistence and one invalidation are observed. Actual cooldown-trigger/recovery and large-board rotation across visits are still pending; bounded maintenance does not guarantee every row becomes fresh within 24 hours |
+
+No real saved-search POST, forced production failure, forced session expiry or A3 destination navigation was performed in this acceptance. Recovery and cross-profile positive guidance retain their synthetic/isolated evidence until corresponding live observations exist. Existing account and journey state were preserved; this public record omits account identifiers, personal filter values and private evidence fragments.
+
+The verification made only read-only Supabase operations on DTCFINAL `dcfrbwxbejtbcouionna`, with no manual cron, retry or lease manipulation. The 34 upserts / 32 net-new stored rows belong to the earlier slot 165873; none are attributed to publication of PR #241/#242. The runtime and browser-console observation below records its bounded final window; it is not a perpetual zero-error claim. No unrelated DTC criterion is re-certified by this scoped acceptance.
+
+
+### Final runtime observation and scoped verdict — 2026-10-08, 03:42:20 UTC
+
+The canonical deployment and main identity were reconfirmed unchanged: `dpl_JDvrrvfSwMdmghUionzASdAsEyDU` / `172a09b94e266084c9d79be235053893db5ef549`. The Vercel project aggregate returned **0 grouped runtime errors** for the post-READY window **2026-10-08 03:35:24.835–03:42:20 UTC**, including the authenticated A4 browser journey. This is the observed project-aggregate window, not an exact-deployment log-exhaustiveness or ongoing zero-error claim.
+
+The browser console review covered **38 captured records**, all classified as browser-extension metadata delivery failures originating from a `chrome-extension` content script; the last observed message was **03:41:17.550 UTC**. **0 DTC application errors were observed in that reviewed set.** The console was not error-free: the 38 extension records remain separate from DTC application/runtime findings.
+
+Independent reviews agree on **CONDITIONAL_GO** for this scoped release: **Q01 verified; P01, S01 and S02 in_progress** for the specific evidence gaps above. The private production screenshot remains outside the public repository. No account identifier, email, CV fragment or private search content is included in this record.

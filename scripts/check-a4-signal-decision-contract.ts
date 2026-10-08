@@ -349,7 +349,7 @@ assert.ok(workspace.includes('decision-outcome-'))
 assert.ok(!workspace.includes('disabled={decisionBusy}\n                        onClick={() => updateDecision(decision.id)}'))
 assert.ok(decisionRoute.includes('validateDecisionUpdate('))
 
-assert.ok(page.includes("if (!journey.access.a4) redirect('/despega/a3')"))
+assert.ok(page.includes("requireJourneyModule('A4')"))
 assert.ok(page.includes(".from('a4_verified_signals')"))
 assert.ok(page.includes(".from('a4_decision_log')"))
 assert.ok(page.includes('const loadFailures = ['))

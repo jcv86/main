@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import {
   normalizeGetOnBoardJob,
+  normalizeGetOnBoardJobResult,
   normalizeGetOnBoardPayload,
   normalizeGetOnBoardPublishedAt,
   normalizeGetOnBoardWorkMode,
@@ -25,8 +26,8 @@ const row = (id = source.id, attributes = {}) => ({
   attributes: { ...structuredClone(source.attributes), ...attributes },
   links: { public_url: 'https://www.getonbrd.com/jobs/' + id },
 })
-const response = (body, status = 200) => new Response(JSON.stringify(body), {
-  status, headers: { 'Content-Type': 'application/json' },
+const response = (body, status = 200, headers = {}) => new Response(JSON.stringify(body), {
+  status, headers: { 'Content-Type': 'application/json', ...headers },
 })
 const isError = (kind, code) => error => error instanceof GetOnBoardProviderError && error.kind === kind && error.code === code
 
@@ -61,6 +62,51 @@ test('flattened compatibility form keeps a matching provider identity', () => {
   assert.equal(job.sourceId, sample.data.id)
   assert.equal(job.company, 'Empresa sintética')
   assert.equal(job.workMode, 'remote')
+})
+
+test('a description cannot resurrect a contradictory, temporary or unsupported declared mode', () => {
+  for (const attributes of [
+    { remote_modality: 'fully_remote', remote: false, description: 'This role is remote.' },
+    { remote_modality: 'no_remote', remote: true, description: 'Modalidad presencial.' },
+    { remote_modality: 'temporarily_remote', remote: true, description: 'This role is remote.' },
+    { remote_modality: 'undocumented', remote: true, description: 'This role is remote.' },
+    { remote_modality: '', remote: false, description: 'This role is remote.' },
+  ]) {
+    const job = normalizeGetOnBoardJob(row(source.id, attributes), verifiedAt)
+    assert.ok(job)
+    assert.equal(job.workMode, null)
+    assert.equal(job.remote, null)
+  }
+  const hybrid = normalizeGetOnBoardJob(row(source.id, { remote_modality: '', remote: false, description: 'Modalidad híbrida.' }), verifiedAt)
+  assert.equal(hybrid.workMode, 'hybrid', 'A non-remote flag alone does not imply onsite')
+  assert.equal(hybrid.remote, false)
+})
+
+test('oversized descriptions are rejected before a truncation could remove negating source text', () => {
+  const samples = [
+    { description_headline: 'x'.repeat(39_960) + '\nThis role is remote.', functions: 'No hay teletrabajo.', description: '', desirable: '' },
+    { description: 'x'.repeat(40_001), description_headline: 'This role is remote.' },
+    { description: '<div>' + 'x'.repeat(200_000) + '</div>' },
+  ]
+  for (const attributes of samples) assert.deepEqual(
+    normalizeGetOnBoardJobResult(row(source.id, attributes), verifiedAt),
+    { kind: 'rejected', reason: 'description_too_large' },
+  )
+})
+
+test('scheduled publication is not verified active before its actual date or instant', () => {
+  for (const published_at of ['2026-10-08', '2026-10-07T18:00:00.001Z', Date.parse('2026-10-07T18:00:01Z') / 1000]) {
+    assert.equal(normalizeGetOnBoardJob(row(source.id, { published_at }), verifiedAt), null)
+  }
+  assert.ok(normalizeGetOnBoardJob(row(source.id, { published_at: verifiedAt }), verifiedAt))
+  const midnight = '2026-10-08T02:59:59.999Z'
+  assert.ok(normalizeGetOnBoardJob(row(source.id, { published_at: '2026-10-07' }), midnight))
+  assert.equal(normalizeGetOnBoardJob(row(source.id, { published_at: '2026-10-08' }), midnight), null)
+  assert.ok(normalizeGetOnBoardJob(row(source.id, { published_at: '2026-10-08' }), '2026-10-08T03:00:00.000Z'))
+  const batch = normalizeGetOnBoardPayload({ data: [source, row('scheduled-synthetic', { published_at: '2026-10-09' })] }, verifiedAt)
+  assert.equal(batch.jobs.length, 1)
+  assert.equal(batch.diagnostics.outcome, 'partial')
+  assert.equal(batch.diagnostics.rejected, 1)
 })
 
 test('expanded fields can exist at the resource level as in the official SDK', () => {
@@ -107,7 +153,7 @@ test('HTML fields become visible text; scripts, styles and tag keywords do not b
   assert.match(job.description, /Revisar datos y desarrollar aplicaciones accesibles/)
   assert.match(job.description, /Se requiere experiencia/)
   assert.ok(!/<[^>]+>|UNSAFE_SCRIPT_SENTINEL|color: red/.test(job.description))
-  assert.deepEqual(job.requirements, ['Experiencia comprobable'])
+  assert.deepEqual(job.requirements, ['Experiencia comprobable', 'Se requiere experiencia en desarrollo y comunicación clara.'])
   assert.deepEqual(job.skills, ['TypeScript', 'Node.js'])
   assert.ok(!job.skills.some(skill => /DO_NOT_INFER|Server backend/.test(skill)))
 })
@@ -279,6 +325,57 @@ test('HTTP, network and JSON errors expose only controlled error metadata', asyn
   await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
     fetchImpl: async () => new Response('<html>not JSON</html>', { status: 200 }),
   }), isError('parse_failed', 'invalid_json'))
+})
+
+test('429 carries seconds or HTTP-date pauses and falls back to three hours for invalid headers', async () => {
+  const fallback = new Date(now() + 3 * 3600_000).toISOString()
+  for (const [header, expected] of [
+    ['86400', new Date(now() + 86400_000).toISOString()],
+    [new Date(now() + 6 * 3600_000).toUTCString(), new Date(now() + 6 * 3600_000).toISOString()],
+    ['Thursday, 08-Oct-26 18:00:00 GMT', '2026-10-08T18:00:00.000Z'],
+    ['Thu Oct  8 18:00:00 2026', '2026-10-08T18:00:00.000Z'],
+    [undefined, fallback], ['', fallback], ['-1', fallback], ['1.5', fallback],
+    ['tomorrow', fallback], ['9'.repeat(500), fallback], ['0', fallback],
+    ['Wed, 31 Feb 2027 18:00:00 GMT', fallback],
+    [new Date(now() - 1000).toUTCString(), fallback],
+  ]) {
+    let calls = 0
+    await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+      now,
+      fetchImpl: async () => {
+        calls++
+        return response({ private: 'PRIVATE_RATE_LIMIT_BODY' }, 429, header === undefined ? {} : { 'Retry-After': header })
+      },
+    }), error => error.kind === 'unavailable' && error.code === 'http_429'
+      && error.retryAfterUntil === expected && !error.message.includes('PRIVATE_RATE_LIMIT_BODY'))
+    assert.equal(calls, 1)
+  }
+})
+
+test('503 exposes only a valid future Retry-After and preserves the error code', async () => {
+  for (const [header, expected] of [
+    ['3600', new Date(now() + 3600_000).toISOString()],
+    [new Date(now() + 86400_000).toUTCString(), new Date(now() + 86400_000).toISOString()],
+    [undefined, undefined], ['-1', undefined], ['1.5', undefined], ['unknown', undefined],
+    ['Wed, 31 Feb 2027 18:00:00 GMT', undefined],
+    [new Date(now() - 1000).toUTCString(), undefined],
+  ]) {
+    await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+      now, fetchImpl: async () => response({}, 503, header === undefined ? {} : { 'Retry-After': header }),
+    }), error => error.code === 'http_503' && error.retryAfterUntil === expected)
+  }
+})
+
+test('rate-limit bodies are cancelled without reading them and access denials do not become cooldowns', async () => {
+  let cancelled = false
+  const body = new ReadableStream({ cancel() { cancelled = true } })
+  await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+    now, fetchImpl: async () => new Response(body, { status: 429, headers: { 'Retry-After': '60' } }),
+  }), error => error.code === 'http_429' && error.retryAfterUntil === new Date(now() + 60_000).toISOString())
+  assert.equal(cancelled, true)
+  await assert.rejects(fetchGetOnBoardBatch('programming', 1, {
+    now, fetchImpl: async () => response({}, 403, { 'Retry-After': '86400' }),
+  }), error => error.code === 'http_403' && error.retryAfterUntil === undefined)
 })
 
 test('response bytes are bounded while streaming even without Content-Length', async () => {

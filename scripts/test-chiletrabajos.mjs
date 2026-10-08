@@ -34,6 +34,232 @@ const response = (html, url, status = 200, headers = {}) => {
 }
 const code = expected => error => error?.code === expected
 
+test('maintenance interleaves nine discoveries and three known offers within twelve probes', async () => {
+  const fresh = Array.from({ length: 15 }, (_, i) => String(7000101 + i))
+  const preferred = ['7000201', '7000202', '7000203', '7000204']
+  const probes = []
+  const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now, budgetMs: 35_000, maxCandidates: 12, preferredIds: preferred,
+    fetchImpl: async url => {
+      if (url.includes('/encuentra-un-empleo')) return response(listings(fresh), url)
+      const id = url.split('/').pop()
+      probes.push(id)
+      return response(jobHtml(id), url)
+    },
+  })
+  assert.deepEqual(probes, [
+    ...fresh.slice(0, 3), preferred[0], ...fresh.slice(3, 6), preferred[1],
+    ...fresh.slice(6, 9), preferred[2],
+  ])
+  assert.equal(batch.jobs.length, 12)
+  assert.equal(batch.diagnostics.probed, 12)
+  assert.equal(batch.diagnostics.maintenance_selected, 3)
+  assert.equal(batch.diagnostics.maintenance_probed, 3)
+  assert.equal(batch.diagnostics.outcome, 'ok')
+})
+
+test('maintenance validates IDs, caps known candidates and probes overlap only once', async () => {
+  const known = ['7000301', '7000302', '7000303']
+  const fresh = ['7000311', '7000312', '7000313', '7000314']
+  const probes = []
+  const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now,
+    preferredIds: ['https://private.example/path', '../7000301', '7e6', '', 7000301,
+      known[0], known[0], known[1], known[2], '7000304'],
+    fetchImpl: async url => {
+      assert.equal(new URL(url).origin, 'https://www.chiletrabajos.cl')
+      if (url.includes('/encuentra-un-empleo')) return response(listings([...known, ...fresh]), url)
+      const id = url.split('/').pop()
+      assert.match(id, /^\d{5,10}$/)
+      probes.push(id)
+      return response(jobHtml(id), url)
+    },
+  })
+  assert.deepEqual(probes, [...fresh.slice(0, 3), known[0], fresh[3], ...known.slice(1)])
+  assert.equal(new Set(probes).size, probes.length)
+  assert.equal(batch.diagnostics.maintenance_selected, 3)
+  assert.equal(batch.diagnostics.maintenance_probed, 3)
+  assert.ok(known.every(id => !JSON.stringify(batch.diagnostics).includes(id)))
+})
+
+test('unused maintenance places return to discovery without exceeding twelve total probes', async () => {
+  for (const preferred of [[], ['7000401']]) {
+    const fresh = Array.from({ length: 15 }, (_, i) => String(7000411 + i))
+    const probes = []
+    const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+      now, maxCandidates: 12, preferredIds: preferred,
+      fetchImpl: async url => {
+        if (url.includes('/encuentra-un-empleo')) return response(listings(fresh), url)
+        const id = url.split('/').pop(); probes.push(id)
+        return response(jobHtml(id), url)
+      },
+    })
+    assert.equal(probes.length, 12)
+    assert.equal(probes.filter(id => fresh.includes(id)).length, 12 - preferred.length)
+    assert.equal(batch.diagnostics.maintenance_probed, preferred.length)
+    assert.equal(batch.diagnostics.returned, 12)
+  }
+})
+
+test('known offers are revalidated after an empty listing without inventing discoveries', async () => {
+  const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now, preferredIds: ['7000501', '7000502'],
+    fetchImpl: async url => response(url.includes('/encuentra-un-empleo')
+      ? '<form action="/encuentra-un-empleo"><input name="2"></form><p>No se encontraron ofertas de trabajo.</p>'
+      : jobHtml(url.split('/').pop()), url),
+  })
+  assert.equal(batch.diagnostics.discovered, 0)
+  assert.equal(batch.diagnostics.discovery_status, 'empty')
+  assert.equal(batch.diagnostics.maintenance_probed, 2)
+  assert.equal(batch.diagnostics.returned, 2)
+  assert.equal(batch.diagnostics.outcome, 'ok')
+})
+
+test('a changed listing format preserves valid known offers and a degraded diagnosis', async () => {
+  const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now, preferredIds: ['7000601', '7000602', '7000603'],
+    fetchImpl: async url => response(url.includes('/encuentra-un-empleo')
+      ? '<main><h1>Nuevo formato de resultados</h1></main>' : jobHtml(url.split('/').pop()), url),
+  })
+  assert.equal(batch.jobs.length, 3)
+  assert.equal(batch.diagnostics.discovery_status, 'parse_failed')
+  assert.equal(batch.diagnostics.failure_code, 'listing_shape')
+  assert.equal(batch.diagnostics.maintenance_probed, 3)
+  assert.equal(batch.diagnostics.outcome, 'partial')
+})
+
+test('discovery throttling, service pauses, forbidden access and challenges suppress all known probes', async () => {
+  for (const [status, retry, expected, html = 'Provider unavailable'] of [
+    [429, '3600', new Date(now() + 3600_000).toISOString()],
+    [429, undefined, new Date(now() + 3 * 3600_000).toISOString()],
+    [503, new Date(now() + 86400_000).toUTCString(), new Date(now() + 86400_000).toISOString()],
+    [503, undefined, undefined],
+    [403, '3600', undefined],
+    [200, undefined, undefined, '<title>Just a moment</title><h1>Access denied</h1>'],
+  ]) {
+    let calls = 0
+    const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+      now, preferredIds: ['7000701', '7000702', '7000703'],
+      fetchImpl: async url => {
+        calls++
+        return response(html, url, status, retry ? { 'Retry-After': retry } : {})
+      },
+    })
+    assert.equal(calls, 1, String(status))
+    assert.equal(batch.diagnostics.probed, 0)
+    assert.equal(batch.diagnostics.maintenance_selected, 3)
+    assert.equal(batch.diagnostics.maintenance_probed, 0)
+    assert.equal(batch.diagnostics.retryAfterUntil, expected)
+    assert.equal(batch.diagnostics.failure_code, status === 200 ? 'access_challenge' : 'http_' + status)
+    assert.deepEqual(batch.failedJobs, [])
+  }
+})
+
+test('detail Retry-After preserves completed observations then stops every remaining queue', async () => {
+  for (const status of [429, 503]) {
+    const probes = []
+    const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+      now, preferredIds: ['7000801', '7000802', '7000803'],
+      fetchImpl: async url => {
+        if (url.includes('/encuentra-un-empleo')) return response(listings(['7000811', '7000812', '7000813']), url)
+        const id = url.split('/').pop(); probes.push(id)
+        return probes.length === 2
+          ? response('Private body must not be logged', url, status, { 'Retry-After': '86400' })
+          : response(jobHtml(id), url)
+      },
+    })
+    assert.deepEqual(probes, ['7000811', '7000812'])
+    assert.equal(batch.diagnostics.outcome, 'partial')
+    assert.equal(batch.diagnostics.failure_code, 'http_' + status)
+    assert.equal(batch.diagnostics.retryAfterUntil, new Date(now() + 86400_000).toISOString())
+    assert.equal(batch.diagnostics.maintenance_probed, 0)
+    assert.equal(batch.verifiedJobs.length, 1)
+    assert.equal(batch.failedJobs.length, 1)
+    assert.ok(!JSON.stringify(batch.diagnostics).includes('Private body'))
+  }
+})
+
+test('invalid 503 pauses do not manufacture cooldowns and the next valid detail is retained', async () => {
+  let probes = 0
+  const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now,
+    fetchImpl: async url => {
+      if (url.includes('/encuentra-un-empleo')) return response(listings(['7000901', '7000902']), url)
+      probes++
+      return probes === 1 ? response('Unavailable', url, 503, { 'Retry-After': '-1' }) : response(jobHtml(url.split('/').pop()), url)
+    },
+  })
+  assert.equal(probes, 2)
+  assert.equal(batch.diagnostics.retryAfterUntil, undefined)
+  assert.equal(batch.jobs.length, 1)
+  assert.equal(batch.diagnostics.outcome, 'partial')
+})
+
+test('maintenance shares the 35-second work budget and caller cancellation with discovery', async () => {
+  let clock = now()
+  const batch = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now: () => clock, budgetMs: 35_000, preferredIds: ['7001001', '7001002', '7001003'],
+    fetchImpl: async url => {
+      if (url.includes('/encuentra-un-empleo')) return response(listings(Array.from({ length: 12 }, (_, i) => String(7001011 + i))), url)
+      clock += 5000
+      return response(jobHtml(url.split('/').pop()), url)
+    },
+  })
+  assert.equal(batch.diagnostics.probed, 7)
+  assert.equal(batch.diagnostics.maintenance_probed, 1)
+  assert.equal(batch.diagnostics.budget_exhausted, true)
+  assert.equal(batch.diagnostics.outcome, 'partial')
+  const controller = new AbortController(); controller.abort()
+  const cancelled = await fetchChileTrabajosBatch('', 'Santiago', 12, {
+    now, signal: controller.signal, preferredIds: ['7001001'],
+    fetchImpl: async () => assert.fail('Cancelled maintenance must not request the provider'),
+  })
+  assert.equal(cancelled.diagnostics.probed, 0)
+  assert.equal(cancelled.diagnostics.maintenance_probed, 0)
+})
+
+test('the compatibility wrapper retains the provider retry date in its controlled error', async () => {
+  await assert.rejects(fetchChileTrabajosOpportunities('', 'Santiago', 12, {
+    now, fetchImpl: async url => response('Limited', url, 429, { 'Retry-After': '86400' }),
+  }), error => error.code === 'http_429' && error.retryAfterUntil === new Date(now() + 86400_000).toISOString())
+})
+
+test('on-demand searches keep twenty candidate probes to find relevant offers beyond position twelve', async () => {
+  for (const options of [{}, { maxCandidates: 20 }]) {
+    let probes = 0
+    const ids = Array.from({ length: 20 }, (_, i) => String(7001101 + i))
+    const batch = await fetchChileTrabajosBatch('contador', 'Santiago', 5, {
+      ...options, now,
+      fetchImpl: async url => {
+        if (url.includes('/encuentra-un-empleo')) return response(listings(ids), url)
+        const id = url.split('/').pop(); probes++
+        return response(jobHtml(id, probes > 12 ? 'Contador auditor' : 'Analista de pruebas'), url)
+      },
+    })
+    assert.equal(probes, 17, 'the existing public/default search must reach its five matches')
+    assert.equal(batch.jobs.length, 5)
+    assert.equal(batch.diagnostics.irrelevant, 12)
+    assert.equal(batch.diagnostics.outcome, 'ok')
+  }
+})
+
+test('generic batch limits still clamp at twenty results and thirty probes while cron opts into twelve', async () => {
+  let probes = 0
+  const ids = Array.from({ length: 30 }, (_, i) => String(7001201 + i))
+  const batch = await fetchChileTrabajosBatch('contador', 'Santiago', 100, {
+    now, maxCandidates: 100,
+    fetchImpl: async url => {
+      if (url.includes('/encuentra-un-empleo')) return response(listings(ids), url)
+      const id = url.split('/').pop(); probes++
+      return response(jobHtml(id, probes > 10 ? 'Contador auditor' : 'Analista de pruebas'), url)
+    },
+  })
+  assert.equal(probes, 30)
+  assert.equal(batch.jobs.length, 20)
+  assert.equal(batch.diagnostics.returned, 20)
+  assert.equal(batch.diagnostics.outcome, 'ok')
+})
+
 test('real search form contract uses job field 2, city field 13 and f=2', () => {
   assert.equal(listingUrl, 'https://www.chiletrabajos.cl/encuentra-un-empleo?2=contador&13=1022&f=2')
   for (const [city, id] of [['Santiago', '1022'], ['Valparaíso', '1014'], ['Concepción', '1035'], ['Antofagasta', '1004'], ['Puerto Montt', '1043']]) {

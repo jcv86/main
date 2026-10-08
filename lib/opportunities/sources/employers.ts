@@ -1,9 +1,13 @@
 import type { CanonicalOpportunity } from '../types'
 import {
-  employerApiUrl, employerBoardKey, employerJobId, planEmployerBoards,
+  EMPLOYER_BOARDS, employerApiUrl, employerBoardKey, employerJobId, planEmployerBoards,
   type EmployerBoard, type EmployerSource,
 } from './employer-registry'
 import { normalizeEmployerJob } from './employer-normalize'
+import {
+  addOpportunityReason, opportunityContentCoverage,
+  type OpportunityContentCoverage, type OpportunityReasonCounts,
+} from '../source-diagnostics'
 import {
   createEmployerRequestContext, EmployerRequestError, fetchEmployerJson,
   type EmployerRequestContext, type EmployerRequestOptions,
@@ -27,6 +31,14 @@ export interface EmployerBoardResult {
   observedSourceIds: string[]
   retryAfterUntil?: string
   failureCode?: string
+  /** Versioned, additive counts preserve compatibility with prior run records. */
+  diagnosticsVersion?: 1
+  considered?: number
+  notConsidered?: number
+  deferredEligible?: number
+  excludedReasons?: OpportunityReasonCounts
+  rejectedReasons?: OpportunityReasonCounts
+  contentCoverage?: OpportunityContentCoverage
 }
 
 export interface EmployerFetchOptions extends EmployerRequestOptions {
@@ -48,14 +60,16 @@ function initialResult(board: EmployerBoard): EmployerBoardResult {
     source: board.source, board: board.board, boardKey: employerBoardKey(board),
     outcome: 'unavailable', received: 0, accepted: 0, rejected: 0, excluded: 0, returned: 0,
     completeSnapshot: false, observedSourceIds: [],
+    diagnosticsVersion: 1, considered: 0, notConsidered: 0, deferredEligible: 0,
+    excludedReasons: {}, rejectedReasons: {}, contentCoverage: opportunityContentCoverage([]),
   }
 }
 
-async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext): Promise<{ jobs: CanonicalOpportunity[]; result: EmployerBoardResult }> {
+async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext, cycle: number): Promise<{ jobs: CanonicalOpportunity[]; result: EmployerBoardResult }> {
   const result = initialResult(board)
   const jobs: CanonicalOpportunity[] = []
   const observed = new Set<string>()
-  const seen = new Set<string>()
+  const seen = new Map<string, 'accepted' | 'excluded' | 'rejected'>()
   let complete = false
   let processed = 0
   let skip = 0
@@ -89,20 +103,28 @@ async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext): 
         processed++
         const rawId = row !== null && typeof row === 'object' ? (row as Record<string, unknown>).id : undefined
         const id = employerJobId(board.source, rawId)
-        if (id && seen.has(id)) {
+        if (id && seen.has(id) && seen.get(id) !== 'rejected') {
           result.rejected++
+          addOpportunityReason(result.rejectedReasons!, 'duplicate_id')
           result.failureCode ||= 'duplicate_id'
           continue
         }
-        if (id) seen.add(id)
         const normalized = normalizeEmployerJob(board, row, verifiedAt)
+        // An incomplete first copy must not hide a later, fully validated copy.
+        // The earlier rejection remains and prevents absence reconciliation.
+        // Accepted or explicitly excluded identities cannot be replaced.
+        if (id) seen.set(id, normalized.kind)
         if (normalized.kind === 'rejected') {
           result.rejected++
+          addOpportunityReason(result.rejectedReasons!, normalized.reason)
           result.failureCode ||= normalized.reason
-        } else if (normalized.kind === 'excluded') result.excluded++
+        } else if (normalized.kind === 'excluded') {
+          result.excluded++
+          addOpportunityReason(result.excludedReasons!, normalized.reason)
+        }
         else {
           observed.add(normalized.job.sourceId)
-          if (jobs.length < MAX_JOBS_PER_BOARD) jobs.push(normalized.job)
+          jobs.push(normalized.job)
         }
       }
       result.accepted = observed.size
@@ -127,14 +149,27 @@ async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext): 
     if (failure.retryAfterUntil) result.retryAfterUntil = failure.retryAfterUntil
   }
   result.accepted = observed.size
-  result.returned = jobs.length
+  // Rotate only within the eligible rows already received. The request/page
+  // budgets and the partial-snapshot boundary above remain unchanged.
+  // Reduce before multiplying so every safe integer slot stays deterministic.
+  const offset = jobs.length > MAX_JOBS_PER_BOARD
+    ? ((cycle % jobs.length) * MAX_JOBS_PER_BOARD) % jobs.length : 0
+  const selected = jobs.length > MAX_JOBS_PER_BOARD
+    ? [...jobs.slice(offset), ...jobs.slice(0, offset)].slice(0, MAX_JOBS_PER_BOARD)
+    : jobs
+  result.returned = selected.length
+  result.considered = processed
+  result.notConsidered = Math.max(0, result.received - processed)
+  result.deferredEligible = Math.max(0, result.accepted - selected.length)
+  result.contentCoverage = opportunityContentCoverage(selected)
   result.observedSourceIds = [...observed]
-  return { jobs, result }
+  return { jobs: selected, result }
 }
 
 /** Two allowlisted boards per slot, 18s wall budget, public reads only. */
 export async function fetchEmployerBatch(slot: number, options: EmployerFetchOptions = {}): Promise<EmployerBatchResult> {
   const boards = planEmployerBoards(slot)
+  const cycle = Math.floor(slot / (EMPLOYER_BOARDS.length / 2))
   const ctx = createEmployerRequestContext(options)
   try {
     const batches = await Promise.all(boards.map(async board => {
@@ -144,7 +179,7 @@ export async function fetchEmployerBatch(slot: number, options: EmployerFetchOpt
           ...initialResult(board), outcome: 'cooldown' as const, retryAfterUntil: new Date(cooldown).toISOString(),
         } }
       }
-      return collectBoard(board, ctx)
+      return collectBoard(board, ctx, cycle)
     }))
     return { jobs: batches.flatMap(batch => batch.jobs), boards: batches.map(batch => batch.result) }
   } finally { ctx.dispose() }

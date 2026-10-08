@@ -3,6 +3,7 @@ import { normalizeEmployerJob } from '../lib/opportunities/sources/employer-norm
 import { EMPLOYER_BOARDS } from '../lib/opportunities/sources/employer-registry.ts'
 import {
   invalidateOpportunityVerifications,
+  OpportunityPersistenceError,
   OPPORTUNITY_FRESHNESS_MS,
   readVerifiedOpportunities,
   reconcileEmployerSnapshot,
@@ -10,6 +11,7 @@ import {
 } from '../lib/opportunities/verified-index.ts'
 import { filterOpportunities } from '../lib/opportunities/matching.ts'
 import { runOpportunityRefreshCron } from '../lib/opportunities/refresh-catalog.ts'
+import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
 const NOW = new Date('2026-10-07T20:00:00.000Z')
 const OLD = new Date(NOW.getTime() - 60_000).toISOString()
@@ -133,6 +135,7 @@ function memoryDb(initialRows = [], options = {}) {
     in(field, values) { this.filters.push(['in', field, values]); return this }
     gte(field, value) { this.filters.push(['gte', field, value]); return this }
     lte(field, value) { this.filters.push(['lte', field, value]); return this }
+    or(expression) { this.filters.push(['logical', expression]); return this }
     like(field, value) { this.filters.push(['like', field, value]); return this }
     not(field, operator, value) {
       assert.equal(operator, 'is')
@@ -148,6 +151,7 @@ function memoryDb(initialRows = [], options = {}) {
     abortSignal(signal) { this.signal = signal; return this }
     matches(row) {
       return this.filters.every(([operator, field, value]) => {
+        if (operator === 'logical') return matchesPostgrestFilter(row, field)
         const actual = fieldValue(row, field)
         if (operator === 'eq') return actual === value
         if (operator === 'in') return value.includes(actual)
@@ -381,6 +385,90 @@ test('read freshness and expiry checks prevent legacy future and expired rows fr
   assert.deepEqual(db.tables[TABLE], before)
 })
 
+test('catalog reads project matching fields without provider payloads or write bookkeeping', async () => {
+  const input = rowOf(normalized(fintual), {
+    source_payload: { synthetic: 'payload not needed by catalog or matching' },
+    id: 'synthetic-internal-row-id',
+    description: 'Oferta sintética de QA: evaluar riesgo y preparar informes de crédito.',
+  })
+  const db = memoryDb([input])
+  const before = structuredClone(db.tables[TABLE])
+  const [result] = await readVerifiedOpportunities(db, 100, { now: NOW })
+  const columns = db.calls[0].columns.split(',')
+  assert.ok(!columns.includes('*') && !columns.includes('source_payload'))
+  assert.equal(Object.hasOwn(result, 'source_payload'), false)
+  assert.equal(Object.hasOwn(result, 'updated_at'), false)
+  assert.equal(Object.hasOwn(result, 'id'), false)
+  for (const field of ['source', 'source_id', 'original_url', 'title', 'company', 'published_at', 'expires_at', 'verification_status', 'last_verified_at', 'description', 'requirements', 'skills']) {
+    assert.deepEqual(result[field], input[field], field + ' must preserve the public/matching value')
+  }
+  assert.equal(result.region, 'Metropolitana')
+  assert.equal(result.category_key, 'risk')
+  assert.equal(result.work_mode, 'hybrid')
+  assert.equal(filterOpportunities([result], { targetRoles: ['Analista de crédito'], locations: ['Metropolitana'], workModes: ['hybrid'] }).length, 1)
+  assert.deepEqual(db.tables[TABLE], before)
+  assert.equal(db.mutations.length, 0)
+})
+
+test('legacy catalog rows gain evidence from visible sections without a database write or payload read', async () => {
+  const description = 'Analizar procesos de la empresa.\n\nRequisitos\nExperiencia con SQL y Python.\n\nBeneficios\nCursos gratuitos de Java.\n\nModalidad híbrida.'
+  const input = rowOf(normalized(cabify), {
+    description, requirements: [], skills: [], work_mode: null,
+    source_payload: { synthetic: 'PRIVATE_SOURCE_SENTINEL' },
+  })
+  const db = memoryDb([input])
+  const before = structuredClone(db.tables[TABLE])
+  const [result] = await readVerifiedOpportunities(db, 100, { now: NOW })
+  assert.equal(result.description, description)
+  assert.deepEqual(result.requirements, ['Experiencia con SQL y Python.'])
+  assert.deepEqual(result.skills, ['SQL', 'Python'])
+  assert.equal(result.work_mode, null, 'Unknown legacy modes may preserve a lost upstream contradiction')
+  assert.ok(result.field_evidence.every(item => item.field !== 'workMode'))
+  assert.ok(result.field_evidence.some(item => item.field === 'requirements' && item.origin === 'description' && item.excerpt === 'Experiencia con SQL y Python.'))
+  assert.ok(result.field_evidence.some(item => item.field === 'skills' && item.value === 'SQL' && item.excerpt === 'Experiencia con SQL y Python.'))
+  assert.ok(!result.field_evidence.some(item => item.value === 'Java'))
+  assert.doesNotMatch(JSON.stringify(result), /PRIVATE_SOURCE_SENTINEL/)
+  assert.ok(!db.calls[0].columns.split(',').includes('field_evidence'), 'Derived evidence is not a new database column')
+  assert.deepEqual(db.tables[TABLE], before)
+  assert.equal(db.mutations.length, 0)
+})
+
+test('source-derived requirements persist in existing columns and contradictory modes stay unknown after reading', async () => {
+  const description = 'Requisitos\nExperiencia con Excel.\n\nModalidad\nThis position is fully remote.'
+  const value = normalized(fintual, { lists: [], descriptionPlain: description })
+  assert.equal(value.workMode, null, 'The declared hybrid field conflicts with the current remote description')
+  const db = memoryDb()
+  const summary = await upsertVerifiedOpportunities(db, [value], { now: NOW })
+  assert.equal(summary.upserted, 1)
+  assert.deepEqual(db.tables[TABLE][0].requirements, ['Experiencia con Excel.'])
+  assert.deepEqual(db.tables[TABLE][0].skills, ['Excel'])
+  assert.equal(db.tables[TABLE][0].work_mode, null)
+  assert.equal(Object.hasOwn(db.tables[TABLE][0], 'field_evidence'), false)
+  const [result] = await readVerifiedOpportunities(db, 100, { now: NOW })
+  assert.equal(result.work_mode, null)
+  assert.deepEqual(result.requirements, ['Experiencia con Excel.'])
+})
+
+test('a description rejected by the complexity budget cannot retain an unverified mode or field evidence', async () => {
+  const description = 'No hay teletrabajo.\nRequisitos:\n' + 'SQL\n'.repeat(9900)
+  const original = normalized(fintual)
+  const legacy = rowOf(original, { description, work_mode: 'remote', requirements: [], skills: [] })
+  const db = memoryDb([legacy])
+  const before = structuredClone(db.tables[TABLE])
+  const [result] = await readVerifiedOpportunities(db, 100, { now: NOW })
+  assert.equal(result.description, null)
+  assert.equal(result.work_mode, null)
+  assert.deepEqual(result.field_evidence, [])
+  assert.deepEqual(result.requirements, [])
+  assert.deepEqual(result.skills, [])
+  assert.deepEqual(db.tables[TABLE], before)
+  assert.equal(db.mutations.length, 0)
+  const writeDb = memoryDb()
+  await upsertVerifiedOpportunities(writeDb, [{ ...original, description, workMode: 'remote' }], { now: NOW })
+  assert.equal(writeDb.tables[TABLE][0].description, null)
+  assert.equal(writeDb.tables[TABLE][0].work_mode, null)
+})
+
 test('restricted verification maps to the database unknown state and retains historical evidence', async () => {
   const job = normalized(fintual)
   for (const viaUpsert of [false, true]) {
@@ -481,9 +569,10 @@ test('pre-cancelled writes and cancellation after reconciliation read leave the 
   ]) {
     const db = memoryDb([rowOf(job)])
     const before = structuredClone(db.tables[TABLE])
-    await assert.rejects(action(db), /Aborted/)
+    await assert.rejects(action(db), { name: 'AbortError' })
     assert.deepEqual(db.tables[TABLE], before)
     assert.equal(db.mutations.length, 0)
+    assert.equal(db.calls.length, 0, 'Pre-cancelled operations must not reach the database')
   }
   const duringRead = new AbortController()
   const db = memoryDb([rowOf(job)], { afterSelect() { duringRead.abort() } })
@@ -499,9 +588,43 @@ test('database read or update errors propagate without falsely reporting withdra
   for (const failOperation of ['select', 'update']) {
     const db = memoryDb([rowOf(job)], { failOperation })
     const before = structuredClone(db.tables[TABLE])
-    await assert.rejects(reconcileEmployerSnapshot(db, snapshot(fintual), { now: NOW }), /Synthetic database failure/)
+    await assert.rejects(reconcileEmployerSnapshot(db, snapshot(fintual), { now: NOW }), error => {
+      if (failOperation === 'select') {
+        assert.equal(error instanceof OpportunityPersistenceError, false, 'A failed read confirms no persistence attempt')
+        assert.equal(error.code, 'XX000')
+      } else {
+        assert.ok(error instanceof OpportunityPersistenceError)
+        assert.deepEqual(error.confirmed, { upserted: 0, invalidated: 0, rejected: 0 })
+        assert.ok(Object.isFrozen(error.confirmed))
+        assert.equal(error.message, 'Opportunity persistence did not complete')
+        assert.equal(Object.hasOwn(error, 'cause'), false)
+        assert.equal(JSON.stringify(error).includes('Synthetic database failure'), false)
+      }
+      return true
+    })
     assert.deepEqual(db.tables[TABLE], before)
     assert.equal(db.mutations.length, 0)
+  }
+})
+
+test('cancellation at a write boundary reports zero confirmed changes and does not proceed to another write', async () => {
+  const job = normalized(fintual)
+  for (const invalidate of [false, true]) {
+    const controller = new AbortController()
+    const db = memoryDb([rowOf(job)], { beforeCommit: () => controller.abort() })
+    const before = structuredClone(db.tables[TABLE])
+    const action = invalidate
+      ? invalidateOpportunityVerifications(db, job.source, [{ sourceId: job.sourceId, verificationStatus: 'stale' }], { now: NOW, signal: controller.signal })
+      : upsertVerifiedOpportunities(db, [job], { now: NOW, signal: controller.signal })
+    await assert.rejects(action, error => {
+      assert.ok(error instanceof OpportunityPersistenceError)
+      assert.deepEqual(error.confirmed, { upserted: 0, invalidated: 0, rejected: 0 })
+      assert.equal(Object.hasOwn(error, 'cause'), false)
+      return true
+    })
+    assert.deepEqual(db.tables[TABLE], before)
+    assert.equal(db.mutations.length, 0)
+    assert.equal(db.calls.length, 1)
   }
 })
 
@@ -525,6 +648,7 @@ async function runCron(db, employers, leaseOverrides = {}) {
       complete: async (success, summary) => completed.push({ success, summary }),
       ...leaseOverrides,
     }),
+    readChileCandidates: async () => [],
     fetchChileBatch: async () => primaryBatch(),
     fetchGetOnBoard: async () => { assert.fail('Slot 0 must not query Get on Board') },
     fetchEmployerBatch: async () => employers,
@@ -563,6 +687,45 @@ test('a partial employer response can add valid jobs but cannot retire earlier o
   assert.equal(body.source_errors['lever:fintual'], 'PROVIDER_UNAVAILABLE')
   assert.ok(db.tables[TABLE].every(row => row.verification_status === 'verified_active'))
   assert.equal(completed[0].success, false)
+})
+
+test('versioned normalization failures stay partial and expose only bounded reasons in the run ledger', async () => {
+  const job = normalized(fintual)
+  const db = memoryDb([rowOf(normalized(fintual, { id: UUID2 }))])
+  const board = snapshot(fintual, [job], {
+    outcome: 'partial', completeSnapshot: false, received: 3, rejected: 2,
+    failureCode: 'missing_description', diagnosticsVersion: 1,
+    considered: 3, notConsidered: 0, deferredEligible: 0,
+    excludedReasons: {}, rejectedReasons: { missing_description: 1, job_url: 1, arbitrary: 'PRIVATE_SOURCE_SENTINEL' },
+    contentCoverage: { measured: 'returned', total: 1, with_requirements: 1, with_skills: 1, with_work_mode: 1, source_payload: 'PRIVATE_SOURCE_SENTINEL' },
+  })
+  const { response, body, completed } = await runCron(db, { jobs: [job], boards: [board] })
+  assert.equal(response.status, 503)
+  assert.equal(body.outcome, 'partial')
+  assert.equal(body.success, false)
+  assert.equal(body.upserted, 1)
+  assert.equal(body.invalidated, 0)
+  assert.equal(body.source_errors['lever:fintual'], 'SOURCE_DATA_PARTIAL')
+  assert.deepEqual(body.employer_boards[0].rejected_reasons, { missing_description: 1, job_url: 1 })
+  assert.equal(body.employer_boards[0].diagnostics_version, 1)
+  assert.equal(body.employer_boards[0].content_coverage.measured, 'returned')
+  assert.doesNotMatch(JSON.stringify(body), /PRIVATE_SOURCE_SENTINEL|Oferta sintética/)
+  assert.deepEqual(completed[0].summary.employer_boards[0].rejected_reasons, body.employer_boards[0].rejected_reasons)
+  assert.ok(db.tables[TABLE].every(row => row.verification_status === 'verified_active'))
+})
+
+test('a network failure remains a provider failure even if earlier records were rejected', async () => {
+  const job = normalized(fintual)
+  const db = memoryDb()
+  const board = snapshot(fintual, [job], {
+    outcome: 'partial', completeSnapshot: false, received: 2, rejected: 1,
+    failureCode: 'http_503', diagnosticsVersion: 1,
+    considered: 2, notConsidered: 0, deferredEligible: 0,
+    excludedReasons: {}, rejectedReasons: { missing_description: 1 },
+  })
+  const { body } = await runCron(db, { jobs: [job], boards: [board] })
+  assert.equal(body.source_errors['lever:fintual'], 'PROVIDER_UNAVAILABLE')
+  assert.equal(body.employer_boards[0].failure_code, 'http_503')
 })
 
 test('the real cron loses write permission with its lease before employer insertion or withdrawal', async () => {

@@ -7,7 +7,7 @@ import {
   EMPLOYER_REFRESH_BUDGET_MS,
 } from '../lib/opportunities/employer-refresh.ts'
 import {
-  runOpportunityRefreshCron,
+  runOpportunityRefreshCron as runProductionOpportunityRefreshCron,
   planOpportunityRefresh,
   OPPORTUNITY_REFRESH_BUDGET_MS,
 } from '../lib/opportunities/refresh-catalog.ts'
@@ -23,6 +23,14 @@ const hostCooldowns = (board, until) => Object.fromEntries(EMPLOYER_BOARDS
   .filter((item) => item.source === board.source).map((item) => [key(item), until]))
 const later = (hours, now = NOW) => new Date(now.getTime() + hours * 3600000).toISOString()
 const passed = []
+
+// These tests isolate ATS/lease behavior; candidate selection has its own suite.
+function runOpportunityRefreshCron(request, dependencies) {
+  return runProductionOpportunityRefreshCron(request, {
+    readChileCandidates: async () => [],
+    ...dependencies,
+  })
+}
 
 async function test(name, action) {
   await action()
@@ -132,6 +140,7 @@ function memoryDb(rows = [], executions = [], config = {}) {
     in(field, values) { this.filters.push((row) => values.includes(fieldValue(row, field))); return this }
     not(field, operator, value) {
       assert.equal(operator, 'is'); assert.equal(value, null)
+      if (field.startsWith('execution_summary->')) this.stateKey = field.split('->')[1]
       this.filters.push((row) => fieldValue(row, field) != null)
       return this
     }
@@ -149,7 +158,7 @@ function memoryDb(rows = [], executions = [], config = {}) {
     async execute() {
       calls.push({ table: this.table, operation: this.operation, payload: this.payload, signal: this.signal })
       if (this.signal?.aborted) return { data: null, error: new Error('Aborted'), count: 0 }
-      if (config.failStateRead && this.table === 'cron_job_executions') {
+      if (config.failStateRead && this.table === 'cron_job_executions' && this.stateKey === 'employer_cooldowns') {
         return { data: null, error: new Error('Private internal DB failure') }
       }
       const rows = tables[this.table]
@@ -243,6 +252,7 @@ await test('primary and employer retrieval run concurrently without extending th
     },
     fetchEmployerBatch: async (_slot, options) => {
       employerStarted = true
+      await new Promise((resolve) => setTimeout(resolve, 15))
       assert.equal(primaryStarted, true)
       assert.ok(options.budgetMs > 0 && options.budgetMs < EMPLOYER_REFRESH_BUDGET_MS)
       assert.equal(options.timeoutMs, 8000)
@@ -293,6 +303,16 @@ await test('partial Get on Board normalization stays visible as partial even whe
   assert.equal(body.diagnostics.outcome, 'partial')
   assert.equal(body.outcome, 'partial')
   assert.equal(body.success, false)
+})
+
+await test('Chiletrabajos content coverage counts only returned verified records before persistence', async () => {
+  const db = memoryDb()
+  const { body } = await run(db)
+  assert.equal(body.diagnostics.diagnostics_version, 1)
+  assert.deepEqual(body.diagnostics.content_coverage, {
+    measured: 'returned', total: 1, with_requirements: 0, with_skills: 0, with_work_mode: 1,
+  })
+  assert.equal(body.primary_persistence.upserted, 1)
 })
 
 await test('an employer provider failure preserves primary work and carries unrelated cooldowns', async () => {

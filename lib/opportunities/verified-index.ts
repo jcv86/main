@@ -5,11 +5,17 @@ import { EMPLOYER_BOARDS, isEmployerJobUrl, type EmployerBoardResult } from './s
 import { employerJobId } from './sources/employer-registry'
 import type { CanonicalOpportunity, OpportunitySource, OpportunityVerificationStatus } from './types'
 import { categorizeOpportunity, inferChileRegion, normalizeRoleTitle } from './taxonomy'
+import { isOpportunityPublished, opportunityTemporalFilter } from './temporal-filter'
+import {
+  deriveOpportunityEvidence, readableOpportunityTextResult, type OpportunityFieldEvidence,
+} from './opportunity-evidence'
 
 export type AdminDbClient = { from: (table: string) => any }
 export type VerifiedOpportunityInput = ChileTrabajosPublicJob | CanonicalOpportunity
 export const OPPORTUNITY_FRESHNESS_MS = 24 * 60 * 60 * 1000
 const TABLE = 'a4_verified_opportunities'
+// Raw provider payloads and write bookkeeping are not needed by catalog/matching readers.
+const READ_COLUMNS = 'source,source_id,original_url,title,normalized_title,category_key,category_label,company,location,region,work_mode,published_at,expires_at,verification_status,last_verified_at,description,requirements,skills'
 
 export interface VerifiedOpportunityRow {
   source: OpportunitySource
@@ -30,12 +36,33 @@ export interface VerifiedOpportunityRow {
   description: string | null
   requirements: string[]
   skills: string[]
+  /** Computed from selected public fields; not a new database column. */
+  field_evidence?: OpportunityFieldEvidence[]
   [key: string]: unknown
 }
 
 export interface IndexWriteOptions {
   now?: Date
   signal?: AbortSignal
+  /** Deltas confirmed before a later statement or its deadline can fail. */
+  onConfirmed?: (counts: Readonly<OpportunityPersistenceCounts>) => void
+}
+
+export interface OpportunityPersistenceCounts {
+  upserted: number
+  invalidated: number
+  rejected: number
+}
+
+/** A later statement failure must not erase earlier confirmed database changes. */
+export class OpportunityPersistenceError extends Error {
+  readonly confirmed: Readonly<OpportunityPersistenceCounts>
+
+  constructor(confirmed: OpportunityPersistenceCounts) {
+    super('Opportunity persistence did not complete')
+    this.name = 'OpportunityPersistenceError'
+    this.confirmed = Object.freeze({ ...confirmed })
+  }
 }
 
 export interface OpportunityVerificationFailure {
@@ -66,24 +93,9 @@ function safeOriginalUrl(source: string, id: string, value: string): boolean {
   }
 }
 
-function cleanDescription(value: unknown): string | null {
-  if (typeof value !== 'string') return null
-  const clean = value
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 40_000)
-  if (!clean || /^(publicidad|advertisement|anuncio)$/i.test(clean)) return null
-  return clean
-}
-
-function stringArray(value: unknown): string[] {
-  return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === 'string')
-        .map((item) => item.trim().slice(0, 500)).filter(Boolean).slice(0, 100)
-    : []
+function cleanDescription(value: unknown): { description: string | null; exceedsLimit: boolean } {
+  const { text, exceedsLimit } = readableOpportunityTextResult(value)
+  return { description: text && !/^(publicidad|advertisement|anuncio)$/i.test(text) ? text : null, exceedsLimit }
 }
 
 function normalizeWorkMode(value: unknown): VerifiedOpportunityRow['work_mode'] {
@@ -107,24 +119,32 @@ export async function invalidateOpportunityVerifications(
   options: IndexWriteOptions = {},
 ): Promise<number> {
   if (!failures.length) return 0
+  if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
   const now = (options.now ?? new Date()).toISOString()
   const byId = new Map(failures.map((failure) => [failure.sourceId, failure]))
   let affected = 0
 
-  for (const status of ['stale', 'unavailable', 'unknown', 'verified_restricted'] as const) {
-    const ids = [...byId.values()]
-      .filter((failure) => failure.verificationStatus === status && failure.sourceId)
-      .map((failure) => failure.sourceId)
-    if (!ids.length) continue
-    const query = supabase.from(TABLE)
-      // The existing catalog constraint has four states; restricted access is
-      // insufficient verification and must never make a write violate it.
-      .update({ verification_status: status === 'verified_restricted' ? 'unknown' : status, updated_at: now }, { count: 'exact' })
-      .eq('source', source)
-      .in('source_id', ids)
-    const { error, count } = await queryWithSignal(query, options.signal)
-    if (error) throw error
-    affected += typeof count === 'number' ? count : 0
+  try {
+    for (const status of ['stale', 'unavailable', 'unknown', 'verified_restricted'] as const) {
+      const ids = [...byId.values()]
+        .filter((failure) => failure.verificationStatus === status && failure.sourceId)
+        .map((failure) => failure.sourceId)
+      if (!ids.length) continue
+      if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+      const query = supabase.from(TABLE)
+        // The existing catalog constraint has four states; restricted access is
+        // insufficient verification and must never make a write violate it.
+        .update({ verification_status: status === 'verified_restricted' ? 'unknown' : status, updated_at: now }, { count: 'exact' })
+        .eq('source', source)
+        .in('source_id', ids)
+      const { error, count } = await queryWithSignal(query, options.signal)
+      if (error) throw error
+      const confirmed = typeof count === 'number' ? count : 0
+      affected += confirmed
+      options.onConfirmed?.({ upserted: 0, invalidated: confirmed, rejected: 0 })
+    }
+  } catch {
+    throw new OpportunityPersistenceError({ upserted: 0, invalidated: affected, rejected: 0 })
   }
   return affected
 }
@@ -182,7 +202,8 @@ export async function upsertVerifiedOpportunities(
   supabase: AdminDbClient,
   jobs: VerifiedOpportunityInput[],
   options: IndexWriteOptions = {},
-): Promise<{ upserted: number; invalidated: number; rejected: number }> {
+): Promise<OpportunityPersistenceCounts> {
+  if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
   const now = options.now ?? new Date()
   const nowIso = now.toISOString()
   const rows: Array<Record<string, unknown>> = []
@@ -219,6 +240,15 @@ export async function upsertVerifiedOpportunities(
     const workMode = 'workMode' in job
       ? normalizeWorkMode(job.workMode)
       : 'remote' in job && job.remote === true ? 'remote' : null
+    const { description, exceedsLimit } = cleanDescription(job.description)
+    const derived = deriveOpportunityEvidence({
+      // Preserve the rejection signal so inaccessible text cannot leave an
+      // apparently confirmed modality after its contradictions were discarded.
+      description: exceedsLimit ? job.description : description,
+      requirements: 'requirements' in job ? job.requirements : [],
+      skills: 'skills' in job ? job.skills : [],
+      workMode,
+    })
     rows.push({
       source: job.source,
       source_id: job.sourceId,
@@ -230,13 +260,15 @@ export async function upsertVerifiedOpportunities(
       company: job.company,
       location,
       region: inferChileRegion(location),
-      work_mode: workMode,
+      // Null may record a source-field/description contradiction. A second
+      // enrichment pass must not resurrect one side after source context is lost.
+      work_mode: workMode === null ? null : derived.workMode,
       published_at: job.publishedAt,
       expires_at: expiresAt ? normalizeChileTrabajosDate(expiresAt) : null,
       verification_status: 'verified_active',
-      description: cleanDescription(job.description),
-      requirements: 'requirements' in job ? stringArray(job.requirements) : [],
-      skills: 'skills' in job ? stringArray(job.skills) : [],
+      description,
+      requirements: derived.requirements,
+      skills: derived.skills,
       source_payload: 'raw' in job ? job.raw : null,
       last_verified_at: verifiedAt,
       updated_at: nowIso,
@@ -251,37 +283,55 @@ export async function upsertVerifiedOpportunities(
     .map((row) => [String(row.source) + ':' + String(row.source_id), row])).values()]
 
   let invalidated = 0
-  for (const [source, items] of failures) {
-    invalidated += await invalidateOpportunityVerifications(supabase, source, items, options)
-  }
-  if (uniqueRows.length) {
-    const query = supabase.from(TABLE).upsert(uniqueRows, { onConflict: 'source,source_id' })
-    const { error } = await queryWithSignal(query, options.signal)
-    if (error) throw error
+  if (rejected) options.onConfirmed?.({ upserted: 0, invalidated: 0, rejected })
+  try {
+    for (const [source, items] of failures) {
+      invalidated += await invalidateOpportunityVerifications(supabase, source, items, options)
+    }
+    if (uniqueRows.length) {
+      if (options.signal?.aborted) throw new DOMException('Aborted', 'AbortError')
+      const query = supabase.from(TABLE).upsert(uniqueRows, { onConflict: 'source,source_id' })
+      const { error } = await queryWithSignal(query, options.signal)
+      if (error) throw error
+      options.onConfirmed?.({ upserted: uniqueRows.length, invalidated: 0, rejected: 0 })
+    }
+  } catch (error) {
+    // A failed source group has not yet been added to invalidated above.
+    const partial = error instanceof OpportunityPersistenceError ? error.confirmed.invalidated : 0
+    throw new OpportunityPersistenceError({ upserted: 0, invalidated: invalidated + partial, rejected })
   }
   return { upserted: uniqueRows.length, invalidated, rejected }
 }
 
-/** Read only: expiration and old derived metadata are corrected in memory. */
-export async function readVerifiedOpportunities(
+export interface VerifiedOpportunityInventory {
+  opportunities: VerifiedOpportunityRow[]
+  /** A full bounded read may omit inventory; this is never a global total. */
+  scope: { limit: number; limitReached: boolean }
+}
+
+/** Read only: temporal filters precede LIMIT; legacy values are checked in memory. */
+export async function readVerifiedOpportunityInventory(
   supabase: AdminDbClient,
   limit = 100,
   options: { now?: Date; signal?: AbortSignal } = {},
-): Promise<VerifiedOpportunityRow[]> {
+): Promise<VerifiedOpportunityInventory> {
   const now = options.now ?? new Date()
   const cutoff = new Date(now.getTime() - OPPORTUNITY_FRESHNESS_MS).toISOString()
   const safeLimit = Math.max(1, Math.min(1000, Number.isFinite(limit) ? Math.floor(limit) : 100))
   const query = supabase.from(TABLE)
-    .select('*')
+    .select(READ_COLUMNS)
     .eq('verification_status', 'verified_active')
     .gte('last_verified_at', cutoff)
     .lte('last_verified_at', now.toISOString())
+    .or(opportunityTemporalFilter(now))
     .order('last_verified_at', { ascending: false })
+    .order('source', { ascending: true })
+    .order('source_id', { ascending: true })
     .limit(safeLimit)
   const { data, error } = await queryWithSignal(query, options.signal)
   if (error) throw error
 
-  return (data ?? []).filter((row: VerifiedOpportunityRow) => {
+  const opportunities = (data ?? []).filter((row: VerifiedOpportunityRow) => {
     const verifiedMs = Date.parse(row.last_verified_at)
     return knownSource(row.source)
       && row.verification_status === 'verified_active'
@@ -291,9 +341,17 @@ export async function readVerifiedOpportunities(
       && typeof row.title === 'string' && Boolean(row.title.trim())
       && safeOriginalUrl(row.source, row.source_id, row.original_url)
       && validExpiry(row.expires_at, now)
+      && isOpportunityPublished(row.published_at, now)
   }).map((row: VerifiedOpportunityRow) => {
     const category = categorizeOpportunity(row.title)
     const location = row.location?.trim() || null
+    const { description, exceedsLimit } = cleanDescription(row.description)
+    const workMode = normalizeWorkMode(row.work_mode)
+    const derived = deriveOpportunityEvidence({
+      description: exceedsLimit ? row.description : description,
+      requirements: row.requirements, skills: row.skills,
+      workMode,
+    })
     return {
       ...row,
       normalized_title: normalizeRoleTitle(row.title),
@@ -301,11 +359,22 @@ export async function readVerifiedOpportunities(
       category_label: category.label,
       location,
       region: inferChileRegion(location),
-      work_mode: normalizeWorkMode(row.work_mode),
-      description: cleanDescription(row.description),
-      requirements: stringArray(row.requirements),
-      skills: stringArray(row.skills),
+      work_mode: workMode === null ? null : derived.workMode,
+      description,
+      requirements: derived.requirements,
+      skills: derived.skills,
+      field_evidence: derived.evidence.filter(item => item.field !== 'workMode' || workMode !== null),
       expires_at: row.expires_at ? normalizeChileTrabajosDate(row.expires_at) : null,
     }
   })
+  return { opportunities, scope: { limit: safeLimit, limitReached: (data ?? []).length >= safeLimit } }
+}
+
+/** Compatibility for existing callers that only need the bounded rows. */
+export async function readVerifiedOpportunities(
+  supabase: AdminDbClient,
+  limit = 100,
+  options: { now?: Date; signal?: AbortSignal } = {},
+): Promise<VerifiedOpportunityRow[]> {
+  return (await readVerifiedOpportunityInventory(supabase, limit, options)).opportunities
 }
