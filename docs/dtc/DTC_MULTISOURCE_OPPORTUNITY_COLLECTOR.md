@@ -2,7 +2,7 @@
 
 Date: 2026-10-07
 Delivery item: DTC-A4-S01
-State: initial ingestion, authenticated Radar access and PR #240 search/context publication verified; remaining employer cycles and native effects of bounded freshness improvement in_progress
+State: initial ingestion, authenticated Radar access, PR #240 search/context publication and first native maintenance cycle observed; Coderio partial, remaining source coverage and catalog-quality candidate in_progress
 Application baseline: `jcv86/main` at `7ce45b5c77f844081a97a3f023fbc346ee9350e7`.
 
 ## User outcome
@@ -354,3 +354,88 @@ The pre-run 78-row catalog increased to 110, supporting **32 net-new stored rows
 These are scheduled targets, not successful-run claims. Native effects of maintenance, cooldown persistence, fair coverage and per-source write counters require their natural visits. The three-known-offer maintenance cap per region cannot promise to refresh all 66 older rows within 24 hours.
 
 All Supabase operations in this check were read-only and restricted to DTCFINAL `dcfrbwxbejtbcouionna`; no profiles, evaluations, personal data or offer source payloads were retrieved through SQL. No manual cron, retries, lease/schedule/schema/RLS/environment/credential or account changes were made. This checkpoint does not re-score or re-certify unrelated DTC areas.
+
+## Native ingestion follow-up — 2026-10-08, 01:23 UTC
+
+The connector reconfirmed main `8b776e9c171ec0c755fd3829b19bca804e8e74f8`, tree `073793eb9500723a122de9519a29e5ec9b583c94`, and canonical production `dpl_957qm7APiGXMd1MguMWSZxoZSn14` READY. The scoped Vercel runtime-error query since **2026-10-08 00:14 UTC** returned no groups at this checkpoint. That query does not turn the following partial scheduler execution into a success.
+
+**Native slot 165872** started **2026-10-08 00:15:01.081795 UTC / October 7 21:15 Chile** and completed **00:15:05.353 UTC**, in **4,272 ms**. Its durable state is **failure / partial**, success false: **15 confirmed upserts, 0 invalidations, 0 index rejections**.
+
+| Source / board | Received or discovered | Probed or considered | Accepted / returned | Excluded | Source records rejected | Confirmed upserts | Result |
+|---|---:|---:|---:|---:|---:|---:|---|
+| Chiletrabajos — Concepción | 30 discovered | 12 probed | 12 / 12 | 0 irrelevant | 0 parse failures | 12 | ok |
+| Lever — Coderio (`lever:coderio`) | 17 | 17 | 2 / 2 | 12 | 3 | 2 | partial, `missing_description`, incomplete snapshot |
+| Greenhouse — PagerDuty (`greenhouse:pagerduty`) | 51 | 51 | 1 / 1 | 50 | 0 | 1 | ok, complete snapshot |
+
+Employer considered counts in this historical run are reconstructed as accepted + excluded + rejected; the new versioned field is not yet deployed. The primary run recorded **maintenance_selected 3 / maintenance_probed 3 / maintenance_selection_status ok**. Primary persistence was `ok`, with 12 upserts; both employer persistence results were `ok`. Primary and employer cooldown maps were empty. Chiletrabajos reported no stale, unavailable, irrelevant or parse-failed probes and no exhausted budget. Coderio's three source-format rejections are distinct from the zero index-persistence rejections.
+
+The production implementation recorded Coderio's generic source error as `PROVIDER_UNAVAILABLE`. Its more specific board diagnostic, `missing_description`, is the evidence for the partial result. One bounded, read-only public Lever check at **01:27:47 UTC** received 17 records and confirmed that some have all documented description/opening/body/additional fields and lists empty. Only field-presence/length diagnostics were retained. Salary-description fields are not a replacement for a job description, and empty records remain rejected. This check did not ingest any jobs.
+
+**DTCFINAL aggregate at 2026-10-08 01:23:51.848222 UTC**, using only source/status/freshness aggregates:
+
+| Source | Stored status | Stored rows | Verified within 24 hours |
+|---|---|---:|---:|
+| Chiletrabajos | verified_active | 98 | 36 |
+| Greenhouse | verified_active | 15 | 15 |
+| Lever | verified_active | 8 | 8 |
+| Get on Board | no stored rows | 0 | 0 |
+| **Total** | | **121** | **59** |
+
+Fresh means `observed_at - 24 hours <= last_verified_at <= observed_at`. The previous 110 / 44 checkpoint increased to **121 / 59: 11 net-new stored rows and 15 additional fresh rows**. By source the net increases are Chiletrabajos +8, Greenhouse +1 and Lever +2. Fifteen upserts are not fifteen inserts. The 62 older Chiletrabajos rows remain outside the 24-hour catalog.
+
+This is now native evidence of the three-offer maintenance selection/probe path and confirmed per-source persistence. It does not establish every cooldown branch or complete coverage of all sources. Checkr and APPLY Digital retain their earlier successful slot 165871 evidence (14 and 6 saved respectively). Coderio is partial; Fintual/Cabify and the Get on Board primary visit remain pending on their natural schedule: **October 8 03:15 UTC / 00:15 Chile**, and **09:15 UTC / 06:15 Chile**, respectively. DTC-A4-S01 and DTC-A4-S02 remain **in_progress**. No new browser rendering claim is derived from these SQL counts.
+
+All live Supabase operations in this follow-up were read-only and restricted to DTCFINAL `dcfrbwxbejtbcouionna`. No profiles, evaluations, personal data or `source_payload` were retrieved through SQL. No manual cron, forced retry, lease, schedule, production data, account, schema, RLS, environment or credential mutation was performed.
+
+### Stored-content baseline — 2026-10-08, 01:45 UTC
+
+A second read-only aggregate at **01:45:52.143582 UTC** reconfirmed the same **121 stored / 59 fresh** catalog and the same latest slot 165872. It also measured existing structured fields, without retrieving their contents:
+
+| Source | Fresh rows | With stored requirements | With stored skills | With stored work mode |
+|---|---:|---:|---:|---:|
+| Chiletrabajos | 36 | 0 | 0 | 7 |
+| Greenhouse | 15 | 0 | 0 | 15 |
+| Lever | 8 | 5 | 0 | 8 |
+| **Total** | **59** | **5** | **0** | **30** |
+
+This measures presence in existing columns, not whether the original description contains useful requirements. It motivates the candidate's source-backed enrichment. No improvement in these production aggregates is attributed to unmerged candidate code.
+
+## Catalog quality candidate — 2026-10-08
+
+The owner requested the next scraper improvement. Branch `codex/a4-catalog-quality-20261008` starts from published main `8b776e9c171ec0c755fd3829b19bca804e8e74f8` / tree `073793eb9500723a122de9519a29e5ec9b583c94`. Its exact commit, CI and preview evidence are recorded in its PR. This section describes candidate behavior and does not claim a new production deployment or native ingestion.
+
+### Source-backed content
+
+- A shared deterministic reader preserves visible paragraphs, list items and section boundaries, removes hidden/executable/ad content, and quotes explicit requirement clauses. It keeps recognized Spanish/English qualification sections separate from benefits and unrelated sections, including provider fields rendered as HTML.
+- Skills come from source-declared skill fields or a reviewed literal vocabulary found in qualification clauses. Negated clauses are checked before splitting lists. Missing fields do not create qualifications or candidate-fit scores.
+- Current work modes require explicit source fields or current statements. Conditional salary boilerplate, historical experience, temporary/unsupported modes, negations and contradictions remain unknown. Source normalizers align the legacy remote boolean with the resolved work mode.
+- New writes use existing description/requirements/skills/work_mode columns. Catalog reads can enrich requirements and skills from existing visible text without writes or source-payload reads. An existing null work mode is preserved because it can represent a lost upstream contradiction; filling it requires a new source observation. A deployment alone does not refresh an offer.
+- The text budget is 200,000 input characters, 40,000 visible characters, 500 nonempty lines, 2,000 clause delimiters and 2,000 HTML elements. Over-budget descriptions are never truncated through a negation. Employer/Get on Board format diagnostics identify oversized descriptions; an unreadable legacy description cannot retain newly certified modality evidence.
+- Empty Coderio descriptions remain rejected. Documented opening/body/additional fields are supported, but salary text is not substituted for vacancy content.
+
+### Matching and user-visible detail
+
+The same evaluator determines inclusion, relevance order and the reasons displayed by the client. It supports 22 reviewed ES/EN role-equivalence groups and preserves qualifiers. Exact-title mode keeps its phrase constraint; translations apply to broader modes. Region and mode filters remain mandatory. Word boundaries avoid category collisions such as UX inside auxiliar and sales inside Salesforce.
+
+Results rank direct title, equivalent, related role and selected/expanded area before the existing stable verification/source/id tie-break. The 18-row pagination snapshot includes the ordered public DTO, filters, view and consulted scope, so content or explanation changes invalidate the page even when verification time is unchanged. The consulted-inventory limit remains 500.
+
+Each card shows server-issued reasons and a native expandable detail with the complete available description, requirements, skills, source fragments and original link. Unknown values remain explicit. The detail stays open when more cards are appended. A real mobile overflow found with a valid 200-character role was fixed with a minimal flex-width correction.
+
+### Bounded operational diagnostics
+
+Employer summaries now version their counters and record considered, not-considered and deferred eligible records, plus fixed-code exclusion/rejection histograms. The counts reconcile: considered = accepted + excluded + rejected; received = considered + not considered; accepted = returned + deferred eligible. The returned-content coverage counts requirements, skills and mode presence across Chiletrabajos, employers and Get on Board. It does not measure completeness, candidate affinity or persistence.
+
+A partial board caused by known rejected source records reports SOURCE_DATA_PARTIAL; transport failures remain PROVIDER_UNAVAILABLE. Partial snapshots still cannot retire absent offers. Confirmed persistence remains separate from source acceptance. Request/page/record/time budgets, allowlisted boards, source rotation, freshness, cron, leases and cooldown semantics are unchanged.
+
+### Validation scope
+
+The candidate is exercised by the existing provider, matching, index, scheduler, access and search regressions and the new `test:a4-catalog-quality` suite, which is wired into the A4 CI workflow. Synthetic tests cover text provenance, negations/contradictions, section roundtrips, complexity limits, counted rejection reasons, unchanged persistence boundaries, public projection and full expandable detail.
+
+The isolated browser renders the changed pages, shell, components, matcher, CSS and local fonts with synthetic authentication/API/Supabase adapters. At 390×844 and 1440×1000 it verifies 18→36→40 unique results, exact server labels, role equivalence, complete available text, requirement 9 and skill 13, native keyboard activation, 44px targets, focus and no horizontal overflow, including a 200-character role. Retry, inventory-change, expired-session, empty and partial-context states pass. No external request or page error was recorded. Axe reported zero violations in the reviewed scope, with aria-prohibited-attr and color-contrast incomplete; this is not a complete accessibility certification. The synthetic save check is not a production save.
+
+An adversarial 500-row in-memory read with dense descriptions originally took 31,486 ms. The final independent check, including the preserved rejection signal and negative-mode assertions, took 1,161 ms; 500 typical synthetic descriptions had measured 656 ms. These are local measurements, not a production latency claim.
+
+DTC-A4-Q01 remains in_progress until this candidate's publication and relevant live acceptance are observed. DTC-A4-S01/S02 retain the native limitations above. Salary/schema additions, more providers, a larger inventory query, cross-source deduplication and application-outcome tracking are outside this block. This candidate-preparation checkpoint does not merge to main or deploy production code.
+
+
+**Integrated candidate gate:** all **441 focused regressions** passed (138 opportunity/provider/matching/refresh, 88 employer/index/refresh, 41 Get on Board/routes, 61 new quality checks, 74 journey/search, 25 A4 access, 14 profile-availability). Full TypeScript, critical contracts, both source-contract scripts, scoped ESLint and the production build passed. The build retained the existing Supabase Edge-import and outdated Browserslist warnings; no dependency or environment change was made to suppress them. The independent review closed its 22 focused reproductions with GO; the isolated UI gate also returned GO. Exact remote commit/CI evidence is maintained in the candidate PR.
