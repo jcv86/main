@@ -5,6 +5,10 @@ import {
 } from './employer-registry'
 import { normalizeEmployerJob } from './employer-normalize'
 import {
+  addOpportunityReason, opportunityContentCoverage,
+  type OpportunityContentCoverage, type OpportunityReasonCounts,
+} from '../source-diagnostics'
+import {
   createEmployerRequestContext, EmployerRequestError, fetchEmployerJson,
   type EmployerRequestContext, type EmployerRequestOptions,
 } from './employer-request'
@@ -27,6 +31,14 @@ export interface EmployerBoardResult {
   observedSourceIds: string[]
   retryAfterUntil?: string
   failureCode?: string
+  /** Versioned, additive counts preserve compatibility with prior run records. */
+  diagnosticsVersion?: 1
+  considered?: number
+  notConsidered?: number
+  deferredEligible?: number
+  excludedReasons?: OpportunityReasonCounts
+  rejectedReasons?: OpportunityReasonCounts
+  contentCoverage?: OpportunityContentCoverage
 }
 
 export interface EmployerFetchOptions extends EmployerRequestOptions {
@@ -48,6 +60,8 @@ function initialResult(board: EmployerBoard): EmployerBoardResult {
     source: board.source, board: board.board, boardKey: employerBoardKey(board),
     outcome: 'unavailable', received: 0, accepted: 0, rejected: 0, excluded: 0, returned: 0,
     completeSnapshot: false, observedSourceIds: [],
+    diagnosticsVersion: 1, considered: 0, notConsidered: 0, deferredEligible: 0,
+    excludedReasons: {}, rejectedReasons: {}, contentCoverage: opportunityContentCoverage([]),
   }
 }
 
@@ -91,6 +105,7 @@ async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext, c
         const id = employerJobId(board.source, rawId)
         if (id && seen.has(id) && seen.get(id) !== 'rejected') {
           result.rejected++
+          addOpportunityReason(result.rejectedReasons!, 'duplicate_id')
           result.failureCode ||= 'duplicate_id'
           continue
         }
@@ -101,8 +116,12 @@ async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext, c
         if (id) seen.set(id, normalized.kind)
         if (normalized.kind === 'rejected') {
           result.rejected++
+          addOpportunityReason(result.rejectedReasons!, normalized.reason)
           result.failureCode ||= normalized.reason
-        } else if (normalized.kind === 'excluded') result.excluded++
+        } else if (normalized.kind === 'excluded') {
+          result.excluded++
+          addOpportunityReason(result.excludedReasons!, normalized.reason)
+        }
         else {
           observed.add(normalized.job.sourceId)
           jobs.push(normalized.job)
@@ -139,6 +158,10 @@ async function collectBoard(board: EmployerBoard, ctx: EmployerRequestContext, c
     ? [...jobs.slice(offset), ...jobs.slice(0, offset)].slice(0, MAX_JOBS_PER_BOARD)
     : jobs
   result.returned = selected.length
+  result.considered = processed
+  result.notConsidered = Math.max(0, result.received - processed)
+  result.deferredEligible = Math.max(0, result.accepted - selected.length)
+  result.contentCoverage = opportunityContentCoverage(selected)
   result.observedSourceIds = [...observed]
   return { jobs: selected, result }
 }

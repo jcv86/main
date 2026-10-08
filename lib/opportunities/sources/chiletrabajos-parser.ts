@@ -1,4 +1,5 @@
 import { load } from 'cheerio'
+import { deriveOpportunityEvidence, readableOpportunityText } from '../opportunity-evidence'
 
 export type ChileTrabajosWorkMode = 'remote' | 'hybrid' | 'onsite'
 
@@ -12,6 +13,8 @@ export interface ChileTrabajosPublicJob {
   expiresAt: string | null
   originalUrl: string
   description?: string
+  requirements?: string[]
+  skills?: string[]
   workMode?: ChileTrabajosWorkMode | null
   verificationStatus: 'verified_active' | 'stale' | 'unavailable' | 'unknown'
 }
@@ -162,8 +165,7 @@ function textFromHtml(html: string): string {
     const node = $(element)
     if (!node.children().length && /^(?:publicidad|advertisement|anuncio patrocinado)$/i.test(compact(node.text()))) node.remove()
   })
-  $('br, p, li, div, section, h1, h2, h3, h4').after('\n')
-  return compact($.root().text())
+  return readableOpportunityText($.root().html() || '')
 }
 
 function usefulDescription(value: string): boolean {
@@ -276,45 +278,17 @@ export function inferChileTrabajosWorkMode(
   description: string,
   jobLocationType?: unknown,
 ): ChileTrabajosWorkMode | null {
-  const offered = new Set<ChileTrabajosWorkMode>()
-  const denied = new Set<ChileTrabajosWorkMode>()
-  const modeOf = (value: string): ChileTrabajosWorkMode =>
-    /^hibrid[oa]$/.test(value) ? 'hybrid' : /^presencial$/.test(value) ? 'onsite' : 'remote'
-  const modeWords = '(remot[oa]|teletrabajo|a distancia|presencial|hibrid[oa])'
-  const affirmativePatterns = [
-    new RegExp('\\b(?:modalidad|trabajo|jornada|cargo|puesto|esquema|formato|modelo|sistema)(?:\\s+(?:de|es|sera|en|trabajo)){0,3}\\s*[:=-]?\\s*(?:100\\s*%\\s*)?' + modeWords + '\\b', 'g'),
-    new RegExp('\\b(?:ofrecemos|ofrece|incluye|incluimos|permite|permitimos)\\s+(?:(?:el|la|un|una|en|modalidad|de|trabajo)\\s+){0,4}(?:100\\s*%\\s*)?' + modeWords + '\\b', 'g'),
-    new RegExp('^(?:100\\s*%\\s*)?' + modeWords + '(?:\\s+100\\s*%)?$', 'g'),
-  ]
-  const negative = /\b(?:no|sin|nunca|jamas|descarta(?:mos|n)?|descartad[oa]s?|excluye(?:n)?|excluimos|excluid[oa]s?|prohibe|prohibid[oa])\b/
-  const historicalOrConditional = /\b(?:experiencia|anterior(?:es)?|previ[oa]s?|historial|conocimientos?|certificacion|formacion|capacitacion|cursos?|posibilidad|posible|opcion|opcional|eventual(?:mente)?|podria(?:n)?|podra(?:n)?|potencial(?:mente)?|preferencia|idealmente|deseable)\b/
+  return deriveOpportunityEvidence({
+    description,
+    workModeText: explicitValue,
+    workMode: typeof jobLocationType === 'string' && jobLocationType.toUpperCase() === 'TELECOMMUTE' ? 'remote' : null,
+  }).workMode
+}
 
-  const inspectClause = (raw: string) => {
-    const clause = normalized(raw).replace(/^[:=\s]+|[:=\s]+$/g, '')
-    if (!clause) return
-    if (negative.test(clause)) {
-      // A negated clause never establishes a mode. Retain contradictions with
-      // explicit fields/JobPosting so "TELECOMMUTE" + "no teletrabajo" is unknown.
-      for (const match of clause.matchAll(new RegExp('\\b' + modeWords + '\\b', 'g'))) denied.add(modeOf(match[1]))
-      return
-    }
-    // Mentions in previous experience, training or possible future benefits are
-    // not an affirmative statement about the current offer.
-    if (historicalOrConditional.test(clause)) return
-    for (const pattern of affirmativePatterns) {
-      pattern.lastIndex = 0
-      for (const match of clause.matchAll(pattern)) offered.add(modeOf(match[1]))
-    }
-  }
-
-  // Keep clauses separate: "Modalidad presencial. No hay teletrabajo" is onsite.
-  // Colons remain inside a clause because they connect labels to their values.
-  for (const clause of explicitValue.split(/[.!?;,\n]+/)) inspectClause(clause)
-  for (const clause of description.split(/[.!?;,\n]+/)) inspectClause(clause)
-  if (typeof jobLocationType === 'string' && jobLocationType.toUpperCase() === 'TELECOMMUTE') offered.add('remote')
-  if (offered.size !== 1) return null
-  const mode = [...offered][0]
-  return denied.has(mode) ? null : mode
+function postingTextFields(...values: unknown[]): string[] {
+  return values.flatMap(value => Array.isArray(value) ? value.slice(0, 50) : [value])
+    .filter((value): value is string => typeof value === 'string')
+    .map(readableOpportunityText).filter(Boolean).slice(0, 50)
 }
 
 export function parseChileTrabajosJobHtml(
@@ -358,6 +332,13 @@ export function parseChileTrabajosJobHtml(
   const expiresAt = normalizeChileTrabajosDate(expiresRaw)
   const structuredDescription = typeof posting?.description === 'string' ? textFromHtml(posting.description) : ''
   const description = usefulDescription(structuredDescription) ? structuredDescription : descriptionFromHtml($)
+  const derived = deriveOpportunityEvidence({
+    description,
+    requirements: postingTextFields(posting?.qualifications, posting?.experienceRequirements, posting?.educationRequirements),
+    skills: postingTextFields(posting?.skills),
+    workModeText: readField($, ['modalidad', 'modalidad de trabajo']),
+    workMode: typeof posting?.jobLocationType === 'string' && posting.jobLocationType.toUpperCase() === 'TELECOMMUTE' ? 'remote' : null,
+  })
   const offerScope = $('#detalle-oferta').first()
   const bodyText = textFromHtml((offerScope.length ? offerScope.html() : $('body').html()) || '')
   const explicitlyClosed = /\b(?:ha expirado|ha sido desactivad[oa]|oferta (?:expirada|finalizada|cerrada)|anuncio (?:expirado|finalizado|cerrado)|ya no (?:acepta|recibe) postulaciones)\b/i.test(normalized(bodyText))
@@ -374,7 +355,8 @@ export function parseChileTrabajosJobHtml(
     source: 'chiletrabajos', sourceId: id, title, company: company || 'Empresa no informada',
     location, publishedAt, expiresAt, originalUrl: url.toString(),
     description: description || undefined,
-    workMode: inferChileTrabajosWorkMode(readField($, ['modalidad', 'modalidad de trabajo']), description, posting?.jobLocationType),
+    requirements: derived.requirements, skills: derived.skills,
+    workMode: derived.workMode,
     verificationStatus: status,
   }
 }

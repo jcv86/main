@@ -10,7 +10,7 @@ import * as searchQuery from '../lib/opportunities/search-query.ts'
 import { readVerifiedOpportunities, readVerifiedOpportunityInventory } from '../lib/opportunities/verified-index.ts'
 import { matchesPostgrestFilter } from './lib/postgrest-filter-fixture.mjs'
 
-const { createOpportunityMatcher, filterOpportunities, searchFiltersFromStoredIntent } = matching
+const { createOpportunityEvaluator, createOpportunityMatcher, filterOpportunities, rankOpportunities, searchFiltersFromStoredIntent } = matching
 const tests = []
 const test = (name, run) => tests.push({ name, run })
 
@@ -185,6 +185,126 @@ test('the saved intent shape keeps all filters and valid breadth', () => {
   })
 })
 
+test('reviewed translations are symmetric and preserve precise title semantics', () => {
+  for (const [spanish, english] of [
+    ['Analista de datos', 'Data Analyst'], ['Ingeniera de datos', 'Data Engineer'],
+    ['Científico de datos', 'Data Scientist'], ['Ingeniero de software', 'Software Engineer'],
+    ['Gerente de riesgo', 'Risk Manager'], ['Gerente de operaciones', 'Operations Manager'],
+    ['Analista financiero', 'Financial Analyst'], ['Contadora', 'Accountant'],
+    ['Ejecutivo de cuentas', 'Account Executive'], ['Reclutadora', 'Recruiter'],
+  ]) for (const [requested, title] of [[spanish, english], [english, spanish]]) {
+    const filters = { targetRoles: [requested], breadth: 'related' }
+    const match = createOpportunityEvaluator(filters)(job({ title }))
+    assert.equal(match?.kind, 'equivalent', requested + ' → ' + title)
+    assert.equal(match.reasons[0].code, 'reviewed_equivalent')
+    assert.ok(match.reasons[0].label.includes(requested))
+    assert.equal(createOpportunityEvaluator({ ...filters, breadth: 'precise' })(job({ title })), null)
+  }
+})
+
+test('equivalents never cross into distinct data or account occupations', () => {
+  const data = createOpportunityEvaluator({ targetRoles: ['Analista de datos'], breadth: 'related' })
+  for (const title of ['Data Scientist', 'Data Engineer', 'Database Administrator', 'Metadata Analyst', 'Data Entry Clerk']) {
+    assert.equal(data(job({ title })), null, title)
+  }
+  assert.equal(data(job({ title: 'Senior Data Analyst' }))?.kind, 'equivalent')
+  const accounts = createOpportunityEvaluator({ targetRoles: ['Ejecutivo de cuentas'], breadth: 'related' })
+  assert.equal(accounts(job({ title: 'Account Executive' }))?.kind, 'equivalent')
+  assert.equal(accounts(job({ title: 'Account Manager' })), null)
+  assert.equal(accounts(job({ title: 'Accounting Analyst' })), null)
+})
+
+test('a translated role keeps seniority and domain qualifiers instead of silently dropping them', () => {
+  const senior = createOpportunityEvaluator({ targetRoles: ['Senior Data Analyst'], breadth: 'related' })
+  assert.equal(senior(job({ title: 'Senior Analista de datos' }))?.kind, 'equivalent')
+  assert.equal(senior(job({ title: 'Analista de datos senior' }))?.kind, 'equivalent')
+  assert.equal(senior(job({ title: 'Junior Analista de datos' })), null)
+  assert.equal(senior(job({ title: 'Analista de datos' })), null)
+  const junior = createOpportunityEvaluator({ targetRoles: ['Analista de datos junior'], breadth: 'related' })
+  assert.equal(junior(job({ title: 'Junior Data Analyst' }))?.kind, 'equivalent')
+  assert.equal(junior(job({ title: 'Senior Data Analyst' })), null)
+  const clinical = createOpportunityEvaluator({ targetRoles: ['Analista de datos clínicos'], breadth: 'related' })
+  assert.equal(clinical(job({ title: 'Data Analyst' })), null)
+  assert.equal(clinical(job({ title: 'Clinical Data Analyst' })), null)
+})
+
+test('a direct target takes precedence over another target translated to the same title', () => {
+  const match = createOpportunityEvaluator({ targetRoles: ['Analista de datos', 'Data Analyst'], breadth: 'related' })(job({ title: 'Data Analyst' }))
+  assert.equal(match.kind, 'title')
+  assert.equal(match.reasons[0].label, 'Coincide con el cargo buscado: Data Analyst')
+})
+
+test('one evaluator produces auditable relevance tiers without changing inclusion', () => {
+  const filters = { targetRoles: ['Contador', 'technology'], breadth: 'exploratory' }
+  const rows = [
+    job({ source_id: '5', title: 'Auditor financiero' }),
+    job({ source_id: '4', title: 'Data Scientist' }),
+    job({ source_id: '3', title: 'Analista contable' }),
+    job({ source_id: '2', title: 'Accountant' }),
+    job({ source_id: '1', title: 'Contador', last_verified_at: '2026-10-06T18:00:00Z' }),
+    job({ source_id: '6', title: 'Nurse' }),
+  ]
+  const ranked = rankOpportunities(rows, filters)
+  assert.deepEqual(ranked.map(value => value.source_id), ['1', '2', '3', '4', '5'])
+  assert.deepEqual(ranked.map(value => value.match.kind), ['title', 'equivalent', 'related', 'category', 'expanded_category'])
+  assert.deepEqual(ranked.map(value => value.match.rank), [0, 1, 2, 3, 4])
+  assert.deepEqual(new Set(ranked.map(value => value.source_id)), new Set(filterOpportunities(rows, filters).map(value => value.source_id)))
+  assert.equal(ranked[3].match.reasons[0].code, 'selected_category')
+  assert.equal(ranked[4].match.reasons[0].code, 'expanded_category')
+  assert.ok(rows.every(value => !Object.hasOwn(value, 'match')))
+  assert.equal(rows[0].source_id, '5')
+})
+
+test('equivalent and area explanations never relax region or known-mode boundaries', () => {
+  for (const targetRoles of [['Analista de datos'], ['technology']]) {
+    const evaluate = createOpportunityEvaluator({ targetRoles, breadth: 'exploratory', locations: ['Metropolitana'], workModes: ['remote'] })
+    const accepted = evaluate(job({ title: 'Data Analyst' }))
+    assert.equal(accepted.reasons.some(value => value.code === 'region' && value.label.includes('Metropolitana')), true)
+    assert.equal(accepted.reasons.some(value => value.code === 'work_mode' && value.label.includes('remota')), true)
+    for (const change of [{ location: 'Concepción', region: 'Biobío' }, { location: null, region: null }, { work_mode: null }, { work_mode: 'onsite' }]) {
+      assert.equal(evaluate(job({ title: 'Data Analyst', ...change })), null)
+    }
+  }
+})
+
+test('unknown mode stays explicit in an all-roles search and never becomes a claimed capability', () => {
+  const match = createOpportunityEvaluator()(job({ work_mode: null }))
+  assert.equal(match.kind, 'all')
+  assert.equal(match.reasons[0].code, 'all_roles')
+  assert.equal(match.reasons[1].code, 'work_mode_unreported')
+  assert.doesNotMatch(JSON.stringify(match), /probabilidad|contratación|compatibilidad|preparación/i)
+})
+
+test('relevance ties preserve verification, source and id order independently of input order', () => {
+  const rows = [
+    job({ source: 'lever', source_id: 'a', last_verified_at: '2026-10-07T17:00:00Z' }),
+    job({ source: 'greenhouse', source_id: 'b', last_verified_at: '2026-10-07T17:00:00Z' }),
+    job({ source: 'greenhouse', source_id: 'a', last_verified_at: '2026-10-07T17:00:00.000Z' }),
+    job({ source_id: 'recent', last_verified_at: '2026-10-07T18:00:00Z' }),
+  ]
+  for (const order of [rows, rows.toReversed()]) {
+    assert.deepEqual(rankOpportunities(order).map(value => value.source + ':' + value.source_id), [
+      'chiletrabajos:recent', 'greenhouse:a', 'greenhouse:b', 'lever:a',
+    ])
+  }
+})
+
+test('clear English occupation families receive useful categories without substring evidence', () => {
+  for (const [title, expected] of [
+    ['Senior Account Executive', 'commercial'], ['Financial Analyst', 'finance'], ['Accounting Analyst', 'finance'],
+    ['Operations Specialist', 'operations'], ['Warehouse Supervisor', 'operations'], ['Supply Chain Planner', 'operations'],
+    ['Data Scientist', 'technology'], ['Product Owner', 'technology'], ['Backend Developer', 'technology'],
+    ['Salesforce Developer', 'technology'], ['Human Resources Analyst', 'people'], ['Recruiter', 'people'],
+    ['Content Strategist', 'marketing'], ['Legal Counsel', 'legal'], ['Executive Assistant', 'administration'],
+    ['Civil Engineer', 'engineering'], ['Registered Nurse', 'health'], ['School Teacher', 'education'],
+    ['Auxiliar Administrativo', 'administration'], ['Auxiliar de bodega', 'operations'],
+    ['Analista financiera', 'finance'], ['Enfermera', 'health'], ['Profesora', 'education'],
+  ]) assert.equal(taxonomy.categorizeOpportunity(title).key, expected, title)
+  for (const title of ['PeopleSoft Consultant', 'Wholesale Coordinator', 'Biodata Specialist', 'Subcontador', 'Auxiliar']) {
+    assert.equal(taxonomy.categorizeOpportunity(title).key, 'other', title)
+  }
+})
+
 // Execute the real route bodies with controlled boundaries. Any new provider dependency,
 // database mutation or second index read fails these fixtures instead of making a network call.
 function routeHarness(path, { user = { id: 'test-user' }, allowed = true, intent = null, rows = [], indexError = false } = {}) {
@@ -286,6 +406,80 @@ test('results route applies current user intent once and preserves response fiel
   assert.equal(body.opportunities[0].sourceId, '100')
   assert.equal(body.opportunities[0].workMode, 'remote')
   assert.equal(body.opportunities[0].originalUrl, rows[0].original_url)
+  assert.equal(body.opportunities[0].match.kind, 'category')
+  assert.equal(body.opportunities[0].match.reasons[0].code, 'selected_category')
+})
+
+test('the actual endpoint ranks before pagination and keeps every matching identity exactly once', async () => {
+  const rows = Array.from({ length: 43 }, (_, index) => job({
+    source_id: String(800 + index), title: index === 42 ? 'Analista de datos' : 'Data Analyst',
+    last_verified_at: index === 42 ? '2026-10-06T18:00:00Z' : '2026-10-07T16:00:00Z',
+  }))
+  const route = routeHarness(resultsPath, { rows })
+  const base = 'https://dtc.test/api?view=explore&role=Analista+de+datos&breadth=related'
+  const first = await (await route.GET(new Request(base))).json()
+  assert.equal(first.total_matching, 43)
+  assert.equal(first.count, 18)
+  assert.equal(first.opportunities[0].sourceId, '842')
+  assert.equal(first.opportunities[0].match.kind, 'title')
+  assert.ok(first.opportunities.slice(1).every(value => value.match.kind === 'equivalent'))
+  const second = await (await route.GET(new Request(base + '&offset=18&snapshot=' + first.pagination.snapshot))).json()
+  const third = await (await route.GET(new Request(base + '&offset=36&snapshot=' + first.pagination.snapshot))).json()
+  const all = [...first.opportunities, ...second.opportunities, ...third.opportunities]
+  assert.equal(all.length, 43)
+  assert.equal(new Set(all.map(value => value.source + ':' + value.sourceId)).size, 43)
+  assert.equal(third.pagination.next_offset, null)
+})
+
+test('a changed public title, requirement or explanation invalidates the next page without a new verification timestamp', async () => {
+  const rows = Array.from({ length: 20 }, (_, index) => job({ source_id: String(900 + index), title: 'Data Analyst' }))
+  const base = 'https://dtc.test/api?view=explore&role=Analista+de+datos&breadth=related'
+  const first = await (await routeHarness(resultsPath, { rows }).GET(new Request(base))).json()
+  for (const change of [
+    { title: 'Analista de datos' }, { description: 'Requisitos actualizados por la empresa.' },
+    { requirements: ['Experiencia con SQL'] }, { skills: ['SQL'] }, { work_mode: null },
+    { field_evidence: [{ field: 'skills', value: 'SQL', excerpt: 'Experiencia con SQL', origin: 'description', section: 'Requisitos' }] },
+  ]) {
+    const changedRows = rows.map((row, index) => index === 19 ? { ...row, ...change } : row)
+    const response = await routeHarness(resultsPath, { rows: changedRows }).GET(new Request(base + '&offset=18&snapshot=' + first.pagination.snapshot))
+    assert.equal(response.status, 409, JSON.stringify(change))
+    assert.equal((await response.json()).code, 'inventory_changed')
+  }
+})
+
+test('equivalent ordered public results reuse a snapshot despite raw row order and private bookkeeping changes', async () => {
+  const rows = Array.from({ length: 20 }, (_, index) => job({ source_id: String(950 + index), title: 'Data Analyst' }))
+  const base = 'https://dtc.test/api?view=explore&role=Analista+de+datos&breadth=related'
+  const first = await (await routeHarness(resultsPath, { rows }).GET(new Request(base))).json()
+  const unchanged = rows.toReversed().map(row => ({ ...row, source_payload: { private: 'must not affect public pages' }, updated_at: '2026-10-07T18:00:00Z' }))
+  const response = await routeHarness(resultsPath, { rows: unchanged }).GET(new Request(base + '&offset=18&snapshot=' + first.pagination.snapshot))
+  assert.equal(response.status, 200)
+  const body = await response.json()
+  assert.equal(body.pagination.snapshot, first.pagination.snapshot)
+  assert.doesNotMatch(JSON.stringify(body), /source_payload|private bookkeeping|updated_at/)
+})
+
+test('the result DTO exposes field evidence and derived match reasons through its explicit public projection', async () => {
+  const evidence = [{ field: 'skills', value: 'SQL', excerpt: 'Experiencia con SQL', origin: 'description', section: 'Requisitos' }]
+  const row = job({
+    field_evidence: evidence, source_payload: { private: true }, user_id: 'private-owner',
+    match: { rank: -999, kind: 'untrusted', reasons: [{ code: 'untrusted', label: 'Do not trust raw row fields' }] },
+  })
+  const body = await (await routeHarness(resultsPath, { rows: [row] }).GET(new Request('https://dtc.test/api?view=explore&role=Ingeniero+de+datos'))).json()
+  assert.deepEqual(body.opportunities[0].fieldEvidence, evidence)
+  assert.equal(body.opportunities[0].match.kind, 'title')
+  assert.equal(body.opportunities[0].match.rank, 0)
+  assert.doesNotMatch(JSON.stringify(body), /untrusted|source_payload|user_id|private-owner/)
+})
+
+test('catalog counts and ordered results agree on reviewed equivalents under the same hard filters', async () => {
+  const rows = [job({ title: 'Data Analyst' }), job({ title: 'Data Scientist' }), job({ title: 'Data Analyst', work_mode: null })]
+  const query = 'view=explore&role=Analista+de+datos&breadth=related&region=Metropolitana&mode=remote'
+  const catalog = await (await routeHarness(catalogPath, { rows }).GET(new Request('https://dtc.test/api?' + query))).json()
+  const result = await (await routeHarness(resultsPath, { rows }).GET(new Request('https://dtc.test/api?' + query))).json()
+  assert.equal(catalog.total, 1)
+  assert.equal(result.total_matching, catalog.total)
+  assert.equal(result.opportunities[0].match.kind, 'equivalent')
 })
 
 test('catalog and result routes apply the same region and work mode constraints', async () => {

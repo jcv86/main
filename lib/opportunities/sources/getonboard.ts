@@ -1,7 +1,11 @@
-import { load } from 'cheerio'
 import type { CanonicalOpportunity } from '../types'
 import { sourceRetryAfterUntil } from './retry-after'
 import { isOpportunityPublished } from '../temporal-filter'
+import { deriveOpportunityEvidence, readableOpportunityText, readableOpportunityTextResult } from '../opportunity-evidence'
+import {
+  addOpportunityReason, opportunityContentCoverage,
+  type OpportunityReasonCode, type OpportunityReasonCounts, type OpportunityContentCoverage,
+} from '../source-diagnostics'
 export type { CanonicalOpportunity, OpportunityVerificationStatus } from '../types'
 
 type JsonObject = Record<string, unknown>
@@ -23,11 +27,7 @@ function resource(value: unknown): JsonObject {
 }
 
 function plainText(value: unknown): string {
-  if (typeof value !== 'string' || !value.trim()) return ''
-  const $ = load(value, null, false)
-  $('script,style,noscript,iframe').remove()
-  $('br,p,li,div,section,h1,h2,h3,h4').after('\n')
-  return $.root().text().replace(/\s+/g, ' ').trim().slice(0, 40_000)
+  return readableOpportunityText(value)
 }
 
 function strings(value: unknown): string[] {
@@ -100,10 +100,14 @@ function geographicRelation(value: unknown, city = false): { names: string[]; un
   return { names: names.filter(Boolean), unresolved: data.length > 100 || names.some(name => !name) }
 }
 
-export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().toISOString()): CanonicalOpportunity | null {
+export type GetOnBoardNormalization =
+  | { kind: 'accepted'; job: CanonicalOpportunity }
+  | { kind: 'rejected'; reason: OpportunityReasonCode }
+
+export function normalizeGetOnBoardJobResult(input: unknown, verifiedAt = new Date().toISOString()): GetOnBoardNormalization {
   const root = object(input)
   const data = object(root.data ?? root)
-  if (data.type && data.type !== 'job') return null
+  if (data.type && data.type !== 'job') return { kind: 'rejected', reason: 'resource_type' }
   const attrs = resource(data)
   const companyObj = resource(attrs.company)
   const links = object(attrs.links)
@@ -111,7 +115,9 @@ export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().t
   const title = plainText(text(attrs.title, attrs.name))
   const company = plainText(text(companyObj.name, attrs.company_name, attrs.company))
   const originalUrl = text(links.public_url, links.public, links.web, attrs.url, attrs.public_url, attrs.web_url)
-  if (!sourceId || !title || !company || !isGetOnBoardJobUrl(originalUrl, sourceId)) return null
+  if (!sourceId || !title) return { kind: 'rejected', reason: 'job_identity' }
+  if (!company) return { kind: 'rejected', reason: 'company_missing' }
+  if (!isGetOnBoardJobUrl(originalUrl, sourceId)) return { kind: 'rejected', reason: 'job_url' }
 
   const cities = geographicRelation(attrs.location_cities, true)
   const regions = geographicRelation(attrs.location_regions)
@@ -127,12 +133,16 @@ export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().t
     (!location || cities.unresolved || regions.unresolved || countriesExpanded.unresolved)) {
     // A local remote offer with opaque territorial restrictions must not become
     // an unrestricted remote recommendation. Never translate IDs into countries.
-    return null
+    return { kind: 'rejected', reason: 'remote_geography_unresolved' }
   }
 
-  const description = [...new Set([
+  const descriptionParts = [
     attrs.description_headline, attrs.functions, attrs.description, attrs.desirable,
-  ].map(plainText).filter(Boolean))].join('\n\n').slice(0, 40_000)
+  ].map(readableOpportunityTextResult)
+  if (descriptionParts.some(part => part.exceedsLimit)) return { kind: 'rejected', reason: 'description_too_large' }
+  const description = [...new Set(descriptionParts.map(part => part.text).filter(Boolean))].join('\n\n')
+  // Slicing can remove the end of a negation and manufacture a qualification.
+  if (readableOpportunityTextResult(description).exceedsLimit) return { kind: 'rejected', reason: 'description_too_large' }
   const requirements = strings(attrs.requirements)
   const skills = [...new Set([
     ...strings(attrs.skills),
@@ -141,27 +151,44 @@ export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().t
     ...strings(attrs.tags),
   ])].slice(0, 100)
   const publishedAt = normalizeGetOnBoardPublishedAt(attrs.published_at ?? attrs.created_at)
-  if (!isOpportunityPublished(publishedAt, new Date(verifiedAt))) return null
+  if (!isOpportunityPublished(publishedAt, new Date(verifiedAt))) return { kind: 'rejected', reason: 'scheduled' }
   const remoteRaw = attrs.remote ?? attrs.remote_allowed
   const remote = typeof remoteRaw === 'boolean' ? remoteRaw : null
+  const declaredMode = normalizeGetOnBoardWorkMode(attrs.remote_modality, remote)
+  const hasModeDeclaration = typeof attrs.remote_modality === 'string'
+    ? Boolean(attrs.remote_modality.trim()) : attrs.remote_modality != null
+  const unresolvedDeclaration = hasModeDeclaration && declaredMode === null
+  const enriched = deriveOpportunityEvidence({
+    description, requirements, skills,
+    workMode: declaredMode,
+  })
+  // A temporary, unsupported or contradictory source field must remain unknown.
+  const workMode = unresolvedDeclaration || (remote === false && enriched.workMode === 'remote')
+    ? null : enriched.workMode
 
-  return {
+  return { kind: 'accepted', job: {
     source: 'getonboard',
     sourceId,
     title,
     company,
     location,
-    remote,
-    workMode: normalizeGetOnBoardWorkMode(attrs.remote_modality, remote),
+    remote: workMode === 'remote' ? true : workMode ? false : null,
+    workMode,
     description,
-    requirements,
-    skills,
+    requirements: enriched.requirements,
+    skills: enriched.skills,
     originalUrl,
     publishedAt,
     lastVerifiedAt: verifiedAt,
     verificationStatus: 'verified_active',
     raw: input,
-  }
+  } }
+}
+
+/** Compatibility for callers that only need an accepted canonical vacancy. */
+export function normalizeGetOnBoardJob(input: unknown, verifiedAt = new Date().toISOString()): CanonicalOpportunity | null {
+  const result = normalizeGetOnBoardJobResult(input, verifiedAt)
+  return result.kind === 'accepted' ? result.job : null
 }
 
 export interface GetOnBoardBatchDiagnostics {
@@ -172,6 +199,10 @@ export interface GetOnBoardBatchDiagnostics {
   returned: number
   outcome: 'ok' | 'partial' | 'no_matches' | 'parse_failed'
   failure_code?: string
+  diagnostics_version?: 1
+  not_considered?: number
+  rejected_reasons?: OpportunityReasonCounts
+  content_coverage?: OpportunityContentCoverage
 }
 
 export interface GetOnBoardBatchResult {
@@ -201,6 +232,7 @@ export function normalizeGetOnBoardPayload(
   const root = object(payload)
   const diagnostics: GetOnBoardBatchDiagnostics = {
     received: 0, considered: 0, normalized: 0, rejected: 0, returned: 0, outcome: 'parse_failed',
+    diagnostics_version: 1, not_considered: 0, rejected_reasons: {}, content_coverage: opportunityContentCoverage([]),
   }
   const result: GetOnBoardBatchResult = { source: 'getonboard', fetchedAt: verifiedAt, jobs: [], diagnostics }
   if (!Array.isArray(root.data)) {
@@ -210,10 +242,16 @@ export function normalizeGetOnBoardPayload(
   diagnostics.received = root.data.length
   const rows = root.data.slice(0, 30)
   diagnostics.considered = rows.length
-  result.jobs = rows.map(row => normalizeGetOnBoardJob(row, verifiedAt)).filter((row): row is CanonicalOpportunity => row !== null)
+  diagnostics.not_considered = diagnostics.received - rows.length
+  for (const row of rows) {
+    const normalized = normalizeGetOnBoardJobResult(row, verifiedAt)
+    if (normalized.kind === 'accepted') result.jobs.push(normalized.job)
+    else addOpportunityReason(diagnostics.rejected_reasons!, normalized.reason)
+  }
   diagnostics.normalized = result.jobs.length
   diagnostics.rejected = rows.length - result.jobs.length
   diagnostics.returned = result.jobs.length
+  diagnostics.content_coverage = opportunityContentCoverage(result.jobs)
   diagnostics.outcome = rows.length === 0 ? 'no_matches' :
     result.jobs.length === 0 ? 'parse_failed' :
       diagnostics.rejected ? 'partial' : 'ok'

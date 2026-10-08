@@ -3,6 +3,7 @@ import { readFileSync } from 'node:fs'
 import test from 'node:test'
 import {
   normalizeGetOnBoardJob,
+  normalizeGetOnBoardJobResult,
   normalizeGetOnBoardPayload,
   normalizeGetOnBoardPublishedAt,
   normalizeGetOnBoardWorkMode,
@@ -61,6 +62,36 @@ test('flattened compatibility form keeps a matching provider identity', () => {
   assert.equal(job.sourceId, sample.data.id)
   assert.equal(job.company, 'Empresa sintética')
   assert.equal(job.workMode, 'remote')
+})
+
+test('a description cannot resurrect a contradictory, temporary or unsupported declared mode', () => {
+  for (const attributes of [
+    { remote_modality: 'fully_remote', remote: false, description: 'This role is remote.' },
+    { remote_modality: 'no_remote', remote: true, description: 'Modalidad presencial.' },
+    { remote_modality: 'temporarily_remote', remote: true, description: 'This role is remote.' },
+    { remote_modality: 'undocumented', remote: true, description: 'This role is remote.' },
+    { remote_modality: '', remote: false, description: 'This role is remote.' },
+  ]) {
+    const job = normalizeGetOnBoardJob(row(source.id, attributes), verifiedAt)
+    assert.ok(job)
+    assert.equal(job.workMode, null)
+    assert.equal(job.remote, null)
+  }
+  const hybrid = normalizeGetOnBoardJob(row(source.id, { remote_modality: '', remote: false, description: 'Modalidad híbrida.' }), verifiedAt)
+  assert.equal(hybrid.workMode, 'hybrid', 'A non-remote flag alone does not imply onsite')
+  assert.equal(hybrid.remote, false)
+})
+
+test('oversized descriptions are rejected before a truncation could remove negating source text', () => {
+  const samples = [
+    { description_headline: 'x'.repeat(39_960) + '\nThis role is remote.', functions: 'No hay teletrabajo.', description: '', desirable: '' },
+    { description: 'x'.repeat(40_001), description_headline: 'This role is remote.' },
+    { description: '<div>' + 'x'.repeat(200_000) + '</div>' },
+  ]
+  for (const attributes of samples) assert.deepEqual(
+    normalizeGetOnBoardJobResult(row(source.id, attributes), verifiedAt),
+    { kind: 'rejected', reason: 'description_too_large' },
+  )
 })
 
 test('scheduled publication is not verified active before its actual date or instant', () => {
@@ -122,7 +153,7 @@ test('HTML fields become visible text; scripts, styles and tag keywords do not b
   assert.match(job.description, /Revisar datos y desarrollar aplicaciones accesibles/)
   assert.match(job.description, /Se requiere experiencia/)
   assert.ok(!/<[^>]+>|UNSAFE_SCRIPT_SENTINEL|color: red/.test(job.description))
-  assert.deepEqual(job.requirements, ['Experiencia comprobable'])
+  assert.deepEqual(job.requirements, ['Experiencia comprobable', 'Se requiere experiencia en desarrollo y comunicación clara.'])
   assert.deepEqual(job.skills, ['TypeScript', 'Node.js'])
   assert.ok(!job.skills.some(skill => /DO_NOT_INFER|Server backend/.test(skill)))
 })

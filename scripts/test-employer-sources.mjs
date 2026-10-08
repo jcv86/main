@@ -180,7 +180,7 @@ test('Lever falls back to documented opening/body/closing fields only when combi
   })
   const result = normalizeEmployerJob(board('lever:fintual'), input, verifiedAt)
   assert.equal(result.kind, 'accepted')
-  assert.equal(result.job.description, 'Introducción del empleador.\n\nConstruir sistemas y revisar resultados.\n\nCondiciones de la convocatoria.')
+  assert.equal(result.job.description, 'Introducción del empleador.\n\nConstruir sistemas y revisar resultados.\n\nInformación adicional:\nCondiciones de la convocatoria.')
 })
 
 test('genuinely empty Lever descriptions are still rejected and undocumented closing fields are ignored', () => {

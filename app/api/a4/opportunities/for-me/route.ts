@@ -3,8 +3,8 @@ import { createHash } from 'node:crypto'
 import { resolveServerUser } from '@/lib/auth/server-user'
 import { createAdminClient } from '@/lib/supabase/server'
 import { checkA4Access, getA4AccessDenialMessage } from '@/lib/a4/access-control'
-import { filterOpportunities, normalizeOpportunityWorkMode, searchFiltersFromStoredIntent } from '@/lib/opportunities/matching'
-import { readVerifiedOpportunityInventory } from '@/lib/opportunities/verified-index'
+import { rankOpportunities, normalizeOpportunityWorkMode, searchFiltersFromStoredIntent, type OpportunityMatch } from '@/lib/opportunities/matching'
+import { readVerifiedOpportunityInventory, type VerifiedOpportunityRow } from '@/lib/opportunities/verified-index'
 import { OPPORTUNITY_PAGE_SIZE, OpportunityQueryError, parseOpportunityQuery } from '@/lib/opportunities/search-query'
 
 export const runtime = 'nodejs'
@@ -32,13 +32,15 @@ export async function GET(request?: Request) {
     // GET only reads the verified index. A scheduled refresh owns provider calls and writes.
     const { opportunities: index, scope } = await readVerifiedOpportunityInventory(supabase, 500)
     const filters = query.view === 'explore' ? query.filters : searchFiltersFromStoredIntent(intent)
-    const matches = filterOpportunities(index, filters)
-    const snapshot = createHash('sha256').update(JSON.stringify({ filters, rows: matches.map(job => [job.source, job.source_id, job.last_verified_at, job.expires_at]) })).digest('hex')
+    const matches = rankOpportunities(index, filters).map(toPublic)
+    // A page belongs to the exact ordered public result, including explanations.
+    // Title/requirements changes can alter relevance even when verification time is unchanged.
+    const snapshot = createHash('sha256').update(JSON.stringify({ version: 2, view: query.view, filters, scope, rows: matches })).digest('hex')
     if (query.snapshot && query.snapshot !== snapshot) {
       return json({ error: 'Las ofertas cambiaron. Vuelve a cargar los resultados.', code: 'inventory_changed' }, 409)
     }
     if (query.offset > 0 && query.offset >= matches.length) return json({ error: 'Vuelve a la primera página de resultados.' }, 400)
-    const opportunities = matches.slice(query.offset, query.offset + OPPORTUNITY_PAGE_SIZE).map(toPublic)
+    const opportunities = matches.slice(query.offset, query.offset + OPPORTUNITY_PAGE_SIZE)
     const nextOffset = query.offset + opportunities.length
     return json({
       needs_intent: query.view === 'saved' && !intent,
@@ -61,7 +63,7 @@ export async function GET(request?: Request) {
   }
 }
 
-function toPublic(job: any) {
+function toPublic(job: VerifiedOpportunityRow & { match: OpportunityMatch }) {
   return {
     source: job.source,
     sourceId: job.source_id,
@@ -78,5 +80,7 @@ function toPublic(job: any) {
     description: typeof job.description === 'string' ? job.description : null,
     requirements: Array.isArray(job.requirements) ? job.requirements : [],
     skills: Array.isArray(job.skills) ? job.skills : [],
+    fieldEvidence: Array.isArray(job.field_evidence) ? job.field_evidence : [],
+    match: job.match,
   }
 }

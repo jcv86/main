@@ -6,6 +6,9 @@ import { employerJobId } from './sources/employer-registry'
 import type { CanonicalOpportunity, OpportunitySource, OpportunityVerificationStatus } from './types'
 import { categorizeOpportunity, inferChileRegion, normalizeRoleTitle } from './taxonomy'
 import { isOpportunityPublished, opportunityTemporalFilter } from './temporal-filter'
+import {
+  deriveOpportunityEvidence, readableOpportunityTextResult, type OpportunityFieldEvidence,
+} from './opportunity-evidence'
 
 export type AdminDbClient = { from: (table: string) => any }
 export type VerifiedOpportunityInput = ChileTrabajosPublicJob | CanonicalOpportunity
@@ -33,6 +36,8 @@ export interface VerifiedOpportunityRow {
   description: string | null
   requirements: string[]
   skills: string[]
+  /** Computed from selected public fields; not a new database column. */
+  field_evidence?: OpportunityFieldEvidence[]
   [key: string]: unknown
 }
 
@@ -88,24 +93,9 @@ function safeOriginalUrl(source: string, id: string, value: string): boolean {
   }
 }
 
-function cleanDescription(value: unknown): string | null {
-  if (typeof value !== 'string') return null
-  const clean = value
-    .replace(/<script\b[^>]*>[\s\S]*?<\/script>/gi, ' ')
-    .replace(/<style\b[^>]*>[\s\S]*?<\/style>/gi, ' ')
-    .replace(/<[^>]*>/g, ' ')
-    .replace(/\s+/g, ' ')
-    .trim()
-    .slice(0, 40_000)
-  if (!clean || /^(publicidad|advertisement|anuncio)$/i.test(clean)) return null
-  return clean
-}
-
-function stringArray(value: unknown): string[] {
-  return Array.isArray(value)
-    ? value.filter((item): item is string => typeof item === 'string')
-        .map((item) => item.trim().slice(0, 500)).filter(Boolean).slice(0, 100)
-    : []
+function cleanDescription(value: unknown): { description: string | null; exceedsLimit: boolean } {
+  const { text, exceedsLimit } = readableOpportunityTextResult(value)
+  return { description: text && !/^(publicidad|advertisement|anuncio)$/i.test(text) ? text : null, exceedsLimit }
 }
 
 function normalizeWorkMode(value: unknown): VerifiedOpportunityRow['work_mode'] {
@@ -250,6 +240,15 @@ export async function upsertVerifiedOpportunities(
     const workMode = 'workMode' in job
       ? normalizeWorkMode(job.workMode)
       : 'remote' in job && job.remote === true ? 'remote' : null
+    const { description, exceedsLimit } = cleanDescription(job.description)
+    const derived = deriveOpportunityEvidence({
+      // Preserve the rejection signal so inaccessible text cannot leave an
+      // apparently confirmed modality after its contradictions were discarded.
+      description: exceedsLimit ? job.description : description,
+      requirements: 'requirements' in job ? job.requirements : [],
+      skills: 'skills' in job ? job.skills : [],
+      workMode,
+    })
     rows.push({
       source: job.source,
       source_id: job.sourceId,
@@ -261,13 +260,15 @@ export async function upsertVerifiedOpportunities(
       company: job.company,
       location,
       region: inferChileRegion(location),
-      work_mode: workMode,
+      // Null may record a source-field/description contradiction. A second
+      // enrichment pass must not resurrect one side after source context is lost.
+      work_mode: workMode === null ? null : derived.workMode,
       published_at: job.publishedAt,
       expires_at: expiresAt ? normalizeChileTrabajosDate(expiresAt) : null,
       verification_status: 'verified_active',
-      description: cleanDescription(job.description),
-      requirements: 'requirements' in job ? stringArray(job.requirements) : [],
-      skills: 'skills' in job ? stringArray(job.skills) : [],
+      description,
+      requirements: derived.requirements,
+      skills: derived.skills,
       source_payload: 'raw' in job ? job.raw : null,
       last_verified_at: verifiedAt,
       updated_at: nowIso,
@@ -344,6 +345,13 @@ export async function readVerifiedOpportunityInventory(
   }).map((row: VerifiedOpportunityRow) => {
     const category = categorizeOpportunity(row.title)
     const location = row.location?.trim() || null
+    const { description, exceedsLimit } = cleanDescription(row.description)
+    const workMode = normalizeWorkMode(row.work_mode)
+    const derived = deriveOpportunityEvidence({
+      description: exceedsLimit ? row.description : description,
+      requirements: row.requirements, skills: row.skills,
+      workMode,
+    })
     return {
       ...row,
       normalized_title: normalizeRoleTitle(row.title),
@@ -351,10 +359,11 @@ export async function readVerifiedOpportunityInventory(
       category_label: category.label,
       location,
       region: inferChileRegion(location),
-      work_mode: normalizeWorkMode(row.work_mode),
-      description: cleanDescription(row.description),
-      requirements: stringArray(row.requirements),
-      skills: stringArray(row.skills),
+      work_mode: workMode === null ? null : derived.workMode,
+      description,
+      requirements: derived.requirements,
+      skills: derived.skills,
+      field_evidence: derived.evidence.filter(item => item.field !== 'workMode' || workMode !== null),
       expires_at: row.expires_at ? normalizeChileTrabajosDate(row.expires_at) : null,
     }
   })

@@ -6,6 +6,8 @@ on:
       - 'lib/opportunities/sources/getonboard.ts'
       - 'lib/opportunities/sources/retry-after.ts'
       - 'lib/opportunities/temporal-filter.ts'
+      - 'lib/opportunities/opportunity-evidence.ts'
+      - 'lib/opportunities/source-diagnostics.ts'
       - 'lib/opportunities/sources/chiletrabajos-parser.ts'
       - 'lib/opportunities/types.ts'
       - 'lib/opportunities/verified-index.ts'
