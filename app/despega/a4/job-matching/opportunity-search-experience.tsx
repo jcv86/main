@@ -5,15 +5,9 @@ import { copyOpportunityFilters, type OpportunityFilters, type OpportunityView }
 import { SearchIntentForm } from './search-intent-form'
 import { RealOpportunityResults } from './real-opportunity-results'
 
-export interface OpportunityProfileEvidence {
-  targetRole?: string
-  strengths: string[]
-  missingProof: string[]
-  nextBestActions: string[]
-}
 const INITIAL_FILTERS: OpportunityFilters = { targetRoles: [], breadth: 'related', locations: ['Metropolitana'], workModes: [] }
 
-export function OpportunitySearchExperience({ seedRole, profileEvidence }: { seedRole?: string | null; profileEvidence?: OpportunityProfileEvidence | null }) {
+export function OpportunitySearchExperience({ seedRole }: { seedRole?: string | null }) {
   const [view, setView] = useState<OpportunityView>('explore')
   const [draft, setDraft] = useState(() => copyOpportunityFilters(INITIAL_FILTERS))
   const [pendingRole, setPendingRole] = useState('')
@@ -34,6 +28,6 @@ export function OpportunitySearchExperience({ seedRole, profileEvidence }: { see
     </div>
     {notice && <p role="status" className="text-sm text-muted-foreground">{notice}</p>}
     {view === 'explore' && <SearchIntentForm value={draft} applied={applied} role={pendingRole} onRoleChange={setPendingRole} seedRole={seedRole} onChange={setDraft} onApply={apply} onSaved={saved} saving={saving} onSavingChange={setSaving} />}
-    <RealOpportunityResults view={view} filters={applied} refreshKey={refreshKey} profileEvidence={profileEvidence} onExplore={() => setView('explore')} />
+    <RealOpportunityResults view={view} filters={applied} refreshKey={refreshKey} onExplore={() => setView('explore')} />
   </div>
 }

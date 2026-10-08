@@ -394,7 +394,7 @@ test('active pages preserve empty and degraded canonical context without request
       if (path.includes('job-matching')) {
         const search = nodes(tree).find(node => node?.type === 'ui:OpportunitySearchExperience')
         assert.ok(search, 'Search remains available without canonical context')
-        assert.equal(search.props.profileEvidence, null)
+        assert.equal(Object.hasOwn(search.props, 'profileEvidence'), false)
         assert.equal(search.props.seedRole, null)
       }
       assert.equal(signalQueries(h).length, 0)
@@ -411,7 +411,8 @@ test('active pages use declared target role only and never revive legacy readine
     assert.equal(card?.props.context.identity.targetRole, 'Objetivo sintético existente')
     if (path.includes('job-matching')) {
       const search = nodes(tree).find(node => node?.type === 'ui:OpportunitySearchExperience')
-      assert.deepEqual(search.props.profileEvidence, { targetRole: 'Objetivo sintético existente', strengths: [], missingProof: [], nextBestActions: [] })
+      assert.equal(Object.hasOwn(search.props, 'profileEvidence'), false)
+      assert.equal(search.props.seedRole, 'Objetivo sintético existente')
     }
     assert.equal(signalQueries(h).length, 0)
   }

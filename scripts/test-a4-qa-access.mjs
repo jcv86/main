@@ -7,6 +7,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createHash } from 'node:crypto'
 import * as searchQuery from '../lib/opportunities/search-query.ts'
 import * as opportunityMatching from '../lib/opportunities/matching.ts'
+import * as personalOrientation from '../lib/opportunities/personal-orientation.ts'
 
 // This suite executes production module, route and component bodies against
 // synthetic boundaries. It has no credentials, network access or database writes.
@@ -146,7 +147,7 @@ function harness(options = {}) {
     constructor(...args) { super(...(args.length ? args : [clock.value])) }
     static now() { return clock.value }
   }
-  const calls = { protectedReads: 0, report: 0, logs: [] }
+  const calls = { protectedReads: 0, personalReads: 0, report: 0, logs: [] }
   const loaded = new Map()
   const modules = {
     'server-only': {},
@@ -196,6 +197,11 @@ function harness(options = {}) {
       calls.protectedReads++; assert.equal(client, db); return { opportunities: [], scope: { limit: 500, limitReached: false } }
     } },
     '@/lib/opportunities/matching': opportunityMatching,
+    '@/lib/opportunities/personal-orientation': personalOrientation,
+    '@/lib/opportunities/personal-context': { loadOpportunityPersonalContext: async id => {
+      calls.personalReads++; assert.equal(id, USER)
+      return { version: 1, status: 'empty', revision: 'synthetic-empty', sources: [], evidence: [] }
+    } },
     '@/lib/opportunities/taxonomy': { catalogFromJobs: () => ({ areas: [], roles: [] }), regionCatalogFromJobs: () => [] },
   }
   const realDependencies = new Set([
@@ -477,18 +483,19 @@ test('shared context API returns effective A4 access with unchanged completion e
   assertNoAccessWrites(h)
 })
 
-test('catalog and personalized APIs use the same effective QA access and only read inventory', async () => {
+test('catalog and personalized APIs use the same effective QA access before inventory and private context', async () => {
   for (const path of ['catalog', 'for-me']) {
     const h = harness()
     const response = await h.load('app/api/a4/opportunities/' + path + '/route.ts').GET(request('/api/a4/opportunities/' + path))
     assert.equal(response.status, 200)
     assert.equal((await response.json()).inventory_status, 'empty')
     assert.equal(h.calls.protectedReads, 1)
+    assert.equal(h.calls.personalReads, path === 'for-me' ? 1 : 0)
     assertNoAccessWrites(h)
   }
 })
 
-test('catalog and personalized APIs reject no-session, no-pilot, expired and failed grants before inventory', async () => {
+test('catalog and personalized APIs reject no-session, no-pilot, expired and failed grants before inventory or private context', async () => {
   for (const path of ['catalog', 'for-me']) {
     for (const [config, status] of [
       [{ user: null }, 401], [{ tables: { pilot_memberships: [] } }, 403],
@@ -500,6 +507,7 @@ test('catalog and personalized APIs reject no-session, no-pilot, expired and fai
       const response = await h.load('app/api/a4/opportunities/' + path + '/route.ts').GET(request('/api/a4/opportunities/' + path))
       assert.equal(response.status, status, path)
       assert.equal(h.calls.protectedReads, 0)
+      assert.equal(h.calls.personalReads, 0)
       assertNoAccessWrites(h)
     }
   }

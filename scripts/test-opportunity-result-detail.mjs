@@ -12,10 +12,10 @@ import { OPPORTUNITY_SOURCE_LABELS } from '../lib/opportunities/types.ts'
 // Real TSX bodies and native details semantics, with only shell primitives and
 // fetch state replaced. Every value is synthetic; there are no database calls.
 const SOURCE = new URL('../app/despega/a4/job-matching/real-opportunity-results.tsx', import.meta.url)
-function compile(hooks = React) {
+function compile(hooks = React, source = SOURCE) {
   const module = { exports: {} }
-  const output = ts.transpileModule(fs.readFileSync(SOURCE, 'utf8'), {
-    fileName: SOURCE.pathname,
+  const output = ts.transpileModule(fs.readFileSync(source, 'utf8'), {
+    fileName: source.pathname,
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022, jsx: ts.JsxEmit.ReactJSX },
   }).outputText
   const modules = {
@@ -28,6 +28,7 @@ function compile(hooks = React) {
     '@/lib/opportunities/types': { OPPORTUNITY_SOURCE_LABELS },
     '@/lib/opportunities/search-query': queryHelpers,
   }
+  if (source === SOURCE) modules['./personal-orientation'] = compile(hooks, new URL('./personal-orientation.tsx', SOURCE))
   new Function('require', 'module', 'exports', output)(name => {
     assert.ok(Object.hasOwn(modules, name), 'Unexpected runtime dependency: ' + name)
     return modules[name]

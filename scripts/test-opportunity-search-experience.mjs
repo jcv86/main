@@ -5,6 +5,7 @@ import { createHash } from 'node:crypto'
 import * as matching from '../lib/opportunities/matching.ts'
 import * as taxonomy from '../lib/opportunities/taxonomy.ts'
 import * as queryHelpers from '../lib/opportunities/search-query.ts'
+import * as personalOrientation from '../lib/opportunities/personal-orientation.ts'
 import { OPPORTUNITY_SOURCE_LABELS } from '../lib/opportunities/types.ts'
 
 const cases = []
@@ -28,7 +29,7 @@ function compile(path, modules) {
   return module.exports
 }
 function route(path, options = {}) {
-  const calls = { tables: [], predicates: [], reads: 0, admin: 0 }
+  const calls = { tables: [], predicates: [], reads: 0, admin: 0, personal: [] }
   const rows = options.rows ?? ROWS
   const dbQuery = {
     select(columns) { assert.equal(columns, 'target_roles,breadth,locations,work_modes'); return this },
@@ -39,10 +40,15 @@ function route(path, options = {}) {
   const modules = {
     'next/server': { NextResponse: { json: (body, init = {}) => new Response(JSON.stringify(body), { status: init.status ?? 200, headers: { 'Content-Type': 'application/json', ...init.headers } }) } },
     'node:crypto': { createHash },
-    '@/lib/auth/server-user': { resolveServerUser: async () => { if (options.authThrows) throw new Error('PRIVATE_AUTH_DETAIL'); return options.anonymous ? null : { id: 'synthetic-owner' } } },
+    '@/lib/auth/server-user': { resolveServerUser: async () => { if (options.authThrows) throw new Error('PRIVATE_AUTH_DETAIL'); return options.anonymous ? null : { id: options.userId ?? 'synthetic-owner' } } },
     '@/lib/supabase/server': { createAdminClient: () => { calls.admin++; if (options.adminThrows) throw new Error('PRIVATE_ADMIN_DETAIL'); return db } },
     '@/lib/a4/access-control': { checkA4Access: async () => { if (options.accessThrows) throw new Error('PRIVATE_ACCESS_DETAIL'); return { canAccess: options.allowed !== false, reason: 'a3_incomplete' } }, getA4AccessDenialMessage: () => 'Acceso no disponible.' },
     '@/lib/opportunities/matching': matching, '@/lib/opportunities/taxonomy': taxonomy, '@/lib/opportunities/search-query': queryHelpers,
+    '@/lib/opportunities/personal-orientation': personalOrientation,
+    '@/lib/opportunities/personal-context': { loadOpportunityPersonalContext: async (userId, { now }) => {
+      calls.personal.push(userId); assert.ok(now instanceof Date)
+      return structuredClone(typeof options.personalContext === 'function' ? options.personalContext() : options.personalContext ?? { version: 1, status: 'empty', revision: 'synthetic-empty', sources: [], evidence: [] })
+    } },
     '@/lib/opportunities/verified-index': { readVerifiedOpportunityInventory: async (_db, limit) => {
       calls.reads++; assert.equal(limit, 500)
       if (options.indexError) throw new Error('Synthetic unavailable index')
@@ -62,6 +68,7 @@ test('both routes preserve auth, A4 guard and private no-store before catalog re
     assert.equal(response.status, option.anonymous ? 401 : 403)
     assert.match(response.headers.get('cache-control'), /private, no-store/)
     assert.equal(testRoute.calls.reads, 0)
+    assert.deepEqual(testRoute.calls.personal, [])
     assert.deepEqual(testRoute.calls.tables, [])
   }
 })
@@ -130,6 +137,81 @@ test('bounded inventory and unavailable/empty states retain distinct response se
   assert.equal((await route(RESULTS).get()).body.mode, 'available_now')
 })
 
+const personalFixture = (skill = 'SQL', overrides = {}) => ({
+  version: 1, status: 'available', revision: 'synthetic-' + skill,
+  sources: [
+    { source: 'cv', status: 'available', updatedAt: '2026-10-06T12:00:00Z' },
+    ...['dtc_goal', 'dtc_a1', 'dtc_a2', 'dtc_a3'].map(source => ({ source, status: 'empty', updatedAt: null })),
+  ],
+  evidence: [{ id: 'cv:synthetic:skills', source: 'cv', nature: 'declared_skill', label: 'Habilidades de tu CV', text: skill, observedAt: '2026-10-06T12:00:00Z', expiresAt: null, href: '/despega/a3/cv-builder-studio' }],
+  ...overrides,
+})
+const orientedRows = ['Python', 'SQL'].map((skill, index) => ({
+  ...ROWS[index], source_id: String(7100000 + index), title: 'Data Analyst', skills: [skill],
+  requirements: ['Experiencia con ' + skill + '.'],
+  field_evidence: [{ field: 'skills', value: skill, excerpt: 'Experiencia con ' + skill + '.', origin: 'description', section: 'Requisitos' }],
+}))
+
+test('same query with two CVs changes genuine server-issued support and only a relevance tie', async () => {
+  const query = 'view=explore&role=Analista+de+datos&breadth=related&region=Metropolitana'
+  const sql = await route(RESULTS, { rows: orientedRows, personalContext: personalFixture('SQL') }).get(query)
+  const python = await route(RESULTS, { rows: orientedRows, personalContext: personalFixture('Python') }).get(query)
+  assert.equal(sql.response.status, 200); assert.equal(python.response.status, 200)
+  assert.equal(sql.body.total_matching, 2); assert.equal(python.body.total_matching, 2)
+  assert.equal(sql.body.opportunities[0].sourceId, '7100001')
+  assert.equal(python.body.opportunities[0].sourceId, '7100000')
+  assert.ok(sql.body.opportunities[0].orientation.support.some(item => item.personal.text === 'SQL' && item.offer.value === 'SQL'))
+  assert.ok(python.body.opportunities[0].orientation.support.some(item => item.personal.text === 'Python' && item.offer.value === 'Python'))
+  assert.deepEqual(sql.body.applied_filters, python.body.applied_filters)
+  assert.ok(sql.body.opportunities.every(job => !Object.hasOwn(job, 'supportedTopics')))
+})
+
+test('CV support never displaces an exact requested title or overrides region and mode', async () => {
+  const exact = { ...orientedRows[0], title: 'Analista de datos', source_id: '7100010' }
+  const foreign = { ...orientedRows[1], source_id: '7100011', region: 'Biobío', location: 'Concepción' }
+  const onsite = { ...orientedRows[1], source_id: '7100012', work_mode: 'onsite' }
+  const { body } = await route(RESULTS, { rows: [...orientedRows, exact, foreign, onsite], personalContext: personalFixture('SQL') })
+    .get('view=explore&role=Analista+de+datos&breadth=related&region=Metropolitana&mode=remote')
+  assert.equal(body.total_matching, 3)
+  assert.equal(body.opportunities[0].sourceId, '7100010')
+  assert.equal(body.opportunities[0].match.kind, 'title')
+  assert.ok(body.opportunities.every(job => job.region === 'Metropolitana' && job.workMode === 'remote'))
+})
+
+test('private context is read once for the authenticated owner and never projected wholesale', async () => {
+  const personalContext = personalFixture('SQL')
+  personalContext.responses = { private: 'FULL_PRIVATE_RESPONSES' }
+  personalContext.email = 'SYNTHETIC_PRIVATE_CONTACT'
+  personalContext.evidence.push({ ...personalContext.evidence[0], id: 'cv:unrelated', text: 'SYNTHETIC_UNRELATED_PERSONAL_RECORD' })
+  const h = route(RESULTS, { rows: orientedRows, personalContext, userId: 'synthetic-authenticated-owner' })
+  const { body } = await h.get('view=explore')
+  assert.deepEqual(h.calls.personal, ['synthetic-authenticated-owner'])
+  assert.equal(h.calls.reads, 1)
+  assert.deepEqual(Object.keys(body.personal_context).sort(), ['revision', 'sources', 'status', 'version'])
+  assert.doesNotMatch(JSON.stringify(body), /FULL_PRIVATE_RESPONSES|SYNTHETIC_PRIVATE_CONTACT|SYNTHETIC_UNRELATED_PERSONAL_RECORD|source_payload/)
+})
+
+test('owner and personal-context revisions prevent appending an incompatible page', async () => {
+  const first = (await route(RESULTS, { personalContext: personalFixture() }).get('view=explore')).body
+  for (const options of [
+    { personalContext: personalFixture('SQL', { revision: 'updated-cv' }) },
+    { personalContext: personalFixture(), userId: 'different-authenticated-owner' },
+    { personalContext: personalFixture('SQL', { status: 'unavailable', revision: 'source-unavailable', evidence: [] }) },
+  ]) {
+    const { response, body } = await route(RESULTS, options).get('view=explore&offset=18&snapshot=' + first.pagination.snapshot)
+    assert.equal(response.status, 409)
+    assert.equal(body.code, 'inventory_changed')
+  }
+})
+
+test('an unavailable personal source preserves the usable verified catalog and truthful scope', async () => {
+  const context = personalFixture('SQL', { status: 'unavailable', revision: 'unavailable', evidence: [], sources: [{ source: 'cv', status: 'unavailable', updatedAt: null }] })
+  const { response, body } = await route(RESULTS, { personalContext: context }).get('view=explore')
+  assert.equal(response.status, 200); assert.equal(body.total_matching, 43)
+  assert.equal(body.personal_context.status, 'unavailable')
+  assert.ok(body.opportunities.every(job => job.orientation.status === 'context_unavailable' && job.orientation.reasons.length === 0))
+})
+
 // Execute actual client component bodies with a deterministic hook scheduler.
 // UI primitives are inert trees; effects/events/fetch cancellation run unchanged.
 const jsx = (type, props) => ({ type, props: props ?? {} })
@@ -174,6 +256,7 @@ function renderer(path, exportName, initialProps = {}) {
     '@/lib/opportunities/types': { OPPORTUNITY_SOURCE_LABELS },
     '@/lib/opportunities/search-query': queryHelpers,
     './search-intent-form': components, './real-opportunity-results': components,
+    './personal-orientation': { PersonalOrientation: 'PersonalOrientation', PersonalContextStatus: 'PersonalContextStatus' },
   }
   const Component = compile(path, modules)[exportName]
   function render() {
@@ -311,7 +394,7 @@ test('a changed inventory reloads the first page with a visible explanation', as
   }, async () => {
     const ui = renderer(COMPONENT, 'RealOpportunityResults', { view: 'explore', filters: BASE }); await ui.flush()
     await button(ui.tree, 'Ver más ofertas').props.onClick(); await ui.flush()
-    assert.match(textOf(ui.tree), /Las ofertas se actualizaron/)
+    assert.match(textOf(ui.tree), /Las ofertas o tu contexto de búsqueda cambiaron/)
     assert.match(textOf(ui.tree), /Oferta 7000002/); assert.doesNotMatch(textOf(ui.tree), /Oferta 7000001/)
     ui.unmount()
   })

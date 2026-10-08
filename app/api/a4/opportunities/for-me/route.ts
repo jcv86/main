@@ -6,6 +6,8 @@ import { checkA4Access, getA4AccessDenialMessage } from '@/lib/a4/access-control
 import { rankOpportunities, normalizeOpportunityWorkMode, searchFiltersFromStoredIntent, type OpportunityMatch } from '@/lib/opportunities/matching'
 import { readVerifiedOpportunityInventory, type VerifiedOpportunityRow } from '@/lib/opportunities/verified-index'
 import { OPPORTUNITY_PAGE_SIZE, OpportunityQueryError, parseOpportunityQuery } from '@/lib/opportunities/search-query'
+import { loadOpportunityPersonalContext } from '@/lib/opportunities/personal-context'
+import { createOpportunityPersonalOrienter } from '@/lib/opportunities/personal-orientation'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -14,13 +16,13 @@ const json = (body: unknown, status = 200) => NextResponse.json(body, { status, 
 
 export async function GET(request?: Request) {
   try {
-  const user = await resolveServerUser()
-  if (!user) return json({ error: 'No autenticado' }, 401)
-  const supabase = createAdminClient()
-  const access = await checkA4Access(user.id, supabase)
-  if (!access.canAccess) {
-    return json({ error: getA4AccessDenialMessage(), code: access.reason }, 403)
-  }
+    const user = await resolveServerUser()
+    if (!user) return json({ error: 'No autenticado' }, 401)
+    const supabase = createAdminClient()
+    const access = await checkA4Access(user.id, supabase)
+    if (!access.canAccess) {
+      return json({ error: getA4AccessDenialMessage(), code: access.reason }, 403)
+    }
     const query = parseOpportunityQuery(new URL(request?.url ?? 'https://www.despegatucarrera.com/api/a4/opportunities/for-me'))
     let intent = null
     if (query.view === 'saved') {
@@ -29,15 +31,30 @@ export async function GET(request?: Request) {
       if (result.error) return json({ error: 'No fue posible cargar tu búsqueda.' }, 500)
       intent = result.data
     }
-    // GET only reads the verified index. A scheduled refresh owns provider calls and writes.
-    const { opportunities: index, scope } = await readVerifiedOpportunityInventory(supabase, 500)
+    // GET reads the stored catalog and session context. Scheduled refresh owns provider calls and writes.
+    // Private context uses its own authenticated owner-bound reader, never the admin client.
+    const now = new Date()
+    const [{ opportunities: index, scope }, context] = await Promise.all([
+      readVerifiedOpportunityInventory(supabase, 500),
+      loadOpportunityPersonalContext(user.id, { now }),
+    ])
     const filters = query.view === 'explore' ? query.filters : searchFiltersFromStoredIntent(intent)
-    const matches = rankOpportunities(index, filters).map(toPublic)
-    // A page belongs to the exact ordered public result, including explanations.
-    // Title/requirements changes can alter relevance even when verification time is unchanged.
-    const snapshot = createHash('sha256').update(JSON.stringify({ version: 2, view: query.view, filters, scope, rows: matches })).digest('hex')
+    const orient = createOpportunityPersonalOrienter(context, filters, now)
+    const matches = rankOpportunities(index, filters)
+      .map((job, order) => ({ job, order, ...orient(job) }))
+      // Personal evidence only breaks ties within the same explicit search relationship.
+      // It cannot remove results, override preferences, or promote a broad category above a title.
+      .sort((a, b) => a.job.match.rank - b.job.match.rank || b.supportedTopics - a.supportedTopics || a.order - b.order)
+      .map(({ job, orientation }) => ({ ...toPublic(job), orientation }))
+    const personalContext = {
+      version: context.version, status: context.status, revision: context.revision,
+      sources: context.sources.map(({ source, status, updatedAt }) => ({ source, status, updatedAt })),
+    }
+    // Bind every page to the owner and relevant private context as well as the public catalog.
+    // No CV, source responses, or complete personal evidence list is serialized to the client.
+    const snapshot = createHash('sha256').update(JSON.stringify({ version: 3, owner: user.id, context: personalContext, view: query.view, filters, scope, rows: matches })).digest('hex')
     if (query.snapshot && query.snapshot !== snapshot) {
-      return json({ error: 'Las ofertas cambiaron. Vuelve a cargar los resultados.', code: 'inventory_changed' }, 409)
+      return json({ error: 'Las ofertas, tu contexto o tu búsqueda cambiaron. Vuelve a cargar los resultados.', code: 'inventory_changed' }, 409)
     }
     if (query.offset > 0 && query.offset >= matches.length) return json({ error: 'Vuelve a la primera página de resultados.' }, 400)
     const opportunities = matches.slice(query.offset, query.offset + OPPORTUNITY_PAGE_SIZE)
@@ -46,6 +63,7 @@ export async function GET(request?: Request) {
       needs_intent: query.view === 'saved' && !intent,
       mode: query.view === 'explore' ? 'explore' : intent ? 'saved' : 'available_now',
       applied_filters: filters,
+      personal_context: personalContext,
       scope,
       source: 'verified_index',
       inventory_status: index.length ? 'ready' : 'empty',
