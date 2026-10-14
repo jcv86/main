@@ -19,9 +19,8 @@ fs.mkdirSync(output,{recursive:true});
 const checks = [], axes = [], errors = [];
 const check = (name, condition) => { assert.ok(condition,name); checks.push(name); };
 const TEXT = 'Esta respuesta sintética explica mi aporte al equipo y un resultado concreto de mi trabajo.';
-const IDs = ['00000000-0000-4000-8000-000000000701','00000000-0000-4000-8000-000000000702'];
 const KEYS = {a1:'a1_professional_clarity',a2:'a2_execution_checkpoint',a3:'a3_structured_interview'};
-let browser,server;
+let browser,server,browserVersion;
 async function main(){
  const entry = `import React from 'react';import {createRoot} from 'react-dom/client';
  import {A1ProfessionalClarityForm as A1} from '${root}/components/outcomes/a1-professional-clarity-form';
@@ -44,13 +43,19 @@ async function main(){
  await inflate(path.join(chromeBase,'bin/al2023.tar.br'));
  const chrome=(await import(qa.resolve('@sparticuz/chromium'))).default;
  const executablePath=await chrome.executablePath();
- browser=await qa('playwright-core').chromium.launch({args:chrome.args,executablePath,headless:true,
-  env:{...process.env,LD_LIBRARY_PATH:'/tmp/al2023/lib',FONTCONFIG_PATH:'/tmp/fonts'}});
+ // Keep each scenario in its own process. Do not reuse a browser after closing a
+ // single-process context; never hide crashes or skip the remaining scenarios.
+ // No cross-origin/web-security relaxation is needed for this loopback fixture.
+ const browserArgs=chrome.args.filter(arg=>!['--disable-web-security','--disable-site-isolation-trials','--allow-running-insecure-content'].includes(arg));
  const json=(route,body,status=200)=>route.fulfill({status,contentType:'application/json',body:JSON.stringify(body)});
  for(const theme of ['light','dark'])for(const width of [390,1440])for(const module of Object.keys(KEYS)){
   const name=`${module}/${width}/${theme}`;
-  const context=await browser.newContext({viewport:{width,height:844}});
+  let context;
   try{
+   browser=await qa('playwright-core').chromium.launch({args:browserArgs,executablePath,headless:true,
+    env:{...process.env,LD_LIBRARY_PATH:'/tmp/al2023/lib',FONTCONFIG_PATH:'/tmp/fonts'}});
+   browserVersion=browser.version();
+   context=await browser.newContext({viewport:{width,height:844}});
    const page=await context.newPage();page.setDefaultTimeout(6000);page.on('pageerror',e=>errors.push({name,message:e.message}));
    let records=[],posts=[],failNext=true,readFailure=false;
    const key=KEYS[module];
@@ -71,7 +76,7 @@ async function main(){
    const go=role=>page.goto(base+`/?module=${module}&role=${role}&theme=${theme}`);
    const overflow=()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth);
    const fill=async()=>{for(const input of await page.locator('textarea').all())await input.fill(TEXT);};
-   const audit=async stage=>{await page.addScriptTag({path:qa.resolve('axe-core/axe.min.js')});const result=await page.evaluate(()=>axe.run(document.querySelector('main'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));axes.push({name,stage,violations:result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>n.target)})),incomplete:result.incomplete.map(v=>v.id)});};
+   const audit=async stage=>{await page.addScriptTag({path:qa.resolve('axe-core/axe.min.js')});const result=await page.evaluate(()=>axe.run(document.querySelector('main'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));axes.push({name,stage,violations:result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html,failureSummary:n.failureSummary,checks:[...n.any,...n.all,...n.none].map(c=>({id:c.id,data:c.data,message:c.message}))}))})),incomplete:result.incomplete.map(v=>v.id)});};
    await go('baseline');await page.locator('textarea').first().waitFor();
    check(name+': browser fonts have actual metrics',(await page.getByRole('heading',{level:1}).boundingBox()).height>10);
    check(name+': initial empty form cannot save',await page.getByRole('button',{name:'Guardar mi punto de partida'}).isDisabled());
@@ -90,7 +95,8 @@ async function main(){
    await page.getByRole('button',{name:'Continuar mi recorrido'}).click();
    check(name+': continuation explicit',await page.locator('#continued').innerText()==='Continuación elegida');
    await page.reload();await page.getByText('Leer mis respuestas: punto de partida',{exact:true}).click();
-   check(name+': saved text recovered on reload',(await page.locator('dd:visible').allTextContents()).every(t=>t===TEXT));
+   const reloadedText=await page.locator('dd:visible').allTextContents();
+   check(name+': saved text recovered on reload',reloadedText.length>0&&reloadedText.every(t=>t===TEXT));
    check(name+': readback does not fill a new draft',(await page.locator('textarea').evaluateAll(inputs=>inputs.map(e=>e.value))).every(v=>v===''));
    await go('follow_up');await fill();await page.getByRole('button',{name:'Guardar mi seguimiento'}).click();await page.getByRole('heading',{name:'Tus respuestas quedaron guardadas'}).waitFor();
    await page.getByText('Leer mis respuestas: punto de partida',{exact:true}).click();await page.getByText('Leer mis respuestas: seguimiento',{exact:true}).click();
@@ -102,10 +108,13 @@ async function main(){
    check(name+': unavailable history is not empty',(await page.getByRole('alert').innerText()).includes('no significa'));
    readFailure=false;await page.getByRole('button',{name:'Reintentar lectura'}).click();await page.getByText('Leer mis respuestas: punto de partida',{exact:true}).waitFor();
    check(name+': history read retry recovers',await page.getByText('Leer mis respuestas: seguimiento',{exact:true}).isVisible());
-  }finally{await context.close();}
+   fs.writeFileSync(output+'/browser-progress.json',JSON.stringify({lastCompleted:name,checks,axes,errors},null,2));
+  }finally{
+   try{if(context)await context.close();}finally{if(browser)await browser.close();browser=null;}
+  }
  }
  check('no client runtime exceptions',errors.length===0);
- const result={suite:'outcome-browser-regression',applicationHead:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),browser:browser.version(),checks:checks.length,passed:checks.length,scenarios:12,api:'synthetic',fullAuthenticatedShell:false,axe:axes,errors};
+ const result={suite:'outcome-browser-regression',applicationHead:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),browser:browserVersion,checks:checks.length,passed:checks.length,scenarios:12,api:'synthetic',fullAuthenticatedShell:false,axe:axes,errors};
  fs.writeFileSync(output+'/browser-results.json',JSON.stringify(result,null,2));
  console.log(JSON.stringify({suite:result.suite,checks:result.checks,scenarios:12,axeViolations:axes.reduce((n,a)=>n+a.violations.length,0),runtimeErrors:errors.length,output}));
  if(axes.some(a=>a.violations.length))process.exitCode=1;

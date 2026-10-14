@@ -12,6 +12,10 @@ import {
 
 export interface OutcomeCaptureFormProps { role: MeasurementRole; onSaved?: () => void }
 
+// Scoped to capture actions: the shared primary token is too light for small white text.
+// Keep the global Button and every other product surface unchanged.
+const CAPTURE_ACTION_CLASS = 'min-h-11 w-full bg-[#3730a3] text-white hover:bg-[#312e81] hover:text-white'
+
 /** Reuses the existing A1/A2/A3 entry points; capturing answers is not grading capability. */
 export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: OutcomeCaptureFormProps & { instrumentKey: CaptureInstrumentKey }) {
   const instrument: CaptureInstrument = CAPTURE_INSTRUMENTS[instrumentKey]
@@ -99,7 +103,7 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: Out
         </div>)}</dl>
       </details>
       <p className="text-sm leading-6"><strong>Tu siguiente paso: </strong>{captureNextAction(instrument, role)}</p>
-      {onSaved && <Button type="button" className="min-h-11 w-full" onClick={onSaved}>Continuar mi recorrido</Button>}
+      {onSaved && <Button type="button" className={CAPTURE_ACTION_CLASS} onClick={onSaved}>Continuar mi recorrido</Button>}
     </div> : <form className="space-y-5" onSubmit={event => { event.preventDefault(); void save() }}>
       {instrument.prompts.map(({ key, label, prompt }) => <div key={key} className="space-y-2">
         <label htmlFor={formId + '-' + key} className="block text-sm font-semibold">{label}</label>
@@ -109,7 +113,7 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: Out
           onChange={event => { setResponses(current => ({ ...current, [key]: event.target.value })); setError('') }} />
       </div>)}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      <Button type="submit" disabled={!complete || saving} className="min-h-11 w-full">
+      <Button type="submit" disabled={!complete || saving} className={CAPTURE_ACTION_CLASS}>
         {saving ? 'Guardando respuestas…' : role === 'baseline' ? 'Guardar mi punto de partida' : 'Guardar mi seguimiento'}
       </Button>
       <p className="text-xs leading-5 text-muted-foreground">Cada respuesta admite entre {instrument.minimumWords} palabras y {MAX_RESPONSE_CHARACTERS} caracteres. Es un límite del formulario, no una medida de la calidad de tu respuesta. No reconstruyas respuestas pasadas: este registro cuenta desde ahora y se añade sin reemplazar los anteriores.</p>
