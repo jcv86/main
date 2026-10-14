@@ -64,7 +64,7 @@ export function parseOutcomeCapture(value: unknown): OutcomeCapture {
       || typeof value.instrumentKey !== 'string'
       || !Object.hasOwn(CAPTURE_INSTRUMENTS, value.instrumentKey)
       || value.instrumentVersion !== OUTCOME_CAPTURE_VERSION
-      || !['baseline', 'follow_up'].includes(String(value.measurementRole))
+      || (value.measurementRole !== 'baseline' && value.measurementRole !== 'follow_up')
       || typeof value.observationId !== 'string'
       || !/^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i.test(value.observationId)) {
     throw new CaptureValidationError('Revisa los datos del registro de evidencia.')
@@ -75,8 +75,8 @@ export function parseOutcomeCapture(value: unknown): OutcomeCapture {
     throw new CaptureValidationError('Las respuestas no corresponden a este ejercicio.')
   }
   const input = value.responsePayload
-  const keys = instrument.prompts.map(prompt => prompt.key)
-  if (Object.keys(input).length !== keys.length || Object.keys(input).some(key => !keys.includes(key as never))) {
+  const keys: readonly string[] = instrument.prompts.map(prompt => prompt.key)
+  if (Object.keys(input).length !== keys.length || Object.keys(input).some(key => !keys.includes(key))) {
     throw new CaptureValidationError('Completa las preguntas de este ejercicio, sin campos adicionales.')
   }
   const responsePayload: Record<string, string> = {}
@@ -91,7 +91,7 @@ export function parseOutcomeCapture(value: unknown): OutcomeCapture {
   return {
     observationId: value.observationId.toLowerCase(), instrumentKey,
     instrumentVersion: OUTCOME_CAPTURE_VERSION, outcomeKey: instrument.outcomeKey,
-    measurementRole: value.measurementRole as MeasurementRole, responsePayload,
+    measurementRole: value.measurementRole, responsePayload,
   }
 }
 
