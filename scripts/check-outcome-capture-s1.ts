@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import './check-outcome-page-continuity'
 
 const route = readFileSync('app/api/outcomes/observations/route.ts', 'utf8')
 const card = readFileSync('components/outcomes/outcome-progress-card.tsx', 'utf8')

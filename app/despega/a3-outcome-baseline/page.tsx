@@ -10,7 +10,8 @@ export default function A3OutcomeBaselinePage() {
     <PageContainer className="max-w-3xl">
       <A3InterviewOutcomeForm
         role="baseline"
-        onSaved={() => window.setTimeout(() => router.push('/despega/a3?outcomeBaseline=done'), 900)}
+        continueLabel="Volver a Entrenamiento"
+        onSaved={() => router.push('/despega/a3?outcomeBaseline=done')}
       />
     </PageContainer>
   )

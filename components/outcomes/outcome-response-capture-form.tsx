@@ -10,14 +10,19 @@ import {
   type CaptureInstrument, type CaptureInstrumentKey, type MeasurementRole,
 } from '@/lib/outcomes/response-capture'
 
-export interface OutcomeCaptureFormProps { role: MeasurementRole; onSaved?: () => void }
+export interface OutcomeCaptureFormProps {
+  role: MeasurementRole
+  /** Invoked only by the user's explicit continuation after a confirmed save. */
+  onSaved?: () => void
+  continueLabel?: string
+}
 
 // Scoped to capture actions: the shared primary token is too light for small white text.
 // Keep the global Button and every other product surface unchanged.
 const CAPTURE_ACTION_CLASS = 'min-h-11 w-full bg-[#3730a3] text-white hover:bg-[#312e81] hover:text-white'
 
 /** Reuses the existing A1/A2/A3 entry points; capturing answers is not grading capability. */
-export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: OutcomeCaptureFormProps & { instrumentKey: CaptureInstrumentKey }) {
+export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved, continueLabel = 'Continuar mi recorrido' }: OutcomeCaptureFormProps & { instrumentKey: CaptureInstrumentKey }) {
   const instrument: CaptureInstrument = CAPTURE_INSTRUMENTS[instrumentKey]
   const [responses, setResponses] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
@@ -103,7 +108,7 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: Out
         </div>)}</dl>
       </details>
       <p className="text-sm leading-6"><strong>Tu siguiente paso: </strong>{captureNextAction(instrument, role)}</p>
-      {onSaved && <Button type="button" className={CAPTURE_ACTION_CLASS} onClick={onSaved}>Continuar mi recorrido</Button>}
+      {onSaved && <Button type="button" className={CAPTURE_ACTION_CLASS} onClick={onSaved}>{continueLabel}</Button>}
     </div> : <form className="space-y-5" onSubmit={event => { event.preventDefault(); void save() }}>
       {instrument.prompts.map(({ key, label, prompt }) => <div key={key} className="space-y-2">
         <label htmlFor={formId + '-' + key} className="block text-sm font-semibold">{label}</label>
