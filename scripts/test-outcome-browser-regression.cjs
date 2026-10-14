@@ -28,7 +28,7 @@ async function main(){
  import {A3InterviewOutcomeForm as A3} from '${root}/components/outcomes/a3-interview-outcome-form';
  const p=new URLSearchParams(location.search);const Component=({a1:A1,a2:A2,a3:A3})[p.get('module')||'a1'];
  document.documentElement.classList.toggle('dark',p.get('theme')==='dark');
- createRoot(document.getElementById('root')).render(<main className="mx-auto max-w-5xl p-4"><h1>Registro de respuestas · laboratorio</h1><Component role={p.get('role')==='follow_up'?'follow_up':'baseline'} onSaved={()=>{document.getElementById('continued').textContent='Continuación elegida'}}/><p id="continued" role="status"/></main>);`;
+ createRoot(document.getElementById('root')).render(<main className="mx-auto max-w-5xl p-4"><h1 className="mb-6 text-2xl leading-normal">Registro de respuestas · laboratorio</h1><Component role={p.get('role')==='follow_up'?'follow_up':'baseline'} onSaved={()=>{document.getElementById('continued').textContent='Continuación elegida'}}/><p id="continued" role="status"/></main>);`;
  await qa('esbuild').build({stdin:{contents:entry,loader:'tsx',resolveDir:root},outfile:work+'/app.js',bundle:true,platform:'browser',jsx:'automatic',tsconfig:root+'/tsconfig.json',nodePaths:[root+'/node_modules'],define:{'process.env.NODE_ENV':'"production"'},logLevel:'silent'});
  // Font downloads are excluded. The browser's bundled Latin fonts are required and checked below.
  fs.writeFileSync(work+'/style-in.css',fs.readFileSync(root+'/app/globals.css','utf8').replace(/^@import url\(.*$/gm,''));
@@ -76,7 +76,7 @@ async function main(){
    const go=role=>page.goto(base+`/?module=${module}&role=${role}&theme=${theme}`);
    const overflow=()=>page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth);
    const fill=async()=>{for(const input of await page.locator('textarea').all())await input.fill(TEXT);};
-   const audit=async stage=>{await page.addScriptTag({path:qa.resolve('axe-core/axe.min.js')});const result=await page.evaluate(()=>axe.run(document.querySelector('main'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));axes.push({name,stage,violations:result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html,failureSummary:n.failureSummary,checks:[...n.any,...n.all,...n.none].map(c=>({id:c.id,data:c.data,message:c.message}))}))})),incomplete:result.incomplete.map(v=>v.id)});};
+   const audit=async stage=>{await page.addScriptTag({path:qa.resolve('axe-core/axe.min.js')});const result=await page.evaluate(()=>axe.run(document.querySelector('main'),{runOnly:{type:'tag',values:['wcag2a','wcag2aa','wcag21aa']}}));axes.push({name,stage,violations:result.violations.map(v=>({id:v.id,impact:v.impact,nodes:v.nodes.map(n=>({target:n.target,html:n.html,failureSummary:n.failureSummary,checks:[...n.any,...n.all,...n.none].map(c=>({id:c.id,data:c.data,message:c.message}))}))})),incomplete:result.incomplete.map(v=>({id:v.id,nodes:v.nodes.map(n=>({target:n.target,html:n.html,reason:n.failureSummary}))}))});};
    await go('baseline');await page.locator('textarea').first().waitFor();
    check(name+': browser fonts have actual metrics',(await page.getByRole('heading',{level:1}).boundingBox()).height>10);
    check(name+': initial empty form cannot save',await page.getByRole('button',{name:'Guardar mi punto de partida'}).isDisabled());
@@ -116,7 +116,7 @@ async function main(){
  check('no client runtime exceptions',errors.length===0);
  const result={suite:'outcome-browser-regression',applicationHead:execFileSync('git',['rev-parse','HEAD'],{cwd:root,encoding:'utf8'}).trim(),browser:browserVersion,checks:checks.length,passed:checks.length,scenarios:12,api:'synthetic',fullAuthenticatedShell:false,axe:axes,errors};
  fs.writeFileSync(output+'/browser-results.json',JSON.stringify(result,null,2));
- console.log(JSON.stringify({suite:result.suite,checks:result.checks,scenarios:12,axeViolations:axes.reduce((n,a)=>n+a.violations.length,0),runtimeErrors:errors.length,output}));
- if(axes.some(a=>a.violations.length))process.exitCode=1;
+ console.log(JSON.stringify({suite:result.suite,checks:result.checks,scenarios:12,axeViolations:axes.reduce((n,a)=>n+a.violations.length,0),axeIncomplete:axes.reduce((n,a)=>n+a.incomplete.length,0),runtimeErrors:errors.length,output}));
+ if(axes.some(a=>a.violations.length || a.incomplete.length))process.exitCode=1;
 }
 main().catch(e=>{fs.writeFileSync(output+'/browser-failure.json',JSON.stringify({message:e.message,stack:e.stack,checks,axes,errors},null,2));console.error(e.message);process.exitCode=1;}).finally(async()=>{if(browser)await browser.close();if(server)await new Promise(r=>server.close(r));});
