@@ -10,7 +10,8 @@ export default function A1OutcomeBaselinePage() {
     <main className="mx-auto min-h-screen max-w-3xl px-4 py-10">
       <A1ProfessionalClarityForm
         role="baseline"
-        onSaved={() => window.setTimeout(() => router.push('/despega/a1-cerebral-intro'), 900)}
+        continueLabel="Continuar al análisis de A1"
+        onSaved={() => router.push('/despega/a1-cerebral-intro')}
       />
     </main>
   )
