@@ -3,17 +3,18 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
+import { OutcomeCaptureHistory } from './outcome-capture-history'
 import {
   CAPTURE_INSTRUMENTS, MAX_RESPONSE_CHARACTERS, OUTCOME_CAPTURE_VERSION,
   captureNextAction, isRecord, responseWordCount,
-  type CaptureInstrumentKey, type MeasurementRole,
+  type CaptureInstrument, type CaptureInstrumentKey, type MeasurementRole,
 } from '@/lib/outcomes/response-capture'
 
 export interface OutcomeCaptureFormProps { role: MeasurementRole; onSaved?: () => void }
 
 /** Reuses the existing A1/A2/A3 entry points; capturing answers is not grading capability. */
 export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: OutcomeCaptureFormProps & { instrumentKey: CaptureInstrumentKey }) {
-  const instrument = CAPTURE_INSTRUMENTS[instrumentKey]
+  const instrument: CaptureInstrument = CAPTURE_INSTRUMENTS[instrumentKey]
   const [responses, setResponses] = useState<Record<string, string>>({})
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
@@ -83,10 +84,11 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: Out
         Registra con tus propias palabras lo que puedes explicar hoy y qué lo respalda. Este ejercicio no asigna una nota de capacidad ni una probabilidad de conseguir empleo.
       </p>
     </div>
+    <OutcomeCaptureHistory key={instrumentKey} instrumentKey={instrumentKey} refreshKey={saved ? 1 : 0} />
     {saved ? <div className="space-y-4">
       <div role="status" className="rounded-xl border border-border p-4">
         <h3 className="font-semibold">Tus respuestas quedaron guardadas</h3>
-        <p className="mt-2 text-sm">Estado: registradas, pendientes de evaluación.</p>
+        <p className="mt-2 text-sm">Estado: registradas, sin evaluación de capacidad. No hay una evaluación automática en curso.</p>
         <p className="mt-2 text-sm text-muted-foreground">Guardar un ejercicio no demuestra una mejora. Para afirmarla se necesita una evaluación válida de evidencia comparable; no basta con escribir más o usar ciertas palabras.</p>
       </div>
       <details className="rounded-xl border border-border p-4">
@@ -110,7 +112,7 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved }: Out
       <Button type="submit" disabled={!complete || saving} className="min-h-11 w-full">
         {saving ? 'Guardando respuestas…' : role === 'baseline' ? 'Guardar mi punto de partida' : 'Guardar mi seguimiento'}
       </Button>
-      <p className="text-xs leading-5 text-muted-foreground">Cada respuesta admite entre {instrument.minimumWords} palabras y {MAX_RESPONSE_CHARACTERS} caracteres. Es un límite del formulario, no una medida de la calidad de tu respuesta. No reconstruyas respuestas pasadas: este registro cuenta desde ahora.</p>
+      <p className="text-xs leading-5 text-muted-foreground">Cada respuesta admite entre {instrument.minimumWords} palabras y {MAX_RESPONSE_CHARACTERS} caracteres. Es un límite del formulario, no una medida de la calidad de tu respuesta. No reconstruyas respuestas pasadas: este registro cuenta desde ahora y se añade sin reemplazar los anteriores.</p>
     </form>}
   </section>
 }

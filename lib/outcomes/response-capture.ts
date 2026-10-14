@@ -30,7 +30,16 @@ export const CAPTURE_INSTRUMENTS = {
 } as const
 
 export type CaptureInstrumentKey = keyof typeof CAPTURE_INSTRUMENTS
-export type CaptureInstrument = typeof CAPTURE_INSTRUMENTS[CaptureInstrumentKey]
+export interface CapturePrompt { readonly key: string; readonly label: string; readonly prompt: string }
+export interface CaptureInstrument {
+  readonly outcomeKey: 'professional_clarity' | 'execution_capability' | 'interview_capability'
+  readonly stage: 'a1' | 'a2' | 'a3'
+  readonly label: string
+  readonly minimumWords: number
+  readonly prompts: readonly CapturePrompt[]
+  readonly baselineAction: string
+  readonly followUpAction: string
+}
 export interface OutcomeCapture {
   observationId: string
   instrumentKey: CaptureInstrumentKey

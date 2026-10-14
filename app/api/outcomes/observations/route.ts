@@ -1,3 +1,4 @@
+import { captureHistory, captureInstrumentKey, savedCaptureFromRow } from '@/lib/outcomes/response-history'
 import { NextResponse } from 'next/server'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import {
@@ -91,7 +92,8 @@ export async function POST(request: Request) {
       }
       return json({ error: 'No pudimos confirmar este registro. Conserva tus respuestas y revisa el estado antes de volver a enviarlo.' }, 409)
     }
-    if (error || !data || data.id !== capture.observationId || typeof data.observed_at !== 'string') {
+    if (error || !data || data.id !== capture.observationId || typeof data.observed_at !== 'string'
+        || !Number.isFinite(Date.parse(data.observed_at))) {
       return json({ error: 'No pudimos confirmar el guardado. Tus respuestas siguen en el formulario.' }, 503)
     }
     // v1 scores and snapshots are not rewritten. Raw response capture does not generate a numeric improvement.
@@ -99,5 +101,35 @@ export async function POST(request: Request) {
   } catch (error) {
     if (error instanceof CaptureValidationError) return json({ error: error.message }, error.status)
     return json({ error: 'No pudimos confirmar el guardado. Conservamos tus respuestas para reintentar.' }, 503)
+  }
+}
+
+/** Session/RLS reads only. A refresh never initializes or rewrites outcomes. */
+export async function GET(request: Request) {
+  try {
+    const supabase = await createClient()
+    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    if (authError || !user) return json({ error: 'Vuelve a iniciar sesión para revisar tus respuestas.' }, 401)
+    const url = new URL(request.url)
+    const instrumentKey = captureInstrumentKey(url.searchParams.get('instrument'))
+    if (!instrumentKey || url.searchParams.getAll('instrument').length !== 1
+        || [...url.searchParams.keys()].some(key => key !== 'instrument')) {
+      return json({ error: 'Elige un ejercicio válido para revisar tus respuestas.' }, 400)
+    }
+    const now = new Date()
+    const signal = AbortSignal.timeout(8000)
+    const read = (role: 'baseline' | 'follow_up') => supabase.from('dtc_outcome_observations')
+      .select('id,outcome_key,measurement_role,instrument_key,instrument_version,response_payload,observed_at')
+      .eq('user_id', user.id).eq('outcome_key', CAPTURE_INSTRUMENTS[instrumentKey].outcomeKey)
+      .eq('instrument_key', instrumentKey).eq('instrument_version', OUTCOME_CAPTURE_VERSION)
+      .eq('measurement_role', role).order('observed_at', { ascending: false })
+      .order('id', { ascending: false }).limit(1).abortSignal(signal).maybeSingle()
+    const [initial, latest] = await Promise.all([read('baseline'), read('follow_up')])
+    if (initial.error || latest.error) throw new Error('Capture history unavailable')
+    return json(captureHistory(instrumentKey,
+      savedCaptureFromRow(initial.data, instrumentKey, 'baseline', now),
+      savedCaptureFromRow(latest.data, instrumentKey, 'follow_up', now)))
+  } catch {
+    return json({ error: 'No pudimos recuperar tus respuestas. Esto no significa que no estén guardadas.' }, 503)
   }
 }

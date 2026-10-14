@@ -1,23 +1,39 @@
 import assert from 'node:assert/strict'
 import { readFileSync } from 'node:fs'
+import { CAPTURE_INSTRUMENTS, OUTCOME_CAPTURE_VERSION, parseOutcomeCapture, captureObservation } from '../lib/outcomes/response-capture'
 import { scoreA2ExecutionCapability } from '../lib/outcomes/a2-execution-capability'
 
 const dashboard = readFileSync('app/despega/a2/page.tsx', 'utf8')
-const route = readFileSync('app/api/outcomes/observations/route.ts', 'utf8')
 const form = readFileSync('components/outcomes/a2-execution-outcome-form.tsx', 'utf8')
 const instruments = readFileSync('lib/outcomes/instruments.ts', 'utf8')
 
 assert.ok(instruments.includes("instrumentKey: 'a2_execution_checkpoint'"))
 assert.ok(instruments.includes("'objective_specificity'"))
 assert.ok(instruments.includes("'review_discipline'"))
-assert.ok(route.includes("error: 'A2 response evidence is required'"))
-assert.ok(route.includes("requiredResponseKeys = ['objective', 'actions', 'evidence', 'obstacle', 'review']"))
-assert.ok(form.includes('Completar más misiones') === false, 'form should focus on construct, not progress')
-assert.ok(form.includes('Esto no mide cuántas misiones completas.'))
 assert.ok(dashboard.includes("progress.completed_days.includes(30)"), 'follow-up must require verified Day 30 completion')
 assert.ok(dashboard.includes('Completar más misiones no se presenta como mejora de capacidad.'))
 assert.ok(!dashboard.includes("averageScore") || dashboard.includes("Puntaje promedio"), 'legacy mission average may remain operational but not outcome-labeled')
 
+// Shared capture replaces browser scoring. Keep entry/continuation gates and the v1 regression below.
+const shared = readFileSync('components/outcomes/outcome-response-capture-form.tsx', 'utf8')
+assert.ok(form.includes('OutcomeResponseCaptureForm'))
+assert.ok(form.includes('instrumentKey="a2_execution_checkpoint"'))
+assert.ok(!form.includes('scoreA'), 'the current wrapper must not grade capability')
+assert.ok(shared.includes("role === 'baseline' ? 'Guardar mi punto de partida' : 'Guardar mi seguimiento'"))
+assert.ok(shared.includes('No hay una evaluación automática en curso.'))
+assert.ok(shared.includes('OutcomeCaptureHistory'))
+const currentInstrument = CAPTURE_INSTRUMENTS.a2_execution_checkpoint
+assert.deepEqual(currentInstrument.prompts.map(prompt => prompt.key), ["objective", "actions", "evidence", "obstacle", "review"])
+assert.equal(currentInstrument.minimumWords, 6)
+const captured = parseOutcomeCapture({
+  observationId: '00000000-0000-4000-8000-000000000777', instrumentKey: 'a2_execution_checkpoint',
+  instrumentVersion: OUTCOME_CAPTURE_VERSION, outcomeKey: currentInstrument.outcomeKey, measurementRole: 'baseline',
+  responsePayload: Object.fromEntries(currentInstrument.prompts.map(({key}) => [key, 'Este ejercicio sintético contiene respuestas completas sin afirmar una mejora profesional real.'])),
+})
+const record = captureObservation(captured, 'synthetic-owner', '2026-10-14T12:00:00Z')
+assert.equal(record.score, null); assert.equal(record.confidence, null)
+assert.deepEqual(record.response_payload, captured.responsePayload)
+// Historical heuristic unit regression only; not an outcome or a calibrated rubric.
 const weak = scoreA2ExecutionCapability({
   objective: 'Quiero avanzar algo durante esta semana',
   actions: 'Voy a hacer algunas cosas para avanzar',
@@ -40,5 +56,6 @@ console.log(JSON.stringify({
   day30VerifiedGate: true,
   missionAverageNotOutcome: true,
   serverEvidenceRequired: true,
-  deterministicRubric: true,
+  legacyHeuristicRegressionOnly: true,
+  currentCaptureUnscored: true,
 }))
