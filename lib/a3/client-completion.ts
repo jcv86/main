@@ -69,6 +69,9 @@ export async function completeA3Module(
 
   const payload = (await response.json().catch(() => ({}))) as A3CompletionPayload
   if (!response.ok) throw new Error(errorMessage(payload))
+  if (!payload || payload.success !== true || payload.moduleId !== input.moduleId || payload.moduleNumber !== input.moduleNumber) {
+    throw new Error('No pudimos confirmar el guardado de este módulo. Conservamos tu borrador para que puedas reintentarlo.')
+  }
 
   if (input.moduleId === 'basic-interview-mission') {
     if (!payload.routeCompleted || !payload.a4Unlocked || !payload.nextPath) {

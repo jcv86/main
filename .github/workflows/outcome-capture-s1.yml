@@ -4,9 +4,13 @@ on:
   pull_request:
     paths:
       - 'app/api/outcomes/**'
+      - 'app/despega/a1-outcome-*/**'
+      - 'app/despega/a2-outcome-*/**'
+      - 'app/despega/a3-outcome-*/**'
       - 'components/outcomes/**'
       - 'lib/outcomes/**'
       - 'scripts/check-outcome-capture-s1.ts'
+      - 'scripts/check-outcome-page-continuity.ts'
       - '.github/workflows/outcome-capture-s1.yml'
 
 jobs:

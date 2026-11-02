@@ -3,9 +3,11 @@ import 'server-only'
 import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { resolveA2DayAccess } from './a2-day-access'
+import { resolveA2PracticePath, type A2PracticePath } from '@/lib/a2/practice-path'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { canonicalOnboardingPath } from './flow'
 import { hasActiveA4QaEntitlement } from '@/lib/a4/qa-entitlement'
+import { OUTCOME_CAPTURE_VERSION } from '@/lib/outcomes/response-capture'
 
 export type JourneyModule = 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
 
@@ -43,6 +45,9 @@ interface JourneyRow {
 }
 
 export interface ProfileFlags {
+  camino_foco?: A2PracticePath | null
+  camino_persona_active?: boolean | null
+  camino_profesional_active?: boolean | null
   onboarding_conozcamonos_1_completed?: boolean | null
   a1_cerebral_intro_seen?: boolean | null
   a1_cerebral_completed?: boolean | null
@@ -222,7 +227,8 @@ async function loadJourneyEvidence(
       .select('instrument_key,measurement_role')
       .eq('user_id', userId)
       .in('instrument_key', ['a1_professional_clarity', 'a2_execution_checkpoint', 'a3_structured_interview'])
-      .eq('instrument_version', '1'),
+      // Both versions record completion of the exercise, never proof of improved capability.
+      .in('instrument_version', ['1', OUTCOME_CAPTURE_VERSION]),
   ])
 
   const a1CompletedAt =
@@ -312,7 +318,8 @@ function hydrateJourneyState(
     highestA2DayUnlocked > 1 || Boolean(evidence.a2StartedAt) || hasA3Evidence
 
   let currentModule: JourneyModule = 'A1'
-  if (state.currentModule === 'COMPLETED') currentModule = 'COMPLETED'
+  if (resolveA2PracticePath(profile) === 'persona' && hasA2Evidence) currentModule = 'A2'
+  else if (state.currentModule === 'COMPLETED') currentModule = 'COMPLETED'
   else if (hasA4Evidence) currentModule = 'A4'
   else if (state.a3UnlockedAt || profile.a3_unlocked || hasA3Evidence) {
     currentModule = 'A3'
@@ -475,7 +482,7 @@ export async function getSharedJourneyContext(): Promise<SharedJourneyContext | 
         .order('created_at', { ascending: false }),
       supabase
         .from('dtc_documents')
-        .select('id,name,document_type,status,created_at')
+        .select('id,name:title,document_type:type,status,created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(20),

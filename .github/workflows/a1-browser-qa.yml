@@ -8,8 +8,25 @@ on:
       - 'components/career/**'
       - 'components/journey/**'
       - 'components/a4/**'
+      - 'components/outcomes/**'
+      - 'components/layout/**'
+      - 'components/session-wrapper.tsx'
+      - 'components/coach-provider-wrapper.tsx'
+      - 'components/coach-strategic-provider.tsx'
+      - 'components/analytics/journey-stage-analytics.tsx'
+      - 'components/a2-*.tsx'
+      - 'components/a3/**'
+      - 'contexts/**'
       - 'lib/a1/**'
       - 'lib/a4/**'
+      - 'lib/a2/**'
+      - 'lib/a3/**'
+      - 'lib/a2-*.ts'
+      - 'lib/a3-*.ts'
+      - 'lib/disc-test-questions.ts'
+      - 'lib/middleware/**'
+      - 'lib/outcomes/**'
+      - 'lib/opportunities/**'
       - 'lib/journey/**'
       - 'lib/reports/**'
       - 'lib/career/**'
@@ -20,15 +37,35 @@ on:
       - 'app/api/a1/**'
       - 'app/api/a1-cerebral-save/**'
       - 'app/api/a4/**'
+      - 'app/api/a2/**'
+      - 'app/api/a3/**'
+      - 'app/api/journey/**'
+      - 'app/api/outcomes/**'
+      - 'app/api/career/**'
       - 'app/api/auth/invitation/**'
       - 'app/api/gamification/global/**'
       - 'app/api/preferences/**'
+      - 'app/api/v1-analytics/**'
       - 'app/despega/a4/**'
+      - 'app/despega/layout.tsx'
+      - 'app/despega/*-outcome-*/**'
+      - 'app/despega/a1-cerebral-intro/**'
+      - 'app/despega/a2/**'
+      - 'app/despega/a3/**'
+      - 'app/despega/recorrido/**'
+      - 'app/despega/objetivo-laboral/**'
+      - 'app/providers.tsx'
       - 'app/despega/settings/**'
       - 'hooks/use-auth-redirect.ts'
       - 'app/globals.css'
+      - 'app/design-system.css'
       - 'supabase/migrations/20260825010000_pilot_access_foundation.sql'
       - 'supabase/migrations/*a4*'
+      - 'supabase/migrations/20260915160000_canonical_journey_foundation.sql'
+      - 'supabase/migrations/20260915160100_canonical_journey_security.sql'
+      - 'supabase/migrations/*outcome*'
+      - 'supabase/migrations/20260920173000_career_search_intents.sql'
+      - 'supabase/migrations/*labor_objective*'
       - '.github/workflows/a1-browser-qa.yml'
 permissions:
   contents: read
@@ -37,8 +74,8 @@ concurrency:
   cancel-in-progress: true
 jobs:
   isolated-browser:
-    runs-on: ubuntu-latest
-    timeout-minutes: 25
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
     env:
       A1_BROWSER_LAB: 'yes'
       A1_SOURCE_COMMIT: ${{ github.event.pull_request.head.sha }}
@@ -63,6 +100,8 @@ jobs:
           npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
           npm install --prefix "$A1_TOOLS_ROOT" --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
           "$A1_TOOLS_ROOT/node_modules/.bin/playwright" install chromium
+      - name: UI response observation survives navigation and excludes stale refreshes
+        run: node scripts/a1-browser-qa/closure-response-browser.mjs
       - name: Prepare isolated application and start local Supabase only
         run: |
           node scripts/a1-browser-qa/prepare.mjs
@@ -88,6 +127,12 @@ jobs:
         run: node scripts/a1-browser-qa/flow-browser.mjs
       - name: Browser to API to redacted log request correlation
         run: node scripts/a1-browser-qa/ops-correlation-browser.mjs
+      - name: Append actual AppShell, capture pages and canonical local outcome migrations
+        run: |
+          node scripts/a1-browser-qa/closure-prepare.mjs
+          npx tsx scripts/a1-browser-qa/closure-seed.ts
+      - name: Six capture pages, real owner RLS, reload continuity and saved objective revision conflicts
+        run: node scripts/a1-browser-qa/closure-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4

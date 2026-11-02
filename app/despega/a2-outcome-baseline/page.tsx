@@ -8,7 +8,11 @@ export default function A2OutcomeBaselinePage() {
   const router = useRouter()
   return (
     <PageContainer className="max-w-3xl">
-      <A2ExecutionOutcomeForm role="baseline" onSaved={() => window.setTimeout(() => router.push('/despega/a2'), 900)} />
+      <A2ExecutionOutcomeForm
+        role="baseline"
+        continueLabel="Volver a Tu Ruta"
+        onSaved={() => router.push('/despega/a2')}
+      />
     </PageContainer>
   )
 }

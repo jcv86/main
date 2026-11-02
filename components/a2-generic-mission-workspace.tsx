@@ -48,7 +48,7 @@ export function A2GenericMissionWorkspace({
 }: A2GenericMissionWorkspaceProps) {
   const summaryPlaceholder = adaptation
     ? `${adaptation.focusQuestion} Resume el trabajo realizado y la decisión que quedó registrada.`
-    : 'Resume el trabajo realizado, las decisiones tomadas y cómo se conecta con tu objetivo profesional.'
+    : 'Resume el trabajo realizado, las decisiones tomadas y cómo se conecta con el objetivo que elegiste.'
   const evidencePlaceholder = adaptation
     ? adaptation.evidencePrompt
     : 'Pega el resultado principal, ejemplos, fragmentos, estructura, mensajes, aprendizajes o evidencia concreta producida hoy.'
@@ -221,31 +221,20 @@ export function A2GenericMissionWorkspace({
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-sm font-semibold text-white">
-              Validación estructural del entregable
+              Registro del entregable
             </p>
             <p className="mt-1 text-xs text-slate-400">
-              Umbral del día: {validation.passScore}/100
-              {mission.dtcValidation.required
-                ? ' · Esta misión tiene revisión DTC reforzada'
-                : ''}
+              Estos controles comprueban campos registrados. La calidad y el
+              aprendizaje se revisan con tus evidencias; escribir más no mejora una nota.
             </p>
           </div>
           <div
-            className={`text-3xl font-bold ${
+            className={`text-lg font-bold ${
               validation.passed ? 'text-emerald-300' : 'text-amber-300'
             }`}
           >
-            {validation.score}
+            {validation.passed ? 'Listo' : 'Pendiente'}
           </div>
-        </div>
-
-        <div className="mt-4 h-2 overflow-hidden rounded-full bg-slate-900">
-          <div
-            className={`h-full rounded-full transition-all ${
-              validation.passed ? 'bg-emerald-500' : 'bg-amber-500'
-            }`}
-            style={{ width: `${Math.min(100, validation.score)}%` }}
-          />
         </div>
 
         <div className="mt-4 grid gap-2 sm:grid-cols-2">
@@ -260,7 +249,7 @@ export function A2GenericMissionWorkspace({
                   criterion.met ? 'text-emerald-300' : 'text-amber-300'
                 }`}
               >
-                {criterion.score}/{criterion.maxScore}
+                {criterion.met ? 'Registrado' : 'Pendiente'}
               </span>
             </div>
           ))}
@@ -276,7 +265,7 @@ export function A2GenericMissionWorkspace({
 
         {validation.passed && (
           <p className="mt-4 text-sm text-emerald-100">
-            El entregable cumple la estructura mínima y está listo para registrarse.
+            Los campos están completos. Puedes guardar este intento y revisar su calidad con una persona o en tu siguiente práctica.
           </p>
         )}
       </section>

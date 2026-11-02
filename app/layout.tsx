@@ -1,6 +1,6 @@
 import type React from "react"
 import type { Metadata, Viewport } from "next"
-import { Montserrat } from "next/font/google"
+import localFont from "next/font/local"
 import "./globals.css"
 import "./design-system.css"
 import { Providers } from "./providers"
@@ -16,10 +16,14 @@ if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
 }
 
 // DESIGN.md: Montserrat is the only product typeface.
-const montserrat = Montserrat({
-  subsets: ["latin"],
+const montserrat = localFont({
+  src: [
+    { path: "./fonts/montserrat-latin-wght.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/montserrat-latin-wght.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/montserrat-latin-wght.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/montserrat-latin-wght.woff2", weight: "700", style: "normal" },
+  ],
   variable: "--font-montserrat",
-  weight: ["400", "500", "600", "700"],
   display: "swap",
   preload: true,
 })
@@ -100,8 +104,6 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   themeColor: "#080B14",
 }
 
@@ -111,7 +113,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="es-CL" suppressHydrationWarning className="bg-background">
+    <html lang="es-CL" suppressHydrationWarning className={`${montserrat.variable} bg-background`}>
       <head>
         <link rel="icon" href="/favicon.ico" sizes="any" />
         <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
@@ -120,7 +122,7 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
-      <body className={`${montserrat.variable} font-sans`}>
+      <body className="font-sans">
         <Providers>
           {children}
           <LLMOOptimizedFooter />

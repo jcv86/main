@@ -100,6 +100,40 @@ const a3Closed = flow({
 assert.equal(a3Closed.cards.find((card) => card.id === 'A3')?.state, 'completed')
 assert.equal(a3Closed.cards.find((card) => card.id === 'A4')?.state, 'active')
 
+// A declared personal goal must survive legacy A3 timestamps/current_module.
+// Access remains unchanged: A3 is optional and A4 still requires its real closure.
+for (const day of [7, 16, 27, 30, 60, 90]) {
+  const personal = flow({
+    profile: { ...profile, camino_foco: 'persona', camino_persona_active: true, camino_profesional_active: false },
+    access: { a1: true, a2: true, a3: true, a4: false },
+    currentModule: 'A3',
+    highestA2DayUnlocked: day,
+    horizonMetadata: { a2_horizon: day > 60 ? 90 : day > 30 ? 60 : 30 },
+    completedA2Days: Array.from({ length: day - 1 }, (_, index) => index + 1),
+    completedA3Modules: ['career-mirror'],
+  })
+  assert.equal(personal.practicePath, 'persona')
+  assert.equal(personal.checkpointPending, false)
+  assert.equal(personal.next.href, `/despega/a2/dia-${day}`)
+  assert.equal(personal.cards.find((card) => card.id === 'A2')?.state, 'active')
+  assert.equal(personal.cards.find((card) => card.id === 'A3')?.state, 'available')
+  assert.match(personal.cards.find((card) => card.id === 'A3')!.detail, /Opcional/)
+  assert.equal(personal.cards.find((card) => card.id === 'A4')?.state, 'locked')
+}
+const personalClosed = flow({
+  profile: { ...profile, camino_foco: 'persona' },
+  access: { a1: true, a2: true, a3: true, a4: true },
+  currentModule: 'A4',
+  highestA2DayUnlocked: 30,
+  horizonMetadata: { a2_horizon: 30 },
+  completedA2Days: Array.from({ length: 30 }, (_, index) => index + 1),
+  a3RouteClosed: true,
+})
+assert.equal(personalClosed.next.href, '/despega/a2/resultados')
+assert.equal(personalClosed.cards.find((card) => card.id === 'A4')?.state, 'available', 'Past A4 permission stays available without becoming the forced next step.')
+const personalNeedsOnboarding = flow({ profile: { camino_foco: 'persona' }, access: { a1: true, a2: false, a3: false, a4: false } })
+assert.equal(personalNeedsOnboarding.next.href, '/despega/conozcamonos-1', 'A personal goal never bypasses onboarding.')
+
 const shell = source('components/layout/app-shell.tsx')
 const layout = source('app/despega/layout.tsx')
 const service = source('lib/journey/service.ts')

@@ -24,6 +24,7 @@ import {
   type A2CycleReviewView,
 } from '@/components/a2-cycle-review-card'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
+import { missionForA2Path, type A2PracticePath } from '@/lib/a2/practice-path'
 import type { A2DailyMission, A2MissionType } from '@/lib/a2-mission.types'
 
 type Horizon = 30 | 60 | 90
@@ -68,6 +69,7 @@ interface A2ValidationSummary {
 }
 
 interface A2ProgressResponse {
+  practice_path?: A2PracticePath
   current_day: number
   highest_unlocked_day: number
   active_horizon: Horizon
@@ -190,10 +192,9 @@ function groupForMission(type: A2MissionType): Exclude<MissionGroup, 'all'> {
 
 function validationLabel(record: A2DayRecord | undefined): string | null {
   if (!record) return null
-  if (record.validation_status === 'checkpoint') return 'Checkpoint validado'
+  if (record.validation_status === 'checkpoint') return 'Entrenamiento registrado'
   if (record.validation_status === 'legacy') return 'Completado anteriormente'
-  if (record.score !== null) return `Entregable validado · ${record.score}/100`
-  return 'Entregable validado'
+  return 'Entregable registrado'
 }
 
 export default function A2DashboardPage() {
@@ -261,6 +262,7 @@ export default function A2DashboardPage() {
   const missions = useMemo(
     () =>
       Object.values(A2_DAILY_MISSIONS)
+        .map((mission) => missionForA2Path(mission, progress.practice_path || 'ambos'))
         .filter((mission) => mission.day <= horizon)
         .filter(
           (mission) =>
@@ -277,7 +279,7 @@ export default function A2DashboardPage() {
           ].some((value) => value.toLowerCase().includes(query))
         })
         .sort((left, right) => left.day - right.day),
-    [group, horizon, search],
+    [group, horizon, search, progress.practice_path],
   )
 
   const selectedCycleReview =
@@ -295,18 +297,6 @@ export default function A2DashboardPage() {
   const checkpointsInHorizon = recordsInHorizon.filter(
     (record) => record.validation_status === 'checkpoint',
   ).length
-  const scoredInHorizon = recordsInHorizon.filter(
-    (record) => record.score !== null && record.validation_status !== 'legacy',
-  )
-  const averageScore =
-    scoredInHorizon.length > 0
-      ? Math.round(
-          scoredInHorizon.reduce(
-            (sum, record) => sum + (record.score || 0),
-            0,
-          ) / scoredInHorizon.length,
-        )
-      : null
   const progressPercent = Math.min(
     100,
     Math.round((completedInHorizon / horizon) * 100),
@@ -320,7 +310,7 @@ export default function A2DashboardPage() {
       icon: <CheckCircle2 className="h-5 w-5 text-emerald-400" />,
     },
     {
-      label: 'Entregables validados',
+      label: 'Entregables registrados',
       value: validatedInHorizon,
       description: `${evidenceInHorizon} con evidencia guardada`,
       icon: <ClipboardCheck className="h-5 w-5 text-cyan-400" />,
@@ -332,9 +322,9 @@ export default function A2DashboardPage() {
       icon: <Trophy className="h-5 w-5 text-amber-400" />,
     },
     {
-      label: 'Puntaje promedio',
-      value: averageScore === null ? '—' : `${averageScore}/100`,
-      description: 'Solo evaluaciones con puntaje',
+      label: 'Evidencias guardadas',
+      value: evidenceInHorizon,
+      description: 'Revisa su contenido y tu siguiente acción',
       icon: <Gauge className="h-5 w-5 text-purple-400" />,
     },
   ]
@@ -371,7 +361,7 @@ export default function A2DashboardPage() {
     }
   }
 
-  const currentMission = A2_DAILY_MISSIONS[progress.current_day]
+  const currentMission = A2_DAILY_MISSIONS[progress.current_day] ? missionForA2Path(A2_DAILY_MISSIONS[progress.current_day], progress.practice_path || 'ambos') : undefined
 
   return (
     <PageContainer>
@@ -387,7 +377,7 @@ export default function A2DashboardPage() {
               <p className="text-xs font-semibold uppercase tracking-wide text-muted-foreground">Tu misión de hoy</p>
               <p className="mt-2 text-xl font-semibold text-foreground">Día {progress.current_day}{currentMission ? ` · ${currentMission.title}` : ''}</p>
               <p className="mt-1 text-sm text-muted-foreground">Disponible hasta el Día {progress.highest_unlocked_day}. Tu avance y evidencia permanecen guardados.</p>
-              {progress.route ? <p className="mt-2 text-xs text-muted-foreground">Ruta: {progress.route.name} · Seleccionada desde tu diagnóstico de Despega Cerebral.</p> : null}
+              {progress.route ? <p className="mt-2 text-xs text-muted-foreground">Ruta: {progress.route.name} · Puedes revisar si sigue encajando con tu objetivo.</p> : null}
             </div>
             {currentMission && progress.current_day <= progress.highest_unlocked_day ? (
               <Button onClick={() => router.push(`/despega/a2/dia-${progress.current_day}`)} className="shrink-0">
@@ -410,7 +400,7 @@ export default function A2DashboardPage() {
                 <p className="mt-2 max-w-3xl text-sm leading-relaxed text-emerald-50/75">
                   Tu avance queda guardado aquí. Extiende a {progress.next_horizon}{' '}
                   días solo cuando quieras profundizar el trabajo con nuevas misiones,
-                  acciones reales y checkpoints de Entrenamiento.
+                  acciones reales y revisiones que correspondan a tu objetivo.
                 </p>
                 {extensionError && (
                   <p className="mt-3 text-sm text-amber-200">{extensionError}</p>
@@ -448,7 +438,7 @@ export default function A2DashboardPage() {
                 Cerraste los 90 días de Tu Ruta
               </h2>
               <p className="mt-2 text-sm text-purple-100/70">
-                Tus entregables, checkpoints y evidencia permanecen disponibles para
+                Tus entregables, ajustes y evidencia permanecen disponibles para
                 revisión y actualización.
               </p>
             </div>
@@ -488,20 +478,20 @@ export default function A2DashboardPage() {
           )}
 
         <section className="mb-8 rounded-xl border border-emerald-500/25 bg-emerald-500/5 p-6">
-          <p className="text-sm font-semibold text-emerald-200">Tu capacidad de ejecución</p>
+          <p className="text-sm font-semibold text-emerald-200">Tus evidencias de ejecución</p>
           <p className="mt-1 max-w-3xl text-sm text-muted-foreground">
-            Se mide aparte del progreso diario. Completar más misiones no se presenta como mejora de capacidad.
+            Conserva un intento inicial y otro de seguimiento para revisar lo que hiciste y lo que cambió. Estos registros no generan una nota de capacidad.
           </p>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <button type="button" onClick={() => router.push('/despega/a2-outcome-baseline')} className="rounded-lg border border-emerald-500/40 px-4 py-2 text-sm font-semibold text-emerald-200 hover:bg-emerald-500/10">
-              Hacer baseline comparable
+              Registrar mi punto de partida
             </button>
             {progress.completed_days.includes(30) ? (
               <button type="button" onClick={() => router.push('/despega/a2-outcome-follow-up')} className="rounded-lg bg-emerald-600 px-4 py-2 text-sm font-semibold text-foreground hover:bg-emerald-500">
-                Medir mi cambio en el hito de 30 días
+                Registrar seguimiento al cerrar 30 días
               </button>
             ) : (
-              <span className="self-center text-xs text-muted-foreground">El follow-up se habilita al completar el hito verificable del Día 30.</span>
+              <span className="self-center text-xs text-muted-foreground">El seguimiento se habilita al completar el hito verificable del Día 30.</span>
             )}
           </div>
         </section>

@@ -134,11 +134,11 @@ export function PersonalOrientation({ orientation, title }: {
       <h4 className="text-sm font-semibold text-foreground">Tu orientación para esta oferta</h4>
       <p className="mt-1.5 break-words text-sm leading-relaxed text-muted-foreground">{orientation.summary}</p>
     </div>
-    {!!reasons.length && <ul className="list-disc space-y-2 pl-4 text-sm leading-relaxed text-foreground" aria-label="Motivos respaldados">
+    {!!reasons.length && <div><h5 className="mb-2 text-sm font-semibold text-foreground">Qué coincide con tu información</h5><ul className="list-disc space-y-2 pl-4 text-sm leading-relaxed text-foreground" aria-label="Motivos respaldados">
       {reasons.map((reason, index) => <li key={reason.code + ':' + index} className="break-words">{reason.label}</li>)}
-    </ul>}
+    </ul></div>}
     {!!questions.length && <div>
-      <h5 className="text-sm font-semibold text-foreground">Por confirmar</h5>
+      <h5 className="text-sm font-semibold text-foreground">Qué falta confirmar</h5>
       <ul className="mt-2 list-disc space-y-2 pl-4 text-sm leading-relaxed text-muted-foreground">
         {questions.map((question, index) => <li key={question.code + ':' + index} className="break-words">
           <span>{question.label}</span>

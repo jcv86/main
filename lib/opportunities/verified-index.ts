@@ -6,6 +6,7 @@ import { employerJobId } from './sources/employer-registry'
 import type { CanonicalOpportunity, OpportunitySource, OpportunityVerificationStatus } from './types'
 import { categorizeOpportunity, inferChileRegion, normalizeRoleTitle } from './taxonomy'
 import { isOpportunityPublished, opportunityTemporalFilter } from './temporal-filter'
+import { employerIndustryForOpportunity, type EmployerIndustryEvidence } from './employer-industry'
 import {
   deriveOpportunityEvidence, readableOpportunityTextResult, type OpportunityFieldEvidence,
 } from './opportunity-evidence'
@@ -38,6 +39,7 @@ export interface VerifiedOpportunityRow {
   skills: string[]
   /** Computed from selected public fields; not a new database column. */
   field_evidence?: OpportunityFieldEvidence[]
+  industry_evidence?: EmployerIndustryEvidence | null
   [key: string]: unknown
 }
 
@@ -364,6 +366,8 @@ export async function readVerifiedOpportunityInventory(
       requirements: derived.requirements,
       skills: derived.skills,
       field_evidence: derived.evidence.filter(item => item.field !== 'workMode' || workMode !== null),
+      industry_evidence: employerIndustryForOpportunity({ source: row.source, source_id: row.source_id,
+        company: row.company, description }, now),
       expires_at: row.expires_at ? normalizeChileTrabajosDate(row.expires_at) : null,
     }
   })

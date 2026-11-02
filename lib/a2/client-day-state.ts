@@ -43,6 +43,7 @@ export interface A2DayStateResponse {
   success: boolean
   day: number
   draftScope: string
+  practicePath: 'persona' | 'profesional' | 'ambos'
   route: A2DayRouteState | null
   adaptation: A2RouteAdaptation
   access: A2DayAccessState

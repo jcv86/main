@@ -87,7 +87,7 @@ export function Day1Experience({ onComplete, userId }: Day1ExperienceProps) {
     'Hipótesis de Ruta',
     'Las 3 Puertas',
     'Tu Roadmap',
-    'Análisis y Puntuación',
+    'Revisión del acuerdo',
   ]
 
   const saveDraft = (step: number, data: RouteData) => {

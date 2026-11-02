@@ -29,6 +29,8 @@ import {
   type A2DayStateResponse,
 } from '@/lib/a2/client-day-state'
 import { SIGN_IN_PATH } from '@/lib/auth/routes'
+import { missionForA2Path } from '@/lib/a2/practice-path'
+import { A2PracticeAdjustment } from '@/components/a2-practice-adjustment'
 import {
   normalizeA2MissionSubmission,
   requiresUniversalA2Submission,
@@ -145,14 +147,17 @@ export function A2DayPageTemplate({
   const mission = useMemo(() => {
     const configured = A2_DAILY_MISSIONS[dayNumber]
     if (!configured) return null
-    return customMission
-      ? ({ ...configured, ...customMission } as A2DailyMission)
-      : configured
-  }, [customMission, dayNumber])
+    const adapted = missionForA2Path(configured, dayState?.practicePath || 'ambos')
+    return customMission && adapted.practiceTrack !== 'persona'
+      ? ({ ...adapted, ...customMission } as A2DailyMission)
+      : adapted
+  }, [customMission, dayNumber, dayState?.practicePath])
 
-  const checkpoint = getA3CheckpointForDay(dayNumber)
+  const personalPractice = mission?.practiceTrack === 'persona'
+  const checkpoint = personalPractice ? null : getA3CheckpointForDay(dayNumber)
+  const specializedChildren = personalPractice ? null : children
   const needsEvidence = Boolean(
-    mission && !children && requiresUniversalA2Submission(mission),
+    mission && !specializedChildren && requiresUniversalA2Submission(mission),
   )
   const draftKey = dayState?.draftScope
     ? `dtc:a2:${dayState.draftScope}:mission-draft:${dayNumber}`
@@ -440,18 +445,17 @@ export function A2DayPageTemplate({
             <p className="mt-1 text-xs text-emerald-100/70">
               {dayState.completion?.validationStatus === 'legacy'
                 ? 'Puedes revisarla; fue completada antes del sistema de evidencia.'
-                : `Validación: ${dayState.completion?.validationStatus || 'completada'}${
-                    typeof dayState.completion?.validation.score === 'number'
-                      ? ` · ${dayState.completion.validation.score}/100`
-                      : ''
-                  }`}
+                : 'Entregable guardado. Este registro no certifica una capacidad ni una mejora.'}
             </p>
           </section>
         )}
 
         <A2RouteContextCard adaptation={dayState.adaptation} />
 
-        {children ? (
+        <A2PracticeAdjustment key={`${dayState.draftScope}:${dayNumber}`} dayNumber={dayNumber} draftScope={dayState.draftScope} draft={needsEvidence ? submission : undefined} onRestoreDraft={needsEvidence ? (saved) => setSubmission(normalizeA2MissionSubmission(mission, saved)) : undefined} />
+
+        <div id="a2-deliverable" tabIndex={-1} />
+        {specializedChildren ? (
           isCompleted && dayState.completion?.validationStatus === 'legacy' ? (
             <section className="space-y-4 rounded-[28px] border border-cyan-500/25 bg-cyan-500/5 p-6">
               <h2 className="text-xl font-semibold text-white">
@@ -466,7 +470,7 @@ export function A2DayPageTemplate({
               </Button>
             </section>
           ) : (
-            children
+            specializedChildren
           )
         ) : (
           <>

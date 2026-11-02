@@ -3,7 +3,7 @@ export const CV_BUILDER_DRAFT_KEY = 'dtc:a3:cv-builder-studio:draft:v1'
 export const CV_BUILDER_ATS_ITEMS = [
   { id: 'format', label: 'Formato simple, sin tablas ni columnas complejas', critical: true },
   { id: 'fonts', label: 'Tipografía estándar y legible', critical: true },
-  { id: 'keywords', label: 'Palabras clave del rol objetivo incorporadas', critical: true },
+  { id: 'keywords', label: 'Palabras clave relevantes sólo cuando describen habilidades reales', critical: true },
   { id: 'sections', label: 'Secciones con títulos claros', critical: true },
   { id: 'file', label: 'Documento final con texto seleccionable', critical: true },
   { id: 'contact', label: 'Datos de contacto fuera de encabezados o pies', critical: true },
@@ -33,6 +33,9 @@ export interface CvBuilderState {
   skills: string
   education: string
   atsChecklist: string[]
+  evidenceKind: 'experience' | 'project' | 'education'
+  pendingFacts: string
+  factsConfirmed: boolean
 }
 
 export const EMPTY_CV_BUILDER_STATE: CvBuilderState = {
@@ -53,6 +56,9 @@ export const EMPTY_CV_BUILDER_STATE: CvBuilderState = {
   skills: '',
   education: '',
   atsChecklist: [],
+  evidenceKind: 'experience',
+  pendingFacts: '',
+  factsConfirmed: false,
 }
 
 export function splitCvList(value: unknown): string[] {
@@ -77,6 +83,9 @@ export function normalizeCvBuilderState(value: unknown): CvBuilderState {
     typeof record[key] === 'string' ? String(record[key]) : ''
 
   return {
+    evidenceKind: record.evidenceKind === 'project' || record.evidenceKind === 'education' ? record.evidenceKind : 'experience',
+    pendingFacts: text('pendingFacts'),
+    factsConfirmed: record.factsConfirmed === true || record.factsConfirmed === 'true',
     fullName: text('fullName'),
     email: text('email'),
     phone: text('phone'),
@@ -103,6 +112,9 @@ export function buildCvBuilderDeliverable(
   state: CvBuilderState,
 ): Record<string, string> {
   return {
+    evidenceKind: state.evidenceKind,
+    pendingFacts: state.pendingFacts.trim(),
+    factsConfirmed: String(state.factsConfirmed),
     fullName: state.fullName.trim(),
     email: state.email.trim(),
     phone: state.phone.trim(),
@@ -133,4 +145,30 @@ export function buildCvBuilderResponses(state: CvBuilderState): string[] {
     `Competencias: ${state.skills}.`,
     `Validaciones ATS: ${state.atsChecklist.join(', ')}.`,
   ]
+}
+
+/** Exact, user-authored facts only. Pending notes and UI examples never reach the export. */
+export function buildCvPreviewText(state: CvBuilderState): string {
+  const lines = [
+    state.fullName.trim(),
+    state.targetRole.trim(),
+    [state.email, state.phone, state.location, state.linkedin].map((text) => text.trim()).filter(Boolean).join(' · '),
+  ].filter(Boolean)
+  const section = (title: string, content: string[]) => {
+    const entries = content.map((text) => text.trim()).filter(Boolean)
+    if (entries.length) lines.push('', title, ...entries)
+  }
+  section('Resumen', [state.professionalSummary])
+  section(state.evidenceKind === 'project' ? 'Proyectos' : 'Experiencia', [
+    [state.experienceTitle, state.experienceCompany, state.experienceDates].map((text) => text.trim()).filter(Boolean).join(' · '),
+    ...[state.achievement1, state.achievement2, state.achievement3].filter((text) => text.trim()).map((text) => `• ${text.trim()}`),
+  ])
+  section('Competencias', [splitCvList(state.skills).join(', ')])
+  section('Formación', [state.education])
+  return `${lines.join('\n')}\n`
+}
+
+export function buildCvPlainText(state: CvBuilderState): string {
+  if (!state.factsConfirmed) throw new Error('Revisa y confirma los hechos incluidos antes de exportar.')
+  return buildCvPreviewText(state)
 }

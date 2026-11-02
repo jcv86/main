@@ -3,7 +3,6 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
-    "prebuild": "node scripts/generate-docx.js",
     "build": "npm run check:report-quality && next build",
     "dev": "next dev",
     "lint": "next lint",
@@ -35,7 +34,7 @@
     "check:a1-understanding": "tsx scripts/check-a1-individual-understanding-contract.ts",
     "check:credibility": "tsx scripts/check-dtc-credibility-contract.ts",
     "check:critical-contracts": "node --import tsx scripts/check-test-evidence-matrix.ts && node --import tsx scripts/check-global-auth-boundary-contract.ts && node --import tsx scripts/check-production-laboratory-boundary-contract.ts && node --import tsx scripts/check-signin-recovery-contract.ts && node --import tsx scripts/check-security-p0-contract.ts && node --import tsx scripts/check-security-wave2-contract.ts && node --import tsx scripts/check-security-wave3-contract.ts && node --import tsx scripts/check-a2-day-ssr-guard-contract.ts && node --import tsx scripts/check-shell-canonical-journey-contract.ts && node --import tsx scripts/check-dtc-critical-contract.ts && node --import tsx scripts/check-a4-canonical-entry-contract.ts && node --import tsx scripts/check-a4-signal-decision-contract.ts && node --import tsx scripts/check-rls-p1-contract.ts && node --import tsx scripts/check-rls-p2-contract.ts && node --import tsx scripts/check-rls-p3-contract.ts",
-    "quality:gate": "tsc --noEmit && npm run check:critical-contracts && npm run build",
+    "quality:gate": "npm run test:professional-closure && tsc --noEmit && npm run check:critical-contracts && npm run build",
     "check:report-quality": "node --import tsx scripts/check-report-evidence-contract.ts && node --import tsx scripts/check-a1-professional-report-contract.ts && node --import tsx scripts/check-a1-individual-understanding-contract.ts && node --import tsx scripts/check-a1-a2-a3-journey-contract.ts && node --import tsx scripts/check-reporting-contract.ts && node --import tsx scripts/check-dtc-credibility-contract.ts && tsc --noEmit",
     "generate:docs": "node scripts/generate-docx.js",
     "db:reset-progress": "node --env-file-if-exists=/vercel/share/.env.project --env-file-if-exists=/vercel/share/.env.snowflake --loader tsx scripts/reset-pillar-progress.ts",
@@ -43,12 +42,15 @@
     "test:a4-opportunity-db": "node --import tsx scripts/test-opportunity-refresh-db.mjs",
     "test:a4-qa-access": "node --import tsx scripts/test-a4-qa-access.mjs",
     "test:a4-profile-availability": "node --import tsx scripts/test-a4-profile-availability.mjs",
-    "test:a4-closure": "node --import tsx scripts/test-a4-journey-context.mjs && node --import tsx scripts/test-a4-search-intents.mjs && node --import tsx scripts/test-opportunity-search-experience.mjs",
+    "test:a4-closure": "node --import tsx scripts/test-saved-search-contract.cjs && node --import tsx scripts/test-a4-journey-context.mjs && node --import tsx scripts/test-a4-search-intents.mjs && node --import tsx scripts/test-opportunity-search-experience.mjs",
     "test:a4-catalog-quality": "node --import tsx scripts/test-opportunity-evidence.mjs && node --import tsx scripts/test-opportunity-diagnostics.mjs && node --import tsx scripts/test-opportunity-result-detail.mjs",
     "test:a4-personal-orientation": "node --import tsx scripts/test-opportunity-personal-context.mjs && node --import tsx scripts/test-opportunity-personal-orientation.mjs && node --import tsx scripts/test-opportunity-personal-detail.mjs",
     "test:getonboard": "node --import tsx scripts/test-getonboard.mjs && node --import tsx scripts/test-getonboard-routes.mjs",
     "test:a4-employers": "node --import tsx scripts/test-employer-sources.mjs && node --import tsx scripts/test-employer-index.mjs && node --import tsx scripts/test-employer-refresh.mjs",
-    "smoke:a4-employers": "node --import tsx scripts/smoke-employer-sources.mjs --live"
+    "smoke:a4-employers": "node --import tsx scripts/smoke-employer-sources.mjs --live",
+    "test:outcome-capture": "node --import tsx scripts/test-outcome-response-capture.cjs && node --import tsx scripts/test-outcome-capture-routes.cjs && node --import tsx scripts/test-outcome-capture-ui.cjs && node --import tsx scripts/check-outcome-capture-s1.ts && node --import tsx scripts/check-a1-outcome-experience.ts && node --import tsx scripts/check-a2-outcome-experience.ts && node --import tsx scripts/check-a3-outcome-experience.ts && node --import tsx scripts/check-outcome-instruments-s1.ts",
+    "test:practice-evidence": "node --import tsx scripts/check-dtc-practice-evidence.ts && node --import tsx scripts/test-report-practice-context.mjs && node --import tsx scripts/test-a2-practice-adjustment-routes.cjs && node --import tsx scripts/test-a3-editor-concurrency.mjs && node --import tsx scripts/test-a3-cv-context-route.cjs",
+    "test:professional-closure": "node --import tsx scripts/test-a1-a2-orientation.cjs && npm run test:outcome-capture && npm run test:practice-evidence && npm run test:a4-closure && npm run test:a4-qa-access"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",

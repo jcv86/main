@@ -120,13 +120,14 @@ export async function GET() {
     const moduleResults: Partial<
       Record<
         A3ModuleId,
-        { bestScore: number; totalAttempts: number; completedAt: string | null }
+        { scoreMeaning: 'completion_or_legacy_unvalidated'; bestScore: number; totalAttempts: number; completedAt: string | null }
       >
     > = {}
     for (const row of completionResult.data || []) {
       const moduleId = normalizeA3ModuleId(row.module_id)
       if (!moduleId) continue
       moduleResults[moduleId] = {
+        scoreMeaning: 'completion_or_legacy_unvalidated',
         bestScore: Math.max(0, Number(row.best_score) || 0),
         totalAttempts: Math.max(0, Number(row.total_attempts) || 0),
         completedAt: isoValue(row.completed_at),

@@ -262,7 +262,7 @@ export function A3RouteOverview() {
               {routeCompleted ? (
                 <>
                   <p className="mt-2 text-xl font-semibold text-foreground">Ruta básica completada</p>
-                  <p className="mt-1 text-sm text-muted-foreground">Tu cierre quedó registrado. El journey central confirmará cuándo corresponde habilitar el Radar Estratégico.</p>
+                  <p className="mt-1 text-sm text-muted-foreground">Tu cierre quedó registrado. Revisa tu siguiente paso para continuar al Radar Estratégico.</p>
                 </>
               ) : nextModule ? (
                 <>
@@ -285,17 +285,17 @@ export function A3RouteOverview() {
         </Card>
 
         <section className="rounded-xl border border-fuchsia-500/20 bg-fuchsia-500/5 p-5">
-          <p className="text-sm font-semibold">Evidencia de capacidad de entrevista</p>
+          <p className="text-sm font-semibold">Tus evidencias de práctica de entrevista</p>
           <p className="mt-1 text-sm text-muted-foreground">
-            Los puntajes de los módulos miden práctica. Esta medición separada compara tu capacidad antes y después con la misma rúbrica.
+            Conserva un intento inicial y otro de seguimiento. Revisa tus ejemplos, lo que cambió y lo que sigue pendiente; estos registros no miden por sí solos una mejora de capacidad.
           </p>
           <div className="mt-4 flex flex-col gap-2 sm:flex-row">
             <Link href="/despega/a3-outcome-baseline" className="sm:flex-1">
-              <Button variant="outline" className="w-full">Hacer baseline comparable</Button>
+              <Button variant="outline" className="w-full">Registrar mi punto de partida</Button>
             </Link>
             {progress?.route.routeCompletedAt ? (
               <Link href="/despega/a3-outcome-follow-up" className="sm:flex-1">
-                <Button className="w-full">Medir mi cambio después de A3</Button>
+                <Button className="w-full">Registrar seguimiento después de A3</Button>
               </Link>
             ) : null}
           </div>
@@ -319,7 +319,7 @@ export function A3RouteOverview() {
               <div>
                 <p className="font-semibold">{completedModule.title} registrado</p>
                 <p className="mt-1 text-sm text-muted-foreground">
-                  Tu puntaje, entregable y progreso fueron actualizados. Las repeticiones no vuelven a entregar XP.
+                  Tu entregable y progreso quedaron guardados. Las repeticiones no vuelven a entregar XP.
                 </p>
                 <Link
                   href={`/despega/a2/dia-${completedModule.checkpointDay}`}
@@ -358,7 +358,7 @@ export function A3RouteOverview() {
           <div className="flex items-center justify-between gap-4">
             <div>
               <p className="font-semibold">Progreso verificado de A3</p>
-              <p className="text-sm text-muted-foreground">Calculado desde completitudes y XP persistidos.</p>
+              <p className="text-sm text-muted-foreground">Calculado desde los módulos que completaste y guardaste.</p>
             </div>
             <Badge variant={routeCompleted ? 'default' : 'secondary'}>
               {routeCompleted ? 'Cerrada' : 'Activa'}
@@ -374,11 +374,11 @@ export function A3RouteOverview() {
               <div className="space-y-2">
                 <h2 className="text-xl font-bold">Ruta básica completada</h2>
                 <p className="text-muted-foreground">
-                  El cierre quedó registrado{progress.route.routeCompletedAt ? ` el ${dateLabel(progress.route.routeCompletedAt)}` : ''}. Puedes repetir cualquier módulo completado para mejorar tu mejor puntaje; una repetición no duplica XP.
+                  El cierre quedó registrado{progress.route.routeCompletedAt ? ` el ${dateLabel(progress.route.routeCompletedAt)}` : ''}. Puedes repetir cualquier módulo completado para revisar tus ejemplos y practicar un cambio concreto. Las repeticiones no vuelven a entregar XP.
                 </p>
                 {progress.route.proUnlockedAt ? (
                   <Badge className="border-fuchsia-500/30 bg-fuchsia-500/10 text-fuchsia-200">
-                    Desbloqueo Pro registrado
+                    Repeticiones disponibles
                   </Badge>
                 ) : null}
               </div>
@@ -480,7 +480,7 @@ export function A3RouteOverview() {
 
                   {result ? (
                     <div className="mt-4 flex flex-wrap gap-2 text-xs">
-                      <Badge variant="secondary">Mejor puntaje: {result.bestScore}/100</Badge>
+                      <Badge variant="secondary">Práctica registrada</Badge>
                       <Badge variant="secondary">Intentos: {result.totalAttempts}</Badge>
                       {result.completedAt ? <Badge variant="secondary">Completado: {dateLabel(result.completedAt)}</Badge> : null}
                     </div>
@@ -518,9 +518,9 @@ export function A3RouteOverview() {
         <Card className="p-5">
           <h2 className="font-semibold">Cómo se registra el progreso</h2>
           <div className="mt-4 grid gap-4 text-sm text-muted-foreground sm:grid-cols-3">
-            <p><strong className="text-foreground">1. Acceso.</strong> Cada módulo verifica Día 1, checkpoint y prerrequisitos en el servidor.</p>
-            <p><strong className="text-foreground">2. Evidencia.</strong> El módulo exige un entregable y un puntaje mínimo de 75/100.</p>
-            <p><strong className="text-foreground">3. Persistencia.</strong> Sesión, puntaje, progreso y XP se guardan juntos; repetir no duplica XP.</p>
+            <p><strong className="text-foreground">1. Acceso.</strong> Cada módulo indica qué prácticas previas necesitas completar.</p>
+            <p><strong className="text-foreground">2. Evidencia.</strong> Conservas tu entregable y revisas los campos requeridos. Una entrega completa no acredita por sí sola una capacidad.</p>
+            <p><strong className="text-foreground">3. Persistencia.</strong> Tu sesión y tu avance se guardan juntos. Puedes volver a practicar sin perder lo anterior.</p>
           </div>
         </Card>
       </PageStack>

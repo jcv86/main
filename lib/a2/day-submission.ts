@@ -67,11 +67,6 @@ function validOptionalUrl(value: string): boolean {
   }
 }
 
-function proportionalScore(length: number, target: number, maxScore: number): number {
-  if (target <= 0) return maxScore
-  return Math.min(maxScore, Math.round((length / target) * maxScore))
-}
-
 export function normalizeA2MissionSubmission(
   mission: A2DailyMission,
   value: unknown,
@@ -94,7 +89,7 @@ export function normalizeA2MissionSubmission(
 export function requiresUniversalA2Submission(
   mission: A2DailyMission,
 ): boolean {
-  return mission.day >= 11 && mission.missionType !== 'a3_checkpoint'
+  return mission.practiceTrack === 'persona' || (mission.day >= 11 && mission.missionType !== 'a3_checkpoint')
 }
 
 export function validateA2MissionSubmission(
@@ -103,7 +98,7 @@ export function validateA2MissionSubmission(
 ): A2MissionValidationResult {
   const normalized = normalizeA2MissionSubmission(mission, value)
 
-  if (mission.day === 1) {
+  if (mission.day === 1 && mission.practiceTrack !== 'persona') {
     return {
       passed: true,
       score: 100,
@@ -129,58 +124,17 @@ export function validateA2MissionSubmission(
     }
   }
 
-  const requiredValidation = mission.dtcValidation.required
-  const summaryTarget = requiredValidation ? 180 : 100
-  const evidenceTarget = requiredValidation ? 140 : 70
-  const reflectionTarget =
-    mission.missionType === 'debrief' || mission.missionType === 'milestone'
-      ? 120
-      : 60
-  const summaryMinimum = requiredValidation ? 100 : 60
-  const evidenceMinimum = requiredValidation ? 80 : 40
-  const reflectionMinimum =
-    mission.missionType === 'debrief' || mission.missionType === 'milestone'
-      ? 80
-      : 30
-  const instructionRatio =
-    mission.instructions.length === 0
-      ? 1
-      : normalized.completedInstructions.length / mission.instructions.length
-  const instructionsScore = Math.round(instructionRatio * 30)
-  const summaryScore = proportionalScore(
-    normalized.summary.length,
-    summaryTarget,
-    20,
-  )
-  const evidenceScore = proportionalScore(
-    normalized.evidence.length,
-    evidenceTarget,
-    25,
-  )
-  const reflectionScore = proportionalScore(
-    normalized.reflection.length,
-    reflectionTarget,
-    15,
-  )
-
-  let missionSpecificScore = 10
-  let missionSpecificMet = true
-  let missionSpecificLabel = 'Coherencia del entregable'
-
-  if (mission.missionType === 'field_action') {
-    missionSpecificLabel = 'Resultado o métrica de la acción real'
-    missionSpecificMet = normalized.metrics.length >= 20
-    missionSpecificScore = proportionalScore(normalized.metrics.length, 60, 10)
-  } else if (
-    mission.missionType === 'builder' ||
-    mission.missionType === 'coach_forge' ||
-    mission.missionType === 'performance_drill'
-  ) {
-    missionSpecificLabel = 'Activo, práctica o evidencia utilizable'
-    missionSpecificMet =
-      normalized.artifactUrl.length > 0 || normalized.evidence.length >= evidenceTarget
-    missionSpecificScore = missionSpecificMet ? 10 : 5
-  }
+  // Compatibility numbers describe field coverage only. They are never an
+  // assessment of quality, skill, truthfulness or learning.
+  const instructionRatio = mission.instructions.length === 0
+    ? 1 : normalized.completedInstructions.length / mission.instructions.length
+  const instructionsScore = instructionRatio === 1 ? 30 : 0
+  const summaryMet = Boolean(normalized.summary)
+  const evidenceMet = Boolean(normalized.evidence)
+  const reflectionMet = Boolean(normalized.reflection)
+  const missionSpecificMet = mission.missionType !== 'field_action' || Boolean(normalized.metrics)
+  const missionSpecificLabel = mission.missionType === 'field_action'
+    ? 'Resultado observado registrado' : 'Entregable registrado'
 
   const criteria: A2MissionValidationCriterion[] = [
     {
@@ -192,29 +146,29 @@ export function validateA2MissionSubmission(
     },
     {
       key: 'summary',
-      label: 'Resumen concreto del trabajo realizado',
-      score: summaryScore,
+      label: 'Trabajo realizado registrado',
+      score: summaryMet ? 20 : 0,
       maxScore: 20,
-      met: normalized.summary.length >= summaryMinimum,
+      met: summaryMet,
     },
     {
       key: 'evidence',
-      label: 'Evidencia o contenido del entregable',
-      score: evidenceScore,
+      label: 'Contenido del entregable registrado',
+      score: evidenceMet ? 25 : 0,
       maxScore: 25,
-      met: normalized.evidence.length >= evidenceMinimum,
+      met: evidenceMet,
     },
     {
       key: 'reflection',
       label: 'Aprendizaje y siguiente ajuste',
-      score: reflectionScore,
+      score: reflectionMet ? 15 : 0,
       maxScore: 15,
-      met: normalized.reflection.length >= reflectionMinimum,
+      met: reflectionMet,
     },
     {
       key: 'mission_specific',
       label: missionSpecificLabel,
-      score: missionSpecificScore,
+      score: missionSpecificMet ? 10 : 0,
       maxScore: 10,
       met: missionSpecificMet,
     },
@@ -224,31 +178,18 @@ export function validateA2MissionSubmission(
   if (instructionRatio !== 1) {
     errors.push('Confirma todos los pasos de la misión antes de continuar.')
   }
-  if (normalized.summary.length < summaryMinimum) {
-    errors.push(
-      `Resume el trabajo realizado con al menos ${summaryMinimum} caracteres.`,
-    )
-  }
-  if (normalized.evidence.length < evidenceMinimum) {
-    errors.push(
-      `Describe o pega evidencia del entregable con al menos ${evidenceMinimum} caracteres.`,
-    )
-  }
-  if (normalized.reflection.length < reflectionMinimum) {
-    errors.push(
-      `Registra tu aprendizaje o ajuste con al menos ${reflectionMinimum} caracteres.`,
-    )
-  }
+  if (!summaryMet) errors.push('Registra qué hiciste y qué decisión tomaste.')
+  if (!evidenceMet) errors.push('Pega o describe una evidencia real del trabajo realizado.')
+  if (!reflectionMet) errors.push('Registra un aprendizaje y tu siguiente acción.')
   if (!validOptionalUrl(normalized.artifactUrl)) {
     errors.push('El enlace del entregable debe comenzar con http:// o https://.')
   }
   if (mission.missionType === 'field_action' && !missionSpecificMet) {
-    errors.push('Registra un resultado o métrica concreta de la acción realizada.')
+    errors.push('Registra qué ocurrió en la acción; no necesitas inventar una cifra.')
   }
 
   const score = criteria.reduce((sum, criterion) => sum + criterion.score, 0)
-  const passScore =
-    mission.dtcValidation.passScore || (requiredValidation ? 70 : 60)
+  const passScore = 100
   const strengths = criteria
     .filter((criterion) => criterion.met)
     .map((criterion) => criterion.label)

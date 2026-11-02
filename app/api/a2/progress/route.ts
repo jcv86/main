@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
 import { nextA2Horizon } from '@/lib/a2/horizon'
 import { buildA2CycleReview } from '@/lib/a2/cycle-review'
+import { loadA2PracticePath } from '@/lib/a2/server-practice-path'
 
 const TOTAL_DAYS = 90
 const REVIEW_HORIZONS = [30, 60, 90] as const
@@ -127,7 +128,7 @@ export async function GET() {
 
     const userId = currentUser.id
     const supabase = createAdminClient()
-    const [snapshot, route, completionsResult] = await Promise.all([
+    const [snapshot, route, completionsResult, practicePath] = await Promise.all([
       getA2ProgressSnapshot(userId, supabase),
       resolveA2Route(userId, supabase),
       supabase
@@ -138,6 +139,7 @@ export async function GET() {
         .eq('user_id', userId)
         .not('completed_at', 'is', null)
         .order('completed_at', { ascending: false }),
+      loadA2PracticePath(userId, supabase),
     ])
 
     if (completionsResult.error) {
@@ -230,7 +232,7 @@ export async function GET() {
       completedAt: record.completed_at,
     }))
     const cycleReviews = REVIEW_HORIZONS.map((horizon) =>
-      buildA2CycleReview(horizon, cycleReviewRecords),
+      buildA2CycleReview(horizon, cycleReviewRecords, practicePath),
     )
     const activeCycleReview =
       cycleReviews.find((review) => review.horizon === snapshot.activeHorizon) ||
@@ -256,6 +258,7 @@ export async function GET() {
         total_tasks: TOTAL_DAYS,
         status,
         route,
+        practice_path: practicePath,
         month_progress: monthCounts.map((completed, index) => ({
           month: index + 1,
           percentage: Math.min(100, Math.round((completed / 30) * 100)),
@@ -279,7 +282,7 @@ export async function GET() {
           },
         ],
       },
-      { status: 200 },
+      { status: 200, headers: { 'Cache-Control': 'private, no-store' } },
     )
   } catch (error) {
     console.error('[v0] Error fetching A2 progress:', error)

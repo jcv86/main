@@ -30,7 +30,7 @@ for (const studio of studios) {
   const studioSource = readFileSync(join(root, 'components/a3', studio), 'utf8')
   assert.match(studioSource, /useA3DraftStorage\(\{/)
   assert.match(studioSource, /legacyKey: [A-Z0-9_]+/)
-  assert.match(studioSource, /clearDraft\(\)/)
+  assert.match(studioSource, /clearDraft\((?:state|draft)?\)/)
   assert.doesNotMatch(studioSource, /window\.localStorage/)
 }
 

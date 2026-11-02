@@ -24,7 +24,7 @@ export async function GET(request: NextRequest) {
             total: 5,
           },
         },
-        { status: 200 }
+        { status: 200, headers: { 'Cache-Control': 'private, no-store' } }
       )
     }
 
@@ -33,7 +33,7 @@ export async function GET(request: NextRequest) {
     // Fetch interview history for XP calculation
     const { data: interviews } = await supabase
       .from('a3_user_entrevistas')
-      .select('score, created_at')
+      .select('created_at')
       .eq('user_id', userId)
 
     // Fetch user progress for badges
@@ -69,7 +69,6 @@ export async function GET(request: NextRequest) {
     if (totalSessions >= 10) badges.push('🥈 10 Entrenamientos')
     if (totalSessions >= 25) badges.push('🥇 25 Entrenamientos')
     if (totalSessions >= 50) badges.push('👑 50 Entrenamientos')
-    if ((interviews || []).filter((iv) => iv.score >= 90).length >= 3) badges.push('⭐ Experto')
 
     // Determine next challenge
     const nextChallenge = (() => {
@@ -91,11 +90,11 @@ export async function GET(request: NextRequest) {
         }
       } else {
         return {
-          name: 'Maestría',
-          description: 'Obtén 3 scores >= 90',
+          name: 'Práctica sostenida',
+          description: 'Registra 25 entrenamientos. La participación no certifica capacidad.',
           reward: 300,
-          progress: (interviews || []).filter((iv) => iv.score >= 90).length,
-          total: 3,
+          progress: Math.min(totalSessions, 25),
+          total: 25,
         }
       }
     })()
@@ -107,9 +106,10 @@ export async function GET(request: NextRequest) {
         xpToNextLevel,
         streak,
         badges,
+        rewardMeaning: 'participation_only',
         nextChallenge,
       },
-      { status: 200 }
+      { status: 200, headers: { 'Cache-Control': 'private, no-store' } }
     )
   } catch (error) {
     console.error('[v0] Error in /api/a3/gamification:', error)
@@ -122,7 +122,7 @@ export async function GET(request: NextRequest) {
         badges: [],
         nextChallenge: null,
       },
-      { status: 200 }
+      { status: 200, headers: { 'Cache-Control': 'private, no-store' } }
     )
   }
 }

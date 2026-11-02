@@ -121,7 +121,7 @@ assert.ok(dayTemplate.includes('A2RouteContextCard'))
 assert.ok(dayTemplate.includes('adaptation={dayState.adaptation}'))
 assert.ok(dayTemplate.includes('{dayState.adaptation.routeName}'))
 assert.ok(
-  dayTemplate.indexOf('<A2RouteContextCard') < dayTemplate.indexOf('{children ? ('),
+  dayTemplate.indexOf('<A2RouteContextCard') < dayTemplate.indexOf('{specializedChildren ? ('),
   'Route adaptation must be visible before specialized Day 1–10 experiences',
 )
 

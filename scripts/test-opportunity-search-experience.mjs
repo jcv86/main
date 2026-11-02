@@ -1,3 +1,7 @@
+import * as objectiveApi from '../lib/opportunities/objective-api.ts'
+import * as laborObjective from '../lib/opportunities/labor-objective.ts'
+import * as savedSearch from '../lib/opportunities/saved-search.ts'
+import * as employerIndustry from '../lib/opportunities/employer-industry.ts'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import ts from 'typescript'
@@ -32,12 +36,13 @@ function route(path, options = {}) {
   const calls = { tables: [], predicates: [], reads: 0, admin: 0, personal: [] }
   const rows = options.rows ?? ROWS
   const dbQuery = {
-    select(columns) { assert.equal(columns, 'target_roles,breadth,locations,work_modes'); return this },
+    select(columns) { assert.equal(columns, laborObjective.OBJECTIVE_COLUMNS); return this },
     eq(key, value) { calls.predicates.push([key, value]); return this },
-    async maybeSingle() { return { data: options.intent ?? null, error: options.intentError ?? null } },
+    async maybeSingle() { return { data: options.intent ? { id: '00000000-0000-4000-8000-000000000711', updated_at: '2026-10-07T22:00:00.000Z', is_primary: true, is_active: true, ...options.intent } : null, error: options.intentError ?? null } },
   }
   const db = { from(table) { assert.equal(table, 'career_search_intents'); calls.tables.push(table); return dbQuery } }
   const modules = {
+    '@/lib/opportunities/objective-api': objectiveApi, '@/lib/opportunities/labor-objective': laborObjective, '@/lib/opportunities/saved-search': savedSearch, '@/lib/opportunities/employer-industry': employerIndustry,
     'next/server': { NextResponse: { json: (body, init = {}) => new Response(JSON.stringify(body), { status: init.status ?? 200, headers: { 'Content-Type': 'application/json', ...init.headers } }) } },
     'node:crypto': { createHash },
     '@/lib/auth/server-user': { resolveServerUser: async () => { if (options.authThrows) throw new Error('PRIVATE_AUTH_DETAIL'); return options.anonymous ? null : { id: options.userId ?? 'synthetic-owner' } } },
@@ -79,7 +84,7 @@ test('exploration uses explicit role, region and modality without reading saved 
   assert.equal(body.mode, 'explore')
   assert.equal(body.total_matching, 43)
   assert.equal(body.count, 18)
-  assert.deepEqual(body.applied_filters, { targetRoles: ['Ingeniero de datos'], locations: ['Metropolitana'], workModes: ['remote'], breadth: 'precise' })
+  assert.deepEqual(body.applied_filters, laborObjective.completeOpportunityFilters({ targetRoles: ['Ingeniero de datos'], locations: ['Metropolitana'], workModes: ['remote'], breadth: 'precise' }))
   assert.deepEqual(testRoute.calls.tables, [])
   assert.ok(body.opportunities.every(row => !Object.hasOwn(row, 'source_payload')))
 })
@@ -255,6 +260,7 @@ function renderer(path, exportName, initialProps = {}) {
     '@/components/ui/button': { Button: 'Button' },
     '@/lib/opportunities/types': { OPPORTUNITY_SOURCE_LABELS },
     '@/lib/opportunities/search-query': queryHelpers,
+    '@/lib/opportunities/objective-api': objectiveApi, '@/lib/opportunities/labor-objective': laborObjective, '@/lib/opportunities/saved-search': savedSearch, '@/lib/opportunities/employer-industry': employerIndustry, '@/lib/opportunities/taxonomy': taxonomy,
     './search-intent-form': components, './real-opportunity-results': components,
     './personal-orientation': { PersonalOrientation: 'PersonalOrientation', PersonalContextStatus: 'PersonalContextStatus' },
   }
@@ -285,23 +291,26 @@ async function mockedFetch(implementation, run) {
   try { await run() } finally { globalThis.fetch = previous }
 }
 
-test('the real parent keeps draft changes separate from applied results and preserves them across views', () => {
+test('the real parent keeps draft changes separate from applied results and preserves them across views', async () => {
+ await mockedFetch(async () => response({ intents: [] }), async () => {
   const app = renderer(EXPERIENCE, 'OpportunitySearchExperience', { seedRole: 'Contador' })
   let form = nodes(app.tree).find(node => node.type === 'SearchIntentForm')
   const edited = { ...BASE, targetRoles: ['Contador'], locations: ['Biobío'] }
   form.props.onChange(edited)
-  assert.deepEqual(nodes(app.tree).find(node => node.type === 'RealOpportunityResults').props.filters, BASE)
+  assert.deepEqual(nodes(app.tree).find(node => node.type === 'RealOpportunityResults').props.filters, savedSearch.emptySearchFilters())
   form = nodes(app.tree).find(node => node.type === 'SearchIntentForm')
-  assert.deepEqual(form.props.value, edited)
+  assert.deepEqual(form.props.value, laborObjective.completeOpportunityFilters(edited))
   form.props.onApply(edited)
-  assert.deepEqual(nodes(app.tree).find(node => node.type === 'RealOpportunityResults').props.filters, edited)
+  assert.deepEqual(nodes(app.tree).find(node => node.type === 'RealOpportunityResults').props.filters, laborObjective.completeOpportunityFilters(edited))
   button(app.tree, 'Mi búsqueda guardada').props.onClick()
   assert.equal(nodes(app.tree).find(node => node.type === 'RealOpportunityResults').props.view, 'saved')
   button(app.tree, 'Explorar ofertas').props.onClick()
-  assert.deepEqual(nodes(app.tree).find(node => node.type === 'SearchIntentForm').props.value, edited)
+  assert.deepEqual(nodes(app.tree).find(node => node.type === 'SearchIntentForm').props.value, laborObjective.completeOpportunityFilters(edited))
   app.unmount()
+ })
 })
-test('an unsubmitted role survives switching to saved search and back without becoming applied', () => {
+test('an unsubmitted role survives switching to saved search and back without becoming applied', async () => {
+ await mockedFetch(async () => response({ intents: [] }), async () => {
   const app = renderer(EXPERIENCE, 'OpportunitySearchExperience', {})
   nodes(app.tree).find(node => node.type === 'SearchIntentForm').props.onRoleChange('Analista de datos')
   assert.equal(nodes(app.tree).find(node => node.type === 'SearchIntentForm').props.role, 'Analista de datos')
@@ -313,30 +322,31 @@ test('an unsubmitted role survives switching to saved search and back without be
   assert.deepEqual(form.props.value.targetRoles, [])
   assert.deepEqual(nodes(app.tree).find(node => node.type === 'RealOpportunityResults').props.filters.targetRoles, [])
   app.unmount()
+ })
 })
 test('form exploration and clearing use no POST; only explicit save sends the compatible payload once', async () => {
   const calls = []; const applied = []; const saved = []; const changes = []
   await mockedFetch(async (url, init = {}) => {
     calls.push({ url, init })
-    return response(init.method === 'POST' ? { intent: { target_roles: ['Contador'] } } : { total: 0, areas: [], roles: [], inventory_status: 'ready' }, init.method === 'POST' ? 201 : 200)
+    return response(init.method === 'POST' ? { intent: { id: '00000000-0000-4000-8000-000000000711', updated_at: '2026-10-07T22:00:00.000Z', is_primary: true, is_active: true, ...laborObjective.objectiveStorageValues(laborObjective.completeOpportunityFilters(JSON.parse(init.body))) } } : { total: 0, areas: [], roles: [], inventory_status: 'ready' }, init.method === 'POST' ? 201 : 200)
   }, async () => {
     const value = { ...BASE, targetRoles: ['Contador'] }
-    const form = renderer(FORM, 'SearchIntentForm', { role: '', onRoleChange() {}, value, applied: BASE, onChange: next => changes.push(next), onApply: next => applied.push(next), onSaved: () => saved.push(true), saving: false, onSavingChange: () => {} })
+    const form = renderer(FORM, 'SearchIntentForm', { role: '', onRoleChange() {}, value, applied: BASE, onChange: next => changes.push(next), onApply: next => applied.push(next), onSaved: () => saved.push(true), saving: false, saveReady: true, savedSearch: null, onConflict() {}, onSavingChange: () => {} })
     await form.flush()
     nodes(form.tree).find(node => node.type === 'form').props.onSubmit({ preventDefault() {} })
-    assert.deepEqual(applied, [value]); assert.equal(calls.filter(call => call.init.method === 'POST').length, 0)
+    assert.deepEqual(applied, [laborObjective.completeOpportunityFilters(value)]); assert.equal(calls.filter(call => call.init.method === 'POST').length, 0)
     button(form.tree, 'Limpiar filtros').props.onClick()
     assert.equal(calls.filter(call => call.init.method === 'POST').length, 0)
-    await button(form.tree, 'Guardar como mi búsqueda').props.onClick()
+    await button(form.tree, 'Guardar mi objetivo').props.onClick()
     assert.equal(calls.filter(call => call.init.method === 'POST').length, 1)
-    assert.deepEqual(JSON.parse(calls.find(call => call.init.method === 'POST').init.body), { ...value, isPrimary: true })
+    assert.deepEqual(JSON.parse(calls.find(call => call.init.method === 'POST').init.body), { ...laborObjective.completeOpportunityFilters(value), isPrimary: true, expectedRevision: null })
     assert.equal(saved.length, 1); form.unmount()
   })
 })
 test('catalog response races cannot replace the newer draft availability', async () => {
   const pending = []
   await mockedFetch((url, init) => new Promise(resolve => pending.push({ url, init, resolve })), async () => {
-    const props = { role: '', onRoleChange() {}, value: BASE, applied: BASE, onChange() {}, onApply() {}, onSaved() {}, saving: false, onSavingChange() {} }
+    const props = { role: '', onRoleChange() {}, value: BASE, applied: BASE, onChange() {}, onApply() {}, onSaved() {}, saving: false, saveReady: true, savedSearch: null, onConflict() {}, onSavingChange() {} }
     const form = renderer(FORM, 'SearchIntentForm', props); form.tree
     form.setProps({ ...props, value: { ...BASE, locations: ['Biobío'] } })
     assert.equal(pending.length, 2); assert.equal(pending[0].init.signal.aborted, true)
@@ -460,8 +470,8 @@ test('the client never invents match reasons or skill gaps from a profile goal',
 test('save failure keeps the draft and does not announce a successful saved search', async () => {
   let saved = 0; let changes = 0; const saving = []
   await mockedFetch(async (_url, init = {}) => init.method === 'POST' ? response({ error: 'Tu búsqueda cambió mientras guardabas. Vuelve a intentarlo.' }, 409) : response({ total: 0, areas: [], roles: [], inventory_status: 'ready' }), async () => {
-    const form = renderer(FORM, 'SearchIntentForm', { role: '', onRoleChange() {}, value: { ...BASE, targetRoles: ['Contador'] }, applied: BASE, onChange: () => changes++, onApply() {}, onSaved: () => saved++, saving: false, onSavingChange: value => saving.push(value) }); await form.flush()
-    await button(form.tree, 'Guardar como mi búsqueda').props.onClick(); await form.flush()
+    const form = renderer(FORM, 'SearchIntentForm', { role: '', onRoleChange() {}, value: { ...BASE, targetRoles: ['Contador'] }, applied: BASE, onChange: () => changes++, onApply() {}, onSaved: () => saved++, saving: false, saveReady: true, savedSearch: null, onConflict() {}, onSavingChange: value => saving.push(value) }); await form.flush()
+    await button(form.tree, 'Guardar mi objetivo').props.onClick(); await form.flush()
     assert.equal(saved, 0); assert.equal(changes, 0); assert.deepEqual(saving, [true, false])
     assert.match(textOf(form.tree), /Tu búsqueda cambió mientras guardabas/)
     form.unmount()
@@ -470,7 +480,7 @@ test('save failure keeps the draft and does not announce a successful saved sear
 test('all three modes truthfully display Any mode for draft and legacy saved filters', async () => {
   const filters = { ...BASE, workModes: ['onsite', 'hybrid', 'remote'] }
   await mockedFetch(async url => response(url.includes('/catalog') ? { total: 1, areas: [], roles: [], inventory_status: 'ready' } : payload(['7000001'], { applied_filters: filters })), async () => {
-    const form = renderer(FORM, 'SearchIntentForm', { role: '', onRoleChange() {}, value: filters, applied: filters, onChange() {}, onApply() {}, onSaved() {}, saving: false, onSavingChange() {} }); await form.flush()
+    const form = renderer(FORM, 'SearchIntentForm', { role: '', onRoleChange() {}, value: filters, applied: filters, onChange() {}, onApply() {}, onSaved() {}, saving: false, saveReady: true, savedSearch: null, onConflict() {}, onSavingChange() {} }); await form.flush()
     const label = nodes(form.tree).find(node => node.type === 'label' && textOf(node) === 'Cualquier modalidad')
     assert.equal(nodes(label).find(node => node.type === 'input').props.checked, true)
     const ui = renderer(COMPONENT, 'RealOpportunityResults', { view: 'saved', filters: BASE }); await ui.flush()
@@ -479,6 +489,150 @@ test('all three modes truthfully display Any mode for draft and legacy saved fil
     assert.doesNotMatch(textOf(chips), /Presencial|Híbrido|Remoto/)
     form.unmount(); ui.unmount()
   })
+})
+
+test('a complete objective reaches real ranking and personal guidance with CV plus DTC evidence', async () => {
+  const filters = laborObjective.completeOpportunityFilters({ targetRoles: ['Gerente financiero'], functionalAreas: ['Finanzas y Contabilidad'], objectiveStage: 'specific', locations: ['Biobío'], locationPreference: 'selected', workModes: ['hybrid'], breadth: 'precise', industries: ['Minería'], excludedIndustries: ['Comercio'], unknownIndustryPolicy: 'exclude' })
+  const industry = { industry: 'Minería', company: 'Minera sintética', sourceUrl: 'https://minera.example.invalid/nosotros', reviewedAt: '2026-10-01', reviewAfter: '2099-01-01', scope: 'employer', origin: 'reviewed_company_source', summary: 'Fuente sintética de la empresa para esta prueba.' }
+  const offer = { ...ROWS[0], title: 'Gerente financiero', company: industry.company, region: 'Biobío', location: 'Concepción', work_mode: 'hybrid', industry_evidence: industry, skills: ['Excel'], requirements: ['Excel intermedio y CRM.'], field_evidence: [{ field: 'skills', value: 'Excel', excerpt: 'Excel intermedio y CRM.', origin: 'description', section: 'Requisitos' }] }
+  const context = personalFixture('Excel')
+  context.sources.find(item => item.source === 'dtc_a2').status = 'available'
+  context.evidence.push({ id: 'dtc_a2:synthetic:practice', source: 'dtc_a2', nature: 'practice_artifact', label: 'Práctica sintética', text: 'Construí una planilla en Excel para seguimiento de cartera.', observedAt: '2026-10-06T12:00:00Z', expiresAt: null, href: '/despega/a2' })
+  const query = 'view=explore&' + queryHelpers.opportunityFilterParams(filters)
+  const { response: res, body } = await route(RESULTS, { rows: [offer], personalContext: context }).get(query)
+  assert.equal(res.status, 200); assert.equal(body.count, 1)
+  assert.deepEqual(body.applied_filters, filters)
+  const result = body.opportunities[0]
+  assert.ok(result.match.reasons.some(reason => reason.code === 'functional_area'))
+  assert.ok(result.match.reasons.some(reason => reason.code === 'industry'))
+  assert.ok(result.orientation.support.some(proof => proof.personal.source === 'cv'))
+  assert.ok(result.orientation.support.some(proof => proof.personal.source === 'dtc_a2'))
+  assert.ok(result.orientation.toConfirm.length > 0)
+  assert.ok(result.orientation.nextStep.label)
+  assert.doesNotMatch(JSON.stringify(result.orientation), /certificamos|probabilidad de contrataci/i)
+  for (const patch of [{ region: 'Metropolitana', location: 'Santiago' }, { work_mode: 'remote' }, { title: 'Analista financiero' }, { title: 'Gerente comercial' }, { industry_evidence: { ...industry, industry: 'Comercio' } }, { industry_evidence: null }]) {
+    const negative = await route(RESULTS, { rows: [{ ...offer, ...patch }], personalContext: context }).get(query)
+    assert.equal(negative.body.count, 0, JSON.stringify(patch))
+  }
+  const unknown = await route(RESULTS, { rows: [{ ...offer, industry_evidence: null }] }).get('view=explore&' + queryHelpers.opportunityFilterParams({ ...filters, unknownIndustryPolicy: 'include' }))
+  assert.equal(unknown.body.count, 1)
+  assert.ok(unknown.body.opportunities[0].match.reasons.some(reason => reason.code === 'industry_unconfirmed'))
+  assert.ok(!unknown.body.opportunities[0].match.reasons.some(reason => reason.code === 'industry'))
+  context.evidence[0].text = 'No tengo experiencia con Excel.'
+  const negativeCV = await route(RESULTS, { rows: [offer], personalContext: context }).get(query)
+  assert.equal(negativeCV.body.count, 1)
+  assert.ok(!negativeCV.body.opportunities[0].orientation.support.some(proof => proof.offer.value === 'Excel'))
+})
+test('objective parameters survive serialization and reject malformed or unknown filters', () => {
+  const filters = laborObjective.completeOpportunityFilters({ targetRoles: [], functionalAreas: ['Finanzas y Contabilidad'], objectiveStage: 'exploring', locations: [], locationPreference: 'any', workModes: [], breadth: 'exploratory', industries: ['Minería'], excludedIndustries: ['Comercio'], unknownIndustryPolicy: 'include' })
+  assert.deepEqual(queryHelpers.parseOpportunityQuery(new URL('https://dtc.invalid/?' + queryHelpers.opportunityFilterParams(filters))).filters, filters)
+  for (const q of ['unexpected=1', 'area=unknown', 'unknownIndustry=guess', 'industry=', 'stage=guess', 'locationPreference=selected', 'region=Maule&locationPreference=any']) assert.throws(() => queryHelpers.parseOpportunityQuery(new URL('https://dtc.invalid/?' + q)))
+})
+test('industry evidence belongs to the direct employer and never to a title or an unnamed client', () => {
+  const now = new Date('2026-11-02T12:00:00Z')
+  const direct = { source: 'lever', source_id: 'fintual:synthetic', company: 'Fintual', description: 'Trabajo en nuestro equipo.' }
+  assert.equal(employerIndustry.employerIndustryForOpportunity(direct, now).industry, 'Servicios financieros')
+  assert.equal(employerIndustry.employerIndustryForOpportunity({ ...direct, description: 'Buscamos para nuestro cliente un analista.' }, now), null)
+  assert.equal(employerIndustry.employerIndustryForOpportunity({ ...direct, company: 'Otra empresa' }, now), null)
+  assert.equal(employerIndustry.employerIndustryForOpportunity({ source: 'chiletrabajos', source_id: '700001', company: 'Minera desconocida', description: 'Gerente de minería para una empresa de tecnología.' }, now), null)
+  assert.equal(employerIndustry.employerIndustryForOpportunity(direct, new Date('2027-03-01')), null)
+})
+test('late saved reads preserve the edited draft and a failed read is not an empty objective', async () => {
+  let resolveRead
+  await mockedFetch(() => new Promise(resolve => { resolveRead = resolve }), async () => {
+    const ui = renderer(EXPERIENCE, 'OpportunitySearchExperience', {})
+    const initial = nodes(ui.tree).find(node => node.type === 'SearchIntentForm')
+    initial.props.onChange({ ...savedSearch.emptySearchFilters(), targetRoles: ['Contador'], objectiveStage: 'specific' })
+    const saved = { id: '00000000-0000-4000-8000-000000000711', updated_at: '2026-10-07T22:00:00Z', is_primary: true, is_active: true, ...laborObjective.objectiveStorageValues(laborObjective.completeOpportunityFilters({ ...BASE, targetRoles: ['Analista'] })) }
+    resolveRead(response({ intents: [saved] })); await ui.flush()
+    const form = nodes(ui.tree).find(node => node.type === 'SearchIntentForm')
+    assert.deepEqual(form.props.value.targetRoles, ['Contador']); assert.equal(form.props.saveReady, true)
+    assert.deepEqual(nodes(ui.tree).find(node => node.type === 'RealOpportunityResults').props.filters.targetRoles, [])
+    ui.unmount()
+  })
+  await mockedFetch(async () => response({ error: 'Lectura fallida' }, 503), async () => {
+    const ui = renderer(EXPERIENCE, 'OpportunitySearchExperience', {}); await ui.flush()
+    assert.match(textOf(ui.tree), /Lectura fallida/); assert.doesNotMatch(textOf(ui.tree), /Todavía no guardaste/)
+    assert.equal(nodes(ui.tree).find(node => node.type === 'SearchIntentForm').props.saveReady, false)
+    ui.unmount()
+  })
+})
+
+test('early objective form uses static preferences and makes no catalog or result request', async () => {
+  const calls = [], saved = []
+  const value = laborObjective.completeOpportunityFilters({ targetRoles: [], functionalAreas: ['Finanzas y Contabilidad'], objectiveStage: 'exploring', locations: [], workModes: [], breadth: 'related', industries: ['Minería'] })
+  await mockedFetch(async (url, init) => {
+    calls.push({ url, init })
+    assert.equal(url, '/api/career/objective'); assert.equal(init.method, 'POST')
+    return response({ intent: { id: '00000000-0000-4000-8000-000000000711', updated_at: '2026-11-02T12:00:00Z', is_primary: true, is_active: true, source: 'user_confirmed', ...laborObjective.objectiveStorageValues(laborObjective.parseLaborObjective(JSON.parse(init.body), true)) } }, 201)
+  }, async () => {
+    const form = renderer(FORM, 'SearchIntentForm', { mode: 'objective', saveEndpoint: '/api/career/objective', value, applied: savedSearch.emptySearchFilters(), role: '', onRoleChange() {}, onChange() {}, onApply() { assert.fail('Early objective must not apply Radar filters') }, onSaved: item => saved.push(item), saving: false, saveReady: true, savedSearch: null, onConflict() {}, onSavingChange() {} })
+    await form.flush()
+    assert.equal(calls.length, 0)
+    assert.ok(taxonomy.OPPORTUNITY_CATEGORIES.every(area => textOf(form.tree).includes(area.label)))
+    assert.doesNotMatch(textOf(form.tree), /Ver ofertas|ofertas disponibles|ofertas consultadas|sin ofertas confirmadas/)
+    assert.match(textOf(form.tree), /Todavía estoy explorando/)
+    await button(form.tree, 'Guardar mi objetivo').props.onClick()
+    assert.equal(calls.length, 1); assert.deepEqual(saved[0].filters, value)
+    form.unmount()
+  })
+})
+test('early editor recovers a confirmed objective as a summary and edits it without resetting advanced preferences', async () => {
+  const filters = laborObjective.completeOpportunityFilters({ targetRoles: ['Contador'], functionalAreas: ['Finanzas y Contabilidad'], objectiveStage: 'specific', locations: ['Biobío'], workModes: ['hybrid'], breadth: 'precise', industries: ['Minería'], excludedIndustries: ['Comercio'] })
+  const stored = { id: '00000000-0000-4000-8000-000000000711', updated_at: '2026-11-02T12:00:00Z', is_primary: true, is_active: true, source: 'user_confirmed', salary_min_clp: 1200000, languages: ['Inglés'], ...laborObjective.objectiveStorageValues(filters) }
+  const calls = []
+  await mockedFetch(async url => { calls.push(url); return response({ intents: [stored] }) }, async () => {
+    const ui = renderer(EXPERIENCE, 'OpportunitySearchExperience', { mode: 'objective' }); await ui.flush()
+    assert.deepEqual(calls, ['/api/career/objective'])
+    assert.ok(!nodes(ui.tree).some(node => node.type === 'RealOpportunityResults' || node.type === 'SearchIntentForm'))
+    assert.match(textOf(ui.tree), /Otras preferencias conservadas/)
+    button(ui.tree, 'Editar mi objetivo').props.onClick()
+    const form = nodes(ui.tree).find(node => node.type === 'SearchIntentForm')
+    assert.deepEqual(form.props.value, filters)
+    assert.equal(form.props.saveEndpoint, '/api/career/objective')
+    assert.equal(form.props.savedSearch.advanced.salaryMinClp, 1200000)
+    assert.deepEqual(form.props.savedSearch.advanced.languages, ['Inglés'])
+    form.props.onSaved(savedSearch.parseSavedPrimarySearch(stored))
+    assert.match(textOf(ui.tree), /Tu objetivo quedó guardado/)
+    assert.ok(!nodes(ui.tree).some(node => node.type === 'RealOpportunityResults'))
+    ui.unmount()
+  })
+})
+test('early save conflict preserves the pending role and never reports success', async () => {
+  let conflict = 0, success = 0, cleared = 0
+  await mockedFetch(async url => { assert.equal(url, '/api/career/objective'); return response({ error: 'Tu objetivo cambió en otra sesión.' }, 409) }, async () => {
+    const form = renderer(FORM, 'SearchIntentForm', { mode: 'objective', saveEndpoint: '/api/career/objective', value: savedSearch.emptySearchFilters(), applied: savedSearch.emptySearchFilters(), role: 'Contador', onRoleChange() { cleared++ }, onChange() {}, onApply() {}, onSaved() { success++ }, saving: false, saveReady: true, savedSearch: null, onConflict() { conflict++ }, onSavingChange() {} })
+    await form.flush()
+    await button(form.tree, 'Guardar mi objetivo').props.onClick()
+    assert.equal(conflict, 1); assert.equal(success, 0); assert.equal(cleared, 0)
+    assert.match(textOf(form.tree), /Tu objetivo cambió en otra sesión/)
+    assert.equal(nodes(form.tree).find(node => node.props.id === 'opportunity-role').props.value, 'Contador')
+    form.unmount()
+  })
+})
+test('early page is optional, session and pilot guarded, and contains no A4 entitlement mutation', async () => {
+  const path = 'app/despega/objetivo-laboral/page.tsx'
+  for (const scenario of ['anonymous', 'no-pilot', 'pilot', 'unavailable']) {
+    let pilotCalls = 0
+    const Page = compile(path, {
+      'react/jsx-runtime': { jsx, jsxs: jsx, Fragment: 'Fragment' },
+      'next/link': { __esModule: true, default: 'Link' },
+      'next/navigation': { redirect: location => { throw new Error('redirect:' + location) } },
+      '@/app/despega/a4/job-matching/opportunity-search-experience': { OpportunitySearchExperience: 'OpportunitySearchExperience' },
+      '@/lib/supabase/server': {
+        createClient: async () => ({ auth: { getUser: async () => ({ data: { user: scenario === 'anonymous' ? null : { id: 'synthetic-owner' } }, error: null }) } }),
+        createAdminClient: () => ({ rpc: async (name, args) => { pilotCalls++; assert.equal(name, 'resolve_pilot_access'); assert.equal(args.p_user_id, 'synthetic-owner'); return { data: [{ allowed: scenario === 'pilot' }], error: scenario === 'unavailable' ? new Error('private') : null } }, from() { assert.fail('Page must not load private records or change journey state') } }),
+      },
+    }).default
+    if (scenario === 'anonymous') { await assert.rejects(Page(), /redirect:\/auth\/signin\?next=\/despega\/objetivo-laboral/); assert.equal(pilotCalls, 0); continue }
+    if (scenario === 'unavailable') { await assert.rejects(Page(), /No pudimos verificar tu acceso/); continue }
+    const tree = await Page()
+    if (scenario === 'no-pilot') { assert.match(textOf(tree), /Acceso piloto requerido/); assert.ok(!nodes(tree).some(node => node.type === 'OpportunitySearchExperience')); continue }
+    assert.match(textOf(tree), /Este paso es opcional/)
+    assert.match(textOf(tree), /objetivo personal/)
+    assert.equal(nodes(tree).find(node => node.type === 'OpportunitySearchExperience').props.mode, 'objective')
+    assert.equal(nodes(tree).find(node => node.type === 'Link').props.href, '/despega/recorrido')
+  }
 })
 
 let failed = 0

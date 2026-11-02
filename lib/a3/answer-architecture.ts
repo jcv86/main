@@ -11,6 +11,10 @@ export interface AnswerArchitectureDraft {
   timing30: string
   timing45: string
   timing60: string
+  factsConfirmed?: string
+  structureReviewed?: string
+  contextReviewed?: string
+  practiceHistory?: string
 }
 
 export interface AnswerArchitectureContext {
@@ -35,6 +39,10 @@ export const EMPTY_ANSWER_ARCHITECTURE_DRAFT: AnswerArchitectureDraft = {
   timing30: '',
   timing45: '',
   timing60: '',
+  factsConfirmed: '',
+  structureReviewed: '',
+  contextReviewed: '',
+  practiceHistory: '',
 }
 
 function objectValue(value: unknown): Record<string, unknown> {

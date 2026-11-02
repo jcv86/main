@@ -1,14 +1,18 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { AlertCircle, CheckCircle2, ChevronRight, Mic, MicOff, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { EvidenceFeedback } from '@/components/a3/evidence-feedback'
+import type { PracticeReview } from '@/lib/a3/practice-feedback'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
 import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { completeA3Module } from '@/lib/a3/client-completion'
 import { getA3ModuleByNumber, type A3ModuleId } from '@/lib/a3/module-catalog'
+import { useA3DraftStorage } from '@/lib/a3/draft-storage'
+import { parseCoachSessionDraft, type CoachSessionDraft } from '@/lib/a3/coach-session-draft'
 
 export interface VerifiedCoachQuestion {
   id: string
@@ -38,14 +42,16 @@ export function VerifiedCoachSession({
   const [textMode, setTextMode] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answer, setAnswer] = useState('')
+  const [factsConfirmed, setFactsConfirmed] = useState(false)
+  const [practiceReviews, setPracticeReviews] = useState<PracticeReview[]>([])
   const [responses, setResponses] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [completed, setCompleted] = useState(false)
-  const [score, setScore] = useState(0)
-  const [bestScore, setBestScore] = useState(0)
   const [xpAwarded, setXpAwarded] = useState(0)
   const [firstCompletion, setFirstCompletion] = useState(false)
+  const saving = useRef(false)
+  const ownerGeneration = useRef(0)
 
   const {
     isListening,
@@ -62,14 +68,34 @@ export function VerifiedCoachSession({
     silenceTimeout: 2000,
   })
   const lastTranscript = useRef('')
+  const draft = useMemo<CoachSessionDraft>(() => ({
+    version: 1, moduleId, questionIds: questions.map(question => question.id), started: !showDeviceTest,
+    currentQuestion, answer, responses, practiceReviews,
+  }), [moduleId, questions, showDeviceTest, currentQuestion, answer, responses, practiceReviews])
+  const { ready: draftReady, clearDraft, error: draftError, retry: retryDraft } = useA3DraftStorage({
+    moduleId, legacyKey: `dtc:a3:${moduleId}:coach-session:draft:v1`, value: draft, enabled: !completed,
+    onRestore: stored => {
+      const restored = parseCoachSessionDraft(stored, moduleId, questions)
+      if (!restored) throw new Error('Incompatible coach draft')
+      setCurrentQuestion(restored.currentQuestion); setAnswer(restored.answer); setResponses(restored.responses)
+      setPracticeReviews(restored.practiceReviews); setFactsConfirmed(false); setTextMode(true); setShowDeviceTest(!restored.started)
+    },
+    onReset: () => {
+      ownerGeneration.current++; saving.current = false; setSubmitting(false); setShowDeviceTest(true)
+      stopListening(); setTextMode(true)
+      resetSession()
+    },
+  })
 
   useEffect(() => {
     if (transcript && isFinal && transcript !== lastTranscript.current) {
       lastTranscript.current = transcript
+      if (saving.current || !draftReady || showDeviceTest || textMode) { resetTranscript(); return }
       setAnswer(transcript)
+      setFactsConfirmed(false)
       resetTranscript()
     }
-  }, [isFinal, resetTranscript, transcript])
+  }, [draftReady, isFinal, resetTranscript, showDeviceTest, textMode, transcript])
 
   const beginSession = (devicesPassed: boolean) => {
     setShowDeviceTest(false)
@@ -81,10 +107,10 @@ export function VerifiedCoachSession({
     setCurrentQuestion(0)
     setAnswer('')
     setResponses([])
+    setFactsConfirmed(false)
+    setPracticeReviews([])
     setCompleted(false)
     setError(null)
-    setScore(0)
-    setBestScore(0)
     setXpAwarded(0)
     setFirstCompletion(false)
     lastTranscript.current = ''
@@ -93,8 +119,8 @@ export function VerifiedCoachSession({
 
   const submitAnswer = async () => {
     const normalized = answer.trim()
-    if (normalized.length < 20 || submitting) {
-      setError('Desarrolla tu respuesta con al menos 20 caracteres.')
+    if (!normalized || !factsConfirmed || !draftReady || saving.current) {
+      setError('Registra una respuesta y confirma sus hechos antes de continuar.')
       return
     }
 
@@ -105,35 +131,42 @@ export function VerifiedCoachSession({
       setResponses(nextResponses)
       setCurrentQuestion((question) => question + 1)
       setAnswer('')
+      setFactsConfirmed(false)
       lastTranscript.current = ''
       resetTranscript()
       return
     }
 
+    saving.current = true
+    const submittedOwner = ownerGeneration.current
+    stopListening()
     setSubmitting(true)
     try {
       const result = await completeA3Module({
         moduleId,
         moduleNumber,
         responses: nextResponses,
-        deliverable: buildDeliverable(nextResponses),
+        deliverable: { ...buildDeliverable(nextResponses), factsConfirmed: 'true', practiceHistory: JSON.stringify(practiceReviews) },
       })
+      if (submittedOwner !== ownerGeneration.current) return
       setResponses(nextResponses)
-      setScore(Number(result.score) || 0)
-      setBestScore(Number(result.bestScore) || Number(result.score) || 0)
       setXpAwarded(Number(result.xpAwarded) || 0)
       setFirstCompletion(Boolean(result.isFirstCompletion))
       setCompleted(true)
+      clearDraft(draft)
     } catch (completionError) {
+      if (submittedOwner !== ownerGeneration.current) return
       setError(
         completionError instanceof Error
           ? completionError.message
           : 'No pudimos completar el entrenamiento.',
       )
     } finally {
-      setSubmitting(false)
+      if (submittedOwner === ownerGeneration.current) { saving.current = false; setSubmitting(false) }
     }
   }
+
+  if (!draftReady) return <section className="space-y-4 rounded-xl border border-slate-700 bg-slate-950 p-6 text-white"><p role="status">{draftError || 'Recuperando tu práctica en este dispositivo…'}</p>{draftError && <Button onClick={retryDraft}>Volver a intentar</Button>}</section>
 
   if (showDeviceTest) {
     return (
@@ -155,11 +188,11 @@ export function VerifiedCoachSession({
           <CheckCircle2 className="mx-auto h-16 w-16 text-fuchsia-400" />
           <div>
             <p className="text-sm uppercase tracking-[0.18em] text-fuchsia-300">
-              Entrenamiento verificado
+              Entrenamiento registrado
             </p>
             <h1 className="mt-2 text-3xl font-semibold">{title}</h1>
             <p className="mt-3 text-slate-400">
-              Puntaje de esta sesión: {score}/100 · Mejor puntaje: {bestScore}/100
+              Tus respuestas quedaron guardadas. El registro no es una calificación de capacidad.
             </p>
             <p className="mt-2 text-sm text-slate-500">
               {firstCompletion && xpAwarded > 0
@@ -217,7 +250,11 @@ export function VerifiedCoachSession({
             <span>{error}</span>
           </div>
         )}
+        {draftError && <p role="status" className="text-sm text-amber-200">{draftError}</p>}
+        <p className="text-xs text-slate-400">El borrador y los intentos se conservan en este dispositivo para tu cuenta. Guardar y completar registra la sesión en tu cuenta.</p>
 
+        <fieldset disabled={submitting} className="min-w-0 space-y-6">
+        <legend className="sr-only">Respuesta de práctica</legend>
         <div className="grid gap-5 lg:grid-cols-[1fr_1.2fr]">
           <Card className="border-fuchsia-500/25 bg-fuchsia-500/10 p-6 text-white">
             <p className="text-xs uppercase tracking-[0.18em] text-fuchsia-300">
@@ -239,14 +276,15 @@ export function VerifiedCoachSession({
           <section className="space-y-4 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5">
             <textarea
               value={answer}
-              onChange={(event) => setAnswer(event.target.value)}
+              onChange={(event) => { if (saving.current) return; setAnswer(event.target.value); setFactsConfirmed(false) }}
               rows={10}
+              maxLength={8000}
               placeholder="Desarrolla tu respuesta con contexto, una decisión y evidencia concreta…"
               className="w-full resize-none rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500/50"
             />
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className={`text-xs ${answer.trim().length >= 20 ? 'text-emerald-300' : 'text-slate-500'}`}>
-                {answer.trim().length} caracteres · mínimo 20
+              <span className={`text-xs ${answer.trim().length > 0 ? 'text-emerald-300' : 'text-slate-500'}`}>
+                {answer.trim().length} caracteres · hechos propios y límites claros
               </span>
               {isSupported && !textMode && (
                 <Button
@@ -266,20 +304,29 @@ export function VerifiedCoachSession({
           </section>
         </div>
 
+        <EvidenceFeedback key={`${moduleId}:${currentQuestion}`} question={question.question} answer={answer}
+          disabled={submitting}
+          onApplyAttempt={(value) => { if (saving.current) return; setAnswer(value); setFactsConfirmed(false) }}
+          onRecordReview={(review) => { if (!saving.current) setPracticeReviews((current) => [...current, review].slice(-8)) }}
+        />
+        {practiceReviews.length > 0 && <details className="rounded-xl border border-slate-700 p-4 text-sm text-slate-300"><summary className="cursor-pointer">Intentos y observaciones conservados ({practiceReviews.length})</summary><ol className="mt-4 space-y-5">{practiceReviews.map((review, index) => <li key={review.recordedAt + ':' + index} className="space-y-2"><p className="font-medium">{review.question}</p><p className="whitespace-pre-wrap"><strong>Primer intento:</strong> {review.firstAttempt}</p><blockquote className="border-l-2 border-cyan-500 pl-3">{review.feedback.label}: «{review.feedback.quote}»</blockquote><p className="whitespace-pre-wrap"><strong>Segundo intento:</strong> {review.secondAttempt}</p></li>)}</ol></details>}
+        <label className="flex items-start gap-3 text-sm text-slate-300"><input type="checkbox" className="mt-1 h-4 w-4" checked={factsConfirmed} onChange={(event) => setFactsConfirmed(event.target.checked)} /><span>Revisé que esta respuesta describe mis hechos y distingue lo que aún no sé. No añadí experiencia, cifras ni competencias para completarla.</span></label>
+
         <div className="flex justify-end">
           <Button
             onClick={() => void submitAnswer()}
-            disabled={submitting || answer.trim().length < 20}
+            disabled={submitting || !answer.trim() || !factsConfirmed}
             className="min-w-52"
           >
             {submitting
-              ? 'Validando…'
+              ? 'Guardando…'
               : currentQuestion === questions.length - 1
-                ? 'Validar y completar'
+                ? 'Guardar y completar'
                 : 'Siguiente pregunta'}
             {!submitting && <ChevronRight className="ml-2 h-4 w-4" />}
           </Button>
         </div>
+        </fieldset>
       </div>
     </div>
   )

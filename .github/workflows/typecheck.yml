@@ -34,6 +34,9 @@ jobs:
       - name: TypeScript full-repository check
         run: npx tsc --noEmit
 
+      - name: Professional closure regressions with synthetic I/O
+        run: npm run test:professional-closure
+
       - name: Test evidence classification
         run: npx tsx scripts/check-test-evidence-matrix.ts
 

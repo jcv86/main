@@ -40,15 +40,22 @@ export function resolveOpportunityCategory(value: string): OpportunityCategory |
 }
 
 export function categorizeOpportunity(title: string): OpportunityCategory {
+  const categories = opportunityFunctionalCategories(title)
+  // A level such as manager/director does not replace the person's function.
+  return categories.find(category => category.key !== 'leadership') || categories[0] || OTHER_OPPORTUNITY_CATEGORY
+}
+
+export function opportunityFunctionalCategories(title: string): OpportunityCategory[] {
   const selectedArea = resolveOpportunityCategory(title)
-  if (selectedArea) return selectedArea
+  if (selectedArea) return [selectedArea]
   const words = (value: string) => ' ' + normalizeOpportunityText(value).replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim() + ' '
   const normalized = words(title)
-  return OPPORTUNITY_CATEGORIES.find(category => category.terms.some(term => {
+  const found = OPPORTUNITY_CATEGORIES.filter(category => category.terms.some(term => {
     // Occupation phrases, including acronyms, must have complete token boundaries.
     // "UX" in auxiliar and "sales" in Salesforce are not occupational evidence.
     return normalized.includes(words(term))
-  })) || OTHER_OPPORTUNITY_CATEGORY
+  }))
+  return found.length ? found : [OTHER_OPPORTUNITY_CATEGORY]
 }
 
 export function normalizeRoleTitle(title: string): string {
@@ -61,8 +68,7 @@ export function catalogFromJobs(jobs: { title: string }[]) {
   for (const job of jobs) {
     const role = normalizeRoleTitle(job.title)
     if (role) roles.set(role, (roles.get(role) || 0) + 1)
-    const area = categorizeOpportunity(job.title).label
-    areas.set(area, (areas.get(area) || 0) + 1)
+    for (const { label: area } of opportunityFunctionalCategories(job.title)) areas.set(area, (areas.get(area) || 0) + 1)
   }
   const byCount = (a: { label: string; count: number }, b: { label: string; count: number }) =>
     b.count - a.count || a.label.localeCompare(b.label)

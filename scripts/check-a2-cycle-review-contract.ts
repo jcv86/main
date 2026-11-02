@@ -109,8 +109,8 @@ assert.ok(dashboard.includes('review={progress.active_cycle_review}'))
 assert.ok(dashboard.includes('review={selectedCycleReview}'))
 
 for (const label of [
-  'Cierre verificable',
-  'Solidez registrada',
+  'Cierre del ciclo',
+  'Días registrados',
   'Señales consolidadas',
   'Aspectos todavía abiertos',
   'Acciones reales',

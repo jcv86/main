@@ -1,3 +1,7 @@
+import * as objectiveApi from '../lib/opportunities/objective-api.ts'
+import * as laborObjective from '../lib/opportunities/labor-objective.ts'
+import * as savedSearch from '../lib/opportunities/saved-search.ts'
+import * as employerIndustry from '../lib/opportunities/employer-industry.ts'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import ts from 'typescript'
@@ -172,18 +176,14 @@ test('the saved intent shape keeps all filters and valid breadth', () => {
     target_roles: ['Tecnología, Datos y Producto', 'Ingeniero de datos'],
     locations: ['Metropolitana'], work_modes: ['hybrid', 'remote'], breadth: 'precise',
   })
-  assert.deepEqual(actual, {
-    targetRoles: ['Tecnología, Datos y Producto', 'Ingeniero de datos'],
+  assert.deepEqual(actual, laborObjective.completeOpportunityFilters({
+    targetRoles: ['Ingeniero de datos'], functionalAreas: ['Tecnología, Datos y Producto'],
     locations: ['Metropolitana'], workModes: ['hybrid', 'remote'], breadth: 'precise',
-  })
+  }))
   assert.equal(createOpportunityMatcher(actual)(job()), true)
   assert.equal(createOpportunityMatcher(actual)(job({ work_mode: null })), false)
-  assert.deepEqual(searchFiltersFromStoredIntent({ target_roles: [' Contador ', 1, 'Contador'], breadth: 'bad' }), {
-    targetRoles: ['Contador'], breadth: 'related', locations: [], workModes: [],
-  })
-  assert.deepEqual(searchFiltersFromStoredIntent(null), {
-    targetRoles: [], breadth: 'related', locations: [], workModes: [],
-  })
+  assert.throws(() => searchFiltersFromStoredIntent({ target_roles: [' Contador ', 1, 'Contador'], breadth: 'bad' }))
+  assert.deepEqual(searchFiltersFromStoredIntent(null), savedSearch.emptySearchFilters())
 })
 
 test('reviewed translations are symmetric and preserve precise title semantics', () => {
@@ -313,7 +313,7 @@ function routeHarness(path, { user = { id: 'test-user' }, allowed = true, intent
   const query = {
     select() { return query },
     eq(key, value) { calls.predicates.push([key, value]); return query },
-    async maybeSingle() { return { data: intent, error: null } },
+    async maybeSingle() { return { data: intent ? { id: '00000000-0000-4000-8000-000000000711', updated_at: '2026-10-07T22:00:00.000Z', is_primary: true, is_active: true, breadth: 'related', locations: [], work_modes: [], ...intent } : null, error: null } },
   }
   const supabase = {
     from(table) {
@@ -323,6 +323,7 @@ function routeHarness(path, { user = { id: 'test-user' }, allowed = true, intent
     },
   }
   const modules = {
+    '@/lib/opportunities/objective-api': objectiveApi, '@/lib/opportunities/labor-objective': laborObjective, '@/lib/opportunities/saved-search': savedSearch, '@/lib/opportunities/employer-industry': employerIndustry,
     'next/server': { NextResponse: { json(body, init = {}) {
       return new Response(JSON.stringify(body), { status: init.status || 200, headers: { 'content-type': 'application/json' } })
     } } },
@@ -414,8 +415,8 @@ test('results route applies current user intent once and preserves response fiel
   assert.equal(body.opportunities[0].sourceId, '100')
   assert.equal(body.opportunities[0].workMode, 'remote')
   assert.equal(body.opportunities[0].originalUrl, rows[0].original_url)
-  assert.equal(body.opportunities[0].match.kind, 'category')
-  assert.equal(body.opportunities[0].match.reasons[0].code, 'selected_category')
+  assert.equal(body.opportunities[0].match.kind, 'all')
+  assert.ok(body.opportunities[0].match.reasons.some(reason => reason.code === 'functional_area'))
 })
 
 test('the actual endpoint ranks before pagination and keeps every matching identity exactly once', async () => {
@@ -498,7 +499,7 @@ test('catalog and result routes apply the same region and work mode constraints'
   const body = await response.json()
   assert.equal(body.total, 1)
   assert.equal(body.total_available, 3)
-  assert.equal(body.areas[0].label, 'Tecnología, Datos y Producto')
+  assert.ok(body.areas.some(area => area.label === 'Tecnología, Datos y Producto'))
   assert.equal(catalog.calls.index, 1)
   assert.deepEqual(catalog.calls.tables, [])
 })

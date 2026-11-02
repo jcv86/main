@@ -128,13 +128,13 @@ export function A2Day1Scoring({
         <div className="space-y-4 rounded-lg bg-[rgba(90,90,150,0.1)] p-8">
           <div className="flex items-center gap-3">
             <Loader2 className="h-5 w-5 animate-spin text-cyan-300" />
-            <p className="font-semibold text-white">DTC está analizando tu ruta…</p>
+            <p className="font-semibold text-white">Revisando los campos de tu acuerdo…</p>
           </div>
           <div className="h-3 overflow-hidden rounded-full bg-white/10">
             <div className="h-full w-3/5 animate-pulse bg-gradient-to-r from-purple-500/40 to-cyan-400/80" />
           </div>
           <p className="text-xs text-white/50">
-            Evaluando claridad, hitos, realismo y accionabilidad.
+            Comprobando que registraste objetivo, momentos de revisión y una acción inicial.
           </p>
         </div>
       </div>
@@ -148,13 +148,13 @@ export function A2Day1Scoring({
           <div className="flex items-start gap-3">
             <AlertCircle className="mt-0.5 h-5 w-5 text-amber-300" />
             <div>
-              <p className="font-semibold text-white">No pudimos evaluar tu ruta</p>
+              <p className="font-semibold text-white">No pudimos revisar tu acuerdo</p>
               <p className="mt-1 text-sm text-white/70">{error}</p>
             </div>
           </div>
         </div>
         <Button onClick={() => window.location.reload()} className="w-full">
-          Reintentar análisis
+          Reintentar revisión
         </Button>
       </div>
     )
@@ -162,23 +162,23 @@ export function A2Day1Scoring({
 
   const dimensions = [
     {
-      name: 'Claridad de visión',
-      description: 'Objetivo, resultado y entorno claramente definidos.',
+      name: 'Objetivo y contexto',
+      description: 'Campos de objetivo, resultado esperado y contexto.',
       score: scores.clarity,
     },
     {
-      name: 'Lógica de hitos',
-      description: 'Progresión concreta entre los hitos de la ruta.',
+      name: 'Momentos de revisión',
+      description: 'Qué revisarás en los días 10, 20 y 30.',
       score: scores.logic,
     },
     {
-      name: 'Realismo',
-      description: 'Coherencia y factibilidad del ciclo inicial.',
+      name: 'Primera acción',
+      description: 'Una acción registrada para comenzar.',
       score: scores.realism,
     },
     {
-      name: 'Accionabilidad',
-      description: 'Contenido suficiente para convertirlo en acciones.',
+      name: 'Acuerdo registrado',
+      description: 'Presencia de los campos requeridos.',
       score: scores.actionability,
     },
   ]
@@ -200,23 +200,18 @@ export function A2Day1Scoring({
           )}
           <h2 className="text-2xl font-bold text-white">
             {passStatus === 'pass'
-              ? 'Día 1 aprobado'
+              ? 'Acuerdo inicial registrado'
               : 'Tu ruta necesita una revisión'}
           </h2>
         </div>
-        <div>
-          <p className="text-4xl font-bold text-white">{totalScore}</p>
-          <p className="text-sm text-white/70">de 100 puntos · mínimo 75</p>
-        </div>
         <p className="text-sm text-white/70">
-          {passStatus === 'pass'
-            ? 'La evaluación del servidor habilitó el desbloqueo del Día 2.'
-            : `Faltan ${Math.max(0, 75 - totalScore)} puntos para continuar.`}
+          {passStatus === 'pass' ? 'Puedes guardar tu acuerdo y comenzar el Día 2.' : 'Completa los campos pendientes para continuar.'}
+          {' '}Este control no califica la calidad, la viabilidad ni tu capacidad para ejecutar el plan.
         </p>
       </div>
 
       <div className="space-y-4">
-        <p className="font-semibold text-white">Evaluación por dimensión</p>
+        <p className="font-semibold text-white">Campos del acuerdo</p>
         {dimensions.map((dimension) => (
           <div key={dimension.name} className="space-y-2">
             <div className="flex items-center justify-between gap-4">
@@ -225,22 +220,17 @@ export function A2Day1Scoring({
                 <p className="text-xs text-white/50">{dimension.description}</p>
               </div>
               <p className="text-lg font-bold text-cyan-300">
-                {dimension.score}/25
+                {dimension.score === 25 ? 'Registrado' : 'Pendiente'}
               </p>
             </div>
-            <div className="h-2 overflow-hidden rounded-full bg-white/10">
-              <div
-                className="h-full bg-gradient-to-r from-purple-500 to-cyan-400"
-                style={{ width: `${Math.min(100, dimension.score * 4)}%` }}
-              />
-            </div>
+
           </div>
         ))}
       </div>
 
       {analysis?.recommendations.length ? (
         <div className="rounded-lg border border-amber-500/25 bg-amber-500/5 p-4">
-          <p className="font-semibold text-white">Puntos a fortalecer</p>
+          <p className="font-semibold text-white">Campos pendientes</p>
           <ul className="mt-2 space-y-1 text-sm text-white/70">
             {analysis.recommendations.map((recommendation) => (
               <li key={recommendation}>• {recommendation}</li>
@@ -249,9 +239,9 @@ export function A2Day1Scoring({
         </div>
       ) : (
         <div className="rounded-lg border border-cyan-500/25 bg-cyan-500/5 p-4">
-          <p className="font-semibold text-white">Evaluación consistente</p>
+          <p className="font-semibold text-white">Revisión de campos completada</p>
           <p className="mt-1 text-sm text-white/70">
-            La ruta contiene suficiente claridad, evidencia y progresión para iniciar.
+            Tu acuerdo inicial queda disponible para contrastarlo con lo que ocurra durante la práctica.
           </p>
         </div>
       )}

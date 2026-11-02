@@ -49,10 +49,10 @@ export function A2Day1Intro({ onNext }: A2Day1IntroProps) {
           <ul className="text-sm text-white/70 space-y-1 ml-4">
             <li>✓ Responder 3 preguntas sobre tu visión</li>
             <li>✓ Ver una hipótesis de ruta generada por coach</li>
-            <li>✓ Definir 3 puertas (hitos de validación)</li>
+            <li>✓ Definir 3 puertas (momentos de revisión)</li>
             <li>✓ Construir tu roadmap profesional dentro de DTC</li>
             <li>✓ Guardarlo de forma segura en tu recorrido</li>
-            <li>✓ Obtener una evaluación explicada y puntos a fortalecer</li>
+            <li>✓ Revisar campos pendientes y elegir tu primera acción</li>
           </ul>
         </div>
 

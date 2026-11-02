@@ -13,8 +13,11 @@ const stateClient = source('lib/a2/client-day-state.ts')
 
 assert.deepEqual(getAllCheckpointDays(), [7, 16, 27, 35, 43, 51, 58, 68, 78, 88])
 for (const day of getAllCheckpointDays()) {
-  const page = source(`app/despega/a2/dia-${day}/page.tsx`)
-  assert.ok(page.includes(`<A2DayPageTemplate dayNumber={DIA_NUM}`))
+  const pagePath = `app/despega/a2/dia-${day}/page.tsx`
+  const dedicated = existsSync(join(process.cwd(), pagePath))
+  const page = source(dedicated ? pagePath : 'app/despega/a2/[day]/page.tsx')
+  assert.ok(page.includes(dedicated ? '<A2DayPageTemplate dayNumber={DIA_NUM}' : '<A2DayPageTemplate dayNumber={day}'))
+  if (!dedicated) assert.ok(page.includes('parseExtendedA2DaySegment'))
 }
 
 assert.ok(template.includes('Boolean(checkpoint && !checkpointCompleted)'))

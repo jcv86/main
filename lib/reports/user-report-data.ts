@@ -1,6 +1,8 @@
 import 'server-only'
 
 import { buildA2CycleReview, type A2CycleReviewRecord } from '@/lib/a2/cycle-review'
+import { resolveA2PracticePath } from '@/lib/a2/practice-path'
+import { inferA2Horizon } from '@/lib/a2/server-progress'
 import { computeA4EvidencePulse } from '@/lib/a4/evidence-pulse'
 import type { A4Decision, A4VerifiedSignal } from '@/lib/a4/strategic-radar'
 import { createAdminClient } from '@/lib/supabase/server'
@@ -51,15 +53,21 @@ export async function loadA1Report(userId: string) {
 }
 
 export async function loadA2Report(userId: string) {
+  if (!userId) throw new Error('Se requiere una identidad verificada.')
   const supabase = createAdminClient()
-  const { data, error } = await supabase
-    .from('a2_user_task_completions')
-    .select('day,mission_type,validation_status,validation_result,submission,completed_at')
-    .eq('user_id', userId)
-    .not('completed_at', 'is', null)
-    .order('completed_at', { ascending: false })
-
-  if (error) throw new Error(`No se pudo cargar el reporte A2: ${error.message}`)
+  const [completionsResult, profileResult, journeyResult] = await Promise.all([
+    supabase.from('a2_user_task_completions')
+      .select('day,mission_type,validation_status,validation_result,submission,completed_at')
+      .eq('user_id', userId).not('completed_at', 'is', null)
+      .order('completed_at', { ascending: false }),
+    supabase.from('despega_user_profiles')
+      .select('camino_foco,camino_persona_active,camino_profesional_active')
+      .eq('user_id', userId).maybeSingle(),
+    supabase.from('despega_journey_state')
+      .select('metadata,highest_a2_day_unlocked').eq('user_id', userId).maybeSingle(),
+  ])
+  if (completionsResult.error || profileResult.error || journeyResult.error) throw new Error('No se pudo cargar el reporte A2.')
+  const data = completionsResult.data
 
   const recordsByDay = new Map<number, A2CycleReviewRecord>()
   for (const row of data ?? []) {
@@ -80,22 +88,30 @@ export async function loadA2Report(userId: string) {
   }
 
   const records = [...recordsByDay.values()].sort((a, b) => a.day - b.day)
+  const practicePath = resolveA2PracticePath(profileResult.data)
+  const activeHorizon = inferA2Horizon(journeyResult.data?.metadata,
+    Math.max(Number(journeyResult.data?.highest_a2_day_unlocked) || 1, ...records.map(record => record.day)))
+  const reviews = ([30, 60, 90] as const).map(horizon => buildA2CycleReview(horizon, records, practicePath))
   return {
     completedDays: records.length,
-    reviews: ([30, 60, 90] as const).map((horizon) => buildA2CycleReview(horizon, records)),
+    practicePath,
+    activeHorizon,
+    activeReview: reviews.find(review => review.horizon === activeHorizon)!,
+    reviews,
   }
 }
 
 export async function loadA3Report(userId: string) {
+  if (!userId) throw new Error('Se requiere una identidad verificada.')
   const supabase = createAdminClient()
   const { data, error } = await supabase
     .from('a3_session_attempts')
-    .select('module_id,module_number,status,score,feedback,session_completed_at,created_at')
+    .select('module_id,module_number,status,feedback,session_completed_at,created_at')
     .eq('user_id', userId)
     .eq('status', 'completed')
     .order('created_at', { ascending: false })
 
-  if (error) throw new Error(`No se pudo cargar el reporte A3: ${error.message}`)
+  if (error) throw new Error('No se pudo cargar el reporte A3.')
 
   const latestByModule = new Map<string, NonNullable<typeof data>[number]>()
   for (const session of data ?? []) {
@@ -105,17 +121,9 @@ export async function loadA3Report(userId: string) {
   const modules = [...latestByModule.values()].sort(
     (a, b) => Number(a.module_number ?? 999) - Number(b.module_number ?? 999),
   )
-  const scores = modules
-    .map((session) => numberValue(session.score))
-    .filter((score): score is number => score !== null)
-
   return {
     completedModules: modules.length,
     totalSessions: data?.length ?? 0,
-    averageScore:
-      scores.length === 0
-        ? null
-        : Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length),
     modules,
   }
 }

@@ -6,6 +6,7 @@ import { filterOpportunities } from '@/lib/opportunities/matching'
 import { catalogFromJobs, regionCatalogFromJobs } from '@/lib/opportunities/taxonomy'
 import { readVerifiedOpportunityInventory } from '@/lib/opportunities/verified-index'
 import { OpportunityQueryError, parseOpportunityQuery } from '@/lib/opportunities/search-query'
+import { industryCatalogFromJobs } from '@/lib/opportunities/employer-industry'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -25,7 +26,9 @@ export async function GET(request: Request) {
     const { opportunities: cached, scope } = await readVerifiedOpportunityInventory(supabase, 500)
     const filtered = filterOpportunities(cached, filters)
     // Facets remain available when a role is selected; the preview count applies every filter.
-    const catalog = catalogFromJobs(filterOpportunities(cached, { locations: filters.locations, workModes: filters.workModes }))
+    const facetJobs = filterOpportunities(cached, { locations: filters.locations, workModes: filters.workModes })
+    const catalog = catalogFromJobs(facetJobs)
+    const industryCoverage = industryCatalogFromJobs(facetJobs)
     const regions = regionCatalogFromJobs(cached)
     return json({
       source: 'verified_index',
@@ -39,6 +42,8 @@ export async function GET(request: Request) {
       areas: catalog.areas.filter(item => item.count > 0),
       roles: catalog.roles.filter(item => item.count > 0).slice(0, 50),
       regions,
+      industries: industryCoverage.industries,
+      industry_coverage: industryCoverage,
       filters: { regions: filters.locations, modes: filters.workModes },
     })
   } catch (error) {

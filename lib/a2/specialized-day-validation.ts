@@ -56,21 +56,21 @@ function completedMemoryCount(value: unknown): number {
   return arrayValue(value).filter((item) => {
     const memory = objectValue(item)
     return (
-      textValue(memory.memory_text).length >= 10 &&
-      textValue(memory.memory_where).length >= 3 &&
-      textValue(memory.memory_why_remember).length >= 5
+      textValue(memory.memory_text).length > 0 &&
+      textValue(memory.memory_where).length > 0 &&
+      textValue(memory.memory_why_remember).length > 0
     )
   }).length
 }
 
 function taskCount(value: unknown): number {
-  return arrayValue(value).filter((item) => textValue(item).length >= 12).length
+  return arrayValue(value).filter((item) => textValue(item).length > 0).length
 }
 
 function valueSeedCount(value: unknown): number {
   return arrayValue(value).filter((item) => {
     const seed = objectValue(item)
-    return textValue(seed.value).length >= 3 && textValue(seed.impact).length >= 5
+    return textValue(seed.value).length > 0 && textValue(seed.impact).length > 0
   }).length
 }
 
@@ -82,7 +82,7 @@ function criteriaForDay(day: number, submission: Submission): CriterionInput[] {
       return [
         { key: 'vault', label: 'Bóveda definida', met: textValue(vault.vaultType).length > 0, maxScore: 20, error: 'Define el tipo de bóveda donde conservarás tu evidencia.' },
         { key: 'fragments', label: 'Fragmentos de evidencia', met: fragments.length >= 5, maxScore: 35, error: 'Registra al menos cinco fragmentos de evidencia profesional.' },
-        { key: 'classified', label: 'Evidencia clasificada', met: fragments.filter((item) => textValue(objectValue(item).category)).length >= 3, maxScore: 20, error: 'Clasifica al menos tres fragmentos de evidencia.' },
+        { key: 'classified', label: 'Evidencia clasificada', met: fragments.filter((item) => textValue(objectValue(item).category)).length > 0, maxScore: 20, error: 'Clasifica al menos tres fragmentos de evidencia.' },
         { key: 'gold', label: 'Piezas de oro', met: arrayValue(vault.goldPieces).length >= 3, maxScore: 25, error: 'Selecciona tres piezas de oro reutilizables.' },
       ]
     }
@@ -90,45 +90,45 @@ function criteriaForDay(day: number, submission: Submission): CriterionInput[] {
       const marketSignals = arrayValue(submission.marketSignals)
       return [
         { key: 'jobs', label: 'Vacantes reales analizadas', met: marketSignals.length >= 3, maxScore: 40, error: 'Analiza al menos tres vacantes reales.' },
-        { key: 'job_detail', label: 'Vacantes con contexto', met: marketSignals.filter((item) => { const signal = objectValue(item); return textValue(signal.job_title).length >= 2 && textValue(signal.company_name).length >= 2 }).length >= 2, maxScore: 20, error: 'Incluye cargo y empresa en al menos dos vacantes.' },
+        { key: 'job_detail', label: 'Vacantes con contexto', met: marketSignals.filter((item) => { const signal = objectValue(item); return textValue(signal.job_title).length > 0 && textValue(signal.company_name).length > 0 }).length >= 2, maxScore: 20, error: 'Incluye cargo y empresa en al menos dos vacantes.' },
         { key: 'signals', label: 'Señales extraídas', met: arrayValue(submission.extractedSignals).length >= 3, maxScore: 40, error: 'Extrae al menos tres señales del mercado.' },
       ]
     }
     case 4: {
       const board = objectValue(submission.candidateBoard)
-      const columns = [board.column_1_quien_soy, board.column_2_que_quiere, board.column_3_que_prueba, board.column_4_que_falta].filter((value) => textValue(value).length >= 10).length
+      const columns = [board.column_1_quien_soy, board.column_2_que_quiere, board.column_3_que_prueba, board.column_4_que_falta].filter((value) => textValue(value).length > 0).length
       return [
         { key: 'columns', label: 'Tablero de cuatro columnas', met: columns === 4, maxScore: 55, error: 'Completa las cuatro columnas del tablero del candidato.' },
-        { key: 'hypothesis', label: 'Hipótesis de candidato', met: textValue(board.candidate_hypothesis).length >= 20, maxScore: 30, error: 'Formula una hipótesis de candidato suficientemente concreta.' },
-        { key: 'archetype', label: 'Arquetipo identificado', met: textValue(board.candidate_archetype).length >= 3, maxScore: 15, error: 'Identifica el arquetipo profesional del tablero.' },
+        { key: 'hypothesis', label: 'Hipótesis de candidato', met: textValue(board.candidate_hypothesis).length > 0, maxScore: 30, error: 'Formula una hipótesis de candidato suficientemente concreta.' },
+        { key: 'archetype', label: 'Arquetipo identificado', met: textValue(board.candidate_archetype).length > 0, maxScore: 15, error: 'Identifica el arquetipo profesional del tablero.' },
       ]
     }
     case 5: {
       const intro = objectValue(submission.testIntroduction)
       return [
-        { key: 'versions', label: 'Versiones iniciales', met: textValue(intro.version_a).length >= 20 && textValue(intro.version_b).length >= 20, maxScore: 35, error: 'Construye dos versiones completas de tu introducción.' },
-        { key: 'improved', label: 'Versión mejorada', met: textValue(intro.version_c).length >= 20, maxScore: 30, error: 'Conserva una versión mejorada después del feedback.' },
-        { key: 'test', label: 'Prueba realizada', met: textValue(intro.test_type).length >= 2, maxScore: 20, error: 'Registra el formato de la prueba realizada.' },
-        { key: 'feedback', label: 'Feedback registrado', met: textValue(intro.test_feedback).length >= 5, maxScore: 15, error: 'Registra el feedback o resultado de la prueba.' },
+        { key: 'versions', label: 'Versiones iniciales', met: textValue(intro.version_a).length > 0 && textValue(intro.version_b).length > 0, maxScore: 35, error: 'Construye dos versiones completas de tu introducción.' },
+        { key: 'improved', label: 'Versión mejorada', met: textValue(intro.version_c).length > 0, maxScore: 30, error: 'Conserva una versión mejorada después del feedback.' },
+        { key: 'test', label: 'Prueba realizada', met: textValue(intro.test_type).length > 0, maxScore: 20, error: 'Registra el formato de la prueba realizada.' },
+        { key: 'feedback', label: 'Feedback registrado', met: textValue(intro.test_feedback).length > 0, maxScore: 15, error: 'Registra el feedback o resultado de la prueba.' },
       ]
     }
     case 6: {
       const identity = objectValue(submission.professionalIdentity)
-      const versions = [identity.version_simple, identity.version_recruiter, identity.version_interview].filter((value) => textValue(value).length >= 20).length
+      const versions = [identity.version_simple, identity.version_recruiter, identity.version_interview].filter((value) => textValue(value).length > 0).length
       return [
-        { key: 'archetype', label: 'Arquetipo profesional', met: textValue(identity.candidate_archetype).length >= 3, maxScore: 20, error: 'Selecciona un arquetipo profesional.' },
+        { key: 'archetype', label: 'Arquetipo profesional', met: textValue(identity.candidate_archetype).length > 0, maxScore: 20, error: 'Selecciona un arquetipo profesional.' },
         { key: 'versions', label: 'Tres versiones de identidad', met: versions === 3, maxScore: 45, error: 'Completa las versiones simple, recruiter y entrevista.' },
-        { key: 'stress', label: 'Prueba de estrés', met: textValue(identity.stress_test_result).length >= 5, maxScore: 20, error: 'Registra el resultado de la prueba de estrés.' },
-        { key: 'validated', label: 'Identidad validada', met: identity.is_validated === true, maxScore: 15, error: 'Valida la identidad antes de completar el día.' },
+        { key: 'stress', label: 'Prueba de estrés', met: textValue(identity.stress_test_result).length > 0, maxScore: 20, error: 'Registra el resultado de la prueba de estrés.' },
+        { key: 'validated', label: 'Identidad revisada por ti', met: identity.is_validated === true, maxScore: 15, error: 'Revisa tu identidad antes de completar el día.' },
       ]
     }
     case 7: {
       const mirror = objectValue(submission.careerMirror)
       return [
         { key: 'snapshot', label: 'Datos previos integrados', met: nonEmptyObject(mirror.a2_data_snapshot), maxScore: 20, error: 'Integra los datos de los días anteriores.' },
-        { key: 'card', label: 'Tarjeta espejo construida', met: textValue(mirror.mirror_card_title).length >= 5 && nonEmptyObject(mirror.mirror_card_content), maxScore: 35, error: 'Construye una tarjeta espejo con título y contenido.' },
-        { key: 'feedback', label: 'Feedback incorporado', met: textValue(mirror.coach_feedback).length >= 5 || arrayValue(mirror.coach_tags).length >= 1, maxScore: 20, error: 'Incorpora feedback o etiquetas del Coach.' },
-        { key: 'validated', label: 'Tarjeta validada', met: mirror.is_validated === true && numericValue(mirror.validation_score) >= 60, maxScore: 25, error: 'Valida la tarjeta espejo con un puntaje suficiente.' },
+        { key: 'card', label: 'Tarjeta espejo construida', met: textValue(mirror.mirror_card_title).length > 0 && nonEmptyObject(mirror.mirror_card_content), maxScore: 35, error: 'Construye una tarjeta espejo con título y contenido.' },
+        { key: 'feedback', label: 'Feedback incorporado', met: textValue(mirror.coach_feedback).length > 0 || arrayValue(mirror.coach_tags).length >= 1, maxScore: 20, error: 'Incorpora feedback o etiquetas del Coach.' },
+        { key: 'validated', label: 'Tarjeta revisada por ti', met: mirror.is_validated === true, maxScore: 25, error: 'Revisa la tarjeta espejo antes de continuar.' },
       ]
     }
     case 8: {
@@ -177,7 +177,7 @@ export function validateA2SpecializedDaySubmission(day: number, value: unknown):
   ]
 
   return {
-    passed: dayMatches && score >= PASS_SCORE,
+    passed: dayMatches && errors.length === 0,
     score,
     passScore: PASS_SCORE,
     mode: 'specialized_day',

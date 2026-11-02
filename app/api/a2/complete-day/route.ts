@@ -1,10 +1,14 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
+import { getJourneyForCurrentUser } from '@/lib/journey/service'
+import { checkA2PilotAccess } from '@/lib/a2/api-access'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
 import { resolveA2HorizonProgression } from '@/lib/a2/horizon'
+import { missionForA2Path } from '@/lib/a2/practice-path'
+import { loadA2PracticePath } from '@/lib/a2/server-practice-path'
 import {
   requiresUniversalA2Submission,
   validateA2MissionSubmission,
@@ -106,6 +110,21 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
     }
 
+    const pilot = await checkA2PilotAccess(currentUser.id)
+    if (pilot !== 'allowed') {
+      return NextResponse.json(
+        { error: pilot === 'denied' ? 'Necesitas acceso al piloto.' : 'No pudimos verificar tu acceso al piloto.' },
+        { status: pilot === 'denied' ? 403 : 503, headers: { 'Cache-Control': 'private, no-store' } },
+      )
+    }
+    const journey = await getJourneyForCurrentUser()
+    if (!journey || journey.user.id !== currentUser.id || !journey.access.a2) {
+      return NextResponse.json(
+        { error: 'Completa tu punto de partida antes de guardar entregables de Tu Ruta.' },
+        { status: 403, headers: { 'Cache-Control': 'private, no-store' } },
+      )
+    }
+
     let body: CompleteDayBody
     try {
       body = (await request.json()) as CompleteDayBody
@@ -122,8 +141,8 @@ export async function POST(request: Request) {
       )
     }
 
-    const mission = A2_DAILY_MISSIONS[day]
-    if (!mission) {
+    const configuredMission = A2_DAILY_MISSIONS[day]
+    if (!configuredMission) {
       return NextResponse.json(
         { error: 'La misión solicitada no está configurada.' },
         { status: 404 },
@@ -134,7 +153,11 @@ export async function POST(request: Request) {
     const userId = currentUser.id
     const supabase = createAdminClient()
     const now = new Date().toISOString()
-    const snapshot = await getA2ProgressSnapshot(userId, supabase)
+    const [snapshot, practicePath] = await Promise.all([
+      getA2ProgressSnapshot(userId, supabase),
+      loadA2PracticePath(userId, supabase),
+    ])
+    const mission = missionForA2Path(configuredMission, practicePath)
 
     if (day > snapshot.highestUnlockedDay) {
       return NextResponse.json(
@@ -253,7 +276,12 @@ export async function POST(request: Request) {
     let specializedValidation: A2SpecializedValidationResult | null = null
     let missionValidation: A2MissionValidationResult | null = null
 
-    if (day === 1) {
+    if (mission.practiceTrack === 'persona') {
+      missionValidation = validateA2MissionSubmission(mission, submission)
+      if (!missionValidation.passed) {
+        return NextResponse.json({ error: 'Completa los campos de tu práctica personal.', validation: missionValidation }, { status: 422 })
+      }
+    } else if (day === 1) {
       if (Object.keys(submission).length === 0) {
         return NextResponse.json(
           { error: 'Completa el contrato de ruta antes de desbloquear el Día 2.' },
@@ -333,7 +361,7 @@ export async function POST(request: Request) {
     }
 
     const validationStatus =
-      day === 1
+      mission.practiceTrack === 'persona' ? 'structural' : day === 1
         ? 'specialized'
         : mission.missionType === 'a3_checkpoint'
           ? 'checkpoint'
@@ -342,7 +370,7 @@ export async function POST(request: Request) {
             : 'specialized'
     const persistedSubmission =
       specializedValidation?.normalized || missionValidation?.normalized || submission
-    const persistedValidation =
+    const legacyValidationFields =
       specializedValidation ||
       missionValidation ||
       (day1Analysis
@@ -365,6 +393,12 @@ export async function POST(request: Request) {
                 : 'specialized_experience',
           })
 
+    const persistedValidation = {
+      ...legacyValidationFields,
+      assessmentKind: 'submission_presence_check',
+      practicePath,
+    }
+
     const completionPayload = {
       phase: phaseForDay(day),
       task_title: mission.title,
@@ -381,6 +415,7 @@ export async function POST(request: Request) {
           .from('a2_user_task_completions')
           .update(completionPayload as any)
           .eq('id', existingCompletion.id)
+          .eq('user_id', userId)
       : await supabase.from('a2_user_task_completions').insert({
           user_id: userId,
           day,
@@ -437,7 +472,7 @@ export async function POST(request: Request) {
 
     const journeyPayload = {
       user_id: userId,
-      current_module: day >= 60 ? 'A4' : day >= 30 ? 'A3' : 'A2',
+      current_module: practicePath === 'persona' ? 'A2' : day >= 60 ? 'A4' : day >= 30 ? 'A3' : 'A2',
       current_a2_day: nextDay,
       highest_a2_day_unlocked: highestUnlockedDay,
       a1_completed_at: existingJourney?.a1_completed_at || null,
@@ -447,11 +482,11 @@ export async function POST(request: Request) {
           ? existingJourney?.a2_completed_at || now
           : existingJourney?.a2_completed_at || null,
       a3_unlocked_at:
-        day >= 30
+        practicePath !== 'persona' && day >= 30
           ? existingJourney?.a3_unlocked_at || now
           : existingJourney?.a3_unlocked_at || null,
       a4_unlocked_at:
-        day >= 60
+        practicePath !== 'persona' && day >= 60
           ? existingJourney?.a4_unlocked_at || now
           : existingJourney?.a4_unlocked_at || null,
       version: (existingJourney?.version || 0) + 1,
@@ -523,7 +558,7 @@ export async function POST(request: Request) {
       }
     }
 
-    const nextCheckpoint = extensionRequired
+    const nextCheckpoint = extensionRequired || practicePath === 'persona'
       ? null
       : getA3CheckpointForDay(nextDay)
 

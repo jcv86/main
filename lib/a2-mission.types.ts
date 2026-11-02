@@ -72,6 +72,7 @@ export interface CompletionResult {
  * Every dia-x route uses this structure
  */
 export interface A2DailyMission {
+  practiceTrack?: 'persona'
   day: number                             // Day number 1-90
   slug: string                            // Route slug: 'dia-1', 'dia-2', etc.
   title: string                           // Spanish mission title

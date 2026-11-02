@@ -53,6 +53,7 @@ const context: AnswerArchitectureContext = {
 }
 
 const minimum = {
+  factsConfirmed: 'true', structureReviewed: 'true', contextReviewed: 'true',
   selfIntroduction: words('experiencia', 35),
   motivation: words('motivación', 40),
   strengthEvidence: words('fortaleza', 45),
@@ -69,18 +70,17 @@ assert.equal(empty.score, 0)
 
 const minimumResult = validateAnswerArchitectureSubmission(module, [], minimum, context)
 assert.equal(minimumResult.passed, true, minimumResult.errors.join('; '))
-assert.equal(minimumResult.score, 75)
+assert.equal(minimumResult.score, 100)
 
 const strong = validateAnswerArchitectureSubmission(
   module,
   [],
-  SAMPLE_ANSWER_ARCHITECTURE,
+  { ...SAMPLE_ANSWER_ARCHITECTURE, factsConfirmed: 'true', structureReviewed: 'true', contextReviewed: 'true' },
   context,
 )
 assert.equal(strong.passed, true, strong.errors.join('; '))
 assert.equal(strong.score, 100)
-assert.ok(strong.strengths.some((item) => item.includes('oferta verificada')))
-assert.ok(strong.strengths.some((item) => item.includes('métricas')))
+assert.equal(strong.score, minimumResult.score, 'Fluency, length and metrics do not establish ability.')
 
 const weakStar = validateAnswerArchitectureSubmission(
   module,
@@ -88,11 +88,12 @@ const weakStar = validateAnswerArchitectureSubmission(
   {
     ...minimum,
     challengeStar: words('relato', 80),
+    structureReviewed: '',
   },
   context,
 )
 assert.equal(weakStar.passed, false)
-assert.ok(weakStar.errors.some((error) => error.includes('Situación')))
+assert.ok(weakStar.errors.some((error) => error.includes('contexto')))
 
 const invalidTiming = validateAnswerArchitectureSubmission(
   module,
@@ -101,12 +102,12 @@ const invalidTiming = validateAnswerArchitectureSubmission(
     ...minimum,
     timing30: words('mensaje', 45),
     timing45: words('mensaje', 45),
-    timing60: words('mensaje', 45),
+    timing60: '',
   },
   context,
 )
 assert.equal(invalidTiming.passed, false)
-assert.ok(invalidTiming.errors.some((error) => error.includes('30, 45 y 60')))
+assert.ok(invalidTiming.errors.some((error) => error.includes('tres versiones')))
 
 const completionRoute = source('app/api/a3/module-completion/route.ts')
 const contextRoute = source('app/api/a3/module-context/answer-architecture/route.ts')
@@ -147,8 +148,8 @@ console.log(
     checkpointDay: module.checkpointDay,
     minimumScore: minimumResult.score,
     alignedScore: strong.score,
-    verifiedCvAndOfferContext: true,
-    starRequired: true,
+    ownedCvAndOfferContext: true,
+    structureSelfReviewRequired: true,
     timingVariantsRequired: true,
     atomicCompletion: true,
     legacyWriterRemoved: true,

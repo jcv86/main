@@ -9,6 +9,8 @@ import {
 } from '@/lib/a2/server-progress'
 import { normalizeA2MissionSubmission } from '@/lib/a2/day-submission'
 import { buildA2RouteAdaptation } from '@/lib/a2/route-adaptation'
+import { missionForA2Path, personalA2Adaptation } from '@/lib/a2/practice-path'
+import { loadA2PracticePath } from '@/lib/a2/server-practice-path'
 
 const NUMERIC_TO_SLUG: Record<string, string> = {
   'module-1': 'career-mirror',
@@ -64,8 +66,8 @@ export async function GET(
       )
     }
 
-    const mission = A2_DAILY_MISSIONS[day]
-    if (!mission) {
+    const configuredMission = A2_DAILY_MISSIONS[day]
+    if (!configuredMission) {
       return NextResponse.json(
         { error: 'La misión solicitada no está configurada.' },
         { status: 404 },
@@ -75,11 +77,13 @@ export async function GET(
     const userId = currentUser.id
     const draftScope = createHash('sha256').update(userId).digest('hex').slice(0, 16)
     const supabase = createAdminClient()
-    const [snapshot, route] = await Promise.all([
+    const [snapshot, route, practicePath] = await Promise.all([
       getA2ProgressSnapshot(userId, supabase),
       resolveA2Route(userId, supabase),
+      loadA2PracticePath(userId, supabase),
     ])
-    const adaptation = buildA2RouteAdaptation(route, mission)
+    const mission = missionForA2Path(configuredMission, practicePath)
+    const adaptation = mission.practiceTrack === 'persona' ? personalA2Adaptation() : buildA2RouteAdaptation(route, mission)
     const previousDay = mission.unlockRequirements.requiredPreviousDay
 
     const [completionResult, previousResult, a3Result] = await Promise.all([
@@ -160,6 +164,7 @@ export async function GET(
       success: true,
       day,
       draftScope,
+      practicePath,
       mission: {
         day: mission.day,
         slug: mission.slug,
@@ -206,7 +211,7 @@ export async function GET(
             missingModules: missingA3Modules,
           }
         : null,
-    })
+    }, { headers: { 'Cache-Control': 'private, no-store' } })
   } catch (error) {
     console.error('[v0] A2 day-state error:', error)
     return NextResponse.json(

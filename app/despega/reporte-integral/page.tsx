@@ -22,11 +22,11 @@ export default async function ReporteIntegralPage() {
   if (!journey) redirect('/auth/signin?next=/despega/reporte-integral')
   const [flow, a1, a2, a3, a4] = await Promise.all([loadJourneyFlow(journey),loadA1Report(journey.user.id), loadA2Report(journey.user.id), loadA3Report(journey.user.id), loadA4Report(journey.user.id)])
   const generatedAt = new Date().toISOString()
-  const a2Final = a2.reviews[2]
+  const a2Final = a2.activeReview
   const a1Ready = a1?.reviewable === true
   const sections = [
-    { title: 'A2 “Tu Ruta”', icon: Map, value: `${a2.completedDays} días completados`, detail: `Balance acumulado a 90 días: cierre ${a2Final.closureScore}/100 · evidencia ${a2Final.evidenceRate}%`, href: '/despega/a2/resultados' },
-    { title: 'A3 “Entrenamiento”', icon: Compass, value: `${a3.completedModules}/10 módulos`, detail: a3.averageScore === null ? 'Sin puntajes completados' : `Promedio ${a3.averageScore}/100`, href: '/despega/a3/resultados' },
+    { title: 'A2 “Tu Ruta”', icon: Map, value: `${a2Final.completedDays}/${a2.activeHorizon} días completados`, detail: `${a2Final.evidenceDays} días con evidencia guardada · ${a2.practicePath === 'persona' ? 'objetivo personal' : 'ruta con práctica profesional'}`, href: '/despega/a2/resultados' },
+    { title: 'A3 “Entrenamiento”', icon: Compass, value: `${a3.completedModules}/10 módulos`, detail: `${a3.totalSessions} sesiones registradas para revisar y practicar`, href: '/despega/a3/resultados' },
     { title: 'A4 “Radar Estratégico”', icon: Radar, value: `${a4.pulse.activeSignals.length} señales activas`, detail: `${a4.decisions.length} decisiones · ${a4.pulse.coveredCategories} categorías cubiertas`, href: '/despega/a4/resultados' },
   ]
   const nextAction = { ...flow.next, text: flow.next.description }

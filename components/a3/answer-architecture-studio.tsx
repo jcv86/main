@@ -1,8 +1,9 @@
 'use client'
 
 import Link from 'next/link'
+import { EvidenceFeedback } from '@/components/a3/evidence-feedback'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
   ArrowLeft,
@@ -111,30 +112,44 @@ export function AnswerArchitectureStudio() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<CompletionSummary | null>(null)
   const [timerSeconds, setTimerSeconds] = useState<number | null>(null)
+  const saving = useRef(false)
+  const ownerGeneration = useRef(0)
 
-  const { clearDraft } = useA3DraftStorage({
+  const { clearDraft, ready: draftReady, ownerId, error: draftError, retry: retryDraft } = useA3DraftStorage({
     moduleId: 'answer-architecture',
     legacyKey: ANSWER_ARCHITECTURE_DRAFT_KEY,
     value: draft,
     onRestore: (stored) => setDraft({ ...EMPTY_ANSWER_ARCHITECTURE_DRAFT, ...(stored as Partial<AnswerArchitectureDraft>) }),
+    onReset: () => {
+      ownerGeneration.current++; saving.current = false
+      setDraft(EMPTY_ANSWER_ARCHITECTURE_DRAFT); setCompletion(null); setSubmitting(false); setSubmitError(null)
+      setContext(EMPTY_CONTEXT); setContextError(null); setContextLoading(true); setTimerSeconds(null)
+    },
+    enabled: !completion,
   })
 
   useEffect(() => {
+    if (!ownerId) return
+    const controller = new AbortController()
+    setContextLoading(true); setContextError(null)
     void fetch('/api/a3/module-context/answer-architecture', {
       credentials: 'include',
+      cache: 'no-store', signal: controller.signal,
     })
       .then(async (response) => {
         const payload = (await response.json().catch(() => ({}))) as ContextPayload
         if (!response.ok) throw new Error(payload.error || 'No pudimos cargar el contexto.')
-        setContext(payload.context || EMPTY_CONTEXT)
+        if (!controller.signal.aborted) setContext(payload.context || EMPTY_CONTEXT)
       })
       .catch((error: unknown) => {
+        if (controller.signal.aborted) return
         setContextError(
           error instanceof Error ? error.message : 'No pudimos cargar el contexto.',
         )
       })
-      .finally(() => setContextLoading(false))
-  }, [])
+      .finally(() => { if (!controller.signal.aborted) setContextLoading(false) })
+    return () => controller.abort()
+  }, [ownerId])
 
   useEffect(() => {
     if (timerSeconds === null || timerSeconds <= 0) return
@@ -156,23 +171,27 @@ export function AnswerArchitectureStudio() {
   )
 
   const update = (key: keyof AnswerArchitectureDraft, value: string) => {
-    setDraft((current) => ({ ...current, [key]: value }))
+    if (saving.current) return
+    setDraft((current) => ({ ...current, [key]: value, ...(['factsConfirmed', 'structureReviewed', 'contextReviewed', 'practiceHistory'].includes(key) ? {} : { factsConfirmed: '', structureReviewed: '', contextReviewed: '' }) }))
     setSubmitError(null)
     setCompletion(null)
   }
 
   const handleSubmit = async () => {
-    if (!validation.passed || contextLoading || contextError) return
+    if (!validation.passed || !draftReady || contextLoading || contextError || saving.current) return
+    saving.current = true
+    const submittedOwner = ownerGeneration.current
     setSubmitting(true)
     setSubmitError(null)
     try {
       const result = await completeA3Module({
         moduleId: 'answer-architecture',
         moduleNumber: 5,
-        responses: Object.values(draft),
+        responses: [draft.selfIntroduction, draft.motivation, draft.strengthEvidence, draft.challengeStar, draft.whyHire, draft.timing30, draft.timing45, draft.timing60],
         deliverable: draft,
       })
-      clearDraft()
+      if (submittedOwner !== ownerGeneration.current) return
+      clearDraft(draft)
       setCompletion({
         score: result.score || validation.score,
         xpAwarded: result.xpAwarded || 0,
@@ -180,11 +199,12 @@ export function AnswerArchitectureStudio() {
         bestScore: result.bestScore || result.score || validation.score,
       })
     } catch (error) {
+      if (submittedOwner !== ownerGeneration.current) return
       setSubmitError(
         error instanceof Error ? error.message : 'No pudimos completar el entrenamiento.',
       )
     } finally {
-      setSubmitting(false)
+      if (submittedOwner === ownerGeneration.current) { saving.current = false; setSubmitting(false) }
     }
   }
 
@@ -290,7 +310,10 @@ export function AnswerArchitectureStudio() {
           </div>
         </Card>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_310px]">
+        {!draftReady && <div className="space-y-3"><p role="status" className="text-sm text-slate-300">{draftError || 'Recuperando tus respuestas en este dispositivo…'}</p>{draftError && <Button variant="outline" onClick={retryDraft}>Volver a intentar</Button>}</div>}
+        {draftReady && draftError && <p role="status" className="text-sm text-amber-200">{draftError}</p>}
+        <fieldset disabled={submitting || !draftReady} className="min-w-0 grid gap-6 lg:grid-cols-[1fr_310px]">
+          <legend className="sr-only">Editor de respuestas</legend>
           <div className="space-y-6">
             <Card className="rounded-[2px] border-white/10 bg-white/[0.03] p-6">
               <div className="mb-5 flex items-center gap-3">
@@ -336,11 +359,25 @@ export function AnswerArchitectureStudio() {
                 />
                 <TextAreaField
                   label="Historia de desafío STAR"
-                  description="Incluye explícitamente Situación, Tarea, Acción y Resultado."
+                  description="Ordena situación, tu acción y resultado conocido. Puedes señalar un dato pendiente sin inventarlo."
                   value={draft.challengeStar}
                   onChange={(value) => update('challengeStar', value)}
                   placeholder="Situación: ... Tarea: ... Acción: ... Resultado: ..."
                   minHeight="min-h-52"
+                />
+                <EvidenceFeedback
+                  key={ownerId}
+                  disabled={submitting}
+                  question="Cuéntame un desafío: ¿qué ocurrió, qué hiciste tú y cuál fue el resultado?"
+                  answer={draft.challengeStar}
+                  context={[context.jobTitle, context.company].filter(Boolean).join(' · ')}
+                  onApplyAttempt={(answer) => update('challengeStar', answer)}
+                  onRecordReview={(review) => setDraft((current) => {
+                    if (saving.current) return current
+                    let history: unknown[] = []
+                    try { const saved = JSON.parse(current.practiceHistory || '[]'); if (Array.isArray(saved)) history = saved } catch { /* Keep a new record if a local draft was damaged. */ }
+                    return { ...current, practiceHistory: JSON.stringify([...history, review].slice(-3)) }
+                  })}
                 />
                 <TextAreaField
                   label="¿Por qué deberían contratarte?"
@@ -414,8 +451,8 @@ export function AnswerArchitectureStudio() {
             <Card className="rounded-[2px] border-white/10 bg-white/[0.04] p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/50">Puntuación actual</p>
-                  <p className="text-3xl font-bold text-white">{validation.score}/100</p>
+                  <p className="text-sm text-white/50">Campos y revisión</p>
+                  <p className="text-3xl font-bold text-white">{validation.criteria.filter((criterion) => criterion.met).length}/{validation.criteria.length}</p>
                 </div>
                 <Badge
                   className={
@@ -428,7 +465,7 @@ export function AnswerArchitectureStudio() {
                 </Badge>
               </div>
               <Progress value={validation.score} className="mt-4 h-2" />
-              <p className="mt-2 text-xs text-white/45">Umbral de finalización: 75/100</p>
+              <p className="mt-2 text-xs text-white/45">Registro de práctica y autorrevisión; no es una nota de capacidad.</p>
 
               <div className="mt-5 space-y-3">
                 {validation.criteria.map((criterion) => (
@@ -443,7 +480,7 @@ export function AnswerArchitectureStudio() {
                         {criterion.label}
                       </p>
                       <p className="text-xs text-white/35">
-                        {criterion.score}/{criterion.maxScore} puntos
+                        {criterion.met ? 'Registrado' : 'Pendiente'}
                       </p>
                     </div>
                   </div>
@@ -456,13 +493,17 @@ export function AnswerArchitectureStudio() {
                 <Save className="h-4 w-4" />
                 El borrador se guarda automáticamente en este dispositivo.
               </div>
-              <Button
-                variant="outline"
-                className="mt-4 w-full"
-                onClick={() => setDraft(SAMPLE_ANSWER_ARCHITECTURE)}
-              >
-                Cargar ejemplo completo
-              </Button>
+              <details className="mt-4 text-sm text-white/60"><summary className="cursor-pointer">Ver ejemplo ficticio de estructura</summary><p className="mt-3 text-amber-200">Ejemplo de lectura: no es tu experiencia y no se carga en tus respuestas.</p><p className="mt-2 whitespace-pre-wrap">{SAMPLE_ANSWER_ARCHITECTURE.challengeStar}</p></details>
+            </Card>
+
+            <Card className="space-y-4 rounded-[2px] border-cyan-500/25 bg-cyan-500/5 p-5">
+              <h3 className="font-semibold text-white">Revisión antes de guardar</h3>
+              {([
+                ['structureReviewed', 'Revisé contexto, acción propia y resultado conocido en mi relato.'],
+                ['contextReviewed', 'Revisé que mis ejemplos respondan la pregunta sin atribuir requisitos nuevos.'],
+                ['factsConfirmed', 'Confirmo que son mis hechos. No añadí experiencia, cifras ni competencias; lo desconocido queda pendiente.'],
+              ] as const).map(([key, label]) => <label key={key} className="flex items-start gap-3 text-sm text-white/70"><input type="checkbox" className="mt-1 h-4 w-4" checked={draft[key] === 'true'} onChange={(event) => update(key, String(event.target.checked))} /><span>{label}</span></label>)}
+              <p className="text-xs text-white/45">Es una confirmación propia. No certifica la veracidad ni la calidad de una respuesta.</p>
             </Card>
 
             {validation.errors.length > 0 && (
@@ -490,7 +531,7 @@ export function AnswerArchitectureStudio() {
                 <CheckCircle2 className="h-8 w-8 text-emerald-300" />
                 <h3 className="mt-3 font-semibold text-white">Entrenamiento completado</h3>
                 <p className="mt-1 text-sm text-white/60">
-                  Puntaje {completion.score}/100 · Mejor puntaje {completion.bestScore}/100
+                  Tus respuestas y la revisión quedaron registradas
                 </p>
                 <p className="mt-1 text-sm text-emerald-200">
                   {completion.isFirstCompletion
@@ -522,7 +563,7 @@ export function AnswerArchitectureStudio() {
               </Button>
             )}
           </div>
-        </div>
+        </fieldset>
       </div>
     </div>
   )

@@ -8,6 +8,10 @@ import { createHash } from 'node:crypto'
 import * as searchQuery from '../lib/opportunities/search-query.ts'
 import * as opportunityMatching from '../lib/opportunities/matching.ts'
 import * as personalOrientation from '../lib/opportunities/personal-orientation.ts'
+import * as responseCapture from '../lib/outcomes/response-capture.ts'
+import * as laborObjective from '../lib/opportunities/labor-objective.ts'
+import * as savedSearch from '../lib/opportunities/saved-search.ts'
+import * as employerIndustry from '../lib/opportunities/employer-industry.ts'
 
 // This suite executes production module, route and component bodies against
 // synthetic boundaries. It has no credentials, network access or database writes.
@@ -106,8 +110,13 @@ function memoryDb(options = {}) {
       if (this.singular && (rows.length > 1 || (this.required && !rows.length))) {
         return { data: null, error: { code: 'PGRST116', message: 'Synthetic single-row cardinality violation' } }
       }
+      const projection = this.columns.split(',').map(field => field.trim().split(':'))
+      if (this.table === 'dtc_documents' && this.columns !== '*'
+          && projection.some(parts => !['id', 'title', 'type', 'status', 'created_at', 'user_id'].includes(parts.at(-1)))) {
+        return { data: null, error: { code: '42703', message: 'Unknown document column' } }
+      }
       const selected = rows.map(row => this.columns === '*' ? clone(row) : Object.fromEntries(
-        this.columns.split(',').map(field => field.trim()).map(field => [field, clone(row[field])]),
+        projection.map(parts => [parts[0], clone(row[parts.at(-1)])]),
       ))
       return { data: this.singular ? selected[0] ?? null : selected, error: null }
     }
@@ -122,6 +131,14 @@ function memoryDb(options = {}) {
     from: table => new Query(table),
     rpc: async (name, params) => {
       calls.rpc.push({ name, params })
+      if (name === 'resolve_pilot_access') {
+        assert.deepEqual(params, { p_user_id: identity?.id, p_claim_id: null })
+        if (options.pilotReject) throw new Error(PRIVATE_ERROR)
+        if (options.pilotError) return { data: null, error: { message: PRIVATE_ERROR } }
+        if (Object.hasOwn(options, 'pilotResponse')) return { data: clone(options.pilotResponse), error: null }
+        // This test port never redeems invitations or materializes memberships.
+        return { data: [{ allowed: tables.pilot_memberships.some(row => row.user_id === params.p_user_id) }], error: null }
+      }
       // Existing journey initialization runs against an already-present row.
       // No permissions or completion markers can be created by this fixture.
       assert.equal(name, 'ensure_despega_journey_state', 'Unexpected RPC in access resolution')
@@ -198,6 +215,10 @@ function harness(options = {}) {
     } },
     '@/lib/opportunities/matching': opportunityMatching,
     '@/lib/opportunities/personal-orientation': personalOrientation,
+    '@/lib/outcomes/response-capture': responseCapture,
+    '@/lib/opportunities/labor-objective': laborObjective,
+    '@/lib/opportunities/saved-search': savedSearch,
+    '@/lib/opportunities/employer-industry': employerIndustry,
     '@/lib/opportunities/personal-context': { loadOpportunityPersonalContext: async id => {
       calls.personalReads++; assert.equal(id, USER)
       return { version: 1, status: 'empty', revision: 'synthetic-empty', sources: [], evidence: [] }
@@ -205,10 +226,11 @@ function harness(options = {}) {
     '@/lib/opportunities/taxonomy': { catalogFromJobs: () => ({ areas: [], roles: [] }), regionCatalogFromJobs: () => [] },
   }
   const realDependencies = new Set([
+    'lib/opportunities/objective-api.ts',
     'lib/a4/qa-entitlement.ts', 'lib/a4/access-control.ts',
     'lib/journey/service.ts', 'lib/journey/flow.ts', 'lib/journey/flow-service.ts',
     'lib/journey/a2-day-access.ts', 'lib/journey/transitions.ts',
-    'lib/a2/server-progress.ts', 'lib/auth/server-user.ts', 'lib/auth/pilot-access.ts',
+    'lib/a2/server-progress.ts', 'lib/a2/practice-path.ts', 'lib/auth/server-user.ts', 'lib/auth/pilot-access.ts',
   ])
   function load(path) {
     if (loaded.has(path)) return loaded.get(path)
@@ -227,6 +249,9 @@ function harness(options = {}) {
       const candidate = name.startsWith('@/') ? name.slice(2) : name.startsWith('.')
         ? relative(ROOT, resolve(ROOT, dirname(path), name)) : null
       const target = candidate?.endsWith('.ts') ? candidate : candidate + '.ts'
+      // Reuse the same imported production module for relative and alias paths.
+      const alias = candidate ? '@/' + candidate.replace(/\.ts$/, '') : null
+      if (alias && Object.hasOwn(modules, alias)) return modules[alias]
       assert.ok(realDependencies.has(target), 'Unexpected import in ' + path + ': ' + name)
       return load(target)
     }
@@ -243,7 +268,7 @@ function harness(options = {}) {
 
 function assertNoAccessWrites(h) {
   assert.deepEqual(h.db.calls.writes, [])
-  assert.ok(h.db.calls.rpc.every(call => call.name === 'ensure_despega_journey_state'))
+  assert.ok(h.db.calls.rpc.every(call => ['ensure_despega_journey_state', 'resolve_pilot_access'].includes(call.name)))
 }
 function assertOwnerReads(h, tables) {
   const reads = h.db.calls.reads.filter(read => !tables || tables.includes(read.table))
@@ -341,6 +366,7 @@ test('shared A4 API guard identifies QA without manufacturing an A3 closure date
   assert.equal(access.accessSource, 'qa_entitlement')
   assert.equal(access.routeCompletedAt, null)
   assert.equal(access.reason, null)
+  assert.deepEqual(h.db.calls.rpc, [{ name: 'resolve_pilot_access', params: { p_user_id: USER, p_claim_id: null } }])
   assertNoAccessWrites(h)
 })
 
@@ -352,6 +378,36 @@ test('verified journey closure remains the normal access source and survives an 
   assert.equal(access.accessSource, 'journey')
   assert.equal(access.routeCompletedAt, closed)
   assert.ok(!h.db.calls.reads.some(read => read.table === 'a4_qa_entitlements'))
+  assert.deepEqual(h.db.calls.rpc, [{ name: 'resolve_pilot_access', params: { p_user_id: USER, p_claim_id: null } }])
+})
+
+test('historical A3 closure and a QA grant cannot replace pilot admission', async () => {
+  for (const pilotMemberships of [[], [{ user_id: OTHER, access_kind: 'invited' }]]) {
+    const h = harness({ tables: {
+      pilot_memberships: pilotMemberships,
+      a3_route_progression: [{ user_id: USER, route_completed_at: '2026-10-06T18:00:00' }],
+    } })
+    const before = clone(h.db.tables)
+    const guard = h.load('lib/a4/access-control.ts')
+    const access = await guard.checkA4Access(USER, h.db)
+    assert.deepEqual(access, { canAccess: false, routeCompletedAt: null, reason: 'PILOT_ACCESS_REQUIRED' })
+    assert.match(guard.getA4AccessDenialMessage(), /acceso al piloto/)
+    assert.deepEqual(h.db.calls.reads, [], 'Pilot denial precedes closure and QA reads.')
+    assert.deepEqual(h.db.tables, before)
+    assertNoAccessWrites(h)
+  }
+})
+
+test('pilot outages and malformed responses cannot fall back to a historical A3 closure', async () => {
+  for (const config of [
+    { pilotError: true }, { pilotReject: true }, { pilotResponse: null }, { pilotResponse: [] },
+    { pilotResponse: [{ allowed: 'true' }] }, { pilotResponse: [{ allowed: true }, { allowed: false }] },
+  ]) {
+    const h = harness({ ...config, tables: { a3_route_progression: [{ user_id: USER, route_completed_at: '2026-10-06T18:00:00' }] } })
+    await assert.rejects(() => h.load('lib/a4/access-control.ts').checkA4Access(USER, h.db), /Unable to verify pilot access/)
+    assert.deepEqual(h.db.calls.reads, [], 'Unavailable pilot evidence never falls through to another access source.')
+    assertNoAccessWrites(h)
+  }
 })
 
 test('journey integration enables only A4 and preserves raw profile, state and outcomes', async () => {
@@ -377,6 +433,32 @@ test('anonymous journey has no access data, admin reads or initialization RPC', 
   assert.equal(h.db.calls.admin, 0)
   assert.deepEqual(h.db.calls.reads, [])
   assert.deepEqual(h.db.calls.rpc, [])
+})
+
+test('personal flow survives legacy A3/A4 timestamps while preserving professional permissions and records', async () => {
+  const closed = '2026-10-06T18:00:00'
+  const accessByPath = []
+  for (const path of ['persona', 'profesional']) {
+    const h = harness({ tables: {
+      a4_qa_entitlements: [],
+      despega_user_profiles: [profileRow({ camino_foco: path, a1_cerebral_intro_seen: true, a1_cerebral_completed: true, onboarding_conozcamonos_1_completed: true })],
+      despega_journey_state: [stateRow({ current_module: 'A4', highest_a2_day_unlocked: 7, current_a2_day: 7, a3_unlocked_at: closed, a4_unlocked_at: closed })],
+      a2_user_task_completions: Array.from({ length: 6 }, (_, index) => ({ user_id: USER, day: index + 1, completed_at: closed })),
+      a3_route_progression: [{ user_id: USER, route_completed_at: closed }],
+    } })
+    const before = clone(h.db.tables)
+    const result = await journey(h)
+    const flow = await h.load('lib/journey/flow-service.ts').readJourneyFlow(result, h.db)
+    const tree = h.load('components/layout/app-shell.tsx').AppShell({ flow, children: 'Synthetic content' })
+    assert.equal(result.profile.camino_foco, path)
+    assert.equal(result.state.currentModule, path === 'persona' ? 'A2' : 'A4')
+    assert.equal(flow.next.href, path === 'persona' ? '/despega/a2/dia-7' : '/despega/a4')
+    if (path === 'persona') assert.match(visibleText(tree).replace(/\s+/g, ' '), /A3 · Entrenamiento · opcional/)
+    accessByPath.push(result.access)
+    assert.deepEqual(h.db.tables, before)
+    assertNoAccessWrites(h)
+  }
+  assert.deepEqual(accessByPath[0], accessByPath[1], 'Choosing a personal path changes continuity, never authorization.')
 })
 
 test('invalid QA or unavailable entitlement storage leaves incomplete journey blocked', async () => {
@@ -483,6 +565,45 @@ test('shared context API returns effective A4 access with unchanged completion e
   assertNoAccessWrites(h)
 })
 
+test('journey recognizes current capture and historical completion without inventing progress', async () => {
+  const keys = ['a1_professional_clarity', 'a2_execution_checkpoint', 'a3_structured_interview']
+  for (const version of ['1', responseCapture.OUTCOME_CAPTURE_VERSION]) {
+    const h = harness({ tables: { dtc_outcome_observations: keys.flatMap(instrument_key =>
+      ['baseline', 'follow_up'].map(measurement_role => ({ user_id: USER, instrument_key,
+        instrument_version: version, measurement_role, score: null, confidence: null }))) } })
+    const before = clone(h.db.tables)
+    const result = await journey(h)
+    assert.deepEqual(result.outcomes, { a1BaselineCompleted: true, a1FollowUpCompleted: true,
+      a2BaselineCompleted: true, a2FollowUpCompleted: true, a3BaselineCompleted: true, a3FollowUpCompleted: true })
+    assert.equal(result.state.currentModule, 'A1', 'A recorded response does not complete a module')
+    assert.deepEqual(h.db.tables, before)
+    assertOwnerReads(h, ['dtc_outcome_observations'])
+    assertNoAccessWrites(h)
+  }
+})
+
+test('journey ignores another owner and unsupported capture versions', async () => {
+  const h = harness({ tables: { dtc_outcome_observations: [
+    { user_id: OTHER, instrument_key: 'a1_professional_clarity', instrument_version: responseCapture.OUTCOME_CAPTURE_VERSION, measurement_role: 'baseline' },
+    { user_id: USER, instrument_key: 'a2_execution_checkpoint', instrument_version: 'unrecognized', measurement_role: 'baseline' },
+    { user_id: USER, instrument_key: 'a3_structured_interview', instrument_version: responseCapture.OUTCOME_CAPTURE_VERSION, measurement_role: 'follow_up' },
+  ] } })
+  assert.deepEqual((await journey(h)).outcomes, { a1BaselineCompleted: false, a1FollowUpCompleted: false,
+    a2BaselineCompleted: false, a2FollowUpCompleted: false, a3BaselineCompleted: false, a3FollowUpCompleted: true })
+  assertNoAccessWrites(h)
+})
+
+test('shared context returns actual document titles and types with compatible field names', async () => {
+  const h = harness({ tables: { dtc_documents: [
+    { id: 'own-artifact', user_id: USER, title: 'Mi evidencia de práctica', type: 'a2_artifact', status: 'draft', created_at: NOW },
+    { id: 'other-artifact', user_id: OTHER, title: 'Documento de otra persona', type: 'cv', status: 'draft', created_at: NOW },
+  ] } })
+  const context = await h.load('lib/journey/service.ts').getSharedJourneyContext()
+  assert.deepEqual(context.a4.documents, [{ id: 'own-artifact', name: 'Mi evidencia de práctica', document_type: 'a2_artifact', status: 'draft', created_at: NOW }])
+  assertOwnerReads(h, ['dtc_documents'])
+  assertNoAccessWrites(h)
+})
+
 test('catalog and personalized APIs use the same effective QA access before inventory and private context', async () => {
   for (const path of ['catalog', 'for-me']) {
     const h = harness()
@@ -508,6 +629,37 @@ test('catalog and personalized APIs reject no-session, no-pilot, expired and fai
       assert.equal(response.status, status, path)
       assert.equal(h.calls.protectedReads, 0)
       assert.equal(h.calls.personalReads, 0)
+      assertNoAccessWrites(h)
+    }
+  }
+})
+
+test('A4 APIs deny historical closure without pilot and surface pilot outages as 503', async () => {
+  const closure = [{ user_id: USER, route_completed_at: '2026-10-06T18:00:00' }]
+  for (const path of ['opportunities/catalog', 'opportunities/for-me', 'search-intents']) {
+    for (const [config, status] of [
+      [{ tables: { pilot_memberships: [], a3_route_progression: closure } }, 403],
+      [{ tables: { a3_route_progression: closure }, pilotError: true }, 503],
+      [{ tables: { a3_route_progression: closure }, pilotReject: true }, 503],
+      [{ tables: { a3_route_progression: closure }, pilotResponse: [] }, 503],
+      [{ tables: { a3_route_progression: closure } }, 200],
+    ]) {
+      const h = harness(config)
+      const route = h.load('app/api/a4/' + path + '/route.ts')
+      const response = await route.GET(request('/api/a4/' + path))
+      assert.equal(response.status, status, path)
+      const body = await response.json()
+      assert.doesNotMatch(JSON.stringify(body), new RegExp(PRIVATE_ERROR))
+      if (status === 403) { assert.equal(body.code, 'PILOT_ACCESS_REQUIRED'); assert.match(body.error, /piloto/) }
+      if (status !== 200) {
+        assert.equal(h.calls.protectedReads, 0)
+        assert.equal(h.calls.personalReads, 0)
+        assert.deepEqual(h.db.calls.reads, [])
+        if (path === 'search-intents') {
+          const post = await route.POST(new Request('https://a4-qa.example.invalid/api/a4/search-intents', { method: 'POST', headers: { origin: 'https://a4-qa.example.invalid', 'content-type': 'application/json' }, body: '{}' }))
+          assert.equal(post.status, status)
+        }
+      }
       assertNoAccessWrites(h)
     }
   }
