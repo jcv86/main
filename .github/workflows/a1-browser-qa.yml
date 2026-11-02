@@ -41,6 +41,7 @@ on:
       - 'app/api/a3/**'
       - 'app/api/journey/**'
       - 'app/api/outcomes/**'
+      - 'app/api/career/**'
       - 'app/api/auth/invitation/**'
       - 'app/api/gamification/global/**'
       - 'app/api/preferences/**'
@@ -52,6 +53,7 @@ on:
       - 'app/despega/a2/**'
       - 'app/despega/a3/**'
       - 'app/despega/recorrido/**'
+      - 'app/despega/objetivo-laboral/**'
       - 'app/providers.tsx'
       - 'app/despega/settings/**'
       - 'hooks/use-auth-redirect.ts'
@@ -72,7 +74,7 @@ concurrency:
   cancel-in-progress: true
 jobs:
   isolated-browser:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     timeout-minutes: 35
     env:
       A1_BROWSER_LAB: 'yes'

@@ -7,7 +7,7 @@ import { spawn } from 'node:child_process'
 import { once } from 'node:events'
 import { CLOSURE_BASE as base, CLOSURE_PORT, closureLab, closureServerEnv,
   readClosureFixtures, safeFailure } from './closure-lab.mjs'
-import { verifySavedObjective } from './closure-objective.mjs'
+import { verifyEarlyObjective, verifySavedObjective } from './closure-objective.mjs'
 
 const { root, app, repo, status, evidence } = closureLab()
 const fixture = readClosureFixtures(root)
@@ -412,6 +412,13 @@ try {
   await login(secondPage,alpha)
   await verifySavedObjective({ page, secondPage, api, db, alpha, beta, alphaClient, betaClient, record })
   await secondSession.close()
+
+  await startPhase('early-objective')
+  activeStep = 'early_objective_browser_without_a4_access'
+  const earlyPage = await betaContext.newPage()
+  await earlyPage.goto(base + '/despega/a1-outcome-baseline')
+  await earlyPage.getByRole('button',{name:'Continuar al análisis de A1',exact:true}).waitFor()
+  await verifyEarlyObjective({ page:earlyPage, base, api, db, user:beta, visual, record })
 
   assert.deepEqual(javascriptErrors,[])
   assert.equal(blockedHosts.size,0,'Real tested pages must not require any remote browser resource')

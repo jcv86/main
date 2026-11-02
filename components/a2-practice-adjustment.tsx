@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { A2_BARRIERS, type A2Barrier, type A2AdjustmentRequest, type adjustmentContent } from '@/lib/a2/practice-adjustment'
+import { A2_BARRIERS, adjustmentContent, adjustmentRequestSchema, type A2Barrier, type A2AdjustmentRequest } from '@/lib/a2/practice-adjustment'
 import type { A2MissionSubmission } from '@/lib/a2/day-submission'
 
 type Saved = ReturnType<typeof adjustmentContent> & { id: string; createdAt?: string }
@@ -31,6 +31,8 @@ export function A2PracticeAdjustment({ dayNumber, draftScope, draft, onRestoreDr
       .catch((cause) => { if (!controller.signal.aborted) setError(cause.message) })
     try {
       const local = JSON.parse(window.localStorage.getItem(draftKey) || 'null')
+      const pending = adjustmentRequestSchema.safeParse(local)
+      if (pending.success && pending.data.dayNumber === dayNumber) pendingRequest.current = pending.data
       if (local?.outcome === 'could_not' || local?.outcome === 'change') {
         setOutcome(local.outcome)
         if (local.barrier in A2_BARRIERS) setBarrier(local.barrier)
@@ -44,12 +46,12 @@ export function A2PracticeAdjustment({ dayNumber, draftScope, draft, onRestoreDr
 
   const save = async () => {
     if (!outcome || saving) return
-    const fields = { dayNumber, outcome, barrier, retainedWork, nextAction, reviewDate, ...(draft ? { draft } : {}) }
+    const fields = { dayNumber, outcome, barrier, retainedWork: retainedWork.trim(), nextAction: nextAction.trim(), reviewDate, ...(draft ? { draft } : {}) }
     const prior = pendingRequest.current
     const candidate = { ...fields, requestId: prior?.requestId || crypto.randomUUID() }
-    if (prior && JSON.stringify({ ...prior, requestId: '' }) !== JSON.stringify({ ...candidate, requestId: '' })) candidate.requestId = crypto.randomUUID()
+    if (prior && JSON.stringify(adjustmentContent(prior)) !== JSON.stringify(adjustmentContent(candidate))) candidate.requestId = crypto.randomUUID()
     pendingRequest.current = candidate
-    try { window.localStorage.setItem(draftKey, JSON.stringify(fields)) } catch { /* Server save remains available. */ }
+    try { window.localStorage.setItem(draftKey, JSON.stringify(candidate)) } catch { /* Server save remains available. */ }
     setSaving(true); setError(null); setNotice(null)
     try {
       const response = await fetch('/api/a2/practice-adjustments', { method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(candidate) })

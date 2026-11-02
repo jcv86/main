@@ -35,6 +35,14 @@ Providers and contexts, and copy the six capture pages and their real APIs.
    role/area/industry separation, owner RLS, and one successful update plus one
    HTTP 409 when both sessions submit the same old revision. Omitted advanced
    preferences must remain stored. No vacancy provider is contacted.
+7. The actual early objective page is opened by the personal-path owner before
+   A2/A4 access. Keyboard operations add a role and area, select preferences,
+   save, refresh and continue from a recovered summary. This page is also
+   captured and checked by axe at both widths. It must make no catalog/matching
+   request, preserve journey flags/state and still receive HTTP 403 from the
+   real A4 catalog endpoint before and after saving. Before opening A2, the same
+   authenticated pilot must also receive HTTP 403 from both real practice writers
+   (`complete-day` and `practice-adjustments`), with no completion inserted.
 
 The capture version stores free-text evidence with null scores, scale bounds
 and confidence, empty dimensions, and no generated outcome snapshots. The gate

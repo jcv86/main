@@ -84,3 +84,117 @@ export async function verifySavedObjective({ page, secondPage, api, db, alpha, b
   assert.equal(stored.rows[0].user_id,alpha.id)
   record('objective_actual_concurrent_compare_and_swap_409_single_primary_advanced_fields_retained')
 }
+
+/** A pilot user can declare an objective without unlocking or consulting the Radar. */
+export async function verifyEarlyObjective({ page, base, api, db, user, visual, record }) {
+  const endpoint = '/api/career/objective'
+  const profileBefore = await db.query(`select a2_intro_seen,a3_unlocked,a4_unlocked,camino_foco,
+    camino_persona_active,camino_profesional_active from public.despega_user_profiles where user_id=$1`,[user.id])
+  const stateBefore = await db.query(`select current_module,current_a2_day,highest_a2_day_unlocked,
+    a3_unlocked_at,a4_unlocked_at,version from public.despega_journey_state where user_id=$1`,[user.id])
+  assert.equal(profileBefore.rows[0].camino_foco,'persona')
+  assert.equal(profileBefore.rows[0].a2_intro_seen,false)
+  const a2Access = await api(page,'GET',undefined,'/api/journey/module-access?module=A2')
+  assert.equal(a2Access.status,200); assert.equal(a2Access.body.canAccess,false)
+  const completionBefore = await db.query('select count(*)::int as records from public.a2_user_task_completions where user_id=$1',[user.id])
+  const deniedCompletion = await api(page,'POST',{dayNumber:1,submission:{
+    summary:'Ejemplo sintético propio.',evidence:'Una observación concreta.',reflection:'Próximo intento.',
+    metrics:'',artifactUrl:'',completedInstructions:[0,1,2],
+  }},'/api/a2/complete-day')
+  const deniedAdjustment = await api(page,'POST',{
+    requestId:randomUUID(),dayNumber:1,outcome:'could_not',barrier:'time',
+    retainedWork:'Conservo una observación.',nextAction:'Practicaré diez minutos.',reviewDate:'2026-11-03',
+  },'/api/a2/practice-adjustments')
+  for (const result of [deniedCompletion,deniedAdjustment]) {
+    assert.equal(result.status,403,'An authenticated pilot without A2 entry cannot write practice evidence')
+    assert.match(result.body.error,/^Completa tu punto de partida antes de guardar/,'The canonical A2 guard must be the rejection reason')
+    assert.ok(result.cache?.includes('private') && result.cache?.includes('no-store'))
+  }
+  assert.deepEqual((await db.query('select count(*)::int as records from public.a2_user_task_completions where user_id=$1',[user.id])).rows,completionBefore.rows)
+  record('actual_a2_complete_day_and_adjustment_reject_before_canonical_a2_access')
+  const priorAccess = await api(page,'GET',undefined,'/api/journey/module-access?module=A4')
+  assert.equal(priorAccess.status,200); assert.equal(priorAccess.body.canAccess,false)
+  assert.equal((await api(page,'GET',undefined,'/api/a4/opportunities/catalog')).status,403)
+  const requests = []
+  let writes = 0
+  const observe = request => {
+    const url = new URL(request.url())
+    if (url.pathname.startsWith('/api/a4/opportunities/')) requests.push(url.pathname)
+    if (url.pathname === endpoint && request.method()==='POST') writes += 1
+  }
+  page.on('request',observe)
+  try {
+    const read = page.waitForResponse(response => new URL(response.url()).pathname===endpoint && response.request().method()==='GET')
+    await page.goto(base+'/despega/objetivo-laboral')
+    assert.equal((await read).status(),200)
+    await page.getByRole('heading',{name:'Tu próximo paso laboral',exact:true}).waitFor()
+    await page.getByRole('button',{name:'Guardar mi objetivo',exact:true}).waitFor()
+    assert.equal(await page.getByRole('button',{name:'Ver ofertas',exact:true}).count(),0)
+
+    const specific = page.getByRole('radio',{name:'Sé qué trabajo busco',exact:true})
+    await specific.focus(); await page.keyboard.press('Space')
+    const role = page.getByLabel('¿Qué cargo te gustaría conseguir?',{exact:true})
+    await role.fill('Analista de datos'); await role.press('Enter')
+    await page.getByRole('button',{name:'Quitar Analista de datos',exact:true}).waitFor()
+    const area = page.getByRole('button',{name:'Tecnología, Datos y Producto',exact:true})
+    await area.focus(); await page.keyboard.press('Space')
+    assert.equal(await area.getAttribute('aria-pressed'),'true')
+    await page.getByLabel('Agregar rubro de interés',{exact:true}).selectOption('Tecnología')
+    const regions = page.getByText('Elegir regiones',{exact:true})
+    await regions.focus(); await page.keyboard.press('Enter')
+    const metropolitan = page.getByRole('checkbox',{name:'Metropolitana',exact:true})
+    await metropolitan.focus(); await page.keyboard.press('Space')
+    const hybrid = page.getByRole('checkbox',{name:'Híbrido',exact:true})
+    await hybrid.focus(); await page.keyboard.press('Space')
+    await visual(page,'early-objective-form')
+
+    const savedResponse = page.waitForResponse(response => new URL(response.url()).pathname===endpoint && response.request().method()==='POST')
+    const save = page.getByRole('button',{name:'Guardar mi objetivo',exact:true})
+    await save.focus(); await page.keyboard.press('Enter')
+    const saved = await savedResponse
+    assert.equal(saved.status(),201)
+    const intent = (await saved.json()).intent
+    assert.deepEqual(intent.target_roles,['Analista de datos'])
+    assert.deepEqual(intent.functional_areas,['Tecnología, Datos y Producto'])
+    assert.deepEqual(intent.industries,['Tecnología'])
+    assert.deepEqual(intent.locations,['Metropolitana'])
+    assert.deepEqual(intent.work_modes,['hybrid'])
+    assert.equal(intent.objective_stage,'specific')
+    const summary = page.getByRole('list',{name:'Resumen del objetivo guardado',exact:true})
+    await summary.waitFor()
+    assert.ok((await summary.innerText()).includes('Cargo: Analista de datos'))
+    assert.equal(new URL(page.url()).pathname,'/despega/objetivo-laboral')
+
+    const restored = page.waitForResponse(response => new URL(response.url()).pathname===endpoint && response.request().method()==='GET')
+    await page.reload()
+    const restoreResponse = await restored
+    assert.equal(restoreResponse.status(),200)
+    const restoredBody = await restoreResponse.json()
+    assert.equal(restoredBody.intents.length,1)
+    assert.deepEqual(restoredBody.intents[0],intent)
+    await summary.waitFor()
+    for (const text of ['Cargo: Analista de datos','Área: Tecnología, Datos y Producto','Rubro: Tecnología','Metropolitana','Híbrido']) {
+      assert.equal(await summary.getByText(text,{exact:true}).isVisible(),true)
+    }
+    await visual(page,'early-objective-restored')
+    const continuation = page.getByRole('link',{name:'Continuar mi recorrido',exact:true})
+    await continuation.focus(); await page.keyboard.press('Enter')
+    await page.waitForURL(url=>url.pathname==='/despega/recorrido')
+    await page.getByRole('heading',{name:'Tu siguiente paso tiene contexto',exact:true}).waitFor()
+    assert.equal(writes,1,'Reload and continuation must not save another objective')
+    assert.deepEqual(requests,[],'Early objective UI must not query the A4 catalog or matching endpoints')
+  } finally { page.off('request',observe) }
+
+  const currentAccess = await api(page,'GET',undefined,'/api/journey/module-access?module=A4')
+  assert.equal(currentAccess.status,200); assert.equal(currentAccess.body.canAccess,false)
+  assert.equal((await api(page,'GET',undefined,'/api/a4/opportunities/catalog')).status,403)
+  const profileAfter = await db.query(`select a2_intro_seen,a3_unlocked,a4_unlocked,camino_foco,
+    camino_persona_active,camino_profesional_active from public.despega_user_profiles where user_id=$1`,[user.id])
+  const stateAfter = await db.query(`select current_module,current_a2_day,highest_a2_day_unlocked,
+    a3_unlocked_at,a4_unlocked_at,version from public.despega_journey_state where user_id=$1`,[user.id])
+  assert.deepEqual(profileAfter.rows,profileBefore.rows)
+  assert.deepEqual(stateAfter.rows,stateBefore.rows)
+  const persisted = await db.query('select count(*)::int as records from public.career_search_intents where user_id=$1',[user.id])
+  assert.equal(persisted.rows[0].records,1)
+  record('early_objective_keyboard_save_reload_summary_continue_without_catalog_or_journey_unlock')
+}

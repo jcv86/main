@@ -25,6 +25,7 @@ export async function readJourneyFlow(journey: FlowJourney, client: Awaited<Retu
   ])
   if (a2.error || a3.error || closure.error || state.error) throw new Error('No pudimos verificar el progreso. No se reemplazó por cero ni se habilitaron etapas.')
   return buildJourneyFlow({
+    // Includes the declared camino_* fields loaded by the canonical journey service.
     profile: journey.profile,
     access: journey.access,
     a4AccessSource: journey.a4AccessSource,

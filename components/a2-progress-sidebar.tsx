@@ -35,7 +35,7 @@ const CYCLES = [
     number: 1,
     name: 'Ciclo inicial',
     range: 'Días 1–30',
-    description: 'Convierte tu diagnóstico en una primera misión concreta.',
+    description: 'Convierte el objetivo que elegiste en una primera misión concreta.',
   },
   {
     number: 2,

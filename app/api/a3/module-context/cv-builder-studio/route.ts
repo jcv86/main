@@ -11,12 +11,16 @@ export async function GET() {
     if (!user) return NextResponse.json({ error: 'No autenticado' }, { status: 401, headers })
     const supabase = await createClient()
     const { data, error } = await supabase.from('a3_module_completion')
-      .select('deliverable,completed_at')
+      .select('module_id,deliverable,completed_at')
       .eq('user_id', user.id)
       .in('module_id', ['cv-builder-studio', 'module-3'])
-      .order('completed_at', { ascending: false }).limit(1).maybeSingle()
+      .limit(2)
     if (error) return NextResponse.json({ error: 'No pudimos recuperar el CV guardado.' }, { status: 500, headers })
-    return NextResponse.json({ savedCv: data ? normalizeCvBuilderState(data.deliverable) : null, completedAt: data?.completed_at || null }, { headers })
+    // completed_at is the original completion date, not the last edit. The
+    // canonical row owns subsequent edits; the legacy alias is only a fallback.
+    const saved = data?.find((row) => row.module_id === 'cv-builder-studio')
+      ?? data?.find((row) => row.module_id === 'module-3')
+    return NextResponse.json({ savedCv: saved ? normalizeCvBuilderState(saved.deliverable) : null, completedAt: saved?.completed_at || null }, { headers })
   } catch {
     return NextResponse.json({ error: 'No pudimos recuperar el CV guardado.' }, { status: 500, headers })
   }

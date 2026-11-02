@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import { EvidenceFeedback } from '@/components/a3/evidence-feedback'
 import { useRouter } from 'next/navigation'
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import {
   AlertCircle,
   ArrowLeft,
@@ -112,30 +112,44 @@ export function AnswerArchitectureStudio() {
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<CompletionSummary | null>(null)
   const [timerSeconds, setTimerSeconds] = useState<number | null>(null)
+  const saving = useRef(false)
+  const ownerGeneration = useRef(0)
 
-  const { clearDraft } = useA3DraftStorage({
+  const { clearDraft, ready: draftReady, ownerId, error: draftError, retry: retryDraft } = useA3DraftStorage({
     moduleId: 'answer-architecture',
     legacyKey: ANSWER_ARCHITECTURE_DRAFT_KEY,
     value: draft,
     onRestore: (stored) => setDraft({ ...EMPTY_ANSWER_ARCHITECTURE_DRAFT, ...(stored as Partial<AnswerArchitectureDraft>) }),
+    onReset: () => {
+      ownerGeneration.current++; saving.current = false
+      setDraft(EMPTY_ANSWER_ARCHITECTURE_DRAFT); setCompletion(null); setSubmitting(false); setSubmitError(null)
+      setContext(EMPTY_CONTEXT); setContextError(null); setContextLoading(true); setTimerSeconds(null)
+    },
+    enabled: !completion,
   })
 
   useEffect(() => {
+    if (!ownerId) return
+    const controller = new AbortController()
+    setContextLoading(true); setContextError(null)
     void fetch('/api/a3/module-context/answer-architecture', {
       credentials: 'include',
+      cache: 'no-store', signal: controller.signal,
     })
       .then(async (response) => {
         const payload = (await response.json().catch(() => ({}))) as ContextPayload
         if (!response.ok) throw new Error(payload.error || 'No pudimos cargar el contexto.')
-        setContext(payload.context || EMPTY_CONTEXT)
+        if (!controller.signal.aborted) setContext(payload.context || EMPTY_CONTEXT)
       })
       .catch((error: unknown) => {
+        if (controller.signal.aborted) return
         setContextError(
           error instanceof Error ? error.message : 'No pudimos cargar el contexto.',
         )
       })
-      .finally(() => setContextLoading(false))
-  }, [])
+      .finally(() => { if (!controller.signal.aborted) setContextLoading(false) })
+    return () => controller.abort()
+  }, [ownerId])
 
   useEffect(() => {
     if (timerSeconds === null || timerSeconds <= 0) return
@@ -157,13 +171,16 @@ export function AnswerArchitectureStudio() {
   )
 
   const update = (key: keyof AnswerArchitectureDraft, value: string) => {
+    if (saving.current) return
     setDraft((current) => ({ ...current, [key]: value, ...(['factsConfirmed', 'structureReviewed', 'contextReviewed', 'practiceHistory'].includes(key) ? {} : { factsConfirmed: '', structureReviewed: '', contextReviewed: '' }) }))
     setSubmitError(null)
     setCompletion(null)
   }
 
   const handleSubmit = async () => {
-    if (!validation.passed || contextLoading || contextError) return
+    if (!validation.passed || !draftReady || contextLoading || contextError || saving.current) return
+    saving.current = true
+    const submittedOwner = ownerGeneration.current
     setSubmitting(true)
     setSubmitError(null)
     try {
@@ -173,7 +190,8 @@ export function AnswerArchitectureStudio() {
         responses: [draft.selfIntroduction, draft.motivation, draft.strengthEvidence, draft.challengeStar, draft.whyHire, draft.timing30, draft.timing45, draft.timing60],
         deliverable: draft,
       })
-      clearDraft()
+      if (submittedOwner !== ownerGeneration.current) return
+      clearDraft(draft)
       setCompletion({
         score: result.score || validation.score,
         xpAwarded: result.xpAwarded || 0,
@@ -181,11 +199,12 @@ export function AnswerArchitectureStudio() {
         bestScore: result.bestScore || result.score || validation.score,
       })
     } catch (error) {
+      if (submittedOwner !== ownerGeneration.current) return
       setSubmitError(
         error instanceof Error ? error.message : 'No pudimos completar el entrenamiento.',
       )
     } finally {
-      setSubmitting(false)
+      if (submittedOwner === ownerGeneration.current) { saving.current = false; setSubmitting(false) }
     }
   }
 
@@ -291,7 +310,10 @@ export function AnswerArchitectureStudio() {
           </div>
         </Card>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_310px]">
+        {!draftReady && <div className="space-y-3"><p role="status" className="text-sm text-slate-300">{draftError || 'Recuperando tus respuestas en este dispositivo…'}</p>{draftError && <Button variant="outline" onClick={retryDraft}>Volver a intentar</Button>}</div>}
+        {draftReady && draftError && <p role="status" className="text-sm text-amber-200">{draftError}</p>}
+        <fieldset disabled={submitting || !draftReady} className="min-w-0 grid gap-6 lg:grid-cols-[1fr_310px]">
+          <legend className="sr-only">Editor de respuestas</legend>
           <div className="space-y-6">
             <Card className="rounded-[2px] border-white/10 bg-white/[0.03] p-6">
               <div className="mb-5 flex items-center gap-3">
@@ -344,11 +366,14 @@ export function AnswerArchitectureStudio() {
                   minHeight="min-h-52"
                 />
                 <EvidenceFeedback
+                  key={ownerId}
+                  disabled={submitting}
                   question="Cuéntame un desafío: ¿qué ocurrió, qué hiciste tú y cuál fue el resultado?"
                   answer={draft.challengeStar}
                   context={[context.jobTitle, context.company].filter(Boolean).join(' · ')}
                   onApplyAttempt={(answer) => update('challengeStar', answer)}
                   onRecordReview={(review) => setDraft((current) => {
+                    if (saving.current) return current
                     let history: unknown[] = []
                     try { const saved = JSON.parse(current.practiceHistory || '[]'); if (Array.isArray(saved)) history = saved } catch { /* Keep a new record if a local draft was damaged. */ }
                     return { ...current, practiceHistory: JSON.stringify([...history, review].slice(-3)) }
@@ -538,7 +563,7 @@ export function AnswerArchitectureStudio() {
               </Button>
             )}
           </div>
-        </div>
+        </fieldset>
       </div>
     </div>
   )

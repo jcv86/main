@@ -3,6 +3,7 @@ import 'server-only'
 import { cache } from 'react'
 import { redirect } from 'next/navigation'
 import { resolveA2DayAccess } from './a2-day-access'
+import { resolveA2PracticePath, type A2PracticePath } from '@/lib/a2/practice-path'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { canonicalOnboardingPath } from './flow'
 import { hasActiveA4QaEntitlement } from '@/lib/a4/qa-entitlement'
@@ -44,6 +45,9 @@ interface JourneyRow {
 }
 
 export interface ProfileFlags {
+  camino_foco?: A2PracticePath | null
+  camino_persona_active?: boolean | null
+  camino_profesional_active?: boolean | null
   onboarding_conozcamonos_1_completed?: boolean | null
   a1_cerebral_intro_seen?: boolean | null
   a1_cerebral_completed?: boolean | null
@@ -314,7 +318,8 @@ function hydrateJourneyState(
     highestA2DayUnlocked > 1 || Boolean(evidence.a2StartedAt) || hasA3Evidence
 
   let currentModule: JourneyModule = 'A1'
-  if (state.currentModule === 'COMPLETED') currentModule = 'COMPLETED'
+  if (resolveA2PracticePath(profile) === 'persona' && hasA2Evidence) currentModule = 'A2'
+  else if (state.currentModule === 'COMPLETED') currentModule = 'COMPLETED'
   else if (hasA4Evidence) currentModule = 'A4'
   else if (state.a3UnlockedAt || profile.a3_unlocked || hasA3Evidence) {
     currentModule = 'A3'

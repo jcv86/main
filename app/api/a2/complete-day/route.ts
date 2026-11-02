@@ -1,6 +1,8 @@
 import { NextResponse } from 'next/server'
 import { createAdminClient } from '@/lib/supabase/server'
 import { resolveServerUser } from '@/lib/auth/server-user'
+import { getJourneyForCurrentUser } from '@/lib/journey/service'
+import { checkA2PilotAccess } from '@/lib/a2/api-access'
 import { A2_DAILY_MISSIONS } from '@/lib/a2-missions-full'
 import { getA3CheckpointForDay } from '@/lib/a3-checkpoint-map'
 import { getA2ProgressSnapshot, resolveA2Route } from '@/lib/a2/server-progress'
@@ -106,6 +108,21 @@ export async function POST(request: Request) {
     const currentUser = await resolveServerUser()
     if (!currentUser) {
       return NextResponse.json({ error: 'No autenticado' }, { status: 401 })
+    }
+
+    const pilot = await checkA2PilotAccess(currentUser.id)
+    if (pilot !== 'allowed') {
+      return NextResponse.json(
+        { error: pilot === 'denied' ? 'Necesitas acceso al piloto.' : 'No pudimos verificar tu acceso al piloto.' },
+        { status: pilot === 'denied' ? 403 : 503, headers: { 'Cache-Control': 'private, no-store' } },
+      )
+    }
+    const journey = await getJourneyForCurrentUser()
+    if (!journey || journey.user.id !== currentUser.id || !journey.access.a2) {
+      return NextResponse.json(
+        { error: 'Completa tu punto de partida antes de guardar entregables de Tu Ruta.' },
+        { status: 403, headers: { 'Cache-Control': 'private, no-store' } },
+      )
     }
 
     let body: CompleteDayBody
@@ -455,7 +472,7 @@ export async function POST(request: Request) {
 
     const journeyPayload = {
       user_id: userId,
-      current_module: day >= 60 ? 'A4' : day >= 30 ? 'A3' : 'A2',
+      current_module: practicePath === 'persona' ? 'A2' : day >= 60 ? 'A4' : day >= 30 ? 'A3' : 'A2',
       current_a2_day: nextDay,
       highest_a2_day_unlocked: highestUnlockedDay,
       a1_completed_at: existingJourney?.a1_completed_at || null,
@@ -465,11 +482,11 @@ export async function POST(request: Request) {
           ? existingJourney?.a2_completed_at || now
           : existingJourney?.a2_completed_at || null,
       a3_unlocked_at:
-        day >= 30
+        practicePath !== 'persona' && day >= 30
           ? existingJourney?.a3_unlocked_at || now
           : existingJourney?.a3_unlocked_at || null,
       a4_unlocked_at:
-        day >= 60
+        practicePath !== 'persona' && day >= 60
           ? existingJourney?.a4_unlocked_at || now
           : existingJourney?.a4_unlocked_at || null,
       version: (existingJourney?.version || 0) + 1,

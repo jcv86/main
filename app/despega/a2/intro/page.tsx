@@ -3,6 +3,7 @@ import { A2CanonicalIntro } from '@/components/a2-canonical-intro'
 import { getJourneyForCurrentUser } from '@/lib/journey/service'
 import { loadA1Report } from '@/lib/reports/user-report-data'
 import { buildA2A1Orientation } from '@/lib/a2/a1-orientation'
+import { resolveA2PracticePath } from '@/lib/a2/practice-path'
 
 export const dynamic = 'force-dynamic'
 
@@ -18,5 +19,5 @@ export default async function YourRouteIntroPage() {
   // or incompatible evidence is reviewed in A1 instead of becoming a neutral score.
   if (!orientation.canContinue) redirect('/despega/a1-report')
 
-  return <A2CanonicalIntro orientation={orientation} />
+  return <A2CanonicalIntro orientation={orientation} practicePath={resolveA2PracticePath(journey.profile)} />
 }

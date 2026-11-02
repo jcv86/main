@@ -6,6 +6,7 @@ const path = require('node:path')
 const ts = require('typescript')
 const React = require('react')
 const { renderToStaticMarkup } = require('react-dom/server')
+const { createClient: sdkClient } = require('@supabase/supabase-js')
 // Existing UI primitives use Next's JSX transform; tsx's jsx:preserve test
 // loader uses the classic runtime. This binding affects this test process only.
 Object.assign(globalThis, { React })
@@ -16,6 +17,9 @@ const { CLARIFICATION_KEY } = require('../lib/a1/individual-understanding.ts')
 const { UNDERSTANDING_VERSION } = require('../lib/a1/individual-evidence.ts')
 const { buildA2A1Orientation } = require('../lib/a2/a1-orientation.ts')
 const legacy = require('../lib/a2/route-recommendation.ts')
+const { resolveA2Route, getA2ProgressSnapshot } = require('../lib/a2/server-progress.ts')
+const { buildA2RouteAdaptation } = require('../lib/a2/route-adaptation.ts')
+const { A2_DAILY_MISSIONS } = require('../lib/a2-missions-full.ts')
 
 const cases = []
 const test = (name, run) => cases.push({ name, run })
@@ -189,6 +193,24 @@ test('real SSR shows provenance and feedback, without scores or invented classif
   assert.match(html, /href="\/despega\/conozcamonos-2"/)
   assert.match(html, /Comenzar Tu Ruta de 30 días/)
   assert.doesNotMatch(html, new RegExp(revision))
+  assert.doesNotMatch(html, /<main\b/, 'The real AppShell supplies the main landmark')
+})
+
+test('the declared personal path keeps interview preparation optional in the real intro', () => {
+  const { A2CanonicalIntro } = loadSource('components/a2-canonical-intro.tsx', {
+    'next/navigation': { useRouter: () => ({ push() {}, refresh() {} }) },
+  })
+  for (const practicePath of ['persona', 'profesional', 'ambos']) {
+    const html = renderToStaticMarkup(React.createElement(A2CanonicalIntro, { orientation: orientation(), practicePath }))
+    assert.match(html, /Comenzar Tu Ruta de 30 días/)
+    if (practicePath === 'persona') {
+      assert.match(html, /las revisiones y el cierre continúan en Tu Ruta/)
+      assert.match(html, /Entrenamiento para entrevistas es opcional/)
+      assert.doesNotMatch(html, /mercado real|checkpoints|Día 7/)
+    } else {
+      assert.match(html, /checkpoints desde el Día 7/)
+    }
+  }
 })
 
 class Redirect extends Error { constructor(destination) { super(destination); this.destination = destination } }
@@ -212,7 +234,154 @@ test('server page authenticates before loading, and uses only the authenticated 
   const result = await Page()
   assert.equal(result.props.orientation.canContinue, true)
   assert.equal(result.props.orientation.patternStatus, 'ambiguous')
+  assert.equal(result.props.practicePath, 'ambos')
+  user.profile = { camino_foco: 'persona', camino_persona_active: true, camino_profesional_active: false }
+  assert.equal((await Page()).props.practicePath, 'persona')
+  user.profile = { camino_foco: 'profesional', camino_persona_active: false, camino_profesional_active: true }
+  assert.equal((await Page()).props.practicePath, 'profesional')
 })
+
+// Exercise the real resolver and Supabase SDK with a synthetic HTTP transport.
+// This verifies query boundaries and behavior, not live Postgres/RLS enforcement.
+const routeOwner = '00000000-0000-4000-8000-000000000001'
+const otherRouteOwner = '00000000-0000-4000-8000-000000000002'
+const routeCatalog = ['LIDER_EJ', 'TECH_ESP', 'EMPREND', 'COLAB_EX'].map((codigo, index) => ({
+  id: `00000000-0000-4000-8000-00000000010${index}`, codigo,
+  nombre: `Ruta guardada ${codigo}`, descripcion: 'Contexto histórico conservado.',
+  duracion_dias: 90, activo: true, created_at: '2026-01-01T00:00:00Z',
+}))
+function routeHarness(tables = {}, failedTable = null) {
+  const calls = []
+  const rows = {
+    a2_user_route_progress: [], a2_route_recommendations: [],
+    a2_learning_routes: routeCatalog, a1_tests_results: [],
+    despega_journey_state: [], a2_user_task_completions: [], ...tables,
+  }
+  const client = sdkClient('https://synthetic.invalid', 'synthetic-public-key', {
+    auth: { persistSession: false, autoRefreshToken: false, detectSessionInUrl: false },
+    global: { fetch: async (target, init = {}) => {
+      const url = new URL(String(target))
+      const table = url.pathname.split('/').at(-1)
+      calls.push({ table, method: init.method || 'GET', params: url.searchParams })
+      assert.equal(url.hostname, 'synthetic.invalid')
+      assert.equal(init.method || 'GET', 'GET', 'Resolving a route must not persist a new assignment')
+      assert.ok(Object.hasOwn(rows, table), table)
+      if (table === failedTable) return new Response(JSON.stringify({ code: 'XX000', message: 'PRIVATE_DATABASE_DETAIL' }), {
+        status: 500, headers: { 'Content-Type': 'application/json' },
+      })
+      let selected = rows[table]
+      for (const [key, value] of url.searchParams) {
+        if (value.startsWith('eq.')) selected = selected.filter(row => String(row[key]) === value.slice(3))
+        if (value === 'not.is.null') selected = selected.filter(row => row[key] != null)
+      }
+      if (url.searchParams.has('limit')) selected = selected.slice(0, Number(url.searchParams.get('limit')))
+      const columns = url.searchParams.get('select').split(',')
+      return new Response(JSON.stringify(selected.map(row => Object.fromEntries(columns.map(key => [key, row[key]])))), {
+        status: 200, headers: { 'Content-Type': 'application/json' },
+      })
+    } },
+  })
+  return { client, calls }
+}
+
+test('a new user gets canonical missions without a career assignment or invented route row', async () => {
+  const h = routeHarness()
+  const route = await resolveA2Route(routeOwner, h.client)
+  assert.equal(route, null)
+  assert.deepEqual(h.calls.map(call => call.table), ['a2_user_route_progress', 'a2_route_recommendations'])
+  const adaptation = buildA2RouteAdaptation(route, A2_DAILY_MISSIONS[1])
+  assert.equal(adaptation.routeCode, 'RUTA_DTC')
+  assert.equal(adaptation.routeName, 'Tu Ruta DTC')
+  assert.ok(adaptation.qualitySignals.length > 0)
+  assert.deepEqual(await getA2ProgressSnapshot(routeOwner, h.client), {
+    currentDay: 1, highestUnlockedDay: 1, activeHorizon: 30, source: 'default',
+  })
+  assert.ok(h.calls.every(call => call.method === 'GET'))
+})
+
+test('legacy DISC labels cannot select a route even when their corresponding catalog rows exist', async () => {
+  for (const profile_type of ['D-I dominante estratega lider', 'C técnico', 'I creativo emprendedor', 'S colaborador', '']) {
+    const h = routeHarness({ a1_tests_results: [{ user_id: routeOwner, profile_type, resultado_texto: profile_type }] })
+    assert.equal(await resolveA2Route(routeOwner, h.client), null)
+    assert.ok(h.calls.every(call => call.table !== 'a1_tests_results' && call.table !== 'a2_learning_routes'))
+    for (const call of h.calls) assert.equal(call.params.get('user_id'), `eq.${routeOwner}`)
+  }
+})
+
+test('saved route and historical progress stay intact, including an inactive historical catalog row', async () => {
+  const saved = { ...routeCatalog[0], activo: false }
+  const h = routeHarness({
+    a2_learning_routes: [saved, ...routeCatalog.slice(1)],
+    a2_user_route_progress: [{ user_id: routeOwner, route_id: saved.id, dia_actual: 41 }],
+    a2_route_recommendations: [{ user_id: routeOwner, route_id: routeCatalog[1].id }],
+  })
+  const route = await resolveA2Route(routeOwner, h.client)
+  assert.equal(route.id, saved.id)
+  assert.equal(route.name, saved.nombre)
+  assert.equal(route.source, 'progress')
+  assert.equal(route.durationDays, 90)
+  assert.ok(h.calls.every(call => call.table !== 'a2_route_recommendations'))
+  assert.deepEqual(await getA2ProgressSnapshot(routeOwner, h.client), {
+    currentDay: 41, highestUnlockedDay: 41, activeHorizon: 60, source: 'route',
+  })
+})
+
+test('an existing recommendation stays compatible without reading A1 or assigning another route', async () => {
+  const h = routeHarness({ a2_route_recommendations: [{ user_id: routeOwner, route_id: routeCatalog[2].id }] })
+  const route = await resolveA2Route(routeOwner, h.client)
+  assert.equal(route.id, routeCatalog[2].id)
+  assert.equal(route.source, 'recommendation')
+  assert.deepEqual(h.calls.map(call => call.table), ['a2_user_route_progress', 'a2_route_recommendations', 'a2_learning_routes'])
+})
+
+test('another owner’s historical route never supplies the current user’s route', async () => {
+  const h = routeHarness({
+    a2_user_route_progress: [{ user_id: otherRouteOwner, route_id: routeCatalog[0].id }],
+    a2_route_recommendations: [{ user_id: otherRouteOwner, route_id: routeCatalog[1].id }],
+  })
+  assert.equal(await resolveA2Route(routeOwner, h.client), null)
+  assert.ok(h.calls.every(call => call.params.get('user_id') === `eq.${routeOwner}`))
+})
+
+test('a missing saved catalog row never selects an arbitrary active route', async () => {
+  const h = routeHarness({ a2_user_route_progress: [{ user_id: routeOwner, route_id: 'missing-route' }] })
+  assert.equal(await resolveA2Route(routeOwner, h.client), null)
+  const catalogReads = h.calls.filter(call => call.table === 'a2_learning_routes')
+  assert.equal(catalogReads.length, 1)
+  assert.equal(catalogReads[0].params.get('id'), 'eq.missing-route')
+})
+
+test('database failures do not masquerade as the absence of a saved route', async () => {
+  for (const [tables, failedTable] of [
+    [{}, 'a2_user_route_progress'],
+    [{}, 'a2_route_recommendations'],
+    [{ a2_user_route_progress: [{ user_id: routeOwner, route_id: routeCatalog[0].id }] }, 'a2_learning_routes'],
+    [{ a2_route_recommendations: [{ user_id: routeOwner, route_id: routeCatalog[0].id }] }, 'a2_learning_routes'],
+  ]) {
+    const h = routeHarness(tables, failedTable)
+    await assert.rejects(() => resolveA2Route(routeOwner, h.client), error => {
+      assert.match(error.message, /^No pudimos recuperar/)
+      assert.doesNotMatch(error.message, /PRIVATE_DATABASE_DETAIL/)
+      return true
+    })
+    assert.equal(h.calls.at(-1).table, failedTable, 'A failed historical read cannot select a replacement')
+  }
+})
+
+for (const failedTable of ['despega_journey_state', 'a2_user_task_completions', 'a2_user_route_progress']) {
+  test('progress read failure cannot reset the user to day one: ' + failedTable, async () => {
+    const h = routeHarness({}, failedTable)
+    await assert.rejects(() => getA2ProgressSnapshot(routeOwner, h.client), error => {
+      assert.match(error.message, /^No pudimos recuperar/)
+      assert.doesNotMatch(error.message, /PRIVATE_DATABASE_DETAIL/)
+      return true
+    })
+    assert.ok(h.calls.every(call => call.method === 'GET'))
+    if (failedTable !== 'a2_user_route_progress') {
+      assert.ok(h.calls.every(call => call.table !== 'a2_user_route_progress'), 'Failed canonical reads must not reach compatibility defaults')
+    }
+  })
+}
 
 test('legacy bookmarks go through the authenticated compatibility bridge', () => {
   for (const file of ['app/despega/a2/camino/page.tsx', 'app/despega/a2/recomendaciones/page.tsx']) {

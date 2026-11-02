@@ -400,7 +400,7 @@ export default function A2DashboardPage() {
                 <p className="mt-2 max-w-3xl text-sm leading-relaxed text-emerald-50/75">
                   Tu avance queda guardado aquí. Extiende a {progress.next_horizon}{' '}
                   días solo cuando quieras profundizar el trabajo con nuevas misiones,
-                  acciones reales y checkpoints de Entrenamiento.
+                  acciones reales y revisiones que correspondan a tu objetivo.
                 </p>
                 {extensionError && (
                   <p className="mt-3 text-sm text-amber-200">{extensionError}</p>
@@ -438,7 +438,7 @@ export default function A2DashboardPage() {
                 Cerraste los 90 días de Tu Ruta
               </h2>
               <p className="mt-2 text-sm text-purple-100/70">
-                Tus entregables, checkpoints y evidencia permanecen disponibles para
+                Tus entregables, ajustes y evidencia permanecen disponibles para
                 revisión y actualización.
               </p>
             </div>

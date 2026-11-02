@@ -76,7 +76,7 @@ async function main() {
         add column if not exists updated_at timestamptz default now();
 
       create table public.a1_tests_results(id uuid primary key default gen_random_uuid(),user_id uuid not null,profile_type text,resultado_texto text,created_at timestamptz default now(),completed_at timestamptz);
-      create table public.a2_user_route_progress(id uuid primary key default gen_random_uuid(),user_id uuid not null,route_id uuid,dia_actual integer,fecha_inicio timestamptz,updated_at timestamptz default now());
+      create table public.a2_user_route_progress(id uuid primary key default gen_random_uuid(),user_id uuid not null,route_id uuid not null,dia_actual integer,fecha_inicio timestamptz,updated_at timestamptz default now());
       create table public.a2_route_recommendations(id uuid primary key default gen_random_uuid(),user_id uuid not null,route_id uuid,score_match numeric,generado_at timestamptz default now());
       create table public.a2_learning_routes(id uuid primary key default gen_random_uuid(),codigo text,nombre text,descripcion text,duracion_dias integer,activo boolean default true,created_at timestamptz default now());
       create table public.a2_user_bitacora(id uuid primary key default gen_random_uuid(),user_id uuid not null,mood integer,created_at timestamptz default now());

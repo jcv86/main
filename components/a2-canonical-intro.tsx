@@ -12,6 +12,7 @@ import {
   DTC_REQUEST_ID_HEADER,
 } from '@/lib/observability/request-id'
 import type { A2A1Orientation } from '@/lib/a2/a1-orientation'
+import type { A2PracticePath } from '@/lib/a2/practice-path'
 
 interface TransitionPayload {
   success?: boolean
@@ -20,10 +21,14 @@ interface TransitionPayload {
   request_id?: string
 }
 
-export function A2CanonicalIntro({ orientation }: { orientation: A2A1Orientation }) {
+export function A2CanonicalIntro({ orientation, practicePath = 'ambos' }: {
+  orientation: A2A1Orientation
+  practicePath?: A2PracticePath
+}) {
   const router = useRouter()
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const isPersonal = practicePath === 'persona'
 
   const beginRoute = async () => {
     if (!orientation.canContinue || submitting) return
@@ -60,7 +65,7 @@ export function A2CanonicalIntro({ orientation }: { orientation: A2A1Orientation
   }
 
   return (
-    <main className="min-h-screen bg-background px-4 py-10">
+    <article className="min-h-screen bg-background px-4 py-10">
       <div className="mx-auto max-w-4xl space-y-8">
         <header className="space-y-4 text-center">
           <Badge variant="secondary">A2 · Tu Ruta</Badge>
@@ -160,15 +165,18 @@ export function A2CanonicalIntro({ orientation }: { orientation: A2A1Orientation
               <CardDescription>90 días</CardDescription>
             </CardHeader>
             <CardContent className="text-sm text-muted-foreground">
-              Consolidación, mercado real y checkpoints progresivos de Entrenamiento.
+              {isPersonal
+                ? 'Consolidación de lo practicado, revisión de tus evidencias y próximos pasos para tu objetivo.'
+                : 'Consolidación, mercado real y checkpoints progresivos de Entrenamiento.'}
             </CardContent>
           </Card>
         </section>
 
         <Card className="border-indigo-500/30 bg-indigo-500/10 p-6">
           <p className="text-sm leading-relaxed text-foreground">
-            Entrenamiento no espera al final de Tu Ruta: se abre en checkpoints desde
-            el Día 7. Cada módulo utiliza la evidencia que construiste en A1 y A2.
+            {isPersonal
+              ? 'En tu camino personal, las revisiones y el cierre continúan en Tu Ruta. Entrenamiento para entrevistas es opcional; puedes explorarlo cuando esté disponible y se relacione con tu objetivo.'
+              : 'Entrenamiento no espera al final de Tu Ruta: se abre en checkpoints desde el Día 7. Cada módulo utiliza la evidencia que construiste en A1 y A2.'}
           </p>
         </Card>
 
@@ -191,6 +199,6 @@ export function A2CanonicalIntro({ orientation }: { orientation: A2A1Orientation
           Comenzar Tu Ruta de 30 días
         </Button>
       </div>
-    </main>
+    </article>
   )
 }

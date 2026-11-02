@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
@@ -51,26 +51,35 @@ export function CvBuilderStudio() {
   const [savedCv, setSavedCv] = useState<CvBuilderState | null>(null)
   const [savedCvError, setSavedCvError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<A3CompletionPayload | null>(null)
+  const saving = useRef(false)
+  const confirmedSaveRevision = useRef(0)
+  const ownerGeneration = useRef(0)
 
-  const { clearDraft, ready: draftReady } = useA3DraftStorage({
+  const { clearDraft, ready: draftReady, ownerId, error: draftError, retry: retryDraft } = useA3DraftStorage({
     moduleId: 'cv-builder-studio',
     legacyKey: CV_BUILDER_DRAFT_KEY,
     value: state,
     onRestore: (stored) => setState(normalizeCvBuilderState(stored)),
+    onReset: () => {
+      ownerGeneration.current++; confirmedSaveRevision.current++; saving.current = false
+      setState(EMPTY_CV_BUILDER_STATE); setSavedCv(null); setCompletion(null); setSubmitting(false); setError(null); setSavedCvError(null)
+    },
     enabled: !completion?.success,
   })
 
   useEffect(() => {
+    if (!ownerId) return
     const controller = new AbortController()
+    const requestedAtRevision = confirmedSaveRevision.current
     void fetch('/api/a3/module-context/cv-builder-studio', { credentials: 'include', cache: 'no-store', signal: controller.signal })
       .then(async (response) => {
         const payload = await response.json()
         if (!response.ok) throw new Error(payload.error || 'No pudimos recuperar el CV guardado.')
-        if (payload.savedCv) setSavedCv(normalizeCvBuilderState(payload.savedCv))
+        if (!controller.signal.aborted && requestedAtRevision === confirmedSaveRevision.current && payload.savedCv) setSavedCv(normalizeCvBuilderState(payload.savedCv))
       })
-      .catch((cause) => { if (!controller.signal.aborted) setSavedCvError(cause instanceof Error ? cause.message : 'No pudimos recuperar el CV guardado.') })
+      .catch((cause) => { if (!controller.signal.aborted && requestedAtRevision === confirmedSaveRevision.current) setSavedCvError(cause instanceof Error ? cause.message : 'No pudimos recuperar el CV guardado.') })
     return () => controller.abort()
-  }, [])
+  }, [ownerId])
 
   const module = useMemo(() => getA3Module('cv-builder-studio'), [])
   const deliverable = useMemo(() => buildCvBuilderDeliverable(state), [state])
@@ -87,6 +96,7 @@ export function CvBuilderStudio() {
     key: K,
     value: CvBuilderState[K],
   ) => {
+    if (saving.current) return
     setState((current) => ({ ...current, [key]: value, factsConfirmed: key === 'factsConfirmed' ? Boolean(value) : false }))
     setCompletion(null)
     setError(null)
@@ -120,7 +130,9 @@ export function CvBuilderStudio() {
   }
 
   const submit = async () => {
-    if (!module || !validation?.passed || submitting) return
+    if (!module || !validation?.passed || !draftReady || saving.current) return
+    saving.current = true
+    const submittedOwner = ownerGeneration.current
     setSubmitting(true)
     setError(null)
 
@@ -131,10 +143,14 @@ export function CvBuilderStudio() {
         responses,
         deliverable,
       })
+      if (submittedOwner !== ownerGeneration.current) return
+      confirmedSaveRevision.current++
       setCompletion(result)
       setSavedCv(state)
-      clearDraft()
+      setSavedCvError(null)
+      clearDraft(state)
     } catch (submitError) {
+      if (submittedOwner !== ownerGeneration.current) return
       console.error('[v0] Error completing CV builder:', submitError)
       setError(
         submitError instanceof Error
@@ -142,7 +158,7 @@ export function CvBuilderStudio() {
           : 'No pudimos registrar el módulo.',
       )
     } finally {
-      setSubmitting(false)
+      if (submittedOwner === ownerGeneration.current) { saving.current = false; setSubmitting(false) }
     }
   }
 
@@ -206,7 +222,11 @@ export function CvBuilderStudio() {
           </div>
         </header>
 
-        {savedCv && <Card className="space-y-3 border-cyan-500/25 bg-cyan-500/5 p-5"><p className="text-sm text-slate-300">Tienes un CV guardado en tu cuenta. Puedes recuperar esa versión para revisarla o descargar su texto; cargarla reemplaza el borrador visible.</p><Button variant="outline" onClick={() => { setState({ ...savedCv, factsConfirmed: false }); setCompletion(null); setShowPreview(true) }}>Cargar el CV guardado en mi cuenta</Button></Card>}
+        {!draftReady && <div className="space-y-3"><p role="status" className="text-sm text-slate-300">{draftError || 'Recuperando el borrador de tu cuenta en este dispositivo…'}</p>{draftError && <Button variant="outline" onClick={retryDraft}>Volver a intentar</Button>}</div>}
+        {draftReady && draftError && <p role="status" className="text-sm text-amber-200">{draftError}</p>}
+        <fieldset disabled={submitting || !draftReady} className="min-w-0 space-y-7">
+        <legend className="sr-only">Editor del CV</legend>
+        {savedCv && <Card className="space-y-3 border-cyan-500/25 bg-cyan-500/5 p-5"><p className="text-sm text-slate-300">Tienes un CV guardado en tu cuenta. Puedes recuperar esa versión para revisarla o descargar su texto; cargarla reemplaza el borrador visible.</p><Button variant="outline" disabled={submitting} onClick={() => { if (saving.current) return; setState({ ...savedCv, factsConfirmed: false }); setCompletion(null); setShowPreview(true) }}>Cargar el CV guardado en mi cuenta</Button></Card>}
         {savedCvError && <p role="status" className="text-sm text-amber-200">{savedCvError} Tu borrador local sigue disponible.</p>}
 
         <Card className="border-slate-800 bg-slate-900/55 p-5">
@@ -511,6 +531,7 @@ export function CvBuilderStudio() {
             </div>
           )}
         </Card>
+        </fieldset>
       </div>
     </div>
   )
