@@ -1,4 +1,3 @@
-@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap');
 
 /* Cumulative Layout Shift (CLS) Prevention */
 /* Reserve space for dynamic content and prevent layout shifts */
@@ -10,7 +9,7 @@ html {
 
 body {
   /* Ensure consistent font metrics to prevent CLS */
-  font-family: var(--font-montserrat), var(--font-lora), system-ui, sans-serif;
+  font-family: var(--font-montserrat), 'Montserrat', system-ui, sans-serif;
   font-size: 1rem;
   line-height: 1.5;
   /* Reserve space for scrollbar to prevent shift on page change */
@@ -135,7 +134,7 @@ select {
 
   html {
     @apply scroll-smooth;
-    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', system-ui, -apple-system, sans-serif;
   }
 
   body {
@@ -146,7 +145,7 @@ select {
 
   /* Display typography - Montserrat */
   h1, .h1 {
-    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', system-ui, -apple-system, sans-serif;
     font-size: clamp(48px, 8vw, 88px);
     font-weight: 700;
     line-height: 0.95;
@@ -154,7 +153,7 @@ select {
   }
 
   h2, .h2 {
-    font-family: 'Montserrat', system-ui, -apple-system, sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', system-ui, -apple-system, sans-serif;
     font-size: clamp(32px, 5vw, 56px);
     font-weight: 700;
     line-height: 0.98;
@@ -162,14 +161,14 @@ select {
   }
 
   h3, .h3 {
-    font-family: 'Montserrat', system-ui, sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', system-ui, sans-serif;
     font-size: clamp(20px, 3vw, 24px);
     font-weight: 600;
     line-height: 1.1;
   }
 
   h4, h5, h6 {
-    font-family: 'Montserrat', system-ui, sans-serif;
+    font-family: var(--font-montserrat), 'Montserrat', system-ui, sans-serif;
     font-weight: 600;
   }
 
@@ -483,7 +482,7 @@ select {
 
 /* Typography utilities */
 .text-display-lg {
-  font-family: 'Lora', serif;
+  font-family: var(--font-montserrat), 'Montserrat', system-ui, sans-serif;
   font-size: clamp(48px, 8vw, 88px);
   font-weight: 700;
   line-height: 0.95;
@@ -491,7 +490,7 @@ select {
 }
 
 .text-display-md {
-  font-family: 'Lora', serif;
+  font-family: var(--font-montserrat), 'Montserrat', system-ui, sans-serif;
   font-size: clamp(32px, 5vw, 56px);
   font-weight: 700;
   line-height: 0.98;
@@ -499,7 +498,7 @@ select {
 }
 
 .text-display-sm {
-  font-family: 'Montserrat', system-ui, sans-serif;
+  font-family: var(--font-montserrat), 'Montserrat', system-ui, sans-serif;
   font-size: clamp(20px, 3vw, 24px);
   font-weight: 600;
   line-height: 1.1;
