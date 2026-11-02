@@ -1,7 +1,7 @@
 # DTC: integración de cierre profesional
 
 Fecha: 2026-11-02. Base principal revisada: `3de1cbfc5b3147ad0f6ee109742ccb06728e5cda`.
-Estado de este documento: candidato de integración; la ejecución remota de aceptación y el despliegue se registrarán después de sus resultados reales.
+Este documento describe la implementación, los criterios de salida y sus límites. El registro de aceptación y despliegue se conserva en [PR #246](https://github.com/jcv86/main/pull/246), con enlaces a las ejecuciones y su revisión exacta.
 
 ## Decisiones implementadas
 
@@ -13,6 +13,7 @@ Estado de este documento: candidato de integración; la ejecución remota de ace
 - El objetivo laboral separa cargo, área funcional, industria, etapa exploratoria, ubicación y modalidad. Se puede guardar al comienzo del recorrido y recuperar en A4. La entrada temprana exige sesión y acceso piloto; guardar preferencias no concede acceso al Radar.
 - El objetivo se actualiza con revisión `id + updated_at`; una edición concurrente devuelve 409 y conserva el borrador. Los campos avanzados omitidos se mantienen. Los filtros explícitos se combinan sin ampliación silenciosa.
 - La industria empresarial sólo se presenta con evidencia de empleador y fecha. El registro revisado inicial es pequeño; el resto queda por confirmar. Se muestra cobertura y se respeta la decisión de incluir o excluir rubros desconocidos.
+- El documento principal permite zoom del navegador. Los indicadores del menú tienen nombres accesibles válidos y las seis capturas y el objetivo temprano tienen rutas de navegación nombradas en español.
 
 ## Evidencia de ingeniería
 
@@ -22,11 +23,15 @@ Estado de este documento: candidato de integración; la ejecución remota de ace
 
 El workflow `a1-browser-qa.yml` incorpora una etapa adicional descrita en `scripts/a1-browser-qa/closure-README.md`: Supabase local desechable, usuarios sintéticos nuevos, Auth/JWT/cookies/PostgREST reales, migraciones de captura y objetivo, AppShell real, seis formularios, continuidad tras recargar, conflictos concurrentes y pantallas de 390/1440 px. Mantiene declaradas las sustituciones de documento raíz/fuentes y las tablas auxiliares de fixture. No utiliza producción ni acredita servicios externos, validez psicométrica o resultados con participantes.
 
+La fase de preparación también ejecuta 19 casos SQL de compatibilidad de objetivos con escritores anteriores y actuales, bajo el rol `authenticated`, y revierte todas esas escrituras. El resultado sanitizado se adjunta a la evidencia del workflow. Las capturas se conservan incluso cuando falla una comprobación de accesibilidad o desborde; las mediciones esperan a que se renderice el nuevo tamaño de pantalla.
+
 ## Cambio de esquema y publicación
 
 La única migración nueva de producto es `20261102115220_dtc_labor_objective_completion.sql`, generada con Supabase CLI. Agrega áreas, etapa, política de industria desconocida y preferencia geográfica; permite exploración sin cargo. Conserva RLS, índice de principal activa y trigger de revisión.
 
 El preflight de lectura sobre el proyecto DTC confirmó cuatro búsquedas existentes y ninguna lista histórica de cargos o ubicaciones incompatible con los límites preparados. No se inspeccionaron ni copiaron sus valores privados. El backfill de ubicación usa únicamente presencia de regiones, no asigna Metropolitana ni reescribe cargos; actualiza `updated_at`, por lo que una pestaña antigua deberá recuperar la revisión nueva.
+
+El servidor anterior escribe ubicaciones sin el nuevo campo de preferencia. Un puente de compatibilidad, con privilegios del llamante y `search_path` fijo, mantiene coherentes esas escrituras durante la publicación o una reversión de aplicación. Sólo infiere una preferencia omitida al insertar, o normaliza una combinación incoherente cuando cambian las ubicaciones y la preferencia permanece igual. La API nueva valida las elecciones explícitas y el `CHECK` de base de datos se conserva. El puente no cambia propietario, políticas RLS ni permisos de tabla; permanece mientras la versión anterior sea candidata de reversión.
 
 Secuencia de salida: validar migración en la base local de CI, revisar el candidato y sus checks, aplicar el cambio aditivo al proyecto DTC verificado, integrar la versión aprobada y verificar su despliegue. Este documento por sí solo no acredita que esos pasos hayan ocurrido.
 

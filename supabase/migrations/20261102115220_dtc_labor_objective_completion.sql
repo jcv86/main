@@ -11,8 +11,44 @@ alter table public.career_search_intents
 update public.career_search_intents
 set location_preference = case when jsonb_array_length(locations) > 0 then 'selected' else 'unspecified' end
 where location_preference is null;
-alter table public.career_search_intents alter column location_preference set default 'unspecified';
+-- A missing value must reach the BEFORE trigger as NULL. The previous server
+-- does not write this column, including when it inserts a nonempty locations set.
+alter table public.career_search_intents alter column location_preference drop default;
 alter table public.career_search_intents alter column location_preference set not null;
+
+-- Keep this compatibility bridge while the previous server is a rollback
+-- candidate. It reads only NEW/OLD and never changes owner policies or grants.
+create or replace function public.normalize_career_search_intent_location_preference()
+returns trigger
+language plpgsql
+security invoker
+set search_path = pg_catalog
+as $$
+declare
+  has_locations boolean := jsonb_array_length(new.locations) > 0;
+begin
+  if tg_op = 'INSERT' and new.location_preference is null then
+    new.location_preference := case when has_locations then 'selected' else 'unspecified' end;
+  elsif tg_op = 'UPDATE'
+    and new.locations is distinct from old.locations
+    and new.location_preference is not distinct from old.location_preference
+    and ((new.location_preference = 'selected') is distinct from has_locations)
+  then
+    -- A legacy writer changed locations but left the preference untouched.
+    -- An explicitly changed preference is never repaired: CHECK below validates
+    -- it. An explicit unchanged value is indistinguishable here from omission;
+    -- current APIs validate the requested combination before writing it.
+    new.location_preference := case when has_locations then 'selected' else 'unspecified' end;
+  end if;
+  return new;
+end;
+$$;
+
+create trigger normalize_career_search_intent_location_preference
+before insert or update of locations, location_preference on public.career_search_intents
+for each row execute function public.normalize_career_search_intent_location_preference();
+
+comment on function public.normalize_career_search_intent_location_preference() is 'Temporary invoker-only compatibility bridge for previous-server location writes. Keep while that server is a rollback candidate; current APIs validate explicit preferences. CHECK and owner RLS remain authoritative.';
 
 alter table public.career_search_intents drop constraint if exists career_search_intents_target_roles_check;
 alter table public.career_search_intents

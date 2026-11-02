@@ -7,6 +7,7 @@ import { createClient } from '@supabase/supabase-js'
 import { validateAndScoreDiscResponses } from '../../lib/a1/disc-scoring'
 import { CAPTURE_INSTRUMENTS, OUTCOME_CAPTURE_VERSION } from '../../lib/outcomes/response-capture'
 import { closureLab, safeFailure } from './closure-lab.mjs'
+import { verifyObjectiveWriterCompatibility } from './closure-objective-compat'
 
 const canonicalMigrations = [
   '20260915160000_canonical_journey_foundation.sql',
@@ -39,6 +40,9 @@ async function main() {
     for (const name of canonicalMigrations) {
       await db.query(readFileSync(join(repo, 'supabase/migrations', name), 'utf8'))
     }
+    const objectiveWriterCompatibility = await verifyObjectiveWriterCompatibility(db, previous.users[0].id, previous.users[1].id)
+    writeFileSync(join(evidence, 'objective-writer-compatibility.json'), JSON.stringify(objectiveWriterCompatibility, null, 2))
+    console.log(`Objective writer compatibility: ${objectiveWriterCompatibility.casesPassed} real SQL cases passed; all test writes rolled back.`)
 
     // The old suites intentionally use a minimal source fixture policy. Remove that
     // policy now; the real canonical journey initializer and SELECT policy take over.

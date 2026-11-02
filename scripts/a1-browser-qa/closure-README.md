@@ -15,7 +15,10 @@ Providers and contexts, and copy the six capture pages and their real APIs.
    sentinel. It applies the canonical journey foundation/security, outcome
    foundation/payload, and saved labor objective migrations. Two **new** owners
    are created through the real local Auth admin API. No outcome observations
-   are preinserted.
+   are preinserted. A separate transaction runs 19 real SQL cases under the
+   authenticated role for old/new objective writers, explicit invalid preference
+   rejection and owner isolation, then rolls every test write back. The sanitized
+   verdict is stored in `objective-writer-compatibility.json`.
 3. `closure-browser.mjs` signs in through the laboratory password form, using
    the actual Supabase browser client, SSR cookies, JWT verification, PostgREST
    and PostgreSQL. All six forms are saved, refreshed, read back, and continued
@@ -89,7 +92,8 @@ GitHub Actions is the executor for this gate. A local source/type check cannot
 substitute for its real Auth/JWT/RLS verdict when Docker is unavailable.
 
 Uploaded files are limited to synthetic screenshots and sanitized
-`closure-scope.json`, `closure-seed.json` and `closure-results.json`. Passwords,
+`closure-scope.json`, `closure-seed.json`, `closure-results.json` and
+`objective-writer-compatibility.json`. Passwords,
 API keys, cookies, storage state, HAR, authenticated traces and private server
 logs are never put in the evidence directory. The two credential fixtures and
 server logs remain under the disposable root and are not uploaded.

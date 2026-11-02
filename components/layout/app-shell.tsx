@@ -237,7 +237,7 @@ function ShellNavigation({ pathname, flow, onNavigate }: { pathname: string; flo
                   </span>
                   <span className="min-w-0 flex-1 truncate">{item.label}{item.stageId === 'A3' && flow.practicePath === 'persona' ? ' · opcional' : ''}</span>
                   {item.stageId ? (
-                    <span className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={completed ? 'Completado' : locked ? 'Bloqueado' : state === 'active' ? 'En curso' : 'Disponible'}>
+                    <span role="img" className="flex h-5 w-5 shrink-0 items-center justify-center" aria-label={completed ? 'Completado' : locked ? 'Bloqueado' : state === 'active' ? 'En curso' : 'Disponible'}>
                       {completed ? (
                         <Check className="h-3.5 w-3.5 text-success" />
                       ) : locked ? (
