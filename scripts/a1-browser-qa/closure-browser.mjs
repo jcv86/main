@@ -23,7 +23,7 @@ const db = new Client({ connectionString: status.DB_URL })
 const alpha = fixture.users.find(user => user.label === 'closure-alpha')
 const beta = fixture.users.find(user => user.label === 'closure-beta')
 assert.ok(alpha && beta)
-const steps = [], accessibility = [], javascriptErrors = [], phaseRequestCounts = [], blockedHosts = new Set()
+const steps = [], accessibility = [], layoutDiagnostics = [], javascriptErrors = [], phaseRequestCounts = [], blockedHosts = new Set()
 const captures = new Map(), secrets = [fixture.password, status.ANON_KEY, status.SERVICE_ROLE_KEY, status.DB_URL]
 let browser, server, serverLog, phase = 'setup', activeStep = 'setup', apiRequests = 0
 let alphaContext, betaContext
@@ -150,13 +150,38 @@ async function visual(page, name) {
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 })
     await page.evaluate(() => document.fonts.ready)
-    const bounds = await page.evaluate(() => ({ width: innerWidth, scroll: document.documentElement.scrollWidth }))
-    assert.ok(bounds.scroll <= bounds.width + 1, `Horizontal overflow on ${name} at ${width}`)
+    // Chromium can expose the new innerWidth before responsive CSS has been
+    // painted (for example, AppShell's desktop sidebar padding at mobile size).
+    // Measure the rendered viewport; keep the same strict overflow threshold.
+    await page.evaluate(() => {
+      window.scrollTo({ top:0, left:0, behavior:'instant' })
+      return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
+    })
+    const bounds = await page.evaluate(() => {
+      const width = innerWidth
+      const scroll = document.documentElement.scrollWidth
+      const overflowing = Array.from(document.body.querySelectorAll('*')).flatMap(element => {
+        const rect = element.getBoundingClientRect()
+        if (rect.width === 0 || rect.right <= width + 1) return []
+        const style = getComputedStyle(element)
+        return [{ tag:element.tagName.toLowerCase(), id:element.id,
+          classes:(element.getAttribute('class') || '').slice(0,300),
+          left:rect.left, right:rect.right, width:rect.width,
+          display:style.display, position:style.position, overflowX:style.overflowX,
+          minWidth:style.minWidth, maxWidth:style.maxWidth, whiteSpace:style.whiteSpace }]
+      }).sort((left,right) => right.right-left.right).slice(0,20)
+      // Layout diagnostics contain no text, form values, cookies or credentials.
+      return { width, scroll, overflowing }
+    })
+    layoutDiagnostics.push({ page:name, ...bounds })
+    // Keep visual evidence even when the first strict layout assertion fails.
+    await page.screenshot({ path:join(evidence, `closure-${name}-${width}.png`), fullPage:true })
+    assert.ok(bounds.scroll <= bounds.width + 1,
+      `Horizontal overflow on ${name} at ${width}: document width ${bounds.scroll}`)
     const scan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
     const violations = scan.violations.map(item => ({ id:item.id, impact:item.impact,
       targets:item.nodes.map(node => node.target) }))
     accessibility.push({ page:name, width, violations })
-    await page.screenshot({ path:join(evidence, `closure-${name}-${width}.png`), fullPage:true })
     assert.equal(violations.filter(item => ['serious','critical'].includes(item.impact)).length, 0,
       `Serious/critical WCAG violation on ${name} at ${width}; see closure-results.json`)
   }
@@ -434,7 +459,7 @@ try {
   await db.end()
   writeFileSync(join(evidence,'closure-results.json'),JSON.stringify({
     commit:process.env.A1_SOURCE_COMMIT,scope:'real local Auth/JWT/RLS and unmodified application pages/layout/contexts/APIs',
-    steps,accessibility,javascriptErrors,phaseRequestCounts,blockedExternalHosts:[...blockedHosts],
+    steps,accessibility,layoutDiagnostics,javascriptErrors,phaseRequestCounts,blockedExternalHosts:[...blockedHosts],
     viewportWidths:[390,1440],captureVersion:fixture.instrumentVersion,
     outcomeEvaluation:'not_evaluated; no generated scores, confidence or snapshots',
     fixtureMilestones:'A2 day 30 and A3 route closure were seeded, not completed by these tests',

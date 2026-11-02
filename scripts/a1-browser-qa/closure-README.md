@@ -55,6 +55,11 @@ answers entered and after the saved answers have been recovered. Screenshots
 include the actual AppShell. Axe checks WCAG 2 A/AA and 2.1 AA rules and rejects
 serious/critical violations; all returned violations are recorded. Horizontal
 overflow and the mobile navigation open/close behavior are checked separately.
+After a viewport change, the test waits for two rendering frames before measuring
+overflow so that responsive CSS corresponds to the reported viewport width.
+Screenshots and text-free element geometry are retained even if overflow fails.
+Screenshots start at the top so a sticky header is not captured midway down a
+full-page image after filling the final textarea.
 
 This is an automated regression gate, not a claim of comprehensive WCAG
 conformance or a substitute for human accessibility testing.
