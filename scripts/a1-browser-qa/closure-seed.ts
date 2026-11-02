@@ -15,7 +15,7 @@ const canonicalMigrations = [
   '20260920135500_outcome_engine_s1_foundation.sql',
   '20260920141000_outcome_response_payload.sql',
   '20260920173000_career_search_intents.sql',
-  '20261102115220_dtc_labor_objective_completion.sql',
+  '20261102152815_dtc_labor_objective_completion.sql',
 ]
 
 async function main() {

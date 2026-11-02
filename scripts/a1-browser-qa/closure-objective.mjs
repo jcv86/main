@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict'
 import { randomUUID } from 'node:crypto'
+import { captureUiJsonResponse } from './closure-response.mjs'
 
 /** HTTP/SQL acceptance only: no live vacancies, external search or scoring services. */
 export async function verifySavedObjective({ page, secondPage, api, db, alpha, beta, alphaClient, betaClient, record }) {
@@ -124,9 +125,9 @@ export async function verifyEarlyObjective({ page, base, api, db, user, visual, 
   }
   page.on('request',observe)
   try {
-    const read = page.waitForResponse(response => new URL(response.url()).pathname===endpoint && response.request().method()==='GET')
+    const read = captureUiJsonResponse(page, request => new URL(request.url()).pathname===endpoint && request.method()==='GET', {afterNavigation:true})
     await page.goto(base+'/despega/objetivo-laboral')
-    assert.equal((await read).status(),200)
+    assert.equal((await read).status,200)
     await page.getByRole('heading',{name:'Tu próximo paso laboral',exact:true}).waitFor()
     await page.getByRole('button',{name:'Guardar mi objetivo',exact:true}).waitFor()
     assert.equal(await page.getByRole('button',{name:'Ver ofertas',exact:true}).count(),0)
@@ -148,12 +149,12 @@ export async function verifyEarlyObjective({ page, base, api, db, user, visual, 
     await hybrid.focus(); await page.keyboard.press('Space')
     await visual(page,'early-objective-form')
 
-    const savedResponse = page.waitForResponse(response => new URL(response.url()).pathname===endpoint && response.request().method()==='POST')
+    const savedResponse = captureUiJsonResponse(page, request => new URL(request.url()).pathname===endpoint && request.method()==='POST')
     const save = page.getByRole('button',{name:'Guardar mi objetivo',exact:true})
     await save.focus(); await page.keyboard.press('Enter')
     const saved = await savedResponse
-    assert.equal(saved.status(),201)
-    const intent = (await saved.json()).intent
+    assert.equal(saved.status,201)
+    const intent = saved.body.intent
     assert.deepEqual(intent.target_roles,['Analista de datos'])
     assert.deepEqual(intent.functional_areas,['Tecnología, Datos y Producto'])
     assert.deepEqual(intent.industries,['Tecnología'])
@@ -165,11 +166,11 @@ export async function verifyEarlyObjective({ page, base, api, db, user, visual, 
     assert.ok((await summary.innerText()).includes('Cargo: Analista de datos'))
     assert.equal(new URL(page.url()).pathname,'/despega/objetivo-laboral')
 
-    const restored = page.waitForResponse(response => new URL(response.url()).pathname===endpoint && response.request().method()==='GET')
+    const restored = captureUiJsonResponse(page, request => new URL(request.url()).pathname===endpoint && request.method()==='GET', {afterNavigation:true})
     await page.reload()
     const restoreResponse = await restored
-    assert.equal(restoreResponse.status(),200)
-    const restoredBody = await restoreResponse.json()
+    assert.equal(restoreResponse.status,200)
+    const restoredBody = restoreResponse.body
     assert.equal(restoredBody.intents.length,1)
     assert.deepEqual(restoredBody.intents[0],intent)
     await summary.waitFor()

@@ -54,7 +54,7 @@ La revisión de paginación incluye propietario, revisión del objetivo guardado
 
 ## Migración preparada
 
-Archivo: `supabase/migrations/20261102115220_dtc_labor_objective_completion.sql`, creado previamente por el responsable mediante la CLI oficial y completado en esta rama.
+Archivo: `supabase/migrations/20261102152815_dtc_labor_objective_completion.sql`. Se creó mediante la CLI oficial y, tras aplicarlo al proyecto DTC, su nombre se alineó con la versión registrada por Supabase; el SQL almacenado coincide exactamente con el contenido revisado.
 
 Añade `functional_areas`, `objective_stage`, `unknown_industry_policy` y `location_preference`, y permite `target_roles` vacío sólo en combinación con las nuevas restricciones de objetivo. Retira por su nombre real `career_search_intents_target_roles_check` y lo reemplaza con el límite de ocho elementos. Conserva el índice de principal activa, la RLS de propietario y el trigger de actualización existentes.
 

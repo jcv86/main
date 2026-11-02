@@ -8,6 +8,12 @@ Providers and contexts, and copy the six capture pages and their real APIs.
 
 ## What the acceptance gate executes
 
+Before starting the application stack, a Chromium regression uses a synthetic
+loopback server to deliver an old refresh during reload/goto. It proves that the
+response observer accepts only the new document's actual UI request, without a
+retry or replacement GET, and that a captured POST remains inspectable after
+navigation. This isolated harness check does not claim app Auth/RLS coverage.
+
 1. `closure-prepare.mjs` checks the temporary directory, an existing local stack,
    loopback URLs and the absence of a linked project. It copies application
    sources unchanged and records SHA-256 hashes in `closure-scope.json`.
@@ -63,6 +69,9 @@ overflow so that responsive CSS corresponds to the reported viewport width.
 Screenshots and text-free element geometry are retained even if overflow fails.
 Screenshots start at the top so a sticky header is not captured midway down a
 full-page image after filling the final textarea.
+UI responses are consumed as soon as they arrive and kept as plain snapshots.
+Reads expected after goto/reload must have started after the new main document
+committed; an earlier document's background refresh cannot satisfy that check.
 
 This is an automated regression gate, not a claim of comprehensive WCAG
 conformance or a substitute for human accessibility testing.

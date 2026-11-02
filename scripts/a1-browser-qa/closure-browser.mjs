@@ -8,6 +8,7 @@ import { once } from 'node:events'
 import { CLOSURE_BASE as base, CLOSURE_PORT, closureLab, closureServerEnv,
   readClosureFixtures, safeFailure } from './closure-lab.mjs'
 import { verifyEarlyObjective, verifySavedObjective } from './closure-objective.mjs'
+import { captureUiJsonResponse } from './closure-response.mjs'
 
 const { root, app, repo, status, evidence } = closureLab()
 const fixture = readClosureFixtures(root)
@@ -127,11 +128,11 @@ function responsesFor(value, role, owner = 'ALPHA') {
 }
 
 function historyResponse(page, key) {
-  return page.waitForResponse(response => {
-    const url = new URL(response.url())
+  return captureUiJsonResponse(page, request => {
+    const url = new URL(request.url())
     return url.origin === base && url.pathname === '/api/outcomes/observations'
-      && url.searchParams.get('instrument') === key && response.request().method() === 'GET'
-  })
+      && url.searchParams.get('instrument') === key && request.method() === 'GET'
+  }, { afterNavigation:true })
 }
 
 async function assertStoredOnce(capture, user = alpha) {
@@ -203,7 +204,7 @@ async function capturePage(page, stage, role) {
   activeStep = `${name}_capture_reload_continue`
   const read = historyResponse(page, value.key)
   await page.goto(base + path)
-  assert.equal((await read).status(), 200, 'Real history endpoint must be available')
+  assert.equal((await read).status, 200, 'Real history endpoint must be available')
   await page.getByRole('heading', { name:value.label, exact:true }).waitFor()
   await page.getByRole('navigation', { name:'Navegación principal', exact:true }).waitFor()
   assert.equal(await page.locator('[data-lab-chrome]').count(), 0, 'Previous minimal shell must be replaced')
@@ -219,12 +220,12 @@ async function capturePage(page, stage, role) {
   }
   page.on('request', countPosts)
   try {
-    const saveResponse = page.waitForResponse(response => new URL(response.url()).pathname === '/api/outcomes/observations'
-      && response.request().method() === 'POST')
+    const saveResponse = captureUiJsonResponse(page, request => new URL(request.url()).pathname === '/api/outcomes/observations'
+      && request.method() === 'POST')
     await form.getByRole('button', { name: role === 'baseline' ? 'Guardar mi punto de partida' : 'Guardar mi seguimiento', exact:true }).click()
     const saved = await saveResponse
-    assert.equal(saved.status(), 201, 'Initial save must use the actual insert route')
-    const capture = saved.request().postDataJSON(), savedBody = await saved.json()
+    assert.equal(saved.status, 201, 'Initial save must use the actual insert route')
+    const capture = saved.requestBody, savedBody = saved.body
     assertUnscored(savedBody)
     assert.equal(savedBody.observationId, capture.observationId)
     assert.equal(capture.instrumentKey, value.key)
@@ -237,8 +238,8 @@ async function capturePage(page, stage, role) {
     const reloaded = historyResponse(page, value.key)
     await page.reload()
     const actualRead = await reloaded
-    assert.equal(actualRead.status(), 200)
-    const history = await actualRead.json()
+    assert.equal(actualRead.status, 200)
+    const history = actualRead.body
     assert.equal(history.evaluationStatus, 'not_evaluated')
     assert.equal(history.comparable, false)
     const restored = role === 'baseline' ? history.baseline : history.followUp
@@ -305,10 +306,10 @@ try {
   record('a1_intro_reads_current_capture_version')
   await journeyLink(page, '/despega/a1-outcome-follow-up', true)
   await capturePage(page, 'a1', 'follow_up')
-  const transition = page.waitForResponse(response => new URL(response.url()).pathname === '/api/journey/transition'
-    && response.request().method() === 'POST')
+  const transition = captureUiJsonResponse(page, request => new URL(request.url()).pathname === '/api/journey/transition'
+    && request.method() === 'POST')
   await page.getByRole('button', { name:'Comenzar Tu Ruta de 30 días', exact:true }).click()
-  assert.equal((await transition).status(), 200)
+  assert.equal((await transition).status, 200)
   await page.waitForURL(url => url.pathname === '/despega/a2')
   await page.getByRole('heading', { name:'Tu ciclo de avance', exact:true }).waitFor()
   const flags = await db.query('select a2_intro_seen from public.despega_user_profiles where user_id=$1', [alpha.id])
@@ -407,7 +408,7 @@ try {
   assert.equal(betaSaved.status,201); assertUnscored(betaSaved.body)
   const betaRead = historyResponse(otherPage,original.instrumentKey)
   await otherPage.reload()
-  const betaHistory = await (await betaRead).json()
+  const betaHistory = (await betaRead).body
   assert.equal(betaHistory.baseline.observationId,betaCapture.observationId)
   assert.equal(betaHistory.followUp,null)
   assert.deepEqual(betaHistory.baseline.responsePayload,betaCapture.responsePayload)

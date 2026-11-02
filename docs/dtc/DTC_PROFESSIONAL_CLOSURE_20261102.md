@@ -27,13 +27,13 @@ La fase de preparación también ejecuta 19 casos SQL de compatibilidad de objet
 
 ## Cambio de esquema y publicación
 
-La única migración nueva de producto es `20261102115220_dtc_labor_objective_completion.sql`, generada con Supabase CLI. Agrega áreas, etapa, política de industria desconocida y preferencia geográfica; permite exploración sin cargo. Conserva RLS, índice de principal activa y trigger de revisión.
+La única migración nueva de producto es `20261102152815_dtc_labor_objective_completion.sql`. Se creó con Supabase CLI y su nombre se alineó con la versión registrada al aplicarla. Agrega áreas, etapa, política de industria desconocida y preferencia geográfica; permite exploración sin cargo. Conserva RLS, índice de principal activa y trigger de revisión.
 
 El preflight de lectura sobre el proyecto DTC confirmó cuatro búsquedas existentes y ninguna lista histórica de cargos o ubicaciones incompatible con los límites preparados. No se inspeccionaron ni copiaron sus valores privados. El backfill de ubicación usa únicamente presencia de regiones, no asigna Metropolitana ni reescribe cargos; actualiza `updated_at`, por lo que una pestaña antigua deberá recuperar la revisión nueva.
 
 El servidor anterior escribe ubicaciones sin el nuevo campo de preferencia. Un puente de compatibilidad, con privilegios del llamante y `search_path` fijo, mantiene coherentes esas escrituras durante la publicación o una reversión de aplicación. Sólo infiere una preferencia omitida al insertar, o normaliza una combinación incoherente cuando cambian las ubicaciones y la preferencia permanece igual. La API nueva valida las elecciones explícitas y el `CHECK` de base de datos se conserva. El puente no cambia propietario, políticas RLS ni permisos de tabla; permanece mientras la versión anterior sea candidata de reversión.
 
-Secuencia de salida: validar migración en la base local de CI, revisar el candidato y sus checks, aplicar el cambio aditivo al proyecto DTC verificado, integrar la versión aprobada y verificar su despliegue. Este documento por sí solo no acredita que esos pasos hayan ocurrido.
+La migración se aplicó el 2 de noviembre de 2026 después de pasar los 19 casos SQL reales del run [41470320158](https://github.com/jcv86/main/actions/runs/41470320158). La comprobación posterior confirmó el mismo SQL en el historial, las cuatro búsquedas conservadas, cero filas incoherentes, los doce CHECK validados y la política de propietario, índice de principal activa y trigger de revisión intactos. Los avisos de seguridad preexistentes no cambiaron y no apareció un aviso nuevo sobre los objetos modificados. Esta evidencia de esquema es independiente del veredicto completo de navegador y de la publicación de la aplicación, que se registran en PR #246.
 
 ## Trabajo con participantes
 
