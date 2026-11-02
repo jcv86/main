@@ -147,6 +147,9 @@ export async function verifyEarlyObjective({ page, base, api, db, user, visual, 
     await metropolitan.focus(); await page.keyboard.press('Space')
     const hybrid = page.getByRole('checkbox',{name:'Híbrido',exact:true})
     await hybrid.focus(); await page.keyboard.press('Space')
+    // Inspect the actual exclusion checkboxes too, without changing preferences.
+    const additional = page.getByText('Preferencias adicionales de rubro',{exact:true})
+    await additional.focus(); await page.keyboard.press('Enter')
     await visual(page,'early-objective-form')
 
     const savedResponse = captureUiJsonResponse(page, request => new URL(request.url()).pathname===endpoint && request.method()==='POST')

@@ -9,6 +9,7 @@ import { CLOSURE_BASE as base, CLOSURE_PORT, closureLab, closureServerEnv,
   readClosureFixtures, safeFailure } from './closure-lab.mjs'
 import { verifyEarlyObjective, verifySavedObjective } from './closure-objective.mjs'
 import { captureUiJsonResponse } from './closure-response.mjs'
+import { choiceControlLayout } from './closure-control-layout.mjs'
 
 const { root, app, repo, status, evidence } = closureLab()
 const fixture = readClosureFixtures(root)
@@ -174,11 +175,14 @@ async function visual(page, name) {
       // Layout diagnostics contain no text, form values, cookies or credentials.
       return { width, scroll, overflowing }
     })
-    layoutDiagnostics.push({ page:name, ...bounds })
+    const choices = await page.evaluate(choiceControlLayout)
+    layoutDiagnostics.push({ page:name, ...bounds, choiceControls:choices })
     // Keep visual evidence even when the first strict layout assertion fails.
     await page.screenshot({ path:join(evidence, `closure-${name}-${width}.png`), fullPage:true })
     assert.ok(bounds.scroll <= bounds.width + 1,
       `Horizontal overflow on ${name} at ${width}: document width ${bounds.scroll}`)
+    assert.equal(choices.failures.length, 0,
+      `Radio/checkbox content escapes its label or container on ${name} at ${width}; see closure-results.json`)
     const scan = await new AxeBuilder({ page }).withTags(['wcag2a', 'wcag2aa', 'wcag21aa']).analyze()
     const violations = scan.violations.map(item => ({ id:item.id, impact:item.impact,
       targets:item.nodes.map(node => node.target) }))
