@@ -8,6 +8,9 @@ import { readVerifiedOpportunityInventory, type VerifiedOpportunityRow } from '@
 import { OPPORTUNITY_PAGE_SIZE, OpportunityQueryError, parseOpportunityQuery } from '@/lib/opportunities/search-query'
 import { loadOpportunityPersonalContext } from '@/lib/opportunities/personal-context'
 import { createOpportunityPersonalOrienter } from '@/lib/opportunities/personal-orientation'
+import { OBJECTIVE_COLUMNS } from '@/lib/opportunities/labor-objective'
+import { industryCatalogFromJobs } from '@/lib/opportunities/employer-industry'
+import { parseSavedPrimarySearch } from '@/lib/opportunities/saved-search'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -26,10 +29,10 @@ export async function GET(request?: Request) {
     const query = parseOpportunityQuery(new URL(request?.url ?? 'https://www.despegatucarrera.com/api/a4/opportunities/for-me'))
     let intent = null
     if (query.view === 'saved') {
-      const result = await supabase.from('career_search_intents').select('target_roles,breadth,locations,work_modes')
+      const result = await supabase.from('career_search_intents').select(OBJECTIVE_COLUMNS)
         .eq('user_id', user.id).eq('is_active', true).eq('is_primary', true).maybeSingle()
       if (result.error) return json({ error: 'No fue posible cargar tu búsqueda.' }, 500)
-      intent = result.data
+      intent = result.data ? parseSavedPrimarySearch(result.data) : null
     }
     // GET reads the stored catalog and session context. Scheduled refresh owns provider calls and writes.
     // Private context uses its own authenticated owner-bound reader, never the admin client.
@@ -38,7 +41,7 @@ export async function GET(request?: Request) {
       readVerifiedOpportunityInventory(supabase, 500),
       loadOpportunityPersonalContext(user.id, { now }),
     ])
-    const filters = query.view === 'explore' ? query.filters : searchFiltersFromStoredIntent(intent)
+    const filters = query.view === 'explore' ? query.filters : intent?.filters ?? searchFiltersFromStoredIntent(null)
     const orient = createOpportunityPersonalOrienter(context, filters, now)
     const matches = rankOpportunities(index, filters)
       .map((job, order) => ({ job, order, ...orient(job) }))
@@ -52,7 +55,7 @@ export async function GET(request?: Request) {
     }
     // Bind every page to the owner and relevant private context as well as the public catalog.
     // No CV, source responses, or complete personal evidence list is serialized to the client.
-    const snapshot = createHash('sha256').update(JSON.stringify({ version: 3, owner: user.id, context: personalContext, view: query.view, filters, scope, rows: matches })).digest('hex')
+    const snapshot = createHash('sha256').update(JSON.stringify({ version: 4, owner: user.id, context: personalContext, view: query.view, revision: intent?.revision ?? null, filters, scope, rows: matches })).digest('hex')
     if (query.snapshot && query.snapshot !== snapshot) {
       return json({ error: 'Las ofertas, tu contexto o tu búsqueda cambiaron. Vuelve a cargar los resultados.', code: 'inventory_changed' }, 409)
     }
@@ -63,6 +66,8 @@ export async function GET(request?: Request) {
       needs_intent: query.view === 'saved' && !intent,
       mode: query.view === 'explore' ? 'explore' : intent ? 'saved' : 'available_now',
       applied_filters: filters,
+      saved_revision: intent?.revision ?? null,
+      industry_coverage: industryCatalogFromJobs(index, now),
       personal_context: personalContext,
       scope,
       source: 'verified_index',
@@ -99,6 +104,7 @@ function toPublic(job: VerifiedOpportunityRow & { match: OpportunityMatch }) {
     requirements: Array.isArray(job.requirements) ? job.requirements : [],
     skills: Array.isArray(job.skills) ? job.skills : [],
     fieldEvidence: Array.isArray(job.field_evidence) ? job.field_evidence : [],
+    industry: job.industry_evidence ?? null,
     match: job.match,
   }
 }

@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import {
   ArrowLeft,
@@ -24,6 +24,8 @@ import { getA3Module } from '@/lib/a3/module-catalog'
 import { validateA3ModuleSubmission } from '@/lib/a3/module-validation'
 import {
   buildCvBuilderDeliverable,
+  buildCvPlainText,
+  buildCvPreviewText,
   buildCvBuilderResponses,
   CV_BUILDER_ATS_ITEMS,
   CV_BUILDER_DRAFT_KEY,
@@ -46,6 +48,8 @@ export function CvBuilderStudio() {
   const [showPreview, setShowPreview] = useState(false)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  const [savedCv, setSavedCv] = useState<CvBuilderState | null>(null)
+  const [savedCvError, setSavedCvError] = useState<string | null>(null)
   const [completion, setCompletion] = useState<A3CompletionPayload | null>(null)
 
   const { clearDraft, ready: draftReady } = useA3DraftStorage({
@@ -55,6 +59,18 @@ export function CvBuilderStudio() {
     onRestore: (stored) => setState(normalizeCvBuilderState(stored)),
     enabled: !completion?.success,
   })
+
+  useEffect(() => {
+    const controller = new AbortController()
+    void fetch('/api/a3/module-context/cv-builder-studio', { credentials: 'include', cache: 'no-store', signal: controller.signal })
+      .then(async (response) => {
+        const payload = await response.json()
+        if (!response.ok) throw new Error(payload.error || 'No pudimos recuperar el CV guardado.')
+        if (payload.savedCv) setSavedCv(normalizeCvBuilderState(payload.savedCv))
+      })
+      .catch((cause) => { if (!controller.signal.aborted) setSavedCvError(cause instanceof Error ? cause.message : 'No pudimos recuperar el CV guardado.') })
+    return () => controller.abort()
+  }, [])
 
   const module = useMemo(() => getA3Module('cv-builder-studio'), [])
   const deliverable = useMemo(() => buildCvBuilderDeliverable(state), [state])
@@ -71,7 +87,8 @@ export function CvBuilderStudio() {
     key: K,
     value: CvBuilderState[K],
   ) => {
-    setState((current) => ({ ...current, [key]: value }))
+    setState((current) => ({ ...current, [key]: value, factsConfirmed: key === 'factsConfirmed' ? Boolean(value) : false }))
+    setCompletion(null)
     setError(null)
   }
 
@@ -91,6 +108,17 @@ export function CvBuilderStudio() {
   const keywords = splitCvList(state.targetKeywords)
   const skills = splitCvList(state.skills)
 
+  const exportCv = () => {
+    if (!validation?.passed) return
+    const blob = new Blob([buildCvPlainText(state)], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = 'mi-cv.txt'
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
   const submit = async () => {
     if (!module || !validation?.passed || submitting) return
     setSubmitting(true)
@@ -104,6 +132,7 @@ export function CvBuilderStudio() {
         deliverable,
       })
       setCompletion(result)
+      setSavedCv(state)
       clearDraft()
     } catch (submitError) {
       console.error('[v0] Error completing CV builder:', submitError)
@@ -159,7 +188,7 @@ export function CvBuilderStudio() {
               <h1 className="mt-2 text-4xl font-bold">Estudio Constructor de CV</h1>
               <p className="mt-3 max-w-3xl leading-relaxed text-slate-400">
                 Convierte tu experiencia y la evidencia obtenida en Tu Ruta en una
-                estructura de CV clara, trazable y preparada para filtros ATS.
+                estructura de CV clara con hechos que tú confirmas. Revisa el formato según las instrucciones de cada postulación.
               </p>
             </div>
             <Button
@@ -177,12 +206,15 @@ export function CvBuilderStudio() {
           </div>
         </header>
 
+        {savedCv && <Card className="space-y-3 border-cyan-500/25 bg-cyan-500/5 p-5"><p className="text-sm text-slate-300">Tienes un CV guardado en tu cuenta. Puedes recuperar esa versión para revisarla o descargar su texto; cargarla reemplaza el borrador visible.</p><Button variant="outline" onClick={() => { setState({ ...savedCv, factsConfirmed: false }); setCompletion(null); setShowPreview(true) }}>Cargar el CV guardado en mi cuenta</Button></Card>}
+        {savedCvError && <p role="status" className="text-sm text-amber-200">{savedCvError} Tu borrador local sigue disponible.</p>}
+
         <Card className="border-slate-800 bg-slate-900/55 p-5">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
-              <p className="text-sm font-semibold text-white">Validación del módulo</p>
+              <p className="text-sm font-semibold text-white">Revisión del documento</p>
               <p className="mt-1 text-xs text-slate-500">
-                Debes cumplir los seis bloques esenciales y alcanzar {validation.passScore}/100.
+                Completa los campos y confirma tus hechos. Esta revisión no mide empleabilidad ni predice aceptación por un ATS.
               </p>
             </div>
             <p
@@ -190,10 +222,10 @@ export function CvBuilderStudio() {
                 validation.passed ? 'text-emerald-300' : 'text-amber-300'
               }`}
             >
-              {validation.score}
+              {completedCriteria}/{validation.criteria.length}
             </p>
           </div>
-          <Progress value={validation.score} className="mt-4 h-2 bg-slate-800" />
+          <Progress value={criteriaProgress} className="mt-4 h-2 bg-slate-800" />
           <div className="mt-4 grid gap-2 md:grid-cols-3">
             {validation.criteria.map((criterion) => (
               <div
@@ -211,7 +243,7 @@ export function CvBuilderStudio() {
                       criterion.met ? 'text-emerald-300' : 'text-slate-500'
                     }`}
                   >
-                    {criterion.score}/{criterion.maxScore}
+                    {criterion.met ? 'Revisado' : 'Pendiente'}
                   </span>
                 </div>
               </div>
@@ -221,61 +253,9 @@ export function CvBuilderStudio() {
 
         {showPreview && (
           <Card className="border-slate-300 bg-white p-7 text-slate-900">
-            <div className="border-b border-slate-200 pb-4 text-center">
-              <h2 className="text-2xl font-bold">{state.fullName || 'Tu nombre'}</h2>
-              <p className="mt-1 text-sm font-medium text-slate-600">
-                {state.targetRole || 'Rol objetivo'}
-              </p>
-              <p className="mt-2 text-xs text-slate-500">
-                {[state.email, state.phone, state.location, state.linkedin]
-                  .filter(Boolean)
-                  .join(' · ') || 'Correo · teléfono · ubicación · LinkedIn'}
-              </p>
-            </div>
-            <section className="mt-5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Resumen profesional
-              </h3>
-              <p className="mt-2 text-sm leading-relaxed">
-                {state.professionalSummary || 'Tu resumen aparecerá aquí.'}
-              </p>
-            </section>
-            <section className="mt-5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Experiencia
-              </h3>
-              <div className="mt-2 flex justify-between gap-4 text-sm">
-                <div>
-                  <p className="font-semibold">{state.experienceTitle || 'Cargo'}</p>
-                  <p className="text-slate-600">{state.experienceCompany || 'Empresa'}</p>
-                </div>
-                <p className="text-slate-500">{state.experienceDates || 'Fechas'}</p>
-              </div>
-              <ul className="mt-3 space-y-2 text-sm">
-                {[state.achievement1, state.achievement2, state.achievement3]
-                  .filter(Boolean)
-                  .map((achievement) => (
-                    <li key={achievement} className="flex gap-2">
-                      <span>•</span>
-                      <span>{achievement}</span>
-                    </li>
-                  ))}
-              </ul>
-            </section>
-            <section className="mt-5">
-              <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                Competencias
-              </h3>
-              <p className="mt-2 text-sm">{skills.join(' · ') || 'Tus competencias'}</p>
-            </section>
-            {state.education && (
-              <section className="mt-5">
-                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500">
-                  Formación
-                </h3>
-                <p className="mt-2 text-sm">{state.education}</p>
-              </section>
-            )}
+            <h2 className="font-semibold">Vista previa del texto</h2>
+            <p className="mt-1 text-xs text-slate-600">Los campos vacíos y las notas pendientes se omiten. La exportación conserva este contenido.</p>
+            <pre className="mt-4 whitespace-pre-wrap break-words font-sans text-sm leading-relaxed">{buildCvPreviewText(state) || 'Añade tus datos para ver el borrador.'}</pre>
           </Card>
         )}
 
@@ -285,7 +265,7 @@ export function CvBuilderStudio() {
               <User className="h-5 w-5 text-cyan-300" />
               <div>
                 <h2 className="text-lg font-semibold text-white">Identidad y contacto</h2>
-                <p className="text-xs text-slate-500">Información visible y verificable.</p>
+                <p className="text-xs text-slate-500">Datos que revisas antes de compartir.</p>
               </div>
             </div>
             <div className="mt-5 grid gap-4 sm:grid-cols-2">
@@ -298,11 +278,11 @@ export function CvBuilderStudio() {
                 <input type="email" className={fieldClass} value={state.email} onChange={(event) => update('email', event.target.value)} placeholder="nombre@correo.cl" />
               </label>
               <label className="space-y-2">
-                <FieldLabel>Teléfono</FieldLabel>
+                <FieldLabel>Teléfono (opcional)</FieldLabel>
                 <input className={fieldClass} value={state.phone} onChange={(event) => update('phone', event.target.value)} placeholder="+56 9 ..." />
               </label>
               <label className="space-y-2">
-                <FieldLabel>Ubicación</FieldLabel>
+                <FieldLabel>Ubicación (opcional)</FieldLabel>
                 <input className={fieldClass} value={state.location} onChange={(event) => update('location', event.target.value)} placeholder="Santiago, Chile" />
               </label>
               <label className="space-y-2">
@@ -317,7 +297,7 @@ export function CvBuilderStudio() {
               <Target className="h-5 w-5 text-purple-300" />
               <div>
                 <h2 className="text-lg font-semibold text-white">Foco del CV</h2>
-                <p className="text-xs text-slate-500">Un documento por rol objetivo.</p>
+                <p className="text-xs text-slate-500">Declara un rol o área de interés. No necesitas aportar una vacante.</p>
               </div>
             </div>
             <div className="mt-5 space-y-4">
@@ -326,10 +306,10 @@ export function CvBuilderStudio() {
                 <input className={fieldClass} value={state.targetRole} onChange={(event) => update('targetRole', event.target.value)} placeholder="Ej.: Analista de Riesgo Senior" />
               </label>
               <label className="space-y-2">
-                <FieldLabel>Palabras clave del rol</FieldLabel>
+                <FieldLabel>Palabras clave reales (opcional)</FieldLabel>
                 <textarea className={fieldClass} rows={4} value={state.targetKeywords} onChange={(event) => update('targetKeywords', event.target.value)} placeholder="riesgo crediticio, análisis financiero, cartera, SQL" />
                 <span className="block text-right text-xs text-slate-600">
-                  {keywords.length} palabras clave · mínimo 3
+                  {keywords.length} palabras clave · incluye sólo las que puedas respaldar
                 </span>
               </label>
             </div>
@@ -351,10 +331,10 @@ export function CvBuilderStudio() {
             rows={6}
             value={state.professionalSummary}
             onChange={(event) => update('professionalSummary', event.target.value)}
-            placeholder="Describe tu especialidad, años o contexto de experiencia, dos fortalezas demostrables y el rol al que apuntas."
+            placeholder="Describe qué sabes, en qué contexto lo aprendiste y qué te interesa hacer. No añadas años, títulos o logros que no puedas confirmar."
           />
           <p className="mt-2 text-right text-xs text-slate-600">
-            {state.professionalSummary.length} caracteres · objetivo 80 a 600
+            {state.professionalSummary.length} caracteres · busca claridad, sin longitud mínima
           </p>
         </Card>
 
@@ -364,17 +344,18 @@ export function CvBuilderStudio() {
             <div>
               <h2 className="text-lg font-semibold text-white">Experiencia como evidencia</h2>
               <p className="text-xs text-slate-500">
-                Tres logros concretos; las métricas añaden hasta 10 puntos.
+                Un ejemplo real basta para comenzar. Añade cifras sólo si puedes confirmarlas; también puedes usar proyectos, voluntariado o formación inicial.
               </p>
             </div>
           </div>
+          <label className="mt-5 block space-y-2"><FieldLabel>Qué evidencia puedes aportar hoy</FieldLabel><select className={fieldClass} value={state.evidenceKind} onChange={(event) => update('evidenceKind', event.target.value as CvBuilderState['evidenceKind'])}><option value="experience">Experiencia laboral o voluntariado</option><option value="project">Proyecto propio o académico</option><option value="education">Formación inicial, aún sin experiencia o proyecto</option></select></label>
           <div className="mt-5 grid gap-4 md:grid-cols-3">
             <label className="space-y-2">
-              <FieldLabel>Cargo</FieldLabel>
+              <FieldLabel>Cargo o función en el proyecto</FieldLabel>
               <input className={fieldClass} value={state.experienceTitle} onChange={(event) => update('experienceTitle', event.target.value)} placeholder="Cargo desempeñado" />
             </label>
             <label className="space-y-2">
-              <FieldLabel>Empresa</FieldLabel>
+              <FieldLabel>Organización o contexto propio</FieldLabel>
               <input className={fieldClass} value={state.experienceCompany} onChange={(event) => update('experienceCompany', event.target.value)} placeholder="Organización" />
             </label>
             <label className="space-y-2">
@@ -385,10 +366,10 @@ export function CvBuilderStudio() {
           <div className="mt-5 grid gap-4">
             {(['achievement1', 'achievement2', 'achievement3'] as const).map((key, index) => (
               <label key={key} className="space-y-2">
-                <FieldLabel>Logro {index + 1}</FieldLabel>
-                <textarea className={fieldClass} rows={3} value={state[key]} onChange={(event) => update(key, event.target.value)} placeholder="Acción + contexto + resultado observable. Ej.: Rediseñé el flujo de evaluación y reduje 18% el tiempo promedio de respuesta." />
+                <FieldLabel>Ejemplo {index + 1}{index > 0 ? " (opcional)" : ""}</FieldLabel>
+                <textarea className={fieldClass} rows={3} value={state[key]} onChange={(event) => update(key, event.target.value)} placeholder="Qué hiciste tú, en qué contexto y qué ocurrió. Si desconoces el resultado, deja la duda en tus notas pendientes." />
                 <span className="block text-right text-xs text-slate-600">
-                  {state[key].length} caracteres · mínimo 35
+                  {state[key].length} caracteres · hechos propios, sin premio por escribir más
                 </span>
               </label>
             ))}
@@ -403,11 +384,11 @@ export function CvBuilderStudio() {
                 <FieldLabel>Competencias priorizadas</FieldLabel>
                 <textarea className={fieldClass} rows={5} value={state.skills} onChange={(event) => update('skills', event.target.value)} placeholder="Excel avanzado, SQL, análisis financiero, comunicación ejecutiva..." />
                 <span className="block text-right text-xs text-slate-600">
-                  {skills.length} competencias · mínimo 6
+                  {skills.length} competencias · cada una debe poder explicarse con un ejemplo
                 </span>
               </label>
               <label className="space-y-2">
-                <FieldLabel>Formación (opcional)</FieldLabel>
+                <FieldLabel>Formación (necesaria si eliges formación inicial)</FieldLabel>
                 <textarea className={fieldClass} rows={4} value={state.education} onChange={(event) => update('education', event.target.value)} placeholder="Título, institución, año y certificaciones relevantes." />
               </label>
             </div>
@@ -419,7 +400,7 @@ export function CvBuilderStudio() {
               <div>
                 <h2 className="text-lg font-semibold text-white">Control ATS</h2>
                 <p className="text-xs text-slate-500">
-                  Los seis controles críticos son obligatorios.
+                  Autorrevisión del formato. Los sistemas ATS varían; esto no garantiza una aceptación.
                 </p>
               </div>
             </div>
@@ -455,17 +436,25 @@ export function CvBuilderStudio() {
           </Card>
         </section>
 
+        <Card className="space-y-4 border-cyan-500/25 bg-slate-900/45 p-6">
+          <h2 className="text-lg font-semibold text-white">Revisa la fidelidad antes de guardar</h2>
+          <p className="text-sm text-slate-400">Comprueba nombres, funciones, fechas, formación y resultados contra tus propios registros. Las ayudas de escritura pueden mejorar la presentación; no comprueban que una experiencia haya ocurrido.</p>
+          <label className="block space-y-2"><FieldLabel>Datos pendientes de confirmar (notas privadas, no se exportan)</FieldLabel><textarea className={fieldClass} rows={3} value={state.pendingFacts} onChange={(event) => update('pendingFacts', event.target.value)} placeholder="Ej.: confirmar la fecha exacta del proyecto. Omite ese dato del CV hasta revisarlo." /></label>
+          <label className="flex items-start gap-3 text-sm text-slate-200"><input type="checkbox" className="mt-1 h-4 w-4" checked={state.factsConfirmed} onChange={(event) => update('factsConfirmed', event.target.checked)} /><span>Revisé el texto incluido y confirmo que describe mis hechos. No añadí experiencia, competencias, fechas ni cifras para rellenar campos. Mi confirmación no equivale a una verificación externa.</span></label>
+          <Button variant="outline" disabled={!validation.passed} onClick={exportCv}>Descargar texto revisado (.txt)</Button>
+        </Card>
+
         <Card className="border-purple-500/25 bg-purple-500/8 p-6">
           <div className="flex flex-wrap items-center justify-between gap-4">
             <div>
               <p className="text-sm font-semibold text-white">
                 {validation.passed
-                  ? 'El CV cumple el contrato del módulo'
+                  ? 'Los campos y la revisión están completos'
                   : `${completedCriteria}/${validation.criteria.length} bloques esenciales listos`}
               </p>
               <p className="mt-1 text-sm text-slate-400">
                 {validation.passed
-                  ? 'La evidencia está lista para registrarse de forma transaccional.'
+                  ? 'Puedes guardar el documento y descargar el texto revisado.'
                   : validation.errors[0] || 'Completa los campos pendientes.'}
               </p>
             </div>
@@ -491,7 +480,6 @@ export function CvBuilderStudio() {
                 Módulo registrado
               </p>
               <p className="mt-2 text-sm text-emerald-100/75">
-                Puntaje {completion.score}/100 · Mejor puntaje {completion.bestScore}/100 ·{' '}
                 {completion.xpAwarded
                   ? `${completion.xpAwarded} XP otorgados`
                   : 'repetición sin XP adicional'}.

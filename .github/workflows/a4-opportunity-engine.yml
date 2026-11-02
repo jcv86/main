@@ -24,6 +24,7 @@ on:
       - 'scripts/test-a4-profile-availability.mjs'
       - 'scripts/test-a4-journey-context.mjs'
       - 'scripts/test-a4-search-intents.mjs'
+      - 'scripts/test-saved-search-contract.cjs'
       - 'scripts/lib/postgrest-filter-fixture.mjs'
       - 'scripts/test-employer-*.mjs'
       - 'scripts/smoke-employer-sources.mjs'

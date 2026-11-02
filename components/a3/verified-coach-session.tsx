@@ -5,6 +5,8 @@ import { useRouter } from 'next/navigation'
 import { AlertCircle, CheckCircle2, ChevronRight, Mic, MicOff, RotateCcw } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
+import { EvidenceFeedback } from '@/components/a3/evidence-feedback'
+import type { PracticeReview } from '@/lib/a3/practice-feedback'
 import { CameraMicrophoneTest } from '@/components/camera-microphone-test'
 import { useSpeechRecognition } from '@/lib/hooks/use-speech-recognition'
 import { completeA3Module } from '@/lib/a3/client-completion'
@@ -38,12 +40,12 @@ export function VerifiedCoachSession({
   const [textMode, setTextMode] = useState(false)
   const [currentQuestion, setCurrentQuestion] = useState(0)
   const [answer, setAnswer] = useState('')
+  const [factsConfirmed, setFactsConfirmed] = useState(false)
+  const [practiceReviews, setPracticeReviews] = useState<PracticeReview[]>([])
   const [responses, setResponses] = useState<string[]>([])
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [completed, setCompleted] = useState(false)
-  const [score, setScore] = useState(0)
-  const [bestScore, setBestScore] = useState(0)
   const [xpAwarded, setXpAwarded] = useState(0)
   const [firstCompletion, setFirstCompletion] = useState(false)
 
@@ -67,6 +69,7 @@ export function VerifiedCoachSession({
     if (transcript && isFinal && transcript !== lastTranscript.current) {
       lastTranscript.current = transcript
       setAnswer(transcript)
+      setFactsConfirmed(false)
       resetTranscript()
     }
   }, [isFinal, resetTranscript, transcript])
@@ -81,10 +84,10 @@ export function VerifiedCoachSession({
     setCurrentQuestion(0)
     setAnswer('')
     setResponses([])
+    setFactsConfirmed(false)
+    setPracticeReviews([])
     setCompleted(false)
     setError(null)
-    setScore(0)
-    setBestScore(0)
     setXpAwarded(0)
     setFirstCompletion(false)
     lastTranscript.current = ''
@@ -93,8 +96,8 @@ export function VerifiedCoachSession({
 
   const submitAnswer = async () => {
     const normalized = answer.trim()
-    if (normalized.length < 20 || submitting) {
-      setError('Desarrolla tu respuesta con al menos 20 caracteres.')
+    if (!normalized || !factsConfirmed || submitting) {
+      setError('Registra una respuesta y confirma sus hechos antes de continuar.')
       return
     }
 
@@ -105,6 +108,7 @@ export function VerifiedCoachSession({
       setResponses(nextResponses)
       setCurrentQuestion((question) => question + 1)
       setAnswer('')
+      setFactsConfirmed(false)
       lastTranscript.current = ''
       resetTranscript()
       return
@@ -116,11 +120,9 @@ export function VerifiedCoachSession({
         moduleId,
         moduleNumber,
         responses: nextResponses,
-        deliverable: buildDeliverable(nextResponses),
+        deliverable: { ...buildDeliverable(nextResponses), factsConfirmed: 'true', practiceHistory: JSON.stringify(practiceReviews) },
       })
       setResponses(nextResponses)
-      setScore(Number(result.score) || 0)
-      setBestScore(Number(result.bestScore) || Number(result.score) || 0)
       setXpAwarded(Number(result.xpAwarded) || 0)
       setFirstCompletion(Boolean(result.isFirstCompletion))
       setCompleted(true)
@@ -155,11 +157,11 @@ export function VerifiedCoachSession({
           <CheckCircle2 className="mx-auto h-16 w-16 text-fuchsia-400" />
           <div>
             <p className="text-sm uppercase tracking-[0.18em] text-fuchsia-300">
-              Entrenamiento verificado
+              Entrenamiento registrado
             </p>
             <h1 className="mt-2 text-3xl font-semibold">{title}</h1>
             <p className="mt-3 text-slate-400">
-              Puntaje de esta sesión: {score}/100 · Mejor puntaje: {bestScore}/100
+              Tus respuestas quedaron guardadas. El registro no es una calificación de capacidad.
             </p>
             <p className="mt-2 text-sm text-slate-500">
               {firstCompletion && xpAwarded > 0
@@ -239,14 +241,14 @@ export function VerifiedCoachSession({
           <section className="space-y-4 rounded-2xl border border-cyan-500/20 bg-cyan-500/5 p-5">
             <textarea
               value={answer}
-              onChange={(event) => setAnswer(event.target.value)}
+              onChange={(event) => { setAnswer(event.target.value); setFactsConfirmed(false) }}
               rows={10}
               placeholder="Desarrolla tu respuesta con contexto, una decisión y evidencia concreta…"
               className="w-full resize-none rounded-xl border border-white/10 bg-black/35 px-4 py-3 text-sm text-white outline-none placeholder:text-slate-600 focus:border-cyan-500/50"
             />
             <div className="flex flex-wrap items-center justify-between gap-3">
-              <span className={`text-xs ${answer.trim().length >= 20 ? 'text-emerald-300' : 'text-slate-500'}`}>
-                {answer.trim().length} caracteres · mínimo 20
+              <span className={`text-xs ${answer.trim().length > 0 ? 'text-emerald-300' : 'text-slate-500'}`}>
+                {answer.trim().length} caracteres · hechos propios y límites claros
               </span>
               {isSupported && !textMode && (
                 <Button
@@ -266,16 +268,22 @@ export function VerifiedCoachSession({
           </section>
         </div>
 
+        <EvidenceFeedback key={`${moduleId}:${currentQuestion}`} question={question.question} answer={answer}
+          onApplyAttempt={(value) => { setAnswer(value); setFactsConfirmed(false) }}
+          onRecordReview={(review) => setPracticeReviews((current) => [...current, review].slice(-8))}
+        />
+        <label className="flex items-start gap-3 text-sm text-slate-300"><input type="checkbox" className="mt-1 h-4 w-4" checked={factsConfirmed} onChange={(event) => setFactsConfirmed(event.target.checked)} /><span>Revisé que esta respuesta describe mis hechos y distingue lo que aún no sé. No añadí experiencia, cifras ni competencias para completarla.</span></label>
+
         <div className="flex justify-end">
           <Button
             onClick={() => void submitAnswer()}
-            disabled={submitting || answer.trim().length < 20}
+            disabled={submitting || !answer.trim() || !factsConfirmed}
             className="min-w-52"
           >
             {submitting
-              ? 'Validando…'
+              ? 'Guardando…'
               : currentQuestion === questions.length - 1
-                ? 'Validar y completar'
+                ? 'Guardar y completar'
                 : 'Siguiente pregunta'}
             {!submitting && <ChevronRight className="ml-2 h-4 w-4" />}
           </Button>

@@ -1,11 +1,21 @@
 import { normalizeOpportunityText } from './taxonomy'
 
 export type SearchBreadth = 'precise' | 'related' | 'exploratory'
+export type ObjectiveStage = 'specific' | 'exploring'
+export type UnknownIndustryPolicy = 'include' | 'exclude'
+export type LocationPreference = 'unspecified' | 'any' | 'selected'
 export interface CareerSearchIntent {
   targetRoles: string[]
   breadth: SearchBreadth
   locations: string[]
   workModes: string[]
+  /** Optional only for compatibility with existing callers and old saved rows. */
+  functionalAreas?: string[]
+  objectiveStage?: ObjectiveStage
+  industries?: string[]
+  excludedIndustries?: string[]
+  unknownIndustryPolicy?: UnknownIndustryPolicy
+  locationPreference?: LocationPreference
 }
 
 const ADJACENT: Record<string, string[]> = {

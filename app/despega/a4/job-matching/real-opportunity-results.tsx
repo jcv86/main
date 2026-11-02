@@ -11,6 +11,8 @@ import { opportunityFilterParams, type OpportunityFilters, type OpportunityView 
 import type { OpportunityMatch } from '@/lib/opportunities/matching'
 import type { OpportunityFieldEvidence } from '@/lib/opportunities/opportunity-evidence'
 import type { OpportunityPersonalOrientation, PersonalContextSummary } from '@/lib/opportunities/personal-orientation-types'
+import { objectiveSummary } from '@/lib/opportunities/labor-objective'
+import type { EmployerIndustryEvidence } from '@/lib/opportunities/employer-industry'
 
 interface Opportunity {
  sourceId: string
@@ -31,6 +33,7 @@ interface Opportunity {
  match?: OpportunityMatch
  fieldEvidence?: OpportunityFieldEvidence[]
  orientation?: OpportunityPersonalOrientation
+ industry?: EmployerIndustryEvidence | null
 }
 interface Payload {
  needs_intent: boolean
@@ -116,6 +119,7 @@ export function PublishedOpportunityDetail({ job }: { job: Opportunity }) {
   && ![job.workMode, WORK_MODE_LABELS[job.workMode!].toLocaleLowerCase('es-CL')].includes(item.excerpt.trim().toLocaleLowerCase('es-CL')),
  ) : undefined
  return <div className="min-w-0 space-y-3">
+  <p className="text-xs text-muted-foreground">{job.industry ? 'Rubro de la empresa: ' + job.industry.industry : 'Rubro de la empresa por confirmar'}</p>
   {description ? <p className="break-words text-sm leading-relaxed text-foreground">{descriptionPreview(description)}</p> : <p className="text-sm text-muted-foreground">No hay una descripción disponible en esta ficha.</p>}
   <details className="group/detail min-w-0 rounded-xl border border-border bg-muted/30">
    <summary className="flex min-h-11 cursor-pointer list-none items-center justify-between gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background [&::-webkit-details-marker]:hidden">
@@ -123,6 +127,7 @@ export function PublishedOpportunityDetail({ job }: { job: Opportunity }) {
     <ChevronDown aria-hidden="true" className="h-4 w-4 shrink-0 group-open/detail:rotate-180" />
    </summary>
    <div className="min-w-0 space-y-5 border-t border-border p-4">
+    {job.industry && <div className="space-y-1 text-sm"><h4 className="font-semibold">Rubro de la empresa</h4><p>{job.industry.industry} · {job.industry.summary}</p><p className="text-xs text-muted-foreground">Revisión de la empresa: {job.industry.reviewedAt}. Describe a {job.industry.company}, no a sus clientes.</p><a href={job.industry.sourceUrl} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-11 items-center underline">Ver fuente de la empresa</a></div>}
     <p className="text-xs leading-relaxed text-muted-foreground">Este detalle muestra el texto disponible de la publicación. Consulta el aviso original para revisar todas sus condiciones.</p>
     {modeEvidence && <div>
      <h4 className="text-sm font-semibold text-foreground">Modalidad informada</h4>
@@ -222,8 +227,7 @@ export function RealOpportunityResults({ view = 'saved', filters = EMPTY_FILTERS
  if (!data) return null
  if (view === 'saved' && data.needs_intent) return <Card><CardContent className="space-y-3 pt-6"><h2 className="text-xl font-semibold">Todavía no tienes una búsqueda guardada</h2><p className="text-sm text-muted-foreground">Puedes explorar las ofertas actuales y guardar tus preferencias cuando quieras.</p><Button type="button" className="min-h-11 bg-[#3730a3] text-white hover:bg-[#312e81] hover:text-white" onClick={onExplore}>Explorar ofertas</Button></CardContent></Card>
  const applied = data.applied_filters ?? filters
- const anyMode = !applied.workModes.length || ['onsite', 'hybrid', 'remote'].every(mode => applied.workModes.includes(mode))
- const chips = [...(applied.targetRoles.length ? applied.targetRoles : ['Todos los cargos']), ...(applied.locations.length ? applied.locations : ['Todas las regiones']), ...(anyMode ? ['Cualquier modalidad'] : applied.workModes.map(mode => WORK_MODE_LABELS[mode as keyof typeof WORK_MODE_LABELS] || mode)), ...(applied.targetRoles.length ? [BREADTH_LABELS[applied.breadth]] : [])]
+ const chips = [...objectiveSummary(applied), ...(applied.targetRoles.length ? [BREADTH_LABELS[applied.breadth]] : [])]
  return <section className="space-y-5" aria-labelledby="real-jobs-heading">
   <div className="space-y-3"><h2 id="real-jobs-heading" className="text-2xl font-semibold tracking-tight text-foreground">{view === 'saved' ? 'Resultados de mi búsqueda guardada' : 'Resultados de la exploración'}</h2>
    <p className="text-sm text-muted-foreground">{view === 'saved' ? 'Estos resultados usan tu búsqueda principal guardada.' : 'Estos resultados usan los filtros aplicados. Tu búsqueda guardada no cambia.'}</p>

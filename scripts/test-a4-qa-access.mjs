@@ -8,6 +8,10 @@ import { createHash } from 'node:crypto'
 import * as searchQuery from '../lib/opportunities/search-query.ts'
 import * as opportunityMatching from '../lib/opportunities/matching.ts'
 import * as personalOrientation from '../lib/opportunities/personal-orientation.ts'
+import * as responseCapture from '../lib/outcomes/response-capture.ts'
+import * as laborObjective from '../lib/opportunities/labor-objective.ts'
+import * as savedSearch from '../lib/opportunities/saved-search.ts'
+import * as employerIndustry from '../lib/opportunities/employer-industry.ts'
 
 // This suite executes production module, route and component bodies against
 // synthetic boundaries. It has no credentials, network access or database writes.
@@ -106,8 +110,13 @@ function memoryDb(options = {}) {
       if (this.singular && (rows.length > 1 || (this.required && !rows.length))) {
         return { data: null, error: { code: 'PGRST116', message: 'Synthetic single-row cardinality violation' } }
       }
+      const projection = this.columns.split(',').map(field => field.trim().split(':'))
+      if (this.table === 'dtc_documents' && this.columns !== '*'
+          && projection.some(parts => !['id', 'title', 'type', 'status', 'created_at', 'user_id'].includes(parts.at(-1)))) {
+        return { data: null, error: { code: '42703', message: 'Unknown document column' } }
+      }
       const selected = rows.map(row => this.columns === '*' ? clone(row) : Object.fromEntries(
-        this.columns.split(',').map(field => field.trim()).map(field => [field, clone(row[field])]),
+        projection.map(parts => [parts[0], clone(row[parts.at(-1)])]),
       ))
       return { data: this.singular ? selected[0] ?? null : selected, error: null }
     }
@@ -198,6 +207,10 @@ function harness(options = {}) {
     } },
     '@/lib/opportunities/matching': opportunityMatching,
     '@/lib/opportunities/personal-orientation': personalOrientation,
+    '@/lib/outcomes/response-capture': responseCapture,
+    '@/lib/opportunities/labor-objective': laborObjective,
+    '@/lib/opportunities/saved-search': savedSearch,
+    '@/lib/opportunities/employer-industry': employerIndustry,
     '@/lib/opportunities/personal-context': { loadOpportunityPersonalContext: async id => {
       calls.personalReads++; assert.equal(id, USER)
       return { version: 1, status: 'empty', revision: 'synthetic-empty', sources: [], evidence: [] }
@@ -205,6 +218,7 @@ function harness(options = {}) {
     '@/lib/opportunities/taxonomy': { catalogFromJobs: () => ({ areas: [], roles: [] }), regionCatalogFromJobs: () => [] },
   }
   const realDependencies = new Set([
+    'lib/opportunities/objective-api.ts',
     'lib/a4/qa-entitlement.ts', 'lib/a4/access-control.ts',
     'lib/journey/service.ts', 'lib/journey/flow.ts', 'lib/journey/flow-service.ts',
     'lib/journey/a2-day-access.ts', 'lib/journey/transitions.ts',
@@ -480,6 +494,45 @@ test('shared context API returns effective A4 access with unchanged completion e
   assert.deepEqual(body.access, { a1: true, a2: false, a3: false, a4: true })
   assert.equal(body.state.a4UnlockedAt, null)
   assert.equal(body.state.currentModule, 'A1')
+  assertNoAccessWrites(h)
+})
+
+test('journey recognizes current capture and historical completion without inventing progress', async () => {
+  const keys = ['a1_professional_clarity', 'a2_execution_checkpoint', 'a3_structured_interview']
+  for (const version of ['1', responseCapture.OUTCOME_CAPTURE_VERSION]) {
+    const h = harness({ tables: { dtc_outcome_observations: keys.flatMap(instrument_key =>
+      ['baseline', 'follow_up'].map(measurement_role => ({ user_id: USER, instrument_key,
+        instrument_version: version, measurement_role, score: null, confidence: null }))) } })
+    const before = clone(h.db.tables)
+    const result = await journey(h)
+    assert.deepEqual(result.outcomes, { a1BaselineCompleted: true, a1FollowUpCompleted: true,
+      a2BaselineCompleted: true, a2FollowUpCompleted: true, a3BaselineCompleted: true, a3FollowUpCompleted: true })
+    assert.equal(result.state.currentModule, 'A1', 'A recorded response does not complete a module')
+    assert.deepEqual(h.db.tables, before)
+    assertOwnerReads(h, ['dtc_outcome_observations'])
+    assertNoAccessWrites(h)
+  }
+})
+
+test('journey ignores another owner and unsupported capture versions', async () => {
+  const h = harness({ tables: { dtc_outcome_observations: [
+    { user_id: OTHER, instrument_key: 'a1_professional_clarity', instrument_version: responseCapture.OUTCOME_CAPTURE_VERSION, measurement_role: 'baseline' },
+    { user_id: USER, instrument_key: 'a2_execution_checkpoint', instrument_version: 'unrecognized', measurement_role: 'baseline' },
+    { user_id: USER, instrument_key: 'a3_structured_interview', instrument_version: responseCapture.OUTCOME_CAPTURE_VERSION, measurement_role: 'follow_up' },
+  ] } })
+  assert.deepEqual((await journey(h)).outcomes, { a1BaselineCompleted: false, a1FollowUpCompleted: false,
+    a2BaselineCompleted: false, a2FollowUpCompleted: false, a3BaselineCompleted: false, a3FollowUpCompleted: true })
+  assertNoAccessWrites(h)
+})
+
+test('shared context returns actual document titles and types with compatible field names', async () => {
+  const h = harness({ tables: { dtc_documents: [
+    { id: 'own-artifact', user_id: USER, title: 'Mi evidencia de práctica', type: 'a2_artifact', status: 'draft', created_at: NOW },
+    { id: 'other-artifact', user_id: OTHER, title: 'Documento de otra persona', type: 'cv', status: 'draft', created_at: NOW },
+  ] } })
+  const context = await h.load('lib/journey/service.ts').getSharedJourneyContext()
+  assert.deepEqual(context.a4.documents, [{ id: 'own-artifact', name: 'Mi evidencia de práctica', document_type: 'a2_artifact', status: 'draft', created_at: NOW }])
+  assertOwnerReads(h, ['dtc_documents'])
   assertNoAccessWrites(h)
 })
 

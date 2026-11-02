@@ -92,7 +92,7 @@ INSTRUCCIONES:
 3. Agrega contexto adicional que sea importante para ti
 4. Guarda en formato que prefieras (PDF, Notion, Google Docs, etc)
 5. Vuelve a DTC y sube el documento editado
-6. DTC lo puntuará y validará
+6. DTC registrará el acuerdo y comprobará sus campos
 
 ═══════════════════════════════════════════════════════`
 
@@ -131,7 +131,7 @@ INSTRUCCIONES:
       >
         <h3 className="font-bold text-white mb-2">Tu Documento de Ruta Está Listo</h3>
         <p className="text-sm text-white/70">
-          Personaliza, edita, embellece. Luego lo subes de vuelta a DTC para validación y puntuación.
+          Personaliza, edita, embellece. Luego lo subes de vuelta a DTC para conservarlo y revisar los campos pendientes.
         </p>
       </div>
 

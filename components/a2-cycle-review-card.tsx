@@ -4,7 +4,6 @@ import {
   CheckCircle2,
   ClipboardCheck,
   FileCheck2,
-  Gauge,
   Target,
   Trophy,
 } from 'lucide-react'
@@ -45,7 +44,7 @@ export function A2CycleReviewCard({
       icon: <CheckCircle2 className="h-4 w-4 text-emerald-400" />,
     },
     {
-      label: 'Validación',
+      label: 'Campos registrados',
       value: review.validatedDays,
       detail: `${review.validationRate}% de días completados`,
       icon: <ClipboardCheck className="h-4 w-4 text-cyan-400" />,
@@ -68,12 +67,7 @@ export function A2CycleReviewCard({
       detail: 'días con actividad fuera de la plataforma',
       icon: <Target className="h-4 w-4 text-rose-400" />,
     },
-    {
-      label: 'Puntaje promedio',
-      value: review.averageScore === null ? '—' : `${review.averageScore}/100`,
-      detail: 'entregables con evaluación',
-      icon: <Gauge className="h-4 w-4 text-blue-400" />,
-    },
+
   ]
 
   return (
@@ -81,7 +75,7 @@ export function A2CycleReviewCard({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <div>
           <p className="text-xs font-semibold uppercase tracking-[0.18em] text-slate-500">
-            Cierre verificable · {review.horizon} días
+            Cierre del ciclo · {review.horizon} días
           </p>
           <h3 className="mt-2 text-xl font-bold text-white">
             Señales acumuladas del ciclo
@@ -93,10 +87,10 @@ export function A2CycleReviewCard({
         </div>
         <div className="text-right">
           <p className="text-xs uppercase tracking-wider text-slate-500">
-            Solidez registrada
+            Días registrados
           </p>
           <p className="text-3xl font-bold text-cyan-300">
-            {review.closureScore}/100
+            {review.completedDays}/{review.horizon}
           </p>
         </div>
       </div>

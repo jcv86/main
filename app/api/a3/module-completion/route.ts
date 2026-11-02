@@ -320,6 +320,7 @@ export async function POST(request: NextRequest) {
 
     const nextModule = A3_MODULES[module.number]
     const feedback = {
+      assessmentKind: ['career-mirror', 'value-mining-lab', 'cv-builder-studio', 'answer-architecture'].includes(module.id) ? 'self_reported_completion_check' : 'practice_check_not_validated_ability',
       passScore: validation.passScore,
       strengths: validation.strengths,
       criteria: validation.criteria,

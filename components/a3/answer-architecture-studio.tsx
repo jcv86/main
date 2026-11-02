@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { EvidenceFeedback } from '@/components/a3/evidence-feedback'
 import { useRouter } from 'next/navigation'
 import { useEffect, useMemo, useState } from 'react'
 import {
@@ -156,7 +157,7 @@ export function AnswerArchitectureStudio() {
   )
 
   const update = (key: keyof AnswerArchitectureDraft, value: string) => {
-    setDraft((current) => ({ ...current, [key]: value }))
+    setDraft((current) => ({ ...current, [key]: value, ...(['factsConfirmed', 'structureReviewed', 'contextReviewed', 'practiceHistory'].includes(key) ? {} : { factsConfirmed: '', structureReviewed: '', contextReviewed: '' }) }))
     setSubmitError(null)
     setCompletion(null)
   }
@@ -169,7 +170,7 @@ export function AnswerArchitectureStudio() {
       const result = await completeA3Module({
         moduleId: 'answer-architecture',
         moduleNumber: 5,
-        responses: Object.values(draft),
+        responses: [draft.selfIntroduction, draft.motivation, draft.strengthEvidence, draft.challengeStar, draft.whyHire, draft.timing30, draft.timing45, draft.timing60],
         deliverable: draft,
       })
       clearDraft()
@@ -336,11 +337,22 @@ export function AnswerArchitectureStudio() {
                 />
                 <TextAreaField
                   label="Historia de desafío STAR"
-                  description="Incluye explícitamente Situación, Tarea, Acción y Resultado."
+                  description="Ordena situación, tu acción y resultado conocido. Puedes señalar un dato pendiente sin inventarlo."
                   value={draft.challengeStar}
                   onChange={(value) => update('challengeStar', value)}
                   placeholder="Situación: ... Tarea: ... Acción: ... Resultado: ..."
                   minHeight="min-h-52"
+                />
+                <EvidenceFeedback
+                  question="Cuéntame un desafío: ¿qué ocurrió, qué hiciste tú y cuál fue el resultado?"
+                  answer={draft.challengeStar}
+                  context={[context.jobTitle, context.company].filter(Boolean).join(' · ')}
+                  onApplyAttempt={(answer) => update('challengeStar', answer)}
+                  onRecordReview={(review) => setDraft((current) => {
+                    let history: unknown[] = []
+                    try { const saved = JSON.parse(current.practiceHistory || '[]'); if (Array.isArray(saved)) history = saved } catch { /* Keep a new record if a local draft was damaged. */ }
+                    return { ...current, practiceHistory: JSON.stringify([...history, review].slice(-3)) }
+                  })}
                 />
                 <TextAreaField
                   label="¿Por qué deberían contratarte?"
@@ -414,8 +426,8 @@ export function AnswerArchitectureStudio() {
             <Card className="rounded-[2px] border-white/10 bg-white/[0.04] p-5">
               <div className="flex items-center justify-between">
                 <div>
-                  <p className="text-sm text-white/50">Puntuación actual</p>
-                  <p className="text-3xl font-bold text-white">{validation.score}/100</p>
+                  <p className="text-sm text-white/50">Campos y revisión</p>
+                  <p className="text-3xl font-bold text-white">{validation.criteria.filter((criterion) => criterion.met).length}/{validation.criteria.length}</p>
                 </div>
                 <Badge
                   className={
@@ -428,7 +440,7 @@ export function AnswerArchitectureStudio() {
                 </Badge>
               </div>
               <Progress value={validation.score} className="mt-4 h-2" />
-              <p className="mt-2 text-xs text-white/45">Umbral de finalización: 75/100</p>
+              <p className="mt-2 text-xs text-white/45">Registro de práctica y autorrevisión; no es una nota de capacidad.</p>
 
               <div className="mt-5 space-y-3">
                 {validation.criteria.map((criterion) => (
@@ -443,7 +455,7 @@ export function AnswerArchitectureStudio() {
                         {criterion.label}
                       </p>
                       <p className="text-xs text-white/35">
-                        {criterion.score}/{criterion.maxScore} puntos
+                        {criterion.met ? 'Registrado' : 'Pendiente'}
                       </p>
                     </div>
                   </div>
@@ -456,13 +468,17 @@ export function AnswerArchitectureStudio() {
                 <Save className="h-4 w-4" />
                 El borrador se guarda automáticamente en este dispositivo.
               </div>
-              <Button
-                variant="outline"
-                className="mt-4 w-full"
-                onClick={() => setDraft(SAMPLE_ANSWER_ARCHITECTURE)}
-              >
-                Cargar ejemplo completo
-              </Button>
+              <details className="mt-4 text-sm text-white/60"><summary className="cursor-pointer">Ver ejemplo ficticio de estructura</summary><p className="mt-3 text-amber-200">Ejemplo de lectura: no es tu experiencia y no se carga en tus respuestas.</p><p className="mt-2 whitespace-pre-wrap">{SAMPLE_ANSWER_ARCHITECTURE.challengeStar}</p></details>
+            </Card>
+
+            <Card className="space-y-4 rounded-[2px] border-cyan-500/25 bg-cyan-500/5 p-5">
+              <h3 className="font-semibold text-white">Revisión antes de guardar</h3>
+              {([
+                ['structureReviewed', 'Revisé contexto, acción propia y resultado conocido en mi relato.'],
+                ['contextReviewed', 'Revisé que mis ejemplos respondan la pregunta sin atribuir requisitos nuevos.'],
+                ['factsConfirmed', 'Confirmo que son mis hechos. No añadí experiencia, cifras ni competencias; lo desconocido queda pendiente.'],
+              ] as const).map(([key, label]) => <label key={key} className="flex items-start gap-3 text-sm text-white/70"><input type="checkbox" className="mt-1 h-4 w-4" checked={draft[key] === 'true'} onChange={(event) => update(key, String(event.target.checked))} /><span>{label}</span></label>)}
+              <p className="text-xs text-white/45">Es una confirmación propia. No certifica la veracidad ni la calidad de una respuesta.</p>
             </Card>
 
             {validation.errors.length > 0 && (
@@ -490,7 +506,7 @@ export function AnswerArchitectureStudio() {
                 <CheckCircle2 className="h-8 w-8 text-emerald-300" />
                 <h3 className="mt-3 font-semibold text-white">Entrenamiento completado</h3>
                 <p className="mt-1 text-sm text-white/60">
-                  Puntaje {completion.score}/100 · Mejor puntaje {completion.bestScore}/100
+                  Tus respuestas y la revisión quedaron registradas
                 </p>
                 <p className="mt-1 text-sm text-emerald-200">
                   {completion.isFirstCompletion

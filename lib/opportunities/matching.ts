@@ -1,5 +1,7 @@
 import { normalizeRoleSearchPhrase, planOpportunityRoleTerms, type CareerSearchIntent, type SearchBreadth } from './search-intent'
-import { categorizeOpportunity, normalizeOpportunityText, resolveChileRegion, resolveOpportunityCategory } from './taxonomy'
+import { categorizeOpportunity, normalizeOpportunityText, resolveChileRegion, resolveOpportunityCategory, opportunityFunctionalCategories } from './taxonomy'
+import { objectiveFromStoredFields } from './labor-objective'
+import { validEmployerIndustry, type EmployerIndustryEvidence } from './employer-industry'
 
 export type OpportunityWorkMode = 'onsite' | 'hybrid' | 'remote'
 
@@ -11,12 +13,15 @@ export interface MatchableOpportunity {
   location?: string | null
   region?: string | null
   work_mode?: string | null
+  company?: string
+  industry_evidence?: EmployerIndustryEvidence | null
 }
 
 export type OpportunityMatchKind = 'all' | 'title' | 'equivalent' | 'related' | 'category' | 'expanded_category'
 export interface OpportunityMatchReason {
   code: 'all_roles' | 'title_phrase' | 'reviewed_equivalent' | 'related_role'
     | 'selected_category' | 'expanded_category' | 'region' | 'work_mode' | 'work_mode_unreported'
+    | 'functional_area' | 'industry' | 'industry_unconfirmed'
   label: string
 }
 export interface OpportunityMatch {
@@ -38,6 +43,10 @@ export interface OpportunitySearchFilters {
   breadth?: SearchBreadth
   locations?: readonly string[]
   workModes?: readonly string[]
+  functionalAreas?: readonly string[]
+  industries?: readonly string[]
+  excludedIndustries?: readonly string[]
+  unknownIndustryPolicy?: 'include' | 'exclude'
 }
 
 function cleanList(value: unknown): string[] {
@@ -48,15 +57,10 @@ function cleanList(value: unknown): string[] {
 
 /** Accept the snake_case shape persisted by /api/a4/search-intents. */
 export function searchFiltersFromStoredIntent(value: unknown): CareerSearchIntent {
-  const input = value && typeof value === 'object' && !Array.isArray(value)
-    ? value as Record<string, unknown> : {}
-  const breadth = input.breadth === 'precise' || input.breadth === 'exploratory' ? input.breadth : 'related'
-  return {
-    targetRoles: cleanList(input.target_roles),
-    breadth,
-    locations: cleanList(input.locations),
-    workModes: cleanList(input.work_modes),
-  }
+  if (value === null || value === undefined) return objectiveFromStoredFields({ target_roles: [], functional_areas: [],
+    objective_stage: 'exploring', breadth: 'related', locations: [], work_modes: [] })
+  if (typeof value !== 'object' || Array.isArray(value)) throw new Error('Invalid stored search')
+  return objectiveFromStoredFields(value as Record<string, unknown>)
 }
 
 export function normalizeOpportunityWorkMode(value: unknown): OpportunityWorkMode | null {
@@ -86,6 +90,10 @@ export function createOpportunityEvaluator(filters: OpportunitySearchFilters = {
   const targetRoles = cleanList(filters.targetRoles)
   const locations = cleanList(filters.locations)
   const workModes = cleanList(filters.workModes)
+  const functionalAreas = cleanList(filters.functionalAreas)
+  const functionalAreaKeys = new Set(functionalAreas.map(area => resolveOpportunityCategory(area)?.key).filter(Boolean))
+  const industries = cleanList(filters.industries).map(normalizeOpportunityText)
+  const excludedIndustries = new Set(cleanList(filters.excludedIndustries).map(normalizeOpportunityText))
   const breadth = filters.breadth || 'related'
   const selectedRegions = new Set(locations.map(regionIdentity))
   // The previous form encoded "Cualquier modalidad" as all three values; preserve that intent.
@@ -117,6 +125,23 @@ export function createOpportunityEvaluator(filters: OpportunitySearchFilters = {
 
   return (job: MatchableOpportunity): OpportunityMatch | null => {
     const constraintReasons: OpportunityMatchReason[] = []
+    const categories = opportunityFunctionalCategories(String(job.title || job.normalized_title || ''))
+    if (functionalAreas.length) {
+      const area = categories.find(category => functionalAreaKeys.has(category.key))
+      if (!area) return null
+      constraintReasons.push({ code: 'functional_area', label: 'Función del cargo en el área elegida: ' + area.label })
+    }
+    if (industries.length || excludedIndustries.size) {
+      const evidence = validEmployerIndustry(job.industry_evidence, job.company)
+      if (!evidence) {
+        if (filters.unknownIndustryPolicy !== 'include') return null
+        constraintReasons.push({ code: 'industry_unconfirmed', label: 'Rubro por confirmar: elegiste incluir estas ofertas; no podemos comprobar aún tus preferencias de rubro.' })
+      } else {
+        const industry = normalizeOpportunityText(evidence.industry)
+        if (excludedIndustries.has(industry) || (industries.length && !industries.includes(industry))) return null
+        constraintReasons.push({ code: 'industry', label: 'Rubro de la empresa respaldado por su sitio: ' + evidence.industry })
+      }
+    }
     if (locations.length) {
       const region = typeof job.region === 'string' && job.region.trim()
         ? job.region : resolveChileRegion(job.location || '')
@@ -134,7 +159,7 @@ export function createOpportunityEvaluator(filters: OpportunitySearchFilters = {
       kind, rank: MATCH_RANK[kind], reasons: [reason, ...constraintReasons],
     })
     if (!targetRoles.length) {
-      return explain('all', { code: 'all_roles', label: 'Exploración de todos los cargos' })
+      return explain('all', { code: 'all_roles', label: functionalAreas.length ? 'Exploración de cargos dentro de las áreas elegidas' : 'Exploración de todos los cargos' })
     }
     const title = String(job.title || job.normalized_title || '')
     // Compiled terms are ordered direct > reviewed translation > related phrase.
@@ -150,12 +175,13 @@ export function createOpportunityEvaluator(filters: OpportunitySearchFilters = {
       return explain('related', { code: 'related_role', label: 'Cargo relacionado con ' + role.requestedRole + ': ' + role.term })
     }
     // Stored categories may come from an older classifier; derive from current source title.
-    const category = categorizeOpportunity(title)
-    if (explicitAreas.has(category.key)) {
+    const category = categories.find(category => explicitAreas.has(category.key))
+    if (category) {
       return explain('category', { code: 'selected_category', label: 'Pertenece al área que seleccionaste: ' + category.label })
     }
-    if (exploratoryAreas.has(category.key)) {
-      return explain('expanded_category', { code: 'expanded_category', label: 'Aparece porque ampliaste la búsqueda al área: ' + category.label })
+    const expanded = categories.find(category => exploratoryAreas.has(category.key))
+    if (expanded) {
+      return explain('expanded_category', { code: 'expanded_category', label: 'Aparece porque ampliaste la búsqueda al área: ' + expanded.label })
     }
     return null
   }

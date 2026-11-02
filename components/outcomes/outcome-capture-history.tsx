@@ -9,7 +9,11 @@ const dateLabel = (value: string) => new Intl.DateTimeFormat('es-CL', {
   dateStyle: 'medium', timeStyle: 'short', timeZone: 'America/Santiago',
 }).format(new Date(value))
 
-export function OutcomeCaptureHistory({ instrumentKey, refreshKey = 0 }: { instrumentKey: CaptureInstrumentKey; refreshKey?: number }) {
+export function OutcomeCaptureHistory({ instrumentKey, refreshKey = 0, onHistoryChange }: {
+  instrumentKey: CaptureInstrumentKey
+  refreshKey?: number
+  onHistoryChange?: (history: CaptureHistory | null) => void
+}) {
   const [history, setHistory] = useState<CaptureHistory | null>(null)
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
@@ -20,19 +24,20 @@ export function OutcomeCaptureHistory({ instrumentKey, refreshKey = 0 }: { instr
     const controller = new AbortController()
     let current = true
     setHistory(null); setError(''); setLoading(true)
+    onHistoryChange?.(null)
     const timer = setTimeout(() => controller.abort(), 10000)
     fetch('/api/outcomes/observations?instrument=' + encodeURIComponent(instrumentKey), {
       cache: 'no-store', signal: controller.signal,
     }).then(async response => {
       if (!response.ok) throw new Error(response.status === 401 ? 'session' : 'unavailable')
       return historyFromResponse(await response.json(), instrumentKey)
-    }).then(value => { if (current) setHistory(value) })
+    }).then(value => { if (current) { setHistory(value); onHistoryChange?.(value) } })
       .catch(error => { if (current) setError(error instanceof Error && error.message === 'session'
         ? 'Vuelve a iniciar sesión para revisar tus registros.'
         : 'No pudimos recuperar tus respuestas. Esto no significa que no estén guardadas.') })
       .finally(() => { clearTimeout(timer); if (current) setLoading(false) })
     return () => { current = false; clearTimeout(timer); controller.abort() }
-  }, [instrumentKey, refreshKey, retry])
+  }, [instrumentKey, refreshKey, retry, onHistoryChange])
 
   const record = (value: SavedCapture | null, label: string) => <div className="min-w-0 rounded-xl border border-border p-4">
     <h4 className="font-semibold">{label}</h4>

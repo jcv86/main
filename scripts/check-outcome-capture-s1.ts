@@ -33,7 +33,7 @@ assert.ok(!card.includes('mejoraste gracias'))
 const form = readFileSync('components/outcomes/outcome-response-capture-form.tsx', 'utf8')
 const actionClass = form.match(/const CAPTURE_ACTION_CLASS = '([^']+)'/)?.[1]
 assert.ok(actionClass, 'capture actions must share an explicit contrast contract')
-assert.equal((form.match(/className=\{CAPTURE_ACTION_CLASS\}/g) ?? []).length, 2)
+assert.equal((form.match(/className=\{CAPTURE_ACTION_CLASS\}/g) ?? []).length, 3)
 assert.match(actionClass, /(?:^|\s)text-white(?:\s|$)/)
 assert.match(actionClass, /(?:^|\s)hover:text-white(?:\s|$)/)
 const normalColor = actionClass.match(/(?:^|\s)bg-\[(#[0-9a-fA-F]{6})\](?:\s|$)/)?.[1]

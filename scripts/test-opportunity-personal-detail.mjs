@@ -7,6 +7,7 @@ import { renderToStaticMarkup } from 'react-dom/server'
 import { load } from 'cheerio'
 import * as icons from 'lucide-react'
 import * as queryHelpers from '../lib/opportunities/search-query.ts'
+import * as laborObjective from '../lib/opportunities/labor-objective.ts'
 import { OPPORTUNITY_SOURCE_LABELS } from '../lib/opportunities/types.ts'
 
 // Compile the actual rendering boundary. Fixtures are synthetic and do not read
@@ -28,6 +29,7 @@ function compile(name, dependencies = {}) {
     '@/components/ui/button': { Button: ({ asChild, children, ...props }) => asChild ? React.cloneElement(children, props) : React.createElement('button', props, children) },
     '@/lib/opportunities/types': { OPPORTUNITY_SOURCE_LABELS },
     '@/lib/opportunities/search-query': queryHelpers,
+    '@/lib/opportunities/labor-objective': laborObjective,
     ...dependencies,
   }
   new Function('require', 'module', 'exports', compiled)(dependency => {
@@ -74,7 +76,7 @@ test('server-issued reasons, questions and next action render without reinterpre
   assert.ok($('body').text().includes(value.summary))
   assert.ok($('body').text().includes(value.toConfirm[0].label))
   assert.ok($('body').text().includes(value.nextStep.label))
-  assert.match($('h5').text(), /Por confirmarTu siguiente paso/)
+  assert.match($('h5').text(), /Qué coincide con tu informaciónQué falta confirmarTu siguiente paso/)
   assert.doesNotMatch($('body').text(), /%|probabilidad|empleabilidad|puntuación/i)
 })
 

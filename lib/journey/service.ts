@@ -6,6 +6,7 @@ import { resolveA2DayAccess } from './a2-day-access'
 import { createAdminClient, createClient } from '@/lib/supabase/server'
 import { canonicalOnboardingPath } from './flow'
 import { hasActiveA4QaEntitlement } from '@/lib/a4/qa-entitlement'
+import { OUTCOME_CAPTURE_VERSION } from '@/lib/outcomes/response-capture'
 
 export type JourneyModule = 'A1' | 'A2' | 'A3' | 'A4' | 'COMPLETED'
 
@@ -222,7 +223,8 @@ async function loadJourneyEvidence(
       .select('instrument_key,measurement_role')
       .eq('user_id', userId)
       .in('instrument_key', ['a1_professional_clarity', 'a2_execution_checkpoint', 'a3_structured_interview'])
-      .eq('instrument_version', '1'),
+      // Both versions record completion of the exercise, never proof of improved capability.
+      .in('instrument_version', ['1', OUTCOME_CAPTURE_VERSION]),
   ])
 
   const a1CompletedAt =
@@ -475,7 +477,7 @@ export async function getSharedJourneyContext(): Promise<SharedJourneyContext | 
         .order('created_at', { ascending: false }),
       supabase
         .from('dtc_documents')
-        .select('id,name,document_type,status,created_at')
+        .select('id,name:title,document_type:type,status,created_at')
         .eq('user_id', userId)
         .order('created_at', { ascending: false })
         .limit(20),

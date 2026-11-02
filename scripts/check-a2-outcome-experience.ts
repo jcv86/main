@@ -11,8 +11,8 @@ assert.ok(instruments.includes("instrumentKey: 'a2_execution_checkpoint'"))
 assert.ok(instruments.includes("'objective_specificity'"))
 assert.ok(instruments.includes("'review_discipline'"))
 assert.ok(dashboard.includes("progress.completed_days.includes(30)"), 'follow-up must require verified Day 30 completion')
-assert.ok(dashboard.includes('Completar más misiones no se presenta como mejora de capacidad.'))
-assert.ok(!dashboard.includes("averageScore") || dashboard.includes("Puntaje promedio"), 'legacy mission average may remain operational but not outcome-labeled')
+assert.ok(dashboard.includes('Estos registros no generan una nota de capacidad.'))
+assert.ok(!dashboard.includes("averageScore"), 'Mission completion must not be displayed as a capability score.')
 
 // Shared capture replaces browser scoring. Keep entry/continuation gates and the v1 regression below.
 const shared = readFileSync('components/outcomes/outcome-response-capture-form.tsx', 'utf8')

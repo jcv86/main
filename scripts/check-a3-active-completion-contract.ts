@@ -87,7 +87,7 @@ for (const testCase of coachCases) {
   const valid = validateA3ModuleSubmission(
     module,
     [...testCase.responses],
-    testCase.deliverable(testCase.responses),
+    { ...testCase.deliverable(testCase.responses), factsConfirmed: 'true' },
   )
   assert.equal(valid.passed, true, valid.errors.join('; '))
   assert.equal(valid.score, 100)
@@ -96,7 +96,7 @@ for (const testCase of coachCases) {
     module,
     [...testCase.responses],
     {
-      ...testCase.deliverable(testCase.responses),
+      ...testCase.deliverable(testCase.responses), factsConfirmed: 'true',
       [module.completionContract.requiredDeliverableKeys[0]]: long('Contenido distinto'),
     },
   )
@@ -112,6 +112,8 @@ assert.equal(cvModule.xp, 120)
 assert.equal(cvModule.checkpointDay, 27)
 
 const cvCore = {
+  factsConfirmed: 'true',
+  evidenceKind: 'experience',
   fullName: 'Camila Orellana',
   email: 'camila@example.cl',
   phone: '+56 9 5555 5555',
@@ -142,7 +144,7 @@ assert.equal(emptyCv.score, 0)
 
 const minimumCv = validateA3ModuleSubmission(cvModule, [], cvCore)
 assert.equal(minimumCv.passed, true, minimumCv.errors.join('; '))
-assert.equal(minimumCv.score, 75)
+assert.equal(minimumCv.score, 100)
 
 const strongCv = validateA3ModuleSubmission(cvModule, [], {
   ...cvCore,
@@ -155,7 +157,7 @@ const strongCv = validateA3ModuleSubmission(cvModule, [], {
 })
 assert.equal(strongCv.passed, true, strongCv.errors.join('; '))
 assert.equal(strongCv.score, 100)
-assert.ok(strongCv.strengths.some((strength) => strength.includes('cuantitativa')))
+assert.equal(strongCv.score, minimumCv.score, 'Adding metrics or keywords cannot improve a quality score.')
 
 const missingAts = validateA3ModuleSubmission(cvModule, [], {
   ...cvCore,
@@ -170,8 +172,8 @@ const weakAchievements = validateA3ModuleSubmission(cvModule, [], {
   achievement2: 'Coordiné reuniones.',
   achievement3: 'Apoyé al equipo.',
 })
-assert.equal(weakAchievements.passed, false)
-assert.ok(weakAchievements.errors.some((error) => error.includes('tres logros')))
+assert.equal(weakAchievements.passed, true, 'Concise self-confirmed examples are registered without inventing detail.')
+assert.equal(weakAchievements.score, minimumCv.score)
 
 for (const module of A3_MODULES.slice(3)) {
   assert.equal(module.completionContract.enabled, false)

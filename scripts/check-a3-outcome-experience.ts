@@ -8,7 +8,8 @@ const form = readFileSync('components/outcomes/a3-interview-outcome-form.tsx', '
 
 assert.ok(overview.includes('/despega/a3-outcome-baseline'))
 assert.ok(overview.includes('/despega/a3-outcome-follow-up'))
-assert.ok(overview.includes('Los puntajes de los módulos miden práctica'))
+assert.ok(overview.includes('estos registros no miden por sí solos una mejora de capacidad.'))
+assert.ok(!overview.includes('puntaje mínimo de 75/100'))
 assert.ok(overview.includes('progress?.route.routeCompletedAt'), 'follow-up must remain gated by route completion')
 
 // Shared capture replaces browser scoring. Keep entry/continuation gates and the v1 regression below.

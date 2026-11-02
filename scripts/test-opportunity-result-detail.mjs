@@ -1,3 +1,4 @@
+import * as laborObjective from '../lib/opportunities/labor-objective.ts'
 import assert from 'node:assert/strict'
 import fs from 'node:fs'
 import ts from 'typescript'
@@ -22,6 +23,7 @@ function compile(hooks = React, source = SOURCE) {
     react: hooks,
     'react/jsx-runtime': runtime,
     'lucide-react': icons,
+    '@/lib/opportunities/labor-objective': laborObjective,
     'next/link': { __esModule: true, default: 'a' },
     '@/components/ui/card': { Card: 'article', CardContent: 'div', CardHeader: 'header', CardTitle: 'h3' },
     '@/components/ui/button': { Button: ({ asChild, children, ...props }) => asChild ? React.cloneElement(children, props) : React.createElement('button', props, children) },
@@ -82,7 +84,7 @@ test('the preview stays short while the disclosure preserves the complete availa
   assert.equal(full.length, 1)
   assert.match(full.attr('class'), /whitespace-pre-wrap/)
   assert.doesNotMatch(full.attr('class'), /line-clamp|truncate/)
-  const preview = $('body > div > p').text()
+  const preview = $('body > div > p').filter((_, element) => $(element).text().startsWith('Contexto y funciones')).text()
   assert.ok(preview.length <= 241)
   assert.ok(preview.endsWith('…'))
   assert.ok(!preview.includes('CONDICIÓN FINAL'))

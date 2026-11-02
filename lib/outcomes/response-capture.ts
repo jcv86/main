@@ -1,4 +1,3 @@
-import { A1_CLARITY_PROMPTS } from './a1-professional-clarity'
 import { A2_EXECUTION_PROMPTS } from './a2-execution-capability'
 import { A3_INTERVIEW_PROMPTS } from './a3-interview-capability'
 
@@ -8,12 +7,21 @@ export const MAX_RESPONSE_CHARACTERS = 900
 export const MAX_CAPTURE_BODY_BYTES = 32768
 export type MeasurementRole = 'baseline' | 'follow_up'
 
+// A1 precedes the choice of a personal or professional route. Preserve the
+// stored keys without requiring an employment goal or changing historical v1.
+const A1_CAPTURE_PROMPTS = [
+  { key: 'target', label: 'Tu dirección actual', prompt: '¿Qué objetivo personal o profesional quieres trabajar ahora y por qué? Si todavía estás explorando, explica qué te gustaría aclarar.' },
+  { key: 'value', label: 'Lo que puedes aportar', prompt: '¿Qué forma de actuar o aporte reconoces hoy en ti que pueda ayudarte con ese objetivo?' },
+  { key: 'evidence', label: 'Una situación concreta', prompt: 'Describe una situación real que respalde ese aporte. Puede ser de tu trabajo, estudios o vida cotidiana.' },
+  { key: 'gap', label: 'Tu próximo paso', prompt: '¿Qué necesitas practicar o aclarar para avanzar y por qué te importa?' },
+] as const
+
 export const CAPTURE_INSTRUMENTS = {
   a1_professional_clarity: {
-    outcomeKey: 'professional_clarity', stage: 'a1', label: 'Claridad profesional',
-    minimumWords: 5, prompts: A1_CLARITY_PROMPTS,
+    outcomeKey: 'professional_clarity', stage: 'a1', label: 'Tu dirección personal o profesional',
+    minimumWords: 5, prompts: A1_CAPTURE_PROMPTS,
     baselineAction: 'Revisa tu informe de A1 y contrasta sus interpretaciones con ejemplos reales. Después registra tus respuestas de seguimiento.',
-    followUpAction: 'Contrasta tu dirección profesional y los ejemplos que la respaldan. Identifica qué cambió y qué todavía necesitas comprobar.',
+    followUpAction: 'Contrasta tu objetivo y los ejemplos que lo respaldan. Identifica qué cambió y qué todavía necesitas comprobar.',
   },
   a2_execution_checkpoint: {
     outcomeKey: 'execution_capability', stage: 'a2', label: 'Plan de ejecución',

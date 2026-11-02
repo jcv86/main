@@ -2,6 +2,8 @@
 
 Fecha: 14 de octubre de 2026.
 Estado: **diseño preparado; implementación y pruebas pendientes**.
+
+Actualización de continuidad, 2 de noviembre de 2026: [implementación local de objetivo y A4](DTC_LABOR_OBJECTIVE_IMPLEMENTATION_20261102.md). Ese documento registra los cambios, pruebas, migración preparada y alcance vigente; el texto siguiente conserva el estado histórico del diseño del 14 de octubre.
 Repositorio: `jcv86/main`.
 Base de código revisada: `172a09b94e266084c9d79be235053893db5ef549`.
 Rama documental: `codex/a4-labor-objective-20261014`.

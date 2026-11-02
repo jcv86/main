@@ -33,157 +33,48 @@ function objectValue(value: unknown): Record<string, unknown> {
     : {}
 }
 
-function normalizeComparable(value: string): string {
-  return value
-    .toLocaleLowerCase('es')
-    .normalize('NFD')
-    .replace(/[\u0300-\u036f]/g, '')
-}
-
 function validateCvBuilderSubmission(
   module: A3ModuleDefinition,
   responses: string[],
   deliverable: Record<string, unknown>,
 ): A3ModuleValidationResult {
-  const fullName = textValue(deliverable.fullName)
+  const present = (key: string) => Boolean(textValue(deliverable[key]))
   const email = textValue(deliverable.email)
   const phone = textValue(deliverable.phone)
-  const location = textValue(deliverable.location)
-  const targetRole = textValue(deliverable.targetRole)
-  const targetKeywords = splitCvList(deliverable.targetKeywords)
-  const summary = textValue(deliverable.professionalSummary)
-  const experienceTitle = textValue(deliverable.experienceTitle)
-  const experienceCompany = textValue(deliverable.experienceCompany)
-  const experienceDates = textValue(deliverable.experienceDates)
-  const achievements = [
-    textValue(deliverable.achievement1),
-    textValue(deliverable.achievement2),
-    textValue(deliverable.achievement3),
-  ]
-  const skills = splitCvList(deliverable.skills)
-  const atsChecklist = splitCvList(deliverable.atsChecklist)
-
-  const emailValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)
   const phoneDigits = phone.replace(/\D/g, '')
-  const contactMet =
-    fullName.length >= 3 && emailValid && phoneDigits.length >= 7 && location.length >= 3
-
-  const targetMet = targetRole.length >= 3 && targetKeywords.length >= 3
-  const normalizedSummary = normalizeComparable(summary)
-  const roleTokens = splitCvList(targetRole.replace(/\s+/g, ','))
-    .map(normalizeComparable)
-    .filter((token) => token.length >= 3)
-  const normalizedKeywords = targetKeywords.map(normalizeComparable)
-  const summaryAligned = [...roleTokens, ...normalizedKeywords].some((token) =>
-    normalizedSummary.includes(token),
-  )
-
-  const summaryLengthMet = summary.length >= 80 && summary.length <= 600
-  const summaryClean = !/[\[\]{}]/.test(summary)
-  const summaryMet = summaryLengthMet && summaryClean
-
-  const positionMet =
-    experienceTitle.length >= 3 &&
-    experienceCompany.length >= 2 &&
-    experienceDates.length >= 4
-  const detailedAchievements = achievements.filter((achievement) => achievement.length >= 35)
-  const achievementsMet = detailedAchievements.length === 3
-  const metricPresent = achievements.some((achievement) =>
-    /\d|%|\$|UF|CLP|USD|\+/.test(achievement),
-  )
-  const experienceMet = positionMet && achievementsMet
-
-  const skillsMet = skills.length >= 6
-  const normalizedSkills = skills.map(normalizeComparable)
-  const keywordOverlap = normalizedKeywords.filter((keyword) =>
-    normalizedSkills.some(
-      (skill) => skill.includes(keyword) || keyword.includes(skill),
-    ),
-  ).length
-  const skillsAligned = keywordOverlap >= 2
-
-  const atsMet = CV_BUILDER_CRITICAL_ATS_IDS.every((id) =>
-    atsChecklist.includes(id),
-  )
-
-  const criteria: A3ModuleCriterion[] = [
-    {
-      key: 'contact',
-      label: 'Identidad y contacto verificables',
-      met: contactMet,
-      score: contactMet ? 15 : 0,
-      maxScore: 15,
-    },
-    {
-      key: 'target_alignment',
-      label: 'Rol objetivo y palabras clave definidos',
-      met: targetMet,
-      score: (targetMet ? 10 : 0) + (summaryAligned ? 5 : 0),
-      maxScore: 15,
-    },
-    {
-      key: 'professional_summary',
-      label: 'Resumen profesional listo para lectura rápida',
-      met: summaryMet,
-      score: (summaryLengthMet ? 15 : 0) + (summaryAligned && summaryClean ? 5 : 0),
-      maxScore: 20,
-    },
-    {
-      key: 'experience_evidence',
-      label: 'Experiencia expresada como logros',
-      met: experienceMet,
-      score: (positionMet ? 5 : 0) + (achievementsMet ? 15 : 0) + (metricPresent ? 10 : 0),
-      maxScore: 30,
-    },
-    {
-      key: 'skills',
-      label: 'Competencias priorizadas para el rol',
-      met: skillsMet,
-      score: (skillsMet ? 5 : 0) + (skillsAligned ? 5 : 0),
-      maxScore: 10,
-    },
-    {
-      key: 'ats',
-      label: 'Controles ATS críticos confirmados',
-      met: atsMet,
-      score: atsMet ? 10 : 0,
-      maxScore: 10,
-    },
-  ]
-
-  const score = criteria.reduce((sum, criterion) => sum + criterion.score, 0)
-  const errors = [
-    ...(contactMet
-      ? []
-      : ['Completa nombre, correo válido, teléfono y ubicación.']),
-    ...(targetMet
-      ? []
-      : ['Define un rol objetivo y al menos tres palabras clave.']),
-    ...(summaryMet
-      ? []
-      : ['Redacta un resumen de 80 a 600 caracteres sin marcadores pendientes.']),
-    ...(experienceMet
-      ? []
-      : ['Registra un cargo, empresa, fechas y tres logros de al menos 35 caracteres.']),
-    ...(skillsMet ? [] : ['Incluye al menos seis competencias relevantes.']),
-    ...(atsMet ? [] : ['Confirma todos los controles ATS críticos.']),
-  ]
-  const allCriticalCriteriaMet = criteria.every((criterion) => criterion.met)
-
+  const contactMet = present('fullName') && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email) && (!phone || phoneDigits.length >= 7)
+  const targetMet = present('targetRole')
+  const summaryMet = present('professionalSummary')
+  const achievements = ['achievement1', 'achievement2', 'achievement3'].filter(present)
+  const positionFields = ['experienceTitle', 'experienceCompany', 'experienceDates']
+  const hasPosition = positionFields.some(present) || achievements.length > 0
+  const experienceMet = deliverable.evidenceKind === 'education' && !hasPosition
+    ? present('education')
+    : positionFields.every(present) && achievements.length > 0
+  const skillsMet = splitCvList(deliverable.skills).length > 0
+  const atsMet = CV_BUILDER_CRITICAL_ATS_IDS.every((id) => splitCvList(deliverable.atsChecklist).includes(id))
+  const factsMet = deliverable.factsConfirmed === true || deliverable.factsConfirmed === 'true'
+  // Coverage is retained only for the existing completion contract. No word,
+  // keyword or digit count estimates the quality or truth of a CV.
+  const definitions = [
+    ['contact', 'Nombre y contacto revisados', contactMet, 15, 'Completa tu nombre y un correo válido. El teléfono es opcional; si lo incluyes, revísalo.'],
+    ['target_alignment', 'Foco declarado', targetMet, 10, 'Indica el rol o área que te interesa explorar; no necesitas una vacante.'],
+    ['professional_summary', 'Resumen registrado', summaryMet, 15, 'Escribe un resumen fiel de lo que sabes y has hecho.'],
+    ['experience_evidence', 'Ejemplo o formación registrados', experienceMet, 20, 'Incluye un ejemplo real con contexto y fechas, o elige formación inicial si todavía no tienes experiencia. No inventes un empleo ni un logro.'],
+    ['skills', 'Competencias declaradas', skillsMet, 10, 'Incluye al menos una competencia que puedas explicar con un ejemplo.'],
+    ['ats', 'Revisión de formato realizada', atsMet, 10, 'Revisa los controles de formato. No garantizan la aceptación de un ATS.'],
+    ['fidelity', 'Hechos confirmados por ti', factsMet, 20, 'Confirma que los hechos incluidos son tuyos y que no añadiste datos para completar la plantilla.'],
+  ] as const
+  const criteria: A3ModuleCriterion[] = definitions.map(([key, label, met, maxScore]) => ({ key, label, met, maxScore, score: met ? maxScore : 0 }))
   return {
-    passed: score >= module.completionContract.passScore && allCriticalCriteriaMet,
-    score,
+    passed: criteria.every((criterion) => criterion.met),
+    score: criteria.reduce((sum, criterion) => sum + criterion.score, 0),
     passScore: module.completionContract.passScore,
-    errors,
-    strengths: [
-      ...criteria.filter((criterion) => criterion.met).map((criterion) => criterion.label),
-      ...(summaryAligned ? ['Resumen alineado con el rol objetivo'] : []),
-      ...(metricPresent ? ['Logros con evidencia cuantitativa'] : []),
-      ...(skillsAligned ? ['Competencias conectadas con palabras clave'] : []),
-    ],
+    errors: definitions.filter(([, , met]) => !met).map(([, , , , error]) => error),
+    strengths: criteria.filter((criterion) => criterion.met).map((criterion) => criterion.label),
     criteria,
     responses,
-    deliverable,
+    deliverable: { ...deliverable, assessmentKind: 'self_reported_completion_check', factsConfirmation: 'user_attestation_not_independent_verification' },
   }
 }
 
@@ -194,15 +85,13 @@ function validateCoachSubmission(
 ): A3ModuleValidationResult {
   const contract = module.completionContract
   const answeredResponses = responses.filter((response) => response.length > 0)
-  const detailedResponses = responses.filter(
-    (response) => response.length >= contract.minimumResponseLength,
-  )
+
   const completedDeliverables = contract.requiredDeliverableKeys.filter(
-    (key) => textValue(deliverable[key]).length >= contract.minimumResponseLength,
+    (key) => textValue(deliverable[key]).length > 0,
   )
 
   const responseCountMet = answeredResponses.length >= contract.minimumResponses
-  const responseDetailMet = detailedResponses.length >= contract.minimumResponses
+  const responseDetailMet = deliverable.factsConfirmed === 'true' || deliverable.factsConfirmed === true
   const deliverableMet =
     completedDeliverables.length === contract.requiredDeliverableKeys.length
   const crossCheckMet = contract.requiredDeliverableKeys.every((key, index) => {
@@ -220,8 +109,8 @@ function validateCoachSubmission(
       maxScore: 25,
     },
     {
-      key: 'response_detail',
-      label: 'Respuestas con desarrollo suficiente',
+      key: 'facts_review',
+      label: 'Hechos y límites revisados por ti',
       met: responseDetailMet,
       score: responseDetailMet ? 35 : 0,
       maxScore: 35,
@@ -250,7 +139,7 @@ function validateCoachSubmission(
     ...(responseDetailMet
       ? []
       : [
-          `Desarrolla cada respuesta con al menos ${contract.minimumResponseLength} caracteres.`,
+          'Confirma que las respuestas describen tus hechos y distinguen lo que sigue pendiente.',
         ]),
     ...(deliverableMet
       ? []
@@ -269,7 +158,7 @@ function validateCoachSubmission(
     strengths: criteria.filter((criterion) => criterion.met).map((criterion) => criterion.label),
     criteria,
     responses,
-    deliverable,
+    deliverable: { ...deliverable, assessmentKind: 'self_reported_completion_check' },
   }
 }
 

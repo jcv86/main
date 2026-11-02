@@ -1,9 +1,10 @@
 'use client'
 
-import { useEffect, useId, useRef, useState } from 'react'
+import { useCallback, useEffect, useId, useRef, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import { OutcomeCaptureHistory } from './outcome-capture-history'
+import type { CaptureHistory, SavedCapture } from '@/lib/outcomes/response-history'
 import {
   CAPTURE_INSTRUMENTS, MAX_RESPONSE_CHARACTERS, OUTCOME_CAPTURE_VERSION,
   captureNextAction, isRecord, responseWordCount,
@@ -28,11 +29,16 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved, conti
   const [saving, setSaving] = useState(false)
   const [error, setError] = useState('')
   const [saved, setSaved] = useState(false)
+  const [previousCapture, setPreviousCapture] = useState<SavedCapture | null>(null)
+  const [editingNew, setEditingNew] = useState(false)
   const requestRef = useRef<AbortController | null>(null)
   const retryRef = useRef<{ fingerprint: string; id: string } | null>(null)
   const mountedRef = useRef(true)
   const busyRef = useRef(false)
   const formId = useId()
+  const receiveHistory = useCallback((history: CaptureHistory | null) => {
+    setPreviousCapture(history ? role === 'baseline' ? history.baseline : history.followUp : null)
+  }, [role])
   useEffect(() => {
     mountedRef.current = true
     return () => { mountedRef.current = false; requestRef.current?.abort() }
@@ -41,6 +47,9 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved, conti
     const value = responses[key] ?? ''
     return value.length <= MAX_RESPONSE_CHARACTERS && responseWordCount(value) >= instrument.minimumWords
   })
+  // A late read can offer the saved record, but must never replace text already being written.
+  const resumePrevious = !saved && previousCapture !== null && !editingNew
+    && !Object.values(responses).some(value => value.length > 0)
 
   async function save() {
     if (!complete || busyRef.current || saved) return
@@ -93,7 +102,7 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved, conti
         Registra con tus propias palabras lo que puedes explicar hoy y qué lo respalda. Este ejercicio no asigna una nota de capacidad ni una probabilidad de conseguir empleo.
       </p>
     </div>
-    <OutcomeCaptureHistory key={instrumentKey} instrumentKey={instrumentKey} refreshKey={saved ? 1 : 0} />
+    <OutcomeCaptureHistory key={instrumentKey} instrumentKey={instrumentKey} refreshKey={saved ? 1 : 0} onHistoryChange={receiveHistory} />
     {saved ? <div className="space-y-4">
       <div role="status" className="rounded-xl border border-border p-4">
         <h3 className="font-semibold">Tus respuestas quedaron guardadas</h3>
@@ -109,6 +118,10 @@ export function OutcomeResponseCaptureForm({ instrumentKey, role, onSaved, conti
       </details>
       <p className="text-sm leading-6"><strong>Tu siguiente paso: </strong>{captureNextAction(instrument, role)}</p>
       {onSaved && <Button type="button" className={CAPTURE_ACTION_CLASS} onClick={onSaved}>{continueLabel}</Button>}
+    </div> : resumePrevious ? <div className="space-y-4">
+      <p role="status" className="text-sm leading-6">Ya tienes respuestas guardadas para esta etapa. Puedes continuar con ese registro o añadir uno nuevo.</p>
+      {onSaved && <Button type="button" className={CAPTURE_ACTION_CLASS} onClick={onSaved}>{continueLabel}</Button>}
+      <Button type="button" variant="outline" className="min-h-11 w-full" onClick={() => setEditingNew(true)}>Registrar nuevas respuestas</Button>
     </div> : <form className="space-y-5" onSubmit={event => { event.preventDefault(); void save() }}>
       {instrument.prompts.map(({ key, label, prompt }) => <div key={key} className="space-y-2">
         <label htmlFor={formId + '-' + key} className="block text-sm font-semibold">{label}</label>

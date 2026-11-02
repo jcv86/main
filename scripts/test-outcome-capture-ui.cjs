@@ -24,6 +24,7 @@ function renderer(path, name, initialProps) {
     useState(initial) { const index = cursor++; if (!Object.hasOwn(state,index)) state[index] = typeof initial === 'function' ? initial() : initial; return [state[index], value => { if (!active) throw Error('State update after unmount'); state[index] = typeof value === 'function' ? value(state[index]) : value; dirty = true }] },
     useRef(initial) { const index = cursor++; if (!Object.hasOwn(state,index)) state[index] = { current: initial }; return state[index] },
     useId() { const index = cursor++; return 'test-' + index },
+    useCallback(callback, deps) { const index = cursor++; const previous = state[index]; if (!previous || deps.some((value,i) => !Object.is(value,previous.deps[i]))) state[index] = { callback, deps }; return state[index].callback },
     useEffect(run, deps) { const index = cursor++; const previous = effects[index]; if (!previous || deps.some((value,i) => !Object.is(value,previous.deps[i]))) pending.push(() => { previous?.cleanup?.(); effects[index] = { deps, cleanup: run() } }) },
   }
   const dependencies = { react, 'react/jsx-runtime': { jsx, jsxs: jsx, Fragment: 'Fragment' },
@@ -120,6 +121,43 @@ test('history session expiry clears prior records on refresh',async()=>{
  await mockedFetch(async()=>++calls===1?response(history.captureHistory(KEY,savedRow(),null)):response({},401),async()=>{
   const ui=renderer(HISTORY,'OutcomeCaptureHistory',{instrumentKey:KEY,refreshKey:0});await ui.flush();ui.setProps({instrumentKey:KEY,refreshKey:1});await ui.flush()
   assert.match(text(ui.tree),/Vuelve a iniciar sesión/);assert.doesNotMatch(text(ui.tree),new RegExp(TEXT));ui.unmount()
+ })
+})
+for (const role of ['baseline', 'follow_up']) test(role + ': confirmed readback can continue without another write', async () => {
+ let continued = 0, posts = 0
+ await mockedFetch(async () => { posts++; throw Error('Reload continuation must not write') }, async () => {
+  const ui = renderer(FORM, 'OutcomeResponseCaptureForm', { instrumentKey: KEY, role, onSaved: () => continued++ })
+  const record = savedRow(role)
+  nodes(ui.tree).find(n => n.type === 'OutcomeCaptureHistory').props.onHistoryChange(history.captureHistory(KEY,
+    role === 'baseline' ? record : null, role === 'follow_up' ? record : null))
+  assert.equal(nodes(ui.tree).filter(n => n.type === 'Textarea').length, 0)
+  button(ui.tree, 'Continuar mi recorrido').props.onClick()
+  assert.equal(continued, 1); assert.equal(posts, 0)
+  button(ui.tree, 'Registrar nuevas respuestas').props.onClick()
+  assert.equal(nodes(ui.tree).filter(n => n.type === 'Textarea').length, capture.CAPTURE_INSTRUMENTS[KEY].prompts.length)
+  assert.ok(nodes(ui.tree).filter(n => n.type === 'Textarea').every(n => n.props.value === ''))
+  ui.unmount()
+ })
+})
+test('late readback preserves an in-progress draft and only matching phase enables resume', async () => {
+ const ui = renderer(FORM, 'OutcomeResponseCaptureForm', { instrumentKey: KEY, role: 'follow_up', onSaved: () => {} })
+ nodes(ui.tree).find(n => n.type === 'OutcomeCaptureHistory').props.onHistoryChange(history.captureHistory(KEY, savedRow(), null))
+ assert.ok(nodes(ui.tree).some(n => n.type === 'Textarea'))
+ fill(ui)
+ nodes(ui.tree).find(n => n.type === 'OutcomeCaptureHistory').props.onHistoryChange(history.captureHistory(KEY, savedRow(), savedRow('follow_up')))
+ assert.ok(nodes(ui.tree).filter(n => n.type === 'Textarea').every(n => n.props.value === TEXT))
+ assert.equal(nodes(ui.tree).filter(n => ['button','Button'].includes(n.type) && text(n) === 'Continuar mi recorrido').length, 0)
+ ui.unmount()
+})
+test('readback callback clears a previous confirmation before refresh and never propagates failed reads', async () => {
+ const delivered = []; let calls = 0
+ const onHistoryChange = value => delivered.push(value)
+ await mockedFetch(async () => ++calls === 1 ? response(history.captureHistory(KEY, savedRow(), null)) : response({}, 401), async () => {
+  const ui = renderer(HISTORY, 'OutcomeCaptureHistory', { instrumentKey: KEY, refreshKey: 0, onHistoryChange })
+  await ui.flush(); assert.equal(delivered[0], null); assert.ok(delivered.at(-1).baseline)
+  ui.setProps({ instrumentKey: KEY, refreshKey: 1, onHistoryChange }); await ui.flush()
+  assert.equal(delivered.at(-1), null); assert.match(text(ui.tree), /Vuelve a iniciar sesión/)
+  ui.unmount()
  })
 })
 ;(async()=>{let failed=0;for(const {name,run} of cases)try{await run()}catch(error){failed++;console.error(JSON.stringify({name,error:error.message,stack:error.stack}))}

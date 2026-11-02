@@ -1,4 +1,5 @@
 import { A3_CHECKPOINT_MAP } from '@/lib/a3-checkpoint-map'
+import type { A2PracticePath } from '@/lib/a2/practice-path'
 import type { A2Horizon } from '@/lib/a2/server-progress'
 
 export interface A2CycleReviewRecord {
@@ -47,6 +48,7 @@ function average(values: number[]): number | null {
 export function buildA2CycleReview(
   horizon: A2Horizon,
   records: A2CycleReviewRecord[],
+  practicePath: A2PracticePath = 'ambos',
 ): A2CycleReview {
   const cycleRecords = records.filter(
     (record) => record.day >= 1 && record.day <= horizon,
@@ -66,7 +68,7 @@ export function buildA2CycleReview(
   const evidenceDays = normalizedRecords.filter(
     (record) => record.hasEvidence,
   ).length
-  const checkpointDays = Object.keys(A3_CHECKPOINT_MAP)
+  const checkpointDays = (practicePath === 'persona' ? [] : Object.keys(A3_CHECKPOINT_MAP))
     .map(Number)
     .filter((day) => day <= horizon)
     .sort((left, right) => left - right)
@@ -116,13 +118,13 @@ export function buildA2CycleReview(
   else gaps.push(`Quedan ${Math.max(0, horizon - completedDays)} días por completar.`)
 
   if (validationRate >= 90) {
-    strengths.push('La mayoría de los días tiene validación registrada.')
+    strengths.push('La mayoría de los días conserva un registro de campos completados.')
   } else if (completedDays > 0) {
-    gaps.push(`${Math.max(0, completedDays - validatedDays)} días no tienen validación actual.`)
+    gaps.push(`${Math.max(0, completedDays - validatedDays)} días conservan registros anteriores a la revisión de campos actual.`)
   }
 
   if (evidenceRate >= 70) {
-    strengths.push('El ciclo conserva evidencia suficiente para revisar decisiones y resultados.')
+    strengths.push('El ciclo conserva evidencias que puedes usar para revisar decisiones y resultados.')
   } else if (completedDays > 0) {
     gaps.push(`${Math.max(0, completedDays - evidenceDays)} días no tienen evidencia estructurada.`)
   }
@@ -139,11 +141,6 @@ export function buildA2CycleReview(
     strengths.push(`${realActionDays} días registran acciones realizadas fuera de la plataforma.`)
   }
 
-  if (averageScore !== null && averageScore < 70) {
-    gaps.push(`El puntaje promedio de los entregables evaluados es ${averageScore}/100.`)
-  } else if (averageScore !== null) {
-    strengths.push(`El puntaje promedio de los entregables evaluados es ${averageScore}/100.`)
-  }
 
   return {
     horizon,

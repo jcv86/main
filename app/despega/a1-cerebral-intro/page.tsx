@@ -1,269 +1,126 @@
 'use client'
 
+import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Badge } from '@/components/ui/badge'
 import { createClient } from '@/lib/supabase/client'
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
-import { Brain, CheckCircle2, Zap } from 'lucide-react'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { PageContainer, PageHeader, PageStack } from '@/components/layout/page-foundation'
+
+const EXAMPLE = [
+  { label: 'Decidido y directo', selection: 'MÁS como yo' },
+  { label: 'Optimista e inspirador', selection: null },
+  { label: 'Paciente y considerado', selection: null },
+  { label: 'Analítico y preciso', selection: 'MENOS como yo' },
+]
 
 export default function A1CerebralIntroPage() {
   const [authOk, setAuthOk] = useState(false)
   const [baselineCompleted, setBaselineCompleted] = useState(false)
   const [outcomeStatusReady, setOutcomeStatusReady] = useState(false)
+  const [loadError, setLoadError] = useState(false)
+  const [retry, setRetry] = useState(0)
+  const [supabase] = useState(() => createClient())
   const router = useRouter()
-  const supabase = createClient()
 
   useEffect(() => {
-    const check = async () => {
-      const { data: { user } } = await supabase.auth.getUser()
-      
-      if (!user) {
-        router.replace('/auth/signin')
-        return
-      }
-      const userId = user.id
-      
-      // Mark A1 intro as seen (CANONICAL FLAG)
-      const { error: updateError } = await supabase
-        .from('despega_user_profiles')
-        .upsert({
-          user_id: userId,
-          a1_cerebral_intro_seen: true,
-          a1_cerebral_intro_seen_at: new Date().toISOString()
-        }, { onConflict: 'user_id' })
-      
-      if (updateError) {
-        console.error('[v0] [CANONICAL] Error marking A1 intro seen:', updateError)
-      } else {
-        console.log('[v0] [CANONICAL] A1 intro marked as seen')
-      }
-      
+    let active = true
+    const controller = new AbortController()
+    setLoadError(false)
+    setOutcomeStatusReady(false)
+    async function load() {
       try {
-        const statusResponse = await fetch('/api/outcomes/a1-status', { cache: 'no-store', credentials: 'include' })
-        if (statusResponse.ok) {
-          const status = await statusResponse.json()
-          setBaselineCompleted(status.baselineCompleted === true)
-        }
-      } finally {
-        setOutcomeStatusReady(true)
+        const { data: { user }, error } = await supabase.auth.getUser()
+        if (!active) return
+        if (error) throw error
+        if (!user) { router.replace('/auth/signin'); return }
+        setAuthOk(true)
+        // Preserve the canonical entry marker without inventing assessment completion.
+        await supabase.from('despega_user_profiles').upsert({
+          user_id: user.id,
+          a1_cerebral_intro_seen: true,
+          a1_cerebral_intro_seen_at: new Date().toISOString(),
+        }, { onConflict: 'user_id' })
+        const response = await fetch('/api/outcomes/a1-status', {
+          cache: 'no-store', credentials: 'include', signal: controller.signal,
+        })
+        if (!response.ok) throw new Error('Status unavailable')
+        const status = await response.json()
+        if (typeof status.baselineCompleted !== 'boolean') throw new Error('Invalid status')
+        if (active) { setBaselineCompleted(status.baselineCompleted); setOutcomeStatusReady(true) }
+      } catch {
+        if (active) setLoadError(true)
       }
-
-      setAuthOk(true)
     }
-    check()
-  }, [supabase, router])
+    void load()
+    return () => { active = false; controller.abort() }
+  }, [supabase, router, retry])
 
   if (!authOk) {
-    return <PageContainer className="flex min-h-[50vh] items-center justify-center"><p role="status" aria-live="polite">Verificando…</p></PageContainer>
+    return <PageContainer className="flex min-h-[50vh] flex-col items-center justify-center gap-4">
+      <p role="status">{loadError ? 'No pudimos recuperar tu sesión.' : 'Verificando tu sesión…'}</p>
+      {loadError && <Button variant="outline" onClick={() => setRetry(value => value + 1)}>Reintentar</Button>}
+    </PageContainer>
   }
 
-  return (
-    <PageContainer>
-      <PageStack>
-        <PageHeader
-          title="Descubre Tu Perfil Cerebral"
-          description="Una evaluación de cómo tiendes a comunicarte y actuar. Responde 28 preguntas y obtén un perfil que podrás usar como evidencia en tu recorrido."
-          actions={<Badge variant="outline">~10 min</Badge>}
-        />
+  return <PageContainer><PageStack>
+    <PageHeader
+      title="Despega Cerebral: revisa tus preferencias"
+      description="Responde 28 preguntas sobre situaciones cotidianas. Después podrás revisar qué reconoces en tus respuestas y qué necesita más contexto."
+      actions={<Badge variant="outline">Aproximadamente 10 minutos</Badge>}
+    />
 
-        <div className="space-y-8">
-          {/* What is Cerebral Assessment */}
-          <Card className="border border-border bg-card shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
-                <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
-                ¿Qué es esta Evaluación?
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <p className="text-lg text-foreground leading-relaxed" style={{ fontSize: '14px', fontWeight: '400' }}>
-                El Análisis Cerebral identifica tu estilo natural de comunicación y liderazgo según cuatro dimensiones:
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="p-5 bg-red/20 dark:bg-red/25 border-2 border-red rounded-xl" style={{ borderColor: 'rgba(255, 0, 0, 0.4)', backgroundColor: 'rgba(255, 0, 0, 0.15)',  }}>
-                  <p className="font-bold text-red mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔴 Impulsor</p>
-                  <p className="text-foreground text-sm">Enfocado en resultados, decisivo, impulsivo</p>
-                </div>
-                <div className="p-5 bg-yellow/20 dark:bg-yellow/25 border-2 border-yellow rounded-xl" style={{ borderColor: 'rgba(255, 200, 0, 0.4)', backgroundColor: 'rgba(255, 200, 0, 0.15)',  }}>
-                  <p className="font-bold text-yellow mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🟡 Catalizador</p>
-                  <p className="text-foreground text-sm">Comunicativo, entusiasta, orientado a personas</p>
-                </div>
-                <div className="p-5 bg-green/20 dark:bg-green/25 border-2 border-green rounded-xl" style={{ borderColor: 'rgba(0, 128, 0, 0.4)', backgroundColor: 'rgba(0, 128, 0, 0.15)',  }}>
-                  <p className="font-bold text-green mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🟢 Estabilizador</p>
-                  <p className="text-foreground text-sm">Estable, cooperativo, confiable, paciente</p>
-                </div>
-                <div className="p-5 bg-blue/20 dark:bg-blue/25 border-2 border-blue rounded-xl" style={{ borderColor: 'rgb(0, 0, 255, 0.4)', backgroundColor: 'rgba(0, 0, 255, 0.15)',  }}>
-                  <p className="font-bold text-blue mb-2 text-lg" style={{ color: '#ffffff', fontWeight: '500' }}>🔵 Arquitecto</p>
-                  <p className="text-foreground text-sm">Analítico, detallista, exigente con calidad</p>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+    <Card><CardHeader><CardTitle>Un punto de partida para conocerte</CardTitle></CardHeader>
+      <CardContent className="space-y-4 text-sm leading-relaxed">
+        <p>Elegirás cómo sueles actuar o comunicarte en distintas situaciones. Tus respuestas ayudan a formular preguntas y elegir algo concreto para practicar.</p>
+        <p>El resultado refleja lo que declaras en este momento y puede cambiar según el contexto. No es un diagnóstico, una medición del cerebro ni una prueba de tus capacidades o de tu idoneidad para un trabajo.</p>
+        <p>Las cuatro dimensiones del cuestionario organizan tus elecciones: tomar la iniciativa, interactuar con otras personas, mantener la continuidad y atender a criterios o detalles. Ninguna es mejor que otra y pueden aparecer combinaciones o empates.</p>
+      </CardContent>
+    </Card>
 
-          {/* How it Works */}
-          <Card className="border border-border bg-card shadow-sm">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)', fontWeight: '500' }}>
-                <CheckCircle2 className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
-                ¿Cómo funciona el test?
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="space-y-3">
-                <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full text-foreground border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>1</div>
-                  <div>
-                    <p className="font-semibold text-foreground dark:text-foreground">28 preguntas</p>
-                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Responde 28 preguntas simples sobre tu comportamiento</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full text-foreground border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>2</div>
-                  <div>
-                    <p className="font-semibold text-foreground dark:text-foreground">Dos selecciones por pregunta</p>
-                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Para cada pregunta, selecciona la opción que más y menos te describe</p>
-                  </div>
-                </div>
-                <div className="flex gap-4">
-                  <div className="w-14 h-14 rounded-full text-foreground border-2 border-ritual/40 flex items-center justify-center flex-shrink-0 font-black shadow-lg" style={{ backgroundColor: 'rgb(80, 160, 170)' }}>3</div>
-                  <div>
-                    <p className="font-semibold text-foreground dark:text-foreground">Análisis automático</p>
-                    <p className="text-sm text-muted-foreground dark:text-muted-foreground">Obtendrás tu perfil cerebral personalizado con insights sobre tu comunicación y liderazgo</p>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+    <Card><CardHeader><CardTitle>Cómo responder</CardTitle></CardHeader>
+      <CardContent><ol className="list-decimal space-y-3 pl-5 text-sm leading-relaxed">
+        <li>Lee las cuatro opciones de cada una de las 28 preguntas.</li>
+        <li>Elige una opción que te describa <strong>MÁS</strong> y otra distinta que te describa <strong>MENOS</strong>.</li>
+        <li>Piensa en situaciones recientes. Responde con lo que reconoces en ti, aunque ninguna opción encaje perfectamente.</li>
+        <li>Al revisar el informe, podrás señalar matices o desacuerdos. Tus ejemplos y aclaraciones también forman parte del recorrido.</li>
+      </ol></CardContent>
+    </Card>
 
-          {/* Example Question */}
-          <Card className="border border-border bg-card shadow-sm bg-muted/90 dark:bg-card">
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-foreground">Ejemplo Real de Pregunta</CardTitle>
-              <CardDescription className="text-muted-foreground">Así funciona el formato MÁS/MENOS que verás en el test</CardDescription>
-            </CardHeader>
-            <CardContent className="space-y-6">
-              <div className="p-8 rounded-xl" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', border: '1px solid rgba(90, 90, 150, 0.6)' }}>
-                <p className="text-xl font-semibold text-foreground mb-8 text-center">
-                  "Cuando enfrento un desafío importante, tiendo a ser más:"
-                </p>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  {/* MÁS column */}
-                  <div>
-                    <p className="text-base font-bold text-green mb-6 flex items-center gap-2">
-                      <span className="bg-green text-foreground rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">+</span>
-                      MÁS como yo
-                    </p>
-                    <div className="space-y-3">
-                      <button className="w-full p-4 border-2 border-green bg-green/20 rounded-lg text-left hover:bg-green/30 transition-all">
-                        <p className="font-medium text-foreground">Decidido y directo</p>
-                        <p className="text-xs text-muted-foreground mt-1">Impulsor</p>
-                      </button>
-                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-foreground">Optimista e inspirador</p>
-                        <p className="text-xs text-muted-foreground mt-1">Catalizador</p>
-                      </button>
-                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-foreground">Paciente y considerado</p>
-                        <p className="text-xs text-muted-foreground mt-1">Estabilizador</p>
-                      </button>
-                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-foreground">Analítico y preciso</p>
-                        <p className="text-xs text-muted-foreground mt-1">Arquitecto</p>
-                      </button>
-                    </div>
-                  </div>
+    <Card><CardHeader><CardTitle>Ejemplo del formato MÁS / MENOS</CardTitle></CardHeader>
+      <CardContent className="space-y-4">
+        <p className="text-sm">Ante un desafío, ¿qué opción se parece más y cuál se parece menos a tu forma de actuar?</p>
+        <ul className="grid gap-3 sm:grid-cols-2" aria-label="Ejemplo ilustrativo con dos opciones seleccionadas">
+          {EXAMPLE.map(option => <li key={option.label} className="flex min-w-0 flex-wrap items-center justify-between gap-2 rounded-xl border border-border bg-muted/40 p-4 text-sm">
+            <span>{option.label}</span>
+            {option.selection && <span className="rounded-md bg-[#3730a3] px-2 py-1 text-xs font-semibold text-white">{option.selection}</span>}
+          </li>)}
+        </ul>
+        <p className="text-sm text-muted-foreground">Estas selecciones sólo ilustran el formato. El ejemplo no se guarda y no hay una respuesta correcta.</p>
+      </CardContent>
+    </Card>
 
-                  {/* MENOS column */}
-                  <div>
-                    <p className="text-base font-bold text-red mb-6 flex items-center gap-2">
-                      <span className="bg-red text-foreground rounded-full w-7 h-7 flex items-center justify-center text-sm font-bold">−</span>
-                      MENOS como yo
-                    </p>
-                    <div className="space-y-3">
-                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-foreground">Decidido y directo</p>
-                        <p className="text-xs text-muted-foreground mt-1">Impulsor</p>
-                      </button>
-                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-foreground">Optimista e inspirador</p>
-                        <p className="text-xs text-muted-foreground mt-1">Catalizador</p>
-                      </button>
-                      <button className="w-full p-4 border-2 border-muted/60 rounded-lg text-left hover:bg-muted/70 transition-all">
-                        <p className="text-foreground">Paciente y considerado</p>
-                        <p className="text-xs text-muted-foreground mt-1">Estabilizador</p>
-                      </button>
-                      <button className="w-full p-4 border-2 border-red bg-red/20 rounded-lg text-left hover:bg-[rgba(80,160,170,0.6)]/30 transition-all">
-                        <p className="font-medium text-foreground">Analítico y preciso</p>
-                        <p className="text-xs text-muted-foreground mt-1">Arquitecto</p>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
+    <Card><CardHeader><CardTitle>Tu objetivo, a tu ritmo</CardTitle></CardHeader>
+      <CardContent className="space-y-3 text-sm leading-relaxed">
+        <p>Si quieres orientar una búsqueda laboral, puedes guardar ahora el cargo, el área y las condiciones que te interesan, o indicar que todavía estás explorando. Podrás retomarlo y editarlo en el Radar.</p>
+        <Link href="/despega/objetivo-laboral" className="inline-flex min-h-11 items-center rounded-md px-2 font-medium text-foreground underline underline-offset-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Definir o revisar mi objetivo laboral</Link>
+        <p className="text-muted-foreground">Este paso es opcional. También puedes continuar con un objetivo de desarrollo personal.</p>
+      </CardContent>
+    </Card>
 
-              <div className="bg-purple/20 p-4 rounded-xl border" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgba(80, 160, 170, 0.4)' }}>
-                <p className="text-sm text-purple/90 dark:text-foreground">
-                  <span className="font-semibold">¿Cómo funciona?</span> Cada pregunta tiene 4 opciones que representan los 4 estilos: Directo, Inspirador, Seguro y Consciente. Seleccionas cuál te describe MÁS y cuál te describe MENOS. El sistema cuenta tus selecciones y determina tu perfil dominante.
-                </p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* Benefits */}
-          <Card className="border border-border bg-card shadow-sm border-l-4" style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgb(80, 160, 170)' }}>
-            <CardHeader className="pb-4">
-              <CardTitle className="text-2xl text-foreground flex items-center gap-2" style={{ color: 'rgb(80, 160, 170)' }}>
-                <Zap className="w-6 h-6" style={{ color: 'rgb(80, 160, 170)' }} />
-                ¿Por qué es importante?
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4 text-foreground">
-              <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
-                <p className="leading-relaxed">Entiende tu estilo de comunicación natural para adaptarte mejor en entrevistas</p>
-              </div>
-              <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
-                <p className="leading-relaxed">Identifica tus fortalezas clave que los empleadores buscan</p>
-              </div>
-              <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
-                <p className="leading-relaxed">Reconoce áreas de desarrollo personal para mejorar continuamente</p>
-              </div>
-              <div className="flex gap-3 items-start">
-                <CheckCircle2 className="w-5 h-5 flex-shrink-0" style={{ color: 'rgba(80, 160, 170)' }} />
-                <p className="leading-relaxed">Personaliza tus respuestas según el tipo de rol y empresa</p>
-              </div>
-            </CardContent>
-          </Card>
-
-          {/* CTA Button */}
-          <div className="flex gap-4 justify-center mt-12">
-            <Button
-              onClick={() => router.push(baselineCompleted ? '/despega/a1-cerebral' : '/despega/a1-outcome-baseline')}
-              disabled={!outcomeStatusReady}
-              size="lg"
-              className="px-8 text-lg text-foreground"
-              style={{ backgroundColor: 'rgb(80, 160, 170)',  }}
-            >
-              {!outcomeStatusReady ? 'Verificando…' : baselineCompleted ? 'Comenzar Análisis Cerebral' : 'Hacer medición inicial'}
-            </Button>
-            <Button
-              onClick={() => router.push('/despega')}
-              size="lg"
-              variant="outline"
-              className="px-8 text-lg"
-              style={{ backgroundColor: 'rgba(80, 160, 170, 0.15)', borderColor: 'rgb(80, 160, 170)', color: 'rgb(80, 160, 170)' }}
-            >
-              Volver al Dashboard
-            </Button>
-          </div>
-        </div>
-      </PageStack>
-    </PageContainer>
-  )
+    {loadError && <div role="alert" className="space-y-3 rounded-xl border border-border p-4 text-sm">
+      <p>No pudimos comprobar si ya guardaste tu punto de partida. Reintenta para continuar con el registro correcto.</p>
+      <Button variant="outline" onClick={() => setRetry(value => value + 1)}>Reintentar comprobación</Button>
+    </div>}
+    <div className="flex flex-col gap-3 sm:flex-row sm:flex-wrap">
+      <Button
+        onClick={() => router.push(baselineCompleted ? '/despega/a1-cerebral' : '/despega/a1-outcome-baseline')}
+        disabled={!outcomeStatusReady}
+        className="min-h-11 whitespace-normal bg-[#3730a3] px-6 text-white hover:bg-[#312e81] hover:text-white"
+      >{!outcomeStatusReady ? 'Comprobando tu punto de partida…' : baselineCompleted ? 'Comenzar las 28 preguntas' : 'Registrar mi punto de partida'}</Button>
+      <Button asChild variant="outline" className="min-h-11"><Link href="/despega">Volver a mi recorrido</Link></Button>
+    </div>
+  </PageStack></PageContainer>
 }
