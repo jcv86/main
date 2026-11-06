@@ -11,7 +11,7 @@ assert.equal(JSON.parse(readFileSync(join(evidence, 'a2-plan-browser-results.jso
   'Complete the existing AG03 real Auth, SQL and browser phase before AG04')
 assertAuthSources(JSON.parse(readFileSync(join(root, 'auth-prepared.json'), 'utf8')), app, repo)
 const paths = [
-  'app/despega/a2/coach/page.tsx', 'components/a2-chat-coach.tsx', 'components/a2-assistant-action.tsx',
+  'app/despega/a2/coach/page.tsx', 'components/a2-chat-coach.tsx', 'components/a2-assistant-action.tsx', 'components/layout/app-shell.tsx',
   'components/a2-reviewed-plan.tsx', 'app/api/a2/assistant-actions/route.ts', 'app/api/despega/a2-coach/route.ts',
   'lib/a2/assistant-action-contract.ts', 'lib/a2/assistant-action-api.ts', 'lib/a2/assistant-action-service.ts',
   'lib/a2/assistant-contract.ts', 'lib/a2/practice-adjustment.ts', 'lib/a2/api-access.ts',

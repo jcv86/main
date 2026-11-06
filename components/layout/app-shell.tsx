@@ -337,7 +337,7 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
         Saltar al contenido
       </a>
 
-      <header className="sticky top-0 z-40 border-b border-border bg-background/88 backdrop-blur-xl lg:pl-72">
+      <header className="sticky top-0 z-40 border-b border-border bg-background backdrop-blur-xl lg:pl-72">
         <div className="flex min-h-16 items-center gap-3 px-4 py-2 sm:px-6 lg:px-8">
           <Button
             ref={menuButtonRef}
