@@ -147,7 +147,7 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
 
   if (sessionChanged) return <Alert role="alert">
     <AlertDescription>
-      La sesión cambió. Vuelve a abrir el asistente para continuar con el recorrido correcto.
+      La sesión cambió. Vuelve a abrir el asistente para continuar con el recorrido correcto.{' '}
       <a href="/despega/a2/coach" className="mt-3 inline-flex min-h-11 items-center rounded-md font-semibold underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring">Volver a abrir el asistente</a>
     </AlertDescription>
   </Alert>

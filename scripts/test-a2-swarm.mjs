@@ -16,6 +16,7 @@ import { adjustmentContent } from '../lib/a2/practice-adjustment.ts'
 import * as assistantContract from '../lib/a2/assistant-contract.ts'
 import * as planContract from '../lib/a2/plan-contract.ts'
 import * as actionContract from '../lib/a2/assistant-action-contract.ts'
+import * as reviewContract from '../lib/a2/review-evidence-contract.ts'
 import { a1AgentProjection } from '../lib/dtc-agentos/context/a1-context.ts'
 import { buildA1ProfessionalReport } from '../lib/reports/a1-professional-report.ts'
 import { DISC_TEST_QUESTIONS } from '../lib/disc-test-questions.ts'
@@ -23,6 +24,7 @@ import { validateAndScoreDiscResponses } from '../lib/a1/disc-scoring.ts'
 import { QUESTIONNAIRE_VERSION, UNDERSTANDING_VERSION } from '../lib/a1/individual-evidence.ts'
 
 const require = createRequire(import.meta.url)
+const reviewEvidenceFixture = require('./fixtures/a2-review-evidence.cjs')
 const cases = []
 const test = (name, run) => cases.push({ name, run })
 const RECORD = '00000000-0000-4000-8000-000000000701'
@@ -48,6 +50,7 @@ function loadActual(relative, controls = {}) {
     if (key === '@/lib/a2/assistant-contract' || key === '../assistant-contract') return assistantContract
     if (key === '../plan-contract') return planContract
     if (key === '../assistant-action-contract') return actionContract
+    if (key === '../review-evidence-contract') return reviewContract
     if (key === '../../journey/next-action') return nextAction
     if (key === 'zod' || key.startsWith('node:')) return require(key)
     throw new Error('Unexpected swarm module dependency: ' + key)
@@ -714,6 +717,84 @@ test('A malformed plan envelope fails before model calls', async () => {
   const source = fixture(); source.plan = { status: 'expired', memory: { purpose: 'PRIVATE_STALE_PLAN' } }
   const runner = completion(outputs(source)), result = await runA2Swarm(source, runner)
   assertFailure(result, 'invalid_input', 0); assert.equal(runner.requests.length, 0)
+})
+
+test('All review source references are bound to the same minimized declared records', async () => {
+  const source = fixture(); source.reviewEvidence = reviewEvidenceFixture()
+  source.reviewEvidence.a4.latestReview.outcome += ' https://private.invalid/reference 00000000-0000-4000-8000-000000009999'
+  const values = outputs(source)
+  for (const value of Object.values(values)) value.evidenceRefs.push(...reviewContract.A2_REVIEW_SOURCE_IDS)
+  const runner = completion(values), result = await runA2Swarm(source, runner)
+  assert.equal(result.ok, true); assert.equal(result.trace.callsStarted, 3)
+  const expected = reviewContract.buildA2ReviewModelContext(source.reviewEvidence)
+  for (const request of runner.requests) {
+    const data = dataOf(request)
+    assert.deepEqual(data.reviewEvidence, expected)
+    for (const id of reviewContract.A2_REVIEW_SOURCE_IDS) assert.ok(data.availableEvidenceRefs.includes(id))
+    assert.equal(data.reviewEvidence.a3.comparable, false)
+    assert.equal(data.reviewEvidence.a3.evaluationStatus, 'not_evaluated')
+    assert.equal(data.reviewEvidence.a4.evidenceMeaning, 'user_declaration_only')
+    assert.equal(data.reviewEvidence.a4.causation, 'not_established')
+    assert.doesNotMatch(JSON.stringify(data.reviewEvidence), /00000000-|https:\/\/private|score|confidence|normalizedDelta/)
+    assert.equal(data.journey.next.href, source.flow.next.href)
+  }
+  assert.doesNotMatch(JSON.stringify(result.trace), /AG05_|reviewEvidence|outcome|observationId/)
+})
+for (const id of ['a3_baseline', 'a3_follow_up', 'a4_next_review', 'a4_latest_review']) {
+  test('A missing selected record cannot be cited as ' + id, async () => {
+    const source = fixture(); source.reviewEvidence = reviewEvidenceFixture()
+    if (id === 'a3_baseline') {
+      source.reviewEvidence.a3.history.baseline = null; source.reviewEvidence.a3.history.pairStatus = 'follow_up_only'
+    } else if (id === 'a3_follow_up') {
+      source.reviewEvidence.a3.history.followUp = null; source.reviewEvidence.a3.history.pairStatus = 'baseline_only'
+    } else if (id === 'a4_next_review') source.reviewEvidence.a4.nextReview = null
+    else source.reviewEvidence.a4.latestReview = null
+    const values = outputs(source); values.sofia.evidenceRefs.push(id)
+    const runner = completion(values), result = await runA2Swarm(source, runner)
+    assertFailure(result, 'evidence_mismatch', undefined, 'sofia')
+    assert.ok(!dataOf(runner.requests[0]).availableEvidenceRefs.includes(id))
+  })
+}
+for (const status of ['unavailable', 'locked', 'not_applicable']) {
+  test('Unavailable professional evidence cannot become a citation: ' + status, async () => {
+    const source = fixture({ pathName: status === 'not_applicable' ? 'persona' : 'profesional' })
+    source.reviewEvidence = { version: 'dtc-a2-review-evidence.v1',
+      a3: { status, history: null }, a4: { status, nextReview: null, latestReview: null } }
+    const values = outputs(source); values.sofia.evidenceRefs.push('a3_follow_up')
+    const runner = completion(values), result = await runA2Swarm(source, runner)
+    assertFailure(result, 'evidence_mismatch', undefined, 'sofia')
+    const data = dataOf(runner.requests[0])
+    assert.equal(data.reviewEvidence.a3.status, status); assert.equal(data.reviewEvidence.a4.status, status)
+    assert.doesNotMatch(JSON.stringify(data.reviewEvidence), /AG05_/)
+  })
+}
+for (const [label, mutate] of [
+  ['fabricated score', value => { value.a3.history.score = 100 }],
+  ['fabricated comparability', value => { value.a3.history.comparable = true }],
+  ['hidden records in an unavailable source', value => { value.a4.status = 'unavailable' }],
+  ['an open decision labeled as a reviewed result', value => { value.a4.latestReview.status = 'watching' }],
+]) test('Review input rejects ' + label + ' before starting models', async () => {
+  const source = fixture(); source.reviewEvidence = reviewEvidenceFixture(); mutate(source.reviewEvidence)
+  const runner = completion(outputs(source)), result = await runA2Swarm(source, runner)
+  assertFailure(result, 'invalid_input', 0); assert.equal(runner.requests.length, 0)
+})
+test('Personal practice rejects professional source content before starting models', async () => {
+  const source = fixture({ pathName: 'persona' }); source.reviewEvidence = reviewEvidenceFixture()
+  const runner = completion(outputs(source)), result = await runA2Swarm(source, runner)
+  assertFailure(result, 'invalid_input', 0); assert.equal(runner.requests.length, 0)
+})
+test('An inverted A3 pair remains non-comparable even when both declarations are cited', async () => {
+  const source = fixture(); source.reviewEvidence = reviewEvidenceFixture()
+  const history = source.reviewEvidence.a3.history
+  history.followUp.observedAt = '2026-11-04T12:00:00.000000Z'; history.pairStatus = 'out_of_order'
+  const values = outputs(source)
+  for (const value of Object.values(values)) value.evidenceRefs.push('a3_baseline', 'a3_follow_up')
+  const runner = completion(values), result = await runA2Swarm(source, runner)
+  assert.equal(result.ok, true)
+  for (const request of runner.requests) {
+    assert.equal(dataOf(request).reviewEvidence.a3.pairStatus, 'out_of_order')
+    assert.equal(dataOf(request).reviewEvidence.a3.comparable, false)
+  }
 })
 
 const adjustmentDraft = () => ({ outcome: 'could_not', barrier: 'time',

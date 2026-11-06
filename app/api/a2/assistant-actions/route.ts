@@ -8,6 +8,7 @@ import { A2ActionApiFailure, createA2ActionHandlers } from '@/lib/a2/assistant-a
 import { A2_ACTION_EXPECTED_ACTOR_HEADER, a2ActionReceiptSchema, type A2ActionCommand } from '@/lib/a2/assistant-action-contract'
 import { makeA2PlanContextSnapshot, readA2PlanContextSnapshot } from '@/lib/a2/plan-context'
 import { readA2ActionEffect } from '@/lib/a2/assistant-action-service'
+import { readA2ReviewEvidence } from '@/lib/a2/review-evidence-service'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -67,10 +68,13 @@ const handlers = createA2ActionHandlers({
   },
   readContext: async owner => {
     const flow = await readJourneyFlow(owner.journey, owner.client)
-    const guidance = await readGuidedNextAction(owner.journey, flow, owner.client)
+    const [guidance, reviewEvidence] = await Promise.all([
+      readGuidedNextAction(owner.journey, flow, owner.client),
+      readA2ReviewEvidence(owner.client, owner.id, flow, owner.journey.access),
+    ])
     // The server supplies the snapshot. The submitted command contains only the
     // fingerprint of the context reviewed in the browser, never its authority.
-    const snapshot = readA2PlanContextSnapshot(makeA2PlanContextSnapshot(flow, guidance))
+    const snapshot = readA2PlanContextSnapshot(makeA2PlanContextSnapshot(flow, guidance, new Date(), reviewEvidence))
     return { dayNumber: guidedPracticeDay(flow), snapshot, guidance }
   },
   readReceipt: (owner, command) => rpc('read_a2_assistant_action_receipt', owner.id, command),

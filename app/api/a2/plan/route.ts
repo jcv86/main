@@ -7,6 +7,7 @@ import { A2PlanApiFailure, createA2PlanHandlers } from '@/lib/a2/plan-api'
 import { a2PlanReceiptSchema, A2_PLAN_EXPECTED_ACTOR_HEADER, type A2PlanCommand } from '@/lib/a2/plan-contract'
 import { makeA2PlanContextSnapshot } from '@/lib/a2/plan-context'
 import { readA2PlanSlot } from '@/lib/a2/plan-service'
+import { readA2ReviewEvidence } from '@/lib/a2/review-evidence-service'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -27,8 +28,9 @@ async function authorize(request: Request) {
   const pilot = await checkA2PilotAccess(user.id)
   if (pilot !== 'allowed') throw new A2PlanApiFailure(pilot === 'denied' ? 403 : 503, 'pilot_access_unavailable',
     pilot === 'denied' ? 'Necesitas acceso al piloto para usar tu plan.' : 'No pudimos verificar el acceso al piloto. Vuelve a intentarlo.')
-  const journey = await getJourneyForCurrentUser()
-  if (!journey || journey.user.id !== user.id) throw new A2PlanApiFailure(409, 'session_changed', 'La sesión cambió. Recarga la página antes de continuar.')
+  const journey = await getJourneyForCurrentUser('read-only')
+  if (!journey) throw new A2PlanApiFailure(403, 'journey_access_required', 'Completa tu punto de partida antes de preparar tu plan de Tu Ruta.')
+  if (journey.user.id !== user.id) throw new A2PlanApiFailure(409, 'session_changed', 'La sesión cambió. Recarga la página antes de continuar.')
   if (!journey.access.a2) throw new A2PlanApiFailure(403, 'journey_access_required', 'Completa tu punto de partida antes de preparar tu plan de Tu Ruta.')
   return { id: user.id, client, journey }
 }
@@ -69,8 +71,11 @@ const handlers = createA2PlanHandlers({
   readSlot: owner => readA2PlanSlot(owner.client, owner.id),
   readContext: async owner => {
     const flow = await readJourneyFlow(owner.journey, owner.client)
-    const guidance = await readGuidedNextAction(owner.journey, flow, owner.client)
-    return { snapshot: makeA2PlanContextSnapshot(flow, guidance), guidance }
+    const [guidance, reviewEvidence] = await Promise.all([
+      readGuidedNextAction(owner.journey, flow, owner.client),
+      readA2ReviewEvidence(owner.client, owner.id, flow, owner.journey.access),
+    ])
+    return { snapshot: makeA2PlanContextSnapshot(flow, guidance, new Date(), reviewEvidence), guidance }
   },
   readReceipt: (owner, command) => rpc('read_a2_plan_receipt', owner.id, command),
   mutate: async (owner, command, snapshot) => {

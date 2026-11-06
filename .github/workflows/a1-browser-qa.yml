@@ -53,6 +53,10 @@ on:
       - 'scripts/test-a2-swarm*'
       - 'scripts/test-a2-plan*'
       - 'scripts/test-a2-action*'
+      - 'scripts/test-a2-review-evidence*'
+      - 'scripts/fixtures/a2-review-evidence.cjs'
+      - 'migrations/08-a4-signal-decision-log.sql'
+      - 'migrations/10-a4-server-owned-write-hardening.sql'
       - 'supabase/migrations/*a2_reviewed_plan*'
       - 'supabase/migrations/*a2_assistant_action*'
       - 'scripts/test-a2-assistant.cjs'
@@ -208,6 +212,13 @@ jobs:
           node --conditions=react-server --import tsx scripts/test-a2-action-sql.mjs
           node scripts/a1-browser-qa/a2-action-advisors.mjs
           node --import tsx scripts/a1-browser-qa/a2-action-browser.mjs
+      - name: A3 and A4 evidence review, source RLS, plan context conflicts and canonical invariance
+        run: |
+          node scripts/a1-browser-qa/a2-review-evidence-prepare.mjs
+          npx tsx scripts/a1-browser-qa/a2-review-evidence-seed.ts
+          node scripts/test-a2-review-evidence-sql.mjs
+          node scripts/a1-browser-qa/a2-review-evidence-advisors.mjs
+          node --import tsx scripts/a1-browser-qa/a2-review-evidence-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4

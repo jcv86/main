@@ -13,6 +13,9 @@ const { adjustmentContent } = require('../lib/a2/practice-adjustment.ts')
 const contract = require('../lib/a2/assistant-contract.ts')
 const planContract = require('../lib/a2/plan-contract.ts')
 const actionContract = require('../lib/a2/assistant-action-contract.ts')
+const reviewContract = require('../lib/a2/review-evidence-contract.ts')
+const { captureHistory } = require('../lib/outcomes/response-history.ts')
+const reviewEvidenceFixture = require('./fixtures/a2-review-evidence.cjs')
 const planContext = { exports: {} }
 new Function('require', 'module', 'exports', ts.transpileModule(fs.readFileSync('lib/a2/plan-context.ts', 'utf8'), {
   compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
@@ -64,8 +67,12 @@ function harness(options = {}) {
   const { flow, guidance } = fixture(options.practicePath, options.reads)
   const calls = [], providerCalls = [], logs = []
   const env = { OPENAI_API_KEY: options.notConfigured ? '' : 'synthetic-qa-key', ...options.env }
-  let authCalls = 0, planReads = 0, guidanceReads = 0
-  const journey = { user: { id: options.foreignJourney ? OTHER : USER }, access: { a2: !options.lockedJourney } }
+  let authCalls = 0, planReads = 0, guidanceReads = 0, reviewReads = 0
+  const journey = { user: { id: options.foreignJourney ? OTHER : USER },
+    access: { a2: !options.lockedJourney, a3: Boolean(options.a3Access), a4: Boolean(options.a4Access) } }
+  const reviewStatus = options.practicePath === 'persona' ? 'not_applicable' : 'locked'
+  const reviewEvidence = options.reviewEvidence ?? { version: 'dtc-a2-review-evidence.v1',
+    a3: { status: reviewStatus, history: null }, a4: { status: reviewStatus, nextReview: null, latestReview: null } }
   const client = {
     auth: { getUser: async () => {
       calls.push('auth')
@@ -100,8 +107,9 @@ function harness(options = {}) {
       if (options.clientThrows) throw new Error('PRIVATE_CLIENT_DETAIL')
       return client
     } },
-    '@/lib/journey/service': { getJourneyForCurrentUser: async () => {
+    '@/lib/journey/service': { getJourneyForCurrentUser: async (mode) => {
       calls.push('journey')
+      assert.equal(mode, 'read-only', 'Asking the assistant cannot initialize canonical progress')
       if (options.journeyThrows) throw new Error('PRIVATE_JOURNEY_DETAIL')
       return options.missingJourney ? null : journey
     } },
@@ -134,11 +142,20 @@ function harness(options = {}) {
     '@/lib/a2/assistant-contract': contract,
     '@/lib/a2/assistant-action-contract': actionContract,
     '@/lib/a2/plan-context': planContext.exports,
+    '@/lib/a2/review-evidence-service': { readA2ReviewEvidence: async (actualClient, actor, actualFlow, access) => {
+      calls.push('review_evidence'); reviewReads++
+      assert.equal(actualClient, client); assert.equal(actor, USER); assert.equal(actualFlow, flow); assert.equal(access, journey.access)
+      if (options.reviewThrows) throw new Error('PRIVATE_REVIEW_DETAIL')
+      if (options.reviewSessionChange || (reviewReads > 1 && options.finalReviewSessionChange)) throw new Error('a2_review_session_changed')
+      if (options.reviewSessionUnavailable || (reviewReads > 1 && options.finalReviewSessionUnavailable)) throw new Error('a2_review_session_unavailable')
+      return reviewReads > 1 && options.finalReviewEvidence ? options.finalReviewEvidence : reviewEvidence
+    } },
     '@/lib/journey/next-action': nextAction,
-    '@/lib/a2/plan-service': { readA2PlanAssistantEvidence: async (actualClient, actor, actualFlow, actualGuidance) => {
+    '@/lib/a2/plan-service': { readA2PlanAssistantEvidence: async (actualClient, actor, actualFlow, actualGuidance, now, actualReviewEvidence) => {
       calls.push('plan'); assert.equal(actualClient, client); assert.equal(actor, USER);
       assert.equal(actualFlow, flow); assert.ok(actualGuidance === guidance || actualGuidance === options.finalGuidance);
       planReads++
+      assert.deepEqual(actualReviewEvidence, planReads > 1 && options.finalReviewEvidence ? options.finalReviewEvidence : reviewEvidence)
       if (planReads > 1 && options.finalPlan) return options.finalPlan
       return options.plan ?? { status: 'missing', memory: null };
     } },
@@ -188,6 +205,7 @@ function harness(options = {}) {
       if (key === '@/lib/a2/assistant-contract' || key === '../assistant-contract') return contract
       if (key === '../plan-contract') return planContract
       if (key === '../assistant-action-contract') return actionContract
+      if (key === '../review-evidence-contract') return reviewContract
       if (key === '../../journey/next-action') return nextAction
       if (key === 'zod' || key.startsWith('node:')) return require(key)
       throw new Error('Unexpected swarm module dependency: ' + key)
@@ -210,7 +228,7 @@ function harness(options = {}) {
       : ms === 5_000 && options.bodyTimeoutMs ? options.bodyTimeoutMs : ms, ...args))
 
   return {
-    calls, providerCalls, logs, flow, guidance,
+    calls, providerCalls, logs, flow, guidance, reviewEvidence,
     post: async (value = { message: QUESTION }, overrides = {}, raw, signal) => {
       const headers = new Headers({
         'Content-Type': 'application/json', Origin: 'https://synthetic.invalid',
@@ -253,7 +271,8 @@ test('canonical context produces one bounded answer and the same actionable dest
   assert.match(messages.at(-1).content, /Mi contexto cambia según la tarea/)
   assert.match(messages.at(-1).content, /Ensayar durante diez minutos/)
   assert.ok(!('stored' in body) && !('completed' in body) && !('score' in body))
-  assert.deepEqual(h.calls, ['client', 'auth', 'pilot', 'journey', 'flow', 'guidance', 'plan', 'a1', 'plan', 'auth'])
+  assert.deepEqual(h.calls, ['client', 'auth', 'pilot', 'journey', 'flow', 'guidance', 'review_evidence', 'plan', 'a1',
+    'flow', 'guidance', 'review_evidence', 'plan', 'auth'])
 })
 
 for (const [name, options, status] of [
@@ -330,7 +349,7 @@ test('bounded dialogue retains user and assistant roles without becoming system 
 
 for (const [name, options, status] of [
   ['pilot denied', { pilot: 'denied' }, 403], ['pilot unavailable', { pilot: 'unavailable' }, 503], ['pilot transport failure', { pilotThrows: true }, 503],
-  ['foreign journey owner', { foreignJourney: true }, 409], ['journey missing', { missingJourney: true }, 409], ['journey access locked', { lockedJourney: true }, 403],
+  ['foreign journey owner', { foreignJourney: true }, 409], ['journey missing', { missingJourney: true }, 403], ['journey access locked', { lockedJourney: true }, 403],
 ]) test(name + ' never reads evidence or calls the model', async () => {
   const guarded = harness(options), { response } = await guarded.post()
   assert.equal(response.status, status); noProvider(guarded)
@@ -643,7 +662,7 @@ test('an accepted typed adjustment gets only the authorized pending day and serv
   const result = await h.post(); assert.equal(result.response.status, 200)
   const proposal = actionContract.a2ActionProposalSchema.parse(result.body.actionProposal)
   assert.equal(proposal.dayNumber, 3); assert.deepEqual(proposal.draft, actionDraft)
-  assert.equal(proposal.expectedContextHash, planContext.exports.makeA2PlanContextSnapshot(h.flow, h.guidance).hash)
+  assert.equal(proposal.expectedContextHash, planContext.exports.makeA2PlanContextSnapshot(h.flow, h.guidance, undefined, h.reviewEvidence).hash)
   assert.equal(h.providerCalls.length, 3); assert.equal(proposal.requestId, undefined)
   assert.equal(h.calls.filter(call => call === 'guidance').length, 2)
   assert.doesNotMatch(JSON.stringify(h.logs), /Ensayar cinco|Conservo el esquema|contextHash|documentId/)
@@ -656,6 +675,22 @@ test('changing the adjustment during generation prevents delivery of a stale act
   const result = await h.post(); assert.equal(result.response.status, 503)
   assert.equal(result.body.code, 'assistant_context_changed'); assert.equal(result.body.actionProposal, undefined)
   assert.equal(result.body.response, undefined); assert.equal(execution(h).metadata.served_variant, 'none')
+})
+test('an action proposal binds the same reviewed A3/A4 evidence that its confirmation must re-read', async () => {
+  const h = harness({ env: CANARY, reviewEvidence: reviewEvidenceFixture(), a3Access: true, a4Access: true,
+    providerHandler: call => swarmHttp(call, { adjustment: actionDraft }) })
+  const result = await h.post(); assert.equal(result.response.status, 200)
+  const proposal = actionContract.a2ActionProposalSchema.parse(result.body.actionProposal)
+  assert.equal(proposal.expectedContextHash, planContext.exports.makeA2PlanContextSnapshot(h.flow, h.guidance, undefined, h.reviewEvidence).hash)
+  assert.notEqual(proposal.expectedContextHash, planContext.exports.makeA2PlanContextSnapshot(h.flow, h.guidance).hash)
+  assert.equal(proposal.dayNumber, 3)
+})
+test('an unreadable applicable review source cannot produce a newly confirmable action', async () => {
+  const evidence = reviewEvidenceFixture(); evidence.a3 = { status: 'unavailable', history: null }
+  const h = harness({ env: CANARY, reviewEvidence: evidence, a3Access: true, a4Access: true,
+    providerHandler: call => swarmHttp(call, { adjustment: actionDraft }) })
+  const result = await h.post(); assert.equal(result.response.status, 200)
+  assert.equal(result.body.actionProposal, undefined); assert.equal(result.body.receipt, undefined)
 })
 test('baseline prose never becomes an action or a receipt by being parsed from model text', async () => {
   const h = harness({ reply: JSON.stringify({ tool: 'save_practice_adjustment', ...actionDraft }) })
@@ -698,6 +733,116 @@ test('valid fragmented UTF-8 input still produces the expected reply', async () 
   } })
   const h = harness(), result = await h.post(undefined, {}, stream)
   assert.equal(result.response.status, 200); assert.equal(h.providerCalls.length, 1)
+})
+
+function baselineContext(call) {
+  const last = call.messages.at(-1).content
+  return JSON.parse(last.slice(last.indexOf('\n') + 1, last.indexOf('\n\nPREGUNTA ACTUAL:')))
+}
+function swarmContext(call) {
+  const data = call.messages.at(-1).content
+  return JSON.parse(data.slice(data.indexOf('\n') + 1))
+}
+test('baseline and all three specialists receive the identical minimized A3/A4 declarations', async () => {
+  const evidence = reviewEvidenceFixture()
+  evidence.a3.history.baseline.responsePayload.behavioral += ' https://source.invalid/private 00000000-0000-4000-8000-000000009999'
+  evidence.a4.latestReview.outcome += ' [Fuente](https://source.invalid/private).'
+  const expected = reviewContract.buildA2ReviewModelContext(evidence)
+  const baseline = harness({ reviewEvidence: evidence }), swarm = harness({ reviewEvidence: evidence, env: CANARY, providerHandler: swarmHttp })
+  assert.equal((await baseline.post()).response.status, 200)
+  assert.equal((await swarm.post()).response.status, 200)
+  assert.deepEqual(baselineContext(baseline.providerCalls[0]).reviewEvidence, expected)
+  for (const call of swarm.providerCalls) assert.deepEqual(swarmContext(call).reviewEvidence, expected)
+  const data = JSON.stringify(expected)
+  assert.match(data, /AG05_DECLARED_RESPONSE/); assert.match(data, /not_evaluated/); assert.match(data, /not_established/)
+  assert.doesNotMatch(data, /https:\/\/source|00000000-|observationId|signalId|score|confidence|normalizedDelta/)
+  assert.doesNotMatch(JSON.stringify([...baseline.logs, ...swarm.logs]), /AG05_|recordId|reviewEvidence|source\.invalid/)
+  assert.equal(swarm.providerCalls.length, 3); assert.equal(baseline.providerCalls.length, 1)
+})
+for (const source of ['a3', 'a4']) {
+  for (const state of ['changed', 'missing', 'unavailable', 'locked']) {
+    test(source + ' becoming ' + state + ' during generation with no saved plan blocks stale delivery', async () => {
+      const evidence = reviewEvidenceFixture(), final = structuredClone(evidence)
+      if (state === 'changed') {
+        if (source === 'a3') final.a3.history.followUp.responsePayload.challenge += ' Revisión posterior.'
+        else final.a4.latestReview.outcome += ' Revisión posterior.'
+      } else if (source === 'a3') final.a3 = { status: state, history: state === 'missing'
+        ? captureHistory('a3_structured_interview', null, null) : null }
+      else final.a4 = { status: state, nextReview: null, latestReview: null }
+      const h = harness({ reviewEvidence: evidence, finalReviewEvidence: final })
+      const result = await h.post()
+      assert.equal(result.response.status, 503); assert.equal(result.body.code, 'assistant_context_changed')
+      assert.equal(result.body.response, undefined); assert.equal(result.body.actionProposal, undefined)
+      assert.equal(execution(h).metadata.outcome, 'review_evidence_changed')
+      assert.equal(execution(h).metadata.served_variant, 'none')
+      assert.doesNotMatch(JSON.stringify(h.logs), /AG05_|Revisión posterior/)
+    })
+  }
+}
+test('a one-microsecond A4 revision prevents a response based on an old declaration', async () => {
+  const evidence = reviewEvidenceFixture(), final = structuredClone(evidence)
+  final.a4.latestReview.updatedAt = '2026-11-06T12:00:00.000004Z'
+  const h = harness({ reviewEvidence: evidence, finalReviewEvidence: final })
+  const result = await h.post()
+  assert.equal(result.response.status, 503); assert.equal(execution(h).metadata.outcome, 'review_evidence_changed')
+})
+test('source order in a returned object alone does not invalidate the same dated evidence', async () => {
+  const evidence = reviewEvidenceFixture()
+  const final = { a4: evidence.a4, a3: evidence.a3, version: evidence.version }
+  const h = harness({ reviewEvidence: evidence, finalReviewEvidence: final })
+  assert.equal((await h.post()).response.status, 200)
+})
+for (const state of ['missing', 'unavailable', 'locked', 'not_applicable']) {
+  test('stable ' + state + ' A3/A4 sources keep their boundary in both routes', async () => {
+    const evidence = { version: 'dtc-a2-review-evidence.v1',
+      a3: { status: state, history: state === 'missing' ? captureHistory('a3_structured_interview', null, null) : null },
+      a4: { status: state, nextReview: null, latestReview: null } }
+    const settings = { reviewEvidence: evidence, ...(state === 'not_applicable' ? { practicePath: 'persona' } : {}) }
+    const baseline = harness(settings), swarm = harness({ ...settings, env: CANARY, providerHandler: swarmHttp })
+    assert.equal((await baseline.post()).response.status, 200)
+    assert.equal((await swarm.post()).response.status, 200)
+    const data = baselineContext(baseline.providerCalls[0]).reviewEvidence
+    assert.equal(data.a3.status, state); assert.equal(data.a4.status, state)
+    for (const call of swarm.providerCalls) {
+      assert.deepEqual(swarmContext(call).reviewEvidence, data)
+      assert.ok(!swarmContext(call).availableEvidenceRefs.some(id => /^a[34]_/.test(id)))
+    }
+    assert.doesNotMatch(JSON.stringify(data), /AG05_/)
+  })
+}
+test('review evidence identity failure is rejected before any model call', async () => {
+  const h = harness({ reviewSessionChange: true }), result = await h.post()
+  assert.equal(result.response.status, 409); assert.equal(result.body.code, 'session_changed')
+  assert.equal(result.body.guidance, undefined); noProvider(h)
+})
+test('review evidence reader failure is not replaced with empty source data', async () => {
+  const h = harness({ reviewThrows: true }), result = await h.post()
+  assert.equal(result.response.status, 503); assert.equal(result.body.code, 'context_unavailable'); noProvider(h)
+  assert.equal(result.body.guidance, undefined)
+})
+test('an initial review Auth outage never returns the partially loaded private guidance', async () => {
+  const h = harness({ reviewSessionUnavailable: true }), result = await h.post()
+  assert.equal(result.response.status, 503); assert.equal(result.body.code, 'session_verification_unavailable')
+  assert.equal(result.body.guidance, undefined); assert.equal(result.body.response, undefined); noProvider(h)
+})
+for (const [variant, env] of [['baseline', {}], ['swarm', CANARY]]) {
+  for (const [option, status, code] of [['finalReviewSessionUnavailable', 503, 'session_verification_unavailable'],
+    ['finalReviewSessionChange', 409, 'session_changed']]) {
+    test(`${variant} final review identity failure drops every private output without a recovery loophole`, async () => {
+      const h = harness({ env, [option]: true, providerHandler: variant === 'swarm' ? swarmHttp : undefined })
+      const result = await h.post()
+      assert.equal(result.response.status, status); assert.equal(result.body.code, code)
+      assert.equal(result.body.guidance, undefined); assert.equal(result.body.response, undefined)
+      assert.equal(result.body.actionProposal, undefined); assert.equal(execution(h).metadata.served_variant, 'none')
+      assert.equal(h.providerCalls.length, variant === 'swarm' ? 3 : 1)
+    })
+  }
+}
+test('personal-path prompt builder rejects mismatched professional evidence content', () => {
+  const { flow, guidance } = fixture('persona')
+  const messages = contract.buildA2AssistantMessages({ message: QUESTION, conversationHistory: [] }, flow, guidance,
+    { status: 'unavailable' }, { status: 'missing', memory: null }, reviewEvidenceFixture())
+  assert.doesNotMatch(messages.at(-1).content, /AG05_|00000000900|00000000920/)
 })
 
 ;(async () => {

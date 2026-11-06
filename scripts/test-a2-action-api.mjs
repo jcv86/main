@@ -11,13 +11,16 @@ import { buildJourneyFlow } from '../lib/journey/flow.ts'
 import { buildGuidedNextAction, guidedPracticeDay } from '../lib/journey/next-action.ts'
 import * as planContract from '../lib/a2/plan-contract.ts'
 import * as contract from '../lib/a2/assistant-action-contract.ts'
+import * as reviewContract from '../lib/a2/review-evidence-contract.ts'
+import * as captureHistory from '../lib/outcomes/response-history.ts'
+import * as captureContract from '../lib/outcomes/response-capture.ts'
 import { createA2ActionHandlers, A2ActionApiFailure } from '../lib/a2/assistant-action-api.ts'
 
 const require = createRequire(import.meta.url), modules = new Map()
 function loadServer(file) {
   const filename = resolve(file)
   if (modules.has(filename)) return modules.get(filename).exports
-  assert.ok(['lib/a2/plan-context.ts', 'lib/a2/assistant-action-service.ts'].some(path => resolve(path) === filename))
+  assert.ok(['lib/a2/plan-context.ts', 'lib/a2/assistant-action-service.ts', 'lib/a2/review-evidence-service.ts'].some(path => resolve(path) === filename))
   const module = { exports: {} }; modules.set(filename, module)
   const code = ts.transpileModule(readFileSync(filename, 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
@@ -26,6 +29,9 @@ function loadServer(file) {
     if (key === 'server-only') return {}
     if (key === './plan-contract') return planContract
     if (key === './assistant-action-contract') return contract
+    if (key === './review-evidence-contract') return reviewContract
+    if (key === '@/lib/outcomes/response-history') return captureHistory
+    if (key === '@/lib/outcomes/response-capture') return captureContract
     if (key === './plan-context') return loadServer('lib/a2/plan-context.ts')
     if (key.startsWith('node:')) return require(key)
     throw Error('Unexpected server dependency: ' + key)
@@ -149,26 +155,27 @@ function harness(options = {}) {
   }
 }
 
-function routeHarness(journey) {
+function routeHarness(journey, current = base) {
   const calls = [], module = { exports: {} }
   const dependencies = {
     '@/lib/supabase/server': {
       createClient: async () => ({ auth: { getUser: async () => {
         calls.push('session'); return { data: { user: { id: USER } }, error: null }
-      } } }),
+      } }, from: () => { calls.push('source_query'); throw Error('Unexpected professional source query') } }),
       createAdminClient: () => { calls.push('admin'); throw Error('Denied route must not call an admin client') },
     },
     '@/lib/journey/service': { getJourneyForCurrentUser: async mode => {
       calls.push({ journeyMode: mode }); return journey
     } },
-    '@/lib/journey/flow-service': { readJourneyFlow: async () => { calls.push('flow'); return base.flow } },
+    '@/lib/journey/flow-service': { readJourneyFlow: async () => { calls.push('flow'); return current.flow } },
     '@/lib/journey/next-action': { guidedPracticeDay },
-    '@/lib/journey/next-action-service': { readGuidedNextAction: async () => { calls.push('guidance'); return base.guidance } },
+    '@/lib/journey/next-action-service': { readGuidedNextAction: async () => { calls.push('guidance'); return current.guidance } },
     '@/lib/a2/api-access': { checkA2PilotAccess: async () => { calls.push('pilot'); return 'allowed' } },
     '@/lib/a2/assistant-action-api': { createA2ActionHandlers, A2ActionApiFailure },
     '@/lib/a2/assistant-action-contract': contract,
     '@/lib/a2/plan-context': loadServer('lib/a2/plan-context.ts'),
     '@/lib/a2/assistant-action-service': loadServer('lib/a2/assistant-action-service.ts'),
+    '@/lib/a2/review-evidence-service': loadServer('lib/a2/review-evidence-service.ts'),
   }
   const code = ts.transpileModule(readFileSync('app/api/a2/assistant-actions/route.ts', 'utf8'), {
     compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
@@ -196,10 +203,69 @@ for (const method of ['GET', 'POST']) {
   })
 }
 test('Actual eligible GET route uses read-only journey before reading current context', async () => {
-  const h = routeHarness({ user: { id: USER }, access: { a2: true } }), result = await h.invoke('GET')
+  const h = routeHarness({ user: { id: USER }, access: { a2: true, a3: false, a4: false } }), result = await h.invoke('GET')
   assert.equal(result.response.status, 200); assert.equal(result.body.dayNumber, 3)
-  assert.equal(result.body.context.hash, base.snapshot.hash)
-  assert.deepEqual(h.calls, ['session', 'pilot', { journeyMode: 'read-only' }, 'flow', 'guidance', 'session'])
+  assert.equal(result.body.context.projection.reviewEvidence.a3.status, 'locked')
+  assert.equal(result.body.context.projection.reviewEvidence.a4.status, 'locked')
+  assert.equal(result.body.context.hash, makeA2PlanContextSnapshot(base.flow, base.guidance, NOW, result.body.context.projection.reviewEvidence).hash)
+  assert.deepEqual(h.calls, ['session', 'pilot', { journeyMode: 'read-only' }, 'flow', 'guidance', 'session', 'session', 'session'])
+})
+test('Actual personal action GET skips A3 and A4 even when later stages are enabled', async () => {
+  const personal = context({ profile: { camino_foco: 'persona', onboarding_conozcamonos_1_completed: true,
+    a1_cerebral_intro_seen: true, a1_cerebral_completed: true, conozcamonos_2_completed: true, a1_report_seen: true, a2_intro_seen: true } })
+  const h = routeHarness({ user: { id: USER }, access: { a2: true, a3: true, a4: true } }, personal)
+  const result = await h.invoke('GET')
+  assert.equal(result.response.status, 200)
+  assert.equal(result.body.context.projection.reviewEvidence.a3.status, 'not_applicable')
+  assert.equal(result.body.context.projection.reviewEvidence.a4.status, 'not_applicable')
+  assert.ok(!h.calls.includes('source_query'))
+})
+
+function reviewedEvidence() {
+  return reviewContract.a2ReviewEvidenceSchema.parse({ version: 'dtc-a2-review-evidence.v1',
+    a3: { status: 'available', history: { instrumentKey: 'a3_structured_interview', instrumentVersion: '2-capture',
+      baseline: { observationId: '00000000-0000-4000-8000-000000004030', observedAt: '2026-11-04T20:00:00.123456Z', measurementRole: 'baseline',
+        responsePayload: { behavioral: 'Conservé un ejemplo propio y una pregunta para revisar después con mi equipo.',
+          value_fit: 'Mi experiencia permite explorar esta función con preguntas y ejemplos propios de trabajo.',
+          challenge: 'Todavía quiero practicar cómo explicar una situación concreta y conservar lo que observe.' } },
+      followUp: null, pairStatus: 'baseline_only', evaluationStatus: 'not_evaluated', comparable: false } },
+    a4: { status: 'available', nextReview: null, latestReview: {
+      id: '00000000-0000-4000-8000-000000004040', signalId: '00000000-0000-4000-8000-000000004041',
+      decision: 'Contrastar una conversación con mis preguntas pendientes.', rationale: 'Quiero revisar qué información conservé para decidir el próximo intento.',
+      expectedEvidence: 'Conservar una respuesta concreta sobre las tareas del rol.', status: 'reviewed', reviewOn: '2026-11-04',
+      outcome: 'Quedó una pregunta pendiente que quiero revisar en la próxima conversación.', reviewedAt: '2026-11-04T20:00:00.123456Z',
+      reviewClassification: 'inconclusive', externalOutcomes: ['no_external_change'],
+      createdAt: '2026-11-03T20:00:00Z', updatedAt: '2026-11-04T20:00:00.123457Z',
+    } },
+  })
+}
+function reviewedContext(value) {
+  return { ...base, snapshot: makeA2PlanContextSnapshot(base.flow, base.guidance, NOW, value) }
+}
+for (const [source, mutate] of [
+  ['A3 captured response', value => { value.a3.history.baseline.responsePayload.challenge += ' Conservo otra pregunta.' }],
+  ['A4 declared result', value => { value.a4.latestReview.outcome += ' Agregué otra observación.' }],
+  ['A4 microsecond revision', value => { value.a4.latestReview.updatedAt = '2026-11-04T20:00:00.123458Z' }],
+]) test(`${source} changed after a proposal rejects the old confirmation fingerprint before mutation`, async () => {
+  const prior = reviewedEvidence(), proposal = reviewedContext(prior), changed = copy(prior); mutate(changed)
+  const h = harness({ context: reviewedContext(changed) })
+  const result = await h.post(command({ expectedContextHash: proposal.snapshot.hash }))
+  assert.equal(result.response.status, 409); assert.equal(result.body.code, 'action_context_changed'); assert.equal(h.mutations, 0)
+})
+for (const source of ['a3', 'a4']) test(`Unavailable ${source} cannot confirm a newly proposed adjustment`, async () => {
+  const value = reviewedEvidence()
+  value[source] = source === 'a3' ? { status: 'unavailable', history: null } : { status: 'unavailable', nextReview: null, latestReview: null }
+  const current = reviewedContext(value), h = harness({ context: current })
+  const result = await h.post(command({ expectedContextHash: current.snapshot.hash }))
+  assert.equal(result.response.status, 503); assert.equal(result.body.code, 'action_context_unavailable'); assert.equal(h.mutations, 0)
+})
+test('Historical confirmed action replays after newly applicable A3/A4 evidence without changing its document', async () => {
+  const h = harness(), first = await h.post(), stored = copy([...h.documents.values()])
+  h.context = reviewedContext(reviewedEvidence())
+  const replay = await h.post()
+  assert.equal(replay.response.status, 200); assert.equal(replay.body.receipt.replayed, true)
+  assert.equal(replay.body.receipt.documentId, first.body.receipt.documentId); assert.equal(h.mutations, 1)
+  assert.deepEqual([...h.documents.values()], stored)
 })
 
 test('GET returns the actual canonical pending day, guidance and hashed context without a write', async () => {

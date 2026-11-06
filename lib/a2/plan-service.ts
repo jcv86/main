@@ -2,6 +2,7 @@ import 'server-only'
 import type { SupabaseClient } from '@supabase/supabase-js'
 import type { JourneyFlow } from '@/lib/journey/flow'
 import type { GuidedNextAction } from '@/lib/journey/next-action'
+import type { A2ReviewEvidence } from './review-evidence-contract'
 import {
   a2ReviewedPlanSchema, a2PlanToday, assessA2PlanFreshness, buildA2PlanModelMemory,
   type A2ReviewedPlan, type A2PlanAssistantEvidence,
@@ -37,13 +38,13 @@ export async function readA2PlanSlot(client: SupabaseClient, userId: string): Pr
 /** Plan memory is a reviewed intention. It cannot grant access or prove execution. */
 export async function readA2PlanAssistantEvidence(
   client: SupabaseClient, actorId: string, flow: JourneyFlow, guidance: GuidedNextAction,
-  now = new Date(),
+  now = new Date(), reviewEvidence?: A2ReviewEvidence,
 ): Promise<A2PlanAssistantEvidence> {
   try {
     const slot = await readA2PlanSlot(client, actorId)
     if (!slot.plan) return { status: 'missing', memory: null }
     if (slot.plan.state !== 'active') return { status: 'inactive', memory: null }
-    const snapshot = makeA2PlanContextSnapshot(flow, guidance, now)
+    const snapshot = makeA2PlanContextSnapshot(flow, guidance, now, reviewEvidence)
     const freshness = assessA2PlanFreshness(slot.plan, snapshot, a2PlanToday(now))
     const memory = buildA2PlanModelMemory(slot.plan, freshness)
     if (memory) return { status: 'available', memory }

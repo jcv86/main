@@ -11,12 +11,16 @@ assert.ok(!existsSync(join(root, 'a2-plan-prepared.json')), 'Prepare A2 plans on
 assertAuthSources(JSON.parse(readFileSync(join(root, 'auth-prepared.json'), 'utf8')), app, repo)
 const paths = [
   'app/despega/a2/coach/page.tsx', 'components/a2-chat-coach.tsx', 'components/a2-reviewed-plan.tsx',
+  'components/a2-plan-evidence-review.tsx',
   'components/a2-assistant-action.tsx', 'app/api/a2/assistant-actions/route.ts',
   'app/api/a2/plan/route.ts', 'app/api/despega/a2-coach/route.ts',
   'lib/a2/assistant-contract.ts', 'lib/a2/swarm/contracts.ts', 'lib/a2/swarm/runtime.ts',
   'lib/a2/swarm/openai.ts', 'lib/a2/swarm/canary.ts',
   ...readdirSync(join(repo, 'lib/a2')).filter(name => /^plan.*\.ts$/.test(name)).map(name => `lib/a2/${name}`),
   ...readdirSync(join(repo, 'lib/a2')).filter(name => /^assistant-action.*\.ts$/.test(name)).map(name => `lib/a2/${name}`),
+  'lib/a2/review-evidence-contract.ts', 'lib/a2/review-evidence-service.ts',
+  'lib/outcomes/response-capture.ts', 'lib/outcomes/response-history.ts',
+  'lib/outcomes/a2-execution-capability.ts', 'lib/outcomes/a3-interview-capability.ts', 'lib/a4/strategic-radar.ts',
 ]
 assert.ok(paths.includes('lib/a2/plan-contract.ts'), 'The shared plan contract must be present')
 const copied = []

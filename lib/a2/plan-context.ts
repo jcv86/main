@@ -2,6 +2,7 @@ import 'server-only'
 import { createHash } from 'node:crypto'
 import type { JourneyFlow } from '@/lib/journey/flow'
 import type { GuidedNextAction } from '@/lib/journey/next-action'
+import type { A2ReviewEvidence } from './review-evidence-contract'
 import {
   a2PlanContextSnapshotSchema, buildA2PlanContextProjection, a2PlanProjectionAvailable,
   type A2PlanContextSnapshot,
@@ -20,8 +21,8 @@ export function hashA2PlanProjection(projection: unknown): string {
   return createHash('sha256').update(canonicalPlanJson(projection), 'utf8').digest('hex')
 }
 
-export function makeA2PlanContextSnapshot(flow: JourneyFlow, guidance: GuidedNextAction, now = new Date()): A2PlanContextSnapshot {
-  const { projection, available } = buildA2PlanContextProjection(flow, guidance)
+export function makeA2PlanContextSnapshot(flow: JourneyFlow, guidance: GuidedNextAction, now = new Date(), reviewEvidence?: A2ReviewEvidence): A2PlanContextSnapshot {
+  const { projection, available } = buildA2PlanContextProjection(flow, guidance, reviewEvidence)
   return a2PlanContextSnapshotSchema.parse({
     version: 'dtc-a2-plan-context.v1', capturedAt: now.toISOString(),
     hash: hashA2PlanProjection(projection), available, projection,

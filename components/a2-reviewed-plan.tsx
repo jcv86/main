@@ -6,6 +6,7 @@ import { createClient } from '@/lib/supabase/client'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { A2PlanEvidenceReview } from '@/components/a2-plan-evidence-review'
 import {
   A2_PLAN_ACTOR_HEADER, A2_PLAN_EXPECTED_ACTOR_HEADER,
   a2PlanContentSchema, a2PlanViewSchema, a2PlanMutationResponseSchema, a2PlanToday, validateA2PlanReviewDate,
@@ -273,6 +274,16 @@ export function A2ReviewedPlan({ actorId, onSessionChanged, onGuidanceUpdated, r
     window.requestAnimationFrame(() => purposeRef.current?.focus())
   }
 
+  function reviewEvidence() {
+    if (busyRef.current || uncertain || !contextAvailable || invalidSession.current) return
+    // Reviewing a source can return to an existing edit, never replace it.
+    if (draft) {
+      purposeRef.current?.focus()
+      return
+    }
+    startEditing()
+  }
+
   function discardEditing() {
     if (busyRef.current || uncertain) return
     setDraft(null); setDraftBase(null); draftBaseRef.current = null
@@ -354,6 +365,9 @@ export function A2ReviewedPlan({ actorId, onSessionChanged, onGuidanceUpdated, r
       </div>}
 
       {view && <>
+        {view.context?.projection.reviewEvidence && <A2PlanEvidenceReview
+          evidence={view.context.projection.reviewEvidence} hasPlan={Boolean(plan)} hasDraft={Boolean(draft)}
+          disabled={busy !== null || uncertain || !contextAvailable} onReview={reviewEvidence} />}
         {plan ? draft ? <details open={needsReview} className="min-w-0 rounded-lg border border-border p-3">
           <summary className="cursor-pointer rounded-sm font-medium focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">Ver el plan guardado actualmente</summary>
           <div className="mt-3"><PlanSummary plan={plan} /></div>

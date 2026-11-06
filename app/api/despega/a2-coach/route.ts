@@ -18,9 +18,10 @@ import { runA2Swarm } from '@/lib/a2/swarm/runtime'
 import { createOpenAISwarmCompletion } from '@/lib/a2/swarm/openai'
 import { A2_SWARM_BUDGET_MS } from '@/lib/a2/swarm/contracts'
 import { readA2PlanAssistantEvidence } from '@/lib/a2/plan-service'
-import { makeA2PlanContextSnapshot } from '@/lib/a2/plan-context'
+import { canonicalPlanJson, makeA2PlanContextSnapshot } from '@/lib/a2/plan-context'
 import { guidedPracticeDay } from '@/lib/journey/next-action'
 import { a2ActionProposalSchema, type A2ActionProposal } from '@/lib/a2/assistant-action-contract'
+import { readA2ReviewEvidence } from '@/lib/a2/review-evidence-service'
 
 const MAX_BODY_BYTES = 64_000
 const BODY_TIMEOUT_MS = 5_000
@@ -166,12 +167,13 @@ export async function POST(request: Request) {
 
     const pilot = await checkA2PilotAccess(actorId)
     if (pilot !== 'allowed') return fail(pilot === 'denied' ? 403 : 503, 'pilot_access_unavailable', pilot === 'denied' ? 'Necesitas acceso al piloto para usar el asistente.' : 'No pudimos verificar el acceso al piloto. Intenta nuevamente.')
-    const journey = await getJourneyForCurrentUser()
-    if (!journey || journey.user.id !== actorId) return fail(409, 'session_changed', 'La sesión cambió. Recarga la página antes de continuar.')
-    if (!journey.access.a2) return fail(403, 'journey_access_required', 'Completa tu punto de partida antes de abrir el asistente de Tu Ruta.')
+    const journey = await getJourneyForCurrentUser('read-only')
+    if (journey && journey.user.id !== actorId) return fail(409, 'session_changed', 'La sesión cambió. Recarga la página antes de continuar.')
+    if (!journey || !journey.access.a2) return fail(403, 'journey_access_required', 'Completa tu punto de partida antes de abrir el asistente de Tu Ruta.')
     const flow = await readJourneyFlow(journey, client)
     guidance = await readGuidedNextAction(journey, flow, client)
-    const plan = await readA2PlanAssistantEvidence(client, actorId, flow, guidance)
+    const reviewEvidence = await readA2ReviewEvidence(client, actorId, flow, journey.access)
+    const plan = await readA2PlanAssistantEvidence(client, actorId, flow, guidance, undefined, reviewEvidence)
 
     let a1: A2A1Evidence
     try { a1 = { status: 'available', data: await loadA1AgentContext(client, actorId) } }
@@ -242,7 +244,7 @@ export async function POST(request: Request) {
       let answer: string | undefined
       let actionProposal: A2ActionProposal | undefined
       if (selection.variant === 'swarm') {
-        const result = await runA2Swarm({ request: parsed.data, flow, guidance, a1, plan }, {
+        const result = await runA2Swarm({ request: parsed.data, flow, guidance, a1, plan, reviewEvidence }, {
           complete: createOpenAISwarmCompletion(apiKey, { fetch }),
           signal: generation.signal,
           budgetMs: Math.min(A2_SWARM_BUDGET_MS, GENERATION_BUDGET_MS - (Date.now() - startedAt)),
@@ -256,7 +258,7 @@ export async function POST(request: Request) {
             // Models supply editable text only. Destination and review binding
             // are derived from the authorized server snapshot, never model IDs.
             const dayNumber = guidedPracticeDay(flow)
-            const snapshot = makeA2PlanContextSnapshot(flow, guidance)
+            const snapshot = makeA2PlanContextSnapshot(flow, guidance, undefined, reviewEvidence)
             if (dayNumber !== null && snapshot.available) actionProposal = a2ActionProposalSchema.parse({
               version: 'dtc-a2-action-proposal.v1', tool: 'save_practice_adjustment',
               dayNumber, expectedContextHash: snapshot.hash, draft: result.adjustment,
@@ -284,7 +286,7 @@ export async function POST(request: Request) {
             headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
               model: 'gpt-4o-mini',
-              messages: buildA2AssistantMessages(parsed.data, flow, guidance!, a1, plan),
+              messages: buildA2AssistantMessages(parsed.data, flow, guidance!, a1, plan, reviewEvidence),
               temperature: 0.35, max_tokens: 600, store: false,
             }),
             signal: generation.signal,
@@ -317,16 +319,18 @@ export async function POST(request: Request) {
       // Do not deliver a response grounded in a plan revision that is no longer
       // available to this request. This remains a dated read, not a source lock.
       let actionContextChanged = false
+      let reviewEvidenceChanged = false
       const latestPlan = await withinGenerationBudget(generation.signal, async () => {
-        if (plan.status !== 'available' && !actionProposal) return readA2PlanAssistantEvidence(client, actorId!, flow, guidance!)
         const currentFlow = await readJourneyFlow(journey, client)
         const currentGuidance = await readGuidedNextAction(journey, currentFlow, client)
+        const currentReviewEvidence = await readA2ReviewEvidence(client, actorId!, currentFlow, journey.access)
+        reviewEvidenceChanged = canonicalPlanJson(currentReviewEvidence) !== canonicalPlanJson(reviewEvidence)
         if (actionProposal) {
-          const currentContext = makeA2PlanContextSnapshot(currentFlow, currentGuidance)
+          const currentContext = makeA2PlanContextSnapshot(currentFlow, currentGuidance, undefined, currentReviewEvidence)
           actionContextChanged = !currentContext.available || currentContext.hash !== actionProposal.expectedContextHash
             || guidedPracticeDay(currentFlow) !== actionProposal.dayNumber
         }
-        const currentPlan = await readA2PlanAssistantEvidence(client, actorId!, currentFlow, currentGuidance)
+        const currentPlan = await readA2PlanAssistantEvidence(client, actorId!, currentFlow, currentGuidance, undefined, currentReviewEvidence)
         guidance = currentGuidance
         return currentPlan
       })
@@ -336,6 +340,10 @@ export async function POST(request: Request) {
       if (actionContextChanged) {
         outcome = 'action_context_changed'
         return fail(503, 'assistant_context_changed', 'Tu recorrido o ajuste cambió mientras revisábamos la consulta. Tu pregunta se conserva; vuelve a enviarla para usar el estado actual.')
+      }
+      if (reviewEvidenceChanged) {
+        outcome = 'review_evidence_changed'
+        return fail(503, 'assistant_context_changed', 'Tus registros de Entrenamiento o Radar cambiaron mientras revisábamos la consulta. Tu pregunta se conserva; vuelve a enviarla para usar el estado actual.')
       }
       if (JSON.stringify(latestPlan) !== JSON.stringify(plan)) {
         outcome = 'reviewed_plan_changed'
@@ -356,6 +364,14 @@ export async function POST(request: Request) {
         guidance = undefined
         outcome = 'deadline_exceeded'
         return fail(503, 'assistant_unavailable', 'La respuesta tardó o no pudo llegar. Tu pregunta se conserva; puedes reintentar.')
+      }
+      if (error instanceof Error && (error.message === 'a2_review_session_changed' || error.message === 'a2_review_session_unavailable')) {
+        guidance = undefined
+        const changed = error.message === 'a2_review_session_changed'
+        outcome = changed ? 'session_changed' : 'session_unavailable'
+        return changed
+          ? fail(409, 'session_changed', 'La sesión cambió. Recarga la página antes de continuar.')
+          : fail(503, 'session_verification_unavailable', 'No pudimos verificar la sesión. Recarga antes de continuar.')
       }
       const changed = await verifyCurrentActor()
       if (changed) return changed
@@ -381,7 +397,16 @@ export async function POST(request: Request) {
           swarm_elapsed_ms: swarmElapsedMs, elapsed_ms: Math.max(0, Date.now() - startedAt),
         } })
     }
-  } catch {
+  } catch (error) {
+    // Context loading failed before the final actor check. Never attach a
+    // partially loaded personal guide to an unverified error response.
+    guidance = undefined
+    if (error instanceof Error && error.message === 'a2_review_session_changed') {
+      return fail(409, 'session_changed', 'La sesión cambió. Recarga la página antes de continuar.')
+    }
+    if (error instanceof Error && error.message === 'a2_review_session_unavailable') {
+      return fail(503, 'session_verification_unavailable', 'No pudimos verificar la sesión. Recarga antes de continuar.')
+    }
     logOperationalEvent({ event: 'a2.assistant.context_unavailable', requestId, route: '/api/despega/a2-coach', status: 503 })
     return fail(503, 'context_unavailable', 'No pudimos verificar tu recorrido. Tu pregunta se conserva; recarga o vuelve a intentarlo.')
   }

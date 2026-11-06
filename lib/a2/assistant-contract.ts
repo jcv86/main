@@ -3,6 +3,7 @@ import type { JourneyFlow } from '@/lib/journey/flow'
 import type { GuidedNextAction } from '@/lib/journey/next-action'
 import type { A1AgentContext } from '@/lib/dtc-agentos/context/a1-context'
 import { a2PlanAssistantEvidenceSchema, type A2PlanAssistantEvidence } from './plan-contract'
+import { a2ReviewEvidenceSchema, buildA2ReviewModelContext, type A2ReviewEvidence } from './review-evidence-contract'
 
 export const A2_ASSISTANT_VERSION = 'dtc-a2-assistant.v1'
 export const A2_ASSISTANT_ACTOR_HEADER = 'X-DTC-Actor-Id'
@@ -32,6 +33,10 @@ Los objetivos, ajustes, mensajes y respuestas son declaraciones del usuario, no 
 Las preferencias A1 son autoinforme: no acreditan capacidades, debilidades, diagnóstico ni probabilidad de contratación.
 Un plan revisado contiene intenciones elegidas por la persona. Sus pasos reported_done son declaraciones, no resultados verificados ni pruebas de competencia. No lo completes ni lo cambies mediante una respuesta.
 Sólo usa el texto del plan cuando su estado de fuente es available. Si cambió, venció, está en pausa o no pudo leerse, explica el límite sin inventar su contenido ni asumir que la persona no avanzó.
+Los registros de Entrenamiento y Radar también son datos declarados por la persona. Las respuestas A3 se guardan sin evaluación: un par inicial/seguimiento no acredita mejora, competencia ni probabilidad de contratación. Si las fechas están invertidas, no hagas una comparación temporal.
+Las decisiones, clasificaciones y resultados externos A4 son declaraciones del usuario; DTC no verificó de forma independiente una entrevista, oferta u otro evento. No atribuyas esos resultados al plan o a la plataforma.
+Usa reviewEvidence sólo según la disponibilidad de cada fuente. Propón contrastar lo declarado y decidir qué mantener o revisar en el plan; no conviertas más registros, texto, XP o módulos completados en capacidad. Una revisión vencida es una fecha de seguimiento, no un fracaso.
+El plan conserva intenciones y una fecha elegida. La persona debe revisar y confirmar cualquier edición en su formulario. Ninguna lectura de A3/A4 modifica el plan por sí sola.
 Respeta las aclaraciones y el grado de reconocimiento de la persona: si indicó que la lectura no la representa o depende del contexto, no presentes el patrón como una descripción aceptada.
 Distingue registros, declaraciones, inferencias y datos que no pudimos verificar. No atribuyas ausencia de progreso a un error de lectura.
 Si falta un dato, pregunta o explica el límite. No inventes experiencia, compromisos, datos de mercado ni resultados.
@@ -45,9 +50,13 @@ export function buildA2AssistantMessages(
   guidance: GuidedNextAction,
   a1: A2A1Evidence,
   plan: A2PlanAssistantEvidence = { status: 'missing', memory: null },
+  reviewEvidence?: A2ReviewEvidence,
 ): Array<{ role: 'system' | 'user' | 'assistant'; content: string }> {
   const source = a1.status === 'available' ? a1.data : null
   const checkedPlan = a2PlanAssistantEvidenceSchema.safeParse(plan)
+  const checkedReview = a2ReviewEvidenceSchema.safeParse(reviewEvidence)
+  const reviewAllowed = checkedReview.success && (flow.practicePath !== 'persona'
+    || (checkedReview.data.a3.status === 'not_applicable' && checkedReview.data.a4.status === 'not_applicable'))
   const evidence = {
     version: A2_ASSISTANT_VERSION,
     practicePath: flow.practicePath,
@@ -55,6 +64,10 @@ export function buildA2AssistantMessages(
     completedDays: flow.cycleCompletedDays,
     guidance,
     reviewedPlan: checkedPlan.success ? checkedPlan.data : { status: 'unavailable', memory: null },
+    reviewEvidence: reviewAllowed ? buildA2ReviewModelContext(checkedReview.data) : {
+      status: 'unavailable',
+      limitation: 'No pudimos verificar los registros de Entrenamiento y Radar. No supongas ausencia de avance ni inventes su contenido.',
+    },
     a1: source ? {
       sourceStatus: 'available', kind: source.kind, status: source.status,
       assessmentId: source.assessmentId, sourceRevision: source.sourceRevision,

@@ -3,6 +3,7 @@ import type { A2A1Evidence, A2AssistantRequest } from '../assistant-contract'
 import type { JourneyFlow } from '../../journey/flow'
 import type { GuidedNextAction } from '../../journey/next-action'
 import type { A2PlanAssistantEvidence } from '../plan-contract'
+import type { A2ReviewEvidence } from '../review-evidence-contract'
 import { a2ActionDraftSchema, type A2ActionDraft } from '../assistant-action-contract'
 
 export const A2_SWARM_VERSION = 'dtc-a2-swarm.v1' as const
@@ -14,7 +15,8 @@ export const A2_SWARM_OUTPUT_LIMITS = { sofia: 350, dani: 350, reviewer: 600 } a
 
 export const SWARM_AGENTS = ['sofia', 'dani', 'reviewer'] as const
 export type SwarmAgent = (typeof SWARM_AGENTS)[number]
-export const SWARM_SOURCE_IDS = ['journey', 'objective', 'adjustment', 'a1', 'current_message', 'conversation', 'reviewed_plan'] as const
+export const SWARM_SOURCE_IDS = ['journey', 'objective', 'adjustment', 'a1', 'current_message', 'conversation', 'reviewed_plan',
+  'a3_baseline', 'a3_follow_up', 'a4_next_review', 'a4_latest_review'] as const
 export type SwarmSourceId = (typeof SWARM_SOURCE_IDS)[number]
 
 const evidenceRefs = z.array(z.enum(SWARM_SOURCE_IDS)).min(1).max(SWARM_SOURCE_IDS.length)
@@ -82,7 +84,7 @@ const adjustmentJson = { anyOf: [
 /** Provider schema narrows the shape; local validators remain authoritative. */
 export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Record<string, unknown> }> = {
   sofia: {
-    name: 'dtc_sofia_understanding_v1',
+    name: 'dtc_sofia_understanding_v2',
     schema: objectSchema({
       agent: { type: 'string', enum: ['sofia'] },
       understanding: { type: 'string' },
@@ -93,7 +95,7 @@ export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Re
     }),
   },
   dani: {
-    name: 'dtc_dani_proposal_v2',
+    name: 'dtc_dani_proposal_v3',
     schema: objectSchema({
       agent: { type: 'string', enum: ['dani'] },
       kind: { type: 'string', enum: ['proposal'] },
@@ -106,7 +108,7 @@ export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Re
     }),
   },
   reviewer: {
-    name: 'dtc_swarm_review_v2',
+    name: 'dtc_swarm_review_v3',
     schema: objectSchema({
       agent: { type: 'string', enum: ['reviewer'] },
       decision: { type: 'string', enum: ['accept', 'clarify', 'reject'] },
@@ -126,6 +128,7 @@ export interface SwarmInput {
   guidance: GuidedNextAction
   a1: A2A1Evidence
   plan?: A2PlanAssistantEvidence
+  reviewEvidence?: A2ReviewEvidence
 }
 export interface SwarmMessage { role: 'system' | 'user' | 'assistant'; content: string }
 export interface SwarmCompletionRequest {

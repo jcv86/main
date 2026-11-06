@@ -13,6 +13,9 @@ assertAuthSources(JSON.parse(readFileSync(join(root, 'auth-prepared.json'), 'utf
 const paths = [
   'app/despega/a2/coach/page.tsx', 'components/a2-chat-coach.tsx', 'components/a2-assistant-action.tsx', 'components/layout/app-shell.tsx',
   'components/a2-reviewed-plan.tsx', 'app/api/a2/assistant-actions/route.ts', 'app/api/despega/a2-coach/route.ts',
+  'components/a2-plan-evidence-review.tsx', 'lib/a2/review-evidence-contract.ts', 'lib/a2/review-evidence-service.ts',
+  'lib/outcomes/response-capture.ts', 'lib/outcomes/response-history.ts',
+  'lib/outcomes/a2-execution-capability.ts', 'lib/outcomes/a3-interview-capability.ts', 'lib/a4/strategic-radar.ts',
   'lib/a2/assistant-action-contract.ts', 'lib/a2/assistant-action-api.ts', 'lib/a2/assistant-action-service.ts',
   'lib/a2/assistant-contract.ts', 'lib/a2/practice-adjustment.ts', 'lib/a2/api-access.ts',
   'lib/a2/plan-contract.ts', 'lib/a2/plan-context.ts', 'lib/a2/plan-service.ts',

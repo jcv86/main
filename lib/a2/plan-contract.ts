@@ -1,6 +1,7 @@
 import { z } from 'zod'
 import type { JourneyFlow } from '../journey/flow'
 import type { GuidedNextAction } from '../journey/next-action'
+import { a2ReviewEvidenceSchema, a2ReviewEvidenceAvailable, type A2ReviewEvidence } from './review-evidence-contract'
 
 /** Shared with the browser; keep server clients, crypto and side effects out. */
 export const A2_PLAN_VERSION = 'dtc-a2-plan.v1' as const
@@ -150,6 +151,8 @@ export const a2PlanContextProjectionSchema = z.object({
   checkpointPending: z.boolean(), radarAvailable: z.boolean(),
   objective: objectiveSchema.nullable(), adjustment: a2PlanContextAdjustmentSchema.nullable(),
   sources: sourcesSchema, limitations: limitationsSchema,
+  // Optional for stored v1 snapshots. Never inject a default or rewrite an old hash.
+  reviewEvidence: a2ReviewEvidenceSchema.optional(),
 }).strict().superRefine((value, ctx) => {
   validateSourceBindings(value, ctx)
   if (value.completedDays.some((day, index) => index > 0 && day <= value.completedDays[index - 1])) {
@@ -157,6 +160,9 @@ export const a2PlanContextProjectionSchema = z.object({
   }
   if (value.practicePath === 'persona' && (value.objective || value.sources.some(source => source.id === 'objective'))) {
     ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['objective'], message: 'Personal practice does not consume a workplace objective' })
+  }
+  if (value.reviewEvidence && ((value.practicePath === 'persona') !== (value.reviewEvidence.a3.status === 'not_applicable'))) {
+    ctx.addIssue({ code: z.ZodIssueCode.custom, path: ['reviewEvidence'], message: 'Review evidence must respect the declared practice path' })
   }
   const day = pendingDay(value)
   if (value.adjustment && (day !== value.adjustment.dayNumber || value.completedDays.includes(day))) {
@@ -177,6 +183,7 @@ function pendingDay(projection: { next: { href?: string }; activeHorizon?: numbe
 /** Availability of a validated projection, shared by construction and storage reads. */
 export function a2PlanProjectionAvailable(projection: A2PlanContextProjection): boolean {
   if (projection.sources.some(source => source.status === 'unavailable')) return false
+  if (projection.reviewEvidence && !a2ReviewEvidenceAvailable(projection.reviewEvidence)) return false
   // Absence of a relevant read is not the same as a verified missing row.
   if (projection.practicePath !== 'persona' && !projection.sources.some(source => source.id === 'objective')) return false
   if (pendingDay(projection) !== null && !projection.sources.some(source => source.id === 'adjustment')) return false
@@ -184,7 +191,7 @@ export function a2PlanProjectionAvailable(projection: A2PlanContextProjection): 
 }
 
 /** A detached minimal projection, never a read, write or permission decision. */
-export function buildA2PlanContextProjection(flow: JourneyFlow, guidance: GuidedNextAction):
+export function buildA2PlanContextProjection(flow: JourneyFlow, guidance: GuidedNextAction, reviewEvidence?: A2ReviewEvidence):
   { projection: A2PlanContextProjection; available: boolean } {
   const checked = a2PlanGuidanceSchema.parse(guidance)
   const action = a2PlanCanonicalActionSchema.parse(flow.next)
@@ -201,6 +208,7 @@ export function buildA2PlanContextProjection(flow: JourneyFlow, guidance: Guided
     objective: checked.objective || null, adjustment: checked.adjustment || null,
     sources: [...checked.sources].sort((a, b) => sourceOrder.indexOf(a.id) - sourceOrder.indexOf(b.id)),
     limitations: checked.limitations,
+    ...(reviewEvidence === undefined ? {} : { reviewEvidence }),
   })
   if (projection.adjustment && (flow.onboardingPath !== '/despega/a2' || flow.resumeDay !== projection.adjustment.dayNumber)) {
     throw new TypeError('Plan adjustment does not match the canonical pending day')
