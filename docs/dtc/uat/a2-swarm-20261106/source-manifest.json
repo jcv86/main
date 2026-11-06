@@ -1,7 +1,7 @@
 {
   "version": "dtc-a2-swarm-source-evidence.v1",
   "baseCommit": "a1b6388e4f31f5505ba86883e1731acb6309dbc2",
-  "capturedAt": "2026-11-06T19:51:18.821788+00:00",
+  "capturedAt": "2026-11-06T19:56:24.405585+00:00",
   "nodeVersion": "v24.22.1",
   "suites": [
     {
@@ -32,7 +32,7 @@
   "files": [
     {
       "path": ".github/workflows/a1-browser-qa.yml",
-      "sha256": "f09fa40a00e2586ac616bf50dc5e43dc76af90974d1a9a71b673b419edde7f3c"
+      "sha256": "501f95eb779ad2a49c8ed74620057b8f4ca155e833b039e19cba9ef2b25dd7cd"
     },
     {
       "path": "app/admin/canary-deployments/page.tsx",
@@ -86,5 +86,11 @@
       "path": "scripts/test-a2-swarm.mjs",
       "sha256": "b8e9defd1d5b420a6c7fa6d2fb54a002cef9b70d48d251fd049b11631496c042"
     }
-  ]
+  ],
+  "ciPreparationCorrection": {
+    "initialRun": 42283525397,
+    "cause": "A2 evidence directory pre-created the A1 lab root; prepare correctly refused overwrite",
+    "change": "Store and upload A2 evidence beside the lab, not inside its root before initialization",
+    "actualPrepareSmoke": "passed; second preparation still refused; no database or network"
+  }
 }

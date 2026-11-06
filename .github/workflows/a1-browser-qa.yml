@@ -132,7 +132,7 @@ jobs:
         run: npm run test:uat-isolation
       - name: A2 assistant and bounded swarm with synthetic model transport
         env:
-          DTC_AGENTIC_QA_OUTPUT: ${{ runner.temp }}/dtc-a1-browser/evidence/a2-swarm
+          DTC_AGENTIC_QA_OUTPUT: ${{ runner.temp }}/dtc-a2-swarm-evidence
         run: npm run test:guided-assistant
       - name: UI response observation survives navigation and excludes stale refreshes
         run: node scripts/a1-browser-qa/closure-response-browser.mjs
@@ -191,7 +191,9 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: a1-browser-evidence-${{ github.event.pull_request.head.sha || github.sha }}
-          path: ${{ runner.temp }}/dtc-a1-browser/evidence
+          path: |
+            ${{ runner.temp }}/dtc-a1-browser/evidence
+            ${{ runner.temp }}/dtc-a2-swarm-evidence
           retention-days: 7
           if-no-files-found: warn
       - name: Stop disposable local stack, never a linked project
