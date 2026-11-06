@@ -129,9 +129,10 @@ jobs:
           npm install --legacy-peer-deps --ignore-scripts --no-audit --no-fund --package-lock=false
           npm install --prefix "$A1_TOOLS_ROOT" --ignore-scripts --no-audit --no-fund playwright@1.56.1 @axe-core/playwright@4.10.2
           "$A1_TOOLS_ROOT/node_modules/.bin/playwright" install chromium
+          node scripts/a1-browser-qa/prepare-native-tab-focus.mjs
       - name: Native Chromium tab focus and visibility before local stack setup
         timeout-minutes: 2
-        run: xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' node scripts/a1-browser-qa/focus-visibility-preflight.mjs
+        run: DTC_NATIVE_TAB_FOCUS=yes xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' node scripts/a1-browser-qa/focus-visibility-preflight.mjs
       - name: UAT isolation and returning-login regression
         if: github.ref == 'refs/heads/uat/dtc-20261106'
         run: npm run test:uat-isolation
@@ -197,7 +198,7 @@ jobs:
           npx tsx scripts/a1-browser-qa/a2-plan-seed.ts
           node --import tsx scripts/test-a2-plan-sql.mjs
           node scripts/a1-browser-qa/a2-plan-advisors.mjs
-          xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' node --import tsx scripts/a1-browser-qa/a2-plan-browser.mjs
+          DTC_NATIVE_TAB_FOCUS=yes xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' node --import tsx scripts/a1-browser-qa/a2-plan-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4

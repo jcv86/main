@@ -4,12 +4,14 @@ import { randomUUID } from 'node:crypto'
 /**
  * Playwright 1.56.1's Chromium adapter enables focus emulation on every page:
  * https://github.com/microsoft/playwright/blob/v1.56.1/packages/playwright-core/src/server/chromium/crPage.ts
- * A native return test must first remove that override and prove the actual
- * browser changed visibility. This helper only observes browser events; it
- * never dispatches events or replaces document visibility/focus properties.
+ * The isolated, integrity-checked adapter disables its original-session override
+ * only when DTC_NATIVE_TAB_FOCUS=yes. A separate CDP session cannot release it.
+ * This helper proves actual browser visibility and only observes browser events;
+ * it never dispatches events or replaces document visibility/focus properties.
  */
 export async function createNativeTabReturn(page, sibling, { timeout = 10_000 } = {}) {
   assert.equal(process.env.A1_BROWSER_LAB, 'yes', 'Native tab observation is restricted to the disposable browser lab')
+  assert.equal(process.env.DTC_NATIVE_TAB_FOCUS, 'yes', 'Native tab observation requires the isolated adapter opt-in')
   assert.ok(process.env.DISPLAY, 'Native tab observation requires a headed Chromium display (xvfb-run in CI)')
   assert.notEqual(page, sibling, 'Two distinct tabs are required')
   assert.equal(page.context(), sibling.context(), 'Observe two tabs of the same browser context')
@@ -54,23 +56,19 @@ export async function createNativeTabReturn(page, sibling, { timeout = 10_000 } 
     if (disposed) return
     disposed = true
     const failures = []
-    for (const { tab, session } of controlled) {
+    for (const tab of controlled) {
       if (!tab.isClosed()) {
         try {
           await tab.evaluate(key => { window[key]?.dispose(); delete window[key] }, key)
-          // Restore the automation default only after observation has ended.
-          await session.send('Emulation.setFocusEmulationEnabled', { enabled: true })
         } catch (error) { failures.push(error) }
       }
-      await session.detach().catch(error => { if (!tab.isClosed()) failures.push(error) })
     }
     if (failures.length) throw new Error('Native tab observation cleanup failed')
   }
 
   try {
     for (const tab of [page, sibling]) {
-      const session = await tab.context().newCDPSession(tab)
-      controlled.push({ tab, session })
+      controlled.push(tab)
       await tab.evaluate(key => {
         const observed = []
         const record = event => {
@@ -87,7 +85,6 @@ export async function createNativeTabReturn(page, sibling, { timeout = 10_000 } 
           document.removeEventListener('visibilitychange', record)
         } }
       }, key)
-      await session.send('Emulation.setFocusEmulationEnabled', { enabled: false })
     }
   } catch (error) { await dispose().catch(() => {}); throw error }
 
@@ -118,7 +115,7 @@ export async function createNativeTabReturn(page, sibling, { timeout = 10_000 } 
           && observed.some((event, index) => index > hidden && event.type === 'visibilitychange' && event.isTrusted && event.visibility === 'visible')
           && observed.some((event, index) => index > hidden && event.type === 'focus' && event.isTrusted && event.focused)
       }, key, { timeout, polling: 50 })
-      return { mechanism: 'headed_chromium_native_tab_activation', focusEmulation: 'disabled_during_observation',
+      return { mechanism: 'headed_chromium_native_tab_activation', focusEmulation: 'disabled_in_pinned_adapter',
         away, returned: await states(), events: await events() }
     },
     dispose,

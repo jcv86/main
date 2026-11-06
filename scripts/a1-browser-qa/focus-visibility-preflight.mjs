@@ -6,6 +6,7 @@ import { createServer } from 'node:http'
 import { createRequire } from 'node:module'
 import { join, resolve, sep } from 'node:path'
 import { createNativeTabReturn } from './native-tab-return.mjs'
+import { assertNativeTabFocusAdapter } from './prepare-native-tab-focus.mjs'
 
 assert.equal(process.env.A1_BROWSER_LAB, 'yes', 'Explicit disposable browser lab opt-in required')
 assert.ok(process.env.RUNNER_TEMP, 'Runner temporary storage is required')
@@ -18,14 +19,17 @@ assert.ok(!labRoot || (labRoot !== evidenceDirectory && !evidenceDirectory.start
 const labExistedBefore = labRoot ? existsSync(labRoot) : false
 const startedAt = new Date().toISOString()
 let browser, server, probe, nativeTabReturn = null, playwrightVersion = null, chromiumVersion = null
+let nativeFocusAdapter = null
 let phase = 'environment', failure = null, blockedRequests = 0, pagesServed = 0
 const javascriptErrors = []
 
 try {
   assert.ok(process.env.DISPLAY?.trim(), 'Headed Chromium requires DISPLAY; run this preflight with xvfb-run')
+  assert.equal(process.env.DTC_NATIVE_TAB_FOCUS, 'yes', 'Native focus requires the scoped adapter flag')
   assert.ok(process.env.A1_TOOLS_ROOT, 'Isolated browser tools are required')
   const toolsRoot = realpathSync(resolve(process.env.A1_TOOLS_ROOT))
   assert.ok(toolsRoot.startsWith(temporary + sep), 'Browser tools must remain inside runner temporary storage')
+  nativeFocusAdapter = assertNativeTabFocusAdapter()
   const requireTools = createRequire(join(toolsRoot, 'package.json'))
   const { chromium } = requireTools('playwright')
   playwrightVersion = requireTools('playwright/package.json').version
@@ -99,7 +103,7 @@ try {
     suite: 'native-focus-visibility-preflight', version: 1,
     sourceCommit: process.env.A1_SOURCE_COMMIT || null,
     startedAt, finishedAt: new Date().toISOString(), status: failure ? 'FAIL' : 'PASS',
-    nodeVersion: process.version, playwrightVersion, chromiumVersion,
+    nodeVersion: process.version, playwrightVersion, chromiumVersion, nativeFocusAdapter,
     environment: 'disposable-headed-chromium-loopback', headless: false,
     applicationStarted: false, authenticationUsed: false, databaseUsed: false,
     applicationLabCreated: Boolean(labRoot && !labExistedBefore && existsSync(labRoot)),

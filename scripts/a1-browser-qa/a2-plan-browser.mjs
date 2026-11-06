@@ -9,8 +9,10 @@ import { once } from 'node:events'
 import { closureLab, closureServerEnv, safeFailure } from './closure-lab.mjs'
 import { AUTH_VIEWPORTS, assertAuthSources } from './auth-lab.mjs'
 import { createNativeTabReturn } from './native-tab-return.mjs'
+import { assertNativeTabFocusAdapter } from './prepare-native-tab-focus.mjs'
 import { a2PlanViewSchema, a2PlanMutationResponseSchema, a2PlanToday } from '../../lib/a2/plan-contract.ts'
 
+const nativeFocusAdapter = assertNativeTabFocusAdapter()
 const { root, app, repo, status, evidence } = closureLab()
 assert.ok(process.env.DISPLAY, 'A2 plan acceptance requires headed Chromium under xvfb-run')
 const port = 3119, base = `http://localhost:${port}`, path = '/api/a2/plan', coach = '/despega/a2/coach'
@@ -101,6 +103,17 @@ function observe(page, method) {
   return waiting
 }
 async function idle(page) { await page.locator('[data-a2-reviewed-plan][aria-busy="false"]').waitFor() }
+async function activate(page, { refresh = false } = {}) {
+  const foreground = await page.evaluate(() => document.visibilityState === 'visible' && document.hasFocus())
+  // Native activation may refresh the card. Settle that GET before observing a
+  // later button action; pending/held commands intentionally suppress refresh.
+  const returning = !foreground && refresh ? observe(page, 'GET') : null
+  await page.bringToFront()
+  await page.waitForFunction(() => document.visibilityState === 'visible' && document.hasFocus(),
+    undefined, { timeout: 30_000, polling: 50 })
+  if (returning) checked(await returning, page)
+  if (refresh) await idle(page)
+}
 function checked(result, page, expectedStatus = 200) {
   assert.equal(result.status, expectedStatus, 'Actual plan API status matches its UI action')
   assert.match(result.headers['cache-control'] || '', /no-store/)
@@ -147,6 +160,7 @@ async function newPage(context) {
 }
 async function login(page, user, destination = coach) {
   actors.set(page, user.id)
+  await activate(page)
   await page.goto(`${base}/auth/email-login?next=${encodeURIComponent(destination)}`)
   await page.getByLabel('Correo electrónico', { exact: true }).fill(user.email)
   await page.getByLabel('Contraseña', { exact: true }).fill(fixture.password)
@@ -285,9 +299,11 @@ try {
       const secondContext = await newContext(viewport, 151)
       const second = await newPage(secondContext)
       await login(second, user)
+      await activate(page, { refresh: true })
       await card(page).getByRole('button', { name: 'Editar plan', exact: true }).click()
       const retained = 'Mi borrador local conserva esta corrección sintética.'
       await card(page).getByLabel('Propósito del plan', { exact: true }).fill(retained)
+      await activate(second, { refresh: true })
       await card(second).getByRole('button', { name: 'Editar plan', exact: true }).click()
       await card(second).getByLabel('Propósito del plan', { exact: true }).fill('Edición guardada desde la segunda sesión sintética.')
       const reached = deferred(), release = deferred()
@@ -296,11 +312,16 @@ try {
         reached.resolve(); await bounded(release.promise, 'Timed out releasing a stale revision request'); await route.continue()
       }
       await page.route(base + path, holdBeforeWrite)
+      await activate(page, { refresh: true })
       const conflicting = observe(page, 'POST')
       try {
         await card(page).getByRole('button', { name: 'Guardar y activar plan', exact: true }).click()
         await bounded(reached.promise, 'The real UI did not submit its held revision')
+        await activate(second, { refresh: true })
         await clickPlan(second, 'Guardar y activar plan')
+        // Keep the stale request held while activating its page, then let the
+        // actual server compare revisions. No preparation GET replaces the CAS.
+        await activate(page)
         release.resolve()
         const result = checked(await conflicting, page, 409)
         assert.equal(result.body.code, 'plan_conflict')
@@ -410,9 +431,11 @@ try {
         assert.equal(await card(page).getByLabel('Propósito del plan', { exact: true }).inputValue(), pendingPurpose)
         assert.equal(transportPosts, 1, 'Uncertain writes never retry automatically')
       } finally { await page.unroute(base + path, loseDelivery) }
+      await activate(second, { refresh: true })
       await readPlan(second)
       const deleted = (await deletePlan(second, true)).body
       await assertSaved(user.id, deleted)
+      await activate(page)
       const current = await readPlan(page, 'Comprobar estado actual')
       assert.equal(current.plan, null)
       assert.equal(await card(page).getByLabel('Propósito del plan', { exact: true }).inputValue(), pendingPurpose)
@@ -462,6 +485,7 @@ try {
         allowDelivery.resolve()
         const delivered = await bounded(deliveryDone.promise, 'Old actor response did not finish')
         if (delivered.error) throw delivered.error
+        await activate(page)
         await page.getByRole('alert').filter({ hasText: 'La sesión cambió.' }).waitFor()
         assert.equal(await page.locator('[data-a2-reviewed-plan],textarea,[role="log"],[data-guided-next-action]').count(), 0)
         assert.equal((await page.locator('body').innerText()).includes(privateMarker), false)
@@ -521,7 +545,7 @@ try {
   writeFileSync(join(evidence, 'a2-plan-browser-results.json'), JSON.stringify({
     commit: process.env.A1_SOURCE_COMMIT, scope: manifest.environment, verdict: failure ? 'FAIL' : 'PASS',
     steps, accessibility, layouts, javascriptErrors, blockedHosts: [...blockedHosts], requestFailures,
-    controlledFaults, nativeTabReturns, progressTablesCompared: invariantTables, failure,
+    controlledFaults, nativeTabReturns, nativeFocusAdapter, progressTablesCompared: invariantTables, failure,
     transport: 'Actual local UI, email Auth, API, RLS and SQL; no successful plan API response is mocked.',
     notVerified: manifest.notVerified,
   }, null, 2))
