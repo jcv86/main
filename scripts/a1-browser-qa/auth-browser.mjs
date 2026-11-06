@@ -219,7 +219,7 @@ async function submit(page, user, password, expectedStatus) {
   assert.equal(result.status(), expectedStatus, 'Real email-login returned an unexpected status')
   const body = await result.json().catch(() => null)
   if (expectedStatus >= 400) {
-    await page.getByRole('alert').waitFor()
+    await page.locator('#email-login-error[role="alert"]').waitFor()
     assert.equal(new URL(page.url()).pathname, '/auth/email-login', 'Failed login must stay on the form')
     assert.ok(await page.getByRole('button', { name: 'Ingresar', exact: true }).isEnabled(), 'Failed login must allow retry')
   } else assert.equal(body?.success, true)
@@ -308,7 +308,7 @@ async function returning(viewport) {
     await page.route(`${base}/api/auth/email-login`, failLogin)
     controlledFault = true
     await submit(page, user, fixture.returning.password, fault.status)
-    const alert = await page.getByRole('alert').innerText()
+    const alert = await page.locator('#email-login-error[role="alert"]').innerText()
     assert.ok(alert.includes(fault.message), 'Recoverable email error must explain the next step')
     assert.ok(!alert.includes('synthetic-provider-detail'), 'Raw provider diagnostics must stay out of the form')
     await provider(page)
