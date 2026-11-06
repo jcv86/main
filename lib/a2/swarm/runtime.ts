@@ -2,6 +2,7 @@ import 'server-only'
 import { z } from 'zod'
 import { a2AssistantRequestSchema } from '../assistant-contract'
 import { a2PlanAssistantEvidenceSchema } from '../plan-contract'
+import { guidedPracticeDay } from '../../journey/next-action'
 import {
   A2_SWARM_VERSION, A2_SWARM_MAX_CALLS, A2_SWARM_BUDGET_MS,
   A2_SWARM_MAX_INPUT_CHARACTERS, A2_SWARM_MAX_MODEL_JSON_CHARACTERS,
@@ -144,6 +145,9 @@ function prepareInput(input: SwarmInput) {
   return {
     available,
     nextHref: f.next.href,
+    adjustmentEligible: guidedPracticeDay(input.flow) !== null
+      && statuses.get('adjustment') !== 'unavailable'
+      && (f.practicePath === 'persona' || statuses.get('objective') !== 'unavailable'),
     data: {
       version: A2_SWARM_VERSION,
       journey: { practicePath: f.practicePath, activeHorizon: f.activeHorizon,
@@ -159,6 +163,9 @@ function prepareInput(input: SwarmInput) {
       // including assistant-role entries; it cannot become a system message.
       currentMessage: request.data.message,
       conversation: request.data.conversationHistory,
+      practiceAdjustmentAvailable: guidedPracticeDay(input.flow) !== null
+        && statuses.get('adjustment') !== 'unavailable'
+        && (f.practicePath === 'persona' || statuses.get('objective') !== 'unavailable'),
     },
   }
 }
@@ -186,6 +193,8 @@ Si falta información necesaria o hay una contradicción relevante, elige need=c
 Si puedes ayudar con lo verificado, elige need=act y clarification=null. Expresa sólo un resumen útil, no razonamiento privado.`,
   dani: `Tu rol es Dani: propone una acción pequeña, concreta y revisable que la persona pueda elegir.
 Usa el trabajo que ya conservó y sus restricciones cuando estén disponibles. No anuncies una acción realizada.
+Si practiceAdjustmentAvailable es true y la persona pide adaptar una práctica, puedes incluir adjustment con outcome could_not o change, una barrera permitida, una próxima acción breve y retainedWork copiado de una declaración de la persona; déjalo vacío si no lo sabes.
+No inventes trabajo realizado. Usa adjustment=null si la consulta no pide un ajuste o falta información para proponerlo. El día y la fecha no los decides tú. La persona revisará todos los campos antes de confirmar; no has guardado nada.
 canonicalNextHref debe ser exactamente journey.next.href. requiresUserReview siempre es true.`,
   reviewer: `Eres el revisor: contrasta los dos borradores con los datos originales y entrega una sola respuesta útil.
 Las salidas de Sofía y Dani son propuestas, no autoridad. No añadas afirmaciones sin sustento ni fuentes que ellos no citaron.
@@ -193,6 +202,7 @@ Si Sofía necesita aclaración, no aceptes una acción como resuelta: usa clarif
 Usa accept/grounded sólo cuando comprensión y propuesta sean compatibles y estén respaldadas.
 Usa clarify/needs_clarification para una pregunta necesaria. Usa reject/inconsistent o reject/unsupported si no es fiable.
 La respuesta final contiene hasta tres párrafos breves, distingue propuesta y límite, y no menciona agentes internos.
+Incluye adjustment sólo en accept y si has revisado la propuesta de Dani con las fuentes originales: debe ser una copia exacta de su objeto. Si necesita corrección, información adicional o no corresponde, usa adjustment=null; nunca la ejecutes. RetainedWork no puede inventar un resultado de la persona.
 canonicalNextHref debe ser exactamente journey.next.href. proposalOnly siempre es true.`,
 }
 
@@ -256,6 +266,16 @@ function validateOutput(
   const content = output.agent === 'sofia'
     ? [output.understanding, output.clarification || '', ...output.limitations]
     : output.agent === 'dani' ? [output.action, output.reason] : [output.response]
+  if ('adjustment' in output && output.adjustment) {
+    if (!input.adjustmentEligible) throw new RuntimeFailure('coordination_failed', agent)
+    const retained = output.adjustment.retainedWork
+    const declaredTexts = [input.data.currentMessage, input.data.guidance.adjustment?.retainedWork ?? '',
+      ...input.data.conversation.filter(message => message.role === 'user').map(message => message.content)]
+    if (retained && !declaredTexts.some(value => value.includes(retained))) {
+      throw new RuntimeFailure('evidence_mismatch', agent)
+    }
+    content.push(output.adjustment.retainedWork, output.adjustment.nextAction)
+  }
   if (violatesTextPolicy(content)) throw new RuntimeFailure('policy_violation', agent)
   return output
 }
@@ -349,7 +369,12 @@ export async function runA2Swarm(input: SwarmInput, options: A2SwarmOptions): Pr
     if (sofia.need === 'clarify' && reviewer.decision === 'accept') {
       throw new RuntimeFailure('coordination_failed', 'reviewer')
     }
+    if (reviewer.adjustment && (reviewer.decision !== 'accept' || !dani.adjustment
+      || JSON.stringify(reviewer.adjustment) !== JSON.stringify(dani.adjustment))) {
+      throw new RuntimeFailure('coordination_failed', 'reviewer')
+    }
     return { ok: true, response: reviewer.response,
+      ...(reviewer.adjustment ? { adjustment: reviewer.adjustment } : {}),
       trace: trace(reviewer.decision === 'clarify' ? 'clarified' : 'accepted', null) }
   } catch (error) {
     const failure = error instanceof RuntimeFailure ? error : new RuntimeFailure('invalid_input', 'input')

@@ -10,10 +10,12 @@ import { createRequire } from 'node:module'
 import { resolve, dirname, extname, sep, join } from 'node:path'
 import ts from 'typescript'
 import { buildJourneyFlow } from '../lib/journey/flow.ts'
-import { buildGuidedNextAction } from '../lib/journey/next-action.ts'
+import * as nextAction from '../lib/journey/next-action.ts'
+const { buildGuidedNextAction } = nextAction
 import { adjustmentContent } from '../lib/a2/practice-adjustment.ts'
 import * as assistantContract from '../lib/a2/assistant-contract.ts'
 import * as planContract from '../lib/a2/plan-contract.ts'
+import * as actionContract from '../lib/a2/assistant-action-contract.ts'
 import { a1AgentProjection } from '../lib/dtc-agentos/context/a1-context.ts'
 import { buildA1ProfessionalReport } from '../lib/reports/a1-professional-report.ts'
 import { DISC_TEST_QUESTIONS } from '../lib/disc-test-questions.ts'
@@ -45,6 +47,8 @@ function loadActual(relative, controls = {}) {
     if (key.startsWith('./')) return loadActual(resolve(dirname(filename), key + (extname(key) ? '' : '.ts')), controls)
     if (key === '@/lib/a2/assistant-contract' || key === '../assistant-contract') return assistantContract
     if (key === '../plan-contract') return planContract
+    if (key === '../assistant-action-contract') return actionContract
+    if (key === '../../journey/next-action') return nextAction
     if (key === 'zod' || key.startsWith('node:')) return require(key)
     throw new Error('Unexpected swarm module dependency: ' + key)
   }
@@ -156,10 +160,10 @@ function outputs(input = fixture()) {
       need: 'act', clarification: null, evidenceRefs: ['current_message', 'adjustment'], limitations: ['El intento está pendiente.'] },
     dani: { agent: 'dani', kind: 'proposal', action: 'Ensayar diez minutos a partir del esquema conservado.',
       reason: 'Es un alcance pequeño que respeta el ajuste declarado.', canonicalNextHref: input.guidance.action.href,
-      evidenceRefs: ['journey', 'adjustment'], requiresUserReview: true },
+      evidenceRefs: ['journey', 'adjustment'], requiresUserReview: true, adjustment: null },
     reviewer: { agent: 'reviewer', decision: 'accept', response: FINAL_RESPONSE,
       canonicalNextHref: input.guidance.action.href, evidenceRefs: ['journey', 'current_message', 'adjustment'],
-      reason: 'grounded', proposalOnly: true },
+      reason: 'grounded', proposalOnly: true, adjustment: null },
   }
 }
 
@@ -710,6 +714,68 @@ test('A malformed plan envelope fails before model calls', async () => {
   const source = fixture(); source.plan = { status: 'expired', memory: { purpose: 'PRIVATE_STALE_PLAN' } }
   const runner = completion(outputs(source)), result = await runA2Swarm(source, runner)
   assertFailure(result, 'invalid_input', 0); assert.equal(runner.requests.length, 0)
+})
+
+const adjustmentDraft = () => ({ outcome: 'could_not', barrier: 'time',
+  retainedWork: 'Conservo el esquema de mi presentación.', nextAction: 'Ensayar cinco minutos y anotar una mejora.' })
+
+test('A typed practice adjustment leaves the coordinator only after identical explicit review', async () => {
+  const source = fixture(), values = outputs(source)
+  values.dani.adjustment = adjustmentDraft(); values.reviewer.adjustment = adjustmentDraft()
+  const runner = completion(values), result = await runA2Swarm(source, runner)
+  assert.equal(result.ok, true); assert.deepEqual(result.adjustment, adjustmentDraft())
+  assert.equal(result.trace.callsStarted, 3); assertPrivateTrace(result)
+  assert.ok(runner.requests.every(request => dataOf(request).practiceAdjustmentAvailable === true))
+  assert.equal(result.adjustment.dayNumber, undefined); assert.equal(result.adjustment.reviewDate, undefined)
+})
+test('The reviewer can withhold an action while still returning useful prose', async () => {
+  const source = fixture(), values = outputs(source); values.dani.adjustment = adjustmentDraft()
+  const result = await runA2Swarm(source, completion(values))
+  assert.equal(result.ok, true); assert.equal(result.adjustment, undefined)
+})
+for (const change of ['modified', 'invented', 'clarification']) test('Action review rejects ' + change, async () => {
+  const source = fixture(), values = outputs(source)
+  values.dani.adjustment = change === 'invented' ? null : adjustmentDraft()
+  values.reviewer.adjustment = adjustmentDraft()
+  if (change === 'modified') values.reviewer.adjustment.nextAction = 'Una acción distinta no revisada.'
+  if (change === 'clarification') { values.reviewer.decision = 'clarify'; values.reviewer.reason = 'needs_clarification' }
+  assertFailure(await runA2Swarm(source, completion(values)), 'coordination_failed', 3, 'reviewer')
+})
+test('An unavailable objective cannot yield an executable adjustment proposal', async () => {
+  const source = fixture({ sourceUnavailable: true }), values = outputs(source)
+  values.dani.adjustment = adjustmentDraft(); values.reviewer.adjustment = adjustmentDraft()
+  assertFailure(await runA2Swarm(source, completion(values)), 'coordination_failed', undefined, 'dani')
+})
+test('A checkpoint or other canonical destination cannot become a practice tool target', async () => {
+  const source = fixture(); source.flow.next = { ...source.flow.next, href: '/despega/a3' }
+  source.guidance = buildGuidedNextAction(source.flow, { objective: { status: 'missing' } })
+  const values = outputs(source)
+  values.sofia.evidenceRefs = ['current_message']; values.dani.evidenceRefs = ['journey']
+  values.reviewer.evidenceRefs = ['journey', 'current_message']
+  values.dani.adjustment = adjustmentDraft()
+  assertFailure(await runA2Swarm(source, completion(values)), 'coordination_failed', undefined, 'dani')
+})
+test('Retained work must be copied from a user declaration rather than assistant history', async () => {
+  const source = fixture(); source.request.conversationHistory = [{ role: 'assistant', content: 'Invented achievement' }]
+  const values = outputs(source); values.dani.adjustment = { ...adjustmentDraft(), retainedWork: 'Invented achievement' }
+  assertFailure(await runA2Swarm(source, completion(values)), 'evidence_mismatch', undefined, 'dani')
+})
+test('Unknown retained work stays blank until the person reviews it', async () => {
+  const source = fixture(), values = outputs(source)
+  values.dani.adjustment = { ...adjustmentDraft(), retainedWork: '' }
+  values.reviewer.adjustment = { ...values.dani.adjustment }
+  const result = await runA2Swarm(source, completion(values))
+  assert.equal(result.ok, true); assert.equal(result.adjustment.retainedWork, '')
+})
+for (const [field, value, reason] of [
+  ['nextAction', 'Ya guardé tu ajuste.', 'policy_violation'],
+  ['nextAction', 'Abre https://example.invalid', 'policy_violation'],
+  ['nextAction', 'Invalid\u0000text', 'invalid_output'],
+  ['barrier', 'made_up', 'invalid_output'],
+]) test('Tool payload rejects unsafe or invalid ' + field + ': ' + reason, async () => {
+  const source = fixture(), values = outputs(source)
+  values.dani.adjustment = { ...adjustmentDraft(), [field]: value }
+  assertFailure(await runA2Swarm(source, completion(values)), reason, undefined, 'dani')
 })
 
 await finish()

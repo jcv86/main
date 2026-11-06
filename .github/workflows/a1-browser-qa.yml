@@ -52,7 +52,9 @@ on:
       - 'app/admin/canary-deployments/**'
       - 'scripts/test-a2-swarm*'
       - 'scripts/test-a2-plan*'
+      - 'scripts/test-a2-action*'
       - 'supabase/migrations/*a2_reviewed_plan*'
+      - 'supabase/migrations/*a2_assistant_action*'
       - 'scripts/test-a2-assistant.cjs'
       - 'scripts/check-a2-swarm-canary.mjs'
       - 'package.json'
@@ -199,6 +201,13 @@ jobs:
           node --import tsx scripts/test-a2-plan-sql.mjs
           node scripts/a1-browser-qa/a2-plan-advisors.mjs
           DTC_NATIVE_TAB_FOCUS=yes xvfb-run --auto-servernum --server-args='-screen 0 1920x1080x24' node --import tsx scripts/a1-browser-qa/a2-plan-browser.mjs
+      - name: Reviewed assistant actions, atomic adjustment receipts, real API recovery and owner boundaries
+        run: |
+          node scripts/a1-browser-qa/a2-action-prepare.mjs
+          npx tsx scripts/a1-browser-qa/a2-action-seed.ts
+          node --conditions=react-server --import tsx scripts/test-a2-action-sql.mjs
+          node scripts/a1-browser-qa/a2-action-advisors.mjs
+          node --import tsx scripts/a1-browser-qa/a2-action-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4

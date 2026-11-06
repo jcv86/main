@@ -3,6 +3,7 @@ import type { A2A1Evidence, A2AssistantRequest } from '../assistant-contract'
 import type { JourneyFlow } from '../../journey/flow'
 import type { GuidedNextAction } from '../../journey/next-action'
 import type { A2PlanAssistantEvidence } from '../plan-contract'
+import { a2ActionDraftSchema, type A2ActionDraft } from '../assistant-action-contract'
 
 export const A2_SWARM_VERSION = 'dtc-a2-swarm.v1' as const
 export const A2_SWARM_MAX_CALLS = 3
@@ -40,6 +41,7 @@ export const daniOutputSchema = z.object({
   canonicalNextHref: z.string().min(1).max(200),
   evidenceRefs,
   requiresUserReview: z.literal(true),
+  adjustment: a2ActionDraftSchema.nullable().optional().default(null),
 }).strict()
 
 export const reviewerOutputSchema = z.object({
@@ -50,6 +52,7 @@ export const reviewerOutputSchema = z.object({
   evidenceRefs,
   reason: z.enum(['grounded', 'needs_clarification', 'inconsistent', 'unsupported']),
   proposalOnly: z.literal(true),
+  adjustment: a2ActionDraftSchema.nullable().optional().default(null),
 }).strict().superRefine((value, ctx) => {
   const valid = value.decision === 'accept'
     ? value.reason === 'grounded' && value.response.length > 0
@@ -67,6 +70,14 @@ const referenceJson = { type: 'array', items: { type: 'string', enum: [...SWARM_
 function objectSchema(properties: Record<string, unknown>): Record<string, unknown> {
   return { type: 'object', additionalProperties: false, properties, required: Object.keys(properties) }
 }
+const adjustmentJson = { anyOf: [
+  objectSchema({
+    outcome: { type: 'string', enum: ['could_not', 'change'] },
+    barrier: { type: 'string', enum: ['time', 'unclear', 'resources', 'energy', 'goal_changed', 'other'] },
+    retainedWork: { type: 'string' }, nextAction: { type: 'string' },
+  }),
+  { type: 'null' },
+] }
 
 /** Provider schema narrows the shape; local validators remain authoritative. */
 export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Record<string, unknown> }> = {
@@ -82,7 +93,7 @@ export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Re
     }),
   },
   dani: {
-    name: 'dtc_dani_proposal_v1',
+    name: 'dtc_dani_proposal_v2',
     schema: objectSchema({
       agent: { type: 'string', enum: ['dani'] },
       kind: { type: 'string', enum: ['proposal'] },
@@ -91,10 +102,11 @@ export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Re
       canonicalNextHref: { type: 'string' },
       evidenceRefs: referenceJson,
       requiresUserReview: { type: 'boolean', enum: [true] },
+      adjustment: adjustmentJson,
     }),
   },
   reviewer: {
-    name: 'dtc_swarm_review_v1',
+    name: 'dtc_swarm_review_v2',
     schema: objectSchema({
       agent: { type: 'string', enum: ['reviewer'] },
       decision: { type: 'string', enum: ['accept', 'clarify', 'reject'] },
@@ -103,6 +115,7 @@ export const SWARM_OUTPUT_SCHEMAS: Record<SwarmAgent, { name: string; schema: Re
       evidenceRefs: referenceJson,
       reason: { type: 'string', enum: ['grounded', 'needs_clarification', 'inconsistent', 'unsupported'] },
       proposalOnly: { type: 'boolean', enum: [true] },
+      adjustment: adjustmentJson,
     }),
   },
 }
@@ -137,7 +150,7 @@ export interface SwarmTrace {
   terminal: 'accepted' | 'clarified' | 'fallback'
 }
 export type SwarmResult =
-  | { ok: true; response: string; trace: SwarmTrace }
+  | { ok: true; response: string; trace: SwarmTrace; adjustment?: A2ActionDraft }
   | { ok: false; reason: SwarmFailure; trace: SwarmTrace }
 
 /** Errors contain a closed category only, never provider bodies or user text. */

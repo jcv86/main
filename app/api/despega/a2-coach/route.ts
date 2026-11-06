@@ -18,8 +18,12 @@ import { runA2Swarm } from '@/lib/a2/swarm/runtime'
 import { createOpenAISwarmCompletion } from '@/lib/a2/swarm/openai'
 import { A2_SWARM_BUDGET_MS } from '@/lib/a2/swarm/contracts'
 import { readA2PlanAssistantEvidence } from '@/lib/a2/plan-service'
+import { makeA2PlanContextSnapshot } from '@/lib/a2/plan-context'
+import { guidedPracticeDay } from '@/lib/journey/next-action'
+import { a2ActionProposalSchema, type A2ActionProposal } from '@/lib/a2/assistant-action-contract'
 
 const MAX_BODY_BYTES = 64_000
+const BODY_TIMEOUT_MS = 5_000
 const GENERATION_BUDGET_MS = 25_000
 const MIN_FALLBACK_BUDGET_MS = 1_000
 const MAX_PROVIDER_BODY_BYTES = 32_000
@@ -77,21 +81,39 @@ async function readBoundedJson(request: Request): Promise<unknown> {
   if (Number(request.headers.get('content-length')) > MAX_BODY_BYTES) throw new Error('too_large')
   const reader = request.body?.getReader()
   if (!reader) throw new Error('invalid_json')
-  const decoder = new TextDecoder('utf-8', { fatal: true })
-  let bytes = 0, text = ''
-  try {
+  let timer: ReturnType<typeof setTimeout> | undefined
+  let interrupt: (() => void) | undefined
+  const interrupted = new Promise<never>((_, reject) => {
+    interrupt = () => {
+      reject(new Error('request_interrupted'))
+      void reader.cancel().catch(() => {})
+    }
+    timer = setTimeout(interrupt, BODY_TIMEOUT_MS)
+    request.signal.addEventListener('abort', interrupt, { once: true })
+    if (request.signal.aborted) interrupt()
+  })
+  const reading = (async () => {
+    const decoder = new TextDecoder('utf-8', { fatal: true })
+    let bytes = 0, text = ''
     for (;;) {
       const { done, value } = await reader.read()
       if (done) break
       bytes += value.byteLength
       if (bytes > MAX_BODY_BYTES) {
-        await reader.cancel()
+        void reader.cancel().catch(() => {})
         throw new Error('too_large')
       }
       text += decoder.decode(value, { stream: true })
     }
     return JSON.parse(text + decoder.decode())
-  } finally { reader.releaseLock() }
+  })()
+  try { return await Promise.race([interrupted, reading]) }
+  finally {
+    if (timer) clearTimeout(timer)
+    if (interrupt) request.signal.removeEventListener('abort', interrupt)
+    void reader.cancel().catch(() => {})
+    reader.releaseLock()
+  }
 }
 
 export async function POST(request: Request) {
@@ -132,11 +154,15 @@ export async function POST(request: Request) {
     }
     let payload: unknown
     try { payload = await readBoundedJson(request) } catch (error) {
+      if (error instanceof Error && error.message === 'request_interrupted') {
+        return fail(408, 'request_interrupted', 'El envío de la consulta se interrumpió. Tu pregunta se conserva; puedes reintentar.')
+      }
       const oversized = error instanceof Error && error.message === 'too_large'
       return fail(oversized ? 413 : 400, oversized ? 'request_too_large' : 'invalid_json', oversized ? 'La consulta es demasiado larga.' : 'No pudimos leer la consulta.')
     }
     const parsed = a2AssistantRequestSchema.safeParse(payload)
     if (!parsed.success) return fail(400, 'invalid_assistant_request', 'Revisa el texto de la consulta y vuelve a intentarlo.')
+    if (request.signal.aborted) return fail(408, 'request_interrupted', 'El envío de la consulta se interrumpió. Puedes reintentar.')
 
     const pilot = await checkA2PilotAccess(actorId)
     if (pilot !== 'allowed') return fail(pilot === 'denied' ? 403 : 503, 'pilot_access_unavailable', pilot === 'denied' ? 'Necesitas acceso al piloto para usar el asistente.' : 'No pudimos verificar el acceso al piloto. Intenta nuevamente.')
@@ -214,6 +240,7 @@ export async function POST(request: Request) {
     try {
       if (generation.signal.aborted) throw new Error('generation_cancelled')
       let answer: string | undefined
+      let actionProposal: A2ActionProposal | undefined
       if (selection.variant === 'swarm') {
         const result = await runA2Swarm({ request: parsed.data, flow, guidance, a1, plan }, {
           complete: createOpenAISwarmCompletion(apiKey, { fetch }),
@@ -223,7 +250,19 @@ export async function POST(request: Request) {
         swarmCalls = result.trace.callsStarted
         swarmStage = result.trace.failureStage || 'none'
         swarmElapsedMs = result.trace.elapsedMs
-        if (result.ok === true) { answer = result.response; generated = 'swarm' }
+        if (result.ok === true) {
+          answer = result.response; generated = 'swarm'
+          if (result.adjustment) {
+            // Models supply editable text only. Destination and review binding
+            // are derived from the authorized server snapshot, never model IDs.
+            const dayNumber = guidedPracticeDay(flow)
+            const snapshot = makeA2PlanContextSnapshot(flow, guidance)
+            if (dayNumber !== null && snapshot.available) actionProposal = a2ActionProposalSchema.parse({
+              version: 'dtc-a2-action-proposal.v1', tool: 'save_practice_adjustment',
+              dayNumber, expectedContextHash: snapshot.hash, draft: result.adjustment,
+            })
+          }
+        }
         else {
           fallbackReason = result.reason
           if (generation.signal.aborted || GENERATION_BUDGET_MS - (Date.now() - startedAt) < MIN_FALLBACK_BUDGET_MS) {
@@ -277,10 +316,16 @@ export async function POST(request: Request) {
       // A plan may be corrected, paused or deleted while generation is running.
       // Do not deliver a response grounded in a plan revision that is no longer
       // available to this request. This remains a dated read, not a source lock.
+      let actionContextChanged = false
       const latestPlan = await withinGenerationBudget(generation.signal, async () => {
-        if (plan.status !== 'available') return readA2PlanAssistantEvidence(client, actorId!, flow, guidance!)
+        if (plan.status !== 'available' && !actionProposal) return readA2PlanAssistantEvidence(client, actorId!, flow, guidance!)
         const currentFlow = await readJourneyFlow(journey, client)
         const currentGuidance = await readGuidedNextAction(journey, currentFlow, client)
+        if (actionProposal) {
+          const currentContext = makeA2PlanContextSnapshot(currentFlow, currentGuidance)
+          actionContextChanged = !currentContext.available || currentContext.hash !== actionProposal.expectedContextHash
+            || guidedPracticeDay(currentFlow) !== actionProposal.dayNumber
+        }
         const currentPlan = await readA2PlanAssistantEvidence(client, actorId!, currentFlow, currentGuidance)
         guidance = currentGuidance
         return currentPlan
@@ -288,6 +333,10 @@ export async function POST(request: Request) {
       const changed = await verifyCurrentActor()
       if (changed) return changed
       if (generation.signal.aborted) throw new Error('generation_cancelled')
+      if (actionContextChanged) {
+        outcome = 'action_context_changed'
+        return fail(503, 'assistant_context_changed', 'Tu recorrido o ajuste cambió mientras revisábamos la consulta. Tu pregunta se conserva; vuelve a enviarla para usar el estado actual.')
+      }
       if (JSON.stringify(latestPlan) !== JSON.stringify(plan)) {
         outcome = 'reviewed_plan_changed'
         return fail(503, 'assistant_context_changed', 'Tu plan cambió mientras revisábamos la consulta. Tu pregunta se conserva; vuelve a enviarla para usar el estado actual.')
@@ -296,7 +345,7 @@ export async function POST(request: Request) {
       served = generated
       logOperationalEvent({ event: 'a2.assistant.completed', requestId, route: '/api/despega/a2-coach', status: 200,
         metadata: { history_items: parsed.data.conversationHistory.length, a1_available: a1.status === 'available' } })
-      return respond({ response: answer, guidance }, 200)
+      return respond({ response: answer, guidance, ...(actionProposal ? { actionProposal } : {}) }, 200)
     } catch (error) {
       if (request.signal.aborted) {
         guidance = undefined

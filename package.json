@@ -54,9 +54,10 @@
     "test:outcome-capture": "node --import tsx scripts/test-outcome-response-capture.cjs && node --import tsx scripts/test-outcome-capture-routes.cjs && node --import tsx scripts/test-outcome-capture-ui.cjs && node --import tsx scripts/check-outcome-capture-s1.ts && node --import tsx scripts/check-a1-outcome-experience.ts && node --import tsx scripts/check-a2-outcome-experience.ts && node --import tsx scripts/check-a3-outcome-experience.ts && node --import tsx scripts/check-outcome-instruments-s1.ts",
     "test:practice-evidence": "node --import tsx scripts/check-dtc-practice-evidence.ts && node --import tsx scripts/test-report-practice-context.mjs && node --import tsx scripts/test-a2-practice-adjustment-routes.cjs && node --import tsx scripts/test-a3-editor-concurrency.mjs && node --import tsx scripts/test-a3-cv-context-route.cjs",
     "test:professional-closure": "node --import tsx scripts/test-a1-a2-orientation.cjs && npm run test:outcome-capture && npm run test:practice-evidence && npm run test:a4-closure && npm run test:a4-qa-access && npm run test:guided-assistant",
-    "test:guided-assistant": "node --import tsx scripts/test-journey-next-action.mjs && node --import tsx scripts/test-a2-assistant.cjs && npm run test:a2-swarm && npm run test:a2-plan",
+    "test:guided-assistant": "node --import tsx scripts/test-journey-next-action.mjs && node --import tsx scripts/test-a2-assistant.cjs && npm run test:a2-swarm && npm run test:a2-plan && npm run test:a2-actions",
     "test:a2-swarm": "node --import tsx scripts/test-a2-swarm.mjs && node --import tsx scripts/test-a2-swarm-provider.mjs && node --import tsx scripts/test-a2-swarm-canary.mjs",
-    "test:a2-plan": "node --import tsx scripts/test-a2-plan-contract.mjs && node --import tsx scripts/test-a2-plan-api.mjs"
+    "test:a2-plan": "node --import tsx scripts/test-a2-plan-contract.mjs && node --import tsx scripts/test-a2-plan-api.mjs",
+    "test:a2-actions": "node --import tsx scripts/test-a2-action-contract.mjs && node --import tsx scripts/test-a2-action-api.mjs"
   },
   "dependencies": {
     "@ai-sdk/anthropic": "^3.0.76",

@@ -29,6 +29,7 @@ function loadActual(relative) {
   }).outputText
   const moduleRequire = key => {
     if (key === 'server-only') return {}
+    if (key === '../assistant-action-contract') return require(resolve('lib/a2/assistant-action-contract.ts'))
     if (key.startsWith('./')) return loadActual(resolve(dirname(filename), key + (extname(key) ? '' : '.ts')))
     if (key === 'zod' || key === 'node:util') return require(key)
     throw new Error('Unexpected adapter dependency: ' + key)

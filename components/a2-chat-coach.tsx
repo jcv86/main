@@ -8,8 +8,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/com
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { GuidedNextAction } from '@/components/journey/guided-next-action'
 import { A2ReviewedPlan } from '@/components/a2-reviewed-plan'
+import { A2AssistantAction } from '@/components/a2-assistant-action'
 import type { GuidedNextAction as Guidance } from '@/lib/journey/next-action'
 import { A2_ASSISTANT_ACTOR_HEADER, A2_ASSISTANT_EXPECTED_ACTOR_HEADER } from '@/lib/a2/assistant-contract'
+import { a2ActionProposalSchema, type A2ActionProposal } from '@/lib/a2/assistant-action-contract'
+import { a2PlanGuidanceSchema } from '@/lib/a2/plan-contract'
 import { ArrowRight, Loader2, MessageCircle, Send } from 'lucide-react'
 
 type Message = { role: 'user' | 'assistant'; content: string }
@@ -23,6 +26,10 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
   const [error, setError] = useState<string | null>(null)
   const [sessionChanged, setSessionChanged] = useState(false)
   const [identityVerified, setIdentityVerified] = useState(false)
+  const [actionProposal, setActionProposal] = useState<A2ActionProposal | null>(null)
+  const [actionGuidance, setActionGuidance] = useState<Guidance | null>(null)
+  const [responseRevision, setResponseRevision] = useState(0)
+  const [planRefreshKey, setPlanRefreshKey] = useState(0)
   const requestGeneration = useRef(0)
   const controllerRef = useRef<AbortController | null>(null)
   const invalidSessionRef = useRef(false)
@@ -35,6 +42,8 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
     controllerRef.current?.abort()
     setMessages([])
     setInput('')
+    setActionProposal(null)
+    setActionGuidance(null)
     setError(null)
     setLoading(false)
     setSessionChanged(true)
@@ -96,10 +105,8 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
       if (response.status === 401 || response.status === 409 || (responseActor && responseActor !== actorId)) {
         invalidateSession(); return
       }
-      const validGuidance = payload?.guidance?.version === initialGuidance.version
-        && typeof payload.guidance.action?.href === 'string' && payload.guidance.action.href.startsWith('/despega/')
-        && Array.isArray(payload.guidance.sources) && Array.isArray(payload.guidance.limitations)
-      if (responseActor === actorId && validGuidance) setGuidance(payload.guidance)
+      const checkedGuidance = a2PlanGuidanceSchema.safeParse(payload?.guidance)
+      if (responseActor === actorId && checkedGuidance.success) setGuidance(checkedGuidance.data)
       // Middleware failures can omit the actor header. Their body is never treated
       // as personal guidance, and the unanswered question remains in the editor.
       if (!response.ok) {
@@ -109,11 +116,21 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
         return
       }
       if (responseActor !== actorId || typeof payload?.response !== 'string' || !payload.response.trim()
-        || !validGuidance) {
+        || !checkedGuidance.success) {
         setError('No pudimos verificar la respuesta. Tu pregunta se conserva; puedes reintentar.')
         return
       }
+      const proposed = payload.actionProposal === undefined ? null : a2ActionProposalSchema.safeParse(payload.actionProposal)
+      if (proposed && (!proposed.success || checkedGuidance.data.action.href !== `/despega/a2/dia-${proposed.data.dayNumber}`)) {
+        setError('No pudimos verificar la propuesta de ajuste. Tu pregunta se conserva; puedes reintentar.')
+        return
+      }
       setMessages(previous => [...previous, { role: 'user', content: question }, { role: 'assistant', content: payload.response }])
+      // A new reply never overwrites an open action editor or its exact pending
+      // command. The action card requires a fresh context review before reuse.
+      setActionProposal(proposed?.success ? proposed.data : null)
+      setActionGuidance(proposed?.success ? checkedGuidance.data : null)
+      setResponseRevision(previous => previous + 1)
       setInput('')
     } catch {
       if (generation === requestGeneration.current && !invalidSessionRef.current) {
@@ -138,14 +155,14 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
   if (!identityVerified) return <p role="status" className="py-6 text-sm text-muted-foreground">Verificando tu sesión para abrir el asistente…</p>
 
   return <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-    <Card className="min-w-0">
+    <Card className="min-w-0 self-start">
       <CardHeader>
         <CardTitle className="flex items-center gap-2"><MessageCircle className="h-5 w-5" aria-hidden="true" />Asistente de Tu Ruta</CardTitle>
         <CardDescription>Pregunta, revisa una dificultad o piensa una acción más pequeña. Esta conversación dura mientras mantienes abierta la página.</CardDescription>
       </CardHeader>
       <CardContent className="min-w-0 space-y-4">
-        <div ref={transcriptRef} role="log" aria-label="Conversación con el asistente" aria-live="polite" aria-relevant="additions"
-          className="max-h-[28rem] min-h-32 space-y-4 overflow-y-auto rounded-xl border border-border p-4">
+        <div ref={transcriptRef} role="log" tabIndex={0} aria-label="Conversación con el asistente" aria-live="polite" aria-relevant="additions"
+          className="max-h-[28rem] min-h-32 space-y-4 overflow-y-auto rounded-xl border border-border p-4 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring">
           {messages.length === 0 && <p className="text-sm leading-6 text-muted-foreground">Puedes empezar con: «No pude realizar mi última acción. ¿Cómo la hago más abordable?»</p>}
           {messages.map((message, index) => <div key={index} className="min-w-0 space-y-1">
             <p className="text-xs font-semibold text-muted-foreground">{message.role === 'user' ? 'Tú' : 'Asistente DTC'}</p>
@@ -159,7 +176,7 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
             readOnly={loading} maxLength={2_000} rows={4} aria-describedby="a2-assistant-help"
             className="w-full resize-y rounded-lg border border-input bg-background px-3 py-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
             placeholder="¿Qué puedo intentar con el tiempo que tengo?" />
-          <p id="a2-assistant-help" className="text-xs leading-5 text-muted-foreground">Las propuestas se revisan contigo. Para guardar un ajuste o completar una práctica, continúa en el día correspondiente.</p>
+          <p id="a2-assistant-help" className="text-xs leading-5 text-muted-foreground">Si aparece una propuesta de ajuste, revísala antes de confirmar. Para completar una práctica, continúa en el día correspondiente.</p>
           <Button type="submit" disabled={loading || input.trim().length < 2} className="min-h-11 bg-emerald-700 text-white hover:bg-emerald-800">
             {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" /> : <Send className="mr-2 h-4 w-4" aria-hidden="true" />}
             {loading ? 'Preparando respuesta…' : error ? 'Reintentar pregunta' : 'Enviar pregunta'}
@@ -179,7 +196,10 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
         </Button>
       </CardContent>
     </Card>
-    <A2ReviewedPlan actorId={actorId} onSessionChanged={invalidateSession} onGuidanceUpdated={setGuidance} />
+    <A2AssistantAction actorId={actorId} proposal={actionProposal} proposalGuidance={actionGuidance}
+      responseRevision={responseRevision} assistantBusy={loading} onSessionChanged={invalidateSession}
+      onGuidanceUpdated={setGuidance} onSaved={() => setPlanRefreshKey(previous => previous + 1)} />
+    <A2ReviewedPlan actorId={actorId} refreshKey={planRefreshKey} onSessionChanged={invalidateSession} onGuidanceUpdated={setGuidance} />
     </div>
   </div>
 }

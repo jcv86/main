@@ -147,7 +147,7 @@ assert.ok(shell.includes('aria-disabled="true"'))
 assert.ok(shell.includes("state === 'active' ? 'En curso'"))
 assert.ok(layout.includes('const flow = await loadJourneyFlow(journey)'))
 assert.ok(layout.includes('<AppShell flow={flow}>'))
-assert.ok(service.includes('cache(async function getJourneyForCurrentUser()'))
+assert.match(service, /export const getJourneyForCurrentUser\s*=\s*cache\(async function getJourneyForCurrentUser\(/)
 assert.ok(flowService.includes('cache(async function loadJourneyFlow(journey: FlowJourney)'))
 
 assert.ok(!shell.includes("localStorage.getItem('demo_user')"))

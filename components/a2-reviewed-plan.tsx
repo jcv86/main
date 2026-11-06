@@ -67,8 +67,9 @@ function PlanSummary({ plan }: { plan: NonNullable<A2PlanView['plan']> }) {
 }
 
 /** Only an explicitly reviewed plan persists; the surrounding conversation does not. */
-export function A2ReviewedPlan({ actorId, onSessionChanged, onGuidanceUpdated }: {
+export function A2ReviewedPlan({ actorId, onSessionChanged, onGuidanceUpdated, refreshKey = 0 }: {
   actorId: string; onSessionChanged: () => void; onGuidanceUpdated: (guidance: NonNullable<A2PlanView['guidance']>) => void
+  refreshKey?: number
 }) {
   const [client] = useState(() => createClient())
   const [view, setView] = useState<A2PlanView | null>(null)
@@ -246,6 +247,16 @@ export function A2ReviewedPlan({ actorId, onSessionChanged, onGuidanceUpdated }:
       document.removeEventListener('visibilitychange', refreshOnReturn)
     }
   }, [actorId, client])
+
+  const lastRefreshKey = useRef(refreshKey)
+  useEffect(() => {
+    if (lastRefreshKey.current === refreshKey) return
+    // A confirmed adjustment changes the dated plan context. Read it without
+    // remounting, discarding an edit, or replacing an uncertain command.
+    if (busyRef.current || pendingCommand.current) return
+    lastRefreshKey.current = refreshKey
+    void exchange()
+  }, [refreshKey, busy])
 
   function startEditing() {
     const current = viewRef.current

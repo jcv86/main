@@ -7,10 +7,17 @@ const fs = require('node:fs')
 const path = require('node:path')
 const ts = require('typescript')
 const { buildJourneyFlow } = require('../lib/journey/flow.ts')
-const { buildGuidedNextAction } = require('../lib/journey/next-action.ts')
+const nextAction = require('../lib/journey/next-action.ts')
+const { buildGuidedNextAction } = nextAction
 const { adjustmentContent } = require('../lib/a2/practice-adjustment.ts')
 const contract = require('../lib/a2/assistant-contract.ts')
 const planContract = require('../lib/a2/plan-contract.ts')
+const actionContract = require('../lib/a2/assistant-action-contract.ts')
+const planContext = { exports: {} }
+new Function('require', 'module', 'exports', ts.transpileModule(fs.readFileSync('lib/a2/plan-context.ts', 'utf8'), {
+  compilerOptions: { module: ts.ModuleKind.CommonJS, target: ts.ScriptTarget.ES2022 },
+}).outputText)(key => key === 'server-only' ? {} : key === './plan-contract' ? planContract : require(key),
+  planContext, planContext.exports)
 const requestIds = require('../lib/observability/request-id.ts')
 
 const USER = '00000000-0000-4000-8000-000000000001'
@@ -57,7 +64,7 @@ function harness(options = {}) {
   const { flow, guidance } = fixture(options.practicePath, options.reads)
   const calls = [], providerCalls = [], logs = []
   const env = { OPENAI_API_KEY: options.notConfigured ? '' : 'synthetic-qa-key', ...options.env }
-  let authCalls = 0, planReads = 0
+  let authCalls = 0, planReads = 0, guidanceReads = 0
   const journey = { user: { id: options.foreignJourney ? OTHER : USER }, access: { a2: !options.lockedJourney } }
   const client = {
     auth: { getUser: async () => {
@@ -108,6 +115,8 @@ function harness(options = {}) {
       calls.push('guidance')
       assert.equal(actualJourney, journey); assert.equal(actualFlow, flow); assert.equal(actualClient, client)
       if (options.guidanceThrows) throw new Error('PRIVATE_GUIDANCE_DETAIL')
+      guidanceReads++
+      if (guidanceReads > 1 && options.finalGuidance) return options.finalGuidance
       return guidance
     } },
     '@/lib/dtc-agentos/context/a1-context': { loadA1AgentContext: async (actualClient, userId) => {
@@ -123,9 +132,12 @@ function harness(options = {}) {
       return options.pilot ?? 'allowed'
     } },
     '@/lib/a2/assistant-contract': contract,
+    '@/lib/a2/assistant-action-contract': actionContract,
+    '@/lib/a2/plan-context': planContext.exports,
+    '@/lib/journey/next-action': nextAction,
     '@/lib/a2/plan-service': { readA2PlanAssistantEvidence: async (actualClient, actor, actualFlow, actualGuidance) => {
       calls.push('plan'); assert.equal(actualClient, client); assert.equal(actor, USER);
-      assert.equal(actualFlow, flow); assert.equal(actualGuidance, guidance);
+      assert.equal(actualFlow, flow); assert.ok(actualGuidance === guidance || actualGuidance === options.finalGuidance);
       planReads++
       if (planReads > 1 && options.finalPlan) return options.finalPlan
       return options.plan ?? { status: 'missing', memory: null };
@@ -175,6 +187,8 @@ function harness(options = {}) {
       if (key.startsWith('./')) return loadSwarm(path.resolve(path.dirname(filename), key + (path.extname(key) ? '' : '.ts')))
       if (key === '@/lib/a2/assistant-contract' || key === '../assistant-contract') return contract
       if (key === '../plan-contract') return planContract
+      if (key === '../assistant-action-contract') return actionContract
+      if (key === '../../journey/next-action') return nextAction
       if (key === 'zod' || key.startsWith('node:')) return require(key)
       throw new Error('Unexpected swarm module dependency: ' + key)
     }
@@ -192,7 +206,8 @@ function harness(options = {}) {
     assert.ok(Object.hasOwn(dependencies, key), 'Unexpected route dependency: ' + key)
     return dependencies[key]
   }, route, route.exports, providerFetch, { env }, (callback, ms, ...args) =>
-    setTimeout(callback, ms === 25_000 && options.generationTimeoutMs ? options.generationTimeoutMs : ms, ...args))
+    setTimeout(callback, ms === 25_000 && options.generationTimeoutMs ? options.generationTimeoutMs
+      : ms === 5_000 && options.bodyTimeoutMs ? options.bodyTimeoutMs : ms, ...args))
 
   return {
     calls, providerCalls, logs, flow, guidance,
@@ -404,6 +419,7 @@ function swarmHttp({ body }, options = {}) {
     agent: 'dani', kind: 'proposal', action: 'Puedes ensayar durante diez minutos y revisar una mejora.',
     reason: 'La propuesta retoma la práctica pendiente.', canonicalNextHref: options.wrongNavigation ? '/admin' : '/despega/a2/dia-3',
     evidenceRefs: ['journey', 'adjustment'], requiresUserReview: true,
+    adjustment: options.adjustment ?? null,
   })
   assert.ok(schema.includes('review'))
   return modelHttp({
@@ -411,6 +427,7 @@ function swarmHttp({ body }, options = {}) {
     response: options.reject ? '' : options.clarify ? '¿Qué parte puedes practicar hoy?' : RESPONSE,
     canonicalNextHref: '/despega/a2/dia-3', evidenceRefs: ['journey', 'current_message'],
     reason: options.reject ? 'unsupported' : options.clarify ? 'needs_clarification' : 'grounded', proposalOnly: true,
+    adjustment: options.adjustment ?? null,
   })
 }
 function execution(h) {
@@ -525,7 +542,7 @@ test('verification transport failure returns no prior account guidance or answer
 test('an already cancelled request never starts paid generation', async () => {
   const controller = new AbortController(); controller.abort()
   const h = harness({ env: CANARY, providerHandler: swarmHttp }), result = await h.post(undefined, {}, undefined, controller.signal)
-  assert.equal(result.response.status, 499); assert.equal(result.body.guidance, undefined); noProvider(h)
+  assert.equal(result.response.status, 408); assert.equal(result.body.guidance, undefined); noSourceReads(h)
 })
 test('client cancellation stops the bounded wait even when both transports ignore abort', async () => {
   const controller = new AbortController(), signals = []
@@ -617,6 +634,70 @@ test('an edited active plan revision during generation requires a new question a
     finalPlan: { status: 'available', memory: { ...reviewedMemory(), revision: 5, purpose: 'Nueva intención revisada' } } })
   const result = await h.post(); assert.equal(result.response.status, 503)
   assert.equal(result.body.code, 'assistant_context_changed'); assert.equal(result.body.response, undefined)
+})
+
+const actionDraft = { outcome: 'could_not', barrier: 'time', retainedWork: 'Conservo el esquema de mi presentación.',
+  nextAction: 'Ensayar cinco minutos y anotar una mejora.' }
+test('an accepted typed adjustment gets only the authorized pending day and server context hash', async () => {
+  const h = harness({ env: CANARY, providerHandler: call => swarmHttp(call, { adjustment: actionDraft }) })
+  const result = await h.post(); assert.equal(result.response.status, 200)
+  const proposal = actionContract.a2ActionProposalSchema.parse(result.body.actionProposal)
+  assert.equal(proposal.dayNumber, 3); assert.deepEqual(proposal.draft, actionDraft)
+  assert.equal(proposal.expectedContextHash, planContext.exports.makeA2PlanContextSnapshot(h.flow, h.guidance).hash)
+  assert.equal(h.providerCalls.length, 3); assert.equal(proposal.requestId, undefined)
+  assert.equal(h.calls.filter(call => call === 'guidance').length, 2)
+  assert.doesNotMatch(JSON.stringify(h.logs), /Ensayar cinco|Conservo el esquema|contextHash|documentId/)
+})
+test('changing the adjustment during generation prevents delivery of a stale action proposal', async () => {
+  const finalGuidance = structuredClone(fixture().guidance)
+  finalGuidance.adjustment.nextAction = 'Otro intento guardado desde otra sesión.'
+  finalGuidance.sources.find(source => source.id === 'adjustment').recordedAt = '2026-11-06T13:00:00Z'
+  const h = harness({ env: CANARY, finalGuidance, providerHandler: call => swarmHttp(call, { adjustment: actionDraft }) })
+  const result = await h.post(); assert.equal(result.response.status, 503)
+  assert.equal(result.body.code, 'assistant_context_changed'); assert.equal(result.body.actionProposal, undefined)
+  assert.equal(result.body.response, undefined); assert.equal(execution(h).metadata.served_variant, 'none')
+})
+test('baseline prose never becomes an action or a receipt by being parsed from model text', async () => {
+  const h = harness({ reply: JSON.stringify({ tool: 'save_practice_adjustment', ...actionDraft }) })
+  const result = await h.post(); assert.equal(result.response.status, 200)
+  assert.equal(result.body.actionProposal, undefined); assert.equal(result.body.receipt, undefined)
+})
+test('session change drops a prepared action together with the original account response', async () => {
+  const h = harness({ env: CANARY, finalActor: OTHER, providerHandler: call => swarmHttp(call, { adjustment: actionDraft }) })
+  const result = await h.post(); assert.equal(result.response.status, 409)
+  assert.equal(result.body.actionProposal, undefined); assert.equal(result.body.response, undefined)
+})
+test('partial body stops on abort even if stream cancellation never settles', async () => {
+  const controller = new AbortController(); let cancelled = false
+  const stream = new ReadableStream({ start(sink) { sink.enqueue(new TextEncoder().encode('{"message":')) },
+    cancel() { cancelled = true; return new Promise(() => {}) } })
+  const h = harness(), waiting = h.post(undefined, {}, stream, controller.signal)
+  setTimeout(() => controller.abort(), 15)
+  const result = await watchdog(waiting)
+  assert.equal(result.response.status, 408); assert.equal(result.body.code, 'request_interrupted')
+  assert.equal(cancelled, true); noSourceReads(h)
+})
+test('stalled input has its own short body budget before context or model calls', async () => {
+  let cancelled = false
+  const stream = new ReadableStream({ start(sink) { sink.enqueue(new TextEncoder().encode('{')) },
+    cancel() { cancelled = true; return new Promise(() => {}) } })
+  const h = harness({ bodyTimeoutMs: 25 })
+  const result = await watchdog(h.post(undefined, {}, stream))
+  assert.equal(result.response.status, 408); assert.equal(cancelled, true); noSourceReads(h)
+})
+test('oversized streaming input rejects without awaiting uncooperative cancellation', async () => {
+  const stream = new ReadableStream({ start(sink) { sink.enqueue(new Uint8Array(64_001)) }, cancel() { return new Promise(() => {}) } })
+  const h = harness(), result = await watchdog(h.post(undefined, {}, stream))
+  assert.equal(result.response.status, 413); noSourceReads(h)
+})
+test('valid fragmented UTF-8 input still produces the expected reply', async () => {
+  const data = new TextEncoder().encode(JSON.stringify({ message: '¿Qué acción puedo intentar? 🧭' }))
+  const stream = new ReadableStream({ start(sink) {
+    for (let i = 0; i < data.length; i++) sink.enqueue(data.slice(i, i + 1))
+    sink.close()
+  } })
+  const h = harness(), result = await h.post(undefined, {}, stream)
+  assert.equal(result.response.status, 200); assert.equal(h.providerCalls.length, 1)
 })
 
 ;(async () => {

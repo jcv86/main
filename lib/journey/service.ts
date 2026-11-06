@@ -343,26 +343,32 @@ function hydrateJourneyState(
   }
 }
 
-export const getJourneyForCurrentUser = cache(async function getJourneyForCurrentUser() {
+/** Read-only callers inspect existing progress without materializing a journey. */
+export const getJourneyForCurrentUser = cache(async function getJourneyForCurrentUser(
+  mode: 'initialize' | 'read-only' = 'initialize',
+) {
+  if (mode !== 'initialize' && mode !== 'read-only') throw new TypeError('Invalid journey load mode')
   const identity = await getCurrentIdentity()
   if (!identity) return null
 
   const admin = createAdminClient()
   const userId = identity.user.id
-  const { error: ensureError } = await admin.rpc(
-    'ensure_despega_journey_state',
-    { p_user_id: userId },
-  )
-  if (ensureError) {
-    throw new Error(`Unable to initialize journey: ${ensureError.message}`)
+  if (mode === 'initialize') {
+    const { error: ensureError } = await admin.rpc(
+      'ensure_despega_journey_state',
+      { p_user_id: userId },
+    )
+    if (ensureError) {
+      throw new Error(`Unable to initialize journey: ${ensureError.message}`)
+    }
   }
 
+  const stateQuery = admin
+    .from('despega_journey_state')
+    .select('*')
+    .eq('user_id', userId)
   const [stateResult, profileResult, evidence] = await Promise.all([
-    admin
-      .from('despega_journey_state')
-      .select('*')
-      .eq('user_id', userId)
-      .single(),
+    mode === 'read-only' ? stateQuery.maybeSingle() : stateQuery.single(),
     admin
       .from('despega_user_profiles')
       .select('*')
@@ -371,7 +377,7 @@ export const getJourneyForCurrentUser = cache(async function getJourneyForCurren
     loadJourneyEvidence(userId, admin),
   ])
 
-  if (stateResult.error || !stateResult.data) {
+  if (stateResult.error || (!stateResult.data && mode === 'initialize')) {
     throw new Error(
       `Unable to load journey: ${stateResult.error?.message ?? 'missing state'}`,
     )
@@ -381,6 +387,7 @@ export const getJourneyForCurrentUser = cache(async function getJourneyForCurren
       `Unable to load journey profile: ${profileResult.error.message}`,
     )
   }
+  if (!stateResult.data) return null
 
   const rawState = mapState(stateResult.data as JourneyRow)
   const rawProfile = (profileResult.data ?? {}) as ProfileFlags

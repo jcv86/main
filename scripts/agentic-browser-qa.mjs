@@ -339,9 +339,9 @@ async function main() {
   const violations = accessibility.reduce((sum, audit) => sum + audit.violations.length, 0)
   const incomplete = accessibility.reduce((sum, audit) => sum + audit.incomplete.length, 0)
   const sourcePaths = [
-    'components/a2-chat-coach.tsx', 'components/a2-reviewed-plan.tsx', 'components/journey/guided-next-action.tsx', 'components/journey/journey-flow-panel.tsx',
+    'components/a2-chat-coach.tsx', 'components/a2-reviewed-plan.tsx', 'components/a2-assistant-action.tsx', 'components/journey/guided-next-action.tsx', 'components/journey/journey-flow-panel.tsx',
     'app/despega/a2/coach/page.tsx', 'app/despega/dashboard/page.tsx', 'app/despega/recorrido/page.tsx',
-    'lib/a2/assistant-contract.ts', 'lib/a2/plan-contract.ts', 'lib/journey/flow.ts', 'lib/journey/next-action.ts', 'app/globals.css', 'app/design-system.css',
+    'lib/a2/assistant-contract.ts', 'lib/a2/plan-contract.ts', 'lib/a2/assistant-action-contract.ts', 'lib/a2/practice-adjustment.ts', 'lib/journey/flow.ts', 'lib/journey/next-action.ts', 'app/globals.css', 'app/design-system.css',
   ]
   const result = {
     suite: 'agentic-ui', parentCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),

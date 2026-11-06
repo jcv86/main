@@ -143,7 +143,9 @@ function memoryDb(options = {}) {
       // No permissions or completion markers can be created by this fixture.
       assert.equal(name, 'ensure_despega_journey_state', 'Unexpected RPC in access resolution')
       assert.equal(params.p_user_id, identity?.id)
-      assert.ok(tables.despega_journey_state.some(row => row.user_id === params.p_user_id))
+      if (options.ensureError) return { data: null, error: { message: PRIVATE_ERROR } }
+      if (options.ensureReject) throw new Error(PRIVATE_ERROR)
+      if (!options.ensureWithoutState) assert.ok(tables.despega_journey_state.some(row => row.user_id === params.p_user_id))
       return { data: null, error: null }
     },
   }
@@ -440,6 +442,99 @@ test('anonymous journey has no access data, admin reads or initialization RPC', 
   assert.equal(h.db.calls.admin, 0)
   assert.deepEqual(h.db.calls.reads, [])
   assert.deepEqual(h.db.calls.rpc, [])
+})
+
+test('read-only journey preserves the canonical projection without any initialization RPC', async () => {
+  const completedAt = '2026-10-06T18:00:00Z'
+  for (const tables of [undefined, {
+    a4_qa_entitlements: [],
+    despega_user_profiles: [profileRow({ camino_foco: 'persona', a1_cerebral_intro_seen: true, a1_cerebral_completed: true, onboarding_conozcamonos_1_completed: true })],
+    despega_journey_state: [stateRow({ current_module: 'A4', highest_a2_day_unlocked: 7, current_a2_day: 7, a3_unlocked_at: completedAt, a4_unlocked_at: completedAt })],
+    a2_user_task_completions: Array.from({ length: 6 }, (_, index) => ({ user_id: USER, day: index + 1, completed_at: completedAt })),
+    a3_route_progression: [{ user_id: USER, route_completed_at: completedAt }],
+    dtc_outcome_observations: [{ user_id: USER, instrument_key: 'a2_execution_checkpoint', instrument_version: responseCapture.OUTCOME_CAPTURE_VERSION, measurement_role: 'baseline' }],
+  }]) {
+    const readonly = harness({ tables }), initializing = harness({ tables })
+    const before = clone(readonly.db.tables)
+    const existing = await readonly.load('lib/journey/service.ts').getJourneyForCurrentUser('read-only')
+    assert.deepEqual(existing, await journey(initializing), 'Read-only mode must retain the existing access, evidence and continuity projection.')
+    assert.ok(existing)
+    assert.deepEqual(readonly.db.calls.rpc, [], 'Even an existing row must not invoke the initializer.')
+    assert.deepEqual(initializing.db.calls.rpc, [{ name: 'ensure_despega_journey_state', params: { p_user_id: USER } }])
+    assert.deepEqual(readonly.db.tables, before)
+    assertOwnerReads(readonly)
+    assertNoAccessWrites(readonly)
+  }
+})
+
+test('read-only missing or foreign journey returns null without creating progress or granting QA access', async () => {
+  for (const rows of [[], [stateRow({ user_id: OTHER })]]) {
+    const h = harness({ tables: { despega_journey_state: rows, despega_user_profiles: [profileRow({ a4_unlocked: true })] } })
+    const before = clone(h.db.tables)
+    assert.equal(await h.load('lib/journey/service.ts').getJourneyForCurrentUser('read-only'), null)
+    assert.deepEqual(h.db.calls.rpc, [])
+    assert.deepEqual(h.db.calls.writes, [])
+    assert.deepEqual(h.db.tables, before)
+    assertOwnerReads(h)
+    assert.ok(!h.db.calls.reads.some(read => read.table === 'a4_qa_entitlements'), 'A missing journey cannot be synthesized from a QA grant.')
+  }
+})
+
+test('read-only journey rejects read errors and ambiguous state without substituting an empty success', async () => {
+  for (const options of [
+    { errorTable: 'despega_journey_state' }, { rejectTable: 'despega_journey_state' },
+    { errorTable: 'despega_user_profiles' }, { rejectTable: 'despega_user_profiles' },
+    { tables: { despega_journey_state: [stateRow(), stateRow()] } },
+    { tables: { despega_journey_state: [] }, errorTable: 'despega_user_profiles' },
+  ]) {
+    const h = harness(options), before = clone(h.db.tables)
+    await assert.rejects(() => h.load('lib/journey/service.ts').getJourneyForCurrentUser('read-only'),
+      /Unable to load journey|SYNTHETIC_PRIVATE_DATABASE_ERROR/)
+    assert.deepEqual(h.db.calls.rpc, [])
+    assert.deepEqual(h.db.calls.writes, [])
+    assert.deepEqual(h.db.tables, before)
+  }
+})
+
+test('anonymous read-only journey stops before admin or database access', async () => {
+  const h = harness({ user: null })
+  assert.equal(await h.load('lib/journey/service.ts').getJourneyForCurrentUser('read-only'), null)
+  assert.equal(h.db.calls.admin, 0)
+  assert.deepEqual(h.db.calls.reads, [])
+  assert.deepEqual(h.db.calls.rpc, [])
+  assert.deepEqual(h.db.calls.writes, [])
+})
+
+test('default and explicit initialize retain the initializer and its errors', async () => {
+  for (const mode of [undefined, 'initialize']) {
+    const h = harness()
+    const result = await h.load('lib/journey/service.ts').getJourneyForCurrentUser(mode)
+    assert.ok(result)
+    assert.deepEqual(h.db.calls.rpc, [{ name: 'ensure_despega_journey_state', params: { p_user_id: USER } }])
+    for (const failure of [{ ensureError: true }, { ensureReject: true }]) {
+      const failed = harness(failure)
+      await assert.rejects(() => failed.load('lib/journey/service.ts').getJourneyForCurrentUser(mode),
+        failure.ensureError ? /Unable to initialize journey: SYNTHETIC_PRIVATE_DATABASE_ERROR/ : /SYNTHETIC_PRIVATE_DATABASE_ERROR/)
+      assert.deepEqual(failed.db.calls.rpc, [{ name: 'ensure_despega_journey_state', params: { p_user_id: USER } }])
+      assert.deepEqual(failed.db.calls.reads, [], 'Initialization failure still precedes source reads.')
+    }
+  }
+})
+
+test('default initialization cannot replace a still-missing state with an empty journey', async () => {
+  const h = harness({ ensureWithoutState: true, tables: { despega_journey_state: [] } })
+  await assert.rejects(() => journey(h), /Unable to load journey/)
+  assert.deepEqual(h.db.calls.rpc, [{ name: 'ensure_despega_journey_state', params: { p_user_id: USER } }])
+  assert.deepEqual(h.db.calls.writes, [])
+})
+
+test('an invalid journey mode cannot opt into initialization or a privileged read', async () => {
+  const h = harness()
+  await assert.rejects(() => h.load('lib/journey/service.ts').getJourneyForCurrentUser('unknown'), /Invalid journey load mode/)
+  assert.equal(h.db.calls.auth, 0)
+  assert.equal(h.db.calls.admin, 0)
+  assert.deepEqual(h.db.calls.rpc, [])
+  assert.deepEqual(h.db.calls.reads, [])
 })
 
 test('personal flow survives legacy A3/A4 timestamps while preserving professional permissions and records', async () => {
