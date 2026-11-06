@@ -6,6 +6,7 @@ import { spawn } from 'node:child_process'
 import { once } from 'node:events'
 import { CLOSURE_BASE as base, CLOSURE_PORT, closureLab, closureServerEnv, safeFailure } from './closure-lab.mjs'
 import { AUTH_VIEWPORTS, assertAuthSources, authTestHeaders, readAuthFixtures } from './auth-lab.mjs'
+import { captureUiJsonResponse } from './closure-response.mjs'
 
 const { root, app, repo, status, evidence } = closureLab()
 const fixture = readAuthFixtures(root)
@@ -212,17 +213,29 @@ async function submit(page, user, password, expectedStatus) {
   await page.getByLabel('Correo electrónico', { exact: true }).fill(user.email)
   await page.getByLabel('Contraseña', { exact: true }).fill(password)
   expectError('/api/auth/email-login', expectedStatus)
-  const response = page.waitForResponse(response => new URL(response.url()).origin === base
-    && new URL(response.url()).pathname === '/api/auth/email-login' && response.request().method() === 'POST')
+  const matches = request => new URL(request.url()).origin === base
+    && new URL(request.url()).pathname === '/api/auth/email-login' && request.method() === 'POST'
+  // Capture the real JSON while live: click waits for the successful hard
+  // navigation, after which Chromium may have discarded the response body.
+  // The declared HTML503 fault is intentionally the sole non-JSON exception.
+  const response = expectedStatus === 503
+    ? page.waitForResponse(response => matches(response.request())).then(async response => {
+      assert.equal(response.status(), 503, 'Declared HTML error must return HTTP503')
+      assert.ok(response.headers()['content-type']?.includes('text/html'), 'Declared HTML503 must remain non-JSON')
+      await response.text()
+      return { status: response.status(), body: null }
+    })
+    : captureUiJsonResponse(page, matches)
+  response.catch(() => {}) // Keep an early rejection handled until click returns and this promise is awaited.
   await page.getByRole('button', { name: 'Ingresar', exact: true }).click()
   const result = await response
-  assert.equal(result.status(), expectedStatus, 'Real email-login returned an unexpected status')
-  const body = await result.json().catch(() => null)
+  assert.equal(result.status, expectedStatus, 'Real email-login returned an unexpected status')
+  const body = result.body
   if (expectedStatus >= 400) {
     await page.locator('#email-login-error[role="alert"]').waitFor()
     assert.equal(new URL(page.url()).pathname, '/auth/email-login', 'Failed login must stay on the form')
     assert.ok(await page.getByRole('button', { name: 'Ingresar', exact: true }).isEnabled(), 'Failed login must allow retry')
-  } else assert.equal(body?.success, true)
+  } else assert.equal(body?.success, true, 'Real email-login JSON must confirm success before navigation')
   return body
 }
 
@@ -231,7 +244,8 @@ async function admitted(page, user, next) {
   await page.locator('#main-content').waitFor()
   await provider(page, user)
   assert.ok(await hasSession(page), 'Successful login must set an actual Supabase SSR session')
-  assert.equal((await api(page, '/api/auth/pilot-status')).body.allowed, true)
+  assert.equal((await api(page, '/api/auth/pilot-status')).body.allowed, true,
+    'Real pilot-status must confirm admission after successful email login')
 }
 
 async function visual(page, name, viewport) {
@@ -256,16 +270,16 @@ async function clickLogout(page, expectedStatus, retry = false) {
   const button = page.getByRole('button', { name, exact: true })
   if (!(await button.isVisible())) await page.getByRole('button', { name: 'Abrir navegación', exact: true }).click()
   expectError('/api/auth/signout', expectedStatus)
-  const received = page.waitForResponse(response => new URL(response.url()).origin === base
-    && new URL(response.url()).pathname === '/api/auth/signout' && response.request().method() === 'POST')
+  const received = captureUiJsonResponse(page, request => new URL(request.url()).origin === base
+    && new URL(request.url()).pathname === '/api/auth/signout' && request.method() === 'POST')
   await page.getByRole('button', { name, exact: true }).click()
   const response = await received
-  assert.equal(response.status(), expectedStatus)
+  assert.equal(response.status, expectedStatus, 'Real signout returned an unexpected status')
   if (expectedStatus === 200) {
-    const body = await response.json()
-    assert.equal(body.success, true)
-    assert.equal(body.scope, 'local')
-    assert.ok(response.headers()['cache-control']?.includes('no-store'))
+    const body = response.body
+    assert.equal(body.success, true, 'Real signout JSON must confirm success before navigation')
+    assert.equal(body.scope, 'local', 'Real signout must confirm only the current session')
+    assert.ok(response.cache?.includes('no-store'), 'Signout confirmation must not be cached')
     await page.waitForURL(url => url.pathname === '/auth/signin')
     // The SDK's SIGNED_OUT event may schedule a soft redirect before the
     // confirmed logout replaces the document. Wait for that replacement
@@ -493,7 +507,8 @@ try {
   assert.ok(controlledFailures.every(item => item.recovered))
   record('both_viewports_real_auth_and_no_unexpected_javascript_or_external_network')
 } catch (error) {
-  failure = { step: activeStep, message: safeFailure(error, secrets) }
+  failure = { step: activeStep, message: safeFailure(error, secrets),
+    stack: error instanceof Error && error.stack ? safeFailure(new Error(error.stack), secrets) : undefined }
   process.exitCode = 1
   console.error('Real email-auth acceptance failed:', failure.message)
 } finally {
