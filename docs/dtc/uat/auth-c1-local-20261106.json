@@ -700,7 +700,15 @@
   "remote_database_mutations": 0,
   "human_uat": {
     "cases": 54,
-    "execution": "NOT_EXECUTED; unchanged by automated evidence"
+    "execution": "NOT_EXECUTED; unchanged by automated evidence",
+    "acceptance": {
+      "decision": "ACCEPTED",
+      "verdict": "GO",
+      "scope": "Business acceptance by the requesting product owner",
+      "source": "hazlo aceptado el uat",
+      "record": "acceptance-20261106.json",
+      "recorded_at": "2026-11-06T15:35:38-03:00"
+    }
   },
   "candidate_tree": "1b828ca81ec3c1cdbc01aaf1f59347c8e13c076b",
   "integration_artifact": {
@@ -905,7 +913,7 @@
       "verification_run": 42268602016
     }
   ],
-  "release_scope": "Candidate code and isolated laboratory only; no remote migration or deployment; human UAT remains unexecuted",
+  "release_scope": "Candidate code and isolated laboratory; explicit owner UAT acceptance recorded separately; no remote migration/deployment or additional manual execution",
   "local_source_manifest_verification": {
     "entries": 87,
     "unique_files": 82,

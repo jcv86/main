@@ -327,7 +327,7 @@ has not yet been provisioned; its recurring cost requires the owner's decision.
 |---|---|---|---|---|---|
 | DTC-UAT-01 | Test safely without reading or writing production | Separate empty Vercel project; UAT build/runtime deny production origins/ref, inconsistent config and inherited database connections; 16 config and 6 middleware checks pass without network; no cron or application email delivery. New backend, faithful schema and deployment still pending. | Platform/application; independent Supabase provisioning | `in_progress` | yes |
 | DTC-UAT-02 | A new or returning synthetic user can log in, save and resume | Existing real email/password Auth retained; legacy demo copy removed; return targets canonical journey. API/Auth rate-limit counter collision reproduced and corrected with a passing regression while preserving thresholds/windows. Remote smoke runner prepared with exact-host/ref checks and two owners; no remote result claimed. | QA/backend; DTC-UAT-01 and synthetic pilot accounts | `in_progress` | yes |
-| DTC-UAT-03 | The owner accepts the intended user journeys | UAT matrix prepared with 54 cases (48 base, 6 conditional), evidence requirements and human sign-off. Participant execution, defects/retests and acceptance remain pending. | Joaquín and assigned reviewers; DTC-UAT-02 | `in_progress` | yes |
+| DTC-UAT-03 | The owner accepts the intended user journeys | Explicit user acceptance on 2026-11-06: “hazlo aceptado el uat”, for tested branch candidate `7eb0544` and SUCCESS run `42268602016`. Global UAT decision is ACCEPTED; the 54 case-execution records remain unchanged. See [acceptance record](DTC_UAT_ACCEPTANCE_20261106.md). | Product owner; acceptance of the branch candidate and supplied evidence | `verified` | yes |
 
 Details: [application environment](DTC_UAT_ENVIRONMENT_20261106.md),
 [backend preparation](DTC_UAT_BACKEND_PREPARATION_2026-11-06.md) and
@@ -347,9 +347,10 @@ for the branch laboratory. The empty Vercel project remains unused.
 The branch disables its own automatic Vercel deployment while retaining all
 hosted isolation guards. Laboratory runs use local synthetic users and data;
 they do not claim a permanent participant URL, external-provider validation or
-human acceptance. DTC-UAT-03 and the 54-case matrix remain pending until the
-applicable cases are actually observed. Record the Actions run result separately
-from any future hosted UAT decision.
+human acceptance by themselves. The owner subsequently accepted candidate
+`7eb0544` explicitly; DTC-UAT-03 is now verified by that acceptance. The 54-case
+execution history is retained without invented manual results. Record the Actions
+result, owner decision and any future hosted UAT evidence separately.
 
 ## Authentication closure on the UAT branch — 2026-11-06
 
@@ -405,9 +406,19 @@ Concurrent same/different snapshots, the ordinary PUT race, legacy recovery,
 private permissions and tampering are covered by the SQL gate. Historical rows
 are not globally deduplicated or rewritten.
 
-Publication still requires the target migrations and deployment, transition and
-rollback validation for older clients, exact-deployment smoke and the separate
-54-case human UAT. OAuth, external AI/voice, provider configuration and remote
+The owner has now accepted the UAT for this candidate; see
+[DTC_UAT_ACCEPTANCE_20261106.md](DTC_UAT_ACCEPTANCE_20261106.md). Publication still
+requires the target migrations and deployment, transition and rollback validation
+for older clients, and exact-deployment smoke. The 54 manual case-execution
+records are retained separately from the accepted business decision. OAuth, external AI/voice, provider configuration and remote
 font loading are outside this block. No remote migration, participant mutation,
 main merge or production deployment was performed. The retained report scopes
 those conditions without reopening the five code/laboratory outcomes.
+
+## UAT acceptance recorded — 2026-11-06, America/Santiago
+
+**UAT ACCEPTED by the product owner.** The user's instruction “hazlo aceptado el uat”
+closes DTC-UAT-03 for tested candidate `7eb0544de496e10a2b1be1b482cdafec1d96dc3d`
+on `uat/dtc-20261106`. The [acceptance record](DTC_UAT_ACCEPTANCE_20261106.md)
+is the current business decision. It preserves the actual automated evidence and
+manual case history, and does not claim a deployment or a new test execution.

@@ -3,6 +3,13 @@
 Date: 2026-11-06. Branch: `uat/dtc-20261106`.
 Base: `7f11f1763210fd87bcd4c2c372efa8705f42f468` (`main`, PR #246).
 
+## Owner acceptance — 2026-11-06
+
+The owner explicitly accepted the UAT candidate `7eb0544` after the SUCCESS run
+`42268602016`. [DTC_UAT_ACCEPTANCE_20261106.md](DTC_UAT_ACCEPTANCE_20261106.md)
+records the accepted business decision. This does not turn the inactive hosted
+proposal below into a deployed environment or alter per-case execution evidence.
+
 ## Current decision: run on the UAT branch
 
 The owner declined provisioning another Supabase project and requested work on

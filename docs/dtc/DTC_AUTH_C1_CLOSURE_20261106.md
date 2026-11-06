@@ -11,7 +11,9 @@ Fecha: 2026-11-06. Rama: `uat/dtc-20261106`. Repositorio: `jcv86/main`.
 | Evidencia local y hashes | [auth-c1-local-20261106.json](uat/auth-c1-local-20261106.json) |
 | Esquema observado, sólo catálogo | [c1-schema-readonly-20261106.json](uat/c1-schema-readonly-20261106.json) |
 
-Este bloque implementa DTC-AUTH-01/02/03 y DTC-C1-01/02 del [registro de cierre](DTC_CLOSURE_LEDGER.md). La compilación, las regresiones locales y la integración PostgreSQL/navegador del candidato están aprobadas. **Dictamen: CONDITIONAL_GO para avanzar a UAT con este bloque de código verificado.** La publicación requiere las condiciones del último apartado. Las cinco filas del registro quedan verificadas únicamente para este candidato y laboratorio; no se declara publicada la aplicación ni ejecutada la aceptación humana.
+Este bloque implementa DTC-AUTH-01/02/03 y DTC-C1-01/02 del [registro de cierre](DTC_CLOSURE_LEDGER.md). La compilación, las regresiones locales y la integración PostgreSQL/navegador del candidato están aprobadas. **Dictamen técnico previo a la aceptación: CONDITIONAL_GO para avanzar a UAT con este bloque de código verificado.** La publicación requiere las condiciones del último apartado. Las cinco filas del registro quedan verificadas únicamente para este candidato y laboratorio. La ejecución manual de la matriz conserva su estado documentado; la aceptación posterior del responsable se registra a continuación.
+
+**Actualización de aceptación — 6 de noviembre de 2026:** el responsable indicó «hazlo aceptado el uat». El UAT del candidato queda **ACEPTADO** y DTC-UAT-03 verificado según el [acta de aceptación](DTC_UAT_ACCEPTANCE_20261106.md). El dictamen técnico anterior conserva su alcance histórico; la decisión de negocio deja de estar pendiente.
 
 ## Resultado funcional
 
@@ -131,10 +133,10 @@ La revisión del código previo reprodujo también DTC-C1-02: si la inserción d
 
 Este trabajo deja el candidato en la rama UAT. No fusiona `main`, despliega Vercel, aplica migraciones remotas ni cambia proveedores o datos reales.
 
-Antes de promover el candidato a producción deben estar aprobados el CI del SHA correspondiente y la aceptación humana de los 54 casos sobre UAT. Para un despliegue autorizado, primero se aplican y verifican las migraciones necesarias y después se despliega el frontend/API del mismo candidato. Sin las RPC, la nueva página falla de forma recuperable; no crea una finalización ficticia.
+El CI del SHA correspondiente está aprobado y la aceptación del responsable quedó registrada en el acta de UAT. Los resultados manuales de los 54 casos conservan su estado documentado; no se añaden ejecuciones por esta decisión. Para un despliegue autorizado, primero se aplican y verifican las migraciones necesarias y después se despliega el frontend/API del mismo candidato. Sin las RPC, la nueva página falla de forma recuperable; no crea una finalización ficticia.
 
 El rollback de aplicación aún requiere validar la compatibilidad con los recibos y el esquema nuevo. Conservar filas históricas y recibos evita una reversión destructiva, pero no acredita que regresar al flujo anterior de C1 sea seguro. No se ha probado una migración inversa ni un rollback productivo.
 
 Las solicitudes sin el nuevo encabezado a completion POST y draft PUT/POST reciben 409. Una pestaña antigua debe conservar su texto todavía no guardado antes de recargar. Esta precondición no revoca escrituras directas a Supabase de versiones anteriores ni operaciones ya en vuelo; la transición y el rollback con esos clientes requieren verificación antes del despliegue.
 
-Se requiere smoke de cada despliegue exacto. La aceptación humana de los **54 casos UAT** sigue **NO EJECUTADA** y es previa a la promoción productiva. OAuth externo, IA, dictado, fuentes/ofertas externas y tipografía remota retienen sus gates propios. Las posteriores actualizaciones sólo de `docs/**` no repiten el laboratorio: la evidencia continúa vinculada al SHA de código probado.
+Se requiere smoke de cada despliegue exacto. La aceptación de negocio del UAT está **ACEPTADA**. El detalle de ejecución de los **54 casos** se conserva por separado y no se convierte en 54 PASS. OAuth externo, IA, dictado, fuentes/ofertas externas y tipografía remota retienen sus gates propios. Las posteriores actualizaciones sólo de `docs/**` no repiten el laboratorio: la evidencia continúa vinculada al SHA de código probado.

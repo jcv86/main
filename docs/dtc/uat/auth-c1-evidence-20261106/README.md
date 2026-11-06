@@ -18,4 +18,6 @@ El [manifest](artifact-manifest.json) conserva la identidad del artifact, digest
 
 Se trata de usuarios y datos sintéticos del stack local desechable. No contiene contraseñas, JWT, cookies, HAR, storageState ni logs privados del servidor. Los errores HTTP inducidos, los 404 auxiliares del runtime mínimo y las cancelaciones de transporte están declarados; cero errores JavaScript no capturados no significa cero mensajes de recursos HTTP. Las capturas usan fuentes del sistema y las de página completa conservan el contexto de scroll de elementos fijos; no certifican la tipografía de marca o un diseño pixel-perfect.
 
-El [informe completo](../../DTC_AUTH_C1_CLOSURE_20261106.md) y el [contrato API](../../DTC_C1_COMPLETION_API_20261106.md) explican decisiones, recuperación, publicación y límites. No se ejecutaron migraciones remotas ni la aceptación humana de los 54 casos UAT.
+El [informe completo](../../DTC_AUTH_C1_CLOSURE_20261106.md) y el [contrato API](../../DTC_C1_COMPLETION_API_20261106.md) explican decisiones, recuperación, publicación y límites. La evidencia de esta corrida no incluye migraciones remotas ni la ejecución manual de los 54 casos UAT.
+
+**Aceptación posterior:** el responsable aceptó el UAT del candidato el 6 de noviembre de 2026. Véase el [acta](../../DTC_UAT_ACCEPTANCE_20261106.md). Esta decisión se registra sin cambiar los resultados originales de esta carpeta.

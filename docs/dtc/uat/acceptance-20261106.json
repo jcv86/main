@@ -1,0 +1,46 @@
+{
+  "decision": "ACCEPTED",
+  "display_status": "ACEPTADO POR EL RESPONSABLE",
+  "verdict": "GO",
+  "verdict_scope": "Aceptación de negocio del UAT del candidato en la rama; no certifica un despliegue productivo",
+  "approval_source": "explicit_user_message_in_current_conversation",
+  "approval_text": "hazlo aceptado el uat",
+  "approver_role": "Responsable del producto; usuario solicitante",
+  "recorded_at": "2026-11-06T15:35:38-03:00",
+  "timezone": "America/Santiago",
+  "recorded_at_utc": "2026-11-06T18:35:38Z",
+  "repository": "jcv86/main",
+  "branch": "uat/dtc-20261106",
+  "tested_code_commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "tested_tree": "1b828ca81ec3c1cdbc01aaf1f59347c8e13c076b",
+  "prior_evidence_commit": "c4adfe9363712722bc9f997a98c7f8878fa4a951",
+  "workflow_run": 42268602016,
+  "workflow_result": "SUCCESS",
+  "evidence": {
+    "auth_cases": 17,
+    "c1_browser_cases": 24,
+    "c1_sql_cases": 19,
+    "auth_c1_accessibility_checks": 28,
+    "reported_axe_violations": 0,
+    "full_build_pages": 356
+  },
+  "manual_case_execution": {
+    "cases": 54,
+    "base_cases": 48,
+    "conditional_cases": 6,
+    "new_manual_execution_claimed": false,
+    "existing_case_execution_states_preserved": true,
+    "all_cases_pass_claimed": false
+  },
+  "acceptance_effect": "DTC-UAT-03 cerrado por aceptación explícita; la aprobación del responsable deja de estar pendiente",
+  "remaining_technical_work": [
+    "Migraciones y despliegue del candidato en el destino autorizado",
+    "Verificación del despliegue exacto",
+    "Transición y rollback de clientes antiguos"
+  ],
+  "application_code_changed_by_acceptance": false,
+  "main_merged": false,
+  "remote_migrations_applied": false,
+  "production_deployed": false,
+  "workbook_library_file_id": "libfile_07431d69ad00819184be0e5e555aa681"
+}
