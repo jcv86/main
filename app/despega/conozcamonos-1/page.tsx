@@ -1,5 +1,5 @@
 'use client'
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { createClient } from '@/lib/supabase/client'
@@ -8,19 +8,18 @@ import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 import { useAssessmentDraft } from '@/lib/use-assessment-draft'
-
-type ResponseValue = string | string[]
+import { C1_TEXT_LIMIT, c1TextLimitError, restoreC1DraftAnswers, serializeC1DraftAnswers,
+  serializeC1FinalAnswers, type C1Responses, type C1CustomResponses } from '@/lib/c1-responses'
 
 export default function Conozcamonos1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
-  const [responses, setResponses] = useState<Record<number, ResponseValue>>({})
-  const [customResponses, setCustomResponses] = useState<Record<number, string>>({})
+  const [responses, setResponses] = useState<C1Responses>({})
+  const [customResponses, setCustomResponses] = useState<C1CustomResponses>({})
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [authChecked, setAuthChecked] = useState(false)
   const [validating, setValidating] = useState(false)
-  const [validationError, setValidationError] = useState('')
-  const [validationSuggestions, setValidationSuggestions] = useState('')
+  const transitionInFlight = useRef(false)
   const router = useRouter()
   const supabase = createClient()
   const { trackEvent, trackPageView } = useV1Analytics()
@@ -64,7 +63,9 @@ export default function Conozcamonos1Page() {
         try {
           const draft = await loadDraft()
           if (draft) {
-            setResponses(draft.answers as Record<number, ResponseValue>)
+            const restored = restoreC1DraftAnswers(draft.answers)
+            setResponses(restored.responses)
+            setCustomResponses(restored.customResponses)
             setCurrentQuestion(draft.currentQuestion)
           }
         } catch {
@@ -91,6 +92,7 @@ export default function Conozcamonos1Page() {
   const isLastQuestion = currentQuestion === CONOZCAMONOS_1_QUESTIONS.length - 1
 
   const handleAnswer = (value: string) => {
+    if (transitionInFlight.current) return
     if (question.type === 'select') {
       // For select: allow multiple selections
       const current = Array.isArray(responses[question.id]) 
@@ -118,7 +120,9 @@ export default function Conozcamonos1Page() {
   }
 
   const handleCustomText = (value: string) => {
+    if (transitionInFlight.current) return
     setCustomResponses(prev => ({ ...prev, [question.id]: value }))
+    setError('')
   }
 
   const isAnswered = () => {
@@ -129,72 +133,83 @@ export default function Conozcamonos1Page() {
     return Boolean(response && String(response).trim())
   }
 
-  const shouldShowError = () => {
-    // Only show validation errors for text fields, not for select
-    return question.type === 'text' && error
-  }
-
   const handleNext = async () => {
+    if (transitionInFlight.current) return
     if (!isAnswered()) { 
       setError('Necesito entender mejor tu contexto. Amplía un poco más tu respuesta.')
       trackEvent('c1_error_empty', { questionIndex: currentQuestion })
       return 
     }
-    trackEvent('c1_response_submitted', { questionIndex: currentQuestion })
-
-    // Only validate text fields
-    if (question.type === 'text') {
-      setValidating(true)
-      setError('')
-      
-      try {
-        const validationResponse = await fetch('/api/conozcamonos/validate-response', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            questionId: question.id,
-            question: question.question,
-            response: responses[question.id],
-            questionType: question.type
-          })
-        })
-
-        const validation = await validationResponse.json()
-
-        if (!validation.valid) {
-          setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
-          setValidating(false)
-          return
-        }
-      } catch (err) {
-        console.error('[v0] Validation error:', err)
-      } finally {
-        setValidating(false)
-      }
-    }
-
+    const lengthError = c1TextLimitError(responses, customResponses)
+    if (lengthError) { setError(lengthError); return }
+    transitionInFlight.current = true
     try {
-      await saveDraft({ schemaVersion: 1, currentQuestion: isLastQuestion ? currentQuestion : currentQuestion + 1, answers: responses, timings: [] })
-    } catch {
-      return
-    }
+      trackEvent('c1_response_submitted', { questionIndex: currentQuestion })
 
-    // Move to next or submit
-    if (isLastQuestion) { 
-      submitResponses() 
-    } else { 
-      setCurrentQuestion(prev => prev + 1)
-      setError('')
+      // Only validate text fields
+      if (question.type === 'text') {
+        setValidating(true)
+        setError('')
+      
+        try {
+          const validationResponse = await fetch('/api/conozcamonos/validate-response', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              questionId: question.id,
+              question: question.question,
+              response: responses[question.id],
+              questionType: question.type
+            })
+          })
+
+          const validation = await validationResponse.json()
+
+          if (!validation.valid) {
+            setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
+            setValidating(false)
+            return
+          }
+        } catch (err) {
+          console.error('[v0] Validation error:', err)
+        } finally {
+          setValidating(false)
+        }
+      }
+
+      try {
+        await saveDraft({ schemaVersion: 1, currentQuestion: isLastQuestion ? currentQuestion : currentQuestion + 1,
+          answers: serializeC1DraftAnswers(responses, customResponses), timings: [] })
+      } catch {
+        return
+      }
+
+      // Move to next or submit
+      if (isLastQuestion) {
+        await submitResponses()
+      } else {
+        setCurrentQuestion(prev => prev + 1)
+        setError('')
+      }
+    } finally {
+      transitionInFlight.current = false
     }
   }
 
   const handleBack = async () => {
-    if (currentQuestion <= 0) return
+    if (currentQuestion <= 0 || transitionInFlight.current) return
+    const lengthError = c1TextLimitError(responses, customResponses)
+    if (lengthError) { setError(lengthError); return }
+    transitionInFlight.current = true
     try {
-      await saveDraft({ schemaVersion: 1, currentQuestion: currentQuestion - 1, answers: responses, timings: [] })
+      await saveDraft({ schemaVersion: 1, currentQuestion: currentQuestion - 1,
+        answers: serializeC1DraftAnswers(responses, customResponses), timings: [] })
       setCurrentQuestion(prev => prev - 1)
+      setError('')
     } catch {
       return
+    } finally {
+      transitionInFlight.current = false
     }
   }
 
@@ -206,7 +221,7 @@ export default function Conozcamonos1Page() {
 
       const { error: dbError } = await supabase
         .from('canon_conozcamonos_1_responses')
-        .insert({ user_id: user.id, responses, completed_at: new Date().toISOString() })
+        .insert({ user_id: user.id, responses: serializeC1FinalAnswers(responses, customResponses), completed_at: new Date().toISOString() })
 
       if (dbError) throw dbError
       await completeDraft()
@@ -260,14 +275,18 @@ export default function Conozcamonos1Page() {
           <p className="text-xl font-medium leading-relaxed" style={{ color: 'rgba(255, 255, 255, 0.6)' }}>Entiendo tu contexto para que lo que viene después tenga sentido para ti</p>
         </div>
 
-        <div 
-          className="bg-white dark:bg-background p-8 mb-8 shadow-lg"
+        <fieldset
+          key={question.id}
+          disabled={loading || validating || savingDraft}
+          aria-busy={loading || validating || savingDraft}
+          aria-labelledby="c1-question"
+          className="min-w-0 bg-white dark:bg-background p-8 mb-8 shadow-lg"
           style={{ 
             border: '2px solid rgba(80, 160, 170, 0.4)',
             borderRadius: '2px'
           }}
         >
-          <h2 className="text-2xl text-muted/90 dark:text-white mb-6" style={{ fontWeight: 500 }}>{question.question}</h2>
+          <h2 id="c1-question" className="text-2xl text-muted/90 dark:text-white mb-6" style={{ fontWeight: 500 }}>{question.question}</h2>
 
           {question.type === 'select' && (
             <div className="space-y-3">
@@ -280,6 +299,7 @@ export default function Conozcamonos1Page() {
                   <div key={option} className="space-y-2">
                     <button
                       onClick={() => handleAnswer(option)}
+                      aria-pressed={isSelected}
                       className="w-full text-left p-4 border-2 transition-all"
                       style={{
                         borderRadius: '28px',
@@ -293,13 +313,20 @@ export default function Conozcamonos1Page() {
                     {/* Show text input for "Otro" option */}
                     {option === 'Otro' && isSelected && (
                       <div className="space-y-3 p-3 bg-muted/5 dark:bg-background rounded-[28px] border border-muted/20 dark:border-card">
+                        <label htmlFor={`c1-other-${question.id}`} className="text-sm font-medium">Especifica tu respuesta</label>
                         <textarea
+                          id={`c1-other-${question.id}`}
                           value={customResponses[question.id] || ''}
                           onChange={(e) => handleCustomText(e.target.value)}
                           placeholder="Especifica tu respuesta..."
                           className="w-full p-3 bg-background border border-border rounded-lg text-foreground text-sm"
                           rows={3}
+                          maxLength={C1_TEXT_LIMIT}
+                          aria-describedby={`c1-other-limit-${question.id}`}
                         />
+                        <p id={`c1-other-limit-${question.id}`} className="text-xs text-muted-foreground">
+                          {(customResponses[question.id] || '').length}/{C1_TEXT_LIMIT} caracteres
+                        </p>
                         
                         <div className="flex gap-2 items-center flex-wrap">
                           <VoiceInput
@@ -307,7 +334,7 @@ export default function Conozcamonos1Page() {
                               const current = customResponses[question.id] || ''
                               handleCustomText(current + (current ? ' ' : '') + text)
                             }}
-                            isDisabled={loading || validating}
+                            isDisabled={loading || validating || savingDraft}
                           />
                           <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                             O habla para dictar
@@ -336,11 +363,13 @@ export default function Conozcamonos1Page() {
             <div className="space-y-3">
               <div className="flex gap-2">
                 <textarea
+                  aria-labelledby="c1-question"
                   value={responses[question.id] || ''}
                   onChange={(e) => handleAnswer(e.target.value)}
                   className="flex-1 p-4 bg-background border border-border text-foreground"
                   style={{ borderRadius: '2px' }}
                   rows={4}
+                  maxLength={C1_TEXT_LIMIT}
                   placeholder="Escribe tu respuesta aquí o usa el micrófono..."
                 />
               </div>
@@ -349,7 +378,7 @@ export default function Conozcamonos1Page() {
                   onTranscript={(text) => {
                     handleAnswer((responses[question.id] || '') + (responses[question.id] ? ' ' : '') + text)
                   }}
-                  isDisabled={loading || validating}
+                  isDisabled={loading || validating || savingDraft}
                 />
                 <span className="text-xs text-muted-foreground dark:text-muted-foreground">
                   O habla para dictar tu respuesta
@@ -368,14 +397,14 @@ export default function Conozcamonos1Page() {
           )}
 
           {(error || draftError) && (
-            <div className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
+            <div role="alert" className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
               <p className="text-sm font-semibold text-red dark:text-red">{error || draftError}</p>
             </div>
           )}
-        </div>
+        </fieldset>
 
         <div className="flex gap-4">
-          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0 || savingDraft} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
+          <Button onClick={handleBack} variant="outline" disabled={currentQuestion === 0 || savingDraft || loading || validating} className="flex-1" style={{ borderRadius: '20px' }}>Atrás</Button>
           <Button 
             onClick={handleNext} 
             disabled={!isAnswered() || loading || validating || savingDraft}

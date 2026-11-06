@@ -3,6 +3,8 @@ on:
   push:
     branches:
       - 'uat/dtc-20261106'
+    paths-ignore:
+      - 'docs/**'
   pull_request:
     paths:
       - 'scripts/a1-browser-qa/**'
@@ -36,6 +38,10 @@ on:
       - 'lib/supabase/**'
       - 'lib/observability/**'
       - 'lib/auth/**'
+      - 'lib/c1-responses.ts'
+      - 'lib/assessment-drafts.ts'
+      - 'lib/use-assessment-draft.ts'
+      - 'lib/canon-conozcamonos-1-questions.ts'
       - 'middleware.ts'
       - 'app/api/a1/**'
       - 'app/api/a1-cerebral-save/**'
@@ -46,6 +52,13 @@ on:
       - 'app/api/outcomes/**'
       - 'app/api/career/**'
       - 'app/api/auth/invitation/**'
+      - 'app/api/auth/email-login/**'
+      - 'app/api/auth/signout/**'
+      - 'app/api/auth/pilot-status/**'
+      - 'app/api/assessments/drafts/**'
+      - 'app/auth/signin/**'
+      - 'app/auth/email-login/**'
+      - 'components/auth/**'
       - 'app/api/gamification/global/**'
       - 'app/api/preferences/**'
       - 'app/api/v1-analytics/**'
@@ -56,6 +69,7 @@ on:
       - 'app/despega/a2/**'
       - 'app/despega/a3/**'
       - 'app/despega/recorrido/**'
+      - 'app/despega/conozcamonos-1/**'
       - 'app/despega/objetivo-laboral/**'
       - 'app/providers.tsx'
       - 'app/despega/settings/**'
@@ -63,6 +77,7 @@ on:
       - 'app/globals.css'
       - 'app/design-system.css'
       - 'supabase/migrations/20260825010000_pilot_access_foundation.sql'
+      - 'supabase/migrations/20260826010000_assessment_drafts.sql'
       - 'supabase/migrations/*a4*'
       - 'supabase/migrations/20260915160000_canonical_journey_foundation.sql'
       - 'supabase/migrations/20260915160100_canonical_journey_security.sql'
@@ -108,6 +123,12 @@ jobs:
         run: npm run test:uat-isolation
       - name: UI response observation survives navigation and excludes stale refreshes
         run: node scripts/a1-browser-qa/closure-response-browser.mjs
+      - name: Authentication and C1 code regressions
+        run: |
+          node --import tsx scripts/test-auth-signout.cjs
+          node --import tsx scripts/test-email-login.mjs
+          npm run test:assessment-drafts
+          node scripts/a1-browser-qa/auth-self-check.mjs
       - name: Prepare isolated application and start local Supabase only
         run: |
           node scripts/a1-browser-qa/prepare.mjs
@@ -139,6 +160,16 @@ jobs:
           npx tsx scripts/a1-browser-qa/closure-seed.ts
       - name: Six capture pages, real owner RLS, reload continuity and saved objective revision conflicts
         run: node scripts/a1-browser-qa/closure-browser.mjs
+      - name: Actual email login, signed invitation, Provider session, logout recovery and exhausted quota
+        run: |
+          node scripts/a1-browser-qa/auth-prepare.mjs
+          npx tsx scripts/a1-browser-qa/auth-seed.ts
+          node scripts/a1-browser-qa/auth-browser.mjs
+      - name: C1 Other text, draft retry, reload, owner RLS and final response on desktop and mobile
+        run: |
+          node scripts/a1-browser-qa/c1-prepare.mjs
+          npx tsx scripts/a1-browser-qa/c1-seed.ts
+          node scripts/a1-browser-qa/c1-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4

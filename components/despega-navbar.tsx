@@ -2,10 +2,11 @@
 
 import { useState, useRef, useEffect } from 'react'
 import Link from 'next/link'
-import { useRouter, usePathname } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import useSWR from 'swr'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { Button } from '@/components/ui/button'
+import { SignOutButton } from '@/components/auth/sign-out-button'
 import { 
   Menu, 
   X, 
@@ -15,7 +16,6 @@ import {
   MapPin,
   Zap,
   Radar,
-  LogOut,
   User,
   Settings,
   Trophy
@@ -102,7 +102,6 @@ export function DespegaNavbar() {
   const [expandedStage, setExpandedStage] = useState<string | null>(null)
   const [openDropdown, setOpenDropdown] = useState<string | null>(null)
   const [profileOpen, setProfileOpen] = useState(false)
-  const router = useRouter()
   const pathname = usePathname()
   const dropdownRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
@@ -153,21 +152,6 @@ export function DespegaNavbar() {
     setOpenDropdown(null)
     setIsOpen(false)
   }, [pathname])
-
-  const handleLogout = async () => {
-    // Clear demo user from localStorage if exists
-    localStorage.removeItem('demo_user')
-    document.cookie = 'demo_user=; path=/; max-age=0'
-    
-    // Try to sign out from Supabase if there's a real session
-    try {
-      await fetch('/api/auth/signout', { method: 'POST' })
-    } catch (err) {
-      console.error('[v0] Error signing out:', err)
-    }
-    
-    router.push('/auth/signin')
-  }
 
   return (
     <nav className="sticky top-0 z-50 bg-black border-b border-white/10">
@@ -389,16 +373,10 @@ export function DespegaNavbar() {
                 </div>
 
                 <div className="px-2 py-2 border-t border-white/10">
-                  <button
-                    onClick={() => {
-                      setProfileOpen(false)
-                      handleLogout()
-                    }}
+                  <SignOutButton
+                    label="Salir"
                     className="w-full flex items-center gap-2.5 px-3 py-2.5 rounded-lg text-sm text-[rgb(80,160,170)]/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.6)]-500/10 transition-all"
-                  >
-                    <LogOut className="w-4 h-4" />
-                    Salir
-                  </button>
+                  />
                 </div>
               </div>
             )}
@@ -496,18 +474,12 @@ export function DespegaNavbar() {
                 </Button>
               </Link>
 
-              <Button
-                onClick={() => {
-                  setIsOpen(false)
-                  handleLogout()
-                }}
+              <SignOutButton
+                label="Salir"
                 variant="outline"
                 size="sm"
                 className="w-full justify-start gap-2 border-white/20 text-[rgb(80,160,170)]/80 hover:text-[rgb(80,160,170)]-400 hover:bg-[rgba(80,160,170,0.6)]-500/10"
-              >
-                <LogOut className="w-4 h-4" />
-                Salir
-              </Button>
+              />
             </div>
           </div>
         )}

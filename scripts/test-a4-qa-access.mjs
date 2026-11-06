@@ -166,6 +166,7 @@ function harness(options = {}) {
   }
   const calls = { protectedReads: 0, personalReads: 0, report: 0, logs: [] }
   const loaded = new Map()
+  let componentId = 0
   const modules = {
     'server-only': {},
     'node:crypto': { createHash },
@@ -173,6 +174,7 @@ function harness(options = {}) {
     'react': {
       cache: fn => fn, useState: value => [value, () => {}],
       useRef: value => ({ current: value }), useEffect: () => {},
+      useId: () => `synthetic-component-${++componentId}`,
     },
     'react/jsx-runtime': { jsx, jsxs: jsx, Fragment: 'fragment' },
     'next/server': { NextResponse },
@@ -183,6 +185,9 @@ function harness(options = {}) {
     '@/lib/supabase/server': {
       createClient: async () => db,
       createAdminClient: () => { db.calls.admin++; return db },
+    },
+    '@/lib/supabase/client': {
+      createClient: () => assert.fail('Rendering access navigation must not initiate browser Auth'),
     },
     '@/lib/utils': { cn: (...parts) => parts.filter(part => typeof part === 'string').join(' ') },
     '@/hooks/use-auth-redirect': { useAuthRedirect: () => ({ user: { id: USER, email: 'a4-qa@example.invalid' } }) },
@@ -231,6 +236,7 @@ function harness(options = {}) {
     'lib/journey/service.ts', 'lib/journey/flow.ts', 'lib/journey/flow-service.ts',
     'lib/journey/a2-day-access.ts', 'lib/journey/transitions.ts',
     'lib/a2/server-progress.ts', 'lib/a2/practice-path.ts', 'lib/auth/server-user.ts', 'lib/auth/pilot-access.ts',
+    'components/auth/sign-out-button.tsx', 'lib/auth/signout-client.ts', 'lib/auth/current-session.ts',
   ])
   function load(path) {
     if (loaded.has(path)) return loaded.get(path)
@@ -248,9 +254,10 @@ function harness(options = {}) {
       if (Object.hasOwn(modules, name)) return modules[name]
       const candidate = name.startsWith('@/') ? name.slice(2) : name.startsWith('.')
         ? relative(ROOT, resolve(ROOT, dirname(path), name)) : null
-      const target = candidate?.endsWith('.ts') ? candidate : candidate + '.ts'
+      const target = candidate && /\.tsx?$/.test(candidate) ? candidate
+        : [candidate + '.ts', candidate + '.tsx'].find(path => realDependencies.has(path))
       // Reuse the same imported production module for relative and alias paths.
-      const alias = candidate ? '@/' + candidate.replace(/\.ts$/, '') : null
+      const alias = candidate ? '@/' + candidate.replace(/\.tsx?$/, '') : null
       if (alias && Object.hasOwn(modules, alias)) return modules[alias]
       assert.ok(realDependencies.has(target), 'Unexpected import in ' + path + ': ' + name)
       return load(target)

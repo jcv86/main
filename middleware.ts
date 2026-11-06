@@ -64,8 +64,11 @@ function isPublicRoute(pathname: string): boolean {
   return PUBLIC_ROUTES.some(route => pathname.startsWith(route))
 }
 
-function isRateLimitExemptRoute(pathname: string): boolean {
-  return RATE_LIMIT_EXEMPT_ROUTES.some(route => pathname === route)
+function isRateLimitExemptRoute(request: NextRequest): boolean {
+  // A person must always be able to end their current session, including
+  // after exhausting login attempts or the ordinary API allowance.
+  return (request.nextUrl.pathname === '/api/auth/signout' && request.method === 'POST')
+    || RATE_LIMIT_EXEMPT_ROUTES.some(route => request.nextUrl.pathname === route)
 }
 
 function isAuthRoute(pathname: string): boolean {
@@ -158,14 +161,18 @@ export async function middleware(request: NextRequest) {
     // Apply rate limiting based on endpoint
     let limiter = rateLimiters.api
 
-    if (request.nextUrl.pathname.includes('/auth/')) {
+    // Reading an existing pilot entitlement is not a new login attempt.
+    // Keep the ordinary API limit for this read and the strict, unchanged
+    // auth limit for login and every other non-exempt auth endpoint.
+    const isPilotStatusRead = pathname === '/api/auth/pilot-status' && request.method === 'GET'
+    if (pathname.includes('/auth/') && !isPilotStatusRead) {
       limiter = rateLimiters.auth
     } else if (request.nextUrl.pathname.includes('/openai/') || request.nextUrl.pathname.includes('/coaching/')) {
       limiter = rateLimiters.ai
     }
 
     // Check rate limit for non-public routes
-    if (!isPublicRoute(pathname) && !isRateLimitExemptRoute(pathname)) {
+    if (!isPublicRoute(pathname) && !isRateLimitExemptRoute(request)) {
       const rateLimitResponse = await checkRateLimit(request, limiter)
       if (rateLimitResponse) {
         logger.warn('Rate limit exceeded', {

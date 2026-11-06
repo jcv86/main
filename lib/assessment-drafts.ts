@@ -1,5 +1,6 @@
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { DISC_TEST_QUESTIONS } from '@/lib/disc-test-questions'
+import { validateC1DraftAnswers } from '@/lib/c1-responses'
 
 export const ASSESSMENT_TYPES = ['c1', 'a1'] as const
 export type AssessmentType = (typeof ASSESSMENT_TYPES)[number]
@@ -22,18 +23,6 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 
 export function isAssessmentType(value: string): value is AssessmentType {
   return ASSESSMENT_TYPES.includes(value as AssessmentType)
-}
-
-function validateC1Answers(value: unknown) {
-  if (!isRecord(value)) return false
-  const questions = new Map(CONOZCAMONOS_1_QUESTIONS.map((question) => [String(question.id), question]))
-  return Object.entries(value).every(([id, answer]) => {
-    const question = questions.get(id)
-    if (!question) return false
-    if (question.type === 'text') return typeof answer === 'string' && answer.length <= 500
-    if (!Array.isArray(answer) || answer.length === 0 || answer.length > (question.options?.length ?? 0)) return false
-    return answer.every((option) => typeof option === 'string' && question.options?.includes(option))
-  })
 }
 
 function validateA1Answers(value: unknown) {
@@ -67,7 +56,7 @@ export function validateAssessmentDraft(type: AssessmentType, value: unknown):
   const currentQuestion = Number(value.currentQuestion)
   if (!Number.isInteger(currentQuestion) || currentQuestion < 0 || currentQuestion >= maxQuestion) return { valid: false, error: 'La pregunta actual no es válida.' }
   if (value.schemaVersion !== 1) return { valid: false, error: 'La versión del cuestionario no es compatible.' }
-  if (type === 'c1' ? !validateC1Answers(value.answers) : !validateA1Answers(value.answers)) return { valid: false, error: 'Las respuestas del borrador no son válidas.' }
+  if (type === 'c1' ? !validateC1DraftAnswers(value.answers) : !validateA1Answers(value.answers)) return { valid: false, error: 'Las respuestas del borrador no son válidas.' }
   const timings = value.timings ?? []
   if (type === 'a1' && !validateTimings(timings)) return { valid: false, error: 'Los tiempos del borrador no son válidos.' }
   return { valid: true, draft: { schemaVersion: 1, currentQuestion, answers: value.answers as Record<string, unknown>, timings: type === 'a1' ? timings as unknown[] : [] } }

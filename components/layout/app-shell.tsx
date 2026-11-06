@@ -2,7 +2,7 @@
 
 import * as React from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
+import { usePathname } from 'next/navigation'
 import useSWR from 'swr'
 import {
   BarChart3,
@@ -15,7 +15,6 @@ import {
   FileText,
   Home,
   Lock,
-  LogOut,
   Menu,
   Radar,
   Settings,
@@ -26,6 +25,7 @@ import {
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
+import { SignOutButton } from '@/components/auth/sign-out-button'
 import { Progress } from '@/components/ui/progress'
 import { useAuthRedirect } from '@/hooks/use-auth-redirect'
 import { cn } from '@/lib/utils'
@@ -292,7 +292,6 @@ function ShellNavigation({ pathname, flow, onNavigate }: { pathname: string; flo
 
 export function AppShell({ children, flow }: { children: React.ReactNode; flow: JourneyFlow }) {
   const pathname = usePathname()
-  const router = useRouter()
   const { user } = useAuthRedirect()
   const [mobileOpen, setMobileOpen] = React.useState(false)
   const menuButtonRef = React.useRef<HTMLButtonElement>(null)
@@ -328,14 +327,6 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
       menuButtonRef.current?.focus()
     }
   }, [mobileOpen])
-
-  const handleLogout = async () => {
-    try {
-      await fetch('/api/auth/signout', { method: 'POST' })
-    } finally {
-      router.replace('/auth/signin')
-    }
-  }
 
   return (
     <div className="min-h-screen bg-background text-foreground">
@@ -408,10 +399,7 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
             <p className="truncate text-sm font-semibold">{user?.email ?? 'Verificando sesión…'}</p>
             <p className="mt-1 text-xs text-muted-foreground">Tu información permanece conectada a tu recorrido.</p>
           </div>
-          <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground" onClick={handleLogout}>
-            <LogOut className="h-4 w-4" />
-            Cerrar sesión
-          </Button>
+          <SignOutButton className="w-full justify-start gap-3 text-muted-foreground" />
         </div>
       </aside>
 
@@ -448,10 +436,7 @@ export function AppShell({ children, flow }: { children: React.ReactNode; flow: 
               <ShellNavigation pathname={pathname} flow={flow} onNavigate={() => setMobileOpen(false)} />
             </div>
             <div className="border-t border-border p-4">
-              <Button variant="ghost" className="w-full justify-start gap-3 text-muted-foreground" onClick={handleLogout}>
-                <LogOut className="h-4 w-4" />
-                Cerrar sesión
-              </Button>
+              <SignOutButton className="w-full justify-start gap-3 text-muted-foreground" />
             </div>
           </aside>
         </div>

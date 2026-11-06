@@ -3,7 +3,7 @@
 import { useState } from 'react'
 import { useSearchParams } from 'next/navigation'
 import Link from 'next/link'
-import { AlertCircle, Linkedin, Loader2 } from 'lucide-react'
+import { AlertCircle, Linkedin, Loader2, Mail } from 'lucide-react'
 import { createClient } from '@/lib/supabase/client'
 import {
   normalizeNextPath,
@@ -22,6 +22,10 @@ export default function SignInPage() {
   const [loadingProvider, setLoadingProvider] = useState<PilotOAuthProvider | null>(null)
   const urlError = searchParams.get('error')
   const recovery = getAuthenticationRecovery(searchParams.get('reason'), searchParams.get('next'))
+  const emailParams = new URLSearchParams({ next: normalizeNextPath(searchParams.get('next')) })
+  if (searchParams.get('invited') === '1') emailParams.set('invited', '1')
+  if (recovery) emailParams.set('reason', searchParams.get('reason')!)
+  const emailSignInHref = `/auth/email-login?${emailParams.toString()}`
 
   const signIn = async (provider: PilotOAuthProvider) => {
     setError('')
@@ -99,6 +103,13 @@ export default function SignInPage() {
             <Button className="h-12 w-full bg-[#0A66C2] text-white hover:bg-[#0958a8]" disabled={loadingProvider !== null} onClick={() => signIn('linkedin_oidc')}>
               {loadingProvider === 'linkedin_oidc' ? <Loader2 className="mr-2 h-5 w-5 animate-spin" /> : <Linkedin className="mr-3 h-5 w-5" />}
               Continuar con LinkedIn
+            </Button>
+
+            <Button asChild variant="outline" className="min-h-12 w-full whitespace-normal border-white/25 bg-transparent text-white hover:bg-white/10 hover:text-white">
+              <Link href={emailSignInHref}>
+                <Mail className="mr-2 h-5 w-5 shrink-0" aria-hidden="true" />
+                Continuar con correo y contraseña
+              </Link>
             </Button>
 
             <p className="pt-2 text-center text-xs leading-relaxed text-white/50">

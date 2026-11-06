@@ -6,7 +6,6 @@ import {
   Coins,
   Flame,
   Lock,
-  LogOut,
   Settings,
   Trophy,
   User,
@@ -14,6 +13,7 @@ import {
 } from 'lucide-react'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
+import { SignOutButton } from '@/components/auth/sign-out-button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import {
@@ -93,12 +93,7 @@ export default async function ProfilePage() {
                 Preferencias
               </Link>
             </Button>
-            <form action="/api/auth/signout" method="post">
-              <Button type="submit" variant="ghost">
-                <LogOut className="mr-2 h-4 w-4" />
-                Salir
-              </Button>
-            </form>
+            <SignOutButton label="Salir" className="gap-2" />
           </div>
         </header>
 

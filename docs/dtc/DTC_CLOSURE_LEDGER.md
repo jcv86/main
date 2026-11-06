@@ -350,3 +350,33 @@ they do not claim a permanent participant URL, external-provider validation or
 human acceptance. DTC-UAT-03 and the 54-case matrix remain pending until the
 applicable cases are actually observed. Record the Actions run result separately
 from any future hosted UAT decision.
+
+## Authentication closure on the UAT branch — 2026-11-06
+
+Code baseline: `59645764989f7eed1a54be41d2755b48e98278fa`, branch
+`uat/dtc-20261106`. The preceding local-browser run
+[42244740051](https://github.com/jcv86/main/actions/runs/42244740051) passed, but
+used a laboratory login surface. This block closes verified defects in the
+application's actual password sign-in and sign-out journey. It does not change
+providers, provision infrastructure, apply remote SQL, merge main or release.
+
+| ID | User outcome and observed defect | Acceptance criteria | Owner / skill | Status | Release blocker |
+|---|---|---|---|---|---|
+| DTC-AUTH-01 | An invited or returning password user can enter through the canonical sign-in and continue. The canonical page omits the existing email form; the email API ignores the signed invitation claim. | Visible email entry preserves a safe return path. Valid credentials plus a valid invitation or existing access establish the actual client/server session; a non-member without an invitation is denied. The real form and session provider are observed with local synthetic users. | Application / `dtc-build-experience`, `dtc-supabase-backend` | `in_progress` | yes |
+| DTC-AUTH-02 | A user can recover from sign-in failures. The email API maps provider 429 and 503 to incorrect-credentials 401. | Invalid input, invalid credentials, rate limiting and service failure produce distinct safe responses and actionable UI. Retry works without losing the requested destination or claiming successful access. | Authentication / `dtc-supabase-backend` | `in_progress` | yes |
+| DTC-AUTH-03 | Signing out actually ends the current session. Five ordinary auth-status reads exhaust the shared auth-route quota and block signout; AppShell and the signout API can still present success after failure. | Ordinary status reads do not consume the login-attempt quota. Signout remains available at that boundary; errors stay visible and retryable instead of falsely navigating away. Successful signout clears the current session and protected browser-back access is checked. Login thresholds remain enforced. | Session UX / `dtc-build-experience`, `dtc-quality-gate` | `in_progress` | yes |
+
+Verification is limited to synthetic, loopback-only Supabase in the existing
+GitHub Actions laboratory. A later result must name the tested SHA and run; a
+passing earlier run is not evidence for this block.
+
+### C1 custom-response preservation — 2026-11-06
+
+| ID | User outcome and observed defect | Acceptance criteria | Owner / skill | Status | Release blocker |
+|---|---|---|---|---|---|
+| DTC-C1-01 | A participant who chooses “Otro” retains the context they write. The C1 page keeps custom text in component state but omits it from both saved drafts and final canonical responses. | Next/back/reload restores custom text for the selected option; completed responses and report context contain that text. Legacy drafts remain readable. Invalid or oversized custom fields are rejected, deselected custom text is excluded, and a save failure retains the input with retry. Desktop and 390×844 use the real page, draft API and local owner RLS. | Application / `dtc-build-experience`, `dtc-supabase-backend`, `dtc-quality-gate` | `in_progress` | yes |
+
+The optional custom-text map is stored inside the existing draft answers JSON;
+no new column or remote migration is needed. Canonical completed answers retain
+the existing numeric question keys and string/array shape used by report readers.
+External text validation and AI suggestions require their own later acceptance.
