@@ -1,0 +1,240 @@
+{
+  "version": "dtc-a2-swarm-ci.v1",
+  "runId": 42284049633,
+  "url": "https://github.com/jcv86/main/actions/runs/42284049633",
+  "headSha": "0f1e6ffd568c26d835365ecd96fe94ae7ed55ec6",
+  "applicationCodeSha": "cc2ef70b2fe5518c4d02b736896c5dbbfeb82285",
+  "status": "completed",
+  "conclusion": "success",
+  "event": "push",
+  "name": "A1 browser and local Auth",
+  "createdAt": "2026-11-06T19:56:43Z",
+  "updatedAt": "2026-11-06T20:05:10Z",
+  "runAttempt": 1,
+  "jobs": [
+    {
+      "id": 128120159179,
+      "name": "isolated-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Initialize runner-local paths",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Run supabase/setup-cli@v1",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install application and isolated browser tools",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "UAT isolation and returning-login regression",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "A2 assistant and bounded swarm with synthetic model transport",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "UI response observation survives navigation and excludes stale refreshes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Authentication and C1 code regressions",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Prepare isolated application and start local Supabase only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Apply selected real migrations and create synthetic Auth users",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Scanner-safe single-use invitation in real browser",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Preview-equivalent middleware runtime boundaries",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 15,
+          "name": "Browser, cookies, PostgREST, preferences persistence, mobile and print",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 16,
+          "name": "A1-A4 map, persisted progress and navigation in the same local stack",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 17,
+          "name": "Browser to API to redacted log request correlation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 18,
+          "name": "Append actual AppShell, capture pages and canonical local outcome migrations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 19,
+          "name": "Six capture pages, real owner RLS, reload continuity and saved objective revision conflicts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 20,
+          "name": "Actual email login, signed invitation, Provider session, logout recovery and exhausted quota",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 21,
+          "name": "C1 atomic completion, SQL rollback, retry, reload and owner boundaries on desktop and mobile",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 22,
+          "name": "Upload only synthetic visual evidence and sanitized summary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 23,
+          "name": "Stop disposable local stack, never a linked project",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 45,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 46,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 47,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "artifacts": [
+    {
+      "id": 13536129494,
+      "name": "a1-browser-evidence-0f1e6ffd568c26d835365ecd96fe94ae7ed55ec6",
+      "sizeInBytes": 13310625,
+      "digest": "sha256:796fde9adf485d0ddc93d3463fa174f01701ccc87c48ced80c384d4bd85ae5e8",
+      "createdAt": "2026-11-06T20:05:03Z",
+      "expiresAt": "2026-11-13T20:05:01Z",
+      "headSha": "0f1e6ffd568c26d835365ecd96fe94ae7ed55ec6"
+    }
+  ],
+  "initialAttempt": {
+    "runId": 42283525397,
+    "url": "https://github.com/jcv86/main/actions/runs/42283525397",
+    "headSha": "cc2ef70b2fe5518c4d02b736896c5dbbfeb82285",
+    "conclusion": "failure",
+    "failureStep": "Prepare isolated application and start local Supabase only",
+    "reason": "A2 synthetic evidence pre-created the protected A1 lab root; prepare correctly refused overwrite.",
+    "correction": "0f1e6ff stores A2 evidence in a sibling directory. The overwrite guard remains enforced."
+  },
+  "scope": "Exact UAT candidate. A2 route/runtime/provider/canary tests use synthetic model transport. Actual Auth, PostgreSQL, RLS, AppShell, journey and C1 run in a disposable local Supabase stack with synthetic accounts. No live model, hosted deployment, participant mutation or human manual-case execution is claimed.",
+  "nodeVersion": "v22.23.4",
+  "focusedSuites": [
+    {
+      "suite": "a2-assistant-route",
+      "cases": 83,
+      "passed": 83,
+      "syntheticProviderCalls": 67,
+      "externalNetworkCalls": 0,
+      "liveAuthOrRls": false,
+      "liveModelQuality": false
+    },
+    {
+      "suite": "a2-swarm-runtime",
+      "cases": 78,
+      "passed": 78,
+      "syntheticCompletionCalls": 165,
+      "syntheticHttpCalls": 3,
+      "externalNetworkCalls": 0,
+      "liveModelQuality": false
+    },
+    {
+      "suite": "a2-swarm-provider",
+      "cases": 42,
+      "passed": 42,
+      "syntheticHttpCalls": 31,
+      "externalNetworkCalls": 0,
+      "liveModelQuality": false
+    },
+    {
+      "suite": "a2-swarm-canary",
+      "cases": 56,
+      "passed": 56,
+      "cliRuns": 12,
+      "liveTelemetryCertified": false,
+      "liveProvenanceCertified": false,
+      "productionRollout": false,
+      "networkRequests": 0
+    }
+  ]
+}

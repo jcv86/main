@@ -1,0 +1,18 @@
+{
+  "version": "dtc-a2-swarm-local-quality.v1",
+  "candidateSha": "cc2ef70b2fe5518c4d02b736896c5dbbfeb82285",
+  "reviewedTree": "00665941dbf1a3b9aff0ebf1ffee1c3637e2e46e",
+  "recordedAt": "2026-11-06T19:54:28.313148+00:00",
+  "command": "npm run quality:gate",
+  "exitCode": 0,
+  "nodeVersion": "v24.22.1",
+  "configuration": "synthetic CI-equivalent fixtures; no hosted environment asserted",
+  "typescript": "passed",
+  "criticalContracts": "passed",
+  "reportContracts": "passed",
+  "nextBuild": "passed",
+  "staticPages": 354,
+  "localLogSha256": "c719ef5d9b4aa6f3c8e656f65ae6a26a65945761a5d814095780b6e8d6483186",
+  "liveModelQuality": false,
+  "productionDeployment": false
+}
