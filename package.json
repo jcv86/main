@@ -3,7 +3,10 @@
   "version": "5.0.0",
   "private": true,
   "scripts": {
+    "prebuild": "node --import tsx scripts/assert-uat-environment.ts --if-hosted",
     "build": "npm run check:report-quality && next build",
+    "build:uat": "node --import tsx scripts/assert-uat-environment.ts && npm run build",
+    "test:uat-isolation": "node --import tsx scripts/test-uat-isolation.mjs && node --import tsx scripts/test-uat-middleware.mjs && node --import tsx scripts/test-rate-limit-isolation.mjs",
     "dev": "next dev",
     "lint": "next lint",
     "start": "next start",

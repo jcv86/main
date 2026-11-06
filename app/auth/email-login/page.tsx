@@ -4,7 +4,9 @@ import { useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
+import { Label } from '@/components/ui/label'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { normalizeNextPath } from '@/lib/auth/pilot-access'
 
 export default function EmailLoginPage() {
   const router = useRouter()
@@ -32,7 +34,9 @@ export default function EmailLoginPage() {
         return
       }
 
-      router.push('/despega/conozcamonos-1')
+      const next = new URLSearchParams(window.location.search).get('next')
+      router.replace(normalizeNextPath(next || '/despega/recorrido'))
+      router.refresh()
     } catch (err) {
       setError('Error de conexión')
     } finally {
@@ -49,27 +53,33 @@ export default function EmailLoginPage() {
         </CardHeader>
         <CardContent>
           <form onSubmit={handleLogin} className="space-y-4">
+            <Label htmlFor="email">Correo electrónico</Label>
             <Input
+              id="email"
               type="email"
+              autoComplete="username"
               placeholder="tu@email.com"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
             />
+            <Label htmlFor="password">Contraseña</Label>
             <Input
+              id="password"
               type="password"
+              autoComplete="current-password"
               placeholder="Contraseña"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
             />
-            {error && <p className="text-red text-sm">{error}</p>}
+            {error && <p role="alert" className="text-red text-sm">{error}</p>}
             <Button type="submit" disabled={loading} className="w-full">
               {loading ? 'Cargando...' : 'Ingresar'}
             </Button>
           </form>
           <p className="text-xs text-muted-foreground mt-4 text-center">
-            Demo: usa cualquier email y contraseña "demo"
+            Usa una cuenta habilitada para este entorno. Al volver podrás retomar tu avance.
           </p>
         </CardContent>
       </Card>

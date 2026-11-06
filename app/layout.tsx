@@ -10,6 +10,8 @@ import { SpeedInsights } from "@vercel/speed-insights/next"
 import { validateEnvironment } from "@/lib/env-validation"
 import LLMOOptimizedFooter from "@/components/footer"
 
+const isUat = process.env.DTC_ENVIRONMENT === "uat"
+
 // Validate environment on startup (skip for test routes)
 if (typeof window === "undefined" && !process.env.SKIP_ENV_VALIDATION) {
   validateEnvironment()
@@ -29,7 +31,7 @@ const montserrat = localFont({
 })
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://www.despegatucarrera.com"),
+  metadataBase: new URL(isUat ? process.env.NEXT_PUBLIC_APP_URL || "https://uat.invalid" : "https://www.despegatucarrera.com"),
   title: {
     default: "Despega Tu Carrera | Claridad y desarrollo profesional con IA",
     template: "%s | Despega Tu Carrera",
@@ -87,11 +89,11 @@ export const metadata: Metadata = {
     creator: "@despegatucarrera",
   },
   robots: {
-    index: true,
-    follow: true,
+    index: !isUat,
+    follow: !isUat,
     googleBot: {
-      index: true,
-      follow: true,
+      index: !isUat,
+      follow: !isUat,
       "max-video-preview": -1,
       "max-image-preview": "large",
       "max-snippet": -1,
@@ -123,12 +125,17 @@ export default function RootLayout({
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
       </head>
       <body className="font-sans">
+        {isUat && (
+          <aside aria-label="Ambiente de pruebas" className="border-b border-amber-300 bg-amber-50 px-4 py-2 text-center text-xs font-medium text-amber-950">
+            DTC · UAT · Ambiente de pruebas. Usa sólo datos de prueba.
+          </aside>
+        )}
         <Providers>
           {children}
           <LLMOOptimizedFooter />
         </Providers>
-        <Analytics />
-        <SpeedInsights />
+        {!isUat && <Analytics />}
+        {!isUat && <SpeedInsights />}
 
         {/* JSON-LD Structured Data */}
         <script

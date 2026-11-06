@@ -307,3 +307,30 @@ Independent cross review returned GO after fixing and repeating concrete negatio
 The final isolated visual pass used the real page, components, matching/orientation engine, shell, styles and fonts with synthetic profiles and I/O. At **390×844 and 1440×1000**, it confirmed distinct guidance for two profiles, correct CV/A1/A2/A3 attribution, six pertinent support records, **18→36→40** unique cards with both disclosures preserved, keyboard/focus/44px controls, long-text layout, partial/empty/unavailable states and 503/409/401 recovery. It made zero external requests and recorded zero page errors. Axe detected zero violations; `aria-prohibited-attr` and `color-contrast` checks remained incomplete and are not claimed as a complete accessibility certification.
 
 Full `quality:gate` passed: TypeScript, critical contracts, report contracts and the production build. Existing Supabase Edge-import and outdated Browserslist warnings remain classified separately. Exact remote head-specific checks are maintained in the PR. **DTC-A4-P01 remains in_progress** until production publication and the authenticated journey on that version are verified. This first release reads the structured A3 CV; automatic interpretation of other uploaded PDF/documents is outside its implemented boundary. No account data, RLS, schema, variables, credentials, schedules or leases were changed, no cron/retry was invoked, and no other PR was merged. The ingestion and other A4 criteria retain their separate recorded acceptance states.
+
+## Dedicated UAT preparation — 2026-11-06
+
+This entry concerns only the separate UAT environment. It does not reopen or
+replace a historical production verdict above. Its application baseline is
+[PR #246](https://github.com/jcv86/main/pull/246), main
+`7f11f1763210fd87bcd4c2c372efa8705f42f468`; the preparation lives on
+[uat/dtc-20261106](https://github.com/jcv86/main/tree/uat/dtc-20261106), not main.
+
+The separate [Vercel project dtc-uat](https://vercel.com/despega-tu-carrera/dtc-uat)
+was created and read back as `prj_gPYDgxY36roxVZxPfGGtssDPxJzv`, Node.js 22,
+with Vercel Authentication. `dtc-uat.vercel.app` is assigned and verified, but no
+application deployment is claimed at this checkpoint. No production variables,
+database or credentials were copied into it. The independent Supabase project
+has not yet been provisioned; its recurring cost requires the owner's decision.
+
+| ID | User outcome | Current evidence | Owner / dependency | Status | UAT entry blocker |
+|---|---|---|---|---|---|
+| DTC-UAT-01 | Test safely without reading or writing production | Separate empty Vercel project; UAT build/runtime deny production origins/ref, inconsistent config and inherited database connections; 16 config and 6 middleware checks pass without network; no cron or application email delivery. New backend, faithful schema and deployment still pending. | Platform/application; independent Supabase provisioning | `in_progress` | yes |
+| DTC-UAT-02 | A new or returning synthetic user can log in, save and resume | Existing real email/password Auth retained; legacy demo copy removed; return targets canonical journey. API/Auth rate-limit counter collision reproduced and corrected with a passing regression while preserving thresholds/windows. Remote smoke runner prepared with exact-host/ref checks and two owners; no remote result claimed. | QA/backend; DTC-UAT-01 and synthetic pilot accounts | `in_progress` | yes |
+| DTC-UAT-03 | The owner accepts the intended user journeys | UAT matrix prepared with 54 cases (48 base, 6 conditional), evidence requirements and human sign-off. Participant execution, defects/retests and acceptance remain pending. | Joaquín and assigned reviewers; DTC-UAT-02 | `in_progress` | yes |
+
+Details: [application environment](DTC_UAT_ENVIRONMENT_20261106.md),
+[backend preparation](DTC_UAT_BACKEND_PREPARATION_2026-11-06.md) and
+[remote smoke](DTC_UAT_REMOTE_SMOKE_20261106.md). The local laboratory's loopback
+guards remain unchanged. Password-session smoke does not prove external OAuth,
+all 54 UAT cases, real-provider quality or a 30-day human pilot.

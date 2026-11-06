@@ -18,6 +18,11 @@ export async function sendEmail({
   from = 'info@despegatucarrera.com',
 }: SendEmailParams) {
   try {
+    // Server actions can call this helper without passing through an API route.
+    // Do not inherit the production mailer in the isolated UAT application.
+    if (process.env.DTC_ENVIRONMENT === 'uat') {
+      throw new Error('Application email delivery is disabled in UAT.')
+    }
     // Initialize Resend INSIDE the function, not at module level
     const apiKey = process.env.RESEND_API_KEY
     if (!apiKey) {

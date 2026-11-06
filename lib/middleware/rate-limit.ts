@@ -16,9 +16,6 @@ interface RequestData {
   resetTime: number
 }
 
-// In-memory store (use Redis in production for distributed systems)
-const requestStore = new Map<string, RequestData>()
-
 const DEFAULT_CONFIG: RateLimitConfig = {
   windowMs: 15 * 60 * 1000, // 15 minutes
   maxRequests: 100,
@@ -28,6 +25,10 @@ const DEFAULT_CONFIG: RateLimitConfig = {
 
 export function createRateLimiter(config: Partial<RateLimitConfig> = {}) {
   const finalConfig = { ...DEFAULT_CONFIG, ...config }
+  // Each limiter owns its counter. API requests must not consume the stricter
+  // authentication allowance for the same client. Distributed storage remains
+  // a separate deployment concern; the existing limits and windows are kept.
+  const requestStore = new Map<string, RequestData>()
 
   const keyGenerator = finalConfig.keyGenerator || ((req: Request) => {
     // Use IP address as key (from headers or fallback)

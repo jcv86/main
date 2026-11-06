@@ -1,0 +1,86 @@
+{
+  "recorded_at": "2026-11-06T15:15:45.480Z",
+  "base_sha": "7f11f1763210fd87bcd4c2c372efa8705f42f468",
+  "branch": "uat/dtc-20261106",
+  "scope": "Local code preparation; independent hosted UAT backend and acceptance pending",
+  "node": "v24.22.1",
+  "source_sha256": {
+    "app/auth/email-login/page.tsx": "8138029ac5a30475b66cc9dccefca7aa2e3462f91ae3b077e71f186d13ff7584",
+    "app/layout.tsx": "625a875ca1415dc082d183ffbdaa9859c33a17da47a5681291bfe5ed43b53c75",
+    "lib/emails/send-email.ts": "bf9bfbee69439d9c80c26d3764a487ab16068ee968a796f5dafcecd5995c24e8",
+    "lib/middleware/rate-limit.ts": "7805068995409ec786591da89eab8e5b1c45d91a6290e897ead95fcca8e235d1",
+    "lib/uat/environment.ts": "5a517182e5db395f796b111005e25082ed71d68a0a271a9bc0b3a36126d80a4f",
+    "middleware.ts": "355c23e718237989cd1421e8f79f1fa5ec837fc08ffef82441447e700fc1bbab",
+    "package.json": "e95dc9ca7a43d1a33f3e9cf41e40fe0a371bfb2d81d1607a4ec014c02154e4db",
+    "vercel.json": "00de5080c725188846ff47258a1429f250182e0731a553dca43c75b5d19ff09c",
+    "scripts/assert-uat-environment.ts": "153454fe9a2c9a66eb005c88f4f3a90092889dba53ec9b5e4cafb009877d36d2",
+    "scripts/test-uat-isolation.mjs": "ab0cbe36919fef72379e3eede1507069db55bccb092613789ffcdb8e91b3cbda",
+    "scripts/test-uat-middleware.mjs": "6febd72ce341241e035ab2b8f497268aa915413f36e9ad90873cf48651f9aaa4",
+    "scripts/test-rate-limit-isolation.mjs": "74e5e0cbeb6603a87108296298f0524f7da57ad49302c30b1c16332cfb82ff12",
+    "scripts/uat/remote-smoke.mjs": "a896ae0d9106f4f75062631987f26955010a22be1c5952818f5c855c3991c704"
+  },
+  "checks": {
+    "configuration_and_build_boundary": {
+      "passed": 16,
+      "total": 16,
+      "network_calls": 0
+    },
+    "real_middleware": {
+      "passed": 6,
+      "total": 6,
+      "network_calls": 0
+    },
+    "rate_limiter": {
+      "result": "PASS",
+      "regression_failed_before_change": true,
+      "windows_and_thresholds_preserved": true
+    },
+    "typescript": {
+      "result": "PASS",
+      "command": "npx tsc --noEmit --pretty false"
+    },
+    "production_laboratory_boundary": {
+      "result": "PASS",
+      "command": "npm run check:production-laboratory-boundary"
+    },
+    "local_bundle": {
+      "result": "PASS",
+      "exit_code": 0,
+      "static_pages": 355,
+      "attempts": 2,
+      "first_attempt_error": "ENOTEMPTY on generated .next/export during final cleanup",
+      "remediation": "Removed only generated .next output and retried once",
+      "credentials": "Synthetic fixtures from the existing GitHub workflow; no real backend credentials"
+    },
+    "remote_runner": {
+      "syntax": "PASS",
+      "self_check": "PASS",
+      "verified_by": "Independent QA agent",
+      "remote_execution": "NOT_RUN"
+    },
+    "git_diff_check": "PASS",
+    "workflow_push_review": {
+      "branch": "uat/dtc-20261106",
+      "matching_workflows": [],
+      "workflows_with_push": [
+        "assessment-drafts.yml",
+        "outcome-engine-s1.yml",
+        "pilot-access.yml",
+        "v1-analytics-closure.yml"
+      ],
+      "branch_filter_in_each": [
+        "main"
+      ],
+      "result": "No GitHub workflow is triggered by pushing this UAT branch."
+    }
+  },
+  "limitations": [
+    "No new Supabase project or schema applied in this preparation",
+    "No hosted Node.js 22 build yet",
+    "No remote UAT login or data writes",
+    "No OAuth exchange, human acceptance or external-provider acceptance",
+    "Existing package-lock out of sync; local dependency snapshot does not pin a hosted install"
+  ],
+  "uat_entry_verdict": "NO_GO",
+  "uat_entry_reason": "Independent backend, schema and configured deployment remain pending"
+}

@@ -9,6 +9,13 @@ import {
   DTC_REQUEST_ID_HEADER,
   resolveRequestId,
 } from '@/lib/observability/request-id'
+import {
+  currentUatEnvironment,
+  isAllowedUatRequestOrigin,
+  isDisabledUatExternalAction,
+  UAT_BACKEND_HEADER,
+  UAT_ENVIRONMENT_HEADER,
+} from '@/lib/uat/environment'
 
 // Public routes that don't require authentication
 const PUBLIC_ROUTES = [
@@ -79,6 +86,13 @@ function isPillarExemptRoute(pathname: string): boolean {
 
 function withRequestId<T extends Response>(response: T, requestId: string): T {
   response.headers.set(DTC_REQUEST_ID_HEADER, requestId)
+  const uat = currentUatEnvironment()
+  if (uat.enabled && uat.valid) {
+    response.headers.set(UAT_ENVIRONMENT_HEADER, 'uat')
+    response.headers.set(UAT_BACKEND_HEADER, uat.projectRef!)
+    response.headers.set('X-Robots-Tag', 'noindex, nofollow, noarchive')
+    response.headers.set('Cache-Control', 'private, no-store, max-age=0')
+  }
   return response
 }
 
@@ -87,6 +101,28 @@ export async function middleware(request: NextRequest) {
   const requestId = resolveRequestId(request.headers)
   const forwardedHeaders = new Headers(request.headers)
   forwardedHeaders.set(DTC_REQUEST_ID_HEADER, requestId)
+
+  // A UAT request must fail before session refresh, database access or an
+  // external action if the isolated deployment's configuration is incomplete.
+  // This is an environment boundary, never an authentication bypass.
+  const uat = currentUatEnvironment()
+  if (uat.enabled) {
+    if (!uat.valid) {
+      return withRequestId(new NextResponse('UAT no disponible: configuración pendiente.', {
+        status: 503,
+        headers: { 'Cache-Control': 'private, no-store, max-age=0' },
+      }), requestId)
+    }
+    if (!isAllowedUatRequestOrigin(request.nextUrl.origin, uat, process.env.VERCEL_URL)) {
+      return withRequestId(new NextResponse('Origen no habilitado para UAT.', { status: 403 }), requestId)
+    }
+    if (isDisabledUatExternalAction(pathname)) {
+      return withRequestId(NextResponse.json({
+        error: 'uat_external_action_disabled',
+        message: 'Los envíos de correo y tareas programadas están deshabilitados en UAT.',
+      }, { status: 403 }), requestId)
+    }
+  }
 
   // Internal laboratories are available only on a developer's localhost.
   // Both Preview and Production are externally reachable Vercel environments.
