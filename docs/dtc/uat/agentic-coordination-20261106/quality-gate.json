@@ -1,0 +1,8 @@
+{
+  "command": "npm run quality:gate",
+  "exit_code": 0,
+  "duration_seconds": 189.2,
+  "node": "v24.22.1",
+  "log_sha256": "accf82d12e6218d4c51b53dc781e70e2c51940497ad04837b04fc6e5f24789e1",
+  "configuration": "synthetic CI placeholders only; no provider certification"
+}

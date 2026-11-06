@@ -4,7 +4,7 @@ Last full product closure: 2026-09-20 UTC. Latest scoped A4 production evidence:
 
 This is the **single canonical closure ledger** for Despega Tu Carrera. Historical detail remains available in Git history; this file keeps the current release state and only the evidence that still matters for closure decisions.
 
-A status is `verified` only when there is observable evidence. Allowed states: `in_progress`, `verified`, `deferred_by_user`. A green CI run is evidence, but it is not treated as a substitute for a live check when the acceptance criterion explicitly requires one.
+A status is `verified` only when there is observable evidence. Allowed states: `not_started`, `in_progress`, `blocked`, `verified`, `deferred_by_user`. A green CI run is evidence, but it is not treated as a substitute for a live check when the acceptance criterion explicitly requires one.
 
 ## Last verified production checkpoint
 
@@ -422,3 +422,22 @@ closes DTC-UAT-03 for tested candidate `7eb0544de496e10a2b1be1b482cdafec1d96dc3d
 on `uat/dtc-20261106`. The [acceptance record](DTC_UAT_ACCEPTANCE_20261106.md)
 is the current business decision. It preserves the actual automated evidence and
 manual case history, and does not claim a deployment or a new test execution.
+
+
+## Agentic coordination scope — 2026-11-06
+
+The owner identified a missing cross-journey agent layer after accepting the prior UAT. The audit at `79e038b` confirms partial assistant capabilities, not an autonomous execution loop. This scope extends the branch candidate; it does not rewrite the prior UAT decision for `7eb0544` or its original test evidence.
+
+| ID | User outcome | Evidence / acceptance criterion | Owner / dependency | Status | Release blocker |
+|---|---|---|---|---|---|
+| DTC-AG-01 | Resume the right next action with current declared context | Canonical `flow.next` retained with confirmed objective, exact pending-day adjustment, provenance and explicit source availability; 16 coordinator groups and shared browser coverage on code `e880582`; no new business writes or access grants | Experience + backend; canonical journey, saved objective and practice adjustments | `verified` | no, source/laboratory scope; target validation remains |
+| DTC-AG-02 | Ask the A2 assistant safely and recover without losing the question | Legacy A1 gate and incompatible payload replaced; server-owned context, owner/pilot/access checks, session-change protection and retry; 52 API + 80 shared browser checks on `e880582` with synthetic ports | Experience + backend; DTC-AG-01 | `verified` | no, source/laboratory scope; live provider and target smoke remain |
+| DTC-AG-03 | Resume a reviewed multi-step plan across sessions | Versioned owner-bound plan/memory with source revisions, correction/expiry, interruption recovery, cancellation and explicit end states | Backend + experience; DTC-AG-01/02 | `not_started` | no, separate scope |
+| DTC-AG-04 | Confirm bounded assistant actions and see verified results | Purpose-specific tools, reviewed inputs, idempotency, persistence receipts and cost/time limits; no generic legacy command reactivation | Backend + quality; DTC-AG-03 | `not_started` | no, separate scope |
+| DTC-AG-05 | Adapt from real outcomes across A3/A4 | Shared minimal context, current evidence and review dates; comparison with simple baseline and participant usefulness; no capability claims from completion counts | Product + quality; focused pilot and DTC-AG-03/04 | `not_started` | no, separate scope |
+
+Design, audit and detailed criteria: [DTC_AGENTIC_COORDINATION_20261106.md](DTC_AGENTIC_COORDINATION_20261106.md).
+
+The verified outcomes refer to code candidate `e88058211a14bc10a670cd009c30a1d9d692de46` and the explicit laboratory scope in [its evidence](uat/agentic-coordination-20261106/README.md). The full quality gate passed; the final build and browser checks include the final CTA hover-contrast correction. Axe reported zero violations, with 20 incomplete contrast scan entries for gradient backgrounds. This is not a full WCAG, live-model or remote-RLS certification. No new table, remote migration, production deployment or main merge was introduced. The original 54 manual execution records remain unchanged.
+
+The existing branch integration gate also completed successfully on the exact code candidate: [run 42277726935](https://github.com/jcv86/main/actions/runs/42277726935), all 25 job steps successful. That gate uses real local Auth/PostgreSQL/RLS and the AppShell with synthetic accounts, and covers the existing journey, session and C1 regressions. It does not execute the new chat against a live model.

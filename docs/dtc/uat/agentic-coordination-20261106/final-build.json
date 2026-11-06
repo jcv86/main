@@ -1,0 +1,9 @@
+{
+  "command": "npm run build",
+  "exit_code": 0,
+  "duration_seconds": 132.3,
+  "node": "v24.22.1",
+  "log_sha256": "a1e1f2ee1de153b34e895911abc3c003ab869829a91931d21b972feaebc4f983",
+  "configuration": "synthetic CI placeholders only",
+  "scope": "Final application sources after hover contrast correction"
+}

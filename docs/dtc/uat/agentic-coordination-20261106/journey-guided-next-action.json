@@ -1,0 +1,13 @@
+{
+  "suite": "journey-guided-next-action",
+  "passed": 16,
+  "evidence": "real_flow_coordinator_service_and_supabase_sdk_with_synthetic_auth_and_http",
+  "ownerVerified": true,
+  "canonicalActionPreserved": true,
+  "failedSourcesDistinctFromEmpty": true,
+  "oldOrCompletedDayAdjustmentsExcluded": true,
+  "writes": 0,
+  "rpcCalls": 0,
+  "modelCalls": 0,
+  "liveDatabase": false
+}

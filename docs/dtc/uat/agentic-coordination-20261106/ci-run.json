@@ -1,0 +1,175 @@
+{
+  "runId": 42277726935,
+  "url": "https://github.com/jcv86/main/actions/runs/42277726935",
+  "headSha": "e88058211a14bc10a670cd009c30a1d9d692de46",
+  "status": "completed",
+  "conclusion": "success",
+  "event": "push",
+  "name": "A1 browser and local Auth",
+  "createdAt": "2026-11-06T19:13:29Z",
+  "updatedAt": "2026-11-06T19:19:49Z",
+  "runAttempt": 1,
+  "jobs": [
+    {
+      "id": 128098334317,
+      "name": "isolated-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "startedAt": "2026-11-06T19:13:32Z",
+      "completedAt": "2026-11-06T19:19:49Z",
+      "steps": [
+        {
+          "number": 1,
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 2,
+          "name": "Initialize runner-local paths",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 3,
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 4,
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 5,
+          "name": "Run supabase/setup-cli@v1",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 6,
+          "name": "Install application and isolated browser tools",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 7,
+          "name": "UAT isolation and returning-login regression",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 8,
+          "name": "UI response observation survives navigation and excludes stale refreshes",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 9,
+          "name": "Authentication and C1 code regressions",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 10,
+          "name": "Prepare isolated application and start local Supabase only",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 11,
+          "name": "Apply selected real migrations and create synthetic Auth users",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 12,
+          "name": "Scanner-safe single-use invitation in real browser",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 13,
+          "name": "Preview-equivalent middleware runtime boundaries",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 14,
+          "name": "Browser, cookies, PostgREST, preferences persistence, mobile and print",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 15,
+          "name": "A1-A4 map, persisted progress and navigation in the same local stack",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 16,
+          "name": "Browser to API to redacted log request correlation",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 17,
+          "name": "Append actual AppShell, capture pages and canonical local outcome migrations",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 18,
+          "name": "Six capture pages, real owner RLS, reload continuity and saved objective revision conflicts",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 19,
+          "name": "Actual email login, signed invitation, Provider session, logout recovery and exhausted quota",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 20,
+          "name": "C1 atomic completion, SQL rollback, retry, reload and owner boundaries on desktop and mobile",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 21,
+          "name": "Upload only synthetic visual evidence and sanitized summary",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 22,
+          "name": "Stop disposable local stack, never a linked project",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 43,
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 44,
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success"
+        },
+        {
+          "number": 45,
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success"
+        }
+      ]
+    }
+  ],
+  "scope": "Existing branch gate: actual Auth, Supabase/PostgreSQL, RLS, AppShell, journey and C1 in a disposable local stack with synthetic accounts. Not the new A2 chat with a live model."
+}

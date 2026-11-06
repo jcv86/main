@@ -1,0 +1,224 @@
+{
+  "suite": "a2-assistant-route",
+  "cases": 52,
+  "passed": 52,
+  "actualRoute": true,
+  "actualRequestSchema": true,
+  "actualPromptBuilder": true,
+  "sessionAndReadPorts": "synthetic",
+  "providerTransport": "synthetic",
+  "syntheticProviderCalls": 14,
+  "liveAuthOrRls": false,
+  "liveModelQuality": false,
+  "externalNetworkCalls": 0,
+  "results": [
+    {
+      "name": "canonical context produces one bounded answer and the same actionable destination",
+      "status": "passed"
+    },
+    {
+      "name": "anonymous does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "auth error does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "auth transport failure does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "client unavailable does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "missing or changed actor cannot reuse a previous conversation: null",
+      "status": "passed"
+    },
+    {
+      "name": "missing or changed actor cannot reuse a previous conversation: ",
+      "status": "passed"
+    },
+    {
+      "name": "missing or changed actor cannot reuse a previous conversation: 00000000-0000-4000-8000-000000000002",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Origin\":null}",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Origin\":\"https://foreign.invalid\"}",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Sec-Fetch-Site\":\"cross-site\"}",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Sec-Fetch-Site\":\"same-site\"}",
+      "status": "passed"
+    },
+    {
+      "name": "unsupported content type null",
+      "status": "passed"
+    },
+    {
+      "name": "unsupported content type text/plain",
+      "status": "passed"
+    },
+    {
+      "name": "malformed JSON is a recoverable client error",
+      "status": "passed"
+    },
+    {
+      "name": "UTF-8 byte bound rejects an oversized body even if content-length lies",
+      "status": "passed"
+    },
+    {
+      "name": "declared excessive body size fails before decoding",
+      "status": "passed"
+    },
+    {
+      "name": "invalid UTF-8 is not accepted as model input",
+      "status": "passed"
+    },
+    {
+      "name": "blank message is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "non-text message is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "long message is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "unknown owner is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "injected action is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "system-role injection is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "tool-role injection is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "long history is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "oversized history item is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "hidden history field is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "legacy object context no longer crashes and cannot override the owner or evidence",
+      "status": "passed"
+    },
+    {
+      "name": "bounded dialogue retains user and assistant roles without becoming system authority",
+      "status": "passed"
+    },
+    {
+      "name": "pilot denied never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "pilot unavailable never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "pilot transport failure never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "foreign journey owner never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "journey missing never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "journey access locked never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "journey read failure does not become zero progress or a generated plan",
+      "status": "passed"
+    },
+    {
+      "name": "progress read failure does not become zero progress or a generated plan",
+      "status": "passed"
+    },
+    {
+      "name": "guidance read failure does not become zero progress or a generated plan",
+      "status": "passed"
+    },
+    {
+      "name": "A1 source failure stays explicitly unavailable while canonical navigation is retained",
+      "status": "passed"
+    },
+    {
+      "name": "identity loss while reading A1 stops before generation and does not return prior guidance",
+      "status": "passed"
+    },
+    {
+      "name": "failed optional source is distinct from empty source in the assistant context",
+      "status": "passed"
+    },
+    {
+      "name": "personal path does not receive a forced employment goal",
+      "status": "passed"
+    },
+    {
+      "name": "stored free text remains data and cannot close a prompt block or add tools",
+      "status": "passed"
+    },
+    {
+      "name": "missing provider configuration retains canonical next action without calling provider",
+      "status": "passed"
+    },
+    {
+      "name": "provider network failure preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "provider rejection preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "provider invalid JSON preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "empty provider text preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "unexpected provider data preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "excessive provider text preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "missing provider choice preserves the next action and never claims success",
+      "status": "passed"
+    }
+  ]
+}

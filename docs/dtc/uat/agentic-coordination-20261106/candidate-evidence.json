@@ -1,0 +1,169 @@
+{
+  "date": "2026-11-06",
+  "timezone": "America/Santiago",
+  "branch": "uat/dtc-20261106",
+  "auditedBase": "79e038ba72fe7bac44e575b488c648789c91ad12",
+  "candidateCommit": "e88058211a14bc10a670cd009c30a1d9d692de46",
+  "candidateTree": "53de482ce797ef96c8a2667fcce0c7cd023b3722",
+  "priorAcceptedUatCommit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "productionMainObserved": "7f11f1763210fd87bcd4c2c372efa8705f42f468",
+  "sourceHashes": [
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "2c68cb09436db30e5a91424b8a8e3fe4fc327748ef15cc4f3e38c998b2670f10"
+    },
+    {
+      "path": "app/despega/a2/coach/page.tsx",
+      "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146"
+    },
+    {
+      "path": "app/despega/dashboard/page.tsx",
+      "sha256": "a1ee58d6610d98bec02122579accd34600990bf3bab61310b360c698ff29e0d4"
+    },
+    {
+      "path": "app/despega/recorrido/page.tsx",
+      "sha256": "6e830071ffb2560e8c9b02b8e0ba93f41ee60ed8191117b4398ff549e8d012dc"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "22f617cb4b383e461c0236184b4ba1846fc2743026a564ad8d6771a3335fac57"
+    },
+    {
+      "path": "components/journey/guided-next-action.tsx",
+      "sha256": "5007636dcb7e6c2fad7c4ff8a1152de6dfaa89195f90435d06bcc9cc7b670db0"
+    },
+    {
+      "path": "components/journey/journey-flow-panel.tsx",
+      "sha256": "c4b54720e05fbf02a7254415fd9320bbd14ce5a4b69d121606ce7d12ce053f22"
+    },
+    {
+      "path": "lib/a2/assistant-contract.ts",
+      "sha256": "3f4dd1d540b464fd91435eb276abff978858ca4244c7f77e1a405a64544b6c94"
+    },
+    {
+      "path": "lib/journey/next-action-service.ts",
+      "sha256": "dbe6fdca1d361a46503398c3bb748c4ce6eb1cf43af4ad9a7ead97ed15c7b8e2"
+    },
+    {
+      "path": "lib/journey/next-action.ts",
+      "sha256": "4b724dd24aba7615a2b66010648cc1e312bf37f09f09e11ebe7ebe004358cadf"
+    },
+    {
+      "path": "middleware.ts",
+      "sha256": "c126db874a6356710efbdd996b7537320c9be52695c5da75d87dc932204b1fc6"
+    },
+    {
+      "path": "package.json",
+      "sha256": "5d53553ecb7913387e4d92c28b11660769339f6b28eaece7209519ea636b5cbd"
+    },
+    {
+      "path": "scripts/a1-browser-qa/closure-prepare.mjs",
+      "sha256": "b963c8e83945a9cd7020a6f164abc46123611faf6023e186d71f2f9c8f2f0118"
+    },
+    {
+      "path": "scripts/agentic-browser-qa.mjs",
+      "sha256": "b932b1386cb2147fc76e5dfb08c3d73cdaff7e6ba06fcbe50662604c03573947"
+    },
+    {
+      "path": "scripts/test-a2-assistant.cjs",
+      "sha256": "a21220f6a00991afd31950ea0e04d0b1070dd140295a89c3962dbf99932c4984"
+    },
+    {
+      "path": "scripts/test-journey-next-action.mjs",
+      "sha256": "c881ca1cab1d2afb7f36d21a1ad3730fee7af38c55f16444db8992cf261ba930"
+    },
+    {
+      "path": "scripts/test-uat-middleware.mjs",
+      "sha256": "fc3ab8a5d0fc2a1342e0437a7de53c85b324c1bfe9f3a96fc27cabd5aac2b618"
+    }
+  ],
+  "checks": {
+    "qualityGate": {
+      "command": "npm run quality:gate",
+      "exitCode": 0,
+      "note": "Executed before only hover:text-white additions to the assistant and dashboard. Business logic unchanged afterward."
+    },
+    "finalProductionBuild": {
+      "command": "npm run build",
+      "exitCode": 0,
+      "cleanBuild": true,
+      "warningCategories": [],
+      "note": "Executed after the final hover contrast correction."
+    },
+    "guidedCoordinator": {
+      "passed": 16,
+      "liveDatabase": false
+    },
+    "assistantRoute": {
+      "passed": 52,
+      "externalNetworkCalls": 0
+    },
+    "browser": {
+      "passed": 80,
+      "viewports": [
+        "390x844",
+        "1440x844"
+      ],
+      "axeScans": 20,
+      "axeViolations": 0,
+      "axeIncomplete": 20,
+      "runtimeErrors": 0,
+      "liveAuthOrRls": false,
+      "liveModelQuality": false
+    }
+  },
+  "ci": {
+    "runId": 42277726935,
+    "url": "https://github.com/jcv86/main/actions/runs/42277726935",
+    "headSha": "e88058211a14bc10a670cd009c30a1d9d692de46",
+    "status": "completed",
+    "conclusion": "success",
+    "event": "push",
+    "name": "A1 browser and local Auth",
+    "createdAt": "2026-11-06T19:13:29Z",
+    "updatedAt": "2026-11-06T19:19:49Z",
+    "runAttempt": 1,
+    "scope": "Existing branch gate: actual Auth, Supabase/PostgreSQL, RLS, AppShell, journey and C1 in a disposable local stack with synthetic accounts. Not the new A2 chat with a live model.",
+    "successfulJobSteps": 25
+  },
+  "artifactHashes": [
+    {
+      "file": "a2-assistant-route.json",
+      "sha256": "2cbe6a46bf344f80cda6d62170485da679792171ba25aa906c999a66f0b70789"
+    },
+    {
+      "file": "agentic-browser-results.json",
+      "sha256": "88d9fd2aa268349f63a3625ab9478a9ae5d9789698a37bc2c0252cf18b1df732"
+    },
+    {
+      "file": "agentic-final-sha256.json",
+      "sha256": "2c5b1f279bdb2891454a02d258f72d0a07c511ea3e0185c07458282744f03ea0"
+    },
+    {
+      "file": "agentic-manual-review.json",
+      "sha256": "158b8f2098efac219a9fbfe79dd73fdf627b028b164c4acc58d30edc40b84784"
+    },
+    {
+      "file": "ci-run.json",
+      "sha256": "bcd8f95a9d4d15842a549d4650754e12cf4b95b9c316a4b5cd030449252975a0"
+    },
+    {
+      "file": "final-build.json",
+      "sha256": "212c4fa155c32a67ccfa089112e4f0f4d202ffb93473d6913ff72ad9d8eeb5fd"
+    },
+    {
+      "file": "journey-guided-next-action.json",
+      "sha256": "b82d0aba33d58d5c6795a1ddee0a9e8bd3cb8bda2f1b59dc27f3c847e9621e31"
+    },
+    {
+      "file": "quality-gate.json",
+      "sha256": "97c5ed70881770d2a3a1f2c972aeebc8997647281191499784ee9ce46b6f2a8d"
+    }
+  ],
+  "excludedRawArtifacts": [
+    "Scratch screenshots and verbose build logs are referenced by SHA256 but not included in this repository evidence folder. They are reproducible from the committed scripts."
+  ],
+  "remoteDatabaseWrites": false,
+  "productionDeployment": false,
+  "mainMerged": false
+}
