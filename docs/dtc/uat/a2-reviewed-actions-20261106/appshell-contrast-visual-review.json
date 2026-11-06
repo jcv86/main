@@ -1,0 +1,74 @@
+{
+  "version": "dtc-appshell-header-contrast-review.v1",
+  "reviewedAt": "2026-11-06T22:50:15.885638+00:00",
+  "result": "focused_defect_reproduced_and_corrected",
+  "method": "Direct inspection of both original viewport PNGs plus focused axe color-contrast results with unchanged scroll and element geometry.",
+  "cause": "bg-background/88 generates no rule in this repository Tailwind configuration. Header background computes transparent, allowing the underlying real A2 CTA to become the contrast background of both gamification labels.",
+  "correction": "The sole header class change to bg-background produces the solid design-token background #070a12. Both labels remain in the same positions while the underlying CTA no longer shows through.",
+  "scope": {
+    "actualAppShell": true,
+    "actualA2ChatCoach": true,
+    "actualCssAndTokens": true,
+    "authAndReadPorts": "synthetic",
+    "actualDatabaseOrRls": false,
+    "realProviderCalls": 0,
+    "fonts": "system Arial and Georgia",
+    "viewport": {
+      "width": 1440,
+      "height": 900
+    },
+    "browserVersion": "153.0.8010.0",
+    "sourceVariant": "Only bg-background/88 -> bg-background on the header; no repository source mutation by this probe"
+  },
+  "observations": [
+    {
+      "variant": "before",
+      "file": "before-header-over-cta.png",
+      "sha256": "bbcc43b0738b96777141d9b0d77be5ed7caf647a6625f90845d63b35e4bca801",
+      "headerBackground": "rgba(0, 0, 0, 0)",
+      "observed": "Green CTA shows through the fixed header behind Nivel 1 and 0 días. Both targets reproduce the CI failure.",
+      "axeContrastRatio": 2.23,
+      "expectedContrastRatio": 4.5,
+      "axeViolationRules": 1,
+      "axeAffectedTargets": 2,
+      "axeIncompleteRules": 0
+    },
+    {
+      "variant": "after",
+      "file": "after-header-over-cta.png",
+      "sha256": "1d46fd787432381ed23cebeaba1d6de415955016a35cf85e1171c20e908f3b78",
+      "headerBackground": "rgb(7, 10, 18)",
+      "observed": "Header is opaque; both labels are legible above the same underlying CTA. No new clipping, overlap or displacement is visible.",
+      "axeContrastRatio": 8.06,
+      "expectedContrastRatio": 4.5,
+      "axeViolationRules": 0,
+      "axeAffectedTargets": 0,
+      "axeIncompleteRules": 0
+    }
+  ],
+  "unchangedConditions": {
+    "scrollY": 1174,
+    "bothLabelsStillOverlapUnderlyingCta": true,
+    "labelColor": "#a9a59e",
+    "labelFontSize": "11px",
+    "ctaColor": "#047857",
+    "ctaRectangleIdentical": true,
+    "labelRectanglesIdentical": true
+  },
+  "afterSourceMatchesCurrentRepository": true,
+  "afterSourceSha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c",
+  "probeSha256": "b9921de0aab463728531ac39ea1aa3d61650d0d9df10a18f579d693025dcf22f",
+  "sourcesUnchangedDuringRun": true,
+  "externalRequests": 0,
+  "uncaughtJsErrors": 0,
+  "repositorySourceChangesByProbe": false,
+  "previousAttempt": {
+    "file": "attempt-1-results.json",
+    "outcome": "Before variant reproduced both color-contrast targets; bundled single-process Chromium closed after its first browser context, before the second variant. This run launches a fresh browser for each variant."
+  },
+  "limitations": [
+    "Only the header color-contrast rule was audited; this is not a full-page accessibility certification.",
+    "Auth, SWR data, Next navigation and the initial plan GET are synthetic; no actual Supabase or provider operations occurred.",
+    "Chromium 153 viewport rendering with system fonts; the integrated Chromium CI rerun retains its own outcome and scope."
+  ]
+}

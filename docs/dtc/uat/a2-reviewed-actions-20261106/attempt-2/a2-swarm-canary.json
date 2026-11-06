@@ -1,0 +1,262 @@
+{
+  "suite": "a2-swarm-canary",
+  "cases": 56,
+  "passed": 56,
+  "actualSelector": true,
+  "actualEvidenceEvaluator": true,
+  "actualCli": true,
+  "cliRuns": 12,
+  "inputs": "All synthetic fixtures; source:live exercises only validation code paths.",
+  "liveTelemetryCertified": false,
+  "liveProvenanceCertified": false,
+  "productionRollout": false,
+  "networkRequests": 0,
+  "sourceHashes": [
+    {
+      "path": "lib/a2/swarm/canary.ts",
+      "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34"
+    },
+    {
+      "path": "lib/a2/swarm/canary-evidence.ts",
+      "sha256": "058db373f730c88007fc964706f68340f54231f9f3de59b7be3cace763b2e0e5"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "e78b23ee3c599d6b22bd38c13b6327c38c911d4e216cfa86b5b0b7bbb5078195"
+    },
+    {
+      "path": "scripts/check-a2-swarm-canary.mjs",
+      "sha256": "bec6e73ce017c902642724d6a40eb003a9e9d9e824c63915513279de216bea55"
+    },
+    {
+      "path": "scripts/test-a2-swarm-canary.mjs",
+      "sha256": "5655df8e2ce1eb00e71f9361721d1c783bf54befc1800699d30b86d1aa26279a"
+    }
+  ],
+  "results": [
+    {
+      "name": "Unconfigured and explicitly disabled modes always retain baseline",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed configuration containers and unsupported modes fail closed",
+      "status": "passed"
+    },
+    {
+      "name": "Missing or true kill switch overrides allowlist and 100 percent",
+      "status": "passed"
+    },
+    {
+      "name": "Only an explicit lowercase false opens the kill-switch gate",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed actors cannot enter even an all-user cohort",
+      "status": "passed"
+    },
+    {
+      "name": "Rollout and revision identifiers are required and bounded",
+      "status": "passed"
+    },
+    {
+      "name": "Percent requires an integer string from zero through one hundred",
+      "status": "passed"
+    },
+    {
+      "name": "Zero and one hundred percent honor both endpoints for every sampled actor",
+      "status": "passed"
+    },
+    {
+      "name": "Allowlist selects only listed owners at zero percent and normalizes case",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed, duplicate and excessive allowlists never partially admit an actor",
+      "status": "passed"
+    },
+    {
+      "name": "Cohorts are deterministic across requests, revision changes and UUID case",
+      "status": "passed"
+    },
+    {
+      "name": "Increasing percentage preserves all previously selected actors",
+      "status": "passed"
+    },
+    {
+      "name": "A deliberate new rollout identifier produces a distinct stable cohort",
+      "status": "passed"
+    },
+    {
+      "name": "Selection uses its supplied server config and never mutates it or exposes actor IDs",
+      "status": "passed"
+    },
+    {
+      "name": "Complete healthy fixture yields review eligibility, never approval",
+      "status": "passed"
+    },
+    {
+      "name": "Synthetic evidence remains hold even with critical counters",
+      "status": "passed"
+    },
+    {
+      "name": "Evidence must match the exact candidateSha",
+      "status": "passed"
+    },
+    {
+      "name": "Evidence must match the exact deploymentId",
+      "status": "passed"
+    },
+    {
+      "name": "Evidence must match the exact rolloutId",
+      "status": "passed"
+    },
+    {
+      "name": "Evidence must match the exact configRevision",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed expected identities fail closed without reflecting their input",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown evidence properties and arbitrary source claims are rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Clock and observation boundaries are checked before interpreting incidents",
+      "status": "passed"
+    },
+    {
+      "name": "Short, stale and undersampled windows stay on hold",
+      "status": "passed"
+    },
+    {
+      "name": "Observation duration and freshness accept their exact documented boundaries",
+      "status": "passed"
+    },
+    {
+      "name": "UTC offsets describe the same window without changing its result",
+      "status": "passed"
+    },
+    {
+      "name": "Counters cannot exceed requests or contain fractional and nonfinite data",
+      "status": "passed"
+    },
+    {
+      "name": "Nonempty cohorts require observed actors and latency",
+      "status": "passed"
+    },
+    {
+      "name": "Empty cohorts are valid insufficient samples, never invented latency or model usage",
+      "status": "passed"
+    },
+    {
+      "name": "Observed maximum is mandatory and cannot contradict the call total",
+      "status": "passed"
+    },
+    {
+      "name": "Successful answers with zero provider calls cannot earn eligibility",
+      "status": "passed"
+    },
+    {
+      "name": "Baseline has no fallback path and swarm success requires all three agents",
+      "status": "passed"
+    },
+    {
+      "name": "Failed requests may legitimately stop before making any provider call",
+      "status": "passed"
+    },
+    {
+      "name": "Started fallbacks count their attempted baseline calls even when all fail",
+      "status": "passed"
+    },
+    {
+      "name": "Failure, regression, fallback and latency thresholds are inclusive at the boundary",
+      "status": "passed"
+    },
+    {
+      "name": "Absolute failure rate independently requests rollback",
+      "status": "passed"
+    },
+    {
+      "name": "A small absolute failure rate still rolls back when regression exceeds the limit",
+      "status": "passed"
+    },
+    {
+      "name": "Fallback rate belongs to the assigned swarm cohort",
+      "status": "passed"
+    },
+    {
+      "name": "Both absolute and comparative p95 latency limits enforce rollback",
+      "status": "passed"
+    },
+    {
+      "name": "One authBoundary incident requires rollback without a minimum sample",
+      "status": "passed"
+    },
+    {
+      "name": "One crossUserContext incident requires rollback without a minimum sample",
+      "status": "passed"
+    },
+    {
+      "name": "One unconfirmedWrite incident requires rollback without a minimum sample",
+      "status": "passed"
+    },
+    {
+      "name": "One canonicalAction incident requires rollback without a minimum sample",
+      "status": "passed"
+    },
+    {
+      "name": "One dataLoss incident requires rollback without a minimum sample",
+      "status": "passed"
+    },
+    {
+      "name": "One callBudget incident requires rollback without a minimum sample",
+      "status": "passed"
+    },
+    {
+      "name": "A valid but old critical incident remains a conservative rollback recommendation",
+      "status": "passed"
+    },
+    {
+      "name": "Per-request baseline excess cannot hide behind an acceptable average",
+      "status": "passed"
+    },
+    {
+      "name": "Swarm maximum catches a fifth call even when aggregate usage stays low",
+      "status": "passed"
+    },
+    {
+      "name": "A fourth call without any fallback cannot pass the aggregate gate",
+      "status": "passed"
+    },
+    {
+      "name": "Each additional aggregate call needs an actual started fallback",
+      "status": "passed"
+    },
+    {
+      "name": "Evidence and expected identity remain unchanged and raw metrics are not reflected",
+      "status": "passed"
+    },
+    {
+      "name": "CLI returns read-only eligibility with exit zero and preserves input files",
+      "status": "passed"
+    },
+    {
+      "name": "CLI uses exit one for rollback and exit two for synthetic hold",
+      "status": "passed"
+    },
+    {
+      "name": "CLI help describes recommendations rather than applying changes",
+      "status": "passed"
+    },
+    {
+      "name": "CLI rejects missing, duplicate and unexpected arguments without echoing them",
+      "status": "passed"
+    },
+    {
+      "name": "CLI safely rejects invalid JSON, oversized files, missing files and non-files",
+      "status": "passed"
+    }
+  ]
+}

@@ -1,0 +1,103 @@
+{
+  "sourceHash": "5075d86f1da1a98b83c203e41975a9a32864059a4f52e60ff3650a8073865a95",
+  "outputHash": "7bf669e9e7aca84bd9df7598b67da3eea2d4ec71a3108cd32f33bc52406737eb",
+  "candidate": {
+    "sha": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+    "branch": "uat/dtc-20261106",
+    "reference": "https://github.com/jcv86/main/commit/0e879b161e27eda3e3e85104f47544408c3aba0e"
+  },
+  "ci": {
+    "runId": 42307458060,
+    "sha": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+    "url": "https://github.com/jcv86/main/actions/runs/42307458060",
+    "conclusion": "success"
+  },
+  "recordedAt": "2026-11-06T23:07:34.278Z",
+  "outputPath": "/workspace/scratch/7122ccfe4f6a/outputs/dtc_uat_ag04_20261106/DTC_UAT_2026-11-06.xlsx",
+  "changes": [
+    "Protocolo!A109:C135",
+    "Control!B51:F51"
+  ],
+  "preservedSourceValues": true,
+  "preservedSourceFormulas": true,
+  "preservedSwarmAppendix": "Protocolo!A59:C76",
+  "preservedPlanAppendix": "Protocolo!A80:C105",
+  "originalManualCases": 54,
+  "originalManualCasesUnexecuted": 54,
+  "originalAcceptance": "ACEPTADO POR EL RESPONSABLE",
+  "sourceSheets": [
+    "Control",
+    "Casos",
+    "Hallazgos",
+    "Protocolo"
+  ],
+  "reopenedAndVerified": true,
+  "appendixRows": 25,
+  "renders": [
+    "final-control.png",
+    "final-protocolo-1.png",
+    "final-protocolo-2.png",
+    "final-protocolo-3.png",
+    "final-protocolo-4.png"
+  ],
+  "nativeFeatureComparison": {
+    "unchangedNativeCellsChecked": 2040,
+    "originallyBlankCellsEditedWithinAuthorizedArea": 0,
+    "relationshipComparison": "Resolved targets and relation type/mode; generated internal IDs are not content.",
+    "preservedParts": [
+      "xl/tables/table1.xml",
+      "xl/tables/table2.xml"
+    ],
+    "sourceSheets": [
+      "Control",
+      "Casos",
+      "Hallazgos",
+      "Protocolo"
+    ],
+    "differences": [],
+    "nativePreservationPassed": true
+  },
+  "formulaErrorScan": {
+    "matches": 0,
+    "evidence": "final-formula-errors.ndjson"
+  },
+  "visualReview": {
+    "reviewedAt": "2026-11-06T23:08:35.312973+00:00",
+    "reviewer": "Root assistant; direct inspection of all five exported workbook renders",
+    "status": "PASS",
+    "findings": [],
+    "observations": [
+      "Existing Control GO and acceptance remain visible and unchanged.",
+      "AG04 appendix copies established typography, colors and column widths.",
+      "All text and source references fit in their cells; no truncation or horizontal overflow was observed.",
+      "Final candidate, counts and separate incomplete-contrast results match the evidence input."
+    ],
+    "images": [
+      {
+        "file": "final-control.png",
+        "sha256": "07737fc81f0e06181cbdcac84a788462278da1c86032a97e33a9c06c244ff665"
+      },
+      {
+        "file": "final-protocolo-1.png",
+        "sha256": "1a391ae1d9559b9b1e05fb9b11028865f24925a17466dbe06421f2f406e4096e"
+      },
+      {
+        "file": "final-protocolo-2.png",
+        "sha256": "d46c0dc388ba0321f9f48d47d0d9d28b3f63a94dd3996d4fb22abf2cfa7a6039"
+      },
+      {
+        "file": "final-protocolo-3.png",
+        "sha256": "f8ba1ebd4a7eb5473b5651653c09e02da6e1ba3a3c755069eb9663350d0f175c"
+      },
+      {
+        "file": "final-protocolo-4.png",
+        "sha256": "14752bd934cd5651cd043f7990f91d0e643bb04a4445c9c947ff6fdf67856069"
+      }
+    ]
+  },
+  "artifactOperationMarkerRunOnce": true,
+  "outputSizeBytes": 45240,
+  "sourceVersion": 5,
+  "outputVersion": 6,
+  "libraryIdentityPreserved": true
+}

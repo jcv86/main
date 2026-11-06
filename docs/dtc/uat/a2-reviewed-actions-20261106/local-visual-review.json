@@ -1,0 +1,219 @@
+{
+  "version": "dtc-a2-action-visual-review.v1",
+  "reviewedAt": "2026-11-06T22:29:45.035763+00:00",
+  "reviewer": "assistant visual inspection",
+  "method": "Direct inspection of all eight original full-page PNG captures; no recapture or image modification.",
+  "result": "no_new_blocking_visual_defect_observed",
+  "scope": {
+    "actualComponents": [
+      "A2ChatCoach",
+      "A2AssistantAction",
+      "A2ReviewedPlan"
+    ],
+    "actualDtcCss": true,
+    "fonts": "system Arial and Georgia in the isolated rendering fixture",
+    "authAndHttp": "synthetic",
+    "realDatabaseOrRls": false,
+    "realModelQuality": false,
+    "fullAuthenticatedAppShell": false,
+    "browser": "Chromium",
+    "browserVersion": "153.0.8010.0",
+    "headless": true,
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 844
+      }
+    ]
+  },
+  "screenshots": [
+    {
+      "file": "review-390.png",
+      "sha256": "6943c8410df67df285cca9b57ca2769154dcbbec70e386074ea0352fe3e47559",
+      "inspected": true,
+      "observations": [
+        "Single-column layout fits the 390-pixel viewport.",
+        "Labels, reviewed text, date field and explicit confirm/discard controls remain visible and wrap within their card.",
+        "The focused date field has a visible outline; form and plan cards remain separate."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "context-changed-390.png",
+      "sha256": "4d2bbbd4f94e9fcb6f2cdd7d9f965b232524d2ebc1213e42f20e7608d480e020",
+      "inspected": true,
+      "observations": [
+        "The original draft day 3 and current pending day 4 are both visible.",
+        "Entered text is retained; context-check and acknowledgement controls wrap without clipping.",
+        "Save is visibly disabled before context acknowledgement."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "uncertain-390.png",
+      "sha256": "785958fbb4726d1084e5ce40e9c95ccf326efd945fef35191a63df9dbcd49aed",
+      "inspected": true,
+      "observations": [
+        "An uncertain write shows the retry of the same request as the active primary control.",
+        "A newer reply leaves the prior draft visible and disabled; there is no success claim.",
+        "Error, recovery explanation and preserved inputs remain within the narrow column."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "confirmed-390.png",
+      "sha256": "972042bdd82acf715097b2e432594b214557f26c9fff7176099ffbda9e6aa1d2",
+      "inspected": true,
+      "observations": [
+        "The resolved form is replaced by a compact receipt.",
+        "Receipt wording identifies confirmation of an earlier saved adjustment for day 4, with the action and chosen date visible.",
+        "The following reviewed-plan card stays separate and readable."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "review-1440.png",
+      "sha256": "9ed70c2a6a59457bafdcf5a2077c7a5818f35c651b19de503d8ef6a47af4f5ae",
+      "inspected": true,
+      "observations": [
+        "Two-column layout remains aligned and the chat card ends at its own content height.",
+        "Action editor controls have clear labels and a visible date focus outline.",
+        "Confirm/discard controls fit together without crowding or overflow."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "context-changed-1440.png",
+      "sha256": "a8b66d318ea263d2bbcbd08e4098f5670ce61411aeffc1aa5768a1163c4c220e",
+      "inspected": true,
+      "observations": [
+        "Original day 3 and current day 4 are distinguished before reconfirmation.",
+        "The personal draft is retained and the confirmation control is disabled.",
+        "The long conversation uses its bounded scroll area; no horizontal overflow or overlapping controls is visible."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "uncertain-1440.png",
+      "sha256": "215a40143554add82a83e278536c9f7c10144d62704acfeb4562e5a59ad506cb",
+      "inspected": true,
+      "observations": [
+        "The retry control is prominent while mutation and discard controls are disabled.",
+        "The newer-reply notice does not replace the preserved draft or claim a successful write.",
+        "The independent chat card does not stretch to the entire sidebar height."
+      ],
+      "blockingFindings": []
+    },
+    {
+      "file": "confirmed-1440.png",
+      "sha256": "50da7b5d345cc36a04b18daefe75f545d6a4ff5fbd21ca992ebf5cc964632c34",
+      "inspected": true,
+      "observations": [
+        "A compact receipt replaces the editor after recovery.",
+        "The previous-save confirmation, current day and chosen review date are readable.",
+        "Chat, canonical next action and reviewed-plan sections remain distinct, without overlap or clipped controls."
+      ],
+      "blockingFindings": []
+    }
+  ],
+  "automatedEvidence": {
+    "file": "a2-assistant-action-ui.json",
+    "checksPassed": 49,
+    "axeAudits": 8,
+    "axeViolations": 0,
+    "axeIncomplete": [
+      {
+        "width": 390,
+        "stage": "review",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "stage": "context-changed",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "stage": "uncertain",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 390,
+        "stage": "confirmed",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 1440,
+        "stage": "review",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 1440,
+        "stage": "context-changed",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 1440,
+        "stage": "uncertain",
+        "rules": [
+          "color-contrast"
+        ]
+      },
+      {
+        "width": 1440,
+        "stage": "confirmed",
+        "rules": [
+          "color-contrast"
+        ]
+      }
+    ],
+    "contrastLimitation": "All eight axe audits retain incomplete color-contrast results on gradient backgrounds. This visual review does not turn them into measured contrast passes.",
+    "sourcesUnchangedDuringRun": true,
+    "sources": [
+      {
+        "path": "components/a2-assistant-action.tsx",
+        "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d"
+      },
+      {
+        "path": "components/a2-chat-coach.tsx",
+        "sha256": "b20ccef68afff693403ef34612d78528022e12e569523f329dd85077fbd60c15"
+      },
+      {
+        "path": "components/a2-reviewed-plan.tsx",
+        "sha256": "aa2df61c16022ca7ad1d5753efc338b05f5867ce1f2c1cbc3818d685bb8dc10f"
+      },
+      {
+        "path": "lib/a2/assistant-action-contract.ts",
+        "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc"
+      },
+      {
+        "path": "scripts/test-a2-assistant-action-ui.mjs",
+        "sha256": "3295cd58b42094cc470c2ce19677ad7618db2adfe4f8bd0b7ea796f5280ff6c1"
+      }
+    ],
+    "uncaughtJsErrors": 0,
+    "externalRequests": 0
+  },
+  "limitations": [
+    "390×844 is a desktop Chromium viewport, not a physical phone or touch test.",
+    "This review does not verify Safari, browser locale differences, real Auth, persistence, RLS, hosted deployment or model responses.",
+    "The actual database integration and full application-shell screenshots require their separate CI evidence."
+  ],
+  "sourceChangesDuringReview": false
+}

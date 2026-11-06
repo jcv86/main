@@ -1,0 +1,182 @@
+{
+  "candidate": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "candidateTree": "b6a12f30e0e42e312702dd543347df6407a66f31",
+  "ciRun": 42307458060,
+  "artifactId": 13546709691,
+  "artifactDigest": "sha256:dda2e7f13adf9339b061bcd05c3798f914293e870168d1223bd90654a9066d3d",
+  "artifactDigestVerified": true,
+  "files": [
+    {
+      "file": "a2-plan-api.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-plan-api.json",
+      "sizeBytes": 4916,
+      "sha256": "a5d066603aa428d1b0b1c05cd5498525f1bf694b2dca88c2ba97914a90bff8e0",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-plan-contract.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-plan-contract.json",
+      "sizeBytes": 6985,
+      "sha256": "dc85c140d502e5392bc01da0f2363ae1e68a8f618f5031cfaf51accc64134348",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-swarm-runtime.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-swarm-runtime.json",
+      "sizeBytes": 12577,
+      "sha256": "eb414af1b675635ff7e6125e44da78dcccaf346e171f2b97d0ee77488af3ba39",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-assistant-route.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-assistant-route.json",
+      "sizeBytes": 13501,
+      "sha256": "c484caf48e3a793fda4c8497d4f11a2bc41a809f68873809f280e9b217b2770b",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-contract.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-action-contract.json",
+      "sizeBytes": 3978,
+      "sha256": "ca44bbcd1cc04be70853262d4bd782123eba6ba63e6c82b86889da462687a7dc",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-swarm-provider.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-swarm-provider.json",
+      "sizeBytes": 5021,
+      "sha256": "7f53aa06f40422be81cb208e06bfb8cc1bb6a9f7dd81d6e24d68f380922f6dc0",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-swarm-canary.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-swarm-canary.json",
+      "sizeBytes": 7978,
+      "sha256": "462cba4aae4d1b7df7865f16e55facd37f93ac832dda910bb65dadcb331930af",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-api.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/a2-action-api.json",
+      "sizeBytes": 8887,
+      "sha256": "9e6056162d280a22f80655d52c8a71c67810e3357fb80fe8a40fadec2fe20232",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "native-tab-focus-adapter.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/native-tab-focus-adapter.json",
+      "sizeBytes": 827,
+      "sha256": "441568a06d6eaa54676691885a31a919225c600045fdc70eb30b3ce88963f972",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "focus-visibility-preflight.json",
+      "sourceRelativePath": "dtc-a2-swarm-evidence/focus-visibility-preflight.json",
+      "sizeBytes": 2577,
+      "sha256": "6883ccb2856e96f9b4ea6dcb870ae8be3a70430e610662106dbfb294f6fdf110",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-scope.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-action-scope.json",
+      "sizeBytes": 5195,
+      "sha256": "f22a8086f205e2704e083552fcb309b30eeeb4eb821df31ed776c27efbfb0838",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-seed.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-action-seed.json",
+      "sizeBytes": 699,
+      "sha256": "66a79d7123288a0db7c97b92931f12c46b181349a50b23233f0a349e45037213",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-sql.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-action-sql.json",
+      "sizeBytes": 3112,
+      "sha256": "cc5b0ed3fa5e7eb8d90461fadb01d25190dfcccbbec06d9f6f98ca1e3a0cd349",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-advisors.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-action-advisors.json",
+      "sizeBytes": 330,
+      "sha256": "9df41739b05e0237a9b46993accd546d807f12582c70f0c37ebe7c52ab3f88f5",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-action-browser-results.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-action-browser-results.json",
+      "sizeBytes": 9965,
+      "sha256": "bcc4137fffdf9a3cdaa678fd63ef8941eceee7d88659f3702e04d68af4d1a9e7",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-plan-scope.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-plan-scope.json",
+      "sizeBytes": 4103,
+      "sha256": "caf88302dc6c1fc71c87d320c64d61b60ecb62b262289e2f6d9d8b1b96c4ab9a",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-plan-seed.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-plan-seed.json",
+      "sizeBytes": 420,
+      "sha256": "f42123985f86d8edc1bc24efdd809d6506394c6857b0720101e69509a693eed5",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-plan-sql.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-plan-sql.json",
+      "sizeBytes": 3330,
+      "sha256": "bee257a68525b569ec6bbc930dbe532d5c33631a3dff1125b18703dfd1ede622",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-plan-advisors.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-plan-advisors.json",
+      "sizeBytes": 327,
+      "sha256": "6b148580f1c4f0c67507e8c73f018619275aa6e1bc77bccde16b5cfc0979dec0",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "a2-plan-browser-results.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/a2-plan-browser-results.json",
+      "sizeBytes": 10970,
+      "sha256": "8e30aa9b11f5004f3d96bc373723accd7e46021ddd5a5e3fec8b5c2d484d65d5",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "closure-scope.json",
+      "sourceRelativePath": "dtc-a1-browser/evidence/closure-scope.json",
+      "sizeBytes": 9453,
+      "sha256": "181a87c56b1a7055fa5a181d3ef79ce041dcc33e4323bb29b6921a2eea8bfff0",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "verified-summary.json",
+      "sourceRelativePath": "verified-summary.json",
+      "sizeBytes": 69471,
+      "sha256": "c425a6de6e2c2412938484784e3c81532df0cc7acd6b6353518f54f7944db9fb",
+      "copiedWithoutChanges": true
+    },
+    {
+      "file": "visual-review.json",
+      "sourceRelativePath": "visual-review.json",
+      "sizeBytes": 13189,
+      "sha256": "4fdd7d5aa571858ff424e66cb6bec8073547d294d692fb0c3c924c07855f802c",
+      "copiedWithoutChanges": true
+    }
+  ],
+  "verifierCorrection": {
+    "firstReadOnlyCheck": "PNG width was incorrectly compared with viewport width; this was a checker assumption, not a CI failure.",
+    "finalReadOnlyCheck": "PNG width must equal layout.document exactly. AG03 screenshot excludes 8px scrollbar; overflow assertion retained.",
+    "changesToApplicationOrRawEvidence": false
+  },
+  "rootVisualInspection": [
+    "a2-action-desktop-replay-after-deletion.png",
+    "a2-action-mobile-recovered-confirmation.png"
+  ],
+  "allEightActionScreenshotsReviewedBy": "visual-review.json",
+  "publicArchiveContents": "Selected producer-sanitized JSON only. Original screenshot dimensions and hashes are retained in the verified and visual summaries; screenshots remain in the CI artifact."
+}

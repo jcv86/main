@@ -1,0 +1,15 @@
+{
+  "migration": "20261106221437_a2_assistant_action_receipts.sql",
+  "migrationSha256": "3d01f2dc8f57d798ea35fdaa02f7e6b65732a17ed4cf4d3e2e2d2287ee4c34bd",
+  "migrationAppliedTwice": true,
+  "syntheticAuthOwnersCreated": 4,
+  "eligibleA2": 3,
+  "admittedWithoutA2": 1,
+  "pilotRevocation": "One eligible owner is revoked only during the subsequent access test after genuine login.",
+  "initialActionReceipts": 0,
+  "initialOwnerDocuments": 0,
+  "contextFixture": "Inherited minimal dtc_documents owner SELECT/INSERT from AG03; actual new receipt/RPC schema.",
+  "canonicalProgress": "Seeded A2 entry prerequisites only; no practice completion or XP.",
+  "remoteOperations": 0,
+  "verdict": "PASS"
+}

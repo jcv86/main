@@ -1,0 +1,169 @@
+{
+  "commit": "0fd98c7db202af6e369173374261b589fda0cc0f",
+  "scope": "disposable-local-a2-action",
+  "verdict": "FAIL",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "proposal and edits do not write; explicit confirmation persists the exact reviewed adjustment and receipt",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "identical command replays without writes and a real reload recovers the confirmed adjustment as canonical context",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "source changes reject stale confirmation, preserve the draft and require explicit context review before a new command",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "review",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "saved",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "context-conflict",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "replay-after-deletion",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".mb-1 > span:nth-child(1)"
+            ],
+            [
+              ".mb-1 > span:nth-child(2)"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "review",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "saved",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "context-conflict",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "replay-after-deletion",
+      "viewport": 1440,
+      "document": 1440
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/assistant-actions",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET"
+    }
+  ],
+  "controlledFaults": [],
+  "generationFixtures": [
+    {
+      "phase": "desktop",
+      "label": "desktop-first",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "desktop",
+      "label": "context-conflict",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "desktop",
+      "label": "desktop-lost-delivery",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    }
+  ],
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "failure": "AG04 accessibility: replay-after-deletion\n\n1 !== 0\n",
+  "failureScreenshot": "a2-action-desktop-failure.png",
+  "transport": "Actual UI, email Auth, action API, owner RLS and PostgreSQL. Only assistant generation responses use declared synthetic proposals.",
+  "notVerified": [
+    "real provider output, utility, latency, cost or real canary traffic",
+    "remote migration, deployment, production document schema or external OAuth",
+    "global transactional freshness across independent context writes",
+    "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+    "manual UAT participant cases or effectiveness of the practice"
+  ]
+}

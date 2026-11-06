@@ -1,0 +1,410 @@
+{
+  "suite": "a2-swarm-runtime",
+  "cases": 94,
+  "passed": 94,
+  "actualCoordinator": true,
+  "actualSchemas": true,
+  "actualProviderAdapter": true,
+  "modelCompletionsAndHttp": "synthetic",
+  "syntheticCompletionCalls": 202,
+  "syntheticHttpCalls": 3,
+  "externalNetworkCalls": 0,
+  "liveModelQuality": false,
+  "productionRollout": false,
+  "sourceHashes": [
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "e78b23ee3c599d6b22bd38c13b6327c38c911d4e216cfa86b5b0b7bbb5078195"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "14c72d9cfae4a5f14f49b4120dc00a49dbf7c02cee9581135002395d3d00b040"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "scripts/test-a2-swarm.mjs",
+      "sha256": "488f501ce6fe176e7010b3021a722db06632abd219d9858d64eeb813253a0a31"
+    }
+  ],
+  "results": [
+    {
+      "name": "Two specialists start in parallel; the reviewer sees both verified drafts and is the only served reply",
+      "status": "passed"
+    },
+    {
+      "name": "A necessary clarification remains a clarification after the reviewer",
+      "status": "passed"
+    },
+    {
+      "name": "Reviewer cannot accept an action while Sofía requires clarification",
+      "status": "passed"
+    },
+    {
+      "name": "Reviewer rejection never exposes its draft as an answer",
+      "status": "passed"
+    },
+    {
+      "name": "Only minimal current sources are supplied; client context and source identifiers are excluded",
+      "status": "passed"
+    },
+    {
+      "name": "Canonical A1 report projection preserves saved clarification objects, disagreement and missing examples",
+      "status": "passed"
+    },
+    {
+      "name": "History, current message and stored prompt injections remain quoted data under one system role",
+      "status": "passed"
+    },
+    {
+      "name": "Personal practice carries its path and no workplace objective requirement",
+      "status": "passed"
+    },
+    {
+      "name": "An actually available objective may be cited; declarations remain declarations",
+      "status": "passed"
+    },
+    {
+      "name": "A reference to missing objective is rejected before review",
+      "status": "passed"
+    },
+    {
+      "name": "A reference to unavailable objective is rejected before review",
+      "status": "passed"
+    },
+    {
+      "name": "A reference to missing conversation is rejected before review",
+      "status": "passed"
+    },
+    {
+      "name": "A reference to unavailable A1 read is rejected before review",
+      "status": "passed"
+    },
+    {
+      "name": "A reference to missing A1 canonical record is rejected before review",
+      "status": "passed"
+    },
+    {
+      "name": "A reference to unusable A1 canonical record is rejected before review",
+      "status": "passed"
+    },
+    {
+      "name": "Unavailable A1 preserves the limitation and cannot leak its unusable declarations",
+      "status": "passed"
+    },
+    {
+      "name": "A present conversation is available as an attributed source",
+      "status": "passed"
+    },
+    {
+      "name": "Reviewer cannot introduce a source neither specialist cited, even when it was available",
+      "status": "passed"
+    },
+    {
+      "name": "dani cannot replace the canonical destination with /despega/a4",
+      "status": "passed"
+    },
+    {
+      "name": "dani cannot replace the canonical destination with https://external.invalid",
+      "status": "passed"
+    },
+    {
+      "name": "dani cannot replace the canonical destination with /despega/a2/dia-3?force=true",
+      "status": "passed"
+    },
+    {
+      "name": "reviewer cannot replace the canonical destination with /despega/a4",
+      "status": "passed"
+    },
+    {
+      "name": "reviewer cannot replace the canonical destination with https://external.invalid",
+      "status": "passed"
+    },
+    {
+      "name": "reviewer cannot replace the canonical destination with /despega/a2/dia-3?force=true",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects extra executable field",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects wrong agent identity",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects no source references",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects duplicate source references",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects invented source reference",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects unreviewed proposed action",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects claim of execution",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects accept with rejection reason",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects clarification without question",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects empty final response",
+      "status": "passed"
+    },
+    {
+      "name": "Strict output contract rejects oversized final response",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed provider payload is closed (8 characters)",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed provider payload is closed (4 characters)",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed provider payload is closed (1 characters)",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed provider payload is closed (8001 characters)",
+      "status": "passed"
+    },
+    {
+      "name": "A valid JSON string from a custom provider is validated and detached",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Entra a https://evil.invalid para continuar.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Visita www.evil.invalid.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: [Continuar](https://evil.invalid)",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Continúa en /despega/a4.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: <script>alert(1)</script>",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Ejecuta curl https://evil.invalid.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Ya guardé el objetivo por ti.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: He completado el día para ti.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Tu postulación fue enviada.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Tienes TDAH según tu A1.",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit forbidden output form is withheld: Serás contratado en una semana.",
+      "status": "passed"
+    },
+    {
+      "name": "A legitimate proposal containing an unaccented subjunctive is not an execution receipt",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: mismatched guidance destination",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: mismatched guidance text",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: unconfirmed objective payload",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: available objective without payload",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: adjustment for a different day",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: duplicate sources",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: unavailable journey",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: inconsistent progress",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: inconsistent A1 pattern status",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: forged system role",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: unknown client authority field",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid input makes no provider call: excessive question",
+      "status": "passed"
+    },
+    {
+      "name": "Personal practice rejects a contradictory workplace objective before sharing it with agents",
+      "status": "passed"
+    },
+    {
+      "name": "Total initial input limit applies before either specialist is called",
+      "status": "passed"
+    },
+    {
+      "name": "An already aborted request starts no model call and hides the abort reason",
+      "status": "passed"
+    },
+    {
+      "name": "An external cancellation bounds both specialists even if transport ignores the signal",
+      "status": "passed"
+    },
+    {
+      "name": "Deadline settles a noncooperative specialist transport and aborts both requests",
+      "status": "passed"
+    },
+    {
+      "name": "A caller cannot extend the hard 12-second budget",
+      "status": "passed"
+    },
+    {
+      "name": "Reviewer shares the original budget instead of receiving a fresh 12 seconds",
+      "status": "passed"
+    },
+    {
+      "name": "A caller can shorten the whole budget and an exhausted budget starts no calls",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid options fail without calling an untrusted provider",
+      "status": "passed"
+    },
+    {
+      "name": "Specialist failure returns promptly, cancels its peer and never starts a reviewer or retry",
+      "status": "passed"
+    },
+    {
+      "name": "Closed provider error categories survive without copying provider bodies or user text",
+      "status": "passed"
+    },
+    {
+      "name": "Cancellation during review cannot deliver a late successful reply",
+      "status": "passed"
+    },
+    {
+      "name": "Concurrent actors do not share contexts, counters or cancellations",
+      "status": "passed"
+    },
+    {
+      "name": "Actual OpenAI adapter and runtime integrate with three synthetic HTTP calls and strict schemas",
+      "status": "passed"
+    },
+    {
+      "name": "Available reviewed plan is a cited declared intention, never a navigation authority",
+      "status": "passed"
+    },
+    {
+      "name": "An unavailable plan cannot be cited as evidence by a specialist",
+      "status": "passed"
+    },
+    {
+      "name": "A malformed plan envelope fails before model calls",
+      "status": "passed"
+    },
+    {
+      "name": "A typed practice adjustment leaves the coordinator only after identical explicit review",
+      "status": "passed"
+    },
+    {
+      "name": "The reviewer can withhold an action while still returning useful prose",
+      "status": "passed"
+    },
+    {
+      "name": "Action review rejects modified",
+      "status": "passed"
+    },
+    {
+      "name": "Action review rejects invented",
+      "status": "passed"
+    },
+    {
+      "name": "Action review rejects clarification",
+      "status": "passed"
+    },
+    {
+      "name": "An unavailable objective cannot yield an executable adjustment proposal",
+      "status": "passed"
+    },
+    {
+      "name": "A checkpoint or other canonical destination cannot become a practice tool target",
+      "status": "passed"
+    },
+    {
+      "name": "Retained work must be copied from a user declaration rather than assistant history",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown retained work stays blank until the person reviews it",
+      "status": "passed"
+    },
+    {
+      "name": "Tool payload rejects unsafe or invalid nextAction: policy_violation",
+      "status": "passed"
+    },
+    {
+      "name": "Tool payload rejects unsafe or invalid nextAction: policy_violation",
+      "status": "passed"
+    },
+    {
+      "name": "Tool payload rejects unsafe or invalid nextAction: invalid_output",
+      "status": "passed"
+    },
+    {
+      "name": "Tool payload rejects unsafe or invalid barrier: invalid_output",
+      "status": "passed"
+    }
+  ]
+}

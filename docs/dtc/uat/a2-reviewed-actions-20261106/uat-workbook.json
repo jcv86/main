@@ -1,0 +1,54 @@
+{
+  "version": "dtc-ag04-uat-workbook.v1",
+  "candidate": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "ciRun": 42307458060,
+  "filename": "DTC_UAT_2026-11-06.xlsx",
+  "identity": {
+    "library_file_id": "libfile_07431d69ad00819184be0e5e555aa681",
+    "file_id": "file_0000000042ac820ea9700c65b8e0cee0",
+    "previous_version": 5,
+    "current_version": 6,
+    "localWorkingPath": "/workspace/scratch/7122ccfe4f6a/outputs/dtc_uat_ag04_20261106/DTC_UAT_2026-11-06.xlsx"
+  },
+  "url": "https://chatgpt.com/library?file_id=libfile_07431d69ad00819184be0e5e555aa681&account_id=personal",
+  "sourceSha256": "5075d86f1da1a98b83c203e41975a9a32864059a4f52e60ff3650a8073865a95",
+  "sha256": "7bf669e9e7aca84bd9df7598b67da3eea2d4ec71a3108cd32f33bc52406737eb",
+  "sizeBytes": 45240,
+  "saved": true,
+  "expectedCurrentVersionGuard": 5,
+  "returnedMetadataApplied": true,
+  "changedRanges": [
+    "Protocolo!A109:C135",
+    "Control!B51:F51"
+  ],
+  "preserved": {
+    "sheets": [
+      "Control",
+      "Casos",
+      "Hallazgos",
+      "Protocolo"
+    ],
+    "existingNativeCells": 2040,
+    "manualCases": 54,
+    "manualCasesUnexecuted": 54,
+    "businessDecision": "GO",
+    "acceptance": "ACEPTADO POR EL RESPONSABLE",
+    "acceptedCandidate": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+    "priorAppendices": true,
+    "values": true,
+    "formulas": true,
+    "styles": true,
+    "validations": true,
+    "merges": true,
+    "tables": true
+  },
+  "verification": {
+    "reopened": true,
+    "formulaErrorMatches": 0,
+    "nativeDifferences": [],
+    "visualRendersReviewed": 5,
+    "visualFindings": [],
+    "details": "workbook-verification.json"
+  },
+  "savedAt": "2026-11-06T23:09:11.135Z"
+}

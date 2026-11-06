@@ -1,0 +1,335 @@
+{
+  "version": "dtc-a2-action-integrated-visual-review.v1",
+  "reviewedAt": "2026-11-06T23:04:08.980973+00:00",
+  "reviewer": "assistant UI/laboratory visual inspection",
+  "candidate": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "candidateTree": "b6a12f30e0e42e312702dd543347df6407a66f31",
+  "ciRun": {
+    "id": 42307458060,
+    "url": "https://github.com/jcv86/main/actions/runs/42307458060",
+    "attempt": 2
+  },
+  "method": "Direct inspection of all eight original a2-action PNG full-page captures. No recapture, cropping, image modification, test execution or source editing.",
+  "result": "no_new_blocking_visual_defect_observed",
+  "blockingFindings": [],
+  "nonBlockingFindings": [
+    {
+      "id": "ag04-visual-account-alert-spacing",
+      "severity": "cosmetic",
+      "blocking": false,
+      "file": "a2-action-desktop-account-change.png",
+      "description": "The session-changed explanatory sentence and the reopen link have no visible separating space: correcto.Volver a abrir el asistente.",
+      "effect": "Minor text-spacing defect; no observed loss of the link, private-content purge or recovery instruction.",
+      "status": "recorded_without_source_change"
+    }
+  ],
+  "scope": {
+    "actualApplicationShellAndComponents": true,
+    "actualEmailAuthActionApiOwnerRlsAndPostgresql": true,
+    "assistantGeneration": "Declared synthetic HTTP proposals; day/context were obtained from the real action API.",
+    "data": "Synthetic laboratory owners and content.",
+    "browser": "Headless Chromium; the AG04 results file does not embed its version.",
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 844
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "fullPageCaptures": true,
+    "manualUatParticipantExecution": false
+  },
+  "screenshots": [
+    {
+      "file": "a2-action-desktop-review.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-desktop-review.png",
+      "sha256": "c2784a264e2c0d07393cda45213cdc08453a53b7336f9cae0117698a7339def3",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 2307
+      },
+      "inspected": true,
+      "observations": [
+        "The chat and action editor stay in separate columns; retained work, next action, chosen date and confirm/discard controls fit inside the editor.",
+        "The date input has a visible focus outline. Confirming an adjustment is visually distinct from continuing the canonical day.",
+        "The header background is opaque. The full-page capture places the sticky header at the capture scroll position; content behind that strip is occluded rather than bleeding through."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    },
+    {
+      "file": "a2-action-desktop-saved.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-desktop-saved.png",
+      "sha256": "c13a041cb6d1a1b52926a9b34fa05ed0769e3a17aa9afafbb3cce7bb23985f3d",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1831
+      },
+      "inspected": true,
+      "observations": [
+        "The editor is replaced by a compact day-1 saved receipt with the selected action and review date.",
+        "The same action appears in the canonical guidance card while the reviewed-plan card remains a separate section.",
+        "The fixed header retains readable level/streak labels where it crosses underlying content."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    },
+    {
+      "file": "a2-action-desktop-context-conflict.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-desktop-context-conflict.png",
+      "sha256": "38a51a8fe8427e4f610b61a61636a02e9a5827cc63a220c990d7c1260b73463e",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 3126
+      },
+      "inspected": true,
+      "observations": [
+        "The revised objective and last stored adjustment are visibly distinguished from the preserved personal edit.",
+        "Check-current-context and explicit keep-my-edit acknowledgement controls are both visible; the longer acknowledgement label wraps inside its button.",
+        "Confirmation is visibly disabled before acknowledgement. Textareas and date remain within the card without horizontal clipping."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    },
+    {
+      "file": "a2-action-desktop-replay-after-deletion.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-desktop-replay-after-deletion.png",
+      "sha256": "f4fb15683a923a7c71c3381f6580de8332881ef0a571cac84034a5ab1f20fb1f",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1907
+      },
+      "inspected": true,
+      "observations": [
+        "The receipt explicitly says the earlier request was recorded and its content was later deleted; it does not claim a newly saved adjustment.",
+        "The reviewed-plan card remains separate and there is no active action editor beneath the resolved deletion receipt.",
+        "At the location that failed in CI attempt 1, the header is opaque and the green CTA does not show through the level/streak labels."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    },
+    {
+      "file": "a2-action-desktop-account-change.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-desktop-account-change.png",
+      "sha256": "e163fff0f206a873c11c5f2e5f6545ca2b0dc3278ff123c58cc407d1769bf7ab",
+      "imageDimensions": {
+        "width": 1440,
+        "height": 1092
+      },
+      "inspected": true,
+      "observations": [
+        "The assistant conversation, adjustment editor/receipt and reviewed-plan panel are replaced by the session-changed alert and reopen link.",
+        "The shell account label shows the other synthetic owner; the old chat text is not visible.",
+        "A minor spacing defect joins the final sentence and reopen link as correcto.Volver a abrir el asistente; both remain readable and the link remains distinguishable."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": [
+        "ag04-visual-account-alert-spacing"
+      ]
+    },
+    {
+      "file": "a2-action-mobile-review.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-mobile-review.png",
+      "sha256": "8efa308f041f89c857123e82e08d090dc65bde78f4c07b0bf0fab250eded6367",
+      "imageDimensions": {
+        "width": 390,
+        "height": 3036
+      },
+      "inspected": true,
+      "observations": [
+        "The 390-pixel layout stacks chat, canonical guidance, action editor and reviewed plan in a single column.",
+        "Retained work, next action, date and confirmation/discard controls fit within the narrow card; the date focus indicator is visible.",
+        "Long text wraps and the mobile header controls remain inside the viewport. The sticky header is captured at its current scroll position."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    },
+    {
+      "file": "a2-action-mobile-saved.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-mobile-saved.png",
+      "sha256": "dc3d891fc22385f0006f546d4d48c2c87379dc35300f256182cc48148fefcc10",
+      "imageDimensions": {
+        "width": 390,
+        "height": 2539
+      },
+      "inspected": true,
+      "observations": [
+        "The mobile editor is replaced by the saved day-1 receipt with its action and selected date readable.",
+        "Guidance reflects the saved step and the reviewed-plan section stays separate beneath the receipt.",
+        "Receipt lines and controls fit within the 390-pixel column without visible horizontal clipping."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    },
+    {
+      "file": "a2-action-mobile-recovered-confirmation.png",
+      "relativePath": "dtc-a1-browser/evidence/a2-action-mobile-recovered-confirmation.png",
+      "sha256": "8970a9963922db97b816bed13a6aa868342545f7043416fa2878203fa560489c",
+      "imageDimensions": {
+        "width": 390,
+        "height": 2614
+      },
+      "inspected": true,
+      "observations": [
+        "The receipt says Confirmamos el ajuste que guardaste para el día 1, distinguishing recovery of a prior save from a fresh-save claim.",
+        "The recovered action and selected review date wrap within the receipt, and the canonical guidance shows that action.",
+        "The header remains opaque and the plan card remains separately readable below the recovered receipt."
+      ],
+      "blockingFindings": [],
+      "nonBlockingFindings": []
+    }
+  ],
+  "automatedEvidence": {
+    "file": "dtc-a1-browser/evidence/a2-action-browser-results.json",
+    "sha256": "bcc4137fffdf9a3cdaa678fd63ef8941eceee7d88659f3702e04d68af4d1a9e7",
+    "verdict": "PASS",
+    "browserStepsPassed": 13,
+    "axeAudits": 8,
+    "axeViolations": 0,
+    "axeIncomplete": [
+      {
+        "phase": "desktop",
+        "name": "review",
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "phase": "desktop",
+        "name": "saved",
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "phase": "desktop",
+        "name": "context-conflict",
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "phase": "desktop",
+        "name": "replay-after-deletion",
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "phase": "mobile",
+        "name": "review",
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "phase": "mobile",
+        "name": "saved",
+        "incomplete": [
+          "color-contrast"
+        ]
+      },
+      {
+        "phase": "mobile",
+        "name": "recovered-confirmation",
+        "incomplete": [
+          "color-contrast"
+        ]
+      }
+    ],
+    "axeIncompleteAuditCount": 7,
+    "layoutChecks": [
+      {
+        "phase": "desktop",
+        "name": "review",
+        "viewport": 1440,
+        "document": 1440
+      },
+      {
+        "phase": "desktop",
+        "name": "saved",
+        "viewport": 1440,
+        "document": 1440
+      },
+      {
+        "phase": "desktop",
+        "name": "context-conflict",
+        "viewport": 1440,
+        "document": 1440
+      },
+      {
+        "phase": "desktop",
+        "name": "replay-after-deletion",
+        "viewport": 1440,
+        "document": 1440
+      },
+      {
+        "phase": "desktop",
+        "name": "account-change",
+        "viewport": 1440,
+        "document": 1440
+      },
+      {
+        "phase": "mobile",
+        "name": "review",
+        "viewport": 390,
+        "document": 390
+      },
+      {
+        "phase": "mobile",
+        "name": "saved",
+        "viewport": 390,
+        "document": 390
+      },
+      {
+        "phase": "mobile",
+        "name": "recovered-confirmation",
+        "viewport": 390,
+        "document": 390
+      }
+    ],
+    "uncaughtJsErrors": 0,
+    "blockedHosts": 0,
+    "requestFailuresRecorded": 19,
+    "contrastLimitation": "Seven scans retain incomplete color-contrast results. Visual inspection does not turn these into measured passes or a full WCAG certification.",
+    "networkLimitation": "The raw report retains aborted requests and deliberate connection-loss stimuli; no zero-failed-request claim is made."
+  },
+  "copiedUiSourcesFromVerifiedManifest": [
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "b20ccef68afff693403ef34612d78528022e12e569523f329dd85077fbd60c15",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "aa2df61c16022ca7ad1d5753efc338b05f5867ce1f2c1cbc3818d685bb8dc10f",
+      "candidateMatchesLocal": true
+    }
+  ],
+  "limitations": [
+    "This is visual review of fixed captures, not an additional interactive test or execution of any of the 54 manual UAT participant cases.",
+    "The 390×844 captures demonstrate Chromium viewport layout, not physical mobile hardware, touch, Safari or screen-reader behavior.",
+    "Sticky/fixed shell surfaces appear at the capture scroll position in these full-page screenshots. A single capture does not expose content behind that strip; interactive behavior is attributed to the separate browser harness.",
+    "The native date field shows the runner browser locale; this review does not certify locale behavior across browsers.",
+    "Synthetic generation does not establish real model utility, latency, cost, human practice outcomes or live canary activation.",
+    "No remote deployment, production schema or new business acceptance is established by this review."
+  ],
+  "manualUatCasesExecuted": 0,
+  "priorBusinessAcceptance": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d remains separate",
+  "sourceChangesDuringReview": false,
+  "testsRunDuringReview": 0,
+  "imageChangesDuringReview": false
+}

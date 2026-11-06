@@ -1,0 +1,249 @@
+{
+  "commit": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "environment": "disposable-local-supabase-and-next",
+  "copied": [
+    {
+      "path": "middleware.ts",
+      "sha256": "c126db874a6356710efbdd996b7537320c9be52695c5da75d87dc932204b1fc6"
+    },
+    {
+      "path": "app/providers.tsx",
+      "sha256": "a456fdfa1f6c884b895975c2d259447495cacf02308337bec1780549abf80548"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "app/despega/layout.tsx",
+      "sha256": "95c6eea7675370f8637057d342689142d3cd3e41deecf6ab037956c829c681e8"
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "components/layout/shell-breadcrumbs.tsx",
+      "sha256": "561eb869680206678cdbfe6711421028ea6d0b05a694aa47aee3c74b2697c35e"
+    },
+    {
+      "path": "contexts/coach-context.tsx",
+      "sha256": "be1a9c0edb94b998e40a6faea8c505f899332c0226e26f0f1c87c3e1fb3bf685"
+    },
+    {
+      "path": "components/session-wrapper.tsx",
+      "sha256": "876a5dd824f025fd1d83e788ba71b340088b4d6379bccad62bc1c7a2b8d67927"
+    },
+    {
+      "path": "components/coach-provider-wrapper.tsx",
+      "sha256": "d75c41672d0ccad2da2bc62679326a9f973d33f67dd8c8c976e3b2d2f49e650d"
+    },
+    {
+      "path": "components/outcomes/outcome-response-capture-form.tsx",
+      "sha256": "baf6d797bd40a3ff9e3288187d8bc8639f9f8d58645d97e49b6f6d783b22fc1f"
+    },
+    {
+      "path": "components/outcomes/outcome-capture-history.tsx",
+      "sha256": "99900c8e5c0cf3a9429ccb34eaf5a5614652419f52f9077ae87a212950f9c79c"
+    },
+    {
+      "path": "lib/journey/service.ts",
+      "sha256": "034430d06e1709c483b117c88863702e46a33a042caf1ed3606039689ef39598"
+    },
+    {
+      "path": "lib/journey/flow-service.ts",
+      "sha256": "b8f5c305260f54ea8121b35103cbd9130abcf778b14c0bd79a6b44a183adb960"
+    },
+    {
+      "path": "lib/journey/next-action.ts",
+      "sha256": "4b724dd24aba7615a2b66010648cc1e312bf37f09f09e11ebe7ebe004358cadf"
+    },
+    {
+      "path": "lib/journey/next-action-service.ts",
+      "sha256": "dbe6fdca1d361a46503398c3bb748c4ce6eb1cf43af4ad9a7ead97ed15c7b8e2"
+    },
+    {
+      "path": "components/journey/journey-flow-panel.tsx",
+      "sha256": "c4b54720e05fbf02a7254415fd9320bbd14ce5a4b69d121606ce7d12ce053f22"
+    },
+    {
+      "path": "components/journey/guided-next-action.tsx",
+      "sha256": "5007636dcb7e6c2fad7c4ff8a1152de6dfaa89195f90435d06bcc9cc7b670db0"
+    },
+    {
+      "path": "lib/outcomes/response-capture.ts",
+      "sha256": "56bfc03f3a8fd17747b7ef59d1a47bda2975ff7242a306a11c6442c150ce5dea"
+    },
+    {
+      "path": "lib/outcomes/response-history.ts",
+      "sha256": "29936ce2597650ddf099892f2ef6d208745030541cc6ae292e18a66f7a536e68"
+    },
+    {
+      "path": "app/despega/recorrido/page.tsx",
+      "sha256": "6e830071ffb2560e8c9b02b8e0ba93f41ee60ed8191117b4398ff549e8d012dc"
+    },
+    {
+      "path": "app/despega/a1-cerebral-intro/page.tsx",
+      "sha256": "d6d29f2bebf66ed4f889d0806a7488b6c062307d80381e35f4f013db2d481a75"
+    },
+    {
+      "path": "app/despega/a1-cerebral-intro/layout.tsx",
+      "sha256": "ed17448f4e1bc595df173cf94b82ed4d7424dc74b1b4760e4b94409e9ba4a779"
+    },
+    {
+      "path": "app/despega/a2/layout.tsx",
+      "sha256": "2aa806f8a59b5b6e53a6ae57d024237ac7f6e4a415cbf231403c36f3a2a8bb26"
+    },
+    {
+      "path": "app/despega/a2/page.tsx",
+      "sha256": "c85ede07d744dd9dd4257dec0aa47e45331a209736d8a0c914012680c38ded78"
+    },
+    {
+      "path": "app/despega/a2/intro/layout.tsx",
+      "sha256": "7dfc048b55e9b790c1d5dbf38296f286c37ee55a98a14c304341376ce70cfd74"
+    },
+    {
+      "path": "app/despega/a2/intro/page.tsx",
+      "sha256": "6e940b71782ba43fbb8880fd4f1584dddfa814c61a16656ed859605608654224"
+    },
+    {
+      "path": "app/despega/a3/layout.tsx",
+      "sha256": "0b4e858d4145f0b15536739b140baa2a163ebf49120ed553a079af85e4df9f14"
+    },
+    {
+      "path": "app/despega/a3/page.tsx",
+      "sha256": "222155fe4610fbdbc218275293d37a98388b5ff23d09f0c742e0958cd42059fe"
+    },
+    {
+      "path": "app/despega/objetivo-laboral/page.tsx",
+      "sha256": "03793a5cc6b6c6468ceb0d571f710d4dccf72442231f877a143a17685262a59a"
+    },
+    {
+      "path": "app/despega/a4/job-matching/opportunity-search-experience.tsx",
+      "sha256": "e19f66ce31a1266c9ff45d771783b1952632c6e3536fb7e2a3ec9531a44fd6be"
+    },
+    {
+      "path": "app/despega/a4/job-matching/search-intent-form.tsx",
+      "sha256": "7fa84c3a9b7538e04cce4822ffc17361a4afa125544cc418889dbbcfd1d8c03a"
+    },
+    {
+      "path": "app/despega/a4/job-matching/real-opportunity-results.tsx",
+      "sha256": "308c7ed8206e282ac345ce2287a2d70a8458896c66690336f6ce925083772b35"
+    },
+    {
+      "path": "app/despega/a4/job-matching/personal-orientation.tsx",
+      "sha256": "e30081177d9f3bdced0bdaf83959662cc5cbc3f7943fc7de49d11e04e1875cec"
+    },
+    {
+      "path": "app/api/outcomes/observations/route.ts",
+      "sha256": "ef2a43806a01c24bd0c405240b0897119846344554864396c47d0381228f8408"
+    },
+    {
+      "path": "app/api/outcomes/a1-status/route.ts",
+      "sha256": "0fd5fe4f638591f0aa39786a10217e9b3ef1be327a34ce48b8133238822b5dcc"
+    },
+    {
+      "path": "app/api/journey/module-access/route.ts",
+      "sha256": "5004adbf51bdbaf2828fa05c1bee0a87b0725a4f4a222be4e529cd3d58b085dd"
+    },
+    {
+      "path": "app/api/journey/transition/route.ts",
+      "sha256": "5ad68e1dafcb2fe317ad0aafbb54daf84aa856a2f034c3cd42e68295d6b99772"
+    },
+    {
+      "path": "app/api/a2/progress/route.ts",
+      "sha256": "e62330634173986126d6b1dd53f51847b6f04f84965f62484c5786579ea415e1"
+    },
+    {
+      "path": "app/api/a2/activity/route.ts",
+      "sha256": "8c0e09614dbc5a4f783f5625ab75f698319e7868ffcbfbef89e442d56b89ec20"
+    },
+    {
+      "path": "app/api/a2/complete-day/route.ts",
+      "sha256": "79b5a16e5cf12f2cf06c504df2dff6950272dcb33019cec85f00dff974ea9a15"
+    },
+    {
+      "path": "app/api/a2/practice-adjustments/route.ts",
+      "sha256": "81d9226e16c08b6f005ebe0597f6f3b72264aae7463acf5873667a3b02c11e5e"
+    },
+    {
+      "path": "app/api/a3/user-progress/route.ts",
+      "sha256": "c9dce9116595d1af880ab2a80d3c00d3d084b200ea95f31b5213b7dee02975c9"
+    },
+    {
+      "path": "app/api/v1-analytics/route.ts",
+      "sha256": "e2c30fce0f292f517a7f33f820a22db16ab898029fce9bb4605c627c215ce883"
+    },
+    {
+      "path": "app/api/gamification/global/route.ts",
+      "sha256": "57873985ad428bf2ec294538901c4140bc1f410562fab0f9a0d3312e2234214e"
+    },
+    {
+      "path": "app/api/auth/signout/route.ts",
+      "sha256": "e0ffcc6c3914a96bcbe84afc1e623210f3d4f714cd8fec2dc8bf8ea2b5a8443f"
+    },
+    {
+      "path": "app/api/a4/search-intents/route.ts",
+      "sha256": "a7d00a76eb16088c3f6af4c43fc1412350c9ac00e7bab75687f7d8063e027a7f"
+    },
+    {
+      "path": "app/api/a4/opportunities/catalog/route.ts",
+      "sha256": "4e42621780b6a08acf1ce782ba76b4bdefa331b446dc8dae136df5e8d0628b4a"
+    },
+    {
+      "path": "app/api/career/objective/route.ts",
+      "sha256": "0746ab222fcfa2ef47aa75d825955ed1b64c289c65b48b2da4a9eaeb4bcce1f5"
+    },
+    {
+      "path": "app/despega/a1-outcome-baseline/page.tsx",
+      "sha256": "205d32c7877da6d23f6bd61bc31c47432f079720c7b94c6fb075705616d87f09"
+    },
+    {
+      "path": "app/despega/a1-outcome-follow-up/page.tsx",
+      "sha256": "dd262cadb12047095c3bd62d6fb5a67e6eb4660338034f7fa9951979269ea24a"
+    },
+    {
+      "path": "app/despega/a2-outcome-baseline/page.tsx",
+      "sha256": "927a17e2f295d2a1d5d28c40da04465ebe8793bf3f858ac9fd976a6c77d2438d"
+    },
+    {
+      "path": "app/despega/a2-outcome-follow-up/page.tsx",
+      "sha256": "5f160a1337f20c025597f40d2b77abbe8b0add920343e03a703ddc801108dcd1"
+    },
+    {
+      "path": "app/despega/a3-outcome-baseline/page.tsx",
+      "sha256": "9caa9644974e124e8eded7739c9c7feb028b33a82a5ee7191be139f567ecc15e"
+    },
+    {
+      "path": "app/despega/a3-outcome-follow-up/page.tsx",
+      "sha256": "f3ab3ee6720d85479370099d7aeae26f96ff5dda500728ef773be85b4d4a3d0f"
+    }
+  ],
+  "genuine": [
+    "Supabase Auth password sessions, JWT and cookies",
+    "canonical outcome migrations and owner SELECT RLS",
+    "actual observations GET/POST",
+    "actual app/despega/layout, AppShell, Providers and contexts",
+    "six actual A1/A2/A3 capture pages",
+    "actual A1 intro, A2 intro/dashboard, A3 dashboard and journey map",
+    "actual saved labor objective GET/POST with owner RLS and concurrent revision protection",
+    "actual early labor objective page and session/pilot API; A4 catalog remains independently gated",
+    "actual A2 complete-day and practice-adjustment handlers reject a pilot before canonical A2 entry"
+  ],
+  "fixtures": [
+    "new synthetic Auth owners and local pilot memberships",
+    "minimal supporting tables, A1/C1/C2 evidence and explicitly seeded A2/A3 milestones"
+  ],
+  "substitutions": [
+    "root document/font loading and existing laboratory password form"
+  ],
+  "notVerified": [
+    "external OAuth providers",
+    "production or Vercel deployment",
+    "remote migrations",
+    "completion of A2/A3 training by a real participant",
+    "external market/AI services",
+    "psychometric validity"
+  ],
+  "privacy": "Only synthetic screenshots and sanitized verdicts are uploaded. No cookies, storageState, HAR, traces or private server logs."
+}

@@ -1,0 +1,171 @@
+{
+  "suite": "a2-plan-api",
+  "cases": 39,
+  "passed": 39,
+  "actualHandlers": true,
+  "actualContextHashing": true,
+  "actualStorageReader": true,
+  "actualSupabaseSelectBuilder": true,
+  "sessionAndStore": "synthetic",
+  "syntheticDatabaseHttp": 16,
+  "externalNetworkCalls": 0,
+  "liveSqlOrRls": false,
+  "results": [
+    {
+      "name": "Content fingerprint ignores capture time and JSON key insertion order",
+      "status": "passed"
+    },
+    {
+      "name": "Canonical progress change produces a different context",
+      "status": "passed"
+    },
+    {
+      "name": "Stored context hash tampering is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Real SDK reads only explicit fields for the requested owner",
+      "status": "passed"
+    },
+    {
+      "name": "No row and a failed read have different results",
+      "status": "passed"
+    },
+    {
+      "name": "A transport returning another owner is rejected despite the explicit filter",
+      "status": "passed"
+    },
+    {
+      "name": "Tombstone preserves revision but cannot expose historical content",
+      "status": "passed"
+    },
+    {
+      "name": "A corrupted stored snapshot cannot enter assistant memory",
+      "status": "passed"
+    },
+    {
+      "name": "Only active current reviewed intent reaches the model with no owner or step IDs",
+      "status": "passed"
+    },
+    {
+      "name": "Inactive paused memory is excluded",
+      "status": "passed"
+    },
+    {
+      "name": "Inactive completed memory is excluded",
+      "status": "passed"
+    },
+    {
+      "name": "Inactive cancelled memory is excluded",
+      "status": "passed"
+    },
+    {
+      "name": "Changed and expired plan text are excluded from assistant memory",
+      "status": "passed"
+    },
+    {
+      "name": "GET returns a confirmed empty slot with private no-store and actor headers",
+      "status": "passed"
+    },
+    {
+      "name": "Source failure preserves the saved plan without declaring it current",
+      "status": "passed"
+    },
+    {
+      "name": "Storage failure never becomes a successful empty GET",
+      "status": "passed"
+    },
+    {
+      "name": "Absent authorization and mismatched expected actor cannot read plan data",
+      "status": "passed"
+    },
+    {
+      "name": "foreign origin cannot reach receipts or mutations",
+      "status": "passed"
+    },
+    {
+      "name": "missing origin cannot reach receipts or mutations",
+      "status": "passed"
+    },
+    {
+      "name": "cross-site cannot reach receipts or mutations",
+      "status": "passed"
+    },
+    {
+      "name": "wrong content type cannot reach receipts or mutations",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed JSON, extra control fields and an oversized UTF8 body are rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Save confirms only server context and returns a receipt plus recoverable current state",
+      "status": "passed"
+    },
+    {
+      "name": "Lost acknowledgment retries the same command without a second mutation",
+      "status": "passed"
+    },
+    {
+      "name": "Concurrent identical commit appearing after receipt lookup is recovered before CAS rejection",
+      "status": "passed"
+    },
+    {
+      "name": "Reusing a request ID for different content is a conflict",
+      "status": "passed"
+    },
+    {
+      "name": "A stale expected revision preserves and returns the newer plan",
+      "status": "passed"
+    },
+    {
+      "name": "A CAS race refreshes the conflicting response to the actual newer revision",
+      "status": "passed"
+    },
+    {
+      "name": "An old replay after cancellation cannot reactivate the plan despite changed sources",
+      "status": "passed"
+    },
+    {
+      "name": "Replay after deletion returns the old receipt and an empty current tombstone",
+      "status": "passed"
+    },
+    {
+      "name": "A mismatched receipt is never acknowledged as success",
+      "status": "passed"
+    },
+    {
+      "name": "Changed context blocks new confirmation without writing",
+      "status": "passed"
+    },
+    {
+      "name": "Unavailable context blocks save but does not prevent cancellation",
+      "status": "passed"
+    },
+    {
+      "name": "Only a reviewed current paused plan can resume",
+      "status": "passed"
+    },
+    {
+      "name": "Completion requires reviewed declared steps and does not invoke any progress port",
+      "status": "passed"
+    },
+    {
+      "name": "Expired or distant review date is rejected before mutation",
+      "status": "passed"
+    },
+    {
+      "name": "A final owner change clears private data from GET and blocks pre-write mutation",
+      "status": "passed"
+    },
+    {
+      "name": "An owner change after commit does not disclose the old plan or receipt",
+      "status": "passed"
+    },
+    {
+      "name": "An aborted request does not write a new plan",
+      "status": "passed"
+    }
+  ]
+}

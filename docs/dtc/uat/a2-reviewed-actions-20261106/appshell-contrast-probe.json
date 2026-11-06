@@ -1,0 +1,497 @@
+{
+  "scope": "Focused isolated before/after AppShell header contrast with the actual A2ChatCoach CTA beneath it",
+  "actualAppShell": true,
+  "actualA2ChatCoach": true,
+  "actualCssAndTokens": true,
+  "authAndReadPorts": "synthetic",
+  "actualDatabaseOrRls": false,
+  "realProviderCalls": 0,
+  "fonts": "system Arial and Georgia",
+  "viewport": {
+    "width": 1440,
+    "height": 900
+  },
+  "sourceVariant": "Only bg-background/88 -> bg-background on the header; no repository source mutation by this probe",
+  "sourcesAtStart": [
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "b20ccef68afff693403ef34612d78528022e12e569523f329dd85077fbd60c15"
+    },
+    {
+      "path": "components/ui/button.tsx",
+      "sha256": "2ba6400b529c6bafc332d0396fcd8ed12a5d38db9ab75b91123814ae5c542d7e"
+    },
+    {
+      "path": "components/ui/card.tsx",
+      "sha256": "3dea2e4bf6ed88143f8af780d15b83e90bd8eca39d19e1261e4f6f6eba35f8ce"
+    },
+    {
+      "path": "components/ui/progress.tsx",
+      "sha256": "eace5d73328fbdef0b61a225e1ce2294a6f77d3577cc15efa5fd29e34043c856"
+    },
+    {
+      "path": "components/journey/guided-next-action.tsx",
+      "sha256": "5007636dcb7e6c2fad7c4ff8a1152de6dfaa89195f90435d06bcc9cc7b670db0"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "e6c21df3851337c3b868863a58cbae11c1b362f84e6c9fbd6c4382691fa6fc50"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "sha256": "0270c8bb2f98482ee73bffd847ae70ee19de6f5e71c2fb6707329ab57a2cdf3f"
+    }
+  ],
+  "cssSha256": "4a63e8d310384bb20298605c0b0fb547e246e798360236cc2f06309c9908e209",
+  "cssRules": {
+    "oldOpacity88Generated": false,
+    "solidBackgroundGenerated": true
+  },
+  "externalRequests": [],
+  "runtimeErrors": [],
+  "syntheticPlanReads": 2,
+  "variants": {
+    "before": {
+      "headerBackgroundClass": "bg-background/88",
+      "sourceSha256": "9f3e7a2455b779c167a54eb5deb535d3787f50871c8bdd9562f6d58cb7df7387"
+    },
+    "after": {
+      "headerBackgroundClass": "bg-background",
+      "sourceSha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    }
+  },
+  "results": [
+    {
+      "variant": "before",
+      "computed": {
+        "scrollY": 1174,
+        "header": {
+          "backgroundColor": "rgba(0, 0, 0, 0)",
+          "backdropFilter": "blur(24px)",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 74.59375,
+            "top": 0,
+            "right": 1440,
+            "bottom": 74.59375,
+            "left": 0
+          }
+        },
+        "cta": {
+          "backgroundColor": "rgb(4, 120, 87)",
+          "rect": {
+            "x": 1080.265625,
+            "y": 7.34375,
+            "width": 302.734375,
+            "height": 44,
+            "top": 7.34375,
+            "right": 1383,
+            "bottom": 51.34375,
+            "left": 1080.265625
+          }
+        },
+        "labels": [
+          {
+            "text": "Nivel 1",
+            "rect": {
+              "x": 1160,
+              "y": 20.171875,
+              "width": 39.5,
+              "height": 19.25,
+              "top": 20.171875,
+              "right": 1199.5,
+              "bottom": 39.421875,
+              "left": 1160
+            },
+            "color": "rgb(169, 165, 158)",
+            "fontSize": "11px",
+            "fontWeight": "600",
+            "overlapsCta": true
+          },
+          {
+            "text": "0 días",
+            "rect": {
+              "x": 1317.78125,
+              "y": 20.171875,
+              "width": 34.21875,
+              "height": 19.25,
+              "top": 20.171875,
+              "right": 1352,
+              "bottom": 39.421875,
+              "left": 1317.78125
+            },
+            "color": "rgb(169, 165, 158)",
+            "fontSize": "11px",
+            "fontWeight": "600",
+            "overlapsCta": true
+          }
+        ],
+        "overflow": false
+      },
+      "axe": {
+        "violations": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": [
+              {
+                "target": [
+                  ".mb-1 > span:nth-child(1)"
+                ],
+                "html": "<span>Nivel 1</span>",
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.23 (foreground color: #a9a59e, background color: #047857, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#047857",
+                      "contrastRatio": 2.23,
+                      "fontSize": "8.3pt (11px)",
+                      "fontWeight": "normal",
+                      "messageKey": null,
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has insufficient color contrast of 2.23 (foreground color: #a9a59e, background color: #047857, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".mb-1 > span:nth-child(2)"
+                ],
+                "html": "<span>0 días</span>",
+                "failureSummary": "Fix any of the following:\n  Element has insufficient color contrast of 2.23 (foreground color: #a9a59e, background color: #047857, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#047857",
+                      "contrastRatio": 2.23,
+                      "fontSize": "8.3pt (11px)",
+                      "fontWeight": "normal",
+                      "messageKey": null,
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has insufficient color contrast of 2.23 (foreground color: #a9a59e, background color: #047857, font size: 8.3pt (11px), font weight: normal). Expected contrast ratio of 4.5:1"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "incomplete": [],
+        "passes": [
+          {
+            "id": "color-contrast",
+            "impact": "serious",
+            "nodes": [
+              {
+                "target": [
+                  ".flex-1.min-w-0 > .uppercase.tracking-\\[0\\.12em\\].text-\\[11px\\]"
+                ],
+                "html": "<p class=\"truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground\">A2 · Tu Ruta</p>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 8.06,
+                      "fontSize": "8.3pt (11px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 8.06"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".sm\\:text-base"
+                ],
+                "html": "<p class=\"truncate text-sm font-semibold text-foreground sm:text-base\">Construye una ruta con dirección</p>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#f6f4ee",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 17.99,
+                      "fontSize": "12.0pt (16px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 17.99"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".xl\\:block"
+                ],
+                "html": "<p class=\"hidden truncate text-xs text-muted-foreground xl:block\">Organiza prioridades, hábitos y acciones conectadas con tu objetivo.</p>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 8.06,
+                      "fontSize": "9.0pt (12px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 8.06"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "screenshot": "before-header-over-cta.png",
+      "screenshotSha256": "bbcc43b0738b96777141d9b0d77be5ed7caf647a6625f90845d63b35e4bca801"
+    },
+    {
+      "variant": "after",
+      "computed": {
+        "scrollY": 1174,
+        "header": {
+          "backgroundColor": "rgb(7, 10, 18)",
+          "backdropFilter": "blur(24px)",
+          "rect": {
+            "x": 0,
+            "y": 0,
+            "width": 1440,
+            "height": 74.59375,
+            "top": 0,
+            "right": 1440,
+            "bottom": 74.59375,
+            "left": 0
+          }
+        },
+        "cta": {
+          "backgroundColor": "rgb(4, 120, 87)",
+          "rect": {
+            "x": 1080.265625,
+            "y": 7.34375,
+            "width": 302.734375,
+            "height": 44,
+            "top": 7.34375,
+            "right": 1383,
+            "bottom": 51.34375,
+            "left": 1080.265625
+          }
+        },
+        "labels": [
+          {
+            "text": "Nivel 1",
+            "rect": {
+              "x": 1160,
+              "y": 20.171875,
+              "width": 39.5,
+              "height": 19.25,
+              "top": 20.171875,
+              "right": 1199.5,
+              "bottom": 39.421875,
+              "left": 1160
+            },
+            "color": "rgb(169, 165, 158)",
+            "fontSize": "11px",
+            "fontWeight": "600",
+            "overlapsCta": true
+          },
+          {
+            "text": "0 días",
+            "rect": {
+              "x": 1317.78125,
+              "y": 20.171875,
+              "width": 34.21875,
+              "height": 19.25,
+              "top": 20.171875,
+              "right": 1352,
+              "bottom": 39.421875,
+              "left": 1317.78125
+            },
+            "color": "rgb(169, 165, 158)",
+            "fontSize": "11px",
+            "fontWeight": "600",
+            "overlapsCta": true
+          }
+        ],
+        "overflow": false
+      },
+      "axe": {
+        "violations": [],
+        "incomplete": [],
+        "passes": [
+          {
+            "id": "color-contrast",
+            "impact": null,
+            "nodes": [
+              {
+                "target": [
+                  ".flex-1.min-w-0 > .uppercase.tracking-\\[0\\.12em\\].text-\\[11px\\]"
+                ],
+                "html": "<p class=\"truncate text-[11px] font-semibold uppercase tracking-[0.12em] text-muted-foreground\">A2 · Tu Ruta</p>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 8.06,
+                      "fontSize": "8.3pt (11px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 8.06"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".sm\\:text-base"
+                ],
+                "html": "<p class=\"truncate text-sm font-semibold text-foreground sm:text-base\">Construye una ruta con dirección</p>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#f6f4ee",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 17.99,
+                      "fontSize": "12.0pt (16px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 17.99"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".xl\\:block"
+                ],
+                "html": "<p class=\"hidden truncate text-xs text-muted-foreground xl:block\">Organiza prioridades, hábitos y acciones conectadas con tu objetivo.</p>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 8.06,
+                      "fontSize": "9.0pt (12px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 8.06"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".mb-1 > span:nth-child(1)"
+                ],
+                "html": "<span>Nivel 1</span>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 8.06,
+                      "fontSize": "8.3pt (11px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 8.06"
+                  }
+                ]
+              },
+              {
+                "target": [
+                  ".mb-1 > span:nth-child(2)"
+                ],
+                "html": "<span>0 días</span>",
+                "any": [
+                  {
+                    "id": "color-contrast",
+                    "data": {
+                      "fgColor": "#a9a59e",
+                      "bgColor": "#070a12",
+                      "contrastRatio": 8.06,
+                      "fontSize": "8.3pt (11px)",
+                      "fontWeight": "normal",
+                      "expectedContrastRatio": "4.5:1"
+                    },
+                    "message": "Element has sufficient color contrast of 8.06"
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      "screenshot": "after-header-over-cta.png",
+      "screenshotSha256": "1d46fd787432381ed23cebeaba1d6de415955016a35cf85e1171c20e908f3b78"
+    }
+  ],
+  "previousAttempt": {
+    "file": "attempt-1-results.json",
+    "outcome": "Before variant reproduced both color-contrast targets; bundled single-process Chromium closed after its first browser context, before the second variant. This run launches a fresh browser for each variant."
+  },
+  "browserVersion": "153.0.8010.0",
+  "sourcesAtEnd": [
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "b20ccef68afff693403ef34612d78528022e12e569523f329dd85077fbd60c15"
+    },
+    {
+      "path": "components/ui/button.tsx",
+      "sha256": "2ba6400b529c6bafc332d0396fcd8ed12a5d38db9ab75b91123814ae5c542d7e"
+    },
+    {
+      "path": "components/ui/card.tsx",
+      "sha256": "3dea2e4bf6ed88143f8af780d15b83e90bd8eca39d19e1261e4f6f6eba35f8ce"
+    },
+    {
+      "path": "components/ui/progress.tsx",
+      "sha256": "eace5d73328fbdef0b61a225e1ce2294a6f77d3577cc15efa5fd29e34043c856"
+    },
+    {
+      "path": "components/journey/guided-next-action.tsx",
+      "sha256": "5007636dcb7e6c2fad7c4ff8a1152de6dfaa89195f90435d06bcc9cc7b670db0"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "e6c21df3851337c3b868863a58cbae11c1b362f84e6c9fbd6c4382691fa6fc50"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "sha256": "0270c8bb2f98482ee73bffd847ae70ee19de6f5e71c2fb6707329ab57a2cdf3f"
+    }
+  ],
+  "sourceMutationByProbe": false,
+  "completedAt": "2026-11-06T22:49:43.787Z"
+}

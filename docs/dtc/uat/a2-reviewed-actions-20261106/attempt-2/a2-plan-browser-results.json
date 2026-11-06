@@ -1,0 +1,438 @@
+{
+  "commit": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "scope": "disposable-local-a2-plan",
+  "verdict": "PASS",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "actual email login and owner GET show no prior plan",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "explicit save persists through reload and paused plans resume from the same owner slot",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "correction, declared step completion, completion and cancellation preserve explicit user control",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "real CAS conflict preserves the local draft until explicit comparison and a fresh save",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "source changes require explicit re-review and preserve the canonical continuation",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "real read and source failures preserve saved data and never present a false fresh or empty plan",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "a real tab return refreshes source freshness while retaining the editor for explicit review",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "lost ACK retains the draft; GET does not confirm the command; exact replay returns receipt plus current deletion",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "actual account change during delivery clears personal UI and cannot apply the prior actor response",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "all plan operations leave the complete canonical progress and XP snapshots unchanged",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "actual email login and owner GET show no prior plan",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "mobile editor caps steps at five and preserves focus when removing them",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "explicit save persists through reload and paused plans resume from the same owner slot",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "correction, declared step completion, completion and cancellation preserve explicit user control",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "mobile deletion requires confirmation, purges content and retains the owner revision tombstone",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "all plan operations leave the complete canonical progress and XP snapshots unchanged",
+      "status": "PASS"
+    },
+    {
+      "phase": "access",
+      "name": "actual API rejects anonymous and admitted-but-A2-locked owners without creating a plan",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "completed",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "conflict-retains-draft",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "replay-after-deletion",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "account-change",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "phase": "mobile",
+      "name": "editor",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "completed",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "deleted",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "viewport": 1440,
+      "document": 1432
+    },
+    {
+      "phase": "desktop",
+      "name": "completed",
+      "viewport": 1440,
+      "document": 1432
+    },
+    {
+      "phase": "desktop",
+      "name": "conflict-retains-draft",
+      "viewport": 1440,
+      "document": 1432
+    },
+    {
+      "phase": "desktop",
+      "name": "replay-after-deletion",
+      "viewport": 1440,
+      "document": 1432
+    },
+    {
+      "phase": "desktop",
+      "name": "account-change",
+      "viewport": 1440,
+      "document": 1432
+    },
+    {
+      "phase": "mobile",
+      "name": "editor",
+      "viewport": 390,
+      "document": 382
+    },
+    {
+      "phase": "mobile",
+      "name": "completed",
+      "viewport": 390,
+      "document": 382
+    },
+    {
+      "phase": "mobile",
+      "name": "deleted",
+      "viewport": 390,
+      "document": 382
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/plan",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/plan",
+      "method": "POST",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "controlledFaults": [
+    {
+      "phase": "desktop",
+      "kind": "local_source_select_revoked",
+      "preservedSavedPlan": true
+    },
+    {
+      "phase": "desktop",
+      "kind": "local_plan_select_revoked",
+      "emptyPlanNotFabricated": true
+    },
+    {
+      "phase": "desktop",
+      "kind": "lost_200_after_verified_sql_commit",
+      "exactReplay": true,
+      "laterDeletionPreserved": true
+    }
+  ],
+  "nativeTabReturns": [
+    {
+      "phase": "desktop",
+      "mechanism": "headed_chromium_native_tab_activation",
+      "focusEmulation": "disabled_in_pinned_adapter",
+      "away": {
+        "page": {
+          "visibility": "hidden",
+          "focused": false
+        },
+        "sibling": {
+          "visibility": "visible",
+          "focused": true
+        }
+      },
+      "returned": {
+        "page": {
+          "visibility": "visible",
+          "focused": true
+        },
+        "sibling": {
+          "visibility": "hidden",
+          "focused": false
+        }
+      },
+      "events": [
+        {
+          "type": "blur",
+          "isTrusted": true,
+          "visibility": "visible",
+          "focused": false
+        },
+        {
+          "type": "visibilitychange",
+          "isTrusted": true,
+          "visibility": "hidden",
+          "focused": false
+        },
+        {
+          "type": "visibilitychange",
+          "isTrusted": true,
+          "visibility": "visible",
+          "focused": false
+        },
+        {
+          "type": "focus",
+          "isTrusted": true,
+          "visibility": "visible",
+          "focused": true
+        }
+      ]
+    }
+  ],
+  "nativeFocusAdapter": {
+    "suite": "native-tab-focus-adapter",
+    "version": 1,
+    "status": "PASS",
+    "sourceCommit": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+    "preparedAt": "2026-11-06T22:49:40.182Z",
+    "scope": "disposable-runner-tools-only",
+    "playwrightVersion": "1.56.1",
+    "playwrightCoreVersion": "1.56.1",
+    "adapter": "node_modules/playwright/node_modules/playwright-core/lib/server/chromium/crPage.js",
+    "npmIntegrity": "sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==",
+    "originalSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f",
+    "modifiedSha256": "9e0e8ffdbe9c9ae3322a3e5ea9e62968dceb161af3861c87d49e716713521d8d",
+    "replacements": 1,
+    "environmentFlag": {
+      "name": "DTC_NATIVE_TAB_FOCUS",
+      "nativeValue": "yes",
+      "defaultEnabled": true
+    }
+  },
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "failure": null,
+  "transport": "Actual local UI, email Auth, API, RLS and SQL; no successful plan API response is mocked.",
+  "notVerified": [
+    "model quality, model calls or generated plan quality",
+    "remote deployment or migration application",
+    "atomic freshness across independent context source writes",
+    "a real participant completing A2 or the manual UAT cases"
+  ]
+}

@@ -1,0 +1,24 @@
+{
+  "runId": 42305826318,
+  "jobId": 128194754255,
+  "candidate": "0fd98c7db202af6e369173374261b589fda0cc0f",
+  "branch": "uat/dtc-20261106",
+  "url": "https://github.com/jcv86/main/actions/runs/42305826318",
+  "status": "completed",
+  "conclusion": "failure",
+  "startedAt": "2026-11-06T22:35:06Z",
+  "updatedAt": "2026-11-06T22:45:26Z",
+  "artifact": {
+    "id": 13546158098,
+    "name": "a1-browser-evidence-0fd98c7db202af6e369173374261b589fda0cc0f",
+    "sizeBytes": 17784418,
+    "digest": "sha256:d31b34cd95666b7705f302c279b6fb2c27e7339845b3beb872189cdffee53dde",
+    "createdAt": "2026-11-06T22:45:19Z",
+    "expiresAt": "2026-11-13T22:45:17Z",
+    "downloadedSha256": "d31b34cd95666b7705f302c279b6fb2c27e7339845b3beb872189cdffee53dde",
+    "downloadDigestVerified": true
+  },
+  "failedStep": "Reviewed assistant actions, atomic adjustment receipts, real API recovery and owner boundaries",
+  "observedFailure": "serious color-contrast in sticky AppShell header over a green CTA during desktop/replay-after-deletion",
+  "disposition": "Preserved FAIL; corrected effective header background in 0e879b161e27eda3e3e85104f47544408c3aba0e without weakening the audit"
+}

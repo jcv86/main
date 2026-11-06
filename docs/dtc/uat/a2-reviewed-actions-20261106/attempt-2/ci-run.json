@@ -1,0 +1,30 @@
+{
+  "runId": 42307458060,
+  "jobId": 128200295956,
+  "candidate": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "candidateTree": "b6a12f30e0e42e312702dd543347df6407a66f31",
+  "branch": "uat/dtc-20261106",
+  "url": "https://github.com/jcv86/main/actions/runs/42307458060",
+  "status": "completed",
+  "conclusion": "success",
+  "startedAt": "2026-11-06T22:48:37Z",
+  "updatedAt": "2026-11-06T23:00:42Z",
+  "artifact": {
+    "id": 13546709691,
+    "name": "a1-browser-evidence-0e879b161e27eda3e3e85104f47544408c3aba0e",
+    "sizeBytes": 17659663,
+    "digest": "sha256:dda2e7f13adf9339b061bcd05c3798f914293e870168d1223bd90654a9066d3d",
+    "createdAt": "2026-11-06T23:00:37Z",
+    "expiresAt": "2026-11-13T23:00:36Z",
+    "downloadedSha256": "dda2e7f13adf9339b061bcd05c3798f914293e870168d1223bd90654a9066d3d",
+    "downloadDigestVerified": true,
+    "source": "Official GitHub run/artifact metadata retrieved by root; downloaded ZIP SHA-256 and size verified locally."
+  },
+  "previousAttempt": {
+    "runId": 42305826318,
+    "candidate": "0fd98c7db202af6e369173374261b589fda0cc0f",
+    "conclusion": "failure",
+    "preservedAt": "../attempt-1/ci-run.json"
+  },
+  "result": "PASS for laboratory integration; no live model, remote deployment, manual UAT execution or new business acceptance is implied."
+}

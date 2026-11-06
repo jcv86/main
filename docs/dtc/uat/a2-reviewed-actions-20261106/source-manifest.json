@@ -1,0 +1,160 @@
+{
+  "candidate": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "tree": "b6a12f30e0e42e312702dd543347df6407a66f31",
+  "preparationBase": "fcf50161f016d1a387f7106a9875458800945d2d",
+  "implementationCandidate": "0fd98c7db202af6e369173374261b589fda0cc0f",
+  "branch": "uat/dtc-20261106",
+  "files": [
+    {
+      "path": ".github/workflows/a1-browser-qa.yml",
+      "sha256": "e622204156840726ec58f45564d26c752f478f63adc8ca86c7a963db9d82bfde",
+      "bytes": 10356
+    },
+    {
+      "path": "app/api/a2/assistant-actions/route.ts",
+      "sha256": "bcee22abb4a475bf4c4cec70f8cffbf010ba4591938eaa7b4eeddd88c9d5b3bb",
+      "bytes": 5627
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "709ccab7ec26b532e6157075d6a177ad3110cbf7802cab686431ed42ee8560ca",
+      "bytes": 20445
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d",
+      "bytes": 24409
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "b20ccef68afff693403ef34612d78528022e12e569523f329dd85077fbd60c15",
+      "bytes": 12422
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "aa2df61c16022ca7ad1d5753efc338b05f5867ce1f2c1cbc3818d685bb8dc10f",
+      "bytes": 31127
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c",
+      "bytes": 17405
+    },
+    {
+      "path": "lib/a2/assistant-action-api.ts",
+      "sha256": "c1058c2b290098dafb05530e16af667a08fa840a93b113b3ac18a74e1debd80f",
+      "bytes": 10311
+    },
+    {
+      "path": "lib/a2/assistant-action-contract.ts",
+      "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc",
+      "bytes": 4150
+    },
+    {
+      "path": "lib/a2/assistant-action-service.ts",
+      "sha256": "7132ac70f0e65c5914e918ae92a31ce08bf8244464b79fd691655bf110e0a90e",
+      "bytes": 2854
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "e78b23ee3c599d6b22bd38c13b6327c38c911d4e216cfa86b5b0b7bbb5078195",
+      "bytes": 6948
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "14c72d9cfae4a5f14f49b4120dc00a49dbf7c02cee9581135002395d3d00b040",
+      "bytes": 22937
+    },
+    {
+      "path": "lib/journey/service.ts",
+      "sha256": "034430d06e1709c483b117c88863702e46a33a042caf1ed3606039689ef39598",
+      "bytes": 16905
+    },
+    {
+      "path": "package.json",
+      "sha256": "b2ec09b6cc76377f194a3b2a9de706894d058196f9c06a49b65d7be7a9517e98",
+      "bytes": 10913
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-advisors.mjs",
+      "sha256": "3e84a220132684df032f6ce4a3d182cd9a341e98de059343cc35031c9d1c891e",
+      "bytes": 2207
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-browser.mjs",
+      "sha256": "b08f323c70001c47aa018729dff95c02116e79f248ac44be4bc229b1249fb619",
+      "bytes": 34155
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-prepare.mjs",
+      "sha256": "2135e01f855acc29c38fe6837beadd2d5a9a0282ef5443f5405ad2a7504e3404",
+      "bytes": 4102
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-seed.ts",
+      "sha256": "ae3447094e1c447c61ae9f553a47a2bdb6105f754b8c1c2c951ff628ffcd6091",
+      "bytes": 6458
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-prepare.mjs",
+      "sha256": "1248fe1fa3d9921eeb5978145afed02bd5d079956977eeb94d1b1f58d020272d",
+      "bytes": 3487
+    },
+    {
+      "path": "scripts/agentic-browser-qa.mjs",
+      "sha256": "e931eaa026c935c3cfc0dcc20825712c66ee9f9665773fffbfa59306070beed6",
+      "bytes": 29714
+    },
+    {
+      "path": "scripts/check-shell-canonical-journey-contract.ts",
+      "sha256": "50bef16c3158da2a429744272ec565fefb85c363e2cb5053a56883198abbbbf9",
+      "bytes": 7769
+    },
+    {
+      "path": "scripts/test-a2-action-api.mjs",
+      "sha256": "936467c43901b95843b6ffc62ce644daccf29ac8421a498511de6424a75c69ee",
+      "bytes": 28731
+    },
+    {
+      "path": "scripts/test-a2-action-contract.mjs",
+      "sha256": "1281a056a24cc9c1ecdd985084cb77e300fd9d4f965ca8b37e82941379b22be7",
+      "bytes": 8223
+    },
+    {
+      "path": "scripts/test-a2-action-sql.mjs",
+      "sha256": "16304075d3a2ab0b6adf463c7a9eefa4cbadb8241263c5670b556c8479a6091a",
+      "bytes": 27478
+    },
+    {
+      "path": "scripts/test-a2-assistant-action-ui.mjs",
+      "sha256": "3295cd58b42094cc470c2ce19677ad7618db2adfe4f8bd0b7ea796f5280ff6c1",
+      "bytes": 23726
+    },
+    {
+      "path": "scripts/test-a2-assistant.cjs",
+      "sha256": "41dea52614378a8655dfc89ed73cfc11249c6f04e710f3ce7dbd99ee88d0482e",
+      "bytes": 46462
+    },
+    {
+      "path": "scripts/test-a2-swarm-provider.mjs",
+      "sha256": "6865f645342c7eaae3554a683a59ab31c19b9143d60abddc0233bb0af7f923e2",
+      "bytes": 20519
+    },
+    {
+      "path": "scripts/test-a2-swarm.mjs",
+      "sha256": "488f501ce6fe176e7010b3021a722db06632abd219d9858d64eeb813253a0a31",
+      "bytes": 42391
+    },
+    {
+      "path": "scripts/test-a4-qa-access.mjs",
+      "sha256": "2735276478a1cb6a64eff9e1b26c3c49f37572b8372d9f01b85da81e1b6d8f4d",
+      "bytes": 46661
+    },
+    {
+      "path": "supabase/migrations/20261106221437_a2_assistant_action_receipts.sql",
+      "sha256": "3d01f2dc8f57d798ea35fdaa02f7e6b65732a17ed4cf4d3e2e2d2287ee4c34bd",
+      "bytes": 18805
+    }
+  ],
+  "allFilesMatchExactCandidate": true
+}

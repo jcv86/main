@@ -1,0 +1,133 @@
+{
+  "suite": "a2-assistant-action-contract",
+  "cases": 28,
+  "passed": 28,
+  "actualContracts": true,
+  "realDatabase": false,
+  "modelCalls": 0,
+  "externalNetworkCalls": 0,
+  "results": [
+    {
+      "name": "A confirmed action remains compatible with the canonical adjustment reader",
+      "status": "passed"
+    },
+    {
+      "name": "A model draft can leave unknown retained work blank but a confirmed action cannot",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through userId",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through actorId",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through url",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through sql",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through confirmedByModel",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through completed",
+      "status": "passed"
+    },
+    {
+      "name": "No additional authority enters a command through xp",
+      "status": "passed"
+    },
+    {
+      "name": "Only the purpose-specific adjustment tool is accepted: complete_day",
+      "status": "passed"
+    },
+    {
+      "name": "Only the purpose-specific adjustment tool is accepted: send_application",
+      "status": "passed"
+    },
+    {
+      "name": "Only the purpose-specific adjustment tool is accepted: execute_command",
+      "status": "passed"
+    },
+    {
+      "name": "Only the purpose-specific adjustment tool is accepted: update_objective",
+      "status": "passed"
+    },
+    {
+      "name": "A malformed calendar date cannot become a confirmed review: 2026-02-29",
+      "status": "passed"
+    },
+    {
+      "name": "A malformed calendar date cannot become a confirmed review: 2026-11-31",
+      "status": "passed"
+    },
+    {
+      "name": "A malformed calendar date cannot become a confirmed review: 2026-1-01",
+      "status": "passed"
+    },
+    {
+      "name": "A malformed calendar date cannot become a confirmed review: 2026-11-07T00:00:00Z",
+      "status": "passed"
+    },
+    {
+      "name": "The review window uses Chile calendar days and includes its exact 30-day boundary",
+      "status": "passed"
+    },
+    {
+      "name": "Non-storable text is rejected before persistence: \"a\\u0000b\"",
+      "status": "passed"
+    },
+    {
+      "name": "Non-storable text is rejected before persistence: \"\\ud800\"",
+      "status": "passed"
+    },
+    {
+      "name": "Non-storable text is rejected before persistence: \"\\udc00\"",
+      "status": "passed"
+    },
+    {
+      "name": "Non-storable text is rejected before persistence: \"a\\ud800b\"",
+      "status": "passed"
+    },
+    {
+      "name": "Valid emoji and accents survive review normalization and storage",
+      "status": "passed"
+    },
+    {
+      "name": "The proposal carries no date, request identifier, execution result or URL from a model",
+      "status": "passed"
+    },
+    {
+      "name": "Receipt and presently observed effect are separate and independently validated",
+      "status": "passed"
+    },
+    {
+      "name": "A mismatched request, day or confirmed content cannot be acknowledged by the UI",
+      "status": "passed"
+    },
+    {
+      "name": "A repeated input normalizes to the same command without changing its request identity",
+      "status": "passed"
+    },
+    {
+      "name": "UUID case normalizes before the database receipt is matched",
+      "status": "passed"
+    }
+  ],
+  "sourceHashes": [
+    {
+      "path": "lib/a2/assistant-action-contract.ts",
+      "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc"
+    },
+    {
+      "path": "scripts/test-a2-action-contract.mjs",
+      "sha256": "1281a056a24cc9c1ecdd985084cb77e300fd9d4f965ca8b37e82941379b22be7"
+    }
+  ]
+}

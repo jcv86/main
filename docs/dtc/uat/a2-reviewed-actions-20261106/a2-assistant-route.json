@@ -1,0 +1,431 @@
+{
+  "suite": "a2-assistant-route",
+  "cases": 103,
+  "passed": 103,
+  "actualRoute": true,
+  "actualRequestSchema": true,
+  "actualPromptBuilder": true,
+  "actualSwarmCoordinator": true,
+  "actualSwarmProviderAdapter": true,
+  "actualCohortSelector": true,
+  "sessionAndReadPorts": "synthetic",
+  "providerTransport": "synthetic",
+  "syntheticProviderCalls": 90,
+  "liveAuthOrRls": false,
+  "liveModelQuality": false,
+  "externalNetworkCalls": 0,
+  "results": [
+    {
+      "name": "canonical context produces one bounded answer and the same actionable destination",
+      "status": "passed"
+    },
+    {
+      "name": "anonymous does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "auth error does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "auth transport failure does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "client unavailable does not load private context or invoke the model",
+      "status": "passed"
+    },
+    {
+      "name": "missing or changed actor cannot reuse a previous conversation: null",
+      "status": "passed"
+    },
+    {
+      "name": "missing or changed actor cannot reuse a previous conversation: ",
+      "status": "passed"
+    },
+    {
+      "name": "missing or changed actor cannot reuse a previous conversation: 00000000-0000-4000-8000-000000000002",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Origin\":null}",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Origin\":\"https://foreign.invalid\"}",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Sec-Fetch-Site\":\"cross-site\"}",
+      "status": "passed"
+    },
+    {
+      "name": "cross-origin or unproven-origin request fails before context: {\"Sec-Fetch-Site\":\"same-site\"}",
+      "status": "passed"
+    },
+    {
+      "name": "unsupported content type null",
+      "status": "passed"
+    },
+    {
+      "name": "unsupported content type text/plain",
+      "status": "passed"
+    },
+    {
+      "name": "malformed JSON is a recoverable client error",
+      "status": "passed"
+    },
+    {
+      "name": "UTF-8 byte bound rejects an oversized body even if content-length lies",
+      "status": "passed"
+    },
+    {
+      "name": "declared excessive body size fails before decoding",
+      "status": "passed"
+    },
+    {
+      "name": "invalid UTF-8 is not accepted as model input",
+      "status": "passed"
+    },
+    {
+      "name": "blank message is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "non-text message is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "long message is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "unknown owner is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "injected action is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "system-role injection is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "tool-role injection is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "long history is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "oversized history item is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "hidden history field is rejected before pilot, source or provider reads",
+      "status": "passed"
+    },
+    {
+      "name": "legacy object context no longer crashes and cannot override the owner or evidence",
+      "status": "passed"
+    },
+    {
+      "name": "bounded dialogue retains user and assistant roles without becoming system authority",
+      "status": "passed"
+    },
+    {
+      "name": "pilot denied never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "pilot unavailable never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "pilot transport failure never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "foreign journey owner never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "journey missing never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "journey access locked never reads evidence or calls the model",
+      "status": "passed"
+    },
+    {
+      "name": "journey read failure does not become zero progress or a generated plan",
+      "status": "passed"
+    },
+    {
+      "name": "progress read failure does not become zero progress or a generated plan",
+      "status": "passed"
+    },
+    {
+      "name": "guidance read failure does not become zero progress or a generated plan",
+      "status": "passed"
+    },
+    {
+      "name": "A1 source failure stays explicitly unavailable while canonical navigation is retained",
+      "status": "passed"
+    },
+    {
+      "name": "identity loss while reading A1 stops before generation and does not return prior guidance",
+      "status": "passed"
+    },
+    {
+      "name": "failed optional source is distinct from empty source in the assistant context",
+      "status": "passed"
+    },
+    {
+      "name": "personal path does not receive a forced employment goal",
+      "status": "passed"
+    },
+    {
+      "name": "stored free text remains data and cannot close a prompt block or add tools",
+      "status": "passed"
+    },
+    {
+      "name": "missing provider configuration retains canonical next action without calling provider",
+      "status": "passed"
+    },
+    {
+      "name": "provider network failure preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "provider rejection preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "provider invalid JSON preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "empty provider text preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "unexpected provider data preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "excessive provider text preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "missing provider choice preserves the next action and never claims success",
+      "status": "passed"
+    },
+    {
+      "name": "canary routes through the actual selector, coordinator and provider adapter, with one final answer",
+      "status": "passed"
+    },
+    {
+      "name": "a clarification is a successful bounded swarm answer and does not trigger another generation",
+      "status": "passed"
+    },
+    {
+      "name": "review rejection falls back exactly once and remains attributed to the assigned swarm cohort",
+      "status": "passed"
+    },
+    {
+      "name": "wrong proposed navigation cannot replace the canonical destination or reach the reviewer",
+      "status": "passed"
+    },
+    {
+      "name": "one failing specialist aborts the other transport and performs only one baseline fallback",
+      "status": "passed"
+    },
+    {
+      "name": "failed fallback returns an error with canonical guidance and cannot retry the swarm",
+      "status": "passed"
+    },
+    {
+      "name": "off uses only the baseline despite client cohort hints",
+      "status": "passed"
+    },
+    {
+      "name": "killed uses only the baseline despite client cohort hints",
+      "status": "passed"
+    },
+    {
+      "name": "missing kill setting uses only the baseline despite client cohort hints",
+      "status": "passed"
+    },
+    {
+      "name": "zero percentage uses only the baseline despite client cohort hints",
+      "status": "passed"
+    },
+    {
+      "name": "invalid percentage uses only the baseline despite client cohort hints",
+      "status": "passed"
+    },
+    {
+      "name": "anonymous canary retains the ordinary admission boundary",
+      "status": "passed"
+    },
+    {
+      "name": "pilot-denied canary retains the ordinary admission boundary",
+      "status": "passed"
+    },
+    {
+      "name": "locked journey canary retains the ordinary admission boundary",
+      "status": "passed"
+    },
+    {
+      "name": "foreign journey canary retains the ordinary admission boundary",
+      "status": "passed"
+    },
+    {
+      "name": "session changes after generation discard both answer and context: 00000000-0000-4000-8000-000000000002",
+      "status": "passed"
+    },
+    {
+      "name": "session changes after generation discard both answer and context: null",
+      "status": "passed"
+    },
+    {
+      "name": "session change before fallback prevents the fourth model call",
+      "status": "passed"
+    },
+    {
+      "name": "verification transport failure returns no prior account guidance or answer",
+      "status": "passed"
+    },
+    {
+      "name": "an already cancelled request never starts paid generation",
+      "status": "passed"
+    },
+    {
+      "name": "client cancellation stops the bounded wait even when both transports ignore abort",
+      "status": "passed"
+    },
+    {
+      "name": "the route generation deadline stops pending specialists with no late fallback",
+      "status": "passed"
+    },
+    {
+      "name": "the baseline body read is inside the route deadline even if its stream never closes",
+      "status": "passed"
+    },
+    {
+      "name": "truncated baseline cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "refused baseline cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "wrong response role cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "unexpected function call cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "unexpected error envelope cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "multiple completion choices cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "oversized provider envelope cannot be returned as a successful answer",
+      "status": "passed"
+    },
+    {
+      "name": "execution identity is logged only from validated deployment environment fields",
+      "status": "passed"
+    },
+    {
+      "name": "baseline receives only the server-reviewed plan as declared intention",
+      "status": "passed"
+    },
+    {
+      "name": "baseline retains the plan availability boundary: missing",
+      "status": "passed"
+    },
+    {
+      "name": "baseline retains the plan availability boundary: inactive",
+      "status": "passed"
+    },
+    {
+      "name": "baseline retains the plan availability boundary: changed",
+      "status": "passed"
+    },
+    {
+      "name": "baseline retains the plan availability boundary: expired",
+      "status": "passed"
+    },
+    {
+      "name": "baseline retains the plan availability boundary: unavailable",
+      "status": "passed"
+    },
+    {
+      "name": "a plan becoming missing during generation cannot ground the delivered response",
+      "status": "passed"
+    },
+    {
+      "name": "a plan becoming inactive during generation cannot ground the delivered response",
+      "status": "passed"
+    },
+    {
+      "name": "a plan becoming changed during generation cannot ground the delivered response",
+      "status": "passed"
+    },
+    {
+      "name": "a plan becoming expired during generation cannot ground the delivered response",
+      "status": "passed"
+    },
+    {
+      "name": "a plan becoming unavailable during generation cannot ground the delivered response",
+      "status": "passed"
+    },
+    {
+      "name": "an edited active plan revision during generation requires a new question attempt",
+      "status": "passed"
+    },
+    {
+      "name": "an accepted typed adjustment gets only the authorized pending day and server context hash",
+      "status": "passed"
+    },
+    {
+      "name": "changing the adjustment during generation prevents delivery of a stale action proposal",
+      "status": "passed"
+    },
+    {
+      "name": "baseline prose never becomes an action or a receipt by being parsed from model text",
+      "status": "passed"
+    },
+    {
+      "name": "session change drops a prepared action together with the original account response",
+      "status": "passed"
+    },
+    {
+      "name": "partial body stops on abort even if stream cancellation never settles",
+      "status": "passed"
+    },
+    {
+      "name": "stalled input has its own short body budget before context or model calls",
+      "status": "passed"
+    },
+    {
+      "name": "oversized streaming input rejects without awaiting uncooperative cancellation",
+      "status": "passed"
+    },
+    {
+      "name": "valid fragmented UTF-8 input still produces the expected reply",
+      "status": "passed"
+    }
+  ]
+}

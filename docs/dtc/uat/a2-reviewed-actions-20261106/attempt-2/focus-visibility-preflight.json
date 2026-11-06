@@ -1,0 +1,91 @@
+{
+  "suite": "native-focus-visibility-preflight",
+  "version": 1,
+  "sourceCommit": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+  "startedAt": "2026-11-06T22:49:40.367Z",
+  "finishedAt": "2026-11-06T22:49:43.223Z",
+  "status": "PASS",
+  "nodeVersion": "v22.23.4",
+  "playwrightVersion": "1.56.1",
+  "chromiumVersion": "141.0.7390.37",
+  "nativeFocusAdapter": {
+    "suite": "native-tab-focus-adapter",
+    "version": 1,
+    "status": "PASS",
+    "sourceCommit": "0e879b161e27eda3e3e85104f47544408c3aba0e",
+    "preparedAt": "2026-11-06T22:49:40.182Z",
+    "scope": "disposable-runner-tools-only",
+    "playwrightVersion": "1.56.1",
+    "playwrightCoreVersion": "1.56.1",
+    "adapter": "node_modules/playwright/node_modules/playwright-core/lib/server/chromium/crPage.js",
+    "npmIntegrity": "sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==",
+    "originalSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f",
+    "modifiedSha256": "9e0e8ffdbe9c9ae3322a3e5ea9e62968dceb161af3861c87d49e716713521d8d",
+    "replacements": 1,
+    "environmentFlag": {
+      "name": "DTC_NATIVE_TAB_FOCUS",
+      "nativeValue": "yes",
+      "defaultEnabled": true
+    }
+  },
+  "environment": "disposable-headed-chromium-loopback",
+  "headless": false,
+  "applicationStarted": false,
+  "authenticationUsed": false,
+  "databaseUsed": false,
+  "applicationLabCreated": false,
+  "pagesServed": 2,
+  "blockedRequests": 0,
+  "javascriptErrors": [],
+  "nativeTabReturn": {
+    "mechanism": "headed_chromium_native_tab_activation",
+    "focusEmulation": "disabled_in_pinned_adapter",
+    "away": {
+      "page": {
+        "visibility": "hidden",
+        "focused": false
+      },
+      "sibling": {
+        "visibility": "visible",
+        "focused": true
+      }
+    },
+    "returned": {
+      "page": {
+        "visibility": "visible",
+        "focused": true
+      },
+      "sibling": {
+        "visibility": "hidden",
+        "focused": false
+      }
+    },
+    "events": [
+      {
+        "type": "blur",
+        "isTrusted": true,
+        "visibility": "visible",
+        "focused": false
+      },
+      {
+        "type": "visibilitychange",
+        "isTrusted": true,
+        "visibility": "hidden",
+        "focused": false
+      },
+      {
+        "type": "visibilitychange",
+        "isTrusted": true,
+        "visibility": "visible",
+        "focused": false
+      },
+      {
+        "type": "focus",
+        "isTrusted": true,
+        "visibility": "visible",
+        "focused": true
+      }
+    ]
+  },
+  "failure": null
+}
