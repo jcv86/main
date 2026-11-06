@@ -10,6 +10,7 @@ const { buildJourneyFlow } = require('../lib/journey/flow.ts')
 const { buildGuidedNextAction } = require('../lib/journey/next-action.ts')
 const { adjustmentContent } = require('../lib/a2/practice-adjustment.ts')
 const contract = require('../lib/a2/assistant-contract.ts')
+const planContract = require('../lib/a2/plan-contract.ts')
 const requestIds = require('../lib/observability/request-id.ts')
 
 const USER = '00000000-0000-4000-8000-000000000001'
@@ -56,7 +57,7 @@ function harness(options = {}) {
   const { flow, guidance } = fixture(options.practicePath, options.reads)
   const calls = [], providerCalls = [], logs = []
   const env = { OPENAI_API_KEY: options.notConfigured ? '' : 'synthetic-qa-key', ...options.env }
-  let authCalls = 0
+  let authCalls = 0, planReads = 0
   const journey = { user: { id: options.foreignJourney ? OTHER : USER }, access: { a2: !options.lockedJourney } }
   const client = {
     auth: { getUser: async () => {
@@ -122,6 +123,13 @@ function harness(options = {}) {
       return options.pilot ?? 'allowed'
     } },
     '@/lib/a2/assistant-contract': contract,
+    '@/lib/a2/plan-service': { readA2PlanAssistantEvidence: async (actualClient, actor, actualFlow, actualGuidance) => {
+      calls.push('plan'); assert.equal(actualClient, client); assert.equal(actor, USER);
+      assert.equal(actualFlow, flow); assert.equal(actualGuidance, guidance);
+      planReads++
+      if (planReads > 1 && options.finalPlan) return options.finalPlan
+      return options.plan ?? { status: 'missing', memory: null };
+    } },
     '@/lib/observability/request-id': requestIds,
     '@/lib/observability/server-log': { logOperationalEvent: event => { logs.push(event) } },
   }
@@ -166,6 +174,7 @@ function harness(options = {}) {
       if (key.startsWith('@/lib/a2/swarm/')) return loadSwarm(key.replace('@/', '') + '.ts')
       if (key.startsWith('./')) return loadSwarm(path.resolve(path.dirname(filename), key + (path.extname(key) ? '' : '.ts')))
       if (key === '@/lib/a2/assistant-contract' || key === '../assistant-contract') return contract
+      if (key === '../plan-contract') return planContract
       if (key === 'zod' || key.startsWith('node:')) return require(key)
       throw new Error('Unexpected swarm module dependency: ' + key)
     }
@@ -229,7 +238,7 @@ test('canonical context produces one bounded answer and the same actionable dest
   assert.match(messages.at(-1).content, /Mi contexto cambia según la tarea/)
   assert.match(messages.at(-1).content, /Ensayar durante diez minutos/)
   assert.ok(!('stored' in body) && !('completed' in body) && !('score' in body))
-  assert.deepEqual(h.calls, ['client', 'auth', 'pilot', 'journey', 'flow', 'guidance', 'a1', 'auth'])
+  assert.deepEqual(h.calls, ['client', 'auth', 'pilot', 'journey', 'flow', 'guidance', 'plan', 'a1', 'plan', 'auth'])
 })
 
 for (const [name, options, status] of [
@@ -567,6 +576,47 @@ test('execution identity is logged only from validated deployment environment fi
   const invalid = harness({ env: { VERCEL_GIT_COMMIT_SHA: 'invalid', VERCEL_DEPLOYMENT_ID: 'invalid' } })
   await invalid.post()
   assert.equal(execution(invalid).metadata.candidate_sha, null); assert.equal(execution(invalid).metadata.deployment_id, null)
+})
+
+const reviewedMemory = () => ({
+  version: 'dtc-a2-plan-memory.v1', kind: 'reviewed_user_intentions', revision: 4,
+  purpose: 'REVIEWED_PLAN_PURPOSE: preparar un ejemplo propio', constraints: 'Sólo diez minutos diarios',
+  reviewDate: '2026-11-13', completionMeaning: 'user_declaration_only',
+  steps: [{ position: 1, title: 'Practicar', action: 'Anotar un ejemplo y revisarlo.', status: 'reported_done' }],
+})
+test('baseline receives only the server-reviewed plan as declared intention', async () => {
+  const h = harness({ plan: { status: 'available', memory: reviewedMemory() } })
+  const result = await h.post({ message: QUESTION, context: { reviewedPlan: { purpose: 'CLIENT_INVENTED_PLAN' } } })
+  assert.equal(result.response.status, 200)
+  const text = JSON.stringify(h.providerCalls[0].messages)
+  assert.match(text, /REVIEWED_PLAN_PURPOSE/); assert.match(text, /user_declaration_only/)
+  assert.doesNotMatch(text, /CLIENT_INVENTED_PLAN/)
+  assert.doesNotMatch(JSON.stringify(h.logs), /REVIEWED_PLAN_PURPOSE/)
+  assert.deepEqual(result.body.guidance.action, h.flow.next)
+})
+for (const status of ['missing', 'inactive', 'changed', 'expired', 'unavailable']) {
+  test('baseline retains the plan availability boundary: ' + status, async () => {
+    const h = harness({ plan: { status, memory: null } }), result = await h.post()
+    assert.equal(result.response.status, 200)
+    const text = h.providerCalls[0].messages.at(-1).content
+    assert.ok(text.includes(`"reviewedPlan":{"status":"${status}","memory":null}`))
+    assert.doesNotMatch(text, /REVIEWED_PLAN_PURPOSE/)
+  })
+}
+for (const status of ['missing', 'inactive', 'changed', 'expired', 'unavailable']) {
+  test('a plan becoming ' + status + ' during generation cannot ground the delivered response', async () => {
+    const h = harness({ plan: { status: 'available', memory: reviewedMemory() }, finalPlan: { status, memory: null } })
+    const result = await h.post()
+    assert.equal(result.response.status, 503); assert.equal(result.body.code, 'assistant_context_changed')
+    assert.equal(result.body.response, undefined); assert.equal(execution(h).metadata.served_variant, 'none')
+    assert.doesNotMatch(JSON.stringify(h.logs), /REVIEWED_PLAN_PURPOSE/)
+  })
+}
+test('an edited active plan revision during generation requires a new question attempt', async () => {
+  const h = harness({ plan: { status: 'available', memory: reviewedMemory() },
+    finalPlan: { status: 'available', memory: { ...reviewedMemory(), revision: 5, purpose: 'Nueva intención revisada' } } })
+  const result = await h.post(); assert.equal(result.response.status, 503)
+  assert.equal(result.body.code, 'assistant_context_changed'); assert.equal(result.body.response, undefined)
 })
 
 ;(async () => {

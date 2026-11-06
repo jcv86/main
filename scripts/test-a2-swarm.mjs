@@ -13,6 +13,7 @@ import { buildJourneyFlow } from '../lib/journey/flow.ts'
 import { buildGuidedNextAction } from '../lib/journey/next-action.ts'
 import { adjustmentContent } from '../lib/a2/practice-adjustment.ts'
 import * as assistantContract from '../lib/a2/assistant-contract.ts'
+import * as planContract from '../lib/a2/plan-contract.ts'
 import { a1AgentProjection } from '../lib/dtc-agentos/context/a1-context.ts'
 import { buildA1ProfessionalReport } from '../lib/reports/a1-professional-report.ts'
 import { DISC_TEST_QUESTIONS } from '../lib/disc-test-questions.ts'
@@ -43,6 +44,7 @@ function loadActual(relative, controls = {}) {
     if (key.startsWith('@/lib/a2/swarm/')) return loadActual(key.replace('@/', '') + '.ts', controls)
     if (key.startsWith('./')) return loadActual(resolve(dirname(filename), key + (extname(key) ? '' : '.ts')), controls)
     if (key === '@/lib/a2/assistant-contract' || key === '../assistant-contract') return assistantContract
+    if (key === '../plan-contract') return planContract
     if (key === 'zod' || key.startsWith('node:')) return require(key)
     throw new Error('Unexpected swarm module dependency: ' + key)
   }
@@ -674,6 +676,40 @@ test('Actual OpenAI adapter and runtime integrate with three synthetic HTTP call
   assert.equal(result.response, FINAL_RESPONSE)
   assert.equal(observed.length, 3)
   assertPrivateTrace(result)
+})
+
+test('Available reviewed plan is a cited declared intention, never a navigation authority', async () => {
+  const source = fixture()
+  source.plan = { status: 'available', memory: {
+    version: 'dtc-a2-plan-memory.v1', kind: 'reviewed_user_intentions', revision: 2,
+    purpose: 'REVIEWED_INTENTION', constraints: 'Diez minutos', reviewDate: '2026-11-13',
+    steps: [{ position: 1, title: 'Practicar', action: 'Anotar un ejemplo propio.', status: 'reported_done' }],
+    completionMeaning: 'user_declaration_only',
+  } }
+  const values = outputs(source)
+  for (const value of Object.values(values)) value.evidenceRefs.push('reviewed_plan')
+  const runner = completion(values), result = await runA2Swarm(source, runner)
+  assert.equal(result.ok, true)
+  for (const request of runner.requests) {
+    const data = dataOf(request)
+    assert.equal(data.reviewedPlan.memory.purpose, 'REVIEWED_INTENTION')
+    assert.equal(data.reviewedPlan.memory.completionMeaning, 'user_declaration_only')
+    assert.ok(data.availableEvidenceRefs.includes('reviewed_plan'))
+    assert.equal(data.journey.next.href, source.flow.next.href)
+  }
+  assert.doesNotMatch(JSON.stringify(result.trace), /REVIEWED_INTENTION/)
+})
+test('An unavailable plan cannot be cited as evidence by a specialist', async () => {
+  const source = fixture(); source.plan = { status: 'unavailable', memory: null }
+  const values = outputs(source); values.sofia.evidenceRefs.push('reviewed_plan')
+  const runner = completion(values), result = await runA2Swarm(source, runner)
+  assert.equal(result.ok, false); assert.equal(result.reason, 'evidence_mismatch')
+  assert.ok(!dataOf(runner.requests[0]).availableEvidenceRefs.includes('reviewed_plan'))
+})
+test('A malformed plan envelope fails before model calls', async () => {
+  const source = fixture(); source.plan = { status: 'expired', memory: { purpose: 'PRIVATE_STALE_PLAN' } }
+  const runner = completion(outputs(source)), result = await runA2Swarm(source, runner)
+  assertFailure(result, 'invalid_input', 0); assert.equal(runner.requests.length, 0)
 })
 
 await finish()

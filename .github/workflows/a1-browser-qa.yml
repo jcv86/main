@@ -51,6 +51,8 @@ on:
       - 'app/api/despega/a2-coach/**'
       - 'app/admin/canary-deployments/**'
       - 'scripts/test-a2-swarm*'
+      - 'scripts/test-a2-plan*'
+      - 'supabase/migrations/*a2_reviewed_plan*'
       - 'scripts/test-a2-assistant.cjs'
       - 'scripts/check-a2-swarm-canary.mjs'
       - 'package.json'
@@ -186,6 +188,13 @@ jobs:
           node --import tsx scripts/test-c1-completion-sql.mjs
           node scripts/a1-browser-qa/c1-advisors.mjs
           node scripts/a1-browser-qa/c1-browser.mjs
+      - name: Reviewed A2 plans, durable receipts, owner RLS, concurrent sessions and recovery
+        run: |
+          node scripts/a1-browser-qa/a2-plan-prepare.mjs
+          npx tsx scripts/a1-browser-qa/a2-plan-seed.ts
+          node --import tsx scripts/test-a2-plan-sql.mjs
+          node scripts/a1-browser-qa/a2-plan-advisors.mjs
+          node --import tsx scripts/a1-browser-qa/a2-plan-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()
         uses: actions/upload-artifact@v4

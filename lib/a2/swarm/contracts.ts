@@ -2,6 +2,7 @@ import { z } from 'zod'
 import type { A2A1Evidence, A2AssistantRequest } from '../assistant-contract'
 import type { JourneyFlow } from '../../journey/flow'
 import type { GuidedNextAction } from '../../journey/next-action'
+import type { A2PlanAssistantEvidence } from '../plan-contract'
 
 export const A2_SWARM_VERSION = 'dtc-a2-swarm.v1' as const
 export const A2_SWARM_MAX_CALLS = 3
@@ -12,7 +13,7 @@ export const A2_SWARM_OUTPUT_LIMITS = { sofia: 350, dani: 350, reviewer: 600 } a
 
 export const SWARM_AGENTS = ['sofia', 'dani', 'reviewer'] as const
 export type SwarmAgent = (typeof SWARM_AGENTS)[number]
-export const SWARM_SOURCE_IDS = ['journey', 'objective', 'adjustment', 'a1', 'current_message', 'conversation'] as const
+export const SWARM_SOURCE_IDS = ['journey', 'objective', 'adjustment', 'a1', 'current_message', 'conversation', 'reviewed_plan'] as const
 export type SwarmSourceId = (typeof SWARM_SOURCE_IDS)[number]
 
 const evidenceRefs = z.array(z.enum(SWARM_SOURCE_IDS)).min(1).max(SWARM_SOURCE_IDS.length)
@@ -111,6 +112,7 @@ export interface SwarmInput {
   flow: JourneyFlow
   guidance: GuidedNextAction
   a1: A2A1Evidence
+  plan?: A2PlanAssistantEvidence
 }
 export interface SwarmMessage { role: 'system' | 'user' | 'assistant'; content: string }
 export interface SwarmCompletionRequest {

@@ -16,6 +16,7 @@ import { pathToFileURL } from 'node:url'
 import { buildJourneyFlow } from '../lib/journey/flow.ts'
 import { buildGuidedNextAction } from '../lib/journey/next-action.ts'
 import { adjustmentContent } from '../lib/a2/practice-adjustment.ts'
+import { buildA2PlanContextProjection, a2PlanViewSchema } from '../lib/a2/plan-contract.ts'
 
 assert.equal(process.env.DTC_AGENTIC_BROWSER_LAB, 'yes', 'This script is only for the isolated synthetic fixture')
 const root = process.cwd()
@@ -173,6 +174,21 @@ async function main() {
       await context.route('**/*', async route => {
         const request = route.request(), url = new URL(request.url())
         if (url.origin !== base) { externalRequests.push({ width, origin: url.origin }); await route.abort(); return }
+        if (url.pathname === '/api/a2/plan' && request.method() === 'GET') {
+          // This older render suite does not test persistence. Keep the newly
+          // integrated card real and give only its initial read a valid fixture;
+          // actual SQL/Auth/save/conflict behavior is covered by a2-plan-browser.
+          assert.equal(request.headers()['x-dtc-expected-plan-actor'], USER)
+          const selected = fixtures[new URL(page.url()).searchParams.get('scenario')] || fixtures.normal
+          const projected = buildA2PlanContextProjection(selected.flow, selected.guidance)
+          const view = a2PlanViewSchema.parse({ version: 'dtc-a2-plan-view.v1', revision: 0, plan: null,
+            context: { version: 'dtc-a2-plan-context.v1', capturedAt: '2026-11-06T13:00:00Z', ...projected,
+              hash: createHash('sha256').update(JSON.stringify(projected.projection)).digest('hex') },
+            freshness: { status: 'none', reasons: ['no_saved_plan'] }, guidance: selected.guidance })
+          await route.fulfill({ status: 200, headers: { 'Content-Type': 'application/json',
+            'Cache-Control': 'private, no-store', 'X-DTC-Plan-Actor': USER }, body: JSON.stringify(view) })
+          return
+        }
         if (url.pathname !== '/api/despega/a2-coach') { await route.continue(); return }
         state.posts.push({ body: request.postDataJSON(), headers: await request.allHeaders() })
         const plan = state.plans.shift() || {}
@@ -323,16 +339,16 @@ async function main() {
   const violations = accessibility.reduce((sum, audit) => sum + audit.violations.length, 0)
   const incomplete = accessibility.reduce((sum, audit) => sum + audit.incomplete.length, 0)
   const sourcePaths = [
-    'components/a2-chat-coach.tsx', 'components/journey/guided-next-action.tsx', 'components/journey/journey-flow-panel.tsx',
+    'components/a2-chat-coach.tsx', 'components/a2-reviewed-plan.tsx', 'components/journey/guided-next-action.tsx', 'components/journey/journey-flow-panel.tsx',
     'app/despega/a2/coach/page.tsx', 'app/despega/dashboard/page.tsx', 'app/despega/recorrido/page.tsx',
-    'lib/a2/assistant-contract.ts', 'lib/journey/flow.ts', 'lib/journey/next-action.ts', 'app/globals.css', 'app/design-system.css',
+    'lib/a2/assistant-contract.ts', 'lib/a2/plan-contract.ts', 'lib/journey/flow.ts', 'lib/journey/next-action.ts', 'app/globals.css', 'app/design-system.css',
   ]
   const result = {
     suite: 'agentic-ui', parentCommit: execFileSync('git', ['rev-parse', 'HEAD'], { cwd: root, encoding: 'utf8' }).trim(),
     sourceHashes: sourcePaths.map(path => ({ path, sha256: createHash('sha256').update(readFileSync(join(root, path))).digest('hex') })),
     browser: browserVersion, viewports: ['390x844', '1440x844'], checks: checks.length, passed: checks.length,
     real: ['React components and server-page return trees', 'DTC globals.css and design-system.css', 'canonical next-action fixture builders', 'Chromium', 'axe'],
-    synthetic: ['session and auth events', 'server read-port results', 'assistant HTTP transport', 'Next links as normal anchors', 'system fonts instead of remote brand fonts'],
+    synthetic: ['session and auth events', 'server read-port results', 'assistant HTTP transport', 'empty reviewed-plan GET only; no persistence claim', 'Next links as normal anchors', 'system fonts instead of remote brand fonts'],
     fullAuthenticatedShell: false, liveAuthOrRls: false, liveModelQuality: false,
     accessibility, axeViolations: violations, axeIncomplete: incomplete, runtimeErrors, networkFailures, externalRequests, screenshots, checkNames: checks,
   }

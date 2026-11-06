@@ -7,6 +7,7 @@ import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
 import { Alert, AlertDescription } from '@/components/ui/alert'
 import { GuidedNextAction } from '@/components/journey/guided-next-action'
+import { A2ReviewedPlan } from '@/components/a2-reviewed-plan'
 import type { GuidedNextAction as Guidance } from '@/lib/journey/next-action'
 import { A2_ASSISTANT_ACTOR_HEADER, A2_ASSISTANT_EXPECTED_ACTOR_HEADER } from '@/lib/a2/assistant-contract'
 import { ArrowRight, Loader2, MessageCircle, Send } from 'lucide-react'
@@ -167,7 +168,8 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
         </form>
       </CardContent>
     </Card>
-    <Card className="min-w-0 self-start">
+    <div className="min-w-0 space-y-6 self-start">
+    <Card className="min-w-0">
       <CardHeader><CardTitle className="text-xl">Tu siguiente acción</CardTitle><CardDescription>{guidance.action.title}</CardDescription></CardHeader>
       <CardContent className="min-w-0">
         <p className="text-sm leading-6 text-muted-foreground">{guidance.action.description}</p>
@@ -177,5 +179,7 @@ export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; ini
         </Button>
       </CardContent>
     </Card>
+    <A2ReviewedPlan actorId={actorId} onSessionChanged={invalidateSession} onGuidanceUpdated={setGuidance} />
+    </div>
   </div>
 }

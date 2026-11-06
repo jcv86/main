@@ -17,6 +17,7 @@ import { selectA2Swarm } from '@/lib/a2/swarm/canary'
 import { runA2Swarm } from '@/lib/a2/swarm/runtime'
 import { createOpenAISwarmCompletion } from '@/lib/a2/swarm/openai'
 import { A2_SWARM_BUDGET_MS } from '@/lib/a2/swarm/contracts'
+import { readA2PlanAssistantEvidence } from '@/lib/a2/plan-service'
 
 const MAX_BODY_BYTES = 64_000
 const GENERATION_BUDGET_MS = 25_000
@@ -144,6 +145,7 @@ export async function POST(request: Request) {
     if (!journey.access.a2) return fail(403, 'journey_access_required', 'Completa tu punto de partida antes de abrir el asistente de Tu Ruta.')
     const flow = await readJourneyFlow(journey, client)
     guidance = await readGuidedNextAction(journey, flow, client)
+    const plan = await readA2PlanAssistantEvidence(client, actorId, flow, guidance)
 
     let a1: A2A1Evidence
     try { a1 = { status: 'available', data: await loadA1AgentContext(client, actorId) } }
@@ -213,7 +215,7 @@ export async function POST(request: Request) {
       if (generation.signal.aborted) throw new Error('generation_cancelled')
       let answer: string | undefined
       if (selection.variant === 'swarm') {
-        const result = await runA2Swarm({ request: parsed.data, flow, guidance, a1 }, {
+        const result = await runA2Swarm({ request: parsed.data, flow, guidance, a1, plan }, {
           complete: createOpenAISwarmCompletion(apiKey, { fetch }),
           signal: generation.signal,
           budgetMs: Math.min(A2_SWARM_BUDGET_MS, GENERATION_BUDGET_MS - (Date.now() - startedAt)),
@@ -243,7 +245,7 @@ export async function POST(request: Request) {
             headers: { Authorization: `Bearer ${apiKey}`, 'Content-Type': 'application/json' },
             body: JSON.stringify({
               model: 'gpt-4o-mini',
-              messages: buildA2AssistantMessages(parsed.data, flow, guidance!, a1),
+              messages: buildA2AssistantMessages(parsed.data, flow, guidance!, a1, plan),
               temperature: 0.35, max_tokens: 600, store: false,
             }),
             signal: generation.signal,
@@ -272,9 +274,24 @@ export async function POST(request: Request) {
       }
 
       if (generation.signal.aborted) throw new Error('generation_cancelled')
+      // A plan may be corrected, paused or deleted while generation is running.
+      // Do not deliver a response grounded in a plan revision that is no longer
+      // available to this request. This remains a dated read, not a source lock.
+      const latestPlan = await withinGenerationBudget(generation.signal, async () => {
+        if (plan.status !== 'available') return readA2PlanAssistantEvidence(client, actorId!, flow, guidance!)
+        const currentFlow = await readJourneyFlow(journey, client)
+        const currentGuidance = await readGuidedNextAction(journey, currentFlow, client)
+        const currentPlan = await readA2PlanAssistantEvidence(client, actorId!, currentFlow, currentGuidance)
+        guidance = currentGuidance
+        return currentPlan
+      })
       const changed = await verifyCurrentActor()
       if (changed) return changed
       if (generation.signal.aborted) throw new Error('generation_cancelled')
+      if (JSON.stringify(latestPlan) !== JSON.stringify(plan)) {
+        outcome = 'reviewed_plan_changed'
+        return fail(503, 'assistant_context_changed', 'Tu plan cambió mientras revisábamos la consulta. Tu pregunta se conserva; vuelve a enviarla para usar el estado actual.')
+      }
       outcome = fallbackReason === 'none' ? 'completed' : 'fallback_completed'
       served = generated
       logOperationalEvent({ event: 'a2.assistant.completed', requestId, route: '/api/despega/a2-coach', status: 200,
