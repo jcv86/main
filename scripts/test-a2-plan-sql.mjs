@@ -405,8 +405,9 @@ async function main() {
       await mutate(userId, command('pause', 2), null)
       // A synthetic backdated persisted row represents a later visit. Production
       // time is not mocked; the actual RPC compares against its current DB clock.
-      await db.query(`update public.a2_reviewed_plans set review_date=$2,
-        content=jsonb_set(content,'{reviewDate}',to_jsonb($2::text)) where user_id=$1`, [userId,plusDays(today,-1)])
+      // Bind both occurrences as date; format its JSON value explicitly as ISO.
+      await db.query(`update public.a2_reviewed_plans set review_date=$2::date,
+        content=jsonb_set(content,'{reviewDate}',to_jsonb(to_char($2::date,'YYYY-MM-DD'))) where user_id=$1`, [userId,plusDays(today,-1)])
       await assert.rejects(mutate(userId, command('resume', 3)), dbError('P0001','a2_plan_expired'))
     })
     await run('SQL validates actual calendar dates, strict fields, bounded strings and unique step IDs', async () => {
