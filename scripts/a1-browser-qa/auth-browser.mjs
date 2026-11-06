@@ -108,6 +108,14 @@ async function newPage(viewport, scenario) {
     })
     page.on('response', response => {
       const url = new URL(response.url())
+      const request = response.request()
+      // The real Provider skips the body on !ok. An unconsumed error body can
+      // remain open, so requestfinished is not its completion boundary. Count
+      // the resolved response once; requestfinished below ignores removed reads.
+      if (url.origin === base && !response.ok() && reads.pending.has(request)) {
+        if (url.pathname === '/api/banco-central-data') reads.economicFinished += 1
+        reads.pending.delete(request)
+      }
       if (url.origin !== base || !url.pathname.startsWith('/api/auth/')) return
       const statusCode = response.status(), key = `${url.pathname}:${statusCode}`
       const expected = statusCode < 400 || (expectedErrors.get(key) || 0) > 0
@@ -132,12 +140,15 @@ async function settleBeforeNavigation(page) {
   const reads = backgroundReads.get(page)
   for (let attempt = 0; attempt < 300; attempt += 1) {
     if (reads.pending.size === 0 && reads.scoreStarted === reads.economicFinished) {
-      backgroundReadiness.push({ step: activeStep, scoreStarted: reads.scoreStarted,
+      backgroundReadiness.push({ step: activeStep, ready: true, scoreStarted: reads.scoreStarted,
         economicFinished: reads.economicFinished })
       return
     }
     await pause(100)
   }
+  backgroundReadiness.push({ step: activeStep, ready: false, scoreStarted: reads.scoreStarted,
+    economicFinished: reads.economicFinished,
+    pendingPaths: [...reads.pending].map(request => new URL(request.url()).pathname) })
   throw new Error('Provider background reads did not settle before an artificial test navigation; see requestFailures')
 }
 
