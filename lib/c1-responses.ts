@@ -76,6 +76,16 @@ export function validateC1DraftAnswers(value: unknown): boolean {
   })
 }
 
+/** Completion requires every answer; incomplete drafts remain valid above. */
+export function validateC1CompletionAnswers(value: unknown): value is Record<string, unknown> {
+  if (!isRecord(value) || !validateC1DraftAnswers(value)) return false
+  return CONOZCAMONOS_1_QUESTIONS.every(question => {
+    const answer = value[question.id]
+    if (question.type === 'text') return typeof answer === 'string' && answer.trim().length > 0
+    return Array.isArray(answer) && answer.length > 0 && new Set(answer).size === answer.length
+  })
+}
+
 /** Voice/coach input may exceed textarea maxLength: retain it and ask for editing. */
 export function c1TextLimitError(responses: C1Responses, customResponses: C1CustomResponses): string | null {
   for (const question of CONOZCAMONOS_1_QUESTIONS) {

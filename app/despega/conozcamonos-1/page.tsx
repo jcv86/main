@@ -1,15 +1,18 @@
 'use client'
 import { useState, useEffect, useRef } from 'react'
 import { useRouter } from 'next/navigation'
+import Link from 'next/link'
+import { useSession } from '@/components/session-wrapper'
 import { Button } from '@/components/ui/button'
-import { createClient } from '@/lib/supabase/client'
 import { CONOZCAMONOS_1_QUESTIONS } from '@/lib/canon-conozcamonos-1-questions'
 import { AIAssistant } from '@/components/conozcamonos/ai-assistant'
 import { VoiceInput } from '@/components/conozcamonos/voice-input'
 import { useV1Analytics } from '@/lib/v1-analytics/use-v1-analytics'
 import { useAssessmentDraft } from '@/lib/use-assessment-draft'
 import { C1_TEXT_LIMIT, c1TextLimitError, restoreC1DraftAnswers, serializeC1DraftAnswers,
-  serializeC1FinalAnswers, type C1Responses, type C1CustomResponses } from '@/lib/c1-responses'
+  type C1Responses, type C1CustomResponses } from '@/lib/c1-responses'
+import { C1_COMPLETION_ERRORS, C1_SIGN_IN_PATH, asC1CompletionError, completeC1,
+  loadC1CompletionStatus, type C1CompletionErrorCode } from '@/lib/c1-completion'
 
 export default function Conozcamonos1Page() {
   const [currentQuestion, setCurrentQuestion] = useState(0)
@@ -19,11 +22,19 @@ export default function Conozcamonos1Page() {
   const [error, setError] = useState('')
   const [authChecked, setAuthChecked] = useState(false)
   const [validating, setValidating] = useState(false)
+  const [loadAttempt, setLoadAttempt] = useState(0)
+  const [draftUpdatedAt, setDraftUpdatedAt] = useState<string | null>(null)
+  const [completionFailure, setCompletionFailure] = useState<C1CompletionErrorCode | null>(null)
+  const [loadedOwnerId, setLoadedOwnerId] = useState<string | null>(null)
   const transitionInFlight = useRef(false)
+  const operationEpoch = useRef(0)
+  const ownerIdRef = useRef<string | null>(null)
+  const loadedAttemptRef = useRef<number | null>(null)
+  const { user: sessionUser, isLoading: sessionLoading } = useSession()
+  const sessionUserId = sessionUser?.id ?? null
   const router = useRouter()
-  const supabase = createClient()
   const { trackEvent, trackPageView } = useV1Analytics()
-  const { loadDraft, saveDraft, completeDraft, draftError, savingDraft } = useAssessmentDraft('c1')
+  const { saveDraft, draftError, savingDraft, clearDraftError } = useAssessmentDraft('c1', loadedOwnerId)
 
   // Track C1 page entry
   useEffect(() => {
@@ -32,67 +43,109 @@ export default function Conozcamonos1Page() {
   }, [trackEvent, trackPageView])
 
   useEffect(() => {
-    const checkAuth = async () => {
+    let active = true
+    const epoch = ++operationEpoch.current
+    const restoreProgress = async () => {
+      transitionInFlight.current = false
+      setLoading(false)
+      setValidating(false)
+      if (sessionLoading) { setAuthChecked(false); return }
+
+      if (ownerIdRef.current && sessionUserId === null && loadedAttemptRef.current === loadAttempt) {
+        // An expired session can be renewed in another tab without losing text.
+        setError(C1_COMPLETION_ERRORS.authentication_required.message)
+        setCompletionFailure('authentication_required')
+        setAuthChecked(true)
+        return
+      }
+      if (ownerIdRef.current && sessionUserId === ownerIdRef.current && loadedAttemptRef.current === loadAttempt) {
+        setError('')
+        setCompletionFailure(null)
+        setAuthChecked(true)
+        return
+      }
+      if (ownerIdRef.current && sessionUserId && sessionUserId !== ownerIdRef.current) {
+        ownerIdRef.current = null
+        loadedAttemptRef.current = null
+        setLoadedOwnerId(null)
+        setResponses({})
+        setCustomResponses({})
+        setCurrentQuestion(0)
+        setDraftUpdatedAt(null)
+        clearDraftError()
+      }
+      setAuthChecked(false)
+      loadedAttemptRef.current = null
+      setError('')
+      setCompletionFailure(null)
       try {
-        // Check for demo user first
-        const demoUserStr = typeof window !== 'undefined' ? localStorage.getItem('demo_user') : null
-        const demoUser = demoUserStr ? JSON.parse(demoUserStr) : null
-        
-        if (demoUser) {
-          console.log('[v0] Demo user detected in conozcamonos-1:', demoUser.email)
-          setAuthChecked(true)
+        const status = await loadC1CompletionStatus()
+        if (!active || operationEpoch.current !== epoch) return
+        ownerIdRef.current = status.userId
+        setLoadedOwnerId(status.userId)
+        if (status.state === 'completed') {
+          router.replace(status.nextPath)
+          router.refresh()
           return
         }
 
-        // Check Supabase auth for real users
-        const { data: { user }, error } = await supabase.auth.getUser()
-        console.log('[v0] conozcamonos-1 auth check - user:', user?.email, 'error:', error?.message)
-        
-        if (error) {
-          console.log('[v0] Auth error in conozcamonos-1:', error.message)
-          router.push('/auth/signin')
-          return
+        if (status.draft) {
+          const restored = restoreC1DraftAnswers(status.draft.answers)
+          setResponses(restored.responses)
+          setCustomResponses(restored.customResponses)
+          setCurrentQuestion(status.draft.currentQuestion)
+          setDraftUpdatedAt(status.draft.updatedAt!)
+        } else if (status.state === 'not_started') {
+          setResponses({})
+          setCustomResponses({})
+          setCurrentQuestion(0)
+          setDraftUpdatedAt(null)
         }
-        
-        if (!user) {
-          console.log('[v0] No user found in conozcamonos-1, redirecting to signin')
-          router.push('/auth/signin')
-          return
+        if (status.state === 'recovery_required') {
+          setError(C1_COMPLETION_ERRORS.recovery_required.message)
+          setCompletionFailure('recovery_required')
+          if (!status.draft) return
         }
-        
-        try {
-          const draft = await loadDraft()
-          if (draft) {
-            const restored = restoreC1DraftAnswers(draft.answers)
-            setResponses(restored.responses)
-            setCustomResponses(restored.customResponses)
-            setCurrentQuestion(draft.currentQuestion)
-          }
-        } catch {
-          setError('No pudimos recuperar tu avance. Recarga para intentarlo nuevamente.')
-          return
-        }
+
+        loadedAttemptRef.current = loadAttempt
         setAuthChecked(true)
       } catch (err) {
-        console.error('[v0] Auth check exception:', err)
-        router.push('/auth/signin')
+        if (!active || operationEpoch.current !== epoch) return
+        const failure = asC1CompletionError(err)
+        if (failure.code === 'authentication_required') {
+          router.replace(C1_SIGN_IN_PATH)
+          return
+        }
+        setError(failure.code === 'completion_unavailable'
+          ? 'No pudimos recuperar tu avance. Reintenta para consultar la versión guardada.'
+          : failure.message)
+        setCompletionFailure(failure.code)
       }
     }
-    checkAuth()
-  }, [supabase, router, loadDraft])
+    void restoreProgress()
+    return () => { active = false; operationEpoch.current++ }
+  }, [router, loadAttempt, sessionUserId, sessionLoading])
 
-  if (!authChecked) {
+  if (!authChecked || (loadedOwnerId && sessionUserId && loadedOwnerId !== sessionUserId)) {
     if (error) {
-      return <div className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center"><p>{error}</p><Button onClick={() => window.location.reload()}>Reintentar</Button></div>
+      return <div className="min-h-screen flex flex-col gap-4 items-center justify-center px-6 text-center">
+        <p role="alert">{error}</p>
+        <Button className="bg-indigo-700 text-white hover:bg-indigo-600" onClick={() => setLoadAttempt(value => value + 1)}>Reintentar</Button>
+        {completionFailure === 'access_required' && (
+          <Link href={C1_SIGN_IN_PATH} className="underline underline-offset-4">Ingresar con otra cuenta</Link>
+        )}
+      </div>
     }
     return <div className="min-h-screen flex items-center justify-center"><p>Verificando...</p></div>
   }
 
   const question = CONOZCAMONOS_1_QUESTIONS[currentQuestion]
   const isLastQuestion = currentQuestion === CONOZCAMONOS_1_QUESTIONS.length - 1
+  const isCurrentOperation = (epoch: number, ownerId: string) =>
+    operationEpoch.current === epoch && ownerIdRef.current === ownerId
 
   const handleAnswer = (value: string) => {
-    if (transitionInFlight.current) return
+    if (transitionInFlight.current || !loadedOwnerId || ownerIdRef.current !== loadedOwnerId) return
     if (question.type === 'select') {
       // For select: allow multiple selections
       const current = Array.isArray(responses[question.id]) 
@@ -117,12 +170,14 @@ export default function Conozcamonos1Page() {
       setResponses(prev => ({ ...prev, [question.id]: value }))
     }
     setError('')
+    setCompletionFailure(null)
   }
 
   const handleCustomText = (value: string) => {
-    if (transitionInFlight.current) return
+    if (transitionInFlight.current || !loadedOwnerId || ownerIdRef.current !== loadedOwnerId) return
     setCustomResponses(prev => ({ ...prev, [question.id]: value }))
     setError('')
+    setCompletionFailure(null)
   }
 
   const isAnswered = () => {
@@ -134,7 +189,8 @@ export default function Conozcamonos1Page() {
   }
 
   const handleNext = async () => {
-    if (transitionInFlight.current) return
+    if (transitionInFlight.current || !loadedOwnerId || ownerIdRef.current !== loadedOwnerId) return
+    const epoch = operationEpoch.current, ownerId = loadedOwnerId
     if (!isAnswered()) { 
       setError('Necesito entender mejor tu contexto. Amplía un poco más tu respuesta.')
       trackEvent('c1_error_empty', { questionIndex: currentQuestion })
@@ -164,6 +220,7 @@ export default function Conozcamonos1Page() {
           })
 
           const validation = await validationResponse.json()
+          if (!isCurrentOperation(epoch, ownerId)) return
 
           if (!validation.valid) {
             setError(validation.suggestions || 'Respuesta muy corta. Desarrolla más.')
@@ -171,84 +228,87 @@ export default function Conozcamonos1Page() {
             return
           }
         } catch (err) {
-          console.error('[v0] Validation error:', err)
+          if (isCurrentOperation(epoch, ownerId)) console.error('[v0] Validation error:', err)
         } finally {
-          setValidating(false)
+          if (isCurrentOperation(epoch, ownerId)) setValidating(false)
         }
       }
 
-      try {
-        await saveDraft({ schemaVersion: 1, currentQuestion: isLastQuestion ? currentQuestion : currentQuestion + 1,
-          answers: serializeC1DraftAnswers(responses, customResponses), timings: [] })
-      } catch {
+      if (!isCurrentOperation(epoch, ownerId)) return
+      if (isLastQuestion) {
+        await submitResponses(epoch, ownerId)
         return
       }
 
-      // Move to next or submit
-      if (isLastQuestion) {
-        await submitResponses()
-      } else {
-        setCurrentQuestion(prev => prev + 1)
-        setError('')
+      try {
+        const updatedAt = await saveDraft({ schemaVersion: 1, currentQuestion: currentQuestion + 1,
+          answers: serializeC1DraftAnswers(responses, customResponses), timings: [] })
+        if (!isCurrentOperation(epoch, ownerId)) return
+        setDraftUpdatedAt(updatedAt)
+      } catch (err) {
+        const failure = asC1CompletionError(err)
+        if (isCurrentOperation(epoch, ownerId) && ['session_changed', 'authentication_required'].includes(failure.code)) {
+          setError(failure.message)
+          setCompletionFailure(failure.code)
+        }
+        return
       }
+      setCurrentQuestion(prev => prev + 1)
+      setError('')
+      setCompletionFailure(null)
     } finally {
-      transitionInFlight.current = false
+      if (isCurrentOperation(epoch, ownerId)) transitionInFlight.current = false
     }
   }
 
   const handleBack = async () => {
-    if (currentQuestion <= 0 || transitionInFlight.current) return
+    if (currentQuestion <= 0 || transitionInFlight.current || !loadedOwnerId || ownerIdRef.current !== loadedOwnerId) return
+    const epoch = operationEpoch.current, ownerId = loadedOwnerId
     const lengthError = c1TextLimitError(responses, customResponses)
     if (lengthError) { setError(lengthError); return }
     transitionInFlight.current = true
     try {
-      await saveDraft({ schemaVersion: 1, currentQuestion: currentQuestion - 1,
+      const updatedAt = await saveDraft({ schemaVersion: 1, currentQuestion: currentQuestion - 1,
         answers: serializeC1DraftAnswers(responses, customResponses), timings: [] })
+      if (!isCurrentOperation(epoch, ownerId)) return
+      setDraftUpdatedAt(updatedAt)
       setCurrentQuestion(prev => prev - 1)
       setError('')
-    } catch {
+      setCompletionFailure(null)
+    } catch (err) {
+      const failure = asC1CompletionError(err)
+      if (isCurrentOperation(epoch, ownerId) && ['session_changed', 'authentication_required'].includes(failure.code)) {
+        setError(failure.message)
+        setCompletionFailure(failure.code)
+      }
       return
     } finally {
-      transitionInFlight.current = false
+      if (isCurrentOperation(epoch, ownerId)) transitionInFlight.current = false
     }
   }
 
-  const submitResponses = async () => {
+  const submitResponses = async (epoch: number, ownerId: string) => {
     setLoading(true)
+    setError('')
+    setCompletionFailure(null)
+    clearDraftError()
+    let navigating = false
     try {
-      const { data: { user } } = await supabase.auth.getUser()
-      if (!user) { router.push('/auth/signin'); return }
-
-      const { error: dbError } = await supabase
-        .from('canon_conozcamonos_1_responses')
-        .insert({ user_id: user.id, responses: serializeC1FinalAnswers(responses, customResponses), completed_at: new Date().toISOString() })
-
-      if (dbError) throw dbError
-      await completeDraft()
-      
-      // Mark Conozcámonos-1 as completed in despega_user_profiles (CANONICAL FLAG)
-      const { error: profileError } = await supabase
-        .from('despega_user_profiles')
-        .upsert({
-          user_id: user.id,
-          onboarding_conozcamonos_1_completed: true,
-          onboarding_conozcamonos_1_completed_at: new Date().toISOString()
-        }, { onConflict: 'user_id' })
-      
-      if (profileError) {
-        console.error('[v0] Error updating profile completion:', profileError)
-        // Continue anyway - the assessment was saved
-      }
-      console.log('[v0] [CANONICAL] C1 completed, redirecting to A1 intro')
-      console.log('[v0] User context capture complete → Next: Descubrir cómo funcionas (A1 Cerebral)')
+      const completion = await completeC1({ schemaVersion: 1,
+        answers: serializeC1DraftAnswers(responses, customResponses), expectedDraftUpdatedAt: draftUpdatedAt }, ownerId)
+      if (!isCurrentOperation(epoch, ownerId)) return
       trackEvent('c1_completed')
-      router.push('/despega/a1-cerebral-intro')
+      router.replace(completion.nextPath)
+      router.refresh()
+      navigating = true
     } catch (err) {
-      console.error('[v0] Error:', err)
-      trackEvent('c1_error_save', { errorType: 'save_failed' })
-      setError('No pudimos guardar tus respuestas. Intenta de nuevo.')
+      if (!isCurrentOperation(epoch, ownerId)) return
+      const failure = asC1CompletionError(err)
+      trackEvent('c1_error_save', { errorType: failure.code })
+      setError(failure.message)
+      setCompletionFailure(failure.code)
     } finally {
-      setLoading(false)
+      if (!navigating && isCurrentOperation(epoch, ownerId)) setLoading(false)
     }
   }
 
@@ -399,6 +459,16 @@ export default function Conozcamonos1Page() {
           {(error || draftError) && (
             <div role="alert" className="mt-4 p-4 bg-red/15 dark:bg-red/20 border border-red/40 dark:border-red/50 rounded-lg">
               <p className="text-sm font-semibold text-red dark:text-red">{error || draftError}</p>
+              {completionFailure === 'authentication_required' && (
+                <Link href={C1_SIGN_IN_PATH} target="_blank" rel="noopener noreferrer" className="mt-3 inline-block text-sm underline underline-offset-4">
+                  Volver a ingresar en otra pestaña
+                </Link>
+              )}
+              {completionFailure && ['draft_changed', 'completion_conflict', 'recovery_required', 'session_changed'].includes(completionFailure) && (
+                <Button type="button" variant="outline" className="mt-3 whitespace-normal" onClick={() => setLoadAttempt(value => value + 1)}>
+                  Recargar la versión guardada
+                </Button>
+              )}
             </div>
           )}
         </fieldset>

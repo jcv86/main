@@ -39,6 +39,7 @@ on:
       - 'lib/observability/**'
       - 'lib/auth/**'
       - 'lib/c1-responses.ts'
+      - 'lib/c1-completion.ts'
       - 'lib/assessment-drafts.ts'
       - 'lib/use-assessment-draft.ts'
       - 'lib/canon-conozcamonos-1-questions.ts'
@@ -84,6 +85,8 @@ on:
       - 'supabase/migrations/*outcome*'
       - 'supabase/migrations/20260920173000_career_search_intents.sql'
       - 'supabase/migrations/*labor_objective*'
+      - 'supabase/migrations/*c1*'
+      - 'scripts/test-c1-completion*'
       - '.github/workflows/a1-browser-qa.yml'
 permissions:
   contents: read
@@ -127,6 +130,7 @@ jobs:
         run: |
           node --import tsx scripts/test-auth-signout.cjs
           node --import tsx scripts/test-email-login.mjs
+          node --import tsx scripts/test-c1-completion.mjs
           npm run test:assessment-drafts
           node scripts/a1-browser-qa/auth-self-check.mjs
       - name: Prepare isolated application and start local Supabase only
@@ -165,10 +169,12 @@ jobs:
           node scripts/a1-browser-qa/auth-prepare.mjs
           npx tsx scripts/a1-browser-qa/auth-seed.ts
           node scripts/a1-browser-qa/auth-browser.mjs
-      - name: C1 Other text, draft retry, reload, owner RLS and final response on desktop and mobile
+      - name: C1 atomic completion, SQL rollback, retry, reload and owner boundaries on desktop and mobile
         run: |
           node scripts/a1-browser-qa/c1-prepare.mjs
           npx tsx scripts/a1-browser-qa/c1-seed.ts
+          node --import tsx scripts/test-c1-completion-sql.mjs
+          node scripts/a1-browser-qa/c1-advisors.mjs
           node scripts/a1-browser-qa/c1-browser.mjs
       - name: Upload only synthetic visual evidence and sanitized summary
         if: always()

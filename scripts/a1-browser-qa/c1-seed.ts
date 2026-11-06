@@ -28,10 +28,31 @@ async function main() {
     }
     assert.equal((await db.query("select to_regclass('public.assessment_drafts') as table_name")).rows[0].table_name, null)
     const migration = '20260826010000_assessment_drafts.sql'
+    const completionMigration = '20261106173017_c1_atomic_completion.sql'
     await db.query(readFileSync(join(repo, 'supabase/migrations', migration), 'utf8'))
-    // The old laboratory has a minimal supporting profile. Match the existing
-    // real page's timestamp field explicitly; this is not a production migration.
-    await db.query('alter table public.despega_user_profiles add column if not exists onboarding_conozcamonos_1_completed_at timestamptz')
+    // Complete only the old lab's minimal supporting shape, using the types
+    // observed in the read-only DTC catalog. The completion migration itself
+    // adds the missing C1 timestamp contract; no remote schema is changed.
+    await db.query(`
+      alter table public.canon_conozcamonos_1_responses
+        add column if not exists created_at timestamptz default now(),
+        add column if not exists completed boolean default false;
+      alter table public.despega_user_profiles
+        add column if not exists a4_unlocked_at timestamp without time zone,
+        add column if not exists current_stage varchar(50) default 'conozcamonos-1';
+    `)
+    const profileGuard = 'migrations/07-a4-unlock-guard.sql'
+    await db.query(readFileSync(join(repo, profileGuard), 'utf8'))
+    const completionSql = readFileSync(join(repo, 'supabase/migrations', completionMigration), 'utf8')
+    await db.query(completionSql)
+    await db.query(completionSql) // The candidate migration must be repeatable.
+    const timestampType = await db.query(`select data_type from information_schema.columns
+      where table_schema='public' and table_name='despega_user_profiles'
+      and column_name='onboarding_conozcamonos_1_completed_at'`)
+    assert.deepEqual(timestampType.rows, [{ data_type: 'timestamp without time zone' }])
+    assert.equal((await db.query(`select count(*)::integer as total from pg_trigger
+      where tgrelid='public.despega_user_profiles'::regclass and tgname='enforce_a4_profile_completion'
+      and not tgisinternal`)).rows[0].total, 1)
     const users: Array<{ label: string; id: string; email: string }> = []
     for (const viewport of AUTH_VIEWPORTS) {
       const label = `auth-invited-${viewport.name}`
@@ -47,10 +68,12 @@ async function main() {
     }
     await db.query("notify pgrst, 'reload schema'")
     writeFileSync(fixturePath, JSON.stringify({ scope: 'disposable-local-c1', users, password }), { mode: 0o600 })
-    writeFileSync(join(evidence, 'c1-seed.json'), JSON.stringify({ migration, realInvitationOwnersReused: 2,
+    writeFileSync(join(evidence, 'c1-seed.json'), JSON.stringify({ migration, completionMigration,
+      completionMigrationAppliedTwice: true, profileGuard, realInvitationOwnersReused: 2,
       authUsersCreated: 0, membershipsOrProfilesSeeded: 0,
-      initialCompletedC1: 0, localProfileFixture: 'existing completion timestamp column', remoteOperations: 0, verdict: 'PASS' }, null, 2))
-    console.log('C1 setup: canonical draft migration and two owners admitted by the preceding real invitation flow; zero C1 completions.')
+      initialCompletedC1: 0, localProfileFixture: 'legacy A4 trigger columns; canonical C1 UTC timestamp without time zone',
+      remoteOperations: 0, verdict: 'PASS' }, null, 2))
+    console.log('C1 setup: real draft and atomic migrations, legacy profile guard, two admitted owners; zero C1 completions.')
   } finally { await db.end() }
 }
 main().catch(error => { console.error('C1 setup failed:', safeFailure(error, secrets)); process.exitCode = 1 })

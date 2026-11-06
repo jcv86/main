@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { isAssessmentType, validateAssessmentDraft } from '@/lib/assessment-drafts'
+import { C1_COMPLETION_ERRORS, C1_EXPECTED_ACTOR_HEADER } from '@/lib/c1-completion'
 
 type RouteContext = { params: Promise<{ assessmentType: string }> }
 
@@ -24,6 +25,9 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) return NextResponse.json({ error: 'Debes iniciar sesión.' }, { status: 401, headers: noStore })
+  if (assessmentType === 'c1' && request.headers.get(C1_EXPECTED_ACTOR_HEADER) !== user.id) {
+    return NextResponse.json({ error: 'session_changed', message: C1_COMPLETION_ERRORS.session_changed.message }, { status: 409, headers: noStore })
+  }
   let body: unknown
   try { body = await request.json() } catch { return NextResponse.json({ error: 'JSON inválido.' }, { status: 400, headers: noStore }) }
   const validation = validateAssessmentDraft(assessmentType, body)
@@ -34,12 +38,15 @@ export async function PUT(request: NextRequest, context: RouteContext) {
   return NextResponse.json({ saved: true, updatedAt: data.updated_at }, { headers: noStore })
 }
 
-export async function POST(_request: NextRequest, context: RouteContext) {
+export async function POST(request: NextRequest, context: RouteContext) {
   const { assessmentType } = await context.params
   if (!isAssessmentType(assessmentType)) return NextResponse.json({ error: 'Evaluación desconocida.' }, { status: 404, headers: noStore })
   const supabase = await createClient()
   const { data: { user }, error: authError } = await supabase.auth.getUser()
   if (authError || !user) return NextResponse.json({ error: 'Debes iniciar sesión.' }, { status: 401, headers: noStore })
+  if (assessmentType === 'c1' && request.headers.get(C1_EXPECTED_ACTOR_HEADER) !== user.id) {
+    return NextResponse.json({ error: 'session_changed', message: C1_COMPLETION_ERRORS.session_changed.message }, { status: 409, headers: noStore })
+  }
   const { error } = await supabase.from('assessment_drafts').update({ completed_at: new Date().toISOString(), updated_at: new Date().toISOString() }).eq('user_id', user.id).eq('assessment_type', assessmentType).is('completed_at', null)
   if (error) return NextResponse.json({ error: 'No pudimos cerrar el borrador.' }, { status: 503, headers: noStore })
   return NextResponse.json({ completed: true }, { headers: noStore })
