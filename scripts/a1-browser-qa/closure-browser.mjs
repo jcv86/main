@@ -26,6 +26,7 @@ const alpha = fixture.users.find(user => user.label === 'closure-alpha')
 const beta = fixture.users.find(user => user.label === 'closure-beta')
 assert.ok(alpha && beta)
 const steps = [], accessibility = [], layoutDiagnostics = [], javascriptErrors = [], phaseRequestCounts = [], blockedHosts = new Set()
+const viewportReadiness = []
 const captures = new Map(), secrets = [fixture.password, status.ANON_KEY, status.SERVICE_ROLE_KEY, status.DB_URL]
 let browser, server, serverLog, phase = 'setup', activeStep = 'setup', apiRequests = 0
 let alphaContext, betaContext
@@ -148,13 +149,50 @@ async function assertStoredOnce(capture, user = alpha) {
   assert.deepEqual(row.dimensions, {})
 }
 
+async function settleViewportCss(page, name, width) {
+  const deadline = Date.now() + 10000
+  let state, attempts = 0
+  do {
+    attempts += 1
+    state = await page.evaluate(expectedWidth => {
+      const main = document.querySelector('#main-content')
+      const wrapper = main?.parentElement, shell = wrapper?.parentElement
+      const header = shell?.querySelector(':scope > header')
+      const aside = shell?.querySelector(':scope > aside')
+      const menu = header?.querySelector('[aria-controls="mobile-navigation"]')
+      const desktop = expectedWidth >= 1024
+      const expectedPadding = desktop ? 18 * parseFloat(getComputedStyle(document.documentElement).fontSize) : 0
+      const padding = element => element ? parseFloat(getComputedStyle(element).paddingLeft) : null
+      const display = element => element ? getComputedStyle(element).display : null
+      const result = { expectedWidth, innerWidth, clientWidth: document.documentElement.clientWidth,
+        desktopMedia: matchMedia('(min-width: 1024px)').matches, expectedPadding,
+        headerPadding: padding(header), wrapperPadding: padding(wrapper),
+        mainLeft: main?.getBoundingClientRect().left ?? null,
+        wrapperLeft: wrapper?.getBoundingClientRect().left ?? null,
+        menuDisplay: display(menu), asideDisplay: display(aside) }
+      const near = (actual, expected) => actual !== null && Math.abs(actual - expected) < 0.5
+      return { ...result, ready: Boolean(main && wrapper && header && aside && menu)
+        && result.innerWidth === expectedWidth && result.clientWidth === expectedWidth
+        && result.desktopMedia === desktop
+        && near(result.headerPadding, expectedPadding) && near(result.wrapperPadding, expectedPadding)
+        && near(result.mainLeft, result.wrapperLeft + expectedPadding)
+        && (desktop ? result.menuDisplay === 'none' && result.asideDisplay === 'flex'
+          : result.menuDisplay !== 'none' && result.asideDisplay === 'none') }
+    }, width)
+    if (state.ready || Date.now() >= deadline) break
+    await pause(50)
+  } while (true)
+  viewportReadiness.push({ page: name, ...state, attempts })
+  assert.ok(state.ready, 'Responsive AppShell CSS did not settle: ' + JSON.stringify(state))
+}
+
 async function visual(page, name) {
   for (const width of [390, 1440]) {
     await page.setViewportSize({ width, height: width === 390 ? 844 : 1000 })
     await page.evaluate(() => document.fonts.ready)
-    // Chromium can expose the new innerWidth before responsive CSS has been
-    // painted (for example, AppShell's desktop sidebar padding at mobile size).
-    // Measure the rendered viewport; keep the same strict overflow threshold.
+    // Chromium can expose the new innerWidth while AppShell still has desktop
+    // media styles. Wait for the real responsive CSS, never for overflow to pass.
+    await settleViewportCss(page, name, width)
     await page.evaluate(() => {
       window.scrollTo({ top:0, left:0, behavior:'instant' })
       return new Promise(resolve => requestAnimationFrame(() => requestAnimationFrame(resolve)))
@@ -464,7 +502,7 @@ try {
   await db.end()
   writeFileSync(join(evidence,'closure-results.json'),JSON.stringify({
     commit:process.env.A1_SOURCE_COMMIT,scope:'real local Auth/JWT/RLS and unmodified application pages/layout/contexts/APIs',
-    steps,accessibility,layoutDiagnostics,javascriptErrors,phaseRequestCounts,blockedExternalHosts:[...blockedHosts],
+    steps,accessibility,layoutDiagnostics,viewportReadiness,javascriptErrors,phaseRequestCounts,blockedExternalHosts:[...blockedHosts],
     viewportWidths:[390,1440],captureVersion:fixture.instrumentVersion,
     outcomeEvaluation:'not_evaluated; no generated scores, confidence or snapshots',
     fixtureMilestones:'A2 day 30 and A3 route closure were seeded, not completed by these tests',
