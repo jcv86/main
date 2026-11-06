@@ -1,0 +1,10 @@
+{
+  "command": "supabase db advisors --local --type security --level warn --output-format json",
+  "cliVersion": "2.117.0",
+  "scope": "new C1 completion functions and private receipt schema in the disposable laboratory",
+  "totalLaboratoryFindings": 0,
+  "candidateFindings": [],
+  "remoteOperations": 0,
+  "verdict": "PASS",
+  "failure": null
+}

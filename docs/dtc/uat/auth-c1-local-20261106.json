@@ -1,0 +1,914 @@
+{
+  "command": "npm run quality:gate",
+  "exit_code": 0,
+  "duration_seconds": 157.2,
+  "credentials": "synthetic CI placeholders",
+  "node": "v24.22.1",
+  "code_commit": "7bb843f81b37d8cb452a7c2a4ac51c9f30338390",
+  "tree": "bf6a2afca06a1372496a24491fa8b298fd20a393",
+  "static_pages": 356,
+  "workflow_run": 42268602016,
+  "domain_summaries": [
+    {
+      "suite": "a1-a2-evidence-handoff",
+      "cases": 36,
+      "passed": 36,
+      "failed": 0,
+      "renderedMarkup": "real React SSR",
+      "browserChecked": false,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-response-capture",
+      "cases": 20,
+      "passed": 20,
+      "failed": 0,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-capture-routes",
+      "cases": 36,
+      "passed": 36,
+      "failed": 0,
+      "sdk": "real",
+      "transport": "synthetic",
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-capture-ui",
+      "cases": 27,
+      "passed": 27,
+      "failed": 0,
+      "hooks": "synthetic",
+      "browserRendering": false,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-page-continuity",
+      "pages": 6,
+      "pageAndWrapperFunctions": "real",
+      "navigation": "synthetic",
+      "secondContinueButton": false,
+      "artificialNavigationDelay": false,
+      "automaticNavigationOnSave": false,
+      "liveDatabaseWrites": 0,
+      "fullAuthenticatedShell": false
+    },
+    {
+      "authenticatedWriter": true,
+      "serverOwnedIdentity": true,
+      "strictInstrumentBoundary": true,
+      "unevaluatedCapture": true,
+      "ownerBoundReadback": true,
+      "failClosedScorecard": true,
+      "noCausalClaim": true,
+      "captureActionColorContrast": [
+        9.93,
+        11.42
+      ],
+      "contrastScope": "selected_srgb_colors_only_not_browser_accessibility"
+    },
+    {
+      "baselineBeforeAssessment": true,
+      "followUpAfterReport": true,
+      "privateResponseEvidence": true,
+      "legacyHeuristicRegressionOnly": true,
+      "currentCaptureUnscored": true,
+      "canonicalContinuation": true
+    },
+    {
+      "repeatedInstrument": true,
+      "day30VerifiedGate": true,
+      "missionAverageNotOutcome": true,
+      "serverEvidenceRequired": true,
+      "legacyHeuristicRegressionOnly": true,
+      "currentCaptureUnscored": true
+    },
+    {
+      "trainingTelemetrySeparated": true,
+      "baselineAvailable": true,
+      "followUpGatedByCompletion": true,
+      "serverEvidenceRequired": true,
+      "legacyHeuristicRegressionOnly": true,
+      "currentCaptureUnscored": true
+    },
+    {
+      "a1ComparableDelta": true,
+      "a3ComparableDelta": true,
+      "versionMismatchFailsClosed": true,
+      "missingDimensionFailsClosed": true,
+      "chronologyFailsClosed": true
+    },
+    {
+      "evidenceLevel": "runtime_pure_contracts_and_source_boundaries",
+      "personalDaysChecked": 90,
+      "evidenceRequired": true,
+      "noLengthOrMetricReward": true,
+      "exactUserQuoteRequired": true,
+      "fabricatedCoachQuoteRejected": true,
+      "cvExportPreservesUserFacts": true,
+      "incompleteFactsStayPending": true,
+      "adjustmentPreservesDraft": true,
+      "liveDatabaseAndProviderCalls": false
+    },
+    {
+      "suite": "report-practice-context",
+      "passed": 9,
+      "evidence": "real_loaders_and_review_logic_with_synthetic_database_io",
+      "liveDatabase": false
+    },
+    {
+      "evidenceLevel": "real_route_and_sdk_synthetic_http",
+      "tests": 10,
+      "beforeA2Denied": true,
+      "ownerHistoryRestoresDraft": true,
+      "idempotentAppendOnly": true,
+      "liveAuthOrRls": false
+    },
+    {
+      "suite": "a3-editor-concurrency",
+      "passed": 14,
+      "total": 14,
+      "browser": false,
+      "databaseWrites": 0,
+      "providerCalls": 0
+    },
+    {
+      "suite": "a3-cv-context-route",
+      "passed": 7,
+      "evidence": "real_handler_next_response_and_sdk_synthetic_http",
+      "liveAuthOrRls": false
+    },
+    {
+      "suite": "saved-search-contract",
+      "cases": 49,
+      "passed": 49,
+      "failed": 0,
+      "networkCalls": 0,
+      "databaseWrites": 0,
+      "integrated": true
+    },
+    {
+      "suite": "a4-search-intents",
+      "passed": 32,
+      "total": 32
+    },
+    {
+      "opportunity_search_experience": "passed",
+      "cases": 37,
+      "passed": 37,
+      "failed": 0,
+      "externalRequests": 0,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "a4-qa-access",
+      "passed": 32,
+      "failed": 0,
+      "total": 32,
+      "evidence": "real_modules_routes_components_with_synthetic_io",
+      "productionRequests": 0,
+      "databaseWrites": 0
+    },
+    {
+      "scope": ".github/workflows/typecheck.yml; separate browser and PostgreSQL workflows report their own evidence",
+      "domainTests": 49,
+      "evidenceLevels": {
+        "runtime_only": 1,
+        "mixed_runtime_and_source": 24,
+        "source_only": 24
+      },
+      "liveHttpTestsInCi": 0,
+      "liveDatabaseTestsInCi": 0,
+      "browserEndToEndTestsInCi": 0,
+      "interpretation": "Green in this workflow means runtime fixtures and/or source contracts passed; it does not mean live HTTP or live database integration was executed here."
+    },
+    {
+      "evidenceLevel": "source_only",
+      "protectedPrefixes": [
+        "/despega",
+        "/dashboard",
+        "/a4-dashboard"
+      ],
+      "publicA3PreviewRemoved": true,
+      "authenticationFailureMode": "fail_closed",
+      "hardcodedSupabaseCredentialsRemoved": true,
+      "clientDemoIdentityAcceptedBySharedHook": false,
+      "oldDemoStateCleaned": true,
+      "liveHttpCheckedInThisScript": false,
+      "liveAuthStateCheckedInThisScript": false
+    },
+    {
+      "evidenceLevel": "source_contract",
+      "productionDemoIssuance": "retired",
+      "queryStringAuthorization": false,
+      "productionLaboratories": "not_found",
+      "deployedLaboratoriesRetired": true
+    },
+    {
+      "evidenceLevel": "runtime_contract",
+      "safeNextPreserved": true,
+      "externalRedirectRejected": true,
+      "staleOAuthStateRecovered": true
+    },
+    {
+      "evidenceLevel": "runtime_and_source_contract",
+      "guardedRange": [
+        11,
+        90
+      ],
+      "boundaryDaysTested": [
+        11,
+        31,
+        61,
+        90
+      ],
+      "statesTested": [
+        "locked",
+        "completed_90_day_horizon"
+      ],
+      "canonicalSource": "journey.state.highestA2DayUnlocked"
+    },
+    {
+      "evidenceLevel": "runtime_and_source_contract",
+      "scenarios": [
+        "a1_baseline_pending",
+        "a1_follow_up_pending",
+        "a2_follow_up_pending",
+        "a3_follow_up_pending",
+        "day_7_checkpoint",
+        "day_30",
+        "a3_closed"
+      ],
+      "navigationStates": [
+        "completed",
+        "active",
+        "available",
+        "locked"
+      ],
+      "lockedNavigation": false,
+      "duplicateJourneyReadWithinRequest": false,
+      "demoShellFallback": false,
+      "gamificationAvailabilityExplicit": true,
+      "gamificationProgressServerCanonical": true,
+      "gamificationQueryFailuresFailClosed": true
+    },
+    {
+      "stages": [
+        "Despega Cerebral",
+        "Tu Ruta",
+        "Entrenamiento",
+        "Radar Estratégico"
+      ],
+      "canonicalRoutes": [
+        "/despega/a1-report",
+        "/despega/a2",
+        "/despega/a3",
+        "/despega/a4"
+      ],
+      "canonicalProfile": true,
+      "canonicalSignin": "/auth/signin",
+      "adminSurfaceUnavailable": true,
+      "legacyJourneyRedirects": true,
+      "canonicalA2Cycles": [
+        "30",
+        "60",
+        "90"
+      ],
+      "canonicalDayCompletion": true,
+      "day1ServerScoring": true,
+      "a3CompletionAccessGate": true,
+      "a3VerifiedContextRead": true,
+      "a3AtomicCompletion": true,
+      "legacyA3WriterDisabled": true,
+      "publicXpWritesDisabled": true
+    },
+    {
+      "evidenceLevel": "mixed_runtime_and_source_contract",
+      "runtimeValidated": [
+        "Chile calendar date at local night",
+        "Chile calendar date across DST change",
+        "signal input",
+        "future source rejection",
+        "missing source rejection",
+        "unsafe source URL rejection",
+        "private network rejection",
+        "mixed public/private DNS rejection",
+        "HEAD to GET fallback",
+        "available source classification",
+        "restricted source classification",
+        "private redirect rejection",
+        "HTTP error rejection",
+        "redirect limit enforcement",
+        "official source authority",
+        "decision input",
+        "review outcome requirement"
+      ],
+      "sourceContractsChecked": [
+        "canonical tables",
+        "RLS declarations",
+        "API validation wiring",
+        "server-owned write hardening migration",
+        "legacy news exclusion",
+        "source availability verification",
+        "source authority separation",
+        "source integrity persistence"
+      ],
+      "liveDatabaseCheckedInThisScript": false,
+      "liveHttpCheckedInThisScript": false
+    },
+    {
+      "rlsP1MigrationContract": true,
+      "personalTables": 2,
+      "publicReadOnlyCatalogs": 2,
+      "rollbackDocumented": true
+    },
+    {
+      "rlsP2MigrationContract": true,
+      "ownerScopedTables": 1,
+      "anonymousPrivileges": 0,
+      "rollbackDocumented": true
+    },
+    {
+      "rlsP3MigrationContract": true,
+      "publicReadOnlyCatalogs": 2,
+      "browserWritePrivileges": 0,
+      "rollbackDocumented": true
+    },
+    {
+      "evidenceLevel": "mixed_runtime_and_source_contract",
+      "runtimeValidated": [
+        "canonical DISC scoring",
+        "duplicate selection rejection",
+        "missing answer rejection",
+        "forged option rejection",
+        "extra question rejection"
+      ],
+      "sourceContractsChecked": [
+        "server-owned A1 identity and scoring",
+        "atomic A1 Career Identity dual-write",
+        "A1 to A3 journey wiring"
+      ],
+      "canonicalOrder": [
+        "Conozcámonos 1",
+        "Despega Cerebral",
+        "Conozcámonos 2",
+        "Informe A1",
+        "Introducción A2",
+        "Tu Ruta",
+        "Checkpoint A3 Día 7"
+      ],
+      "a1ServerScoring": true,
+      "a1IncludesC2AndReport": true,
+      "a2StartsAt30Days": true,
+      "serverTransitions": true,
+      "canonicalC2Flag": true,
+      "directA2AccessGuarded": true,
+      "realA3CheckpointRequired": true,
+      "legacyCompatibilityRepaired": true,
+      "liveHttpCheckedInThisScript": false,
+      "liveDatabaseCheckedInThisScript": false
+    }
+  ],
+  "source_sha256": {
+    ".github/workflows/a1-browser-qa.yml": "7e49c0714682ebe543cf2d3df8a050879c106b783d24de8798d1f448baa2c2ca",
+    ".gitignore": "61d7614485e31ab57bb71f595063c82944af450a319bb65de2511baeb59366c6",
+    "app/api/assessments/drafts/[assessmentType]/route.ts": "b1500c74d4a4c6337f3cb3f45d0a231df2380c5e06eac82f573f43b69b45cd59",
+    "app/api/auth/email-login/route.ts": "90372146d86f556f3028bb4264f5d4b0ae36d95d3855b7b44e2fd92bfcb897f9",
+    "app/api/auth/signout/route.ts": "e0ffcc6c3914a96bcbe84afc1e623210f3d4f714cd8fec2dc8bf8ea2b5a8443f",
+    "app/api/journey/complete-c1/route.ts": "eac999e702c4e9d491690e4f07ce34922a21a6a3b475782074aba13095feeefb",
+    "app/auth/email-login/page.tsx": "10d7b80c0f1ce7ff5fa5e977119e61bce5f660d6a6bce8dca2b8d80765e7c511",
+    "app/auth/signin/page.tsx": "72de1d69c6e7884cf596cbab295ef27939c1e9bafe83f44ff843319e35b6399d",
+    "app/despega/conozcamonos-1/page.tsx": "7f38c8e50447dba782ed076ab819d12d65e649977b84e2cae3006f1d00bf8946",
+    "app/despega/profile/page.tsx": "378b7d22639fac4e9900ce3b8d2ae0af689e06ef0435aee072b7a53583b075d4",
+    "components/auth/sign-out-button.tsx": "62173d35bc131ae4de302e7d1698eaa8e0afbf2a6bc18c728edb33639d50f5ed",
+    "components/despega-navbar.tsx": "235ce968c943cf5a9f5d1df35686a3043d8d4287053a6cffbb21fbe3eceebeec",
+    "components/journey/journey-flow-panel.tsx": "22e0c9f096a0a1cea8f9da115d6b437e4a931165c99de75c5583f0789985205f",
+    "components/layout/app-shell.tsx": "9f3e7a2455b779c167a54eb5deb535d3787f50871c8bdd9562f6d58cb7df7387",
+    "lib/assessment-drafts.ts": "6acebf1ff9249639ecc12c356c2dfdececc6babefed94d16bd4b5e02c21a863e",
+    "lib/auth/current-session.ts": "3351cb63c4f9114476585314f4172f68948b9c8b99979b2f0838765cac258d81",
+    "lib/auth/email-login.ts": "b0af07da50a93737af4c591217662b2dbf372c41aa6423f6a8fd3b4d64144603",
+    "lib/auth/signout-client.ts": "95a22c4acf1d6312a9e9e302b7e4ea977c59e3a9aa2e87212520bd8d944d0370",
+    "lib/c1-completion.ts": "5d15d5ca1b3b7c7eca958d967ef0712b9559afc5c30bba81de7b901072f96309",
+    "lib/c1-responses.ts": "738d673b5a7bdada76bf32054476ee745fd342e474d45689d5117f50a4fac1d1",
+    "lib/use-assessment-draft.ts": "d6be7236ee1e38e8d482b01e755b4cf1669bca106d4eb10aa7cbe751a92d48d3",
+    "middleware.ts": "c8c6a5385c97e7b08244e360a4e90ac390a92c6cf8adeb0d47c7e72af1d301de",
+    "scripts/a1-browser-qa/auth-browser.mjs": "74ab4edf5b505390d9c2bc1f4b62e84f6d150b08952e14f3425d1127a50ca663",
+    "scripts/a1-browser-qa/auth-lab.mjs": "a712219d3a0d4800d047c7145b2cbb1c0925a13ed2a95f883a5a00a0777720f1",
+    "scripts/a1-browser-qa/auth-prepare.mjs": "271fc03a08fe43a7872b0eded72e1f891020157409505e5362e4467ead9a346d",
+    "scripts/a1-browser-qa/auth-seed.ts": "d01f0fc00ae4af57405c875bf2636b63e25332e9cc4227eecf854742916337ca",
+    "scripts/a1-browser-qa/auth-self-check.mjs": "a9be19c6384fa938678436ce1f398bdf698c154ef7a833bc1f9a3df8ace34da4",
+    "scripts/a1-browser-qa/c1-advisors.mjs": "174b6b838cd3688177316f377118f8b58117e80a76fad86e2e80db98ea0b5c7f",
+    "scripts/a1-browser-qa/c1-browser.mjs": "d6e8851fb6e48b0f4dc93836135aee8714dbdc04de5732d706bbf967273f3829",
+    "scripts/a1-browser-qa/c1-prepare.mjs": "61435130115705575d1a9f7f49b5b985c20178414090fe842becef4cd472a4b1",
+    "scripts/a1-browser-qa/c1-seed.ts": "4e21c77497ca8e5424171a91990f49c34dc3f057a431bbe1d1017ac3ea719632",
+    "scripts/check-dtc-critical-contract.ts": "9e8a05922312e4d57613adb641e6615f63405abd187f6c5596a79e7a8fbb550d",
+    "scripts/test-a4-qa-access.mjs": "0a2cb490324b40ce9d4218493e36dfbe561f32255e26490cf0ffd3a1220d46f3",
+    "scripts/test-assessment-drafts.mjs": "3049c5076d9ec0d092bb3d0020360ba5a62d9141e2428147e74e8a4bc425a45c",
+    "scripts/test-auth-signout.cjs": "053a7f3f39293f9992e0128488fa2ceb37c2762d4bd910e492db4a6593fc9177",
+    "scripts/test-c1-completion-sql.mjs": "f16621602e5f85e3ef19aad298c31a6abd9433fd584706051eb9f32fc77ffb7d",
+    "scripts/test-c1-completion.mjs": "fd96561f0bf4917517253c6165cb45afe1d7125890d39d068396ec4f80b248f7",
+    "scripts/test-email-login.mjs": "0221967022f87701f83787b12a02edc524de1d97e6730a3cc69c2ac4f9f0f8c0",
+    "supabase/migrations/20261106173017_c1_atomic_completion.sql": "fe8e0c8c307323f8a5de528c88b4d80ba27b8c39e1d47f13e07901b0ca2f86b3"
+  },
+  "browser_result": "PASS",
+  "browser_run_url": "https://github.com/jcv86/main/actions/runs/42268602016",
+  "browser_candidate": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "ci_attempts": [
+    {
+      "commit": "6d172f7d7aa4bb0465d77b3d8b7020097450a4e2",
+      "run": 42252367657,
+      "result": "FAIL",
+      "reason": "Email submit button color contrast; stopped before real login and C1",
+      "artifact_id": 13521572282,
+      "artifact_sha256": "58d570a672444d35088957b7d7eacad4d4fdb95567d7bd7216890d32203b731e"
+    },
+    {
+      "commit": "86bd06b5ba9f001037174b7d68eb0ce32ae2dcd3",
+      "run": 42254520881,
+      "result": "FAIL",
+      "reason": "Harness waited for unconsumed non-ok background response bodies; no JS or transport failures",
+      "artifact_id": 13522631607,
+      "artifact_sha256": "a651c627efa1a74331e8710293273a4c480769d088d2ea1536c4812d9c0a8c11"
+    },
+    {
+      "commit": "b6202a39b6e9f6fe57579e6881084dca38892cc6",
+      "run": 42256436814,
+      "result": "FAIL",
+      "reason": "Ambiguous global alert selector matched the form and Next route announcer; canonical entry and initial desktop visual checks passed",
+      "artifact_id": 13522823251,
+      "artifact_sha256": "f8b340c954a68c0461bb535362e488f3942361bec837114f00c48e1a83efc570"
+    },
+    {
+      "commit": "b03cba330e678ddcbf29e93a3e6c1698d8900c10",
+      "run": 42257965965,
+      "result": "FAIL",
+      "reason": "Login returned HTTP200; the harness read its body after full-document navigation and lost the response. Earlier entry, declared errors and five desktop accessibility checks passed.",
+      "artifact_id": 13524745383,
+      "artifact_sha256": "e0e7d91e536e5f9ab5821d16194ca4743e1a22aa8c69e1e816127371852fc2b7"
+    },
+    {
+      "commit": "a2ae4019797c1d512b06bbbd3ee57babc0276fb3",
+      "run": 42259971731,
+      "result": "FAIL",
+      "reason": "Chromium discards successful login response body during full document replacement even when JSON reading starts at response event; required session checks were not reached.",
+      "artifact_id": 13523519567,
+      "artifact_sha256": "8fe818b528fd3ce32f5b9f77cf3657e2d34b7bb8289d28709d91200ad2b0deb3"
+    },
+    {
+      "commit": "0e72e0713e7e001e618fabac0ba8a114eb12f919",
+      "run": 42261395652,
+      "result": "FAIL",
+      "reason": "Desktop authentication journey fully passed. Mobile actual returning-session CTA failed Axe color-contrast under hover because global link hover overrode white text.",
+      "artifact_id": 13524654474,
+      "artifact_sha256": "01a83e076923ebbde0f493e023272ee220cddf7a01203fce5ee5a7f7ba03173a"
+    },
+    {
+      "commit": "48143e6534102796e6be93d408c5636d111c23c2",
+      "run": 42262916358,
+      "result": "FAIL",
+      "reason": "Auth17 and18 accessibility/layout reviews passed; C1 first save-error scan found AppShell skip-link color contrast. Candidate fixes the actual link.",
+      "artifact_id": 13526685905,
+      "artifact_sha256": "1eeda953219f13eee930eb72082432ddb10d8df99ee4de03b5d2777edd604b00"
+    },
+    {
+      "commit": "7bb843f81b37d8cb452a7c2a4ac51c9f30338390",
+      "run": 42266908704,
+      "result": "FAIL",
+      "changes": "Atomic C1, owner precondition, actual SQL rollback/replay/concurrency tests and AppShell skip-link contrast",
+      "reason": "Closure A3 mobile measured width390 before desktop AppShell CSS padding had changed; breadcrumb left320 in diagnostics but mobile layout in later screenshot. Auth/C1 skipped. Fix viewport readiness without retrying or weakening overflow assertion.",
+      "artifact_id": 13528071010,
+      "artifact_sha256": "9dc6c7fffec3b13410eaacd914319e41556c6e3867d2410c3061788f98922c17"
+    },
+    {
+      "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+      "run": 42268602016,
+      "result": "PASS",
+      "changes": "Runner observes actual AppShell responsive CSS before measuring layout; application source is unchanged from7bb843f",
+      "artifact_id": 13529305661,
+      "artifact_sha256": "34ce943213b0b87bb845c75f7fd524aab9a5bdb50ae48152ea34893d759d25e3"
+    }
+  ],
+  "final_build": {
+    "command": "npm run quality:gate",
+    "code_commit": "7bb843f81b37d8cb452a7c2a4ac51c9f30338390",
+    "tree": "bf6a2afca06a1372496a24491fa8b298fd20a393",
+    "exit_code": 0,
+    "duration_seconds": 157.2,
+    "static_pages": 356,
+    "log_sha256": "16fbcdc81951dd0d88799d14d8e9c0eb920e0db873d9e12cbaecb51b25fa2fb0",
+    "application_sources_identical_to_browser_candidate": true,
+    "later_changes": [
+      "scripts/a1-browser-qa/closure-browser.mjs"
+    ]
+  },
+  "final_source_sha256": {
+    ".github/workflows/a1-browser-qa.yml": "7e49c0714682ebe543cf2d3df8a050879c106b783d24de8798d1f448baa2c2ca",
+    ".gitignore": "61d7614485e31ab57bb71f595063c82944af450a319bb65de2511baeb59366c6",
+    "app/api/assessments/drafts/[assessmentType]/route.ts": "b1500c74d4a4c6337f3cb3f45d0a231df2380c5e06eac82f573f43b69b45cd59",
+    "app/api/auth/email-login/route.ts": "90372146d86f556f3028bb4264f5d4b0ae36d95d3855b7b44e2fd92bfcb897f9",
+    "app/api/auth/signout/route.ts": "e0ffcc6c3914a96bcbe84afc1e623210f3d4f714cd8fec2dc8bf8ea2b5a8443f",
+    "app/api/journey/complete-c1/route.ts": "eac999e702c4e9d491690e4f07ce34922a21a6a3b475782074aba13095feeefb",
+    "app/auth/email-login/page.tsx": "10d7b80c0f1ce7ff5fa5e977119e61bce5f660d6a6bce8dca2b8d80765e7c511",
+    "app/auth/signin/page.tsx": "72de1d69c6e7884cf596cbab295ef27939c1e9bafe83f44ff843319e35b6399d",
+    "app/despega/conozcamonos-1/page.tsx": "7f38c8e50447dba782ed076ab819d12d65e649977b84e2cae3006f1d00bf8946",
+    "app/despega/profile/page.tsx": "378b7d22639fac4e9900ce3b8d2ae0af689e06ef0435aee072b7a53583b075d4",
+    "components/auth/sign-out-button.tsx": "62173d35bc131ae4de302e7d1698eaa8e0afbf2a6bc18c728edb33639d50f5ed",
+    "components/despega-navbar.tsx": "235ce968c943cf5a9f5d1df35686a3043d8d4287053a6cffbb21fbe3eceebeec",
+    "components/journey/journey-flow-panel.tsx": "22e0c9f096a0a1cea8f9da115d6b437e4a931165c99de75c5583f0789985205f",
+    "components/layout/app-shell.tsx": "9f3e7a2455b779c167a54eb5deb535d3787f50871c8bdd9562f6d58cb7df7387",
+    "lib/assessment-drafts.ts": "6acebf1ff9249639ecc12c356c2dfdececc6babefed94d16bd4b5e02c21a863e",
+    "lib/auth/current-session.ts": "3351cb63c4f9114476585314f4172f68948b9c8b99979b2f0838765cac258d81",
+    "lib/auth/email-login.ts": "b0af07da50a93737af4c591217662b2dbf372c41aa6423f6a8fd3b4d64144603",
+    "lib/auth/signout-client.ts": "95a22c4acf1d6312a9e9e302b7e4ea977c59e3a9aa2e87212520bd8d944d0370",
+    "lib/c1-completion.ts": "5d15d5ca1b3b7c7eca958d967ef0712b9559afc5c30bba81de7b901072f96309",
+    "lib/c1-responses.ts": "738d673b5a7bdada76bf32054476ee745fd342e474d45689d5117f50a4fac1d1",
+    "lib/use-assessment-draft.ts": "d6be7236ee1e38e8d482b01e755b4cf1669bca106d4eb10aa7cbe751a92d48d3",
+    "middleware.ts": "c8c6a5385c97e7b08244e360a4e90ac390a92c6cf8adeb0d47c7e72af1d301de",
+    "scripts/a1-browser-qa/auth-browser.mjs": "74ab4edf5b505390d9c2bc1f4b62e84f6d150b08952e14f3425d1127a50ca663",
+    "scripts/a1-browser-qa/auth-lab.mjs": "a712219d3a0d4800d047c7145b2cbb1c0925a13ed2a95f883a5a00a0777720f1",
+    "scripts/a1-browser-qa/auth-prepare.mjs": "271fc03a08fe43a7872b0eded72e1f891020157409505e5362e4467ead9a346d",
+    "scripts/a1-browser-qa/auth-seed.ts": "d01f0fc00ae4af57405c875bf2636b63e25332e9cc4227eecf854742916337ca",
+    "scripts/a1-browser-qa/auth-self-check.mjs": "a9be19c6384fa938678436ce1f398bdf698c154ef7a833bc1f9a3df8ace34da4",
+    "scripts/a1-browser-qa/c1-advisors.mjs": "174b6b838cd3688177316f377118f8b58117e80a76fad86e2e80db98ea0b5c7f",
+    "scripts/a1-browser-qa/c1-browser.mjs": "d6e8851fb6e48b0f4dc93836135aee8714dbdc04de5732d706bbf967273f3829",
+    "scripts/a1-browser-qa/c1-prepare.mjs": "61435130115705575d1a9f7f49b5b985c20178414090fe842becef4cd472a4b1",
+    "scripts/a1-browser-qa/c1-seed.ts": "4e21c77497ca8e5424171a91990f49c34dc3f057a431bbe1d1017ac3ea719632",
+    "scripts/a1-browser-qa/closure-browser.mjs": "9113c6916dbf06213895f6f882e12ab03f32d7d2de92f215612d7a2b884c38c1",
+    "scripts/check-dtc-critical-contract.ts": "9e8a05922312e4d57613adb641e6615f63405abd187f6c5596a79e7a8fbb550d",
+    "scripts/test-a4-qa-access.mjs": "0a2cb490324b40ce9d4218493e36dfbe561f32255e26490cf0ffd3a1220d46f3",
+    "scripts/test-assessment-drafts.mjs": "3049c5076d9ec0d092bb3d0020360ba5a62d9141e2428147e74e8a4bc425a45c",
+    "scripts/test-auth-signout.cjs": "053a7f3f39293f9992e0128488fa2ceb37c2762d4bd910e492db4a6593fc9177",
+    "scripts/test-c1-completion-sql.mjs": "f16621602e5f85e3ef19aad298c31a6abd9433fd584706051eb9f32fc77ffb7d",
+    "scripts/test-c1-completion.mjs": "fd96561f0bf4917517253c6165cb45afe1d7125890d39d068396ec4f80b248f7",
+    "scripts/test-email-login.mjs": "0221967022f87701f83787b12a02edc524de1d97e6730a3cc69c2ac4f9f0f8c0",
+    "supabase/migrations/20261106173017_c1_atomic_completion.sql": "fe8e0c8c307323f8a5de528c88b4d80ba27b8c39e1d47f13e07901b0ca2f86b3"
+  },
+  "historical_local_gate": {
+    "command": "npm run quality:gate",
+    "exit_code": 0,
+    "duration_seconds": 146.1,
+    "credentials": "synthetic placeholders from repository CI",
+    "node": "24.22.1",
+    "code_commit": "6d172f7d7aa4bb0465d77b3d8b7020097450a4e2",
+    "tree": "aa9fddfc9d620fa13145693a71feead15c1a9421",
+    "static_pages": 355,
+    "workflow_run": 42252367657,
+    "domain_summaries": [
+      {
+        "suite": "a1-a2-evidence-handoff",
+        "cases": 36,
+        "passed": 36,
+        "failed": 0,
+        "renderedMarkup": "real React SSR",
+        "browserChecked": false,
+        "liveDatabaseWrites": 0
+      },
+      {
+        "suite": "outcome-response-capture",
+        "cases": 20,
+        "passed": 20,
+        "failed": 0,
+        "liveDatabaseWrites": 0
+      },
+      {
+        "suite": "outcome-capture-routes",
+        "cases": 36,
+        "passed": 36,
+        "failed": 0,
+        "sdk": "real",
+        "transport": "synthetic",
+        "liveDatabaseWrites": 0
+      },
+      {
+        "suite": "outcome-capture-ui",
+        "cases": 27,
+        "passed": 27,
+        "failed": 0,
+        "hooks": "synthetic",
+        "browserRendering": false,
+        "liveDatabaseWrites": 0
+      },
+      {
+        "suite": "outcome-page-continuity",
+        "pages": 6,
+        "pageAndWrapperFunctions": "real",
+        "navigation": "synthetic",
+        "secondContinueButton": false,
+        "artificialNavigationDelay": false,
+        "automaticNavigationOnSave": false,
+        "liveDatabaseWrites": 0,
+        "fullAuthenticatedShell": false
+      },
+      {
+        "suite": "report-practice-context",
+        "passed": 9,
+        "evidence": "real_loaders_and_review_logic_with_synthetic_database_io",
+        "liveDatabase": false
+      },
+      {
+        "suite": "a3-editor-concurrency",
+        "passed": 14,
+        "total": 14,
+        "browser": false,
+        "databaseWrites": 0,
+        "providerCalls": 0
+      },
+      {
+        "suite": "a3-cv-context-route",
+        "passed": 7,
+        "evidence": "real_handler_next_response_and_sdk_synthetic_http",
+        "liveAuthOrRls": false
+      },
+      {
+        "suite": "saved-search-contract",
+        "cases": 49,
+        "passed": 49,
+        "failed": 0,
+        "networkCalls": 0,
+        "databaseWrites": 0,
+        "integrated": true
+      },
+      {
+        "suite": "a4-search-intents",
+        "passed": 32,
+        "total": 32
+      },
+      {
+        "opportunity_search_experience": "passed",
+        "cases": 37,
+        "passed": 37,
+        "failed": 0,
+        "externalRequests": 0,
+        "liveDatabaseWrites": 0
+      },
+      {
+        "suite": "a4-qa-access",
+        "passed": 32,
+        "failed": 0,
+        "total": 32,
+        "evidence": "real_modules_routes_components_with_synthetic_io",
+        "productionRequests": 0,
+        "databaseWrites": 0
+      }
+    ],
+    "source_sha256": {
+      "app/api/auth/email-login/route.ts": "90372146d86f556f3028bb4264f5d4b0ae36d95d3855b7b44e2fd92bfcb897f9",
+      "app/api/auth/signout/route.ts": "e0ffcc6c3914a96bcbe84afc1e623210f3d4f714cd8fec2dc8bf8ea2b5a8443f",
+      "app/auth/email-login/page.tsx": "dced11ac5d075b91ea271e72bfac6e7cbc6b2bdde8f275d07de48dd6c3cdcc8c",
+      "app/auth/signin/page.tsx": "72de1d69c6e7884cf596cbab295ef27939c1e9bafe83f44ff843319e35b6399d",
+      "app/despega/conozcamonos-1/page.tsx": "5bb88cd663d074d802d99ce373dbb3a661bc41003d13953d4c3b6cb61ec026c1",
+      "lib/c1-responses.ts": "4067d937fffaf65349f370fb1395e75b84834d3bca4346c06686b76946432e9d",
+      "middleware.ts": "c8c6a5385c97e7b08244e360a4e90ac390a92c6cf8adeb0d47c7e72af1d301de"
+    }
+  },
+  "focused_commands": [
+    {
+      "command": "node --import tsx scripts/test-c1-completion.mjs",
+      "exit_code": 0,
+      "duration_seconds": 1.6
+    },
+    {
+      "command": "npm run test:assessment-drafts",
+      "exit_code": 0,
+      "duration_seconds": 0.3
+    },
+    {
+      "command": "node --import tsx scripts/test-auth-signout.cjs",
+      "exit_code": 0,
+      "duration_seconds": 0.9
+    },
+    {
+      "command": "node --import tsx scripts/test-email-login.mjs",
+      "exit_code": 0,
+      "duration_seconds": 1.1
+    },
+    {
+      "command": "node scripts/a1-browser-qa/auth-self-check.mjs",
+      "exit_code": 0,
+      "duration_seconds": 0.4
+    }
+  ],
+  "focused_counts": {
+    "c1_completion": 32,
+    "email_login": 22,
+    "signout": 16,
+    "auth_lab_self_check": 17,
+    "assessment_drafts": "PASS; partial/legacy/Other/text bounds and report fidelity"
+  },
+  "migration": "supabase/migrations/20261106173017_c1_atomic_completion.sql",
+  "remote_database_mutations": 0,
+  "human_uat": {
+    "cases": 54,
+    "execution": "NOT_EXECUTED; unchanged by automated evidence"
+  },
+  "candidate_tree": "1b828ca81ec3c1cdbc01aaf1f59347c8e13c076b",
+  "integration_artifact": {
+    "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+    "tree": "1b828ca81ec3c1cdbc01aaf1f59347c8e13c076b",
+    "run": 42268602016,
+    "job": 128066975458,
+    "artifact_id": 13529305661,
+    "artifact_bytes": 13188970,
+    "artifact_sha256": "34ce943213b0b87bb845c75f7fd524aab9a5bdb50ae48152ea34893d759d25e3",
+    "artifact_digest_verified": true,
+    "artifact_expires_at": "2026-11-13T18:21:39Z",
+    "retained_files": [
+      {
+        "file": "auth-results.json",
+        "bytes": 82244,
+        "sha256": "4e0066a53d99f3885deb19458fee07c6603c631ee2e916655da04bf9b3f0a2c3"
+      },
+      {
+        "file": "auth-scope.json",
+        "bytes": 6946,
+        "sha256": "ec4d2b4d4c44fb48f03d35ec10e8c2fa1094b6923384902fcc25f8299c179e89"
+      },
+      {
+        "file": "auth-seed.json",
+        "bytes": 198,
+        "sha256": "d8767385ed8bf3f152bd7ff9efa714c40e6749c82055ae9ef206a589ac9f42dc"
+      },
+      {
+        "file": "c1-results.json",
+        "bytes": 14100,
+        "sha256": "1450ad0a299f824ce62e2122c956e84707a350fe2bfbd3b0a91f4f568e720a14"
+      },
+      {
+        "file": "c1-scope.json",
+        "bytes": 2690,
+        "sha256": "6a1b601d79ae263eb0c9182a60e2da42403c79e8576683e32af1324b504e5273"
+      },
+      {
+        "file": "c1-seed.json",
+        "bytes": 492,
+        "sha256": "e8a75b93f5d40d41c8cdb079d32e462b9b80af6cbe101b627ea5caf9ee14b9ea"
+      },
+      {
+        "file": "c1-atomic-sql.json",
+        "bytes": 2783,
+        "sha256": "832000eae30e2f092b330d532e689708af2bf2c04ef98025a623a17acd68c69f"
+      },
+      {
+        "file": "c1-advisors.json",
+        "bytes": 346,
+        "sha256": "adbebfb777f4897f6440d16237e7e21b1c3562ed737530b986876f660cd3abe1"
+      },
+      {
+        "file": "closure-results.json",
+        "bytes": 24857,
+        "sha256": "22c5ad02840f551ee8f850e17ac832febc7c87f7b35300998a0ee55dc7fe709e"
+      },
+      {
+        "file": "closure-scope.json",
+        "bytes": 8855,
+        "sha256": "651bf9c36dd0a44974d06c992d2b4d363377e9dfe792039487c5e5609a5c2f79"
+      },
+      {
+        "file": "flow-results.json",
+        "bytes": 1382,
+        "sha256": "29bd6127f21291bfb30713a87bb2294b5889e757cac6a8a75d4ee990327a7334"
+      },
+      {
+        "file": "results.json",
+        "bytes": 2557,
+        "sha256": "21a9523358170e67db39d8b0be3ae921d666c4a001a5723bf52bb30e45bd0cdd"
+      },
+      {
+        "file": "runtime-boundary-results.json",
+        "bytes": 799,
+        "sha256": "e930f474cef27bf1699d44332556eb8737745cedd6e3b5475aeb451d1a357c83"
+      },
+      {
+        "file": "invitation-browser.json",
+        "bytes": 386,
+        "sha256": "b4825d2dc8fc7956b5e6a97e1c9331c49df4b258bffdc611ca19380dc45f9444"
+      },
+      {
+        "file": "objective-writer-compatibility.json",
+        "bytes": 1125,
+        "sha256": "90780c1e54e171d7fe7358f46478e754a771af6762bb2dbd49e06af39daa0045"
+      },
+      {
+        "file": "ops-correlation.json",
+        "bytes": 355,
+        "sha256": "bbf6917765b93c1719b36e4a112fdee292c3c3d26afa600660635feda567adbe"
+      }
+    ],
+    "privacy": "Synthetic users and sanitized results; no tokens, passwords, cookie values, traces, storageState or private server logs",
+    "visual_review": [
+      "c1-mobile-completion-response-lost.png",
+      "c1-desktop-completion-rollback.png",
+      "c1-mobile-restored-household.png",
+      "closure-a3-baseline-form-390.png"
+    ]
+  },
+  "browser_summary": {
+    "auth_cases": 17,
+    "c1_cases": 24,
+    "c1_sql_cases": 19,
+    "auth_axe_layout_checks": 18,
+    "c1_axe_layout_checks": 10,
+    "closure_cases": 41,
+    "closure_axe_layout_checks": 28,
+    "reported_axe_violations": 0,
+    "atomic_completion": [
+      {
+        "phase": "desktop",
+        "databaseFailureTarget": "profile",
+        "rollbackVerified": true,
+        "realCommitVerifiedBeforeResponseLoss": true,
+        "completionPosts": 2,
+        "successfulCompletionPosts": 1,
+        "finalDraftPuts": 0,
+        "reloadRecoveredThroughGet": true,
+        "canonicalResponses": 1,
+        "privateReceipts": 1,
+        "recoveryDestinationBoundaryObserved": true,
+        "a1EntryWrites": 1
+      },
+      {
+        "phase": "mobile",
+        "databaseFailureTarget": "draft",
+        "rollbackVerified": true,
+        "realCommitVerifiedBeforeResponseLoss": true,
+        "completionPosts": 2,
+        "successfulCompletionPosts": 1,
+        "finalDraftPuts": 0,
+        "reloadRecoveredThroughGet": true,
+        "canonicalResponses": 1,
+        "privateReceipts": 1,
+        "recoveryDestinationBoundaryObserved": true,
+        "a1EntryWrites": 1
+      }
+    ],
+    "auth_background_readiness": {
+      "checks": 76,
+      "all_ready": true
+    },
+    "closure_viewport_readiness": {
+      "checks": 28,
+      "all_ready": true,
+      "max_attempts": 2
+    },
+    "auth_console_resource_failures": 108,
+    "auth_request_cancellations": 67,
+    "c1_transport_events": 29,
+    "c1_deliberate_response_losses": 2,
+    "browser_external_hosts_observed": 0,
+    "uncaught_browser_javascript_errors": 0
+  },
+  "resolved_defects": [
+    {
+      "id": "DTC-C1-02",
+      "priority": "P1",
+      "result": "IN_PROGRESS",
+      "evidence": "Real page handlers, draft hook/API and onboarding selector with synthetic Auth, HTTP and persistence; no remote database",
+      "cases": [
+        "Draft close failure then retry repeats insert",
+        "Profile failure after draft close emits completion and navigates while canonical onboarding still requires C1"
+      ],
+      "reproduction": {
+        "candidate": "86bd06b5ba9f001037174b7d68eb0ce32ae2dcd3",
+        "execution": "inline Node/tsx; no raw execution artifact retained",
+        "browser": false,
+        "remote_database": false,
+        "first_close_failure": {
+          "inserted_rows": 1,
+          "draft_close_attempts": 1,
+          "profile_updates": 0,
+          "navigations": 0,
+          "profile_completed": false,
+          "retry_enabled": true
+        },
+        "retry_after_close_failure": {
+          "inserted_rows": 2,
+          "distinct_ids": true,
+          "identical_final_answers": true,
+          "draft_close_attempts": 2,
+          "profile_updates": 1,
+          "navigations": 1,
+          "profile_completed": true
+        },
+        "profile_update_failure": {
+          "inserted_rows": 1,
+          "draft_completed": true,
+          "profile_completed": false,
+          "visible_error": null,
+          "completion_events": 1,
+          "navigation": "/despega/a1-cerebral-intro",
+          "draft_get": null,
+          "canonical_onboarding_path": "/despega/conozcamonos-1"
+        }
+      },
+      "status": "VERIFIED_IN_CANDIDATE_LOCAL_POSTGRESQL_AND_BROWSER",
+      "verification_run": 42268602016
+    }
+  ],
+  "release_scope": "Candidate code and isolated laboratory only; no remote migration or deployment; human UAT remains unexecuted",
+  "local_source_manifest_verification": {
+    "entries": 87,
+    "unique_files": 82,
+    "all_sha256_match_candidate": true
+  }
+}

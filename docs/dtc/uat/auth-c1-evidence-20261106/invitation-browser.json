@@ -1,0 +1,10 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "scope": "real Chromium + real production invitation route + real production claim SQL; disposable local Supabase only",
+  "scannerGetMutatedInvitation": false,
+  "explicitPostClaimedInvitation": true,
+  "claimCookieHttpOnly": true,
+  "claimCookieSameSiteLax": true,
+  "secondBrowserCouldReclaim": false,
+  "verdict": "PASS"
+}

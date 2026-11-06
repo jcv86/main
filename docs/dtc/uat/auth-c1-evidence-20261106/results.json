@@ -1,0 +1,114 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "scope": "real local Auth/JWT/PostgREST, actual route exports and components in a minimal lab; not production E2E",
+  "steps": [
+    {
+      "name": "unauthenticated_route_preserves_destination_and_rejects_save",
+      "status": "PASS"
+    },
+    {
+      "name": "real_local_auth_cookie_login",
+      "status": "PASS"
+    },
+    {
+      "name": "actual_http_save_through_postgrest",
+      "status": "PASS"
+    },
+    {
+      "name": "clarification_save_and_reload",
+      "status": "PASS"
+    },
+    {
+      "name": "stale_second_tab_conflict_and_recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "clarification_withdrawal",
+      "status": "PASS"
+    },
+    {
+      "name": "clarification_partial_optional_selection",
+      "status": "PASS"
+    },
+    {
+      "name": "visual_a1-desktop",
+      "status": "PASS",
+      "width": 1440,
+      "radioCount": 24
+    },
+    {
+      "name": "visual_a1-mobile",
+      "status": "PASS",
+      "width": 390,
+      "radioCount": 24
+    },
+    {
+      "name": "print_includes_evidence_and_restores_disclosures",
+      "status": "PASS"
+    },
+    {
+      "name": "identity_uses_same_source_without_disc_skills",
+      "status": "PASS"
+    },
+    {
+      "name": "visual_identity-desktop",
+      "status": "PASS",
+      "width": 1440,
+      "radioCount": 0
+    },
+    {
+      "name": "visual_identity-mobile",
+      "status": "PASS",
+      "width": 390,
+      "radioCount": 0
+    },
+    {
+      "name": "preferences_real_http_save_reload_and_restore",
+      "status": "PASS"
+    },
+    {
+      "name": "visual_settings-desktop",
+      "status": "PASS",
+      "width": 1440,
+      "radioCount": 0
+    },
+    {
+      "name": "visual_settings-mobile-390x844",
+      "status": "PASS",
+      "width": 390,
+      "radioCount": 0
+    },
+    {
+      "name": "real_jwt_postgrest_cross_owner_isolation",
+      "status": "PASS"
+    },
+    {
+      "name": "preferences_without_cookie_are_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "session_cookie_removed_is_rejected",
+      "status": "PASS"
+    },
+    {
+      "name": "visual_identity-empty-mobile",
+      "status": "PASS",
+      "width": 390,
+      "radioCount": 0
+    },
+    {
+      "name": "visual_a1-tied-mobile",
+      "status": "PASS",
+      "width": 390,
+      "radioCount": 24
+    },
+    {
+      "name": "no_browser_javascript_exceptions",
+      "status": "PASS"
+    }
+  ],
+  "visualFailures": [],
+  "pageErrors": [],
+  "verdict": "PASS",
+  "completedAt": "2026-11-06T18:16:27.410Z"
+}

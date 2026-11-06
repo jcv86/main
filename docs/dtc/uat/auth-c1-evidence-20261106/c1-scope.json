@@ -1,0 +1,58 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "environment": "disposable-local-c1",
+  "copied": [
+    {
+      "path": "app/despega/conozcamonos-1/page.tsx",
+      "sha256": "7f38c8e50447dba782ed076ab819d12d65e649977b84e2cae3006f1d00bf8946"
+    },
+    {
+      "path": "app/api/assessments/drafts/[assessmentType]/route.ts",
+      "sha256": "b1500c74d4a4c6337f3cb3f45d0a231df2380c5e06eac82f573f43b69b45cd59"
+    },
+    {
+      "path": "app/api/journey/complete-c1/route.ts",
+      "sha256": "eac999e702c4e9d491690e4f07ce34922a21a6a3b475782074aba13095feeefb"
+    },
+    {
+      "path": "lib/c1-completion.ts",
+      "sha256": "5d15d5ca1b3b7c7eca958d967ef0712b9559afc5c30bba81de7b901072f96309"
+    },
+    {
+      "path": "lib/c1-responses.ts",
+      "sha256": "738d673b5a7bdada76bf32054476ee745fd342e474d45689d5117f50a4fac1d1"
+    },
+    {
+      "path": "lib/assessment-drafts.ts",
+      "sha256": "6acebf1ff9249639ecc12c356c2dfdececc6babefed94d16bd4b5e02c21a863e"
+    },
+    {
+      "path": "lib/use-assessment-draft.ts",
+      "sha256": "d6be7236ee1e38e8d482b01e755b4cf1669bca106d4eb10aa7cbe751a92d48d3"
+    }
+  ],
+  "genuine": [
+    "actual C1 page, draft handler and completion route",
+    "real email login, Supabase cookies and AppShell from Auth phase",
+    "canonical assessment_drafts migration and owner RLS",
+    "atomic completion migration, private receipt, server-verified actor, expected-owner precondition and in-transaction pilot admission",
+    "actual legacy A4 profile trigger and its A3 progression dependency"
+  ],
+  "fixtures": [
+    "two synthetic owners admitted by the preceding real invitation flow; no new membership, profile or completion is seeded",
+    "Q2/Q3/Q4 answers are explicitly prefilled through the real draft API to isolate the Other-text regression"
+  ],
+  "substitutions": [
+    "root document metadata and system font loading",
+    "hidden read-only useSession observer in the temporary root; no auth methods or state are changed",
+    "one deliberately failed draft PUT per viewport to verify visible recovery and retained text",
+    "a temporary database trigger for the current synthetic owner induces a real completion failure: profile on desktop, draft on mobile",
+    "after verifying a real successful retry committed, only delivery of its HTTP response is aborted; reload must recover the existing result"
+  ],
+  "notVerified": [
+    "external voice/AI assistance and text-quality validation",
+    "remote migration application or deployment",
+    "already-open browsers running an earlier application version"
+  ],
+  "privacy": "Only synthetic screenshots and sanitized verdicts; no passwords, tokens or private server logs."
+}

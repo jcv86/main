@@ -1,0 +1,744 @@
+{
+  "project": "DTCFINAL",
+  "project_ref": "dcfrbwxbejtbcouionna",
+  "observed_at": "2026-11-06T17:28:45Z",
+  "operation": "read-only pg_catalog/information_schema; zero user rows read or writes",
+  "schema": {
+    "columns": [
+      {
+        "type": "uuid",
+        "table": "assessment_drafts",
+        "column": "id",
+        "default": "gen_random_uuid()",
+        "nullable": "NO"
+      },
+      {
+        "type": "uuid",
+        "table": "assessment_drafts",
+        "column": "user_id",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "text",
+        "table": "assessment_drafts",
+        "column": "assessment_type",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "integer",
+        "table": "assessment_drafts",
+        "column": "schema_version",
+        "default": "1",
+        "nullable": "NO"
+      },
+      {
+        "type": "integer",
+        "table": "assessment_drafts",
+        "column": "current_question",
+        "default": "0",
+        "nullable": "NO"
+      },
+      {
+        "type": "jsonb",
+        "table": "assessment_drafts",
+        "column": "answers",
+        "default": "'{}'::jsonb",
+        "nullable": "NO"
+      },
+      {
+        "type": "jsonb",
+        "table": "assessment_drafts",
+        "column": "timings",
+        "default": "'[]'::jsonb",
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "assessment_drafts",
+        "column": "created_at",
+        "default": "now()",
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "assessment_drafts",
+        "column": "updated_at",
+        "default": "now()",
+        "nullable": "NO"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "assessment_drafts",
+        "column": "completed_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "uuid",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "id",
+        "default": "gen_random_uuid()",
+        "nullable": "NO"
+      },
+      {
+        "type": "uuid",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "user_id",
+        "default": null,
+        "nullable": "NO"
+      },
+      {
+        "type": "character varying",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "test_name",
+        "default": "'Despega Cerebral'::character varying",
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q1_contexto_actual",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q2_desafio_principal",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q3_tiempo_disponible",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q4_recurso_valioso",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q5_estilo_aprender",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q6_expectativa",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "q7_restriccion",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "jsonb",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "responses",
+        "default": "'{}'::jsonb",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "created_at",
+        "default": "now()",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "updated_at",
+        "default": "now()",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "completed_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "canon_conozcamonos_1_responses",
+        "column": "completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "uuid",
+        "table": "despega_user_profiles",
+        "column": "id",
+        "default": "gen_random_uuid()",
+        "nullable": "NO"
+      },
+      {
+        "type": "uuid",
+        "table": "despega_user_profiles",
+        "column": "user_id",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "camino_persona_active",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "camino_profesional_active",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "text",
+        "table": "despega_user_profiles",
+        "column": "camino_foco",
+        "default": "'ambos'::text",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "onboarding_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a1_test_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "despega_user_profiles",
+        "column": "a1_test_completed_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "integer",
+        "table": "despega_user_profiles",
+        "column": "current_ciclo",
+        "default": "30",
+        "nullable": "YES"
+      },
+      {
+        "type": "date",
+        "table": "despega_user_profiles",
+        "column": "ciclo_start_date",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "despega_user_profiles",
+        "column": "created_at",
+        "default": "now()",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "despega_user_profiles",
+        "column": "updated_at",
+        "default": "now()",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "onboarding_cerebral_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp with time zone",
+        "table": "despega_user_profiles",
+        "column": "onboarding_cerebral_completed_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "onboarding_conozcamonos_1_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a1_cerebral_intro_seen",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a1_cerebral_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a1_report_seen",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a2_intro_seen",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a2_route_generated",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a3_unlocked",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a4_unlocked",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "onboarding_conozcamonos_1_completed_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a1_cerebral_intro_seen_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a1_cerebral_completed_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a1_report_seen_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a2_intro_seen_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a2_route_generated_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a3_unlocked_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a4_unlocked_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "character varying",
+        "table": "despega_user_profiles",
+        "column": "current_stage",
+        "default": "'conozcamonos-1'::character varying",
+        "nullable": "YES"
+      },
+      {
+        "type": "integer",
+        "table": "despega_user_profiles",
+        "column": "progress_percentage",
+        "default": "0",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a3_intro_seen",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "a3_intro_seen_at",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a1_results_saved",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "conozcamonos_2_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a2_missions_started",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a3_intro_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a3_entrevista_0_completed",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "boolean",
+        "table": "despega_user_profiles",
+        "column": "a3_training_started",
+        "default": "false",
+        "nullable": "YES"
+      },
+      {
+        "type": "character varying",
+        "table": "despega_user_profiles",
+        "column": "last_module_visited",
+        "default": null,
+        "nullable": "YES"
+      },
+      {
+        "type": "timestamp without time zone",
+        "table": "despega_user_profiles",
+        "column": "last_module_visited_at",
+        "default": null,
+        "nullable": "YES"
+      }
+    ],
+    "policies": [
+      {
+        "cmd": "INSERT",
+        "name": "assessment_drafts_insert_own",
+        "qual": null,
+        "check": "((( SELECT auth.uid() AS uid) = user_id) AND (completed_at IS NULL))",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "assessment_drafts"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "assessment_drafts_select_own",
+        "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+        "check": null,
+        "roles": [
+          "authenticated"
+        ],
+        "table": "assessment_drafts"
+      },
+      {
+        "cmd": "UPDATE",
+        "name": "assessment_drafts_update_own",
+        "qual": "((( SELECT auth.uid() AS uid) = user_id) AND (completed_at IS NULL))",
+        "check": "(( SELECT auth.uid() AS uid) = user_id)",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "assessment_drafts"
+      },
+      {
+        "cmd": "INSERT",
+        "name": "Users can insert own C1 responses",
+        "qual": null,
+        "check": "(auth.uid() = user_id)",
+        "roles": [
+          "public"
+        ],
+        "table": "canon_conozcamonos_1_responses"
+      },
+      {
+        "cmd": "UPDATE",
+        "name": "Users can update own C1 responses",
+        "qual": "(auth.uid() = user_id)",
+        "check": null,
+        "roles": [
+          "public"
+        ],
+        "table": "canon_conozcamonos_1_responses"
+      },
+      {
+        "cmd": "SELECT",
+        "name": "Users can view own C1 responses",
+        "qual": "(auth.uid() = user_id)",
+        "check": null,
+        "roles": [
+          "public"
+        ],
+        "table": "canon_conozcamonos_1_responses"
+      },
+      {
+        "cmd": "ALL",
+        "name": "c1_strict_owner_boundary",
+        "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+        "check": "(( SELECT auth.uid() AS uid) = user_id)",
+        "roles": [
+          "anon",
+          "authenticated"
+        ],
+        "table": "canon_conozcamonos_1_responses"
+      },
+      {
+        "cmd": "ALL",
+        "name": "despega_user_profiles_owner_all",
+        "qual": "(( SELECT auth.uid() AS uid) = user_id)",
+        "check": "(( SELECT auth.uid() AS uid) = user_id)",
+        "roles": [
+          "authenticated"
+        ],
+        "table": "despega_user_profiles"
+      }
+    ],
+    "triggers": [
+      {
+        "name": "enforce_a4_profile_completion",
+        "table": "despega_user_profiles",
+        "definition": "CREATE TRIGGER enforce_a4_profile_completion BEFORE INSERT OR UPDATE OF a4_unlocked, a4_unlocked_at, current_stage ON public.despega_user_profiles FOR EACH ROW EXECUTE FUNCTION enforce_a4_requires_a3_completion()"
+      }
+    ],
+    "constraints": [
+      {
+        "name": "assessment_drafts_answers_check",
+        "table": "assessment_drafts",
+        "definition": "CHECK ((jsonb_typeof(answers) = 'object'::text))"
+      },
+      {
+        "name": "assessment_drafts_assessment_type_check",
+        "table": "assessment_drafts",
+        "definition": "CHECK ((assessment_type = ANY (ARRAY['c1'::text, 'a1'::text])))"
+      },
+      {
+        "name": "assessment_drafts_check",
+        "table": "assessment_drafts",
+        "definition": "CHECK (((pg_column_size(answers) + pg_column_size(timings)) <= 65536))"
+      },
+      {
+        "name": "assessment_drafts_current_question_check",
+        "table": "assessment_drafts",
+        "definition": "CHECK ((current_question >= 0))"
+      },
+      {
+        "name": "assessment_drafts_pkey",
+        "table": "assessment_drafts",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "assessment_drafts_schema_version_check",
+        "table": "assessment_drafts",
+        "definition": "CHECK ((schema_version > 0))"
+      },
+      {
+        "name": "assessment_drafts_timings_check",
+        "table": "assessment_drafts",
+        "definition": "CHECK ((jsonb_typeof(timings) = 'array'::text))"
+      },
+      {
+        "name": "assessment_drafts_user_id_assessment_type_key",
+        "table": "assessment_drafts",
+        "definition": "UNIQUE (user_id, assessment_type)"
+      },
+      {
+        "name": "assessment_drafts_user_id_fkey",
+        "table": "assessment_drafts",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "canon_conozcamonos_1_responses_pkey",
+        "table": "canon_conozcamonos_1_responses",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "canon_conozcamonos_1_responses_user_id_fkey",
+        "table": "canon_conozcamonos_1_responses",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id)"
+      },
+      {
+        "name": "despega_user_profiles_camino_foco_check",
+        "table": "despega_user_profiles",
+        "definition": "CHECK ((camino_foco = ANY (ARRAY['persona'::text, 'profesional'::text, 'ambos'::text])))"
+      },
+      {
+        "name": "despega_user_profiles_current_ciclo_check",
+        "table": "despega_user_profiles",
+        "definition": "CHECK ((current_ciclo = ANY (ARRAY[30, 60, 90])))"
+      },
+      {
+        "name": "despega_user_profiles_pkey",
+        "table": "despega_user_profiles",
+        "definition": "PRIMARY KEY (id)"
+      },
+      {
+        "name": "despega_user_profiles_user_id_fkey",
+        "table": "despega_user_profiles",
+        "definition": "FOREIGN KEY (user_id) REFERENCES auth.users(id) ON DELETE CASCADE"
+      },
+      {
+        "name": "despega_user_profiles_user_id_key",
+        "table": "despega_user_profiles",
+        "definition": "UNIQUE (user_id)"
+      }
+    ]
+  },
+  "effective_table_privileges": [
+    {
+      "r": "anon",
+      "t": "a3_route_progression",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "anon",
+      "t": "assessment_drafts",
+      "can_select": false,
+      "can_insert": false,
+      "can_update": false
+    },
+    {
+      "r": "anon",
+      "t": "canon_conozcamonos_1_responses",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "anon",
+      "t": "despega_user_profiles",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "authenticated",
+      "t": "a3_route_progression",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "authenticated",
+      "t": "assessment_drafts",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "authenticated",
+      "t": "canon_conozcamonos_1_responses",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "authenticated",
+      "t": "despega_user_profiles",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "service_role",
+      "t": "a3_route_progression",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "service_role",
+      "t": "assessment_drafts",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "service_role",
+      "t": "canon_conozcamonos_1_responses",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    },
+    {
+      "r": "service_role",
+      "t": "despega_user_profiles",
+      "can_select": true,
+      "can_insert": true,
+      "can_update": true
+    }
+  ],
+  "completion_namespace_baseline": {
+    "private_schema_exists": false,
+    "completion_rpc_exists": false,
+    "status_rpc_exists": false,
+    "scope": "catalog metadata only; no user rows or writes",
+    "recorded_at_utc": "2026-11-06T17:58:52Z"
+  }
+}

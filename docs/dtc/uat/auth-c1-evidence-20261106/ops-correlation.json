@@ -1,0 +1,8 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "scope": "real browser -> real Next middleware -> real API route -> structured server log; disposable local Supabase only",
+  "requestIdMatchedBrowserApiAndLog": true,
+  "failureWasDeliberateMissingGamificationTables": true,
+  "userIdentifierPresentInStructuredLog": false,
+  "verdict": "PASS"
+}

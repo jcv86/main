@@ -1,0 +1,26 @@
+{
+  "casesPassed": 19,
+  "cases": [
+    "invoker-only function, fixed search_path and no preference default",
+    "legacy INSERT empty locations",
+    "legacy INSERT selected locations",
+    "legacy UPDATE empty to selected",
+    "legacy UPDATE selected to empty",
+    "legacy UPDATE selected to another selection",
+    "current INSERT explicit any remains any",
+    "current INSERT explicit selected",
+    "unrelated legacy UPDATE preserves explicit any",
+    "legacy UPDATE any to selected locations remains coherent",
+    "current UPDATE selected to explicit any",
+    "current UPDATE any to explicit selected",
+    "current INSERT rejects any with inconsistent locations",
+    "current INSERT rejects unspecified with inconsistent locations",
+    "current INSERT rejects selected with inconsistent locations",
+    "current UPDATE rejects explicit any with locations",
+    "current UPDATE rejects explicit unspecified with locations",
+    "current UPDATE rejects explicit selected without locations",
+    "other owner cannot read or mutate the row through the bridge"
+  ],
+  "writesRolledBack": true,
+  "verdict": "PASS"
+}

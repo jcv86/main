@@ -1,0 +1,563 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "scope": "disposable-local-c1",
+  "verdict": "PASS",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "actual email login opens an empty C1 for its owner",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "failed draft save retains the custom text and current question with retry",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "pending save freezes choices, custom text and coach controls until the saved revision completes",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "retry, reload and back restore the exact Q1 custom response",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "second owner cannot read, change or impersonate the draft owner",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "deselection removes inactive custom text from the persisted draft",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "actual API rejects invalid custom fields without replacing the valid draft",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "Q5 custom text independently survives next, reload and back",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "real database failure rolls back all completion records and retains the editable last answer",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "a lost response after a verified database commit shows recovery without false success or an automatic replay",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "reload uses verified completion status to recover the same result without duplicate responses",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "final canonical response contains both details, closes its draft and advances to A1",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "actual email login opens an empty C1 for its owner",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "failed draft save retains the custom text and current question with retry",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "pending save freezes choices, custom text and coach controls until the saved revision completes",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "retry, reload and back restore the exact Q1 custom response",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "second owner cannot read, change or impersonate the draft owner",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "deselection removes inactive custom text from the persisted draft",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "actual API rejects invalid custom fields without replacing the valid draft",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "Q5 custom text independently survives next, reload and back",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "real database failure rolls back all completion records and retains the editable last answer",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "a lost response after a verified database commit shows recovery without false success or an automatic replay",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "reload uses verified completion status to recover the same result without duplicate responses",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "final canonical response contains both details, closes its draft and advances to A1",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "save-error",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "restored-other",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "restored-household",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "completion-rollback",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "completion-response-lost",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "save-error",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "restored-other",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "restored-household",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "completion-rollback",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "completion-response-lost",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "save-error",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "restored-other",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "restored-household",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "completion-rollback",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "completion-response-lost",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "mobile",
+      "name": "save-error",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "restored-other",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "restored-household",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "completion-rollback",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "completion-response-lost",
+      "viewport": 390,
+      "document": 390
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "atomicCompletion": [
+    {
+      "phase": "desktop",
+      "databaseFailureTarget": "profile",
+      "rollbackVerified": true,
+      "realCommitVerifiedBeforeResponseLoss": true,
+      "completionPosts": 2,
+      "successfulCompletionPosts": 1,
+      "finalDraftPuts": 0,
+      "reloadRecoveredThroughGet": true,
+      "canonicalResponses": 1,
+      "privateReceipts": 1,
+      "recoveryDestinationBoundaryObserved": true,
+      "a1EntryWrites": 1
+    },
+    {
+      "phase": "mobile",
+      "databaseFailureTarget": "draft",
+      "rollbackVerified": true,
+      "realCommitVerifiedBeforeResponseLoss": true,
+      "completionPosts": 2,
+      "successfulCompletionPosts": 1,
+      "finalDraftPuts": 0,
+      "reloadRecoveredThroughGet": true,
+      "canonicalResponses": 1,
+      "privateReceipts": 1,
+      "recoveryDestinationBoundaryObserved": true,
+      "a1EntryWrites": 1
+    }
+  ],
+  "controlledFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/assessments/drafts/c1",
+      "method": "PUT",
+      "kind": "declared_http_503"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/journey/complete-c1",
+      "method": "POST",
+      "kind": "local_database_trigger",
+      "target": "profile",
+      "status": 503
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/journey/complete-c1",
+      "method": "POST",
+      "kind": "response_delivery_lost_after_database_commit",
+      "status": 200
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/assessments/drafts/c1",
+      "method": "PUT",
+      "kind": "declared_http_503"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/journey/complete-c1",
+      "method": "POST",
+      "kind": "local_database_trigger",
+      "target": "draft",
+      "status": 503
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/journey/complete-c1",
+      "method": "POST",
+      "kind": "response_delivery_lost_after_database_commit",
+      "status": 200
+    }
+  ],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/journey/complete-c1",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET",
+      "controlledFault": true
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "desktop",
+      "path": "/despega/a1-cerebral-intro",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/journey/complete-c1",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET",
+      "controlledFault": true
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/despega/a1-cerebral-intro",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "phase": "mobile",
+      "path": "/despega/a1-cerebral-intro",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    }
+  ],
+  "syntheticFaults": [
+    "one draft PUT 503 per viewport",
+    "local owner-scoped profile failure on desktop and draft failure on mobile",
+    "one real completion 200 per viewport is delivered to the test transport, verified against committed SQL rows, then aborted before browser delivery"
+  ],
+  "failure": null,
+  "notVerified": [
+    "external voice/AI assistance and text-quality validation",
+    "remote migration application or deployment",
+    "already-open browsers running an earlier application version"
+  ]
+}

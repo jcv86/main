@@ -1,0 +1,2710 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "verdict": "PASS",
+  "scope": "real sign-in/email forms, local Supabase password Auth, invitation SQL, session Provider and AppShell logout",
+  "steps": [
+    {
+      "name": "desktop_canonical_entry_returning",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_declared_email_failures_allow_recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_invalid_password_then_real_return_and_provider",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_logout_failure_preserves_session_and_retries",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_logout_clears_provider_cookie_and_private_history",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_new_invitation_claim_and_admission",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_confirmed_nonmember_is_denied",
+      "status": "PASS"
+    },
+    {
+      "name": "desktop_login_quota_does_not_block_logout",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_canonical_entry_returning",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_declared_email_failures_allow_recovery",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_invalid_password_then_real_return_and_provider",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_logout_failure_preserves_session_and_retries",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_logout_clears_provider_cookie_and_private_history",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_new_invitation_claim_and_admission",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_confirmed_nonmember_is_denied",
+      "status": "PASS"
+    },
+    {
+      "name": "mobile_login_quota_does_not_block_logout",
+      "status": "PASS"
+    },
+    {
+      "name": "both_viewports_real_auth_and_no_unexpected_javascript_or_external_network",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "name": "signin",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "email-form",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "email-html-503",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "email-json-429",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "invalid-credentials",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "returning-session",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "logout-retry",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "new-invited-session",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "access-denied",
+      "viewport": "desktop",
+      "width": 1440,
+      "violations": []
+    },
+    {
+      "name": "signin",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "email-form",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "email-html-503",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "email-json-429",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "invalid-credentials",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "returning-session",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "logout-retry",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "new-invited-session",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    },
+    {
+      "name": "access-denied",
+      "viewport": "mobile",
+      "width": 390,
+      "violations": []
+    }
+  ],
+  "layouts": [
+    {
+      "name": "signin",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "email-form",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "email-html-503",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "email-json-429",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "invalid-credentials",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "returning-session",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "logout-retry",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "new-invited-session",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "access-denied",
+      "viewport": "desktop",
+      "width": 1440,
+      "document": 1440
+    },
+    {
+      "name": "signin",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "email-form",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "email-html-503",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "email-json-429",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "invalid-credentials",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "returning-session",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "logout-retry",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "new-invited-session",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    },
+    {
+      "name": "access-denied",
+      "viewport": "mobile",
+      "width": 390,
+      "document": 390
+    }
+  ],
+  "authResponses": [
+    {
+      "step": "desktop_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 503,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 429,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/signout",
+      "method": "POST",
+      "status": 503,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/signout",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/invitation/claim",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/invitation/claim",
+      "method": "POST",
+      "status": 303,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 403,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 429,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/signout",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 503,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 429,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/signout",
+      "method": "POST",
+      "status": 503,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/signout",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/invitation/claim",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/invitation/claim",
+      "method": "POST",
+      "status": 303,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 403,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "method": "POST",
+      "status": 429,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/signout",
+      "method": "POST",
+      "status": 200,
+      "expected": true,
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "method": "GET",
+      "status": 401,
+      "expected": true,
+      "controlledFault": false
+    }
+  ],
+  "controlledFailures": [
+    {
+      "viewport": "desktop",
+      "path": "/api/auth/email-login",
+      "status": 503,
+      "mechanism": "html-503: declared failing HTTP response only; no successful Auth is mocked",
+      "recovered": true
+    },
+    {
+      "viewport": "desktop",
+      "path": "/api/auth/email-login",
+      "status": 429,
+      "mechanism": "json-429: declared failing HTTP response only; no successful Auth is mocked",
+      "recovered": true
+    },
+    {
+      "viewport": "desktop",
+      "path": "/api/auth/signout",
+      "status": 503,
+      "mechanism": "one declared failing HTTP response; real session and database remain intact",
+      "recovered": true
+    },
+    {
+      "viewport": "mobile",
+      "path": "/api/auth/email-login",
+      "status": 503,
+      "mechanism": "html-503: declared failing HTTP response only; no successful Auth is mocked",
+      "recovered": true
+    },
+    {
+      "viewport": "mobile",
+      "path": "/api/auth/email-login",
+      "status": 429,
+      "mechanism": "json-429: declared failing HTTP response only; no successful Auth is mocked",
+      "recovered": true
+    },
+    {
+      "viewport": "mobile",
+      "path": "/api/auth/signout",
+      "status": 503,
+      "mechanism": "one declared failing HTTP response; real session and database remain intact",
+      "recovered": true
+    }
+  ],
+  "javascriptErrors": [],
+  "consoleErrors": [
+    {
+      "step": "desktop_canonical_entry_returning",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/signout",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "controlledFault": true
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/auth/pilot-status",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/rest/v1/despega_user_profiles",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 406 (Not Acceptable)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "path": "/rest/v1/despega_user_profiles",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 406 (Not Acceptable)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "path": "/api/auth/pilot-status",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_declared_email_failures_allow_recovery",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "path": "/api/auth/signout",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 503 (Service Unavailable)",
+      "controlledFault": true
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/auth/pilot-status",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/rest/v1/despega_user_profiles",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 406 (Not Acceptable)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "path": "/rest/v1/despega_user_profiles",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 406 (Not Acceptable)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 403 (Forbidden)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "path": "/api/auth/pilot-status",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/email-login",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 429 (Too Many Requests)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/a4-strategic-score",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/banco-central-data",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 404 (Not Found)",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "path": "/api/auth/pilot-status",
+      "kind": "http_resource_failure",
+      "message": "Failed to load resource: the server responded with a status of 401 (Unauthorized)",
+      "controlledFault": false
+    }
+  ],
+  "requestFailures": [
+    {
+      "step": "desktop_canonical_entry_returning",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/auth/signin",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/_next/static/chunks/app/auth/signin/page.js",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "viewport": "desktop",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/auth/email-login",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "viewport": "desktop",
+      "scenario": "invited",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "viewport": "desktop",
+      "scenario": "outsider",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "viewport": "desktop",
+      "scenario": "outsider",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/_next/static/chunks/app/auth/signin/page.js",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "viewport": "desktop",
+      "scenario": "quota",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/_next/static/chunks/app/auth/signin/page.js",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "viewport": "mobile",
+      "scenario": "returning",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/auth/email-login",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "viewport": "mobile",
+      "scenario": "invited",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "viewport": "mobile",
+      "scenario": "outsider",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "viewport": "mobile",
+      "scenario": "outsider",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/_next/static/chunks/app/auth/signin/page.js",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "viewport": "mobile",
+      "scenario": "quota",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED",
+      "controlledFault": false
+    }
+  ],
+  "backgroundReadiness": [
+    {
+      "step": "desktop_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_declared_email_failures_allow_recovery",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_declared_email_failures_allow_recovery",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "desktop_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 5,
+      "economicFinished": 5
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 5,
+      "economicFinished": 5
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 6,
+      "economicFinished": 6
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 6,
+      "economicFinished": 6
+    },
+    {
+      "step": "desktop_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 6,
+      "economicFinished": 6
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 7,
+      "economicFinished": 7
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 8,
+      "economicFinished": 8
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 9,
+      "economicFinished": 9
+    },
+    {
+      "step": "desktop_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 9,
+      "economicFinished": 9
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 0,
+      "economicFinished": 0
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "desktop_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "desktop_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_canonical_entry_returning",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_declared_email_failures_allow_recovery",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_declared_email_failures_allow_recovery",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "mobile_invalid_password_then_real_return_and_provider",
+      "ready": true,
+      "scoreStarted": 5,
+      "economicFinished": 5
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 5,
+      "economicFinished": 5
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 6,
+      "economicFinished": 6
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 6,
+      "economicFinished": 6
+    },
+    {
+      "step": "mobile_logout_failure_preserves_session_and_retries",
+      "ready": true,
+      "scoreStarted": 6,
+      "economicFinished": 6
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 7,
+      "economicFinished": 7
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 8,
+      "economicFinished": 8
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 9,
+      "economicFinished": 9
+    },
+    {
+      "step": "mobile_logout_clears_provider_cookie_and_private_history",
+      "ready": true,
+      "scoreStarted": 9,
+      "economicFinished": 9
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 0,
+      "economicFinished": 0
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "mobile_new_invitation_claim_and_admission",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_confirmed_nonmember_is_denied",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 1,
+      "economicFinished": 1
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 2,
+      "economicFinished": 2
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 3,
+      "economicFinished": 3
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    },
+    {
+      "step": "mobile_login_quota_does_not_block_logout",
+      "ready": true,
+      "scoreStarted": 4,
+      "economicFinished": 4
+    }
+  ],
+  "blockedHosts": [],
+  "sourceManifest": "auth-scope.json",
+  "privacy": "Synthetic users only. No secrets, cookies, storageState, HAR, traces or private server logs."
+}

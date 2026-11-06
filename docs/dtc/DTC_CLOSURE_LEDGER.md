@@ -362,21 +362,52 @@ providers, provision infrastructure, apply remote SQL, merge main or release.
 
 | ID | User outcome and observed defect | Acceptance criteria | Owner / skill | Status | Release blocker |
 |---|---|---|---|---|---|
-| DTC-AUTH-01 | An invited or returning password user can enter through the canonical sign-in and continue. The canonical page omits the existing email form; the email API ignores the signed invitation claim. | Visible email entry preserves a safe return path. Valid credentials plus a valid invitation or existing access establish the actual client/server session; a non-member without an invitation is denied. The real form and session provider are observed with local synthetic users. | Application / `dtc-build-experience`, `dtc-supabase-backend` | `in_progress` | yes |
-| DTC-AUTH-02 | A user can recover from sign-in failures. The email API maps provider 429 and 503 to incorrect-credentials 401. | Invalid input, invalid credentials, rate limiting and service failure produce distinct safe responses and actionable UI. Retry works without losing the requested destination or claiming successful access. | Authentication / `dtc-supabase-backend` | `in_progress` | yes |
-| DTC-AUTH-03 | Signing out actually ends the current session. Five ordinary auth-status reads exhaust the shared auth-route quota and block signout; AppShell and the signout API can still present success after failure. | Ordinary status reads do not consume the login-attempt quota. Signout remains available at that boundary; errors stay visible and retryable instead of falsely navigating away. Successful signout clears the current session and protected browser-back access is checked. Login thresholds remain enforced. | Session UX / `dtc-build-experience`, `dtc-quality-gate` | `in_progress` | yes |
+| DTC-AUTH-01 | An invited or returning password user can enter through the canonical sign-in and continue. The canonical page omits the existing email form; the email API ignores the signed invitation claim. | Visible email entry preserves a safe return path. Valid credentials plus a valid invitation or existing access establish the actual client/server session; a non-member without an invitation is denied. The real form and session provider are observed with local synthetic users. | Application / `dtc-build-experience`, `dtc-supabase-backend` | `verified` | yes |
+| DTC-AUTH-02 | A user can recover from sign-in failures. The email API maps provider 429 and 503 to incorrect-credentials 401. | Invalid input, invalid credentials, rate limiting and service failure produce distinct safe responses and actionable UI. Retry works without losing the requested destination or claiming successful access. | Authentication / `dtc-supabase-backend` | `verified` | yes |
+| DTC-AUTH-03 | Signing out actually ends the current session. Five ordinary auth-status reads exhaust the shared auth-route quota and block signout; AppShell and the signout API can still present success after failure. | Ordinary status reads do not consume the login-attempt quota. Signout remains available at that boundary; errors stay visible and retryable instead of falsely navigating away. Successful signout clears the current session and protected browser-back access is checked. Login thresholds remain enforced. | Session UX / `dtc-build-experience`, `dtc-quality-gate` | `verified` | yes |
 
-Verification is limited to synthetic, loopback-only Supabase in the existing
-GitHub Actions laboratory. A later result must name the tested SHA and run; a
-passing earlier run is not evidence for this block.
+Verified code: `7eb0544de496e10a2b1be1b482cdafec1d96dc3d`, tree
+`1b828ca81ec3c1cdbc01aaf1f59347c8e13c076b`, [run 42268602016](https://github.com/jcv86/main/actions/runs/42268602016).
+All five `verified` states in this block refer to candidate-code acceptance with
+synthetic, loopback-only Supabase and the actual UI/API. They do not certify a
+remote deployment or completed human UAT. Main remains `7f11f1763210fd87bcd4c2c372efa8705f42f468`.
+
+Evidence: 17 actual Auth cases and 18 axe/layout scans; 24 C1 browser cases and
+10 scans; 19 PostgreSQL atomicity/concurrency/privilege cases; candidate migration
+applied twice with the real A4 profile guard; zero local security-advisor
+warnings/errors. All focused regressions and the full 356-page build passed.
+The existing 41-case Closure suite, 28 scans and earlier A1–A4 suites passed too.
+No reported axe violations occurred in these scans. See the
+[closure report](DTC_AUTH_C1_CLOSURE_20261106.md) and
+[retained evidence](uat/auth-c1-evidence-20261106/README.md) for exact scope,
+controlled faults, diagnostic network events and artifact/source hashes.
 
 ### C1 custom-response preservation — 2026-11-06
 
 | ID | User outcome and observed defect | Acceptance criteria | Owner / skill | Status | Release blocker |
 |---|---|---|---|---|---|
-| DTC-C1-01 | A participant who chooses “Otro” retains the context they write. The C1 page keeps custom text in component state but omits it from both saved drafts and final canonical responses. | Next/back/reload restores custom text for the selected option; completed responses and report context contain that text. Legacy drafts remain readable. Invalid or oversized custom fields are rejected, deselected custom text is excluded, and a save failure retains the input with retry. Desktop and 390×844 use the real page, draft API and local owner RLS. | Application / `dtc-build-experience`, `dtc-supabase-backend`, `dtc-quality-gate` | `in_progress` | yes |
+| DTC-C1-01 | A participant who chooses “Otro” retains the context they write. The C1 page keeps custom text in component state but omits it from both saved drafts and final canonical responses. | Next/back/reload restores custom text for the selected option; completed responses and report context contain that text. Legacy drafts remain readable. Invalid or oversized custom fields are rejected, deselected custom text is excluded, and a save failure retains the input with retry. Desktop and 390×844 use the real page, draft API and local owner RLS. | Application / `dtc-build-experience`, `dtc-supabase-backend`, `dtc-quality-gate` | `verified` | yes |
+| DTC-C1-02 | Final C1 submission remains consistent after a partial failure. Real handlers with synthetic I/O reproduce a second insert after draft-close failure, and false completion/navigation after profile-update failure. | One canonical completion per retried operation; response, draft and profile commit consistently; lost HTTP responses and reloads recover without re-answering or duplicating; verify with real local SQL and browser. | Atomic completion / `dtc-supabase-backend`, `dtc-quality-gate`; P1 | `verified` | yes |
 
-The optional custom-text map is stored inside the existing draft answers JSON;
-no new column or remote migration is needed. Canonical completed answers retain
-the existing numeric question keys and string/array shape used by report readers.
-External text validation and AI suggestions require their own later acceptance.
+The custom-text map uses the existing draft JSON. Atomic finalization additionally
+requires `supabase/migrations/20261106173017_c1_atomic_completion.sql`: server-only
+invoker RPCs, in-transaction pilot admission, draft revision comparison, one
+response/profile/draft commit and a private durable receipt. A verified server
+actor plus an expected-owner precondition prevents stale C1 form writes from
+being attributed to another active account. Same-account reauthentication retains
+local text; stale asynchronous callbacks cannot alter another owner's form.
+
+The two historical DTC-C1-02 failures were reproduced with actual handlers and
+synthetic I/O. Their replacements are now verified in real local PostgreSQL and
+browser: profile/draft failures roll back all four relations; a lost successful
+HTTP response recovers by GET on reload with one canonical response and receipt.
+Concurrent same/different snapshots, the ordinary PUT race, legacy recovery,
+private permissions and tampering are covered by the SQL gate. Historical rows
+are not globally deduplicated or rewritten.
+
+Publication still requires the target migrations and deployment, transition and
+rollback validation for older clients, exact-deployment smoke and the separate
+54-case human UAT. OAuth, external AI/voice, provider configuration and remote
+font loading are outside this block. No remote migration, participant mutation,
+main merge or production deployment was performed. The retained report scopes
+those conditions without reopening the five code/laboratory outcomes.

@@ -1,0 +1,28 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "scope": "real production middleware over HTTP with VERCEL_ENV=preview; disposable local Next + Supabase only",
+  "checks": [
+    {
+      "name": "preview_environment_laboratories_are_real_http_404",
+      "status": "PASS"
+    },
+    {
+      "name": "legacy_preview_cookie_and_query_cannot_bypass_laboratory_boundary",
+      "status": "PASS"
+    },
+    {
+      "name": "anonymous_protected_route_redirects_before_content_render",
+      "status": "PASS"
+    },
+    {
+      "name": "authenticated_pilot_member_reaches_same_protected_route",
+      "status": "PASS"
+    },
+    {
+      "name": "cleared_session_cannot_restore_protected_content",
+      "status": "PASS"
+    }
+  ],
+  "productionOrPreviewNetworkUsed": false,
+  "verdict": "PASS"
+}

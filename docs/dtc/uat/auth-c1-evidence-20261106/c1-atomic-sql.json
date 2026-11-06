@@ -1,0 +1,87 @@
+{
+  "scope": "disposable-local-postgresql",
+  "migration": "20261106173017_c1_atomic_completion.sql",
+  "cases": [
+    {
+      "name": "service-only invoker, private receipts and the real legacy A4 trigger",
+      "verdict": "PASS"
+    },
+    {
+      "name": "fresh completion, UTC legacy timestamp and lost-response replay preserve one commit",
+      "verdict": "PASS"
+    },
+    {
+      "name": "SQL option bank, final serializer, Unicode trim and UTF-16 limit match TypeScript",
+      "verdict": "PASS"
+    },
+    {
+      "name": "invalid completion payloads and versions leave all four stores unchanged",
+      "verdict": "PASS"
+    },
+    {
+      "name": "stale draft CAS preserves the latest saved answers before a valid retry",
+      "verdict": "PASS"
+    },
+    {
+      "name": "failure at profile rolls back the response, profile, draft and receipt together",
+      "verdict": "PASS"
+    },
+    {
+      "name": "failure at draft rolls back the response, profile, draft and receipt together",
+      "verdict": "PASS"
+    },
+    {
+      "name": "failure at receipt rolls back the response, profile, draft and receipt together",
+      "verdict": "PASS"
+    },
+    {
+      "name": "concurrent identical completions return one fresh commit and one durable replay",
+      "verdict": "PASS"
+    },
+    {
+      "name": "concurrent differing snapshots cannot replace the winning completion",
+      "verdict": "PASS"
+    },
+    {
+      "name": "ordinary draft INSERT winning the absent-row race becomes recoverable CAS conflict",
+      "verdict": "PASS"
+    },
+    {
+      "name": "legacy inserted response is adopted once after an open-draft failure",
+      "verdict": "PASS"
+    },
+    {
+      "name": "legacy closed draft with a failed profile is recovered without a second response",
+      "verdict": "PASS"
+    },
+    {
+      "name": "legacy completed users retain a confirmed receipt-free status and historical rows",
+      "verdict": "PASS"
+    },
+    {
+      "name": "closed legacy mismatch and flag-only completion never invent a successful status",
+      "verdict": "PASS"
+    },
+    {
+      "name": "private receipt and completion RPCs reject anonymous and authenticated direct calls",
+      "verdict": "PASS"
+    },
+    {
+      "name": "receipt detects a later edited canonical response instead of confirming false success",
+      "verdict": "PASS"
+    },
+    {
+      "name": "receipt detects a changed raw draft snapshot and repairs only profile regression",
+      "verdict": "PASS"
+    },
+    {
+      "name": "unadmitted actor fails inside the transaction without any completion write",
+      "verdict": "PASS"
+    }
+  ],
+  "syntheticOwnersCreated": 24,
+  "syntheticOwnersRemoved": true,
+  "browserOwnersUncompleted": true,
+  "remoteOperations": 0,
+  "verdict": "PASS"
+}

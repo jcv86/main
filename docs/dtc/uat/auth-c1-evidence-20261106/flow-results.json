@@ -1,0 +1,57 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "scope": "actual flow loader/model/component; real local Auth and PostgREST; source fixtures and fixed lab admission, not production journey",
+  "steps": [
+    {
+      "name": "anonymous_map_redirect_preserves_destination",
+      "status": "PASS"
+    },
+    {
+      "name": "authenticated_return_to_requested_route",
+      "status": "PASS"
+    },
+    {
+      "name": "report_transition_label_390x844_not_clipped",
+      "status": "PASS"
+    },
+    {
+      "name": "day7_checkpoint_real_owner_scoped_loader",
+      "status": "PASS"
+    },
+    {
+      "name": "map_1440_overflow_accessibility",
+      "status": "PASS"
+    },
+    {
+      "name": "map_390_overflow_accessibility",
+      "status": "PASS"
+    },
+    {
+      "name": "duplicate_completion_not_double_counted",
+      "status": "PASS"
+    },
+    {
+      "name": "checkpoint_source_change_updates_next_action",
+      "status": "PASS"
+    },
+    {
+      "name": "closure_without_access_does_not_offer_radar",
+      "status": "PASS"
+    },
+    {
+      "name": "real_signout_route_clears_session",
+      "status": "PASS"
+    },
+    {
+      "name": "browser_back_does_not_restore_protected_content",
+      "status": "PASS"
+    },
+    {
+      "name": "no_javascript_exceptions",
+      "status": "PASS"
+    }
+  ],
+  "violations": [],
+  "errors": [],
+  "verdict": "PASS"
+}

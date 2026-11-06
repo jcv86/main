@@ -1,0 +1,13 @@
+{
+  "migration": "20260826010000_assessment_drafts.sql",
+  "completionMigration": "20261106173017_c1_atomic_completion.sql",
+  "completionMigrationAppliedTwice": true,
+  "profileGuard": "migrations/07-a4-unlock-guard.sql",
+  "realInvitationOwnersReused": 2,
+  "authUsersCreated": 0,
+  "membershipsOrProfilesSeeded": 0,
+  "initialCompletedC1": 0,
+  "localProfileFixture": "legacy A4 trigger columns; canonical C1 UTC timestamp without time zone",
+  "remoteOperations": 0,
+  "verdict": "PASS"
+}

@@ -1,0 +1,154 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "environment": "disposable-local-real-email-auth",
+  "copied": [
+    {
+      "path": "lib/auth/current-session.ts",
+      "sha256": "3351cb63c4f9114476585314f4172f68948b9c8b99979b2f0838765cac258d81"
+    },
+    {
+      "path": "lib/auth/demo-user.ts",
+      "sha256": "1a7041fd7fa8b6c4109412f5e989333be2944896b19fcb832acccfb5bed385c1"
+    },
+    {
+      "path": "lib/auth/email-login.ts",
+      "sha256": "b0af07da50a93737af4c591217662b2dbf372c41aa6423f6a8fd3b4d64144603"
+    },
+    {
+      "path": "lib/auth/invitation-cookie.ts",
+      "sha256": "f916a609d5939d20c31961ca6752d63f4363ce3429d2cbfa9b1f379450a6a966"
+    },
+    {
+      "path": "lib/auth/middleware.ts",
+      "sha256": "0984f97fee991e9926a59331c5ae8ab91c5cc6a8b6eee68c3999f071efaf0765"
+    },
+    {
+      "path": "lib/auth/oauth-recovery.ts",
+      "sha256": "2cd02befa1128195c472d1e35775686727d7d9b14e28a568b10a12d72b7eea0f"
+    },
+    {
+      "path": "lib/auth/pilot-access.ts",
+      "sha256": "83dbfb4639f5d7b6f438f4dda433ab5c5a8b7cd45fba7b1b0bb8d7ba37d95eef"
+    },
+    {
+      "path": "lib/auth/process-invitation-claim.ts",
+      "sha256": "c4443de54bf91c91944f89af40ba3e28418b6c99e09b024e47f632d76b491adc"
+    },
+    {
+      "path": "lib/auth/require-superadmin.ts",
+      "sha256": "2d88d844c4f523ba3bb37f4d347b9a39a4accb1612d870a2f0276f8701aa4ac6"
+    },
+    {
+      "path": "lib/auth/routes.ts",
+      "sha256": "b9b21805e02f346fdf05a4572c1ad6841dbb667c8d29780b9fe43fe8124cf737"
+    },
+    {
+      "path": "lib/auth/server-user.ts",
+      "sha256": "4bbcbb27f728bde7c94f63a2f3e44afd70601a99b1305e49cea0ad882705d901"
+    },
+    {
+      "path": "lib/auth/signin-recovery.ts",
+      "sha256": "a3481aea42f99cb26c12bba118dc82fdfe64fb6672690deeaaea140489c2e9ec"
+    },
+    {
+      "path": "lib/auth/signout-client.ts",
+      "sha256": "95a22c4acf1d6312a9e9e302b7e4ea977c59e3a9aa2e87212520bd8d944d0370"
+    },
+    {
+      "path": "components/auth/sign-out-button.tsx",
+      "sha256": "62173d35bc131ae4de302e7d1698eaa8e0afbf2a6bc18c728edb33639d50f5ed"
+    },
+    {
+      "path": "app/auth/signin/page.tsx",
+      "sha256": "72de1d69c6e7884cf596cbab295ef27939c1e9bafe83f44ff843319e35b6399d"
+    },
+    {
+      "path": "app/auth/email-login/page.tsx",
+      "sha256": "10d7b80c0f1ce7ff5fa5e977119e61bce5f660d6a6bce8dca2b8d80765e7c511"
+    },
+    {
+      "path": "app/api/auth/email-login/route.ts",
+      "sha256": "90372146d86f556f3028bb4264f5d4b0ae36d95d3855b7b44e2fd92bfcb897f9"
+    },
+    {
+      "path": "app/api/auth/signout/route.ts",
+      "sha256": "e0ffcc6c3914a96bcbe84afc1e623210f3d4f714cd8fec2dc8bf8ea2b5a8443f"
+    },
+    {
+      "path": "app/api/auth/invitation/claim/route.ts",
+      "sha256": "ca2f9fbabb98d413f863891b89c1befe73b2841e18424f756fc00681ad3c6c29"
+    },
+    {
+      "path": "app/api/auth/pilot-status/route.ts",
+      "sha256": "a53427f5281617a8665e952054332319f2c60b03c8188c94f3c8bf46e6dc5c80"
+    },
+    {
+      "path": "app/providers.tsx",
+      "sha256": "a456fdfa1f6c884b895975c2d259447495cacf02308337bec1780549abf80548"
+    },
+    {
+      "path": "components/session-wrapper.tsx",
+      "sha256": "876a5dd824f025fd1d83e788ba71b340088b4d6379bccad62bc1c7a2b8d67927"
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "9f3e7a2455b779c167a54eb5deb535d3787f50871c8bdd9562f6d58cb7df7387"
+    },
+    {
+      "path": "lib/supabase/server.ts",
+      "sha256": "4512eef14a59a1714108663b50e9089c0ed2bf4f2e077a2bc35b3a917a5398ed"
+    },
+    {
+      "path": "lib/supabase/client.ts",
+      "sha256": "55215c516adbcac5e2580d71b4e4f814adbb8fd36ff1b08eacac1beea7ec2fb9"
+    },
+    {
+      "path": "lib/supabase/middleware.ts",
+      "sha256": "1d1ec03f0ecf39d3d11b3cf035ac6fa1ec23937be0c8281356db3b32c5b5351a"
+    },
+    {
+      "path": "lib/middleware/rate-limit.ts",
+      "sha256": "7805068995409ec786591da89eab8e5b1c45d91a6290e897ead95fcca8e235d1"
+    },
+    {
+      "path": "middleware.ts",
+      "sha256": "c8c6a5385c97e7b08244e360a4e90ac390a92c6cf8adeb0d47c7e72af1d301de"
+    },
+    {
+      "path": "public/dtc-logo.png",
+      "sha256": "ea8b90c207f1d1ccbe97f813c1458ae302ca172146374e92411e09d2536505cf"
+    },
+    {
+      "path": "public/favicon.ico",
+      "sha256": "cbff9970e695db7bb6c435abf960d205b89592727499b853ea8b03270a535fe2"
+    }
+  ],
+  "genuine": [
+    "canonical sign-in and email/password pages",
+    "email-login and sign-out route handlers",
+    "Supabase Auth password exchange and SSR cookies",
+    "signed invitation claim and real resolve_pilot_access SQL",
+    "actual Providers, SessionWrapper, AppShell and protected journey map",
+    "unchanged login quota and middleware"
+  ],
+  "fixtures": [
+    "four new confirmed synthetic Auth users, with no pre-created pilot membership or progress",
+    "two issued invitation hashes; membership must be created by the real login flow",
+    "two existing synthetic returning users from the preceding closure suite"
+  ],
+  "substitutions": [
+    "root document metadata and system font loading",
+    "hidden read-only useSession observer in the temporary root; no auth methods or state are changed",
+    "declared email HTML503/JSON429 and sign-out HTTP503 failures per viewport; every success uses real Auth"
+  ],
+  "quotas": "Each bounded case has a distinct TEST-NET-1 forwarded IP, set only by the loopback test browser. The quota case intentionally makes six login attempts. No limiter configuration is changed.",
+  "notVerified": [
+    "external OAuth exchange or provider configuration",
+    "production/Vercel or remote Supabase",
+    "complete onboarding after a new pilot enters the protected journey map",
+    "legacy A4 strategic/economic background URLs return HTTP404 in this runtime and are outside the authentication proof; no market context is asserted"
+  ],
+  "navigation": "Artificial URL-case changes, reloads, Back and context closure wait for both actual Provider background reads. A non-ok response settles at headers because the Provider does not consume that body; successful reads settle at requestfinished. Product login/logout navigation is untouched. Failed requests and readiness counters are recorded; all JavaScript errors remain fatal.",
+  "responseEvidence": "Error JSON is read while the form remains mounted; HTML503 is explicit. For successful hard navigations, Chromium can discard the response body: the browser test asserts real HTTP200/JSON/no-store metadata plus the exact destination, Provider identity, real SSR cookies and pilot admission (or cleared session and protected Back after logout). The unchanged UI itself requires success:true and logout scope:local before navigation; route regressions separately verify those JSON contracts. No unreadable body is converted to success and no request is repeated, replaced or delayed.",
+  "privacy": "No cookies, invitation tokens, passwords, storageState, HAR, traces or private server logs are uploaded."
+}

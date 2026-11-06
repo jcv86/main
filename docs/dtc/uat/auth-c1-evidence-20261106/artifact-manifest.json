@@ -1,0 +1,105 @@
+{
+  "commit": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "tree": "1b828ca81ec3c1cdbc01aaf1f59347c8e13c076b",
+  "run": 42268602016,
+  "job": 128066975458,
+  "artifact_id": 13529305661,
+  "artifact_bytes": 13188970,
+  "artifact_sha256": "34ce943213b0b87bb845c75f7fd524aab9a5bdb50ae48152ea34893d759d25e3",
+  "artifact_digest_verified": true,
+  "artifact_expires_at": "2026-11-13T18:21:39Z",
+  "retained_files": [
+    {
+      "file": "auth-results.json",
+      "bytes": 82244,
+      "sha256": "4e0066a53d99f3885deb19458fee07c6603c631ee2e916655da04bf9b3f0a2c3"
+    },
+    {
+      "file": "auth-scope.json",
+      "bytes": 6946,
+      "sha256": "ec4d2b4d4c44fb48f03d35ec10e8c2fa1094b6923384902fcc25f8299c179e89"
+    },
+    {
+      "file": "auth-seed.json",
+      "bytes": 198,
+      "sha256": "d8767385ed8bf3f152bd7ff9efa714c40e6749c82055ae9ef206a589ac9f42dc"
+    },
+    {
+      "file": "c1-results.json",
+      "bytes": 14100,
+      "sha256": "1450ad0a299f824ce62e2122c956e84707a350fe2bfbd3b0a91f4f568e720a14"
+    },
+    {
+      "file": "c1-scope.json",
+      "bytes": 2690,
+      "sha256": "6a1b601d79ae263eb0c9182a60e2da42403c79e8576683e32af1324b504e5273"
+    },
+    {
+      "file": "c1-seed.json",
+      "bytes": 492,
+      "sha256": "e8a75b93f5d40d41c8cdb079d32e462b9b80af6cbe101b627ea5caf9ee14b9ea"
+    },
+    {
+      "file": "c1-atomic-sql.json",
+      "bytes": 2783,
+      "sha256": "832000eae30e2f092b330d532e689708af2bf2c04ef98025a623a17acd68c69f"
+    },
+    {
+      "file": "c1-advisors.json",
+      "bytes": 346,
+      "sha256": "adbebfb777f4897f6440d16237e7e21b1c3562ed737530b986876f660cd3abe1"
+    },
+    {
+      "file": "closure-results.json",
+      "bytes": 24857,
+      "sha256": "22c5ad02840f551ee8f850e17ac832febc7c87f7b35300998a0ee55dc7fe709e"
+    },
+    {
+      "file": "closure-scope.json",
+      "bytes": 8855,
+      "sha256": "651bf9c36dd0a44974d06c992d2b4d363377e9dfe792039487c5e5609a5c2f79"
+    },
+    {
+      "file": "flow-results.json",
+      "bytes": 1382,
+      "sha256": "29bd6127f21291bfb30713a87bb2294b5889e757cac6a8a75d4ee990327a7334"
+    },
+    {
+      "file": "results.json",
+      "bytes": 2557,
+      "sha256": "21a9523358170e67db39d8b0be3ae921d666c4a001a5723bf52bb30e45bd0cdd"
+    },
+    {
+      "file": "runtime-boundary-results.json",
+      "bytes": 799,
+      "sha256": "e930f474cef27bf1699d44332556eb8737745cedd6e3b5475aeb451d1a357c83"
+    },
+    {
+      "file": "invitation-browser.json",
+      "bytes": 386,
+      "sha256": "b4825d2dc8fc7956b5e6a97e1c9331c49df4b258bffdc611ca19380dc45f9444"
+    },
+    {
+      "file": "objective-writer-compatibility.json",
+      "bytes": 1125,
+      "sha256": "90780c1e54e171d7fe7358f46478e754a771af6762bb2dbd49e06af39daa0045"
+    },
+    {
+      "file": "ops-correlation.json",
+      "bytes": 355,
+      "sha256": "bbf6917765b93c1719b36e4a112fdee292c3c3d26afa600660635feda567adbe"
+    }
+  ],
+  "privacy": "Synthetic users and sanitized results; no tokens, passwords, cookie values, traces, storageState or private server logs",
+  "visual_review": [
+    "c1-mobile-completion-response-lost.png",
+    "c1-desktop-completion-rollback.png",
+    "c1-mobile-restored-household.png",
+    "closure-a3-baseline-form-390.png"
+  ],
+  "local_source_manifest_verification": {
+    "entries": 87,
+    "unique_files": 82,
+    "all_sha256_match_candidate": true
+  }
+}
