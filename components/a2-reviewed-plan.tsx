@@ -432,7 +432,7 @@ export function A2ReviewedPlan({ actorId, onSessionChanged, onGuidanceUpdated }:
               <p className="text-sm leading-6">¿Eliminar el contenido de este plan? El texto y sus versiones guardadas no podrán recuperarse.</p>
               <div className="flex flex-wrap gap-2">
                 <Button type="button" ref={keepContentRef} variant="outline" className="min-h-11" disabled={busy !== null} onClick={() => setDeleteConfirmation(false)}>Conservar contenido</Button>
-                <Button type="button" variant="destructive" className="min-h-11" disabled={busy !== null} onClick={() => transition('delete')}>Eliminar definitivamente</Button>
+                <Button type="button" variant="destructive" className="min-h-11 bg-[#b91c1c] text-white hover:bg-[#991b1b] hover:text-white" disabled={busy !== null} onClick={() => transition('delete')}>Eliminar definitivamente</Button>
               </div>
             </div>}
           </div>

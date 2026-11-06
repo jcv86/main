@@ -326,7 +326,8 @@ try {
       await card(page).getByRole('button', { name: 'Revisé los cambios y quiero conservar mi borrador', exact: true }).click()
       saved = (await clickPlan(page, 'Guardar y activar plan')).body
       assert.equal(saved.plan.contextSnapshot.hash, changed.body.view.context.hash)
-      const next = page.getByRole('link', { name: saved.guidance.action.label, exact: true })
+      const next = page.locator('[data-guided-next-action]').locator('..')
+        .getByRole('link', { name: saved.guidance.action.label, exact: true })
       assert.equal(await next.getAttribute('href'), saved.guidance.action.href, 'Continuation remains the canonical current action')
       record('source changes require explicit re-review and preserve the canonical continuation')
 

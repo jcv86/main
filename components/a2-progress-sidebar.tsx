@@ -122,7 +122,7 @@ export function A2ProgressSidebar() {
               {data.progress_percentage}%
             </span>
           </div>
-          <Progress value={data.progress_percentage} />
+          <Progress value={data.progress_percentage} aria-label="Progreso general de Tu Ruta" />
           <p className="text-xs text-muted-foreground">
             {data.completed_tasks} de {data.total_tasks} días completados
           </p>
@@ -163,7 +163,7 @@ export function A2ProgressSidebar() {
                       {cycle.range}
                     </span>
                     <span className="mt-3 block">
-                      <Progress value={progress.percentage} className="h-1.5" />
+                      <Progress value={progress.percentage} aria-label={`Progreso de ${cycle.name}: ${cycle.range}`} className="h-1.5" />
                     </span>
                   </span>
                   <span className="text-xs font-semibold text-muted-foreground">
@@ -188,7 +188,7 @@ export function A2ProgressSidebar() {
           })}
         </nav>
 
-        <Button asChild className="w-full">
+        <Button asChild className="w-full bg-emerald-700 text-white hover:bg-emerald-800 hover:text-white">
           <Link href={`/despega/a2/dia-${data.highest_unlocked_day}`}>
             Continuar día {data.highest_unlocked_day}
             <ArrowRight className="ml-2 h-4 w-4" />
