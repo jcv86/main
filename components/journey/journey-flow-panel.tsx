@@ -16,7 +16,7 @@ export function JourneyFlowPanel({ flow }: { flow: JourneyFlow }) {
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tu siguiente acción</p>
       <h2 id="flow-next-heading" className="mt-3 text-2xl font-semibold">{flow.next.title}</h2>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">{flow.next.description}</p>
-      <Button asChild className="mt-5 h-auto min-h-11 whitespace-normal bg-emerald-700 py-3 text-white hover:bg-emerald-800"><Link href={flow.next.href} data-next-step>{flow.next.label}<ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 shrink-0" /></Link></Button>
+      <Button asChild className="mt-5 h-auto min-h-11 whitespace-normal bg-emerald-700 py-3 text-white hover:bg-emerald-800 hover:text-white"><Link href={flow.next.href} data-next-step>{flow.next.label}<ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 shrink-0" /></Link></Button>
     </section>
     <nav aria-label="Etapas y requisitos del recorrido A1 a A4" className="grid gap-4 md:grid-cols-2">
       {flow.cards.map(card => <article key={card.id} className="flex min-w-0 flex-col rounded-2xl border border-border bg-card p-5 sm:p-6" data-stage-id={card.id}>
