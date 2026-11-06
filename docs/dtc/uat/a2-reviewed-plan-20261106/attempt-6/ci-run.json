@@ -1,0 +1,204 @@
+{
+  "version": "dtc-a2-reviewed-plan-ci-attempt.v1",
+  "runId": 42300106261,
+  "url": "https://github.com/jcv86/main/actions/runs/42300106261",
+  "headSha": "f86177717d701de24dea323058c791472fd9d23c",
+  "treeSha": "73c38830c04401590d33912fdbb160e7195a502c",
+  "conclusion": "success",
+  "applicationMigrationAppliedTwice": true,
+  "sqlCasesPassed": 22,
+  "sqlFixtureCleanupPassed": true,
+  "candidateSecurityFindings": 0,
+  "browserStepsPassed": 17,
+  "browserPhaseCompleted": true,
+  "nativePreflightPassed": true,
+  "actualApplicationNativeReturnPassed": true,
+  "artifact": {
+    "id": 13544122221,
+    "name": "a1-browser-evidence-f86177717d701de24dea323058c791472fd9d23c",
+    "bytes": 15812617,
+    "sha256": "b5aa30acd11a14f2e6276b53ee9afe8b43bb119eb9b02aade7114d9158afd3a0",
+    "digestVerified": true,
+    "expiresAt": "2026-11-13T22:01:22Z"
+  },
+  "jobs": [
+    {
+      "id": 128175363872,
+      "name": "isolated-browser",
+      "status": "completed",
+      "conclusion": "success",
+      "run_id": 42300106261,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Initialize runner-local paths",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Run supabase/setup-cli@v1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Install application and isolated browser tools",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 6
+        },
+        {
+          "name": "Native Chromium tab focus and visibility before local stack setup",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 7
+        },
+        {
+          "name": "UAT isolation and returning-login regression",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 8
+        },
+        {
+          "name": "A2 assistant and bounded swarm with synthetic model transport",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 9
+        },
+        {
+          "name": "UI response observation survives navigation and excludes stale refreshes",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 10
+        },
+        {
+          "name": "Authentication and C1 code regressions",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 11
+        },
+        {
+          "name": "Prepare isolated application and start local Supabase only",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 12
+        },
+        {
+          "name": "Apply selected real migrations and create synthetic Auth users",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 13
+        },
+        {
+          "name": "Scanner-safe single-use invitation in real browser",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 14
+        },
+        {
+          "name": "Preview-equivalent middleware runtime boundaries",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 15
+        },
+        {
+          "name": "Browser, cookies, PostgREST, preferences persistence, mobile and print",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 16
+        },
+        {
+          "name": "A1-A4 map, persisted progress and navigation in the same local stack",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 17
+        },
+        {
+          "name": "Browser to API to redacted log request correlation",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 18
+        },
+        {
+          "name": "Append actual AppShell, capture pages and canonical local outcome migrations",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 19
+        },
+        {
+          "name": "Six capture pages, real owner RLS, reload continuity and saved objective revision conflicts",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 20
+        },
+        {
+          "name": "Actual email login, signed invitation, Provider session, logout recovery and exhausted quota",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 21
+        },
+        {
+          "name": "C1 atomic completion, SQL rollback, retry, reload and owner boundaries on desktop and mobile",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 22
+        },
+        {
+          "name": "Reviewed A2 plans, durable receipts, owner RLS, concurrent sessions and recovery",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 23
+        },
+        {
+          "name": "Upload only synthetic visual evidence and sanitized summary",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        {
+          "name": "Stop disposable local stack, never a linked project",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 49
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 50
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 51
+        }
+      ]
+    }
+  ]
+}

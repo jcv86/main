@@ -1,0 +1,80 @@
+{
+  "scope": "disposable-local-postgresql",
+  "migration": "20261106201731_a2_reviewed_plan_atomic.sql",
+  "cases": [
+    {
+      "name": "service-only invoker functions, explicit grants and forced owner RLS",
+      "verdict": "PASS"
+    },
+    {
+      "name": "new plan commits one stable slot, history and metadata receipt with one timestamp",
+      "verdict": "PASS"
+    },
+    {
+      "name": "real owner SELECT isolation, no anonymous read and denied direct client mutations/RPCs",
+      "verdict": "PASS"
+    },
+    {
+      "name": "same request ID is bound to owner and stable command; reordered JSON replays",
+      "verdict": "PASS"
+    },
+    {
+      "name": "stale CAS preserves both saved history and new unsaved command receipt absence",
+      "verdict": "PASS"
+    },
+    {
+      "name": "two real concurrent writers serialize per owner, one CAS winner, another owner stays independent",
+      "verdict": "PASS"
+    },
+    {
+      "name": "two real concurrent identical commands commit once and return a replay",
+      "verdict": "PASS"
+    },
+    {
+      "name": "pause/resume preserve confirmed content and reject invalid terminal transitions",
+      "verdict": "PASS"
+    },
+    {
+      "name": "completion requires declared finished steps and never modifies canonical completion or XP",
+      "verdict": "PASS"
+    },
+    {
+      "name": "real failure at current rolls back current/history/receipt and same command can retry",
+      "verdict": "PASS"
+    },
+    {
+      "name": "real failure at history rolls back current/history/receipt and same command can retry",
+      "verdict": "PASS"
+    },
+    {
+      "name": "real failure at receipt rolls back current/history/receipt and same command can retry",
+      "verdict": "PASS"
+    },
+    {
+      "name": "failed deletion restores content and complete history at purge and receipt boundaries",
+      "verdict": "PASS"
+    },
+    {
+      "name": "delete purges all snapshots, old lost-ACK retries never resurrect, explicit fresh CAS may create again",
+      "verdict": "PASS"
+    },
+    {
+      "name": "source mismatch, unavailable or stale snapshot cannot create a plan",
+      "verdict": "PASS"
+    },
+    {
+      "name": "resume rejects a changed context even when the new command hash matches that changed context",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Santiago today and day+30 are inclusive; past/day+31 and aged resume are refused",
+      "verdict": "FAIL",
+      "error": "inconsistent types deduced for parameter $2"
+    }
+  ],
+  "syntheticOwnersCreated": 20,
+  "syntheticOwnersRemoved": true,
+  "browserOwnersUnchanged": true,
+  "remoteOperations": 0,
+  "verdict": "FAIL"
+}

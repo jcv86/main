@@ -1,0 +1,84 @@
+{
+  "commit": "bb6523d70a96a1bef15284fd55b656482658c9a6",
+  "environment": "disposable-local-a2-plan",
+  "copied": [
+    {
+      "path": "app/despega/a2/coach/page.tsx",
+      "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "861fbc069a855548f9d3b66a513931bb864027783386256f17a3dc146cd70243"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "f6ea9cda05b1abe59a1917468d4c0b2d297c74b7363d3d4a66832a25b0cb4daf"
+    },
+    {
+      "path": "app/api/a2/plan/route.ts",
+      "sha256": "440a0dffa8aa185a9e862fed9f417e7ce0b4a2de1a94bf0a380a198108a9f8b2"
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "769b8cc0f3c5ebac11483f231fd82611dd70aae3f2ac96d0bdde7bf2acf8927e"
+    },
+    {
+      "path": "lib/a2/assistant-contract.ts",
+      "sha256": "9ab2a8d80e67cdf9d769bffa2cfde295c9d2b9a62ddbfded06644a5614228d13"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "95e3cbe2b7fada649174c26b1250250ff6b5fe0a5fc6ff701bda3ad53a59b64d"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "6f7d28517e3c7f1f1235158421727c87fa54d56590213f1d44a64e5590a36f80"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "lib/a2/swarm/canary.ts",
+      "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34"
+    },
+    {
+      "path": "lib/a2/plan-api.ts",
+      "sha256": "995018f01334a47b6bd5ca774d46d34c14e84e03fa567153afbb83a8787dd63d"
+    },
+    {
+      "path": "lib/a2/plan-context.ts",
+      "sha256": "4b16273a86843a06435f642007e422e8658f3c354a21e21ccab2fe06aa728e64"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "391f931624f662ad6a1229c335f3889b476c5986afc1c68ee21f4e624d34ff01"
+    },
+    {
+      "path": "lib/a2/plan-service.ts",
+      "sha256": "2c98a3a06f08dcb320a89e558cea16e8e48a1c4a9c16732b85626b7d2c0fe32f"
+    }
+  ],
+  "genuine": [
+    "actual A2 coach page, plan card, session boundary, API and server context readers",
+    "real local email Auth, cookies, owner RLS, private command receipts and PostgreSQL RPC",
+    "canonical journey access, objective revision and practice-adjustment readers",
+    "atomic CAS/history/receipt writes, deletion tombstone and preserved canonical progress"
+  ],
+  "fixtures": [
+    "two new synthetic local owners with explicitly seeded A2 eligibility and one admitted owner without A2 eligibility",
+    "minimal dtc_documents source table; no preexisting adjustment or plan content",
+    "synthetic C1/C2/A1 evidence is setup data, not an assessment of a real participant"
+  ],
+  "substitutions": [
+    "root document/font shell inherited from the existing browser laboratory",
+    "temporary database faults and intentionally dropped HTTP delivery test recovery only"
+  ],
+  "notVerified": [
+    "model quality, model calls or generated plan quality",
+    "remote deployment or migration application",
+    "atomic freshness across independent context source writes",
+    "a real participant completing A2 or the manual UAT cases"
+  ],
+  "privacy": "Only synthetic screenshots and sanitized verdicts; no keys, passwords, cookies, HAR, browser storage or private server logs."
+}

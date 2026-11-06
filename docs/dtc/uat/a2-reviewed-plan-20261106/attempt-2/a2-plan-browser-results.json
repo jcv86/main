@@ -1,0 +1,92 @@
+{
+  "commit": "f09349751a3cb0ca898de6481f000c6eee272d03",
+  "scope": "disposable-local-a2-plan",
+  "verdict": "FAIL",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "actual email login and owner GET show no prior plan",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "targets": [
+            [
+              "section[aria-label=\"Progreso general de Tu Ruta\"] > .h-2\\.5.relative.overflow-hidden"
+            ],
+            [
+              ".bg-background\\/40.rounded-xl.border:nth-child(1) > .items-start.text-left.p-4 > .flex-1.min-w-0 > .mt-3.block > .h-1\\.5.relative.overflow-hidden"
+            ],
+            [
+              ".bg-background\\/40.rounded-xl.border:nth-child(2) > .items-start.text-left.p-4 > .flex-1.min-w-0 > .mt-3.block > .h-1\\.5.relative.overflow-hidden"
+            ],
+            [
+              ".bg-background\\/40.rounded-xl.border:nth-child(3) > .items-start.text-left.p-4 > .flex-1.min-w-0 > .mt-3.block > .h-1\\.5.relative.overflow-hidden"
+            ]
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "targets": [
+            [
+              ".hover\\:bg-\\[hsl\\(233_63\\%_55\\%\\)\\]"
+            ]
+          ]
+        }
+      ],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "viewport": 1440,
+      "document": 1440
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "controlledFaults": [],
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "failure": "Plan accessibility: editor\n\n2 !== 0\n",
+  "transport": "Actual local UI, email Auth, API, RLS and SQL; no successful plan API response is mocked.",
+  "notVerified": [
+    "model quality, model calls or generated plan quality",
+    "remote deployment or migration application",
+    "atomic freshness across independent context source writes",
+    "a real participant completing A2 or the manual UAT cases"
+  ]
+}

@@ -1,0 +1,296 @@
+{
+  "verdict": "FAIL",
+  "failure": "Accessible real UI: after-1440-delete-confirmation\n\n1 !== 0\n",
+  "sourceHashes": [
+    {
+      "path": "components/a2-progress-sidebar.tsx",
+      "sha256": "3b129ce75e0fa93efa82959e63fb89d9ad3afcca4ca70d0e403c836d47a05255"
+    },
+    {
+      "path": "components/ui/progress.tsx",
+      "sha256": "eace5d73328fbdef0b61a225e1ce2294a6f77d3577cc15efa5fd29e34043c856"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "f6ea9cda05b1abe59a1917468d4c0b2d297c74b7363d3d4a66832a25b0cb4daf"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "861fbc069a855548f9d3b66a513931bb864027783386256f17a3dc146cd70243"
+    },
+    {
+      "path": "app/despega/a2/layout.tsx",
+      "sha256": "2aa806f8a59b5b6e53a6ae57d024237ac7f6e4a415cbf231403c36f3a2a8bb26"
+    },
+    {
+      "path": "app/despega/a2/coach/page.tsx",
+      "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146"
+    },
+    {
+      "path": "components/ui/button.tsx",
+      "sha256": "2ba6400b529c6bafc332d0396fcd8ed12a5d38db9ab75b91123814ae5c542d7e"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "e6c21df3851337c3b868863a58cbae11c1b362f84e6c9fbd6c4382691fa6fc50"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "391f931624f662ad6a1229c335f3889b476c5986afc1c68ee21f4e624d34ff01"
+    }
+  ],
+  "scans": [
+    {
+      "name": "before-1440-0-editor",
+      "violations": [
+        {
+          "id": "aria-progressbar-name",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                ".h-2\\.5"
+              ],
+              "html": "<div aria-valuemax=\"100\" aria-valuemin=\"0\" role=\"progressbar\" data-state=\"indeterminate\" data-max=\"100\" class=\"relative h-2.5 w-full overflow-hidden rounded-full bg-[hsl(var(--dtc-ink-700)/0.72)] shadow-[var(--dtc-shadow-inset)]\">",
+              "summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+              "data": [
+                null,
+                null,
+                {
+                  "messageKey": "noAttr"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".bg-background\\/40.rounded-xl.border:nth-child(1) > .items-start.text-left.gap-3 > .flex-1 > .mt-3.block > .h-1\\.5.relative.overflow-hidden"
+              ],
+              "html": "<div aria-valuemax=\"100\" aria-valuemin=\"0\" role=\"progressbar\" data-state=\"indeterminate\" data-max=\"100\" class=\"relative w-full overflow-hidden rounded-full bg-[hsl(var(--dtc-ink-700)/0.72)] shadow-[var(--dtc-shadow-inset)] h-1.5\">",
+              "summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+              "data": [
+                null,
+                null,
+                {
+                  "messageKey": "noAttr"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".bg-background\\/40.rounded-xl.border:nth-child(2) > .items-start.text-left.gap-3 > .flex-1 > .mt-3.block > .h-1\\.5.relative.overflow-hidden"
+              ],
+              "html": "<div aria-valuemax=\"100\" aria-valuemin=\"0\" role=\"progressbar\" data-state=\"indeterminate\" data-max=\"100\" class=\"relative w-full overflow-hidden rounded-full bg-[hsl(var(--dtc-ink-700)/0.72)] shadow-[var(--dtc-shadow-inset)] h-1.5\">",
+              "summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+              "data": [
+                null,
+                null,
+                {
+                  "messageKey": "noAttr"
+                }
+              ]
+            },
+            {
+              "target": [
+                ".bg-background\\/40.rounded-xl.border:nth-child(3) > .items-start.text-left.gap-3 > .flex-1 > .mt-3.block > .h-1\\.5.relative.overflow-hidden"
+              ],
+              "html": "<div aria-valuemax=\"100\" aria-valuemin=\"0\" role=\"progressbar\" data-state=\"indeterminate\" data-max=\"100\" class=\"relative w-full overflow-hidden rounded-full bg-[hsl(var(--dtc-ink-700)/0.72)] shadow-[var(--dtc-shadow-inset)] h-1.5\">",
+              "summary": "Fix any of the following:\n  aria-label attribute does not exist or is empty\n  aria-labelledby attribute does not exist, references elements that do not exist or references elements that are empty\n  Element has no title attribute",
+              "data": [
+                null,
+                null,
+                {
+                  "messageKey": "noAttr"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                ".text-primary-foreground"
+              ],
+              "html": "<a href=\"/despega/a2/dia-1\" class=\"inline-flex items-ce...\">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 4.24 (foreground color: #ffffff, background color: #5d6eef, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "data": [
+                {
+                  "fgColor": "#ffffff",
+                  "bgColor": "#5d6eef",
+                  "contrastRatio": 4.24,
+                  "fontSize": "10.5pt (14px)",
+                  "fontWeight": "normal",
+                  "messageKey": null,
+                  "expectedContrastRatio": "4.5:1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "name": "after-1440-0-editor",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "name": "after-desktop-sidebar-hover",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "name": "after-1440-saved",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "name": "after-1440-paused",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "name": "after-1440-delete-confirmation",
+      "violations": [
+        {
+          "id": "color-contrast",
+          "impact": "serious",
+          "nodes": [
+            {
+              "target": [
+                ".bg-destructive"
+              ],
+              "html": "<button class=\"inline-flex items-ce...\" type=\"button\">",
+              "summary": "Fix any of the following:\n  Element has insufficient color contrast of 3.3 (foreground color: #ffffff, background color: #e16672, font size: 10.5pt (14px), font weight: normal). Expected contrast ratio of 4.5:1",
+              "data": [
+                {
+                  "fgColor": "#ffffff",
+                  "bgColor": "#e16672",
+                  "contrastRatio": 3.3,
+                  "fontSize": "10.5pt (14px)",
+                  "fontWeight": "normal",
+                  "messageKey": null,
+                  "expectedContrastRatio": "4.5:1"
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "progress": [
+    {
+      "width": 1440,
+      "percentage": 0,
+      "bars": [
+        {
+          "name": "Progreso general de Tu Ruta",
+          "now": "0",
+          "text": "0%",
+          "state": "loading"
+        },
+        {
+          "name": "Progreso de Ciclo inicial: Días 1–30",
+          "now": "0",
+          "text": "0%",
+          "state": "loading"
+        },
+        {
+          "name": "Progreso de Extensión a 60 días: Días 31–60",
+          "now": "0",
+          "text": "0%",
+          "state": "loading"
+        },
+        {
+          "name": "Progreso de Integración a 90 días: Días 61–90",
+          "now": "0",
+          "text": "0%",
+          "state": "loading"
+        }
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "mode": "before",
+      "width": 1440,
+      "percentage": 0,
+      "viewport": 1440,
+      "document": 1440,
+      "date": {
+        "x": 1080.265625,
+        "y": 635,
+        "width": 302.734375,
+        "height": 44
+      },
+      "focused": true,
+      "unobscured": true,
+      "viewportHeight": 1000
+    },
+    {
+      "mode": "after",
+      "width": 1440,
+      "percentage": 0,
+      "viewport": 1440,
+      "document": 1440,
+      "date": {
+        "x": 1080.265625,
+        "y": 635,
+        "width": 302.734375,
+        "height": 44
+      },
+      "focused": true,
+      "unobscured": true,
+      "viewportHeight": 1000
+    }
+  ],
+  "errors": [],
+  "external": [],
+  "screenshots": [
+    "before-1440-0-viewport.png",
+    "before-1440-0-editor.png",
+    "after-1440-0-viewport.png",
+    "after-1440-0-editor.png",
+    "after-desktop-sidebar-hover.png",
+    "after-1440-saved.png",
+    "after-1440-paused.png",
+    "after-1440-delete-confirmation.png"
+  ],
+  "genuine": [
+    "actual A2 layout, coach page, plan card, sidebar, shared Button and Radix Progress",
+    "actual DTC CSS",
+    "real Chromium and axe"
+  ],
+  "synthetic": [
+    "Auth/session and server journey read ports",
+    "local HTTP module-access, progress and plan fixtures",
+    "coach context wrapper and Next navigation",
+    "system fonts; global shell margin only"
+  ],
+  "notVerified": [
+    "real Auth, SQL durability or RLS",
+    "complete authenticated AppShell",
+    "full contrast certification over gradient backgrounds"
+  ]
+}

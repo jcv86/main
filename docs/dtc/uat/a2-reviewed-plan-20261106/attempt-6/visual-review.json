@@ -1,0 +1,62 @@
+{
+  "candidate": "f86177717d701de24dea323058c791472fd9d23c",
+  "recordedAt": "2026-11-06T22:06:15.518535+00:00",
+  "reviewType": "manual visual inspection of actual CI PNGs by root and delegated reviewer; not execution of human UAT cases",
+  "screenshots": [
+    {
+      "name": "a2-plan-desktop-editor.png",
+      "sha256": "c22249f98a86d716c6d686634fc4f0c78a0f4a5ddfab24fdc8ecfc1197b3575b",
+      "observation": "Purpose, constraints, two step editors, review date and save controls are legible and within the card; the date control has a visible focus indicator."
+    },
+    {
+      "name": "a2-plan-desktop-completed.png",
+      "sha256": "5e5010f981e620433cb0de750006cbd7c6819e5599037c3d7e00c4279e119434",
+      "observation": "The confirmed completion notice, declared done/skipped step states and prepare-another-plan action are visible."
+    },
+    {
+      "name": "a2-plan-desktop-conflict-retains-draft.png",
+      "sha256": "9ae7fd01769a42d88c11c57b2d29128a45a9ccfb421c8942908040c7340c3d52",
+      "observation": "The newer saved plan and retained local draft are both visible; explicit re-review is offered and save remains disabled until review."
+    },
+    {
+      "name": "a2-plan-desktop-replay-after-deletion.png",
+      "sha256": "25580b3404767f697976ef3b04d5c32c266ee78cbb07a55f3599f02992be0dde",
+      "observation": "The notice distinguishes the prior request confirmation from the current deleted state; no prior plan content is restored."
+    },
+    {
+      "name": "a2-plan-desktop-account-change.png",
+      "sha256": "b1a16edd8f06bfba184f8615e2adf0200559fb491b002bcf67ba876277a98821",
+      "observation": "Plan/editor/conversation are absent; the session-change alert and reopening link remain. A pre-existing cosmetic lack of separation before the link is visible."
+    },
+    {
+      "name": "a2-plan-mobile-editor.png",
+      "sha256": "61e0c6e97caf66d51c1bb4d5386d886c85bc6623c4f5307f91ea16583acf7f70",
+      "observation": "The two-step editor fits the 390px width; labels and controls are not horizontally cropped and the second title shows focus."
+    },
+    {
+      "name": "a2-plan-mobile-completed.png",
+      "sha256": "7dc67536d35b42ff4e1ea173dbcb4b4d71aafa293513e01e84e1758dc74e8afd",
+      "observation": "The completion notice, declared done/skipped steps, review date and next action are legible within the card."
+    },
+    {
+      "name": "a2-plan-mobile-deleted.png",
+      "sha256": "d558a5fb88f236bb2625d1f7a7b70af643333c266501b1fda931f73300981a9f",
+      "observation": "The deletion notice and empty-state action remain, with no deleted plan steps or text."
+    }
+  ],
+  "newBlockingPlanCardDefectsObserved": false,
+  "knownCosmeticObservation": {
+    "screen": "desktop-account-change",
+    "description": "The reopening link lacks separation from the preceding full stop.",
+    "source": "components/a2-chat-coach.tsx",
+    "presentBeforeAG03": true,
+    "baselineCommit": "46873761b02595173943dec9a9c37b0a5e1e1889"
+  },
+  "limitations": [
+    "Full-page captures retain fixed AppShell elements at the current scroll position and visibly overlay portions of the flattened document; they do not establish obstruction-free controls at every viewport position.",
+    "Laboratory root/font shell is substituted as declared in a2-plan-scope.json.",
+    "Mobile coverage is Chromium viewport 390x844, not touch, a physical device or Safari.",
+    "Eight incomplete color-contrast scans remain; visual inspection does not establish complete WCAG conformance.",
+    "The 54 manual UAT cases remain unexecuted."
+  ]
+}

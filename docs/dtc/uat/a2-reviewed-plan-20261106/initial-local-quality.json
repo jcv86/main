@@ -1,0 +1,19 @@
+{
+  "version": "dtc-a2-reviewed-plan-local-quality.v1",
+  "candidateSha": "bb6523d70a96a1bef15284fd55b656482658c9a6",
+  "reviewedTree": "2676968d7cb16c35893534510748b744f645271d",
+  "recordedAt": "2026-11-06T20:41:06.049834+00:00",
+  "command": "npm run quality:gate",
+  "exitCode": 0,
+  "nodeVersion": "v24.22.1",
+  "configuration": "synthetic CI-equivalent fixtures; no hosted environment asserted",
+  "typescript": "passed",
+  "professionalRegressions": "passed",
+  "criticalContracts": "passed",
+  "reportContracts": "passed",
+  "nextBuild": "passed",
+  "staticPages": 354,
+  "localLogSha256": "a9465d769871990dcac69b4790eeebc8b9ce49b47c79e27c30a1317b73ff48bf",
+  "liveModelQuality": false,
+  "productionDeployment": false
+}

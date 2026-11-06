@@ -1,0 +1,164 @@
+{
+  "commit": "b9a017db939d8a060c9696312987a93381132cea",
+  "scope": "disposable-local-a2-plan",
+  "verdict": "FAIL",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "actual email login and owner GET show no prior plan",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "explicit save persists through reload and paused plans resume from the same owner slot",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "correction, declared step completion, completion and cancellation preserve explicit user control",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "real CAS conflict preserves the local draft until explicit comparison and a fresh save",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "source changes require explicit re-review and preserve the canonical continuation",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "real read and source failures preserve saved data and never present a false fresh or empty plan",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "completed",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "conflict-retains-draft",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "completed",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "conflict-retains-draft",
+      "viewport": 1440,
+      "document": 1440
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "controlledFaults": [
+    {
+      "phase": "desktop",
+      "kind": "local_source_select_revoked",
+      "preservedSavedPlan": true
+    },
+    {
+      "phase": "desktop",
+      "kind": "local_plan_select_revoked",
+      "emptyPlanNotFabricated": true
+    }
+  ],
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "failure": "page.waitForResponse: Timeout 30000ms exceeded while waiting for event \"response\"",
+  "transport": "Actual local UI, email Auth, API, RLS and SQL; no successful plan API response is mocked.",
+  "notVerified": [
+    "model quality, model calls or generated plan quality",
+    "remote deployment or migration application",
+    "atomic freshness across independent context source writes",
+    "a real participant completing A2 or the manual UAT cases"
+  ]
+}

@@ -1,0 +1,232 @@
+{
+  "version": "dtc-a2-reviewed-plan-source-evidence.v1",
+  "candidateSha": "f86177717d701de24dea323058c791472fd9d23c",
+  "baseCommit": "46873761b02595173943dec9a9c37b0a5e1e1889",
+  "initialFeatureCommit": "bb6523d70a96a1bef15284fd55b656482658c9a6",
+  "capturedAt": "2026-11-06T22:05:15.516609+00:00",
+  "suites": [
+    {
+      "suite": "a2-assistant-route",
+      "cases": 95,
+      "passed": 95
+    },
+    {
+      "suite": "a2-plan-api",
+      "cases": 39,
+      "passed": 39
+    },
+    {
+      "suite": "a2-reviewed-plan-contract",
+      "cases": 56,
+      "passed": 56
+    },
+    {
+      "suite": "a2-swarm-canary",
+      "cases": 56,
+      "passed": 56
+    },
+    {
+      "suite": "a2-swarm-provider",
+      "cases": 42,
+      "passed": 42
+    },
+    {
+      "suite": "a2-swarm-runtime",
+      "cases": 81,
+      "passed": 81
+    }
+  ],
+  "additionalCanonicalCoordinatorGroups": 16,
+  "componentBrowserRegression": {
+    "candidateSha": "bb6523d70a96a1bef15284fd55b656482658c9a6",
+    "passed": 80,
+    "axeScans": 20,
+    "violations": 0,
+    "incompleteScans": 20,
+    "scope": "Earlier actual-component regression with synthetic session/read/model ports and empty plan GET; not a final-candidate persistence claim.",
+    "filesChangedSinceThatRegression": [
+      "components/a2-reviewed-plan.tsx"
+    ],
+    "changeExplanation": "Only the deletion confirmation button className changed in this harness source set; final UI is covered separately by the focused accessibility report and exact-candidate CI."
+  },
+  "focusedAccessibility": {
+    "candidateSha": "b9a017db939d8a060c9696312987a93381132cea",
+    "postFixScans": 19,
+    "postFixViolations": 0,
+    "postFixIncompleteScans": 19,
+    "progressCases": 4,
+    "sourceHashesVerified": 10,
+    "scope": "Real layout, plan card, sidebar, Button, Radix Progress, CSS, Chromium and axe with synthetic Auth/API ports; no SQL durability claim."
+  },
+  "modelTransport": "synthetic",
+  "liveModelQuality": false,
+  "canaryActivated": false,
+  "integrationCorrections": [
+    {
+      "sha": "f09349751a3cb0ca898de6481f000c6eee272d03",
+      "scope": "SQL test fixture binds its backdated calendar parameter consistently as date; application and migration unchanged."
+    },
+    {
+      "sha": "b9a017db939d8a060c9696312987a93381132cea",
+      "scope": "Accessible progress labels and values, contrast for continuation/deletion controls, and a browser assertion scoped to the canonical action card."
+    },
+    {
+      "sha": "7e0c77725b9bc5d4b4c3a431e769a069b91261a3",
+      "scope": "Early headed native-focus preflight plus native-event helper; an additional CDP session could not release the original Playwright focus override, so CI stopped before application setup."
+    },
+    {
+      "sha": "b72f7f6c920aad60f7e35d1a34c4de62f9314abd",
+      "scope": "One hash-pinned conditional expression in disposable Playwright 1.56.1 tools removes the original-session forced focus only for preflight and A2. Harness brings each interacting page forward and preserves held CAS/account races; application unchanged."
+    },
+    {
+      "sha": "f86177717d701de24dea323058c791472fd9d23c",
+      "scope": "Resolve the exact playwright-core dependency from the pinned Playwright package instead of an independent newer core hoisted for the accessibility tool. All version, hash, integrity and path guards retained."
+    }
+  ],
+  "files": [
+    {
+      "path": ".github/workflows/a1-browser-qa.yml",
+      "sha256": "7466fd434b478e498a73dce6442863b43c58685de378cbbc8b836ceb1ec6cde2"
+    },
+    {
+      "path": "app/api/a2/plan/route.ts",
+      "sha256": "440a0dffa8aa185a9e862fed9f417e7ce0b4a2de1a94bf0a380a198108a9f8b2"
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "769b8cc0f3c5ebac11483f231fd82611dd70aae3f2ac96d0bdde7bf2acf8927e"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "861fbc069a855548f9d3b66a513931bb864027783386256f17a3dc146cd70243"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "1d10deeacdd79eb3d625938e40299f78b8d486f4a491cc00933e9264929304e7"
+    },
+    {
+      "path": "lib/a2/assistant-contract.ts",
+      "sha256": "9ab2a8d80e67cdf9d769bffa2cfde295c9d2b9a62ddbfded06644a5614228d13"
+    },
+    {
+      "path": "lib/a2/plan-api.ts",
+      "sha256": "995018f01334a47b6bd5ca774d46d34c14e84e03fa567153afbb83a8787dd63d"
+    },
+    {
+      "path": "lib/a2/plan-context.ts",
+      "sha256": "4b16273a86843a06435f642007e422e8658f3c354a21e21ccab2fe06aa728e64"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "391f931624f662ad6a1229c335f3889b476c5986afc1c68ee21f4e624d34ff01"
+    },
+    {
+      "path": "lib/a2/plan-service.ts",
+      "sha256": "2c98a3a06f08dcb320a89e558cea16e8e48a1c4a9c16732b85626b7d2c0fe32f"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "95e3cbe2b7fada649174c26b1250250ff6b5fe0a5fc6ff701bda3ad53a59b64d"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "6f7d28517e3c7f1f1235158421727c87fa54d56590213f1d44a64e5590a36f80"
+    },
+    {
+      "path": "package.json",
+      "sha256": "35e791b920342d5f68f42070801bdece9c40f66c542e80e84788bc3a0c309f7a"
+    },
+    {
+      "path": "scripts/agentic-browser-qa.mjs",
+      "sha256": "baf5f9dd05a9ff405f7bfc8aae554c51c23a0498b76e385b29e1c7a8bef32d64"
+    },
+    {
+      "path": "scripts/test-a2-assistant.cjs",
+      "sha256": "d4f78a8595d108035e98f63e481d23f87ed748a5868cf40ac41efe6db79f0232"
+    },
+    {
+      "path": "scripts/test-a2-swarm.mjs",
+      "sha256": "89d69b21168e09837c90afdb93712751c20b928b186bc599ec5a34a80695d506"
+    },
+    {
+      "path": "scripts/test-a2-plan-api.mjs",
+      "sha256": "3d11af06f8d5d679378008e2f368f4ce0d252d9153b61fc43f70d02886abdec2"
+    },
+    {
+      "path": "scripts/test-a2-plan-contract.mjs",
+      "sha256": "31c9c0138180d21a26d78e9d04377c30c59cf989287d22043a0e163d470d5eab"
+    },
+    {
+      "path": "scripts/test-a2-plan-sql.mjs",
+      "sha256": "8d932e5ba466dd0b6d756ee00971dd3819169aaccbd96aab61843101f05831cd"
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-prepare.mjs",
+      "sha256": "787da11bc7f4c14828fb845df0b021fc66d0fd9160d090e18932d26d04272342"
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-seed.ts",
+      "sha256": "491b52c11b62a98e162e5c7e84c3c6bd238a19fa9dd8a837d7377e07cf75ad4b"
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-advisors.mjs",
+      "sha256": "a520856cfb3abe3c746625ad1d9f71315e703d0d655bc4488e07a45720abb0fe"
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-browser.mjs",
+      "sha256": "ee6feadecf3b540a9b02ce86de98745a6e8cacfcc8d53f097d2ff9630297ee3b"
+    },
+    {
+      "path": "supabase/migrations/20261106201731_a2_reviewed_plan_atomic.sql",
+      "sha256": "0665f5db6e0a738dc598c54991818fb1e282461e0f02208d822ba2415e80ca99"
+    },
+    {
+      "path": "components/a2-progress-sidebar.tsx",
+      "sha256": "3b129ce75e0fa93efa82959e63fb89d9ad3afcca4ca70d0e403c836d47a05255"
+    },
+    {
+      "path": "components/ui/progress.tsx",
+      "sha256": "eace5d73328fbdef0b61a225e1ce2294a6f77d3577cc15efa5fd29e34043c856"
+    },
+    {
+      "path": "scripts/a1-browser-qa/focus-visibility-preflight.mjs",
+      "sha256": "6d4078cb95aca8e5b4b3c82d5ce07ce90f080783c521b839d96cab075e2c7978"
+    },
+    {
+      "path": "scripts/a1-browser-qa/native-tab-return.mjs",
+      "sha256": "10c048d5f4418c910379f3375690f254048c5a254fafd186b5a2163720023e97"
+    },
+    {
+      "path": "scripts/a1-browser-qa/prepare-native-tab-focus.mjs",
+      "sha256": "76de96eb3bdf010defb574c4135ac971347d91be74af574a1578da66a3ab3e01"
+    }
+  ],
+  "candidateTree": "73c38830c04401590d33912fdbb160e7195a502c",
+  "localQualityCandidateSha": "b9a017db939d8a060c9696312987a93381132cea",
+  "localQualitySourceCheck": "final-quality-source-check.json",
+  "laboratory": {
+    "runId": 42300106261,
+    "headSha": "f86177717d701de24dea323058c791472fd9d23c",
+    "status": "completed",
+    "url": "https://github.com/jcv86/main/actions/runs/42300106261",
+    "conclusion": "success",
+    "record": "attempt-6/ci-run.json",
+    "verification": "attempt-6/verified-summary.json",
+    "sqlCasesPassed": 22,
+    "browserStepsPassed": 17,
+    "accessibilityScans": 8,
+    "accessibilityViolations": 0,
+    "incompleteContrastScans": 8,
+    "artifactSha256": "b5aa30acd11a14f2e6276b53ee9afe8b43bb119eb9b02aade7114d9158afd3a0"
+  },
+  "changesAfterFinalLocalGate": {
+    "paths": [
+      ".github/workflows/a1-browser-qa.yml",
+      "scripts/a1-browser-qa/a2-plan-browser.mjs",
+      "scripts/a1-browser-qa/focus-visibility-preflight.mjs",
+      "scripts/a1-browser-qa/native-tab-return.mjs",
+      "scripts/a1-browser-qa/prepare-native-tab-focus.mjs"
+    ],
+    "scope": "Only workflow and browser-test harness configuration; application, migration and unit-test sources remain byte-identical to the passing local quality gate."
+  }
+}

@@ -1,0 +1,264 @@
+{
+  "status": "PASS",
+  "candidate": "f86177717d701de24dea323058c791472fd9d23c",
+  "migrationAppliedTwice": true,
+  "sqlCasesPassed": 22,
+  "candidateAdvisorFindings": 0,
+  "totalLaboratoryAdvisorFindings": 0,
+  "browserStepsPassed": 17,
+  "accessibilityScans": 8,
+  "accessibilityViolations": [],
+  "incompleteScans": 8,
+  "incompleteRules": [
+    "color-contrast"
+  ],
+  "javascriptErrors": 0,
+  "externalRequests": 0,
+  "recordedRequestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/plan",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/plan",
+      "method": "POST",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "nativePreflightAndApplicationReturnPassed": true,
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "verifiedCopiedSources": [
+    {
+      "path": "app/despega/a2/coach/page.tsx",
+      "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "861fbc069a855548f9d3b66a513931bb864027783386256f17a3dc146cd70243"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "1d10deeacdd79eb3d625938e40299f78b8d486f4a491cc00933e9264929304e7"
+    },
+    {
+      "path": "app/api/a2/plan/route.ts",
+      "sha256": "440a0dffa8aa185a9e862fed9f417e7ce0b4a2de1a94bf0a380a198108a9f8b2"
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "769b8cc0f3c5ebac11483f231fd82611dd70aae3f2ac96d0bdde7bf2acf8927e"
+    },
+    {
+      "path": "lib/a2/assistant-contract.ts",
+      "sha256": "9ab2a8d80e67cdf9d769bffa2cfde295c9d2b9a62ddbfded06644a5614228d13"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "95e3cbe2b7fada649174c26b1250250ff6b5fe0a5fc6ff701bda3ad53a59b64d"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "6f7d28517e3c7f1f1235158421727c87fa54d56590213f1d44a64e5590a36f80"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "lib/a2/swarm/canary.ts",
+      "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34"
+    },
+    {
+      "path": "lib/a2/plan-api.ts",
+      "sha256": "995018f01334a47b6bd5ca774d46d34c14e84e03fa567153afbb83a8787dd63d"
+    },
+    {
+      "path": "lib/a2/plan-context.ts",
+      "sha256": "4b16273a86843a06435f642007e422e8658f3c354a21e21ccab2fe06aa728e64"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "391f931624f662ad6a1229c335f3889b476c5986afc1c68ee21f4e624d34ff01"
+    },
+    {
+      "path": "lib/a2/plan-service.ts",
+      "sha256": "2c98a3a06f08dcb320a89e558cea16e8e48a1c4a9c16732b85626b7d2c0fe32f"
+    }
+  ],
+  "screenshots": [
+    {
+      "name": "a2-plan-desktop-editor.png",
+      "bytes": 472316,
+      "sha256": "c22249f98a86d716c6d686634fc4f0c78a0f4a5ddfab24fdc8ecfc1197b3575b"
+    },
+    {
+      "name": "a2-plan-desktop-completed.png",
+      "bytes": 351843,
+      "sha256": "5e5010f981e620433cb0de750006cbd7c6819e5599037c3d7e00c4279e119434"
+    },
+    {
+      "name": "a2-plan-desktop-conflict-retains-draft.png",
+      "bytes": 574665,
+      "sha256": "9ae7fd01769a42d88c11c57b2d29128a45a9ccfb421c8942908040c7340c3d52"
+    },
+    {
+      "name": "a2-plan-desktop-replay-after-deletion.png",
+      "bytes": 330480,
+      "sha256": "25580b3404767f697976ef3b04d5c32c266ee78cbb07a55f3599f02992be0dde"
+    },
+    {
+      "name": "a2-plan-desktop-account-change.png",
+      "bytes": 160614,
+      "sha256": "b1a16edd8f06bfba184f8615e2adf0200559fb491b002bcf67ba876277a98821"
+    },
+    {
+      "name": "a2-plan-mobile-editor.png",
+      "bytes": 297012,
+      "sha256": "61e0c6e97caf66d51c1bb4d5386d886c85bc6623c4f5307f91ea16583acf7f70"
+    },
+    {
+      "name": "a2-plan-mobile-completed.png",
+      "bytes": 220350,
+      "sha256": "7dc67536d35b42ff4e1ea173dbcb4b4d71aafa293513e01e84e1758dc74e8afd"
+    },
+    {
+      "name": "a2-plan-mobile-deleted.png",
+      "bytes": 172378,
+      "sha256": "d558a5fb88f236bb2625d1f7a7b70af643333c266501b1fda931f73300981a9f"
+    }
+  ],
+  "versions": {
+    "node": "v22.23.4",
+    "playwright": "1.56.1",
+    "chromium": "141.0.7390.37"
+  },
+  "scope": "disposable-local-a2-plan",
+  "limitations": [
+    "model quality, model calls or generated plan quality",
+    "remote deployment or migration application",
+    "atomic freshness across independent context source writes",
+    "a real participant completing A2 or the manual UAT cases",
+    "Mobile coverage is a Chromium viewport, not a physical device, touch interaction or Safari.",
+    "Account-switch coverage allows Auth cancellation before response delivery and does not distinguish that branch from rejecting a late delivered response.",
+    "Incomplete gradient contrast checks are not a complete WCAG conformance finding."
+  ]
+}

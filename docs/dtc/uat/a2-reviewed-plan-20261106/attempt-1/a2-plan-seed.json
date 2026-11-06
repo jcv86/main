@@ -1,0 +1,12 @@
+{
+  "migration": "20261106201731_a2_reviewed_plan_atomic.sql",
+  "migrationAppliedTwice": true,
+  "syntheticAuthOwnersCreated": 3,
+  "eligibleA2": 2,
+  "admittedWithoutA2": 1,
+  "initialPlanRows": 0,
+  "contextFixture": "minimal dtc_documents owner SELECT/INSERT; no content seeded",
+  "canonicalProgress": "synthetic A2 entry prerequisites only; no task completion or XP",
+  "remoteOperations": 0,
+  "verdict": "PASS"
+}

@@ -1,0 +1,154 @@
+{
+  "playwright": "1.62.1",
+  "chromium": "153.0.8010.0",
+  "states": [
+    {
+      "label": "default-a",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "default-b-front",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "default-a-return",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "focus-override-disabled",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "native-b-front",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "native-a-return",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "focus-override-toggle-cleared",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "cleared-b-front",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    },
+    {
+      "label": "cleared-a-return",
+      "pages": [
+        {
+          "url": "/a",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        },
+        {
+          "url": "/b",
+          "visible": "visible",
+          "focused": true,
+          "events": []
+        }
+      ]
+    }
+  ],
+  "scope": "Observe trusted browser focus/visibility events; no events dispatched and no document properties replaced."
+}

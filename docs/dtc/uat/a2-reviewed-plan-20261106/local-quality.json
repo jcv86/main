@@ -1,0 +1,20 @@
+{
+  "version": "dtc-a2-reviewed-plan-local-quality.v1",
+  "candidateSha": "b9a017db939d8a060c9696312987a93381132cea",
+  "reviewedTree": "98696f925f0dedfe1f5cf261ee78b1603265f374",
+  "recordedAt": "2026-11-06T21:12:50.894376+00:00",
+  "command": "npm run quality:gate",
+  "exitCode": 0,
+  "nodeVersion": "v24.22.1",
+  "configuration": "Explicit synthetic Supabase/OpenAI values; inherited service configuration removed; no hosted environment asserted",
+  "typescript": "passed",
+  "professionalRegressions": "passed",
+  "criticalContracts": "passed",
+  "reportContracts": "passed",
+  "nextBuild": "passed",
+  "staticPages": 354,
+  "localLogSha256": "3fa67b03c21b0f622d9efb40b46ef9eb11ad71c68575eeb867bf44bd285d2dbc",
+  "sourcesUnchangedDuringGate": true,
+  "liveModelQuality": false,
+  "productionDeployment": false
+}

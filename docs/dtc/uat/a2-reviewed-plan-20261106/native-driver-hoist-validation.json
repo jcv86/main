@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "before": {
+    "entries": [
+      {
+        "path": "node_modules/playwright/package.json",
+        "version": "1.56.1"
+      },
+      {
+        "path": "node_modules/playwright-core/package.json",
+        "version": "1.65.0"
+      },
+      {
+        "path": "node_modules/playwright/node_modules/playwright-core/package.json",
+        "version": "1.56.1"
+      }
+    ],
+    "coreFromToolsTreeSha256": "19669073550fa7258e4739a92e58dc383b334f994f59be24a2eb256a1b4b5611",
+    "coreFromPlaywrightSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f"
+  },
+  "manifest": {
+    "suite": "native-tab-focus-adapter",
+    "version": 1,
+    "status": "PASS",
+    "sourceCommit": "local-hoist-validation",
+    "preparedAt": "2026-11-06T21:50:46.767Z",
+    "scope": "disposable-runner-tools-only",
+    "playwrightVersion": "1.56.1",
+    "playwrightCoreVersion": "1.56.1",
+    "adapter": "node_modules/playwright/node_modules/playwright-core/lib/server/chromium/crPage.js",
+    "npmIntegrity": "sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==",
+    "originalSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f",
+    "modifiedSha256": "9e0e8ffdbe9c9ae3322a3e5ea9e62968dceb161af3861c87d49e716713521d8d",
+    "replacements": 1,
+    "environmentFlag": {
+      "name": "DTC_NATIVE_TAB_FOCUS",
+      "nativeValue": "yes",
+      "defaultEnabled": true
+    }
+  },
+  "hoistedCoreTreeSha256After": "19669073550fa7258e4739a92e58dc383b334f994f59be24a2eb256a1b4b5611",
+  "hoistedCoreUnchanged": true,
+  "flatLayoutStillValid": true,
+  "applicationLabCreated": false,
+  "limitations": [
+    "Native headed Chromium remains the CI preflight responsibility."
+  ]
+}

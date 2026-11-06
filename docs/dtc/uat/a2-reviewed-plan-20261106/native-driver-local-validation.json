@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "nodeVersion": "v24.22.1",
+  "cases": [
+    {
+      "name": "original-session expression with flag absent",
+      "pass": true,
+      "enabled": true
+    },
+    {
+      "name": "original-session expression with flag yes",
+      "pass": true,
+      "enabled": false
+    },
+    {
+      "name": "original-session expression with flag no",
+      "pass": true,
+      "enabled": true
+    },
+    {
+      "name": "read-only guard refuses absent opt-in",
+      "pass": true
+    },
+    {
+      "name": "guard refuses tools outside temporary child directory",
+      "pass": true
+    },
+    {
+      "name": "guard refuses missing lab authorization",
+      "pass": true
+    },
+    {
+      "name": "verification performs no writes and creates no application lab",
+      "pass": true
+    }
+  ],
+  "manifest": {
+    "suite": "native-tab-focus-adapter",
+    "version": 1,
+    "status": "PASS",
+    "sourceCommit": "local-native-driver-validation",
+    "preparedAt": "2026-11-06T21:46:24.248Z",
+    "scope": "disposable-runner-tools-only",
+    "playwrightVersion": "1.56.1",
+    "playwrightCoreVersion": "1.56.1",
+    "adapter": "node_modules/playwright-core/lib/server/chromium/crPage.js",
+    "npmIntegrity": "sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==",
+    "originalSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f",
+    "modifiedSha256": "9e0e8ffdbe9c9ae3322a3e5ea9e62968dceb161af3861c87d49e716713521d8d",
+    "replacements": 1,
+    "environmentFlag": {
+      "name": "DTC_NATIVE_TAB_FOCUS",
+      "nativeValue": "yes",
+      "defaultEnabled": true
+    }
+  },
+  "limitations": [
+    "No local Xvfb or headed Chromium is available; real native visibility and trusted events remain required by the CI preflight."
+  ]
+}

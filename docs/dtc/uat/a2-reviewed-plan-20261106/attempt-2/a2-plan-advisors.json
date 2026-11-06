@@ -1,0 +1,10 @@
+{
+  "command": "supabase db advisors --local --type security --level warn --output-format json",
+  "cliVersion": "2.117.0",
+  "scope": "candidate A2 plan tables, private history/receipts and functions",
+  "totalLaboratoryFindings": 0,
+  "candidateFindings": [],
+  "remoteOperations": 0,
+  "verdict": "PASS",
+  "failure": null
+}

@@ -1,0 +1,21 @@
+{
+  "runId": 42297804670,
+  "url": "https://github.com/jcv86/main/actions/runs/42297804670",
+  "headSha": "7e0c77725b9bc5d4b4c3a431e769a069b91261a3",
+  "conclusion": "failure",
+  "failedStep": "Native Chromium tab focus and visibility before local stack setup",
+  "cause": "The headed browser still reported both tabs visible and focused after disabling focus emulation through an additional public CDP session. The required native transition was not observed.",
+  "applicationStarted": false,
+  "databaseUsed": false,
+  "artifact": {
+    "id": 13542807226,
+    "bytes": 690,
+    "sha256": "e73a9dc0a4877500875fb439e2fc01932e40637e1f2d801dc180ef3676d7f0ba",
+    "digestVerified": true
+  },
+  "observedVersions": {
+    "node": "v22.23.4",
+    "playwright": "1.56.1",
+    "chromium": "141.0.7390.37"
+  }
+}

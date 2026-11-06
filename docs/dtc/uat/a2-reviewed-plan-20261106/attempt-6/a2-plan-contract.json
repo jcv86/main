@@ -1,0 +1,249 @@
+{
+  "suite": "a2-reviewed-plan-contract",
+  "cases": 56,
+  "passed": 56,
+  "actualContracts": true,
+  "actualCanonicalJourneyProjection": true,
+  "pureHelpersOnly": true,
+  "realDatabase": false,
+  "remoteAuth": false,
+  "modelCalls": 0,
+  "externalNetworkCalls": 0,
+  "productionRollout": false,
+  "sourceHashes": [
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "391f931624f662ad6a1229c335f3889b476c5986afc1c68ee21f4e624d34ff01"
+    },
+    {
+      "path": "scripts/test-a2-plan-contract.mjs",
+      "sha256": "31c9c0138180d21a26d78e9d04377c30c59cf989287d22043a0e163d470d5eab"
+    }
+  ],
+  "results": [
+    {
+      "name": "Content normalizes declared text and UUID casing while preserving reviewed order",
+      "status": "passed"
+    },
+    {
+      "name": "Exactly one through five steps are supported without inventing additional work",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects duplicate IDs",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects fake UUID",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects empty purpose",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects oversized purpose",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects oversized constraints",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects oversized action",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects oversized title",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects oversized note",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects completion-state substitution",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects client-supplied destination",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects client-supplied tool",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects owner reassignment",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects capability score",
+      "status": "passed"
+    },
+    {
+      "name": "Content rejects unsupported version",
+      "status": "passed"
+    },
+    {
+      "name": "Serialized UTF-8 byte limit is enforced in addition to character limits",
+      "status": "passed"
+    },
+    {
+      "name": "Calendar dates reject nonexistent days, loose formats and year zero",
+      "status": "passed"
+    },
+    {
+      "name": "Save and resume dates use the inclusive 30-calendar-day window",
+      "status": "passed"
+    },
+    {
+      "name": "Chile date uses America/Santiago independently of the host date",
+      "status": "passed"
+    },
+    {
+      "name": "Canonical flow and guidance produce a detached minimal context with source revisions",
+      "status": "passed"
+    },
+    {
+      "name": "Normalization makes source and completed-day ordering deterministic",
+      "status": "passed"
+    },
+    {
+      "name": "Missing sources are valid while failed reads are unavailable",
+      "status": "passed"
+    },
+    {
+      "name": "An omitted relevant source read cannot be labelled a verified missing row",
+      "status": "passed"
+    },
+    {
+      "name": "Personal practice omits the workplace objective and preserves its own current action",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects different canonical destination",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects different canonical wording",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects external navigation",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects adjustment for another day",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects adjustment for completed day",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects unverified objective payload",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects duplicate sources",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects missing stored-source revision",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects invented journey row revision",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects malformed completion row",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects lost progress read",
+      "status": "passed"
+    },
+    {
+      "name": "Projection rejects extra data and false availability bindings",
+      "status": "passed"
+    },
+    {
+      "name": "Wire records accept PostgREST offset timestamps but reject forged owner or invalid receipt metadata",
+      "status": "passed"
+    },
+    {
+      "name": "Timestamp bounds preserve source ISO offsets without allowing an unbounded snapshot",
+      "status": "passed"
+    },
+    {
+      "name": "Text storage boundary accepts complete Unicode and rejects NUL or lone UTF16 surrogates",
+      "status": "passed"
+    },
+    {
+      "name": "Freshness distinguishes no plan, current, changed, unavailable and expired",
+      "status": "passed"
+    },
+    {
+      "name": "A later observation time with the same authoritative hash is still current",
+      "status": "passed"
+    },
+    {
+      "name": "Lifecycle and freshness remain independent",
+      "status": "passed"
+    },
+    {
+      "name": "Commands accept only the exact fields of each operation",
+      "status": "passed"
+    },
+    {
+      "name": "An explicit save can activate an initial or newly reviewed revision from any prior state",
+      "status": "passed"
+    },
+    {
+      "name": "Pause, resume and cancellation obey their source states",
+      "status": "passed"
+    },
+    {
+      "name": "Resume requires current available context and a valid review date",
+      "status": "passed"
+    },
+    {
+      "name": "A changed, unavailable or expired plan can still be cancelled or its content deleted",
+      "status": "passed"
+    },
+    {
+      "name": "Plan completion requires explicit step declarations, not module progress",
+      "status": "passed"
+    },
+    {
+      "name": "View validates slot revision, saved plan and current guidance together",
+      "status": "passed"
+    },
+    {
+      "name": "Deleted content preserves a nonzero owner-slot revision without reviving an old plan",
+      "status": "passed"
+    },
+    {
+      "name": "Replay receipt can describe an older operation while the view preserves newer cancellation",
+      "status": "passed"
+    },
+    {
+      "name": "Only active and current plans become model memory",
+      "status": "passed"
+    },
+    {
+      "name": "Model memory strips structural and free-text IDs/URLs while retaining declared meaning and order",
+      "status": "passed"
+    },
+    {
+      "name": "Assistant evidence sends unavailable states without saved content",
+      "status": "passed"
+    },
+    {
+      "name": "Pure operations do not change journey completion, access, pending day or saved inputs",
+      "status": "passed"
+    }
+  ]
+}

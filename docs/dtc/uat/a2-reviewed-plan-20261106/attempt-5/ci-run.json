@@ -1,0 +1,200 @@
+{
+  "version": "dtc-a2-reviewed-plan-ci-attempt.v1",
+  "runId": 42299599120,
+  "url": "https://github.com/jcv86/main/actions/runs/42299599120",
+  "headSha": "b72f7f6c920aad60f7e35d1a34c4de62f9314abd",
+  "conclusion": "failure",
+  "failedStep": "Install application and isolated browser tools",
+  "cause": "The exact-version guard rejected the root-resolved playwright-core 1.65.0 while 1.56.1 was required. The driver must be resolved from Playwright's own dependency chain, because the accessibility package may install a different hoisted copy.",
+  "diagnosisStatus": "reproduced with the same exact package installation",
+  "applicationStarted": false,
+  "databaseUsed": false,
+  "nativePreflightExecuted": false,
+  "artifact": null,
+  "observedAssertion": {
+    "actual": "1.65.0",
+    "expected": "1.56.1"
+  },
+  "jobs": [
+    {
+      "id": 128173629018,
+      "name": "isolated-browser",
+      "status": "completed",
+      "conclusion": "failure",
+      "run_id": 42299599120,
+      "logs_url": null,
+      "steps": [
+        {
+          "name": "Set up job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 1
+        },
+        {
+          "name": "Initialize runner-local paths",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 2
+        },
+        {
+          "name": "Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 3
+        },
+        {
+          "name": "Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 4
+        },
+        {
+          "name": "Run supabase/setup-cli@v1",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 5
+        },
+        {
+          "name": "Install application and isolated browser tools",
+          "status": "completed",
+          "conclusion": "failure",
+          "number": 6
+        },
+        {
+          "name": "Native Chromium tab focus and visibility before local stack setup",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 7
+        },
+        {
+          "name": "UAT isolation and returning-login regression",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 8
+        },
+        {
+          "name": "A2 assistant and bounded swarm with synthetic model transport",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 9
+        },
+        {
+          "name": "UI response observation survives navigation and excludes stale refreshes",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 10
+        },
+        {
+          "name": "Authentication and C1 code regressions",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 11
+        },
+        {
+          "name": "Prepare isolated application and start local Supabase only",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 12
+        },
+        {
+          "name": "Apply selected real migrations and create synthetic Auth users",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 13
+        },
+        {
+          "name": "Scanner-safe single-use invitation in real browser",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 14
+        },
+        {
+          "name": "Preview-equivalent middleware runtime boundaries",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 15
+        },
+        {
+          "name": "Browser, cookies, PostgREST, preferences persistence, mobile and print",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 16
+        },
+        {
+          "name": "A1-A4 map, persisted progress and navigation in the same local stack",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 17
+        },
+        {
+          "name": "Browser to API to redacted log request correlation",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 18
+        },
+        {
+          "name": "Append actual AppShell, capture pages and canonical local outcome migrations",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 19
+        },
+        {
+          "name": "Six capture pages, real owner RLS, reload continuity and saved objective revision conflicts",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 20
+        },
+        {
+          "name": "Actual email login, signed invitation, Provider session, logout recovery and exhausted quota",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 21
+        },
+        {
+          "name": "C1 atomic completion, SQL rollback, retry, reload and owner boundaries on desktop and mobile",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 22
+        },
+        {
+          "name": "Reviewed A2 plans, durable receipts, owner RLS, concurrent sessions and recovery",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 23
+        },
+        {
+          "name": "Upload only synthetic visual evidence and sanitized summary",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 24
+        },
+        {
+          "name": "Stop disposable local stack, never a linked project",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 25
+        },
+        {
+          "name": "Post Run actions/setup-node@v4",
+          "status": "completed",
+          "conclusion": "skipped",
+          "number": 49
+        },
+        {
+          "name": "Post Run actions/checkout@v4",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 50
+        },
+        {
+          "name": "Complete job",
+          "status": "completed",
+          "conclusion": "success",
+          "number": 51
+        }
+      ]
+    }
+  ],
+  "correctedBy": "f86177717d701de24dea323058c791472fd9d23c",
+  "reproduction": "../native-driver-hoist-validation.json"
+}

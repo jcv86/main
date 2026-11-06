@@ -1,0 +1,26 @@
+{
+  "suite": "native-focus-visibility-preflight",
+  "version": 1,
+  "sourceCommit": "7e0c77725b9bc5d4b4c3a431e769a069b91261a3",
+  "startedAt": "2026-11-06T21:35:09.403Z",
+  "finishedAt": "2026-11-06T21:35:20.676Z",
+  "status": "FAIL",
+  "nodeVersion": "v22.23.4",
+  "playwrightVersion": "1.56.1",
+  "chromiumVersion": "141.0.7390.37",
+  "environment": "disposable-headed-chromium-loopback",
+  "headless": false,
+  "applicationStarted": false,
+  "authenticationUsed": false,
+  "databaseUsed": false,
+  "applicationLabCreated": false,
+  "pagesServed": 2,
+  "blockedRequests": 0,
+  "javascriptErrors": [],
+  "nativeTabReturn": null,
+  "failure": {
+    "phase": "native_tab_return",
+    "name": "Error",
+    "message": "Native tab initial foreground was not observed: {\"page\":{\"visibility\":\"visible\",\"focused\":true},\"sibling\":{\"visibility\":\"visible\",\"focused\":true}}"
+  }
+}

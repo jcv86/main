@@ -1,0 +1,44 @@
+{
+  "version": "dtc-uat-reviewed-plan-appendix.v1",
+  "fileName": "DTC_UAT_2026-11-06.xlsx",
+  "versionNumber": 5,
+  "bytes": 42048,
+  "sha256": "5075d86f1da1a98b83c203e41975a9a32864059a4f52e60ff3650a8073865a95",
+  "previousFileSha256": "4c463d7a26c097cee45bd339fc24948e3878b6b1c6754f46e31dca121b5cd22a",
+  "candidate": {
+    "sha": "f86177717d701de24dea323058c791472fd9d23c",
+    "branch": "uat/dtc-20261106",
+    "reference": "https://github.com/jcv86/main/commit/f86177717d701de24dea323058c791472fd9d23c"
+  },
+  "ci": {
+    "runId": 42300106261,
+    "sha": "f86177717d701de24dea323058c791472fd9d23c",
+    "url": "https://github.com/jcv86/main/actions/runs/42300106261",
+    "conclusion": "success"
+  },
+  "savedAt": "2026-11-06T22:08:06.634943+00:00",
+  "changedAreas": [
+    "Protocolo!A80:C105",
+    "Control!B49:F49"
+  ],
+  "sheets": [
+    "Control",
+    "Casos",
+    "Hallazgos",
+    "Protocolo"
+  ],
+  "preservedOriginalNativeCells": 1957,
+  "nativePreservationDifferences": [],
+  "nativePreservedParts": [
+    "xl/tables/table1.xml",
+    "xl/tables/table2.xml"
+  ],
+  "recalculatedExportedReopened": true,
+  "formulaErrorMatches": 0,
+  "visualRendersReviewed": 5,
+  "priorAcceptanceCandidate": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "priorAcceptancePreserved": true,
+  "manualCases": 54,
+  "manualCasesNotExecuted": 54,
+  "priorSwarmAppendixPreserved": "Protocolo!A59:C76"
+}
