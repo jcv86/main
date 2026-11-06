@@ -1,4 +1,9 @@
 {
+  "git": {
+    "deploymentEnabled": {
+      "uat/dtc-20261106": false
+    }
+  },
   "crons": [],
   "buildCommand": "npm run build:uat",
   "devCommand": "npm run dev",

@@ -3,10 +3,39 @@
 Date: 2026-11-06. Branch: `uat/dtc-20261106`.
 Base: `7f11f1763210fd87bcd4c2c372efa8705f42f468` (`main`, PR #246).
 
-## Scope and status
+## Current decision: run on the UAT branch
 
-This branch prepares a **separate UAT application and Supabase project** for the
-acceptance matrix `DTC_UAT_2026-11-06.xlsx`. It is not a production release and must
+The owner declined provisioning another Supabase project and requested work on
+a separate branch. The active path is `uat/dtc-20261106` with the existing
+disposable local-Supabase browser laboratory in GitHub Actions. No paid backend
+provisioning or Supabase dashboard sign-in is required for this path.
+
+`.github/workflows/a1-browser-qa.yml` now runs on pushes to this exact UAT branch.
+Checkout, evidence names and the source manifest use the pushed SHA; the existing
+pull-request trigger is preserved. The runner uses Node.js 22, creates its own
+local Supabase/Docker stack and synthetic Auth users, and stops it at the end.
+The source-isolation and rate-limit checks run before the browser suite. No
+production secrets, remote migrations or deployments are part of the job.
+
+The laboratory validates real local Auth, cookies, PostgREST, owner RLS,
+persistence, reloads, selected journey boundaries, mobile and accessibility.
+Its support schema and login surface are fixtures. Passing the job does not
+validate hosted Vercel behavior, the full email-login page, external OAuth,
+real AI/offers, human usability or all 54 acceptance cases. Record results by
+the actual workflow run and SHA after completion; no new pass is claimed here.
+
+Automatic Vercel deployment is disabled only for `uat/dtc-20261106` through
+`git.deploymentEnabled`, following the
+[Vercel Git configuration](https://vercel.com/docs/project-configuration/git-configuration).
+The existing hosted isolation guards remain intact. The earlier Preview attempt
+on SHA `367c573e13b15c4c12dbe8613e2d5d5dccb8bfd4` ended in ERROR; it is not a
+participant UAT site. The empty separate Vercel project remains unused.
+
+## Earlier hosted preparation (inactive proposal)
+
+The initial preparation targeted a **separate UAT application and Supabase project**
+for the acceptance matrix `DTC_UAT_2026-11-06.xlsx`. That hosted proposal is now
+inactive. This branch is not a production release and must
 not be merged into `main` or deployed on the existing production project.
 
 Status: application isolation prepared; hosted backend provisioning and remote

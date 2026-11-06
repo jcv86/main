@@ -2,9 +2,15 @@
 
 ## Current status
 
-The owner authorized proceeding with a separate DTC-UAT environment in their account. The new Supabase project has **not been created**. The connector quoted **USD 10 per month** for a new project in the existing DespegaTuCarrera Pro organization. Acceptance of that recurring amount is still pending.
+The owner declined another Supabase project and requested a separate code branch.
+The active test path is the disposable local Supabase laboratory in GitHub Actions
+on `uat/dtc-20261106`. No new hosted Supabase project is being provisioned and no
+approval of the previously quoted USD 10/month is being requested for this path.
+The schema preparation below is retained as historical work, not an instruction
+to create a project or apply migrations. See the current decision in
+`DTC_UAT_ENVIRONMENT_20261106.md`.
 
-Prepared creation request:
+Earlier creation proposal (inactive):
 
 | Field | Value |
 | --- | --- |

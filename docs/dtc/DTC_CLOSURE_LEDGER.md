@@ -334,3 +334,19 @@ Details: [application environment](DTC_UAT_ENVIRONMENT_20261106.md),
 [remote smoke](DTC_UAT_REMOTE_SMOKE_20261106.md). The local laboratory's loopback
 guards remain unchanged. Password-session smoke does not prove external OAuth,
 all 54 UAT cases, real-provider quality or a 30-day human pilot.
+
+### UAT branch direction — 2026-11-06
+
+The owner declined the proposed new Supabase project and requested a separate
+branch. The active path is now `uat/dtc-20261106` plus the existing disposable
+Supabase browser laboratory in GitHub Actions. Its push trigger is limited to
+this branch and its evidence is tied to the pushed SHA. The hosted proposal
+above is inactive; no cost approval or Supabase dashboard login is required
+for the branch laboratory. The empty Vercel project remains unused.
+
+The branch disables its own automatic Vercel deployment while retaining all
+hosted isolation guards. Laboratory runs use local synthetic users and data;
+they do not claim a permanent participant URL, external-provider validation or
+human acceptance. DTC-UAT-03 and the 54-case matrix remain pending until the
+applicable cases are actually observed. Record the Actions run result separately
+from any future hosted UAT decision.
