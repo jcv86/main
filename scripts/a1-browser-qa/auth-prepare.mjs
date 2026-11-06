@@ -74,6 +74,7 @@ const manifest = {
     'complete onboarding after a new pilot enters the protected journey map',
     'legacy A4 strategic/economic background URLs return HTTP404 in this runtime and are outside the authentication proof; no market context is asserted'],
   navigation: 'Artificial URL-case changes, reloads, Back and context closure wait for both actual Provider background reads. A non-ok response settles at headers because the Provider does not consume that body; successful reads settle at requestfinished. Product login/logout navigation is untouched. Failed requests and readiness counters are recorded; all JavaScript errors remain fatal.',
+  responseEvidence: 'Error JSON is read while the form remains mounted; HTML503 is explicit. For successful hard navigations, Chromium can discard the response body: the browser test asserts real HTTP200/JSON/no-store metadata plus the exact destination, Provider identity, real SSR cookies and pilot admission (or cleared session and protected Back after logout). The unchanged UI itself requires success:true and logout scope:local before navigation; route regressions separately verify those JSON contracts. No unreadable body is converted to success and no request is repeated, replaced or delayed.',
   privacy: 'No cookies, invitation tokens, passwords, storageState, HAR, traces or private server logs are uploaded.',
 }
 assertAuthSources(manifest, app, repo)

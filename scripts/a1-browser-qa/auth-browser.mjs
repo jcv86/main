@@ -210,33 +210,50 @@ async function canonicalEntry(page, next, { invited = false } = {}) {
 
 async function submit(page, user, password, expectedStatus) {
   await settleBeforeNavigation(page)
+  const formUrl = new URL(page.url())
+  assert.equal(formUrl.pathname, '/auth/email-login', 'Exercise the actual email form before submitting')
+  const destination = new URL(formUrl.searchParams.get('next') || '/despega', base)
+  assert.equal(destination.origin, base, 'Email login must return to the local application')
+  const previousDocument = expectedStatus === 200 ? await page.evaluate(() => performance.timeOrigin) : null
   await page.getByLabel('Correo electrónico', { exact: true }).fill(user.email)
   await page.getByLabel('Contraseña', { exact: true }).fill(password)
   expectError('/api/auth/email-login', expectedStatus)
   const matches = request => new URL(request.url()).origin === base
     && new URL(request.url()).pathname === '/api/auth/email-login' && request.method() === 'POST'
-  // Capture the real JSON while live: click waits for the successful hard
-  // navigation, after which Chromium may have discarded the response body.
-  // The declared HTML503 fault is intentionally the sole non-JSON exception.
-  const response = expectedStatus === 503
+  // A successful hard navigation can discard CDP's response body even when
+  // reading starts immediately. Observe its stable metadata, then require the
+  // actual destination below and session/pilot postconditions in admitted().
+  // The unchanged page only navigates after parsing { success: true } itself.
+  // Errors stay on the form, so their real JSON bodies remain observable.
+  const response = expectedStatus === 200
+    ? page.waitForResponse(response => matches(response.request())).then(response => ({
+      status: response.status(), cache: response.headers()['cache-control'],
+      contentType: response.headers()['content-type'],
+    }))
+    : expectedStatus === 503
     ? page.waitForResponse(response => matches(response.request())).then(async response => {
       assert.equal(response.status(), 503, 'Declared HTML error must return HTTP503')
       assert.ok(response.headers()['content-type']?.includes('text/html'), 'Declared HTML503 must remain non-JSON')
       await response.text()
       return { status: response.status(), body: null }
     })
-    : captureUiJsonResponse(page, matches)
+    : captureUiJsonResponse(page, matches).then(({ status, cache, body }) => ({ status, cache, body }))
   response.catch(() => {}) // Keep an early rejection handled until click returns and this promise is awaited.
   await page.getByRole('button', { name: 'Ingresar', exact: true }).click()
   const result = await response
   assert.equal(result.status, expectedStatus, 'Real email-login returned an unexpected status')
-  const body = result.body
   if (expectedStatus >= 400) {
     await page.locator('#email-login-error[role="alert"]').waitFor()
     assert.equal(new URL(page.url()).pathname, '/auth/email-login', 'Failed login must stay on the form')
     assert.ok(await page.getByRole('button', { name: 'Ingresar', exact: true }).isEnabled(), 'Failed login must allow retry')
-  } else assert.equal(body?.success, true, 'Real email-login JSON must confirm success before navigation')
-  return body
+    return result.body
+  }
+  assert.ok(result.cache?.includes('no-store'), 'Successful email-login must not be cached')
+  assert.ok(result.contentType?.includes('application/json'), 'Successful email-login must return JSON')
+  await page.waitForURL(url => url.href === destination.href)
+  await page.waitForFunction(previous => performance.timeOrigin !== previous, previousDocument)
+  assert.notEqual(new URL(page.url()).pathname, '/auth/email-login', 'HTTP200 alone is not a successful UI login')
+  return result
 }
 
 async function admitted(page, user, next) {
@@ -270,17 +287,25 @@ async function clickLogout(page, expectedStatus, retry = false) {
   const button = page.getByRole('button', { name, exact: true })
   if (!(await button.isVisible())) await page.getByRole('button', { name: 'Abrir navegación', exact: true }).click()
   expectError('/api/auth/signout', expectedStatus)
-  const received = captureUiJsonResponse(page, request => new URL(request.url()).origin === base
-    && new URL(request.url()).pathname === '/api/auth/signout' && request.method() === 'POST')
+  const matches = request => new URL(request.url()).origin === base
+    && new URL(request.url()).pathname === '/api/auth/signout' && request.method() === 'POST'
+  const received = expectedStatus === 200
+    ? page.waitForResponse(response => matches(response.request())).then(response => ({
+      status: response.status(), cache: response.headers()['cache-control'],
+      contentType: response.headers()['content-type'],
+    }))
+    : captureUiJsonResponse(page, matches).then(({ status, cache, body }) => ({ status, cache, body }))
+  received.catch(() => {}) // Preserve a rejection for the await below without an unhandled-rejection race.
   await page.getByRole('button', { name, exact: true }).click()
   const response = await received
   assert.equal(response.status, expectedStatus, 'Real signout returned an unexpected status')
   if (expectedStatus === 200) {
-    const body = response.body
-    assert.equal(body.success, true, 'Real signout JSON must confirm success before navigation')
-    assert.equal(body.scope, 'local', 'Real signout must confirm only the current session')
     assert.ok(response.cache?.includes('no-store'), 'Signout confirmation must not be cached')
-    await page.waitForURL(url => url.pathname === '/auth/signin')
+    assert.ok(response.contentType?.includes('application/json'), 'Confirmed signout must return JSON')
+    // The real SignOutButton only navigates after consuming success:true and
+    // scope:local. Assert that transition plus cleared cookies/Provider/Back;
+    // do not infer success from a missing or unreadable response body.
+    await page.waitForURL(url => url.origin === base && url.pathname === '/auth/signin')
     // The SDK's SIGNED_OUT event may schedule a soft redirect before the
     // confirmed logout replaces the document. Wait for that replacement
     // before issuing Back, or the test itself races the intended navigation.
