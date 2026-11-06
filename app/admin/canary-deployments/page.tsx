@@ -1,86 +1,64 @@
-"use client"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card'
+import { requireSuperadminPage } from '@/lib/auth/require-superadmin'
+import { selectA2Swarm } from '@/lib/a2/swarm/canary'
 
-import { useState, useEffect } from "react"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
-import { Badge } from "@/components/ui/badge"
-import { Rocket, CheckCircle, XCircle } from "lucide-react"
+export const dynamic = 'force-dynamic'
+export const metadata = { title: 'Activación gradual del asistente | DTC', robots: { index: false, follow: false } }
 
-interface Deployment {
-  id: string
-  name: string
-  version: string
-  status: string
-  progress: number
+const REASONS: Record<string, string> = {
+  disabled: 'El enjambre está desactivado en la configuración de este despliegue.',
+  killed: 'El interruptor de apagado mantiene el asistente habitual.',
+  invalid_configuration: 'La configuración está incompleta o es inválida. Se conserva el asistente habitual.',
+  allowlist: 'Esta cuenta pertenece al grupo de prueba configurado en el servidor.',
+  percentage: 'Esta cuenta está dentro de la cohorte gradual configurada en el servidor.',
+  control: 'Esta cuenta permanece en el grupo de control.',
 }
 
-export default function CanaryDeploymentsPage() {
-  const [deployments, setDeployments] = useState<Deployment[]>([
-    { id: "1", name: "Feature A", version: "v2.1.0", status: "in_progress", progress: 45 },
-    { id: "2", name: "Feature B", version: "v2.0.5", status: "completed", progress: 100 },
-    { id: "3", name: "Feature C", version: "v1.9.0", status: "failed", progress: 75 },
-  ])
-
-  const getStatusIcon = (status: string) => {
-    switch (status) {
-      case "completed":
-        return <CheckCircle className="w-5 h-5 text-green" />
-      case "failed":
-        return <XCircle className="w-5 h-5 text-red" />
-      default:
-        return <Rocket className="w-5 h-5 text-blue animate-spin" />
-    }
-  }
+export default async function CanaryDeploymentsPage() {
+  const user = await requireSuperadminPage('/admin/canary-deployments')
+  const selection = selectA2Swarm(user.id, {
+    DTC_A2_SWARM_MODE: process.env.DTC_A2_SWARM_MODE,
+    DTC_A2_SWARM_KILL_SWITCH: process.env.DTC_A2_SWARM_KILL_SWITCH,
+    DTC_A2_SWARM_ROLLOUT_ID: process.env.DTC_A2_SWARM_ROLLOUT_ID,
+    DTC_A2_SWARM_REVISION: process.env.DTC_A2_SWARM_REVISION,
+    DTC_A2_SWARM_PERCENT: process.env.DTC_A2_SWARM_PERCENT,
+    DTC_A2_SWARM_ALLOWLIST: process.env.DTC_A2_SWARM_ALLOWLIST,
+  })
 
   return (
-    <div className="p-8 space-y-6">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold">Canary Deployments</h1>
-          <p className="text-muted-foreground">Monitor and manage canary deployment rollouts</p>
-        </div>
-      </div>
-
-      <div className="grid gap-4">
-        {deployments.map(deployment => (
-          <Card key={deployment.id} className="border-muted/20">
-            <CardHeader className="pb-3">
-              <div className="flex items-start justify-between">
-                <div className="flex items-center gap-3">
-                  {getStatusIcon(deployment.status)}
-                  <div>
-                    <CardTitle className="text-lg">{deployment.name}</CardTitle>
-                    <CardDescription>{deployment.version}</CardDescription>
-                  </div>
-                </div>
-                <Badge
-                  className={
-                    deployment.status === "completed"
-                      ? "bg-green/10 text-green"
-                      : deployment.status === "failed"
-                        ? "bg-red/10 text-red"
-                        : "bg-blue/10 text-blue"
-                  }
-                >
-                  {deployment.status}
-                </Badge>
-              </div>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-2">
-                <div className="flex justify-between text-sm">
-                  <span className="text-muted-foreground">Progress</span>
-                  <span className="font-medium">{deployment.progress}%</span>
-                </div>
-                <div className="w-full h-2 bg-muted/20 rounded-full overflow-hidden">
-                  <div className="h-full bg-blue transition-all" style={{ width: `${deployment.progress}%` }} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
-    </div>
+    <section className="mx-auto max-w-4xl space-y-6 p-4 sm:p-8" aria-labelledby="canary-title">
+      <header className="space-y-2">
+        <h1 id="canary-title" className="text-3xl font-bold">Activación gradual del asistente</h1>
+        <p className="text-muted-foreground">Selección calculada con la configuración del servidor para esta cuenta y este despliegue.</p>
+      </header>
+      <Card>
+        <CardHeader>
+          <CardTitle>{selection.variant === 'swarm' ? 'Variante seleccionada: enjambre' : 'Variante seleccionada: asistente habitual'}</CardTitle>
+          <CardDescription>{REASONS[selection.reason]}</CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <dl className="grid gap-4 sm:grid-cols-2">
+            <div><dt className="text-sm text-muted-foreground">Cohorte</dt><dd className="break-words font-medium">{selection.rolloutId || 'Sin cohorte activa'}</dd></div>
+            <div><dt className="text-sm text-muted-foreground">Revisión de configuración</dt><dd className="break-words font-medium">{selection.configRevision || 'Sin revisión activa'}</dd></div>
+          </dl>
+          <p className="text-sm text-muted-foreground">Al consultar Tu Ruta se verifican además la sesión, el acceso al piloto y la etapa habilitada. La selección de variante conserva esos requisitos.</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader><CardTitle>Revisión antes de ampliar</CardTitle></CardHeader>
+        <CardContent className="space-y-3 text-sm leading-6">
+          <p>Mediciones de tráfico real: pendientes de incorporar a esta vista.</p>
+          <p>El grupo de prueba se amplía con evidencia del commit, despliegue, cohorte y revisión exactos. Se comparan errores, latencia, llamadas al modelo y retorno al asistente habitual.</p>
+          <p>El evaluador puede recomendar mantener, retirar o revisar la ampliación. Las pruebas sintéticas sirven para validar el código; las decisiones sobre tráfico real requieren mediciones de ese despliegue.</p>
+        </CardContent>
+      </Card>
+      <Card>
+        <CardHeader><CardTitle>Recuperación y apagado</CardTitle></CardHeader>
+        <CardContent className="space-y-3 text-sm leading-6">
+          <p>Si un agente falla o su salida no cumple el contrato, la consulta puede volver una sola vez al asistente habitual dentro del tiempo disponible. La siguiente acción del recorrido se conserva.</p>
+          <p>El interruptor de este bloque se configura en variables del servidor: un cambio en Vercel requiere un nuevo despliegue para aplicarse. La reversión de un despliegue completo se gestiona por separado en Vercel.</p>
+        </CardContent>
+      </Card>
+    </section>
   )
 }
-

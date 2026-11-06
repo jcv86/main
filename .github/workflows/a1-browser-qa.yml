@@ -48,6 +48,12 @@ on:
       - 'app/api/a1-cerebral-save/**'
       - 'app/api/a4/**'
       - 'app/api/a2/**'
+      - 'app/api/despega/a2-coach/**'
+      - 'app/admin/canary-deployments/**'
+      - 'scripts/test-a2-swarm*'
+      - 'scripts/test-a2-assistant.cjs'
+      - 'scripts/check-a2-swarm-canary.mjs'
+      - 'package.json'
       - 'app/api/a3/**'
       - 'app/api/journey/**'
       - 'app/api/outcomes/**'
@@ -124,6 +130,10 @@ jobs:
       - name: UAT isolation and returning-login regression
         if: github.ref == 'refs/heads/uat/dtc-20261106'
         run: npm run test:uat-isolation
+      - name: A2 assistant and bounded swarm with synthetic model transport
+        env:
+          DTC_AGENTIC_QA_OUTPUT: ${{ runner.temp }}/dtc-a1-browser/evidence/a2-swarm
+        run: npm run test:guided-assistant
       - name: UI response observation survives navigation and excludes stale refreshes
         run: node scripts/a1-browser-qa/closure-response-browser.mjs
       - name: Authentication and C1 code regressions

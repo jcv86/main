@@ -1,0 +1,90 @@
+{
+  "version": "dtc-a2-swarm-source-evidence.v1",
+  "baseCommit": "a1b6388e4f31f5505ba86883e1731acb6309dbc2",
+  "capturedAt": "2026-11-06T19:51:18.821788+00:00",
+  "nodeVersion": "v24.22.1",
+  "suites": [
+    {
+      "suite": "a2-assistant-route",
+      "cases": 83,
+      "passed": 83
+    },
+    {
+      "suite": "a2-swarm-runtime",
+      "cases": 78,
+      "passed": 78
+    },
+    {
+      "suite": "a2-swarm-provider",
+      "cases": 42,
+      "passed": 42
+    },
+    {
+      "suite": "a2-swarm-canary",
+      "cases": 56,
+      "passed": 56
+    }
+  ],
+  "additionalCanonicalCoordinatorGroups": 16,
+  "modelTransport": "synthetic",
+  "liveModelQuality": false,
+  "canaryActivated": false,
+  "files": [
+    {
+      "path": ".github/workflows/a1-browser-qa.yml",
+      "sha256": "f09fa40a00e2586ac616bf50dc5e43dc76af90974d1a9a71b673b419edde7f3c"
+    },
+    {
+      "path": "app/admin/canary-deployments/page.tsx",
+      "sha256": "c6f8aadd76ba7d553aa3d795459f5751abed13812b8b99bab5c94d779480a1a7"
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "15da693c1d64c971e1aa179e8c71deeefad98c206a4dbbb5ce6e6c28bb7bef72"
+    },
+    {
+      "path": "lib/a2/swarm/canary-evidence.ts",
+      "sha256": "058db373f730c88007fc964706f68340f54231f9f3de59b7be3cace763b2e0e5"
+    },
+    {
+      "path": "lib/a2/swarm/canary.ts",
+      "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "ed32a92e5b38af8801a236744242a3b03b54ac502cbb852434e9e22b4ba6a0d8"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "a4f21e846ef5321155a0a2d3f38f4248ad6075c8fc8bb33baa8384cd2ba5c1f2"
+    },
+    {
+      "path": "package.json",
+      "sha256": "8664d79432a02987de143e15fe8c934a2276b5631dd0e789c29d35c95ce208c3"
+    },
+    {
+      "path": "scripts/check-a2-swarm-canary.mjs",
+      "sha256": "bec6e73ce017c902642724d6a40eb003a9e9d9e824c63915513279de216bea55"
+    },
+    {
+      "path": "scripts/test-a2-assistant.cjs",
+      "sha256": "d27db253b88a2fb45920caf5331568840160ee5539b93066aa4671269130d851"
+    },
+    {
+      "path": "scripts/test-a2-swarm-canary.mjs",
+      "sha256": "5655df8e2ce1eb00e71f9361721d1c783bf54befc1800699d30b86d1aa26279a"
+    },
+    {
+      "path": "scripts/test-a2-swarm-provider.mjs",
+      "sha256": "3923f358dc375a911e9ca1b85a1ca446eb3da8e2b286845de67da7222f0d9330"
+    },
+    {
+      "path": "scripts/test-a2-swarm.mjs",
+      "sha256": "b8e9defd1d5b420a6c7fa6d2fb54a002cef9b70d48d251fd049b11631496c042"
+    }
+  ]
+}
