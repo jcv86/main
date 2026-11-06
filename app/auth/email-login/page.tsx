@@ -102,7 +102,7 @@ export default function EmailLoginPage() {
               required
             />
             {error && <p id="email-login-error" role="alert" className="text-destructive text-sm">{error}</p>}
-            <Button type="submit" disabled={loading} className="w-full">
+            <Button type="submit" disabled={loading} className="w-full bg-[var(--dtc-indigo-700)] text-white hover:bg-[var(--dtc-indigo-600)]">
               {loading ? 'Cargando...' : 'Ingresar'}
             </Button>
           </form>

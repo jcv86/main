@@ -20,7 +20,8 @@ const db = new Client({ connectionString: status.DB_URL })
 const secrets = [fixture.password, fixture.returning.password, status.ANON_KEY, status.SERVICE_ROLE_KEY,
   status.DB_URL, ...fixture.users.map(user => user.invitationToken).filter(Boolean)]
 const steps = [], accessibility = [], layouts = [], javascriptErrors = [], consoleErrors = []
-const authResponses = [], controlledFailures = [], contexts = [], expectedErrors = new Map(), blockedHosts = new Set()
+const authResponses = [], controlledFailures = [], contexts = [], requestFailures = [], backgroundReadiness = []
+const expectedErrors = new Map(), blockedHosts = new Set(), backgroundReads = new WeakMap()
 let browser, server, serverLog, activeStep = 'setup', controlledFault = false
 const pause = ms => new Promise(resolve => setTimeout(resolve, ms))
 const record = name => { steps.push({ name, status: 'PASS' }); console.log(`Real email-auth: ${name}: PASS`) }
@@ -70,6 +71,8 @@ async function newPage(viewport, scenario) {
     return route.abort()
   })
   context.on('page', page => {
+    const reads = { scoreStarted: 0, economicFinished: 0, pending: new Set() }
+    backgroundReads.set(page, reads)
     page.setDefaultTimeout(30000)
     page.setDefaultNavigationTimeout(60000)
     // Even during a deliberate HTTP failure, every uncaught JS error is fatal.
@@ -84,6 +87,25 @@ async function newPage(viewport, scenario) {
         kind: /^Failed to load resource:/.test(text) ? 'http_resource_failure' : 'javascript_console_error',
         message: safeFailure(new Error(text), secrets), controlledFault })
     })
+    page.on('request', request => {
+      const url = new URL(request.url())
+      if (url.origin !== base) return
+      if (url.pathname === '/api/a4-strategic-score') {
+        reads.scoreStarted += 1
+        reads.pending.add(request)
+      } else if (url.pathname === '/api/banco-central-data') reads.pending.add(request)
+    })
+    page.on('requestfinished', request => {
+      if (!reads.pending.has(request)) return
+      if (new URL(request.url()).pathname === '/api/banco-central-data') reads.economicFinished += 1
+      reads.pending.delete(request)
+    })
+    page.on('requestfailed', request => {
+      reads.pending.delete(request)
+      const url = new URL(request.url())
+      requestFailures.push({ step: activeStep, viewport: viewport.name, scenario,
+        path: url.pathname, method: request.method(), error: request.failure()?.errorText || 'unknown', controlledFault })
+    })
     page.on('response', response => {
       const url = new URL(response.url())
       if (url.origin !== base || !url.pathname.startsWith('/api/auth/')) return
@@ -95,6 +117,42 @@ async function newPage(viewport, scenario) {
     })
   })
   return context.newPage()
+}
+
+async function settleBeforeNavigation(page) {
+  if (new URL(page.url()).origin !== base) return
+  if (await page.locator('[data-auth-lab-session]').count()) {
+    // The state change confirms hydration/effects have started. The genuine
+    // Coach Provider makes two sequential background reads even on sign-in.
+    await page.waitForFunction(() => {
+      const observer = document.querySelector('[data-auth-lab-session]')
+      return observer && observer.getAttribute('data-state') !== 'loading'
+    })
+  }
+  const reads = backgroundReads.get(page)
+  for (let attempt = 0; attempt < 300; attempt += 1) {
+    if (reads.pending.size === 0 && reads.scoreStarted === reads.economicFinished) {
+      backgroundReadiness.push({ step: activeStep, scoreStarted: reads.scoreStarted,
+        economicFinished: reads.economicFinished })
+      return
+    }
+    await pause(100)
+  }
+  throw new Error('Provider background reads did not settle before an artificial test navigation; see requestFailures')
+}
+
+async function navigate(page, url) {
+  // Switching between URL test cases or closing a context must not abort a
+  // pending fetch in the preceding document. Product-driven login/logout
+  // navigations remain untouched, and no JavaScript error is suppressed.
+  await settleBeforeNavigation(page)
+  await page.goto(url)
+  await settleBeforeNavigation(page)
+}
+
+async function closePage(page) {
+  await settleBeforeNavigation(page)
+  await page.context().close()
 }
 
 async function api(page, path, { method = 'GET', body, status: expectedStatus = 200 } = {}) {
@@ -123,7 +181,7 @@ async function hasSession(page) {
 }
 
 async function canonicalEntry(page, next, { invited = false } = {}) {
-  await page.goto(`${base}/auth/signin?next=${encodeURIComponent(next)}${invited ? '&invited=1' : ''}`)
+  await navigate(page, `${base}/auth/signin?next=${encodeURIComponent(next)}${invited ? '&invited=1' : ''}`)
   await page.getByRole('heading', { name: 'Continúa tu carrera', exact: true }).waitFor()
   const link = page.getByRole('link', { name: 'Continuar con correo y contraseña', exact: true })
   const target = new URL(await link.getAttribute('href'), base)
@@ -139,6 +197,7 @@ async function canonicalEntry(page, next, { invited = false } = {}) {
 }
 
 async function submit(page, user, password, expectedStatus) {
+  await settleBeforeNavigation(page)
   await page.getByLabel('Correo electrónico', { exact: true }).fill(user.email)
   await page.getByLabel('Contraseña', { exact: true }).fill(password)
   expectError('/api/auth/email-login', expectedStatus)
@@ -180,6 +239,7 @@ async function visual(page, name, viewport) {
 }
 
 async function clickLogout(page, expectedStatus, retry = false) {
+  await settleBeforeNavigation(page)
   const previousDocument = await page.evaluate(() => performance.timeOrigin)
   const name = retry ? 'Reintentar cierre de sesión' : 'Cerrar sesión'
   const button = page.getByRole('button', { name, exact: true })
@@ -213,7 +273,7 @@ async function returning(viewport) {
   const next = `/despega/recorrido?from=auth-${viewport.name}#auth-return`
   // Default and hostile next stay on a local normalized entry; no OAuth is invoked.
   for (const suffix of ['', '?next=https%3A%2F%2Fexample.invalid%2Foutside']) {
-    await page.goto(`${base}/auth/signin${suffix}`)
+    await navigate(page, `${base}/auth/signin${suffix}`)
     const link = page.getByRole('link', { name: 'Continuar con correo y contraseña', exact: true })
     const target = new URL(await link.getAttribute('href'), base)
     assert.equal(target.origin, base)
@@ -261,13 +321,15 @@ async function returning(viewport) {
     if (failure.viewport === viewport.name && failure.path === '/api/auth/email-login') failure.recovered = true
   }
   await visual(page, 'returning-session', viewport)
+  await settleBeforeNavigation(page)
   await page.reload()
+  await settleBeforeNavigation(page)
   await admitted(page, user, next)
   record(activeStep)
 
   activeStep = `${viewport.name}_logout_failure_preserves_session_and_retries`
   const privateHistory = `/despega/recorrido?back=${viewport.name}`
-  await page.goto(base + privateHistory)
+  await navigate(page, base + privateHistory)
   await admitted(page, user, privateHistory)
   const failLogout = route => route.fulfill({ status: 503, contentType: 'application/json',
     body: JSON.stringify({ success: false, error: 'sign_out_unavailable', message: 'Fallo sintético controlado de cierre.' }) })
@@ -291,17 +353,18 @@ async function returning(viewport) {
   activeStep = `${viewport.name}_logout_clears_provider_cookie_and_private_history`
   // Two private documents existed before replace(signin), so Back really targets
   // authenticated history. Do not reload before checking for an exposed shell.
+  await settleBeforeNavigation(page)
   await page.goBack({ waitUntil: 'domcontentloaded' })
   await page.waitForURL(url => url.pathname === '/auth/signin')
   await provider(page)
   assert.equal(await page.locator('#main-content').count(), 0, 'Back must not restore the private AppShell')
   assert.equal((await api(page, '/api/auth/pilot-status', { status: 401 })).body.allowed, false)
-  await page.goto(base + privateHistory)
+  await navigate(page, base + privateHistory)
   await page.waitForURL(url => url.pathname === '/auth/signin')
   await provider(page)
   assert.equal(await page.locator('#main-content').count(), 0)
   record(activeStep)
-  await page.context().close()
+  await closePage(page)
 }
 
 async function invitation(viewport) {
@@ -312,7 +375,7 @@ async function invitation(viewport) {
     from public.pilot_invitations where id=$1`, [user.invitationId])).rows[0]
   const membership = async () => (await db.query('select access_kind,invitation_id from public.pilot_memberships where user_id=$1', [user.id])).rows
   assert.equal((await membership()).length, 0)
-  await page.goto(`${base}/api/auth/invitation/claim?token=${encodeURIComponent(user.invitationToken)}`)
+  await navigate(page, `${base}/api/auth/invitation/claim?token=${encodeURIComponent(user.invitationToken)}`)
   await page.getByRole('heading', { name: 'Confirma tu invitación', exact: true }).waitFor()
   assert.equal((await invitationRow()).status, 'issued', 'Scanner-safe GET must not reserve an invitation')
   await page.getByRole('button', { name: 'Confirmar y continuar', exact: true }).click()
@@ -340,11 +403,13 @@ async function invitation(viewport) {
   assert.equal((await db.query('select user_id from public.despega_journey_state where user_id=$1', [user.id])).rowCount, 1,
     'The real protected journey must initialize the new pilot')
   await visual(page, 'new-invited-session', viewport)
+  await settleBeforeNavigation(page)
   await page.reload()
+  await settleBeforeNavigation(page)
   await admitted(page, user, next)
   assert.equal((await membership()).length, 1, 'Refresh must not duplicate membership')
   record(activeStep)
-  await page.context().close()
+  await closePage(page)
 }
 
 async function outsider(viewport) {
@@ -358,13 +423,13 @@ async function outsider(viewport) {
   assert.equal(await hasSession(page), false, 'Admission denial must remove the newly established Auth session')
   assert.equal((await db.query('select user_id from public.pilot_memberships where user_id=$1', [user.id])).rowCount, 0)
   await visual(page, 'access-denied', viewport)
-  await page.goto(base + '/despega/recorrido')
+  await navigate(page, base + '/despega/recorrido')
   await page.waitForURL(url => url.pathname === '/auth/signin')
   await provider(page)
   assert.equal((await api(page, '/api/auth/pilot-status', { status: 401 })).body.allowed, false)
   assert.equal(await page.locator('#main-content').count(), 0)
   record(activeStep)
-  await page.context().close()
+  await closePage(page)
 }
 
 async function quota(viewport) {
@@ -388,12 +453,12 @@ async function quota(viewport) {
   await provider(page, user)
   assert.ok(await hasSession(page), 'Failed reauthentication must not fabricate a signed-out session')
   await clickLogout(page, 200)
-  await page.goto(base + next)
+  await navigate(page, base + next)
   await page.waitForURL(url => url.pathname === '/auth/signin')
   await provider(page)
   assert.equal((await api(page, '/api/auth/pilot-status', { status: 401 })).body.allowed, false)
   record(activeStep)
-  await page.context().close()
+  await closePage(page)
 }
 
 let failure
@@ -428,6 +493,7 @@ try {
     commit: process.env.A1_SOURCE_COMMIT, verdict: failure ? 'FAIL' : 'PASS', failure,
     scope: 'real sign-in/email forms, local Supabase password Auth, invitation SQL, session Provider and AppShell logout',
     steps, accessibility, layouts, authResponses, controlledFailures, javascriptErrors, consoleErrors,
+    requestFailures, backgroundReadiness,
     blockedHosts: [...blockedHosts], sourceManifest: 'auth-scope.json',
     privacy: 'Synthetic users only. No secrets, cookies, storageState, HAR, traces or private server logs.',
   }, null, 2))

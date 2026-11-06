@@ -72,7 +72,8 @@ const manifest = {
   quotas: 'Each bounded case has a distinct TEST-NET-1 forwarded IP, set only by the loopback test browser. The quota case intentionally makes six login attempts. No limiter configuration is changed.',
   notVerified: ['external OAuth exchange or provider configuration', 'production/Vercel or remote Supabase',
     'complete onboarding after a new pilot enters the protected journey map',
-    'A4 strategic/economic background endpoints omitted by the existing minimal runtime; their HTTP404 resource errors are retained separately from fatal JavaScript errors'],
+    'legacy A4 strategic/economic background URLs return HTTP404 in this runtime and are outside the authentication proof; no market context is asserted'],
+  navigation: 'Artificial URL-case changes, reloads, Back and context closure wait for both actual Provider background reads to finish. Product login/logout navigation is untouched. Failed requests are recorded and all JavaScript errors remain fatal.',
   privacy: 'No cookies, invitation tokens, passwords, storageState, HAR, traces or private server logs are uploaded.',
 }
 assertAuthSources(manifest, app, repo)
