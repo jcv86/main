@@ -8,9 +8,11 @@ import { spawn } from 'node:child_process'
 import { once } from 'node:events'
 import { closureLab, closureServerEnv, safeFailure } from './closure-lab.mjs'
 import { AUTH_VIEWPORTS, assertAuthSources } from './auth-lab.mjs'
+import { createNativeTabReturn } from './native-tab-return.mjs'
 import { a2PlanViewSchema, a2PlanMutationResponseSchema, a2PlanToday } from '../../lib/a2/plan-contract.ts'
 
 const { root, app, repo, status, evidence } = closureLab()
+assert.ok(process.env.DISPLAY, 'A2 plan acceptance requires headed Chromium under xvfb-run')
 const port = 3119, base = `http://localhost:${port}`, path = '/api/a2/plan', coach = '/despega/a2/coach'
 const actorHeader = 'x-dtc-plan-actor', expectedActorHeader = 'X-DTC-Expected-Plan-Actor'
 const fixture = JSON.parse(readFileSync(join(root, 'a2-plan-fixtures.private.json'), 'utf8'))
@@ -37,7 +39,7 @@ const { default: AxeBuilder } = requireTools('@axe-core/playwright')
 const { Client } = requireApp('pg')
 const db = new Client({ connectionString: status.DB_URL })
 const secrets = [fixture.password, status.ANON_KEY, status.SERVICE_ROLE_KEY, status.DB_URL]
-const steps = [], accessibility = [], layouts = [], javascriptErrors = [], requestFailures = [], controlledFaults = []
+const steps = [], accessibility = [], layouts = [], javascriptErrors = [], requestFailures = [], controlledFaults = [], nativeTabReturns = []
 const blockedHosts = new Set(), actors = new WeakMap(), contexts = new Set()
 const invariantTables = ['despega_user_profiles', 'despega_journey_state', 'a2_user_task_completions',
   'a3_user_progress', 'a3_route_progression', 'user_gamification_profile', 'user_dtc_balance']
@@ -220,7 +222,7 @@ try {
     await new Promise(resolve => setTimeout(resolve, 500))
   }
   assert.ok(ready, 'Plan local Next readiness timed out')
-  browser = await chromium.launch({ headless: true })
+  browser = await chromium.launch({ headless: false })
 
   for (const viewport of AUTH_VIEWPORTS) {
     phase = viewport.name
@@ -359,17 +361,24 @@ try {
       await card(page).getByLabel('Propósito del plan', { exact: true }).fill(focusDraft)
       const sibling = await newPage(context)
       await sibling.goto(`${base}/auth/email-login`)
-      await sibling.bringToFront()
-      await db.query("update public.career_search_intents set target_roles='[\"Coordinación sintética revisada\"]'::jsonb where user_id=$1", [user.id])
-      const returning = observe(page, 'GET')
-      await page.bringToFront()
-      checked(await returning, page)
-      await idle(page)
+      const nativeReturn = await createNativeTabReturn(page, sibling)
+      try {
+        await nativeReturn.leave()
+        // Establishing the original foreground can start a legitimate refresh.
+        // Finish it while the source is unchanged; hidden tabs need timer polling.
+        await page.waitForFunction(() => document.querySelector('[data-a2-reviewed-plan]')?.getAttribute('aria-busy') === 'false',
+          undefined, { timeout: 30_000, polling: 50 })
+        await db.query("update public.career_search_intents set target_roles='[\"Coordinación sintética revisada\"]'::jsonb where user_id=$1", [user.id])
+        const returning = observe(page, 'GET')
+        const nativeEvidence = await nativeReturn.returnToPage()
+        checked(await returning, page)
+        await idle(page)
+        nativeTabReturns.push({ phase, ...nativeEvidence })
+      } finally { await nativeReturn.dispose(); await sibling.close() }
       assert.equal(await card(page).getByLabel('Propósito del plan', { exact: true }).inputValue(), focusDraft)
       assert.equal(await card(page).getByRole('button', { name: 'Guardar y activar plan', exact: true }).isDisabled(), true)
       await card(page).getByRole('button', { name: 'Revisé los cambios y quiero conservar mi borrador', exact: true }).click()
       await clickPlan(page, 'Guardar y activar plan')
-      await sibling.close()
       record('a real tab return refreshes source freshness while retaining the editor for explicit review')
 
       await card(page).getByRole('button', { name: 'Editar plan', exact: true }).click()
@@ -512,7 +521,7 @@ try {
   writeFileSync(join(evidence, 'a2-plan-browser-results.json'), JSON.stringify({
     commit: process.env.A1_SOURCE_COMMIT, scope: manifest.environment, verdict: failure ? 'FAIL' : 'PASS',
     steps, accessibility, layouts, javascriptErrors, blockedHosts: [...blockedHosts], requestFailures,
-    controlledFaults, progressTablesCompared: invariantTables, failure,
+    controlledFaults, nativeTabReturns, progressTablesCompared: invariantTables, failure,
     transport: 'Actual local UI, email Auth, API, RLS and SQL; no successful plan API response is mocked.',
     notVerified: manifest.notVerified,
   }, null, 2))
