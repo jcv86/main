@@ -1,239 +1,181 @@
 "use client"
 
-import { useState, useEffect } from "react"
-import { createClient } from "@/lib/supabase/client"
-import { useContextValidation } from "@/lib/hooks/use-context-validation"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Badge } from "@/components/ui/badge"
-import { Alert, AlertDescription } from "@/components/ui/alert"
-import { MessageCircle, Send, Loader, AlertCircle, AlertTriangle } from "lucide-react"
+import { useEffect, useRef, useState, type FormEvent } from 'react'
+import Link from 'next/link'
+import { createClient } from '@/lib/supabase/client'
+import { Button } from '@/components/ui/button'
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card'
+import { Alert, AlertDescription } from '@/components/ui/alert'
+import { GuidedNextAction } from '@/components/journey/guided-next-action'
+import type { GuidedNextAction as Guidance } from '@/lib/journey/next-action'
+import { A2_ASSISTANT_ACTOR_HEADER, A2_ASSISTANT_EXPECTED_ACTOR_HEADER } from '@/lib/a2/assistant-contract'
+import { ArrowRight, Loader2, MessageCircle, Send } from 'lucide-react'
 
-interface A2ChatCoachProps {
-  a1Pattern: string
-  variantContexts?: string[]
-  internalTensions?: string[]
-}
+type Message = { role: 'user' | 'assistant'; content: string }
 
-export function A2ChatCoach({
-  a1Pattern,
-  variantContexts = [],
-  internalTensions = [],
-}: A2ChatCoachProps) {
-  const { validateContextRelevance, validationError, clearError } = useContextValidation()
-  const [messages, setMessages] = useState<Array<{ role: "user" | "coach"; content: string; type?: string }>>([])
-  const [input, setInput] = useState("")
+export function A2ChatCoach({ actorId, initialGuidance }: { actorId: string; initialGuidance: Guidance }) {
+  const [client] = useState(() => createClient())
+  const [guidance, setGuidance] = useState(initialGuidance)
+  const [messages, setMessages] = useState<Message[]>([])
+  const [input, setInput] = useState('')
   const [loading, setLoading] = useState(false)
-  const [mounted, setMounted] = useState(false)
   const [error, setError] = useState<string | null>(null)
-  const supabase = createClient()
+  const [sessionChanged, setSessionChanged] = useState(false)
+  const [identityVerified, setIdentityVerified] = useState(false)
+  const requestGeneration = useRef(0)
+  const controllerRef = useRef<AbortController | null>(null)
+  const invalidSessionRef = useRef(false)
+  const transcriptRef = useRef<HTMLDivElement>(null)
+  const inputRef = useRef<HTMLTextAreaElement>(null)
 
-  const scrollToBottom = () => {
-    const messagesContainer = document.querySelector('[data-messages-container]')
-    if (messagesContainer) {
-      messagesContainer.scrollTop = messagesContainer.scrollHeight
-    }
+  function invalidateSession() {
+    invalidSessionRef.current = true
+    requestGeneration.current += 1
+    controllerRef.current?.abort()
+    setMessages([])
+    setInput('')
+    setError(null)
+    setLoading(false)
+    setSessionChanged(true)
+    setIdentityVerified(false)
   }
 
   useEffect(() => {
-    setMounted(true)
-  }, [])
+    let active = true
+    const { data: { subscription } } = client.auth.onAuthStateChange((event, session) => {
+      if (event === 'SIGNED_OUT' || (event === 'INITIAL_SESSION' && !session) || (session?.user?.id && session.user.id !== actorId)) invalidateSession()
+    })
+    void client.auth.getUser().then(({ data: { user }, error: authError }) => {
+      if (!active || invalidSessionRef.current) return
+      if (authError || !user || user.id !== actorId) invalidateSession()
+      else setIdentityVerified(true)
+    }).catch(() => { if (active) invalidateSession() })
+    return () => {
+      active = false
+      requestGeneration.current += 1
+      controllerRef.current?.abort()
+      subscription.unsubscribe()
+    }
+  }, [client, actorId])
 
+  useEffect(() => { setGuidance(initialGuidance) }, [initialGuidance])
   useEffect(() => {
-    scrollToBottom()
-  }, [messages])
+    const element = transcriptRef.current
+    if (element) element.scrollTop = element.scrollHeight
+  }, [messages, loading])
 
-  const handleSendMessage = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!input.trim() || loading) return
-
+  async function handleSendMessage(event: FormEvent) {
+    event.preventDefault()
+    const question = input.trim()
+    if (question.length < 2 || loading || invalidSessionRef.current) return
+    setLoading(true)
+    setError(null)
+    const generation = ++requestGeneration.current
+    const controller = new AbortController()
+    controllerRef.current = controller
+    const timeout = window.setTimeout(() => controller.abort(), 30_000)
     try {
-      setLoading(true)
-      clearError()
-
-      // Validate that response is contextually relevant to A1 pattern and A2 context
-      const coachContext = `A1 Pattern: ${a1Pattern}. Variant Contexts: ${variantContexts.join(', ')}. Internal Tensions: ${internalTensions.join(', ')}. La respuesta debe ser relevante al patrón A1 y contextos mencionados.`
-      const validation = await validateContextRelevance(
-        coachContext,
-        input,
-        'a2-chat-coach'
-      )
-
-      if (!validation.isRelevant) {
-        setError(validation.reason || 'Tu respuesta no está relacionada con tu patrón A1 o contexto A2. Por favor, profundiza en ello.')
-        setLoading(false)
-        return
-      }
-
-      // Add user message
-      const userMessage = input.trim()
-      setMessages((prev) => [...prev, { role: "user", content: userMessage }])
-      setInput("")
-
-      const response = await fetch("/api/despega/a2-coach", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
+      const { data: { user }, error: authError } = await client.auth.getUser()
+      if (generation !== requestGeneration.current) return
+      if (authError || !user || user.id !== actorId) { invalidateSession(); return }
+      const response = await fetch('/api/despega/a2-coach', {
+        method: 'POST', credentials: 'same-origin', cache: 'no-store', signal: controller.signal,
+        headers: { 'Content-Type': 'application/json', [A2_ASSISTANT_EXPECTED_ACTOR_HEADER]: actorId },
         body: JSON.stringify({
-          message: userMessage,
-          context: {
-            a1Pattern,
-            variantContexts,
-            internalTensions,
-          },
+          message: question,
+          conversationHistory: messages.slice(-12).map(message => ({ ...message, content: message.content.slice(0, 3_000) })),
         }),
       })
-
-      if (!response.ok) {
-        throw new Error("Failed to get response from A2 coach")
+      const payload = await response.json().catch(() => null)
+      if (generation !== requestGeneration.current || invalidSessionRef.current) return
+      const verified = await client.auth.getUser()
+      if (generation !== requestGeneration.current || invalidSessionRef.current) return
+      if (verified.error || verified.data.user?.id !== actorId) { invalidateSession(); return }
+      const responseActor = response.headers.get(A2_ASSISTANT_ACTOR_HEADER)
+      if (response.status === 401 || response.status === 409 || (responseActor && responseActor !== actorId)) {
+        invalidateSession(); return
       }
-
-      const data = await response.json()
-
-      // Add coach message
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "coach",
-          content: data.response,
-          type: data.type,
-        },
-      ])
-    } catch (error) {
-      console.error("Error sending message:", error)
-      setMessages((prev) => [
-        ...prev,
-        {
-          role: "coach",
-          content: "Disculpa, hubo un error. Intenta nuevamente.",
-        },
-      ])
+      const validGuidance = payload?.guidance?.version === initialGuidance.version
+        && typeof payload.guidance.action?.href === 'string' && payload.guidance.action.href.startsWith('/despega/')
+        && Array.isArray(payload.guidance.sources) && Array.isArray(payload.guidance.limitations)
+      if (responseActor === actorId && validGuidance) setGuidance(payload.guidance)
+      // Middleware failures can omit the actor header. Their body is never treated
+      // as personal guidance, and the unanswered question remains in the editor.
+      if (!response.ok) {
+        setError(response.status === 429 ? 'Has alcanzado el límite de consultas por ahora. Puedes continuar con tu siguiente acción.'
+          : responseActor === actorId && typeof payload?.error === 'string' ? payload.error
+          : 'No pudimos recibir la respuesta. Tu pregunta se conserva; puedes reintentar.')
+        return
+      }
+      if (responseActor !== actorId || typeof payload?.response !== 'string' || !payload.response.trim()
+        || !validGuidance) {
+        setError('No pudimos verificar la respuesta. Tu pregunta se conserva; puedes reintentar.')
+        return
+      }
+      setMessages(previous => [...previous, { role: 'user', content: question }, { role: 'assistant', content: payload.response }])
+      setInput('')
+    } catch {
+      if (generation === requestGeneration.current && !invalidSessionRef.current) {
+        setError('No pudimos recibir la respuesta. Tu pregunta se conserva; revisa tu conexión y reintenta.')
+      }
     } finally {
-      setLoading(false)
+      window.clearTimeout(timeout)
+      if (generation === requestGeneration.current) {
+        setLoading(false)
+        inputRef.current?.focus()
+      }
     }
   }
 
-  if (!mounted) return null
+  if (sessionChanged) return <Alert role="alert">
+    <AlertDescription>
+      La sesión cambió. Vuelve a abrir el asistente para continuar con el recorrido correcto.
+      <a href="/despega/a2/coach" className="mt-3 inline-flex min-h-11 items-center rounded-md font-semibold underline underline-offset-4 focus-visible:ring-2 focus-visible:ring-ring">Volver a abrir el asistente</a>
+    </AlertDescription>
+  </Alert>
 
-  return (
-    <Card className="w-full flex flex-col h-full bg-white dark:bg-muted-950 border border-muted/20 dark:border-muted/80">
+  if (!identityVerified) return <p role="status" className="py-6 text-sm text-muted-foreground">Verificando tu sesión para abrir el asistente…</p>
+
+  return <div className="grid min-w-0 gap-6 xl:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
+    <Card className="min-w-0">
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <MessageCircle className="w-5 h-5 text-blue" />
-          Profundización Cognitiva
-        </CardTitle>
-        <CardDescription>
-          Explora variaciones, contextos y tensiones sin etiquetarnos
-        </CardDescription>
+        <CardTitle className="flex items-center gap-2"><MessageCircle className="h-5 w-5" aria-hidden="true" />Asistente de Tu Ruta</CardTitle>
+        <CardDescription>Pregunta, revisa una dificultad o piensa una acción más pequeña. Esta conversación dura mientras mantienes abierta la página.</CardDescription>
       </CardHeader>
-
-      <CardContent className="flex-1 flex flex-col space-y-4 overflow-hidden">
-        {/* Context Summary */}
-        <div className="bg-blue/5 dark:bg-blue/30 p-4 rounded-[28px] space-y-3 border border-blue/20 dark:border-blue">
-          <div className="font-medium text-blue dark:text-blue/10 flex items-center gap-2">
-            <MessageCircle className="w-4 h-4" />
-            Tu Patrón en A1
-          </div>
-          <div className="text-sm text-blue dark:text-blue-300 leading-relaxed">{a1Pattern}</div>
-
-          {variantContexts.length > 0 && (
-            <div className="pt-2 border-t border-blue/20 dark:border-blue space-y-2">
-              <div className="font-medium text-blue dark:text-blue/10 text-sm">Contextos a explorar:</div>
-              <div className="flex flex-wrap gap-2">
-                {variantContexts.map((context, i) => (
-                  <Badge key={i} variant="secondary" className="bg-transparent text-blue dark:text-blue-200 border-blue/20 dark:border-blue">
-                    {context}
-                  </Badge>
-                ))}
-              </div>
-            </div>
-          )}
+      <CardContent className="min-w-0 space-y-4">
+        <div ref={transcriptRef} role="log" aria-label="Conversación con el asistente" aria-live="polite" aria-relevant="additions"
+          className="max-h-[28rem] min-h-32 space-y-4 overflow-y-auto rounded-xl border border-border p-4">
+          {messages.length === 0 && <p className="text-sm leading-6 text-muted-foreground">Puedes empezar con: «No pude realizar mi última acción. ¿Cómo la hago más abordable?»</p>}
+          {messages.map((message, index) => <div key={index} className="min-w-0 space-y-1">
+            <p className="text-xs font-semibold text-muted-foreground">{message.role === 'user' ? 'Tú' : 'Asistente DTC'}</p>
+            <p className="whitespace-pre-wrap break-words text-sm leading-6 text-foreground">{message.content}</p>
+          </div>)}
         </div>
-
-        {/* Messages Container */}
-        <div 
-          data-messages-container
-          className="flex-1 space-y-3 overflow-y-auto bg-muted/5 dark:bg-transparent/50 p-4 rounded-[28px] border border-muted/20 dark:border-muted/80"
-        >
-          {messages.length === 0 ? (
-            <div className="h-full flex items-center justify-center">
-              <div className="text-center text-muted-foreground dark:text-muted-foreground text-sm space-y-2">
-                <MessageCircle className="w-8 h-8 text-muted-foreground mx-auto opacity-50" />
-                <p>Inicia con una pregunta sobre variaciones o contextos de tu patrón</p>
-              </div>
-            </div>
-          ) : (
-            <>
-              {messages.map((msg, i) => (
-                <div
-                  key={i}
-                  className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
-                >
-                  <div
-                    className={`max-w-sm px-4 py-3 rounded-xl text-sm leading-relaxed ${
-                      msg.role === "user"
-                        ? "bg-blue dark:bg-blue text-white rounded-br-none"
-                        : "bg-transparent text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 rounded-bl-none"
-                    }`}
-                  >
-                    <div>{msg.content}</div>
-                    {msg.type && (
-                      <div className={`text-xs mt-1 opacity-70 ${msg.role === "coach" ? "text-blue dark:text-blue/40" : "text-blue/10"}`}>
-                        {msg.type}
-                      </div>
-                    )}
-                  </div>
-                </div>
-              ))}
-              {loading && (
-                <div className="flex justify-start">
-                  <div className="bg-transparent text-muted/90 dark:text-muted/5 border border-muted/20 dark:border-muted/70 px-4 py-3 rounded-xl rounded-bl-none">
-                    <div className="flex gap-2 items-center">
-                      <Loader className="w-4 h-4 animate-spin text-blue dark:text-blue/40" />
-                      <span className="text-sm">El Coach reflexiona...</span>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </>
-          )}
-        </div>
-
-        {/* Alert */}
-        <Alert className="bg-blue/5 dark:bg-blue/30 border-blue/20 dark:border-blue">
-          <AlertCircle className="w-4 h-4 text-blue dark:text-blue/40" />
-          <AlertDescription className="text-blue dark:text-blue-300 text-sm">
-            A2 expande tu comprensión, no etiqueta. Tus respuestas son tuyas.
-          </AlertDescription>
-        </Alert>
-
-        {/* Context Validation Error */}
-        {error && (
-          <Alert variant="destructive" className="border-red/30 bg-red/5 dark:bg-red/20">
-            <AlertTriangle className="h-4 w-4 text-red" />
-            <AlertDescription className="text-red dark:text-red/20 ml-2">{error}</AlertDescription>
-          </Alert>
-        )}
-
-        {/* Input Form */}
-        <form onSubmit={handleSendMessage} className="flex gap-2">
-          <Input
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="¿Cómo se manifiesta en otros contextos?"
-            disabled={loading}
-            className="text-sm"
-          />
-          <Button
-            type="submit"
-            disabled={loading || !input.trim()}
-            size="sm"
-            className="bg-blue/80 hover:bg-blue/70 dark:bg-blue dark:hover:bg-blue"
-          >
-            <Send className="w-4 h-4" />
+        {error && <Alert variant="destructive" role="alert"><AlertDescription>{error}</AlertDescription></Alert>}
+        <form onSubmit={handleSendMessage} className="space-y-3" aria-busy={loading}>
+          <label htmlFor="a2-assistant-question" className="block text-sm font-medium">Tu pregunta</label>
+          <textarea id="a2-assistant-question" ref={inputRef} value={input} onChange={event => setInput(event.target.value)}
+            readOnly={loading} maxLength={2_000} rows={4} aria-describedby="a2-assistant-help"
+            className="w-full resize-y rounded-lg border border-input bg-background px-3 py-2 text-base text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+            placeholder="¿Qué puedo intentar con el tiempo que tengo?" />
+          <p id="a2-assistant-help" className="text-xs leading-5 text-muted-foreground">Las propuestas se revisan contigo. Para guardar un ajuste o completar una práctica, continúa en el día correspondiente.</p>
+          <Button type="submit" disabled={loading || input.trim().length < 2} className="min-h-11 bg-emerald-700 text-white hover:bg-emerald-800">
+            {loading ? <Loader2 className="mr-2 h-4 w-4 animate-spin motion-reduce:animate-none" aria-hidden="true" /> : <Send className="mr-2 h-4 w-4" aria-hidden="true" />}
+            {loading ? 'Preparando respuesta…' : error ? 'Reintentar pregunta' : 'Enviar pregunta'}
           </Button>
+          <p role="status" className="text-sm text-muted-foreground">{loading ? 'Estamos revisando tu consulta y el recorrido guardado.' : ''}</p>
         </form>
       </CardContent>
     </Card>
-  )
+    <Card className="min-w-0 self-start">
+      <CardHeader><CardTitle className="text-xl">Tu siguiente acción</CardTitle><CardDescription>{guidance.action.title}</CardDescription></CardHeader>
+      <CardContent className="min-w-0">
+        <p className="text-sm leading-6 text-muted-foreground">{guidance.action.description}</p>
+        <GuidedNextAction guidance={guidance} reloadHref="/despega/a2/coach" />
+        <Button asChild className="mt-5 h-auto min-h-11 w-full whitespace-normal bg-emerald-700 text-white hover:bg-emerald-800 hover:text-white">
+          <Link href={guidance.action.href}>{guidance.action.label}<ArrowRight className="ml-2 h-4 w-4 shrink-0" aria-hidden="true" /></Link>
+        </Button>
+      </CardContent>
+    </Card>
+  </div>
 }

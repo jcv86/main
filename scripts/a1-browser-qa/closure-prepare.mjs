@@ -29,6 +29,8 @@ for (const path of [
   'components/outcomes/outcome-response-capture-form.tsx',
   'components/outcomes/outcome-capture-history.tsx',
   'lib/journey/service.ts', 'lib/journey/flow-service.ts',
+  'lib/journey/next-action.ts', 'lib/journey/next-action-service.ts',
+  'components/journey/journey-flow-panel.tsx', 'components/journey/guided-next-action.tsx',
   'lib/outcomes/response-capture.ts', 'lib/outcomes/response-history.ts',
   'app/despega/recorrido/page.tsx',
   'app/despega/a1-cerebral-intro/page.tsx', 'app/despega/a1-cerebral-intro/layout.tsx',

@@ -167,7 +167,7 @@ export async function middleware(request: NextRequest) {
     const isPilotStatusRead = pathname === '/api/auth/pilot-status' && request.method === 'GET'
     if (pathname.includes('/auth/') && !isPilotStatusRead) {
       limiter = rateLimiters.auth
-    } else if (request.nextUrl.pathname.includes('/openai/') || request.nextUrl.pathname.includes('/coaching/')) {
+    } else if (pathname === '/api/despega/a2-coach' || request.nextUrl.pathname.includes('/openai/') || request.nextUrl.pathname.includes('/coaching/')) {
       limiter = rateLimiters.ai
     }
 

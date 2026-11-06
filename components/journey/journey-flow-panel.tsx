@@ -1,11 +1,12 @@
 import Link from 'next/link'
+import type { ReactNode } from 'react'
 import { ArrowRight, CheckCircle2, Lock, Circle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import type { JourneyFlow } from '@/lib/journey/flow'
 
 const labels = { locked: 'Pendiente de habilitación', completed: 'Completado', active: 'En curso', available: 'Disponible' }
 
-export function JourneyFlowPanel({ flow }: { flow: JourneyFlow }) {
+export function JourneyFlowPanel({ flow, nextActionContext }: { flow: JourneyFlow; nextActionContext?: ReactNode }) {
   return <section aria-labelledby="flow-heading" className="space-y-6" data-dtc-flow>
     <header className="max-w-3xl space-y-3">
       <p className="text-sm font-semibold uppercase tracking-wider text-muted-foreground">Un recorrido, cuatro etapas</p>
@@ -16,6 +17,7 @@ export function JourneyFlowPanel({ flow }: { flow: JourneyFlow }) {
       <p className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">Tu siguiente acción</p>
       <h2 id="flow-next-heading" className="mt-3 text-2xl font-semibold">{flow.next.title}</h2>
       <p className="mt-3 max-w-3xl text-sm leading-relaxed text-muted-foreground">{flow.next.description}</p>
+      {nextActionContext}
       <Button asChild className="mt-5 h-auto min-h-11 whitespace-normal bg-emerald-700 py-3 text-white hover:bg-emerald-800 hover:text-white"><Link href={flow.next.href} data-next-step>{flow.next.label}<ArrowRight aria-hidden="true" className="ml-2 h-4 w-4 shrink-0" /></Link></Button>
     </section>
     <nav aria-label="Etapas y requisitos del recorrido A1 a A4" className="grid gap-4 md:grid-cols-2">

@@ -7,6 +7,8 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Progress } from '@/components/ui/progress'
 import { getCanonicalNextPath, getJourneyForCurrentUser } from '@/lib/journey/service'
 import { loadJourneyFlow } from '@/lib/journey/flow-service'
+import { loadGuidedNextAction } from '@/lib/journey/next-action-service'
+import { GuidedNextAction } from '@/components/journey/guided-next-action'
 import { PRODUCT_STAGE_ORDER, PRODUCT_STAGES, type InternalJourneyStage } from '@/lib/dtc/product-language'
 
 const STAGE_ICONS = { A1: Brain, A2: Compass, A3: Target, A4: Radar } as const
@@ -17,11 +19,12 @@ export default async function DashboardPage() {
   const { user, access, profile } = journey
   const name = user.user_metadata?.full_name ?? user.user_metadata?.name ?? user.email?.split('@')[0] ?? 'Profesional'
   const flow = await loadJourneyFlow(journey)
+  const guidance = await loadGuidedNextAction(journey, flow)
   const completedDays = flow.cycleCompletedDays
   const progress = flow.cycleProgress
   const nextPath = await getCanonicalNextPath(profile)
   const onboardingPending = nextPath !== PRODUCT_STAGES.A2.href
-  const continueAction = flow.next
+  const continueAction = guidance.action
   const stageStatus = (id: InternalJourneyStage) => flow.cards.find((card) => card.id === id)!.state
   const completedStages = PRODUCT_STAGE_ORDER.filter((id) => stageStatus(id) === 'completed').length
 
@@ -29,14 +32,15 @@ export default async function DashboardPage() {
     <PageContainer>
       <PageStack>
         <PageHeader eyebrow="Tu trayectoria" title={`Hola, ${name}`} description="Tu autoconocimiento, tu ruta, el entrenamiento y las señales del mercado viven en un solo recorrido conectado."
-          actions={<Button asChild className="bg-emerald-700 text-white hover:bg-emerald-800"><Link href={continueAction.href}>{continueAction.label}<ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" /></Link></Button>} />
+          actions={<Button asChild className="bg-emerald-700 text-white hover:bg-emerald-800 hover:text-white"><Link href={continueAction.href}>{continueAction.label}<ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" /></Link></Button>} />
         <section aria-labelledby="next-action-title" className="overflow-hidden rounded-[var(--dtc-radius-xl)] border border-[hsl(var(--primary)/0.24)] bg-[hsl(var(--primary)/0.08)] shadow-[var(--dtc-shadow-md)]">
           <div className="grid gap-6 p-6 sm:p-8 lg:grid-cols-[minmax(0,1fr)_18rem] lg:items-center">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.14em] text-[hsl(var(--dtc-indigo-300))]">Tu siguiente acción</p>
               <h2 id="next-action-title" className="mt-3 text-2xl font-bold tracking-tight sm:text-3xl">{continueAction.title}</h2>
               <p className="mt-3 max-w-2xl text-sm leading-6 text-muted-foreground sm:text-base">{continueAction.description}</p>
-              <Button asChild className="mt-6 bg-emerald-700 text-white hover:bg-emerald-800"><Link href={continueAction.href}>{continueAction.label}<ArrowRight className="ml-2 h-4 w-4" aria-hidden="true" /></Link></Button>
+              <GuidedNextAction guidance={guidance} reloadHref="/despega/dashboard" />
+              <Button asChild className="mt-6 h-auto min-h-11 whitespace-normal bg-emerald-700 py-3 text-white hover:bg-emerald-800 hover:text-white"><Link href={continueAction.href}>{continueAction.label}<ArrowRight className="ml-2 h-4 w-4 shrink-0" aria-hidden="true" /></Link></Button>
             </div>
             <div className="rounded-[var(--dtc-radius-lg)] border border-border bg-background/72 p-5 shadow-[var(--dtc-shadow-sm)]">
               <div className="flex items-center justify-between gap-4"><div><p className="text-xs font-semibold uppercase tracking-[0.12em] text-muted-foreground">Tu Ruta</p><p className="mt-1 text-sm font-semibold">{onboardingPending ? 'Completa tu punto de partida' : `Día ${flow.resumeDay} para retomar`}</p></div><span className="text-2xl font-bold text-primary">{progress}%</span></div>

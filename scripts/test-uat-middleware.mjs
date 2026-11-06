@@ -58,6 +58,20 @@ try {
     const response = await middleware(new NextRequest(`${fixture.NEXT_PUBLIC_APP_URL}/auth/test`))
     assert.equal(response.status, 404)
   })
+  await check('A2 assistant uses the bounded AI allowance without consuming auth or ordinary API allowance', async () => {
+    const headers = { 'x-forwarded-for': '192.0.2.211' }
+    for (let index = 0; index < 20; index++) {
+      const response = await middleware(new NextRequest(`${fixture.NEXT_PUBLIC_APP_URL}/api/despega/a2-coach`, { method: 'POST', headers }))
+      assert.equal(response.headers.get('x-middleware-next'), '1')
+    }
+    const limited = await middleware(new NextRequest(`${fixture.NEXT_PUBLIC_APP_URL}/api/despega/a2-coach`, { method: 'POST', headers }))
+    assert.equal(limited.status, 429)
+    assert.ok(Number(limited.headers.get('retry-after')) > 3_500, 'The one-hour AI window applies')
+    for (const path of ['/api/journey/context', '/api/auth/signout']) {
+      const response = await middleware(new NextRequest(`${fixture.NEXT_PUBLIC_APP_URL}${path}`, { method: 'POST', headers }))
+      assert.equal(response.headers.get('x-middleware-next'), '1', `${path} keeps its separate allowance`)
+    }
+  })
   await check('normal application mode does not acquire UAT behavior', async () => {
     delete process.env.DTC_ENVIRONMENT
     const response = await middleware(new NextRequest('https://www.despegatucarrera.com/api/health/live'))
