@@ -23,7 +23,10 @@ function location() {
   const toolsRoot = realpathSync(resolve(process.env.A1_TOOLS_ROOT))
   assert.ok(toolsRoot.startsWith(temporary + sep), 'The adapter may only change isolated tools inside RUNNER_TEMP')
   const requireTools = createRequire(join(toolsRoot, 'package.json'))
-  const packagePaths = ['playwright', 'playwright-core'].map(name => realpathSync(requireTools.resolve(`${name}/package.json`)))
+  const playwrightPackage = realpathSync(requireTools.resolve('playwright/package.json'))
+  // Axe can hoist a newer core. Resolve the exact dependency used by Playwright.
+  const requirePlaywright = createRequire(playwrightPackage)
+  const packagePaths = [playwrightPackage, realpathSync(requirePlaywright.resolve('playwright-core/package.json'))]
   for (const file of packagePaths) {
     assert.ok(file.startsWith(toolsRoot + sep), 'Shared or global Playwright installations are forbidden')
     assert.equal(JSON.parse(readFileSync(file, 'utf8')).version, version, 'Only the exact pinned Playwright version may be adjusted')
