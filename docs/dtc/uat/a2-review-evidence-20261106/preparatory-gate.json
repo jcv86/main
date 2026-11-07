@@ -1,0 +1,7 @@
+{
+  "exitCode": 0,
+  "sourcesUnchangedDuringGate": false,
+  "logSha256": "cf659841c0a2398a5576c925835efeb378a9b02765a02a1f74a90b74ac470cff",
+  "eligibleForExactCandidateVerification": false,
+  "reason": "Identity-failure privacy correction changed the coach route and regressions during this preparatory run. It was superseded by the stable full gate."
+}

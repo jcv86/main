@@ -1,0 +1,400 @@
+{
+  "version": "dtc-ag05-ci-visual-review.v1",
+  "reviewedAt": "2026-11-06T23:56:43.787688+00:00",
+  "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "candidateTree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+  "runId": 42313235840,
+  "artifactId": 13548784558,
+  "artifactDigest": "sha256:6f83ca7bfb984cd65e2bc50d3798dc42506da4c1eed879c791a12ef7928da1bc",
+  "status": "visual_review_completed",
+  "scope": "Ocho capturas AG05 del laboratorio integrado y una captura AG04 de cambio de cuenta; revisión visual, no UAT manual con participantes.",
+  "result": "No se observó un nuevo defecto visual accionable en las nueve capturas revisadas.",
+  "verificationReference": {
+    "file": "verified-ag05-summary.json",
+    "sha256": "e184c68a289148e9dff8cd27e8ebf2202c074d7d2de134e8f66a946d3b74d3a9",
+    "status": "PASS",
+    "rerunDuringVisualReview": false
+  },
+  "executionScope": {
+    "environment": "disposable-local-a2-review-evidence",
+    "transport": "Actual UI, email Auth, plan and source APIs, owner RLS and PostgreSQL. Synthetic source fixtures and declared local faults only; no successful response is mocked.",
+    "sourcesVerifiedInAG05": 41,
+    "sourceFixtures": "Cuentas, registros y cambios de fuente sintéticos en Supabase local desechable; no participantes reales.",
+    "shellAndFontSubstitution": "root document/font shell inherited from the preceding laboratory",
+    "generationResponsesSubstituted": 0,
+    "modelRequestsFromBrowser": 0,
+    "viewports": [
+      {
+        "width": 1440,
+        "height": 844
+      },
+      {
+        "width": 390,
+        "height": 844
+      }
+    ],
+    "newBrowserSessionsOrTestRunsDuringReview": 0
+  },
+  "observedTestEvidenceReference": {
+    "AG05": {
+      "sqlPassed": 4,
+      "browserStepsPassed": 15,
+      "sourceCount": 41,
+      "accessibilityAudits": 8,
+      "violations": 0,
+      "auditsWithIncomplete": 8,
+      "accessibility": [
+        {
+          "phase": "desktop",
+          "name": "source-review",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "editor",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "source-conflict",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "reviewed-a4-plan",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "source-unavailable",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "source-review",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "editor",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "reviewed-a3-plan",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        }
+      ],
+      "layouts": [
+        {
+          "phase": "desktop",
+          "name": "source-review",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "editor",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "source-conflict",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "reviewed-a4-plan",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "source-unavailable",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "mobile",
+          "name": "source-review",
+          "viewport": 390,
+          "document": 390
+        },
+        {
+          "phase": "mobile",
+          "name": "editor",
+          "viewport": 390,
+          "document": 390
+        },
+        {
+          "phase": "mobile",
+          "name": "reviewed-a3-plan",
+          "viewport": 390,
+          "document": 390
+        }
+      ]
+    },
+    "AG04AccountChangeOnly": {
+      "sourceFile": "a2-action-browser-results.json",
+      "accessibility": {
+        "phase": "desktop",
+        "name": "account-change",
+        "violations": [],
+        "incomplete": []
+      }
+    }
+  },
+  "screenshots": [
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-desktop-source-review.png",
+      "sha256": "80f5aead0c2a4eeefceabbdae2db3b22c88b15af2d7c5481b68d079a5b5b28e4",
+      "bytes": 513016,
+      "imageWidth": 1440,
+      "imageHeight": 3366,
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "La sugerencia de revisión, los dos registros A3 y las dos decisiones A4 son legibles en la columna del plan.",
+        "Las respuestas se etiquetan como declaradas y sin evaluación; las decisiones y resultados A4 conservan el límite de declaración y causalidad.",
+        "Cada registro mostrado tiene su enlace interno; se distinguen la fecha elegida para revisar y la actualización del registro.",
+        "El foco de teclado de Ver registros usados es visible."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-desktop-editor.png",
+      "sha256": "9808396a4e73dbaa41c419c0a41b8dc196b58d1fb65a300c721d0aaf436de98c",
+      "bytes": 619239,
+      "imageWidth": 1440,
+      "imageHeight": 4539,
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "El propósito editado y su foco visible aparecen en el editor; los controles de restricciones, paso, estado y fecha permanecen diferenciados.",
+        "Guardar y activar plan y Descartar edición son acciones separadas; el botón del panel indica Volver a mi edición.",
+        "El texto y los botones envuelven dentro de la columna sin corte horizontal observado."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-desktop-source-conflict.png",
+      "sha256": "1f032107311f4424957d498273381b4b66f28c49c7056e00ae961b48a54bba74",
+      "bytes": 711802,
+      "imageWidth": 1440,
+      "imageHeight": 5345,
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "El nuevo seguimiento A3 y el aviso de cambio de contexto se muestran con el plan guardado y el propósito editado conservado.",
+        "La confirmación de revisión del borrador está separada del guardado; Guardar y activar plan aparece deshabilitado en este estado.",
+        "Los avisos y el botón de reconocimiento son legibles y envuelven en su contenedor."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-desktop-reviewed-a4-plan.png",
+      "sha256": "01213061dacb9f07846db868b50635043ded0779c75139cb8ea806edd16ab963",
+      "bytes": 528770,
+      "imageWidth": 1440,
+      "imageHeight": 3659,
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "El aviso Plan guardado y activo se muestra junto con la intención conservada y la nueva revisión declarada de A4.",
+        "El resultado y la clasificación A4 mantienen su atribución a la persona y no se presentan como capacidad o efecto causal de DTC.",
+        "La fecha elegida de revisión y el momento de revisión registrada tienen etiquetas distintas."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-desktop-source-unavailable.png",
+      "sha256": "03d1622f7d40a47454d3b51aa695e13ff20a8c8dd45f87ca446298cdc1ae25ad",
+      "bytes": 443226,
+      "imageWidth": 1440,
+      "imageHeight": 2937,
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "A3 y el plan guardado permanecen visibles cuando A4 no puede recuperarse.",
+        "El aviso indica que la lectura falló sin afirmar que no haya decisiones; la nueva revisión o edición aparece deshabilitada.",
+        "Volver a comprobar mi plan conserva una presentación clara como acción de recuperación."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-mobile-source-review.png",
+      "sha256": "13aa95498ebef34edd68e3b1b95c73e02a80104918339ba394c006f4965ed16e",
+      "bytes": 374160,
+      "imageWidth": 390,
+      "imageHeight": 3923,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "A 390 px, los registros A3/A4, sus enlaces y sus fechas se apilan y envuelven sin corte horizontal observado.",
+        "La sugerencia y los límites de evaluación y causalidad permanecen legibles; el foco de Ver registros usados es visible.",
+        "Los botones de revisión y preparación mantienen etiquetas diferenciadas."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-mobile-editor.png",
+      "sha256": "cbb25fcac8d2e303f686c2ed7ebd08b902203de5e0b479dd7d8d2cc55a1a9512",
+      "bytes": 451834,
+      "imageWidth": 390,
+      "imageHeight": 5068,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "El propósito tiene foco visible y los campos de edición se apilan dentro del ancho móvil.",
+        "Los controles de paso y la fecha se mantienen dentro de sus contenedores; guardar y descartar son botones separados.",
+        "El panel conserva Volver a mi edición y los registros expandidos."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-mobile-reviewed-a3-plan.png",
+      "sha256": "c5b665c9a33a8dc9802a107b87970e9c0a6b1b98a0342289a3ac75fa2bdde2a4",
+      "bytes": 328312,
+      "imageWidth": 390,
+      "imageHeight": 3608,
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG05",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "El aviso de guardado y la intención activa aparecen después de la revisión explícita.",
+        "La sugerencia invita a contrastar dos registros A3, aclara que no están evaluados y no genera una mejora numérica.",
+        "A4 muestra ausencia verificada de decisiones para esta revisión; los registros A3 y el plan permanecen legibles a 390 px."
+      ],
+      "newVisualDefects": []
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-action-desktop-account-change.png",
+      "sha256": "fc6031775cadebbb1e58225c89b1ede1f74386a59d65af96a8758d1bccfa7fdf",
+      "bytes": 124937,
+      "imageWidth": 1440,
+      "imageHeight": 1092,
+      "viewport": {
+        "width": 1440,
+        "height": 844
+      },
+      "fullPage": true,
+      "suite": "AG04",
+      "archiveManifestHashMatches": true,
+      "reviewed": true,
+      "observations": [
+        "El aviso muestra separación visible entre la frase terminada en correcto. y el enlace Volver a abrir el asistente.",
+        "El enlace está subrayado y diferenciado; el aviso no concatena ambas partes.",
+        "En esta captura el contenido del chat, plan y ajuste anterior ya no aparece en el área del asistente."
+      ],
+      "newVisualDefects": []
+    }
+  ],
+  "newVisualDefects": [],
+  "resolvedFindings": [
+    {
+      "id": "account-alert-spacing",
+      "status": "resolved_in_reviewed_capture",
+      "evidenceFile": "extracted/dtc-a1-browser/evidence/a2-action-desktop-account-change.png",
+      "observation": "La frase termina en correcto. y el enlace Volver a abrir el asistente comienza después de un espacio visible; el enlace conserva subrayado y separación legible.",
+      "scope": "Cierre visual del detalle cosmético previo; no añade una nueva certificación de Auth ni casos manuales."
+    }
+  ],
+  "limitations": [
+    "Las ocho auditorías AG05 conservan color-contrast como incomplete. Esta inspección visual no resuelve esos resultados ni certifica WCAG.",
+    "El resultado de axe de la captura adicional AG04 corresponde a su propia auditoría existente; no se agrega como una novena auditoría AG05.",
+    "Las capturas son full-page después de scroll y teclado. El header fijo y el enlace de salto aparecen en la posición del viewport desplazado dentro del documento completo; no son composiciones de una página sin desplazar.",
+    "El documento y las fuentes del shell de laboratorio son sustituciones declaradas. La revisión no valida las fuentes de producción ni el comportamiento en otros navegadores, zoom o tecnologías asistivas.",
+    "Móvil significa viewport Chromium de 390 por 844; no se evaluaron dispositivo físico, touch ni Safari.",
+    "La página con fuentes expandidas es extensa; estas capturas no acreditan comprensión, conveniencia ni utilidad de la interacción para participantes.",
+    "No se evaluó generación real de modelo, tráfico de canary, capacidad, mejora laboral, causalidad ni verificación independiente de los resultados declarados.",
+    "No se ejecutaron los 54 casos manuales ni se reemplaza la aceptación de negocio previa. AG05 permanece in_progress por los criterios de utilidad pendientes.",
+    "No se modificaron aplicación, documentación ni archivos del artefacto extraído durante esta revisión."
+  ],
+  "inputMetadata": [
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-browser-results.json",
+      "sha256": "d6cb0d9a1b5a75aa5535e4a448263a10d428cf46f8ecc740441eea7c92e74582"
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-action-browser-results.json",
+      "sha256": "487cf5994019f7125faef65cb846f35ba63e65ea5f5e674aa3b6c3ba0e0ec43b"
+    },
+    {
+      "file": "extracted/dtc-a1-browser/evidence/a2-review-evidence-scope.json",
+      "sha256": "a6a7e451fc5c253323ea308ca37203fc1b95dab3f8306056ba92bb5397e28cee"
+    }
+  ]
+}

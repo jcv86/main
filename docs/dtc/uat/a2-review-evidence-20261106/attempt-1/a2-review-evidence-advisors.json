@@ -1,0 +1,10 @@
+{
+  "command": "supabase db advisors --local --type security --level warn --output-format json",
+  "cliVersion": "2.117.0",
+  "scope": "existing A3 capture, A4 signal/decision source objects and reused A2 plan persistence",
+  "totalLaboratoryFindings": 0,
+  "candidateFindings": [],
+  "remoteOperations": 0,
+  "verdict": "PASS",
+  "failure": null
+}

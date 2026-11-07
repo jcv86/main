@@ -1,0 +1,385 @@
+{
+  "commit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "scope": "disposable-local-a2-action",
+  "verdict": "PASS",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "proposal and edits do not write; explicit confirmation persists the exact reviewed adjustment and receipt",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "identical command replays without writes and a real reload recovers the confirmed adjustment as canonical context",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "source changes reject stale confirmation, preserve the draft and require explicit context review before a new command",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "lost delivery preserves the exact command; retry acknowledges its receipt without resurrecting a later deletion",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "account change during real committed HTTP delivery clears personal UI and rejects the prior actor result",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "all adjustment operations preserve complete snapshots of seven canonical progress and XP tables",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "proposal and edits do not write; explicit confirmation persists the exact reviewed adjustment and receipt",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "identical command replays without writes and a real reload recovers the confirmed adjustment as canonical context",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "mobile lost delivery retries the exact command and confirms its current saved effect without duplicate writes",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "all adjustment operations preserve complete snapshots of seven canonical progress and XP tables",
+      "status": "PASS"
+    },
+    {
+      "phase": "access",
+      "name": "actual API rejects anonymous reads and A2-locked reads and confirmations before any action document or receipt",
+      "status": "PASS"
+    },
+    {
+      "phase": "access",
+      "name": "missing canonical state rejects read and confirmation without initialization or any canonical progress mutation",
+      "status": "PASS"
+    },
+    {
+      "phase": "access",
+      "name": "wrong expected actor and revoked admission reject both read and confirmation without persistence effects",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "review",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "saved",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "context-conflict",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "replay-after-deletion",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "account-change",
+      "violations": [],
+      "incomplete": []
+    },
+    {
+      "phase": "mobile",
+      "name": "review",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "saved",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "recovered-confirmation",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "review",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "saved",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "context-conflict",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "replay-after-deletion",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "account-change",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "mobile",
+      "name": "review",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "saved",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "recovered-confirmation",
+      "viewport": 390,
+      "document": 390
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/assistant-actions",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a2/assistant-actions",
+      "method": "POST",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a2/assistant-actions",
+      "method": "POST",
+      "error": "net::ERR_CONNECTION_RESET"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "controlledFaults": [
+    {
+      "phase": "desktop",
+      "kind": "lost_http_after_verified_commit",
+      "exactReplay": true,
+      "laterDeletion": true,
+      "currentEffect": "removed",
+      "unchangedPersistenceOnReplay": true
+    },
+    {
+      "phase": "mobile",
+      "kind": "lost_http_after_verified_commit",
+      "exactReplay": true,
+      "laterDeletion": false,
+      "currentEffect": "present",
+      "unchangedPersistenceOnReplay": true
+    },
+    {
+      "phase": "access",
+      "kind": "missing_canonical_journey_fixture",
+      "ownerFixture": "a2-action-locked",
+      "setup": "one local journey row deleted after genuine login; existing session reused without page navigation"
+    }
+  ],
+  "generationFixtures": [
+    {
+      "phase": "desktop",
+      "label": "desktop-first",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "desktop",
+      "label": "context-conflict",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "desktop",
+      "label": "desktop-lost-delivery",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "desktop",
+      "label": "account-change",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "mobile",
+      "label": "mobile-first",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    },
+    {
+      "phase": "mobile",
+      "label": "mobile-lost-delivery",
+      "replacement": "assistant-generation-http-only",
+      "contextRead": "actual-action-api"
+    }
+  ],
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "failure": null,
+  "failureScreenshot": null,
+  "transport": "Actual UI, email Auth, action API, owner RLS and PostgreSQL. Only assistant generation responses use declared synthetic proposals.",
+  "notVerified": [
+    "real provider output, utility, latency, cost or real canary traffic",
+    "remote migration, deployment, production document schema or external OAuth",
+    "global transactional freshness across independent context writes",
+    "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+    "manual UAT participant cases or effectiveness of the practice"
+  ]
+}

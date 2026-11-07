@@ -1,0 +1,225 @@
+{
+  "startedAt": "2026-11-06T23:33:41.947387+00:00",
+  "endedAt": "2026-11-06T23:37:49.900089+00:00",
+  "exitCode": 0,
+  "sourceHashes": {
+    ".github/workflows/a1-browser-qa.yml": "cbffde9e3ba62b53955fef8239c714b6cc00fb1c4f7c4578e4c670f202d3a205",
+    "app/api/a2/assistant-actions/route.ts": "5c52d33751036ef67c6cb57d8959120678149916c1ea2c3bf88ac55056e4e4cf",
+    "app/api/a2/plan/route.ts": "a649b7a5c31270186e39f6d73f1b4727ab40be14d1fc8e4f40a0b2a775f7d2a2",
+    "app/api/despega/a2-coach/route.ts": "c04c72d05fb132c9a97e6e19bd4af743eae0dc6ab93bd77ccf0f902b0214d7bc",
+    "components/a2-chat-coach.tsx": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d",
+    "components/a2-plan-evidence-review.tsx": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a",
+    "components/a2-reviewed-plan.tsx": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585",
+    "lib/a2/assistant-contract.ts": "ea153a56b1f8221c965cd74ec4ed7935baeefc63745e9bcb75dd9754589a181f",
+    "lib/a2/plan-context.ts": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6",
+    "lib/a2/plan-contract.ts": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e",
+    "lib/a2/plan-service.ts": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4",
+    "lib/a2/review-evidence-contract.ts": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538",
+    "lib/a2/review-evidence-service.ts": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468",
+    "lib/a2/swarm/contracts.ts": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+    "lib/a2/swarm/runtime.ts": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556",
+    "package.json": "f5ba0c24df22ada72648e199ab5a5d4d6496de16976534872b8ddc03aea4cf63",
+    "scripts/a1-browser-qa/a2-action-prepare.mjs": "194dd4197b5ad89c101574d81be2946d3f75c2892242a6be01d19e857c53af50",
+    "scripts/a1-browser-qa/a2-plan-prepare.mjs": "d9fe4a75c47fecb6bb94beb2b9ce40906667de7bf0481238858772b7cdd55fb1",
+    "scripts/a1-browser-qa/a2-review-evidence-advisors.mjs": "b5bab8d95123608d1af634ee2b0f4609c766dfbfb64e8149a5c344ec33b0a323",
+    "scripts/a1-browser-qa/a2-review-evidence-browser.mjs": "246f87ee2485e40756ffb1cc7ef00bb704abc45400e8066c30d8d231ea4ab08b",
+    "scripts/a1-browser-qa/a2-review-evidence-prepare.mjs": "033c6d3d8783001a3de99200b5dac93b889b045e3b4bc509f36f83630a88bf63",
+    "scripts/a1-browser-qa/a2-review-evidence-seed.ts": "291b11ea6cb0fba26f32255dadfbafa818bbe8b3bc51f839c681837bac632c62",
+    "scripts/agentic-browser-qa.mjs": "9bff2f7c2592330f507f5417e38c2733e0ef07375f2b71b69332b904bc30ae7a",
+    "scripts/fixtures/a2-review-evidence.cjs": "b343578019370a5622035e5a94fc9c949790e07ed789410d310dc3cb0274b560",
+    "scripts/test-a2-action-api.mjs": "5c0360fcb2188b21d9d634a569bc6d2b6c54e9ff6db20e9e4b2636c130e1c630",
+    "scripts/test-a2-assistant.cjs": "f6ef301c31d129494798dd193dcbf73ee4eefa05c2345988ac8cf92695c9b299",
+    "scripts/test-a2-plan-review-evidence-ui.mjs": "f5014501b976287c1ae28c6f12de1be51c4e7cd19e53ddc7cb784f1e0ebb6e22",
+    "scripts/test-a2-review-evidence-sql.mjs": "0e12ca2517f59c03340e5987c2221ef65db8d0a56bc54533e6059aa36c28998f",
+    "scripts/test-a2-review-evidence.mjs": "209b119055fce2d76c29e6d547c458c5f2c2f69327716f1f0162c29bf10a92d2",
+    "scripts/test-a2-swarm.mjs": "db083392ae406ac429563d0a5a0f5af4b4cf6709b55abd47e4510b15105133fd"
+  },
+  "sourcesUnchangedDuringGate": true,
+  "nodeVersion": "v24.22.1",
+  "logSha256": "5def0607b9700d0e8ceaaf3ee60fcb6f3984e1c47e0120768fa9f5e9fde65b0e",
+  "syntheticEnvironment": true,
+  "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "tree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+  "candidateSourceCount": 30,
+  "sourceHashesVerifiedAgainstCandidate": true,
+  "buildPages": 354,
+  "observedSuiteSummaries": [
+    {
+      "suite": "a1-a2-evidence-handoff",
+      "cases": 36,
+      "passed": 36,
+      "failed": 0,
+      "renderedMarkup": "real React SSR",
+      "browserChecked": false,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-response-capture",
+      "cases": 20,
+      "passed": 20,
+      "failed": 0,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-capture-routes",
+      "cases": 36,
+      "passed": 36,
+      "failed": 0,
+      "sdk": "real",
+      "transport": "synthetic",
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-capture-ui",
+      "cases": 27,
+      "passed": 27,
+      "failed": 0,
+      "hooks": "synthetic",
+      "browserRendering": false,
+      "liveDatabaseWrites": 0
+    },
+    {
+      "suite": "outcome-page-continuity",
+      "pages": 6,
+      "pageAndWrapperFunctions": "real",
+      "navigation": "synthetic",
+      "secondContinueButton": false,
+      "artificialNavigationDelay": false,
+      "automaticNavigationOnSave": false,
+      "liveDatabaseWrites": 0,
+      "fullAuthenticatedShell": false
+    },
+    {
+      "suite": "report-practice-context",
+      "passed": 9,
+      "evidence": "real_loaders_and_review_logic_with_synthetic_database_io",
+      "liveDatabase": false
+    },
+    {
+      "suite": "a3-editor-concurrency",
+      "passed": 14,
+      "total": 14,
+      "browser": false,
+      "databaseWrites": 0,
+      "providerCalls": 0
+    },
+    {
+      "suite": "a3-cv-context-route",
+      "passed": 7,
+      "evidence": "real_handler_next_response_and_sdk_synthetic_http",
+      "liveAuthOrRls": false
+    },
+    {
+      "suite": "saved-search-contract",
+      "cases": 49,
+      "passed": 49,
+      "failed": 0,
+      "networkCalls": 0,
+      "databaseWrites": 0,
+      "integrated": true
+    },
+    {
+      "suite": "a4-search-intents",
+      "passed": 32,
+      "total": 32
+    },
+    {
+      "suite": "a4-qa-access",
+      "passed": 39,
+      "failed": 0,
+      "total": 39,
+      "evidence": "real_modules_routes_components_with_synthetic_io",
+      "productionRequests": 0,
+      "databaseWrites": 0
+    },
+    {
+      "suite": "journey-guided-next-action",
+      "passed": 16,
+      "evidence": "real_flow_coordinator_service_and_supabase_sdk_with_synthetic_auth_and_http",
+      "ownerVerified": true,
+      "canonicalActionPreserved": true,
+      "failedSourcesDistinctFromEmpty": true,
+      "oldOrCompletedDayAdjustmentsExcluded": true,
+      "writes": 0,
+      "rpcCalls": 0,
+      "modelCalls": 0,
+      "liveDatabase": false
+    },
+    {
+      "suite": "a2-assistant-route",
+      "cases": 128,
+      "passed": 128,
+      "syntheticProviderCalls": 134,
+      "externalNetworkCalls": 0,
+      "liveAuthOrRls": false,
+      "liveModelQuality": false
+    },
+    {
+      "suite": "a2-swarm-runtime",
+      "cases": 108,
+      "passed": 108,
+      "syntheticCompletionCalls": 222,
+      "syntheticHttpCalls": 3,
+      "externalNetworkCalls": 0,
+      "liveModelQuality": false
+    },
+    {
+      "suite": "a2-swarm-provider",
+      "cases": 42,
+      "passed": 42,
+      "syntheticHttpCalls": 31,
+      "externalNetworkCalls": 0,
+      "liveModelQuality": false
+    },
+    {
+      "suite": "a2-swarm-canary",
+      "cases": 56,
+      "passed": 56,
+      "cliRuns": 12,
+      "liveTelemetryCertified": false,
+      "liveProvenanceCertified": false,
+      "productionRollout": false,
+      "networkRequests": 0
+    },
+    {
+      "suite": "a2-reviewed-plan-contract",
+      "cases": 56,
+      "passed": 56,
+      "modelCalls": 0,
+      "externalNetworkCalls": 0
+    },
+    {
+      "suite": "a2-plan-api",
+      "cases": 39,
+      "passed": 39,
+      "syntheticDatabaseHttp": 16,
+      "externalNetworkCalls": 0,
+      "liveSqlOrRls": false
+    },
+    {
+      "suite": "a2-assistant-action-contract",
+      "cases": 28,
+      "passed": 28,
+      "modelCalls": 0,
+      "externalNetworkCalls": 0
+    },
+    {
+      "suite": "a2-action-api",
+      "cases": 76,
+      "passed": 76,
+      "syntheticDatabaseHttp": 54,
+      "externalNetworkCalls": 0,
+      "liveSqlOrRls": false
+    },
+    {
+      "suite": "a2-review-evidence",
+      "cases": 64,
+      "passed": 64,
+      "externalNetworkCalls": 0,
+      "syntheticDatabaseHttp": 237,
+      "realSqlOrRls": false,
+      "modelCalls": 0
+    }
+  ],
+  "scope": "Real modules and full local quality gate with synthetic environment; not live Auth, RLS, participant or model-provider evaluation."
+}

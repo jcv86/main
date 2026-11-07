@@ -1,0 +1,118 @@
+{
+  "version": "dtc-ag05-workbook-render-visual-review.v1",
+  "reviewedAt": "2026-11-07T00:02:16.817494+00:00",
+  "status": "visual_review_pass",
+  "scope": "Inspección visual exclusiva de cinco PNG ya generados; revisión previa al guardado de la planilla final.",
+  "ranges": {
+    "Control": "B53:F53",
+    "Protocolo": "A139:C164",
+    "protocolDataRows": "141–164, 24 registros; 139 es título y 140 encabezado"
+  },
+  "checks": [
+    "texto cortado",
+    "solapamiento",
+    "altura de filas",
+    "legibilidad",
+    "coherencia de alcance y estados visibles",
+    "completitud visual de enlaces"
+  ],
+  "result": "No se observa un defecto visual accionable en las cinco capturas originales revisadas.",
+  "images": [
+    {
+      "file": "final-control.png",
+      "sha256": "7bfb25b80b9d6c6ae47125571886a683cc347f225c08a80cf56500d986398505",
+      "bytes": 75450,
+      "width": 1232,
+      "height": 382,
+      "coverage": "Control B53:F53, con contexto visible de las filas 43–53",
+      "reviewed": true,
+      "observations": [
+        "La nueva nota de la fila 53 se muestra completa: revisión A3/A4 del plan AG05, evidencia técnica en Protocolo y utilidad con personas pendiente.",
+        "La tipografía cursiva, el color y la alineación son coherentes con las notas de ampliaciones anteriores visibles.",
+        "No se observa corte inferior, solapamiento ni altura insuficiente en la nueva fila."
+      ],
+      "visualDefects": []
+    },
+    {
+      "file": "final-protocolo-1.png",
+      "sha256": "581ffa34cd00ab00d3e3cc563a20d7a4ea6b982bcba894b5cd3febc03baed459",
+      "bytes": 241420,
+      "width": 1325,
+      "height": 856,
+      "coverage": "Protocolo A139:C146",
+      "reviewed": true,
+      "observations": [
+        "El título AG05 de la fila 139 y los encabezados de la fila 140 se leen completos.",
+        "Las descripciones de candidato, continuidad, respuestas A3, decisiones A4, revisión y estados de fuente envuelven dentro de las columnas con altura suficiente.",
+        "Los enlaces visibles de candidato y código conservan su inicio y destino completo, distribuidos en líneas cuando hace falta.",
+        "Se distingue la evidencia declarada de evaluación de capacidad y se mantiene la referencia a los 54 casos manuales no ejecutados."
+      ],
+      "visualDefects": []
+    },
+    {
+      "file": "final-protocolo-2.png",
+      "sha256": "2a91540ef506839be164fa292e0fd9e53edc4cdde11ebbcf617eeba2f72238ab",
+      "bytes": 338042,
+      "width": 1325,
+      "height": 1055,
+      "coverage": "Protocolo A147:C154",
+      "reviewed": true,
+      "observations": [
+        "Los rótulos y descripciones de las filas 147–154 se muestran completos y separados entre filas.",
+        "Los enlaces largos de evidencia envuelven dentro de C y muestran los nombres finales de archivo sin corte observado.",
+        "Se distingue la prueba técnica con puertos sintéticos de SQL/Auth/RLS locales y se mantiene AG05 pendiente de utilidad con personas."
+      ],
+      "visualDefects": []
+    },
+    {
+      "file": "final-protocolo-3.png",
+      "sha256": "3fbdfc44739a8c40638f357dc5b6ab425ba357c3ce2b9135263ad84c44c6905f",
+      "bytes": 328966,
+      "width": 1325,
+      "height": 1055,
+      "coverage": "Protocolo A155:C162",
+      "reviewed": true,
+      "observations": [
+        "Las filas 155–162 muestran completas las cifras y los límites de accesibilidad, invariantes, advisors, UI, integridad, generación e integración.",
+        "La fila 158 separa 55 comprobaciones UI locales de las 9 capturas revisadas en CI y conserva los resultados incompletos de contraste.",
+        "Se volvieron a inspeccionar C159/C160 en el PNG original: el inicio https:// y los destinos artifact-index.json y verified-ag05-summary.json son visibles completos, con salto de línea.",
+        "Se volvió a comprobar B160/B161: hay separación suficiente entre los bloques de texto y no se observa solapamiento.",
+        "La sospecha inicial sobre esos enlaces y filas no se confirmó en la imagen original; no requiere ajuste de formato."
+      ],
+      "visualDefects": []
+    },
+    {
+      "file": "final-protocolo-4.png",
+      "sha256": "c3a992761a13b3a6d0741a129587ade9fb3d04d7e11bf3cb33de0a91318ee6a7",
+      "bytes": 97860,
+      "width": 1325,
+      "height": 279,
+      "coverage": "Protocolo A163:C164",
+      "reviewed": true,
+      "observations": [
+        "Las filas 163–164 muestran completos el alcance real y las siguientes comprobaciones.",
+        "El texto deja AG05 in_progress, utilidad con participantes y modelo real pendientes, y los 54 casos manuales como no ejecutados.",
+        "Las notas de la columna C envuelven con altura suficiente y sin corte inferior observado."
+      ],
+      "visualDefects": []
+    }
+  ],
+  "visualDefects": [],
+  "recheckedAreas": [
+    {
+      "file": "final-protocolo-3.png",
+      "ranges": [
+        "C159:C160",
+        "B160:B161"
+      ],
+      "result": "La preocupación inicial no se confirmó al reabrir el PNG original: enlaces completos, separación suficiente y sin solapamiento concreto."
+    }
+  ],
+  "limitations": [
+    "No se abrió, modificó, guardó ni comparó el libro nativo en esta revisión. La comparación de celdas, hojas, tablas y estilos corresponde a la verificación separada del agente principal.",
+    "Completitud visual de enlaces significa que el texto visible no está cortado; no se probaron sus destinos remotos ni los objetos de hipervínculo del libro.",
+    "Esta revisión no cambia el estado de AG05, no acredita utilidad con participantes o modelo real y no constituye ejecución de los 54 casos manuales.",
+    "No se afirma que la planilla esté guardada ni que una versión v7 esté publicada.",
+    "Sólo se leyeron los cinco PNG autorizados para la inspección. No se cambió la aplicación, documentación, builder ni la planilla."
+  ]
+}

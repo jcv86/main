@@ -1,0 +1,35 @@
+{
+  "commit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "scope": "disposable-local-a2-review-evidence",
+  "verdict": "PASS",
+  "cases": [
+    {
+      "name": "Actual source schemas enable owner RLS and expose SELECT only to authenticated clients",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Each real owner reads only their source rows; cross-owner IDs return no payload",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Anonymous reads cannot disclose A3 response text or A4 decisions and signal provenance",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Authenticated source INSERT, UPDATE and DELETE remain denied even for the current owner",
+      "verdict": "PASS"
+    }
+  ],
+  "passed": 4,
+  "sourceTables": [
+    "dtc_outcome_observations",
+    "a4_verified_signals",
+    "a4_decision_log"
+  ],
+  "allExistingRowsPreserved": true,
+  "priorOwnersChecked": 17,
+  "newOwnersCreatedByThisSuite": 0,
+  "candidatePlanSqlRegression": "Existing unchanged AG03 CAS/history/receipt SQL suite runs earlier; it is not duplicated here.",
+  "remoteOperations": 0,
+  "failure": null
+}

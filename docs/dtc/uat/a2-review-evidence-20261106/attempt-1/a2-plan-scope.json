@@ -1,0 +1,136 @@
+{
+  "commit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "environment": "disposable-local-a2-plan",
+  "copied": [
+    {
+      "path": "app/despega/a2/coach/page.tsx",
+      "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585"
+    },
+    {
+      "path": "components/a2-plan-evidence-review.tsx",
+      "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a"
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d"
+    },
+    {
+      "path": "app/api/a2/assistant-actions/route.ts",
+      "sha256": "5c52d33751036ef67c6cb57d8959120678149916c1ea2c3bf88ac55056e4e4cf"
+    },
+    {
+      "path": "app/api/a2/plan/route.ts",
+      "sha256": "a649b7a5c31270186e39f6d73f1b4727ab40be14d1fc8e4f40a0b2a775f7d2a2"
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "c04c72d05fb132c9a97e6e19bd4af743eae0dc6ab93bd77ccf0f902b0214d7bc"
+    },
+    {
+      "path": "lib/a2/assistant-contract.ts",
+      "sha256": "ea153a56b1f8221c965cd74ec4ed7935baeefc63745e9bcb75dd9754589a181f"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "lib/a2/swarm/canary.ts",
+      "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34"
+    },
+    {
+      "path": "lib/a2/plan-api.ts",
+      "sha256": "995018f01334a47b6bd5ca774d46d34c14e84e03fa567153afbb83a8787dd63d"
+    },
+    {
+      "path": "lib/a2/plan-context.ts",
+      "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e"
+    },
+    {
+      "path": "lib/a2/plan-service.ts",
+      "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4"
+    },
+    {
+      "path": "lib/a2/assistant-action-api.ts",
+      "sha256": "c1058c2b290098dafb05530e16af667a08fa840a93b113b3ac18a74e1debd80f"
+    },
+    {
+      "path": "lib/a2/assistant-action-contract.ts",
+      "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc"
+    },
+    {
+      "path": "lib/a2/assistant-action-service.ts",
+      "sha256": "7132ac70f0e65c5914e918ae92a31ce08bf8244464b79fd691655bf110e0a90e"
+    },
+    {
+      "path": "lib/a2/review-evidence-contract.ts",
+      "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538"
+    },
+    {
+      "path": "lib/a2/review-evidence-service.ts",
+      "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468"
+    },
+    {
+      "path": "lib/outcomes/response-capture.ts",
+      "sha256": "56bfc03f3a8fd17747b7ef59d1a47bda2975ff7242a306a11c6442c150ce5dea"
+    },
+    {
+      "path": "lib/outcomes/response-history.ts",
+      "sha256": "29936ce2597650ddf099892f2ef6d208745030541cc6ae292e18a66f7a536e68"
+    },
+    {
+      "path": "lib/outcomes/a2-execution-capability.ts",
+      "sha256": "cf03ac91e3eb074820d897ccea8ad36eef8f0def87506cd26592c7f91a9454cb"
+    },
+    {
+      "path": "lib/outcomes/a3-interview-capability.ts",
+      "sha256": "139112eae52d37f14fc838b59dbfb4dc8a1b71bbf0bd57680bb1723cb703fd8a"
+    },
+    {
+      "path": "lib/a4/strategic-radar.ts",
+      "sha256": "7e65be4ae1558b9d54af56c01070e900e53135fe2ff1eb388af88b993ded93e8"
+    }
+  ],
+  "genuine": [
+    "actual A2 coach page, plan card, session boundary, API and server context readers",
+    "real local email Auth, cookies, owner RLS, private command receipts and PostgreSQL RPC",
+    "canonical journey access, objective revision and practice-adjustment readers",
+    "atomic CAS/history/receipt writes, deletion tombstone and preserved canonical progress"
+  ],
+  "fixtures": [
+    "two new synthetic local owners with explicitly seeded A2 eligibility and one admitted owner without A2 eligibility",
+    "minimal dtc_documents source table; no preexisting adjustment or plan content",
+    "synthetic C1/C2/A1 evidence is setup data, not an assessment of a real participant"
+  ],
+  "substitutions": [
+    "root document/font shell inherited from the existing browser laboratory",
+    "temporary database faults and intentionally dropped HTTP delivery test recovery only"
+  ],
+  "notVerified": [
+    "model quality, model calls or generated plan quality",
+    "remote deployment or migration application",
+    "atomic freshness across independent context source writes",
+    "a real participant completing A2 or the manual UAT cases"
+  ],
+  "privacy": "Only synthetic screenshots and sanitized verdicts; no keys, passwords, cookies, HAR, browser storage or private server logs."
+}

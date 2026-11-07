@@ -1,0 +1,20 @@
+{
+  "suite": "native-tab-focus-adapter",
+  "version": 1,
+  "status": "PASS",
+  "sourceCommit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "preparedAt": "2026-11-06T23:39:18.347Z",
+  "scope": "disposable-runner-tools-only",
+  "playwrightVersion": "1.56.1",
+  "playwrightCoreVersion": "1.56.1",
+  "adapter": "node_modules/playwright/node_modules/playwright-core/lib/server/chromium/crPage.js",
+  "npmIntegrity": "sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==",
+  "originalSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f",
+  "modifiedSha256": "9e0e8ffdbe9c9ae3322a3e5ea9e62968dceb161af3861c87d49e716713521d8d",
+  "replacements": 1,
+  "environmentFlag": {
+    "name": "DTC_NATIVE_TAB_FOCUS",
+    "nativeValue": "yes",
+    "defaultEnabled": true
+  }
+}

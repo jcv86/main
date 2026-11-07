@@ -1,0 +1,52 @@
+{
+  "migrations": [
+    {
+      "path": "migrations/08-a4-signal-decision-log.sql",
+      "sha256": "4e4181c145611883523c1a35d4623f853c99593da5c9a3e330bc76294b8fd146"
+    },
+    {
+      "path": "migrations/10-a4-server-owned-write-hardening.sql",
+      "sha256": "b9475e8e13a563f30a42b80cc19e2b8d29ba47b805da299872c7e8fdd31cc989"
+    },
+    {
+      "path": "supabase/migrations/20260914153833_a4_source_integrity.sql",
+      "sha256": "3519e095f3bb019723f051a9e9091974d6c822f71c320e01174a6d64e57d609c"
+    },
+    {
+      "path": "supabase/migrations/20260914154438_a4_source_integrity_backward_compatibility.sql",
+      "sha256": "4dae7f0e34392dd030a82ca529526674ef094b48aaecc9d29e5e34c43a941944"
+    },
+    {
+      "path": "supabase/migrations/20260914201532_restore_a4_source_integrity_coherence.sql",
+      "sha256": "33614b3ed71fdd7c4b2047127d4907a0d687a4cd15148974478d8f1336c29699"
+    },
+    {
+      "path": "supabase/migrations/20260920153000_a4_outcome_review.sql",
+      "sha256": "62b351fb2b9b89be2f16d4e07e1026f29645c97b7b17910dfee4d2ade217fc2e"
+    }
+  ],
+  "migrationSequenceAppliedTwice": true,
+  "newMigration": false,
+  "inheritedOutcomeVersion": "2-capture",
+  "syntheticAuthOwnersCreated": 4,
+  "previousOwnersPreserved": 17,
+  "fullHistoryOwners": 3,
+  "syntheticA2DaysPerFullHistoryOwner": 90,
+  "syntheticA3ModulesPerFullHistoryOwner": 10,
+  "eligibleProfessionalOwners": 2,
+  "personalHistoryOwner": 1,
+  "admittedA2WithoutA3A4": 1,
+  "qaEntitlements": 0,
+  "sourceRowsPerOwner": {
+    "a3UnscoredCaptures": 2,
+    "ignoredNumericV1": 1,
+    "a4Signals": 1,
+    "a4OpenDecisions": 1,
+    "a4ClosedDecisions": 1
+  },
+  "canonicalProgress": "Synthetic full progression is access setup only, not a participant completion or ability result. All seven canonical tables are snapshotted afterwards.",
+  "initialPlans": 0,
+  "initialPlanReceipts": 0,
+  "remoteOperations": 0,
+  "verdict": "PASS"
+}

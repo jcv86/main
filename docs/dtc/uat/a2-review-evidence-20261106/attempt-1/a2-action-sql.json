@@ -1,0 +1,92 @@
+{
+  "scope": "disposable-local-postgresql-a2-action",
+  "migration": "20261106221437_a2_assistant_action_receipts.sql",
+  "cases": [
+    {
+      "name": "Only service can invoke the empty-search-path invoker RPCs or read immutable private receipts",
+      "verdict": "PASS"
+    },
+    {
+      "name": "A confirmed adjustment and its receipt commit once using the existing v1 document envelope",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Owner RLS permits only the committed owner document and denies other owners/anon",
+      "verdict": "PASS"
+    },
+    {
+      "name": "A dtc_documents fault rolls back both the effect and receipt",
+      "verdict": "PASS"
+    },
+    {
+      "name": "A a2_assistant_action_receipts fault rolls back both the effect and receipt",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Concurrent identical confirmations return one commit and a replay",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Concurrent different confirmations from the same context require re-review of the first result",
+      "verdict": "PASS"
+    },
+    {
+      "name": "A request identifier cannot be reused for different confirmed content",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Deleting the effect keeps its receipt and an old replay never recreates content",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Editing an existing effect cannot be overwritten by replay",
+      "verdict": "PASS"
+    },
+    {
+      "name": "A refreshed exact adjustment reference allows a subsequent different confirmation",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Observed legacy insertion, mutation or deletion invalidates a stale adjustment snapshot",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Source fingerprint mismatch, unavailable/old/future snapshots cannot create an effect",
+      "verdict": "PASS"
+    },
+    {
+      "name": "An adjustment may target only the pending practice day in the server projection",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Santiago dates include today/day+30 but reject yesterday/day+31 independently of SQL session timezone",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Strict payload, calendar, UTF-16 length and storable-text boundaries reject malformed writes",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Missing pilot admission cannot be grandfathered by either RPC",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Revoked pilot admission also denies lookup/replay of a previously committed action",
+      "verdict": "PASS"
+    },
+    {
+      "name": "The same request UUID is private to each owner and produces separate effect ids",
+      "verdict": "PASS"
+    },
+    {
+      "name": "Actions preserve all seeded canonical milestones, completed days, XP and browser fixtures",
+      "verdict": "PASS"
+    }
+  ],
+  "syntheticOwnersCreated": 16,
+  "syntheticOwnersRemoved": true,
+  "browserOwnersUnchanged": true,
+  "context": "Dated server projection; action writes serialize their consumed adjustment, without a global legacy/source fence.",
+  "remoteOperations": 0,
+  "verdict": "PASS"
+}

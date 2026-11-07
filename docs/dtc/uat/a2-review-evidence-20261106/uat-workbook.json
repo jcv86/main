@@ -1,0 +1,95 @@
+{
+  "version": "dtc-uat-ag05-workbook.v1",
+  "recordedAt": "2026-11-07T00:03:16.276914+00:00",
+  "status": "saved_and_verified",
+  "libraryFileId": "libfile_07431d69ad00819184be0e5e555aa681",
+  "fileId": "file_00000000da40820eb17010a4a16bc7b6",
+  "filename": "DTC_UAT_2026-11-06.xlsx",
+  "path": "/DTC_UAT_2026-11-06.xlsx",
+  "sourceVersion": 6,
+  "savedVersion": 7,
+  "savedFileBytes": 48335,
+  "sourceSha256": "7bf669e9e7aca84bd9df7598b67da3eea2d4ec71a3108cd32f33bc52406737eb",
+  "savedSha256": "49ebf57d371bc0a606b3d7541cb748807bf7e08e175e0ab496832f418bf645bc",
+  "nativeUrl": "https://chatgpt.com/library?file_id=libfile_07431d69ad00819184be0e5e555aa681&account_id=personal",
+  "sameFileIdentityPreserved": true,
+  "expectedCurrentVersionUsed": 6,
+  "returnedMetadataAppliedToLocalFile": true,
+  "authoring": "@oai/artifact-tool; export, reopen and render before replacement",
+  "codeCandidate": {
+    "sha": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "tree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+    "branch": "uat/dtc-20261106"
+  },
+  "ci": {
+    "conclusion": "success",
+    "sha": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "runId": 42313235840,
+    "url": "https://github.com/jcv86/main/actions/runs/42313235840"
+  },
+  "changedAreas": [
+    "Protocolo!A139:C164",
+    "Control!B53:F53"
+  ],
+  "addedAppendixDataRows": 24,
+  "preservation": {
+    "sheets": [
+      "Control",
+      "Casos",
+      "Hallazgos",
+      "Protocolo"
+    ],
+    "priorNativeCellsCompared": 2126,
+    "cellDifferences": 0,
+    "nativeDifferences": 0,
+    "formulaErrors": 0,
+    "priorValuesPreserved": true,
+    "priorFormulasPreserved": true,
+    "priorStylesAndNativeFeaturesPreserved": true,
+    "nativeTablesPreserved": 2
+  },
+  "visualReview": {
+    "imagesReviewed": 5,
+    "newActionableVisualDefects": 0,
+    "report": "workbook-visual-review.json",
+    "reportSha256": "0872d9137d6b17e0176afbded9e9fe753654a73b4033dde8ecbaed64f6f27a41",
+    "scope": "Rendered Control and complete new appendix; no claim of clicked hyperlink targets or participant UAT."
+  },
+  "originalAcceptance": "ACEPTADO POR EL RESPONSABLE",
+  "originalGo": "GO",
+  "originalGoCandidate": "7eb0544de496e10a2b1be1b482cdafec1d96dc3d",
+  "manualCases": 54,
+  "manualCasesStatus": "NO EJECUTADO",
+  "ag05Status": "in_progress",
+  "ag07LiveEvaluationPending": true,
+  "canaryActivated": false,
+  "priorEvidencePreserved": [
+    "AG02/swarm appendix",
+    "AG03 plan appendix",
+    "AG04 reviewed action appendix",
+    "all existing manual cases and findings"
+  ],
+  "evidenceFiles": [
+    {
+      "file": "workbook-verification.json",
+      "sha256": "85aa00ed55d66545eebce43d3c6cf33a4625257c70169ce79e3f264fd9d9d30e",
+      "bytes": 1781
+    },
+    {
+      "file": "workbook-native-preservation.json",
+      "sha256": "0150cba71ee2798c211f501ae5b23f65e8abeea877ec0962cfe29cffe066ed47",
+      "bytes": 434
+    },
+    {
+      "file": "workbook-visual-review.json",
+      "sha256": "0872d9137d6b17e0176afbded9e9fe753654a73b4033dde8ecbaed64f6f27a41",
+      "bytes": 5901
+    }
+  ],
+  "limitations": [
+    "Technical laboratory evidence does not establish participant usefulness, capability improvement, live-model quality, cost or latency.",
+    "Eight AG05 automated contrast results remain incomplete.",
+    "The business GO is not extended to the new code candidate by this documentation.",
+    "No new manual execution, hosted activation, remote SQL, main merge or production deployment is claimed."
+  ]
+}

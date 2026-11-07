@@ -1,0 +1,303 @@
+{
+  "suite": "a2-review-evidence",
+  "cases": 64,
+  "passed": 64,
+  "actualContracts": true,
+  "actualSourceReader": true,
+  "actualSupabaseSelectBuilder": true,
+  "actualPlanRoute": true,
+  "actualContextHashing": true,
+  "sessionAndHttp": "synthetic",
+  "realSqlOrRls": false,
+  "modelCalls": 0,
+  "externalNetworkCalls": 0,
+  "syntheticDatabaseHttp": 237,
+  "sourceHashes": [
+    {
+      "path": "lib/a2/review-evidence-contract.ts",
+      "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538"
+    },
+    {
+      "path": "lib/a2/review-evidence-service.ts",
+      "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e"
+    },
+    {
+      "path": "lib/a2/plan-context.ts",
+      "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6"
+    },
+    {
+      "path": "lib/a2/plan-service.ts",
+      "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4"
+    },
+    {
+      "path": "app/api/a2/plan/route.ts",
+      "sha256": "a649b7a5c31270186e39f6d73f1b4727ab40be14d1fc8e4f40a0b2a775f7d2a2"
+    },
+    {
+      "path": "scripts/test-a2-review-evidence.mjs",
+      "sha256": "209b119055fce2d76c29e6d547c458c5f2c2f69327716f1f0162c29bf10a92d2"
+    }
+  ],
+  "results": [
+    {
+      "name": "Same instant in PostgreSQL/UTC formats preserves six fractional digits",
+      "status": "passed"
+    },
+    {
+      "name": "Four bounded SELECTs use session/owner filters, exact instruments and deterministic tie orders",
+      "status": "passed"
+    },
+    {
+      "name": "Two successful empty sources are verified missing, never failed reads or invented zero scores",
+      "status": "passed"
+    },
+    {
+      "name": "Personal practice skips professional SQL even with later stages enabled",
+      "status": "passed"
+    },
+    {
+      "name": "Locked source stages issue no SQL and remain distinct from missing records",
+      "status": "passed"
+    },
+    {
+      "name": "A4 also requires canonical Radar availability even if the access boolean is true",
+      "status": "passed"
+    },
+    {
+      "name": "A failed or malformed A3 read is unavailable while the verified A4 section remains",
+      "status": "passed"
+    },
+    {
+      "name": "A failed or malformed A3 read is unavailable while the verified A4 section remains",
+      "status": "passed"
+    },
+    {
+      "name": "A failed or malformed A3 read is unavailable while the verified A4 section remains",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects wrong owner without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects wrong stage without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects v1 score instrument without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects wrong instrument without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects wrong outcome without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects wrong measurement role without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects invented score without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects score scale without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects confidence without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects dimensions without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects missing provenance field without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects too-long text without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects unexpected answer without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects ambiguous timestamp without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A3 rejects future record without replacing it with absence",
+      "status": "passed"
+    },
+    {
+      "name": "A one-microsecond later follow-up is temporally ordered but remains unevaluated",
+      "status": "passed"
+    },
+    {
+      "name": "A3 preserves initial only without inferring improvement",
+      "status": "passed"
+    },
+    {
+      "name": "A3 preserves follow-up only without inferring improvement",
+      "status": "passed"
+    },
+    {
+      "name": "A3 preserves same timestamp without inferring improvement",
+      "status": "passed"
+    },
+    {
+      "name": "A3 preserves earlier follow-up without inferring improvement",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects wrong owner without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects unknown status without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects missing review time without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects empty reviewed outcome without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects unknown classification without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects invented external event without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects duplicated outcome without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects future revision without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects revision before review without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects oversized result without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 rejects unknown ID without consuming a malformed declared result",
+      "status": "passed"
+    },
+    {
+      "name": "A4 read failure stays unavailable and does not become no external change",
+      "status": "passed"
+    },
+    {
+      "name": "A discarded decision with a dated nullable outcome is a declaration, not a negative capability score",
+      "status": "passed"
+    },
+    {
+      "name": "An open decision returned by the closed query fails the source instead of claiming a result",
+      "status": "passed"
+    },
+    {
+      "name": "The same decision observed on both sides of a concurrent status change is unavailable",
+      "status": "passed"
+    },
+    {
+      "name": "Identity different actor initially rejects the whole context",
+      "status": "passed"
+    },
+    {
+      "name": "Identity missing actor initially rejects the whole context",
+      "status": "passed"
+    },
+    {
+      "name": "Identity changed actor after reads rejects the whole context",
+      "status": "passed"
+    },
+    {
+      "name": "Identity Auth unavailable rejects the whole context",
+      "status": "passed"
+    },
+    {
+      "name": "Identity Auth exception rejects the whole context",
+      "status": "passed"
+    },
+    {
+      "name": "Strict review contracts reject fabricated scores, source fields and status/content mismatches",
+      "status": "passed"
+    },
+    {
+      "name": "Date-dependent suggestions do not add today/capture time to a stable context hash",
+      "status": "passed"
+    },
+    {
+      "name": "Only available consumed records expose allowlisted source references",
+      "status": "passed"
+    },
+    {
+      "name": "Model context keeps only declared text, statuses and dates while removing record IDs and embedded links",
+      "status": "passed"
+    },
+    {
+      "name": "Old v1 snapshots remain parseable byte-for-byte without a new default or hash rewrite",
+      "status": "passed"
+    },
+    {
+      "name": "One microsecond, a response edit and source deletion each invalidate a reviewed context",
+      "status": "passed"
+    },
+    {
+      "name": "Equivalent source instants do not create false plan staleness",
+      "status": "passed"
+    },
+    {
+      "name": "An applicable failed source blocks current confirmation while retaining a valid partial snapshot",
+      "status": "passed"
+    },
+    {
+      "name": "Plan source availability and the personal-path boundary cannot be forged",
+      "status": "passed"
+    },
+    {
+      "name": "Plan assistant memory compares the same sixth-argument evidence snapshot",
+      "status": "passed"
+    },
+    {
+      "name": "Actual plan GET reads the canonical journey without initialization and returns review evidence",
+      "status": "passed"
+    },
+    {
+      "name": "Missing canonical journey returns 403 with no initialization or private source reads",
+      "status": "passed"
+    },
+    {
+      "name": "Actual plan GET delivers partial unavailable context without claiming that the saved evidence is empty",
+      "status": "passed"
+    },
+    {
+      "name": "Plan POST rejects a changed source hash before mutation and keeps the current view reviewable",
+      "status": "passed"
+    },
+    {
+      "name": "Plan POST rejects an applicable unavailable source before any new write",
+      "status": "passed"
+    }
+  ]
+}

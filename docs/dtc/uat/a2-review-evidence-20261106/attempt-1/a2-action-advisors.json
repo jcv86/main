@@ -1,0 +1,10 @@
+{
+  "command": "supabase db advisors --local --type security --level warn --output-format json",
+  "cliVersion": "2.117.0",
+  "scope": "AG04 private receipts/functions plus the inherited document fixture",
+  "totalLaboratoryFindings": 0,
+  "candidateFindings": [],
+  "remoteOperations": 0,
+  "verdict": "PASS",
+  "failure": null
+}

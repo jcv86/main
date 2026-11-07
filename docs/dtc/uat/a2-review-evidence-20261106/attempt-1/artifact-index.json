@@ -1,0 +1,226 @@
+{
+  "version": "dtc-ag05-retained-evidence-index.v1",
+  "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "candidateTree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+  "runId": 42313235840,
+  "artifactId": 13548784558,
+  "artifactName": "a1-browser-evidence-22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "artifactBytes": 21825666,
+  "artifactSha256": "6f83ca7bfb984cd65e2bc50d3798dc42506da4c1eed879c791a12ef7928da1bc",
+  "artifactFilesVerified": 137,
+  "artifactExpiresAt": "2026-11-13T23:51:08Z",
+  "selectedCopiesAreByteIdentical": true,
+  "files": [
+    {
+      "file": "a2-plan-scope.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-plan-scope.json",
+      "bytes": 5287,
+      "sha256": "7f513a31f3c3df23a5c2d43e5654e51d8a59e526928f472293e0dd7488a0a7dc",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-plan-seed.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-plan-seed.json",
+      "bytes": 420,
+      "sha256": "f42123985f86d8edc1bc24efdd809d6506394c6857b0720101e69509a693eed5",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-plan-sql.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-plan-sql.json",
+      "bytes": 3330,
+      "sha256": "bee257a68525b569ec6bbc930dbe532d5c33631a3dff1125b18703dfd1ede622",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-plan-advisors.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-plan-advisors.json",
+      "bytes": 327,
+      "sha256": "6b148580f1c4f0c67507e8c73f018619275aa6e1bc77bccde16b5cfc0979dec0",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-plan-browser-results.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-plan-browser-results.json",
+      "bytes": 10967,
+      "sha256": "1ae9b2c1445782ef3740f61ab7e0b1f4e7e3780cb80dfdf181e87d9ae1dc355a",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-scope.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-action-scope.json",
+      "bytes": 6379,
+      "sha256": "4f2735662d54184808cc33a373976ab2806bb90838cb8e20d9511c524d0ef511",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-seed.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-action-seed.json",
+      "bytes": 699,
+      "sha256": "66a79d7123288a0db7c97b92931f12c46b181349a50b23233f0a349e45037213",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-sql.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-action-sql.json",
+      "bytes": 3112,
+      "sha256": "cc5b0ed3fa5e7eb8d90461fadb01d25190dfcccbbec06d9f6f98ca1e3a0cd349",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-advisors.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-action-advisors.json",
+      "bytes": 330,
+      "sha256": "9df41739b05e0237a9b46993accd546d807f12582c70f0c37ebe7c52ab3f88f5",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-browser-results.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-action-browser-results.json",
+      "bytes": 9965,
+      "sha256": "487cf5994019f7125faef65cb846f35ba63e65ea5f5e674aa3b6c3ba0e0ec43b",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-review-evidence-scope.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-review-evidence-scope.json",
+      "bytes": 8315,
+      "sha256": "a6a7e451fc5c253323ea308ca37203fc1b95dab3f8306056ba92bb5397e28cee",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-review-evidence-seed.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-review-evidence-seed.json",
+      "bytes": 1911,
+      "sha256": "4aae8d93e8e55358dc2e2cb3f69849e86dc54e9d510398a107d921681c57831b",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-review-evidence-sql.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-review-evidence-sql.json",
+      "bytes": 1099,
+      "sha256": "40bb4d3e7b37210273776185caea9d596c42e6301f2cbc712c45419501be68af",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-review-evidence-advisors.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-review-evidence-advisors.json",
+      "bytes": 348,
+      "sha256": "2b5dd2eb6cfbf4faf2713c2e1f8c086aa9d493f4f43cc4aa70e69dcad863a6c1",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-review-evidence-browser-results.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a1-browser/evidence/a2-review-evidence-browser-results.json",
+      "bytes": 9596,
+      "sha256": "d6cb0d9a1b5a75aa5535e4a448263a10d428cf46f8ecc740441eea7c92e74582",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-api.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-action-api.json",
+      "bytes": 9880,
+      "sha256": "3a82dc5de95bb8e6c97f513ba8a425c82cafc033803141764bb185159bb058ce",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-action-contract.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-action-contract.json",
+      "bytes": 3978,
+      "sha256": "ca44bbcd1cc04be70853262d4bd782123eba6ba63e6c82b86889da462687a7dc",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-assistant-route.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-assistant-route.json",
+      "bytes": 16870,
+      "sha256": "6573c26090052b46b04a7d6e84367f2e11c6d9fad4722983cbc5941c522b98f1",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-plan-api.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-plan-api.json",
+      "bytes": 4916,
+      "sha256": "a5d066603aa428d1b0b1c05cd5498525f1bf694b2dca88c2ba97914a90bff8e0",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-plan-contract.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-plan-contract.json",
+      "bytes": 6985,
+      "sha256": "8a1d36c81f9cb0989be5af2c4f08d7d3cd3993aee0390bf4c864b92a596e52f4",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-review-evidence.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-review-evidence.json",
+      "bytes": 9619,
+      "sha256": "ee7283694194eefaf920667c743acd7388263e146e2732e8fc31486cba357dbf",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-swarm-canary.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-swarm-canary.json",
+      "bytes": 7978,
+      "sha256": "216466886c3ee8cad3916d846735fbcb99861b85d6540dfe0e119556230bd453",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-swarm-provider.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-swarm-provider.json",
+      "bytes": 5021,
+      "sha256": "e05da2bd19dc245104aa9b2fb04e0d1683b904dfcefdcec3ae1d86bfb11dabbb",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "a2-swarm-runtime.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/a2-swarm-runtime.json",
+      "bytes": 14340,
+      "sha256": "81763c6afe2d9f23cada3c23efcd7a1d2cb9222d7bdcf9473996e74033a2be01",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "focus-visibility-preflight.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/focus-visibility-preflight.json",
+      "bytes": 2577,
+      "sha256": "161f41d18be77c2c7e611f27e78aece15a163053cb2a54f6af93dc0e4e4f915b",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "native-tab-focus-adapter.json",
+      "source": "ci-ag05-attempt-1/extracted/dtc-a2-swarm-evidence/native-tab-focus-adapter.json",
+      "bytes": 827,
+      "sha256": "a18b077647eae088518a978f52c34e09c7ac54922f42999871ce59a80ae95928",
+      "role": "original CI artifact bytes"
+    },
+    {
+      "file": "ci-run.json",
+      "source": "ci-ag05-attempt-1/ci-metadata.json",
+      "bytes": 7524,
+      "sha256": "4685c95903d59efb5998beeb2c6d3d2a2a6de24218136b0f761b7ece072a061a",
+      "role": "GitHub API run, commit, jobs and artifact metadata"
+    },
+    {
+      "file": "verified-ag05-summary.json",
+      "source": "ci-ag05-attempt-1/verified-ag05-summary.json",
+      "bytes": 166778,
+      "sha256": "e184c68a289148e9dff8cd27e8ebf2202c074d7d2de134e8f66a946d3b74d3a9",
+      "role": "independent artifact verifier result"
+    },
+    {
+      "file": "visual-review.json",
+      "source": "ci-ag05-attempt-1/visual-review.json",
+      "bytes": 15307,
+      "sha256": "34cfd989d9c322273e67ea58ce9bf3ba0d6e77bbb9f382ead80f10798bcac292",
+      "role": "review of eight AG05 and one AG04 original PNG"
+    },
+    {
+      "file": "verify-ag05-ci-artifact.py",
+      "source": "verify-ag05-ci-artifact.py",
+      "bytes": 81799,
+      "sha256": "6dd8df430282037f326da9b083cb8c5caed1dd2faa0a9cc49ecbe3b1ac0b4dad",
+      "role": "read-only verifier used for this result"
+    }
+  ],
+  "scope": "Selected original JSONs plus independently derived metadata and reviews. PNG/ZIP bytes are not embedded in this Git folder; their hashes and dimensions remain in the verification result. The full ZIP was checked before the selected copies were made."
+}

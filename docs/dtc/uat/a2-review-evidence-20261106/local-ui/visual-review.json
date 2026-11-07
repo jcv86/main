@@ -1,0 +1,319 @@
+{
+  "reviewedAt": "2026-11-06T23:30:58.475697+00:00",
+  "scope": "AG05 local UI and lab visual review; not manual participant UAT",
+  "result": "No new actionable visual defect observed in the eight reviewed captures.",
+  "implementationSources": "Actual AppShell, A2ChatCoach, A2ReviewedPlan, A2PlanEvidenceReview, shared contracts and repository Tailwind/CSS.",
+  "execution": {
+    "authAndHttp": "synthetic",
+    "actualDatabaseOrRls": false,
+    "liveModelQuality": false,
+    "browserVersion": "153.0.8010.0",
+    "fonts": "system Arial and Georgia",
+    "viewports": [
+      {
+        "width": 390,
+        "height": 844
+      },
+      {
+        "width": 1440,
+        "height": 844
+      }
+    ]
+  },
+  "localHarness": {
+    "file": "a2-plan-review-evidence-ui.json",
+    "sha256": "4fbb28b7e827c32b25668257b4ff70b28932f2e37387f87cbbc9cef68f8069a9",
+    "status": "passed",
+    "checks": 55,
+    "axeAudits": 8,
+    "axeViolations": 0,
+    "auditsWithIncomplete": 8,
+    "runtimeErrors": [],
+    "externalRequests": [],
+    "sourcesUnchangedDuringRun": true
+  },
+  "accessibility": [
+    {
+      "viewportWidth": 390,
+      "stage": "review",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 63
+        }
+      ]
+    },
+    {
+      "viewportWidth": 390,
+      "stage": "source-changed",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 81
+        }
+      ]
+    },
+    {
+      "viewportWidth": 390,
+      "stage": "unavailable",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 62
+        }
+      ]
+    },
+    {
+      "viewportWidth": 390,
+      "stage": "personal",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 38
+        }
+      ]
+    },
+    {
+      "viewportWidth": 1440,
+      "stage": "review",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 63
+        }
+      ]
+    },
+    {
+      "viewportWidth": 1440,
+      "stage": "source-changed",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 81
+        }
+      ]
+    },
+    {
+      "viewportWidth": 1440,
+      "stage": "unavailable",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 62
+        }
+      ]
+    },
+    {
+      "viewportWidth": 1440,
+      "stage": "personal",
+      "violations": 0,
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodeCount": 38
+        }
+      ]
+    }
+  ],
+  "screenshots": [
+    {
+      "file": "review-390.png",
+      "sha256": "a91654f1ce88855b2d969b055567c4f7020b2df670df890e5730961eb6f2424f",
+      "imageWidth": 390,
+      "imageHeight": 4683,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "stage": "review",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "Los registros de A3 y la declaración de A4 son legibles, con enlaces internos y etiquetas que limitan su significado.",
+        "La fecha elegida de revisión se distingue de la actualización del registro; el editor conserva su propósito y un control enfocado visible."
+      ]
+    },
+    {
+      "file": "source-changed-390.png",
+      "sha256": "f41102938846f83836566a104b1a384f81b4fd8d6d86c3c011ad48f3cd7e6d55",
+      "imageWidth": 390,
+      "imageHeight": 5451,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "stage": "source-changed",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "El aviso de cambio, el nuevo texto de la fuente y el borrador conservado aparecen juntos.",
+        "La confirmación de nueva revisión está separada de Guardar y activar plan, que aparece deshabilitado hasta reconocer el contexto."
+      ]
+    },
+    {
+      "file": "unavailable-390.png",
+      "sha256": "ce3914fcbcd15ae62a673a26cee551e2b5b26390b96d7e8ecac39ac3a2892101",
+      "imageWidth": 390,
+      "imageHeight": 4628,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "stage": "unavailable",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "La imposibilidad de recuperar A3 se comunica sin presentarla como ausencia de registros.",
+        "La declaración disponible de A4, el plan guardado y el borrador permanecen visibles; la nueva confirmación está deshabilitada."
+      ]
+    },
+    {
+      "file": "personal-390.png",
+      "sha256": "4b54ec9a63d7e7501cecb1289a87aae80ff2d710a76840fe584b1f5fd15287d4",
+      "imageWidth": 390,
+      "imageHeight": 2786,
+      "viewportWidth": 390,
+      "viewportHeight": 844,
+      "stage": "personal",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "El panel presenta las dos fuentes profesionales como no aplicables y conserva el foco de la práctica personal.",
+        "No muestra respuestas A3, decisiones A4 ni enlaces a sus registros en el panel."
+      ]
+    },
+    {
+      "file": "review-1440.png",
+      "sha256": "98576647e40b5f6361c9a691917ba9696a1f9424b9f6629ca06030eeac56772a",
+      "imageWidth": 1440,
+      "imageHeight": 3587,
+      "viewportWidth": 1440,
+      "viewportHeight": 844,
+      "stage": "review",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "Los registros de A3 y la declaración de A4 son legibles, con enlaces internos y etiquetas que limitan su significado.",
+        "La fecha elegida de revisión se distingue de la actualización del registro; el editor conserva su propósito y un control enfocado visible."
+      ]
+    },
+    {
+      "file": "source-changed-1440.png",
+      "sha256": "667782027077c7ded621d5ec45504a9635f55808ab0b5f40eb6dcc5fb8365b5b",
+      "imageWidth": 1440,
+      "imageHeight": 4268,
+      "viewportWidth": 1440,
+      "viewportHeight": 844,
+      "stage": "source-changed",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "El aviso de cambio, el nuevo texto de la fuente y el borrador conservado aparecen juntos.",
+        "La confirmación de nueva revisión está separada de Guardar y activar plan, que aparece deshabilitado hasta reconocer el contexto."
+      ]
+    },
+    {
+      "file": "unavailable-1440.png",
+      "sha256": "62cb5499a659780ce707309039573bf7f4a00de6530ff8b972886d3af32a36e4",
+      "imageWidth": 1440,
+      "imageHeight": 3603,
+      "viewportWidth": 1440,
+      "viewportHeight": 844,
+      "stage": "unavailable",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "La imposibilidad de recuperar A3 se comunica sin presentarla como ausencia de registros.",
+        "La declaración disponible de A4, el plan guardado y el borrador permanecen visibles; la nueva confirmación está deshabilitada."
+      ]
+    },
+    {
+      "file": "personal-1440.png",
+      "sha256": "eff7847e26aa11a4392613e83ee9ec879de32e526e18b20592cad8a32c467646",
+      "imageWidth": 1440,
+      "imageHeight": 1908,
+      "viewportWidth": 1440,
+      "viewportHeight": 844,
+      "stage": "personal",
+      "reviewed": true,
+      "newActionableVisualDefects": [],
+      "observations": [
+        "El panel presenta las dos fuentes profesionales como no aplicables y conserva el foco de la práctica personal.",
+        "No muestra respuestas A3, decisiones A4 ni enlaces a sus registros en el panel."
+      ]
+    }
+  ],
+  "findings": [],
+  "limitations": [
+    "Each of the eight axe audits has color-contrast in incomplete. Visual inspection does not resolve those algorithmic results or certify WCAG conformance.",
+    "Full-page screenshots were captured after keyboard interaction and scrolling. Fixed AppShell and skip-link controls appear at the scrolled viewport position within the full document image; this is not an unscrolled page composition.",
+    "Desktop sidebar access is a synthetic fixture and retains a locked A4 item while separate synthetic plan fixtures provide A4 data. These captures do not establish server authorization or real sidebar/evidence consistency.",
+    "Arial and Georgia system fonts were used; the native date input follows this browser locale. Other fonts, browsers, devices, zoom levels and assistive technologies were not visually assessed here.",
+    "Expanded details intentionally show all source excerpts; normal collapsed presentation and usefulness to participants require separate product evaluation.",
+    "No real Supabase Auth, persistence, RLS, model/provider, production state, hosted UAT or manual participant case was validated by this local harness.",
+    "The review does not close AG05. Participant usefulness and model behavior remain separate evidence requirements."
+  ],
+  "sourceHashesAtRun": [
+    {
+      "path": "components/a2-plan-evidence-review.tsx",
+      "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d"
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d"
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e"
+    },
+    {
+      "path": "lib/a2/review-evidence-contract.ts",
+      "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "e6c21df3851337c3b868863a58cbae11c1b362f84e6c9fbd6c4382691fa6fc50"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "sha256": "0270c8bb2f98482ee73bffd847ae70ee19de6f5e71c2fb6707329ab57a2cdf3f"
+    },
+    {
+      "path": "scripts/test-a2-plan-review-evidence-ui.mjs",
+      "sha256": "f5014501b976287c1ae28c6f12de1be51c4e7cd19e53ddc7cb784f1e0ebb6e22"
+    }
+  ],
+  "priorLocalAttempts": [
+    {
+      "directory": "a2-plan-evidence-ui-local",
+      "status": "passed",
+      "checks": 51,
+      "axeAudits": 8,
+      "scope": "Earlier UI before source-link/date labeling review and capture type alignment."
+    },
+    {
+      "directory": "a2-plan-evidence-ui-local-v2",
+      "status": "failed",
+      "checksCompleted": 32,
+      "axeAuditsCompleted": 4,
+      "reason": "Desktop focus assertion raced the existing requestAnimationFrame focus. Harness now waits for the observed focused element before making the same assertion; no product focus behavior was changed."
+    }
+  ]
+}

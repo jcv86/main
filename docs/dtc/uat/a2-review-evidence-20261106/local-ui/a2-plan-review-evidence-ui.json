@@ -1,0 +1,3209 @@
+{
+  "suite": "a2-plan-review-evidence-ui",
+  "status": "passed",
+  "checks": [
+    "390: source details reuse the plan read and do not write",
+    "390: A4 result is attributed as a declaration with expected evidence",
+    "390: source identifiers stay out of product text",
+    "390: source links use only the internal allowlist",
+    "390: all displayed records remain linked when the suggestion prioritizes A4",
+    "390: chosen review date is not mislabeled as its recorded timestamp",
+    "390: keyboard review opens and focuses the existing editor",
+    "390: preparing and editing do not write",
+    "390/review: no horizontal overflow",
+    "390: explicit save confirms the reviewed context once",
+    "390: returning to the edit preserves text and focuses it",
+    "390: source conflict preserves edits and prevents unreviewed save",
+    "390: changed evidence is visible before acknowledgement",
+    "390/source-changed: no horizontal overflow",
+    "390: reconfirmation uses a new command and current evidence",
+    "390: applicable unavailable source preserves draft and blocks new confirmation",
+    "390: partial evidence remains distinct from missing data",
+    "390/unavailable: no horizontal overflow",
+    "390: pending confirmation cannot be replaced by the evidence CTA",
+    "390: new evidence does not rewrite an uncertain command",
+    "390: settled receipt keeps the confirmed plan and exposes newer context",
+    "390: verified missing and locked sources have separate messages",
+    "390: personal path has no interview prompts or source navigation",
+    "390/personal: no horizontal overflow",
+    "390: account change removes evidence and draft and ignores late response",
+    "390: account alert separates its sentence and reopen link",
+    "1440: source details reuse the plan read and do not write",
+    "1440: A4 result is attributed as a declaration with expected evidence",
+    "1440: source identifiers stay out of product text",
+    "1440: source links use only the internal allowlist",
+    "1440: all displayed records remain linked when the suggestion prioritizes A4",
+    "1440: chosen review date is not mislabeled as its recorded timestamp",
+    "1440: keyboard review opens and focuses the existing editor",
+    "1440: preparing and editing do not write",
+    "1440/review: no horizontal overflow",
+    "1440: explicit save confirms the reviewed context once",
+    "1440: returning to the edit preserves text and focuses it",
+    "1440: source conflict preserves edits and prevents unreviewed save",
+    "1440: changed evidence is visible before acknowledgement",
+    "1440/source-changed: no horizontal overflow",
+    "1440: reconfirmation uses a new command and current evidence",
+    "1440: applicable unavailable source preserves draft and blocks new confirmation",
+    "1440: partial evidence remains distinct from missing data",
+    "1440/unavailable: no horizontal overflow",
+    "1440: pending confirmation cannot be replaced by the evidence CTA",
+    "1440: new evidence does not rewrite an uncertain command",
+    "1440: settled receipt keeps the confirmed plan and exposes newer context",
+    "1440: verified missing and locked sources have separate messages",
+    "1440: personal path has no interview prompts or source navigation",
+    "1440/personal: no horizontal overflow",
+    "1440: account change removes evidence and draft and ignores late response",
+    "1440: account alert separates its sentence and reopen link",
+    "no uncaught JavaScript errors",
+    "no external network requests",
+    "component, contracts and harness sources unchanged during the run"
+  ],
+  "accessibility": [
+    {
+      "width": 390,
+      "stage": "review",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.p-6.space-y-2 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-assistant-question\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .pt-0.p-6 > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "details[open=\"\"] > summary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-02T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-baseline\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-04T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-follow-up\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg > p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-03\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href=\"/despega/a4\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".leading-6:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > legend"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-purpose\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-constraints\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".px-1"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-review-date\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-review-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".flex-wrap > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:00.294Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "stage": "source-changed",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-assistant-question\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6 > .leading-6.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".\\[\\&_p\\]\\:leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-background\\/60 > .h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-2[open=\"\"] > summary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-02T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-baseline\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-04T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined because it partially overlaps other elements"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-follow-up\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .space-y-2.p-3.rounded-lg > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .space-y-2.p-3.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .space-y-2.p-3.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".leading-5.text-xs.text-muted-foreground:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000001Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-03\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > .leading-5.text-xs.text-muted-foreground:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(7)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(8) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href=\"/despega/a4\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-foreground.font-semibold.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.leading-6.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mt-1.whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > .mt-1.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-sm:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-13\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:03.157Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/30"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > legend"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-purpose\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-constraints\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".px-1"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-review-date\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-review-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-amber-100.font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/20 > .leading-6.text-sm:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.leading-6 > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "strong"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/20 > .h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".flex-wrap > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:03.389Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "stage": "unavailable",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-assistant-question\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6 > .leading-6.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-2[open=\"\"] > summary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-03\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".underline"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-foreground.font-semibold"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mt-1.whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > .mt-1.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > p:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-13\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:05.541Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/30"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > legend"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-purpose\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-constraints\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".px-1"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-review-date\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-review-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-amber-100.font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/20 > .leading-6:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.leading-6 > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "strong"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".flex-wrap > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:05.797Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 390,
+      "stage": "personal",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.space-y-2.p-6 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.space-y-2.p-6 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.space-y-2.p-6 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .pt-0.p-6.min-w-0 > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.space-y-2.p-6 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.space-y-2.p-6 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "details[open=\"\"] > .rounded-md"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-foreground.font-semibold"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.mt-1.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mt-1:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-13\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:07.906Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-amber-600\\/40"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-complete-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.space-y-4.p-6 > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:08.451Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.space-y-4.p-6 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "stage": "review",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.p-6.space-y-2 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-assistant-question\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .pt-0.p-6 > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "details[open=\"\"] > summary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-02T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .p-3.space-y-2.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-baseline\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-04T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-follow-up\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .p-3.space-y-2.rounded-lg > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".p-3.space-y-2.rounded-lg > p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-03\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href=\"/despega/a4\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".leading-6:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > legend"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-purpose\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-constraints\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".px-1"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-review-date\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-review-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".flex-wrap > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:10.874Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "stage": "source-changed",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-assistant-question\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6 > .leading-6.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".\\[\\&_p\\]\\:leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-background\\/60 > .h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-2[open=\"\"] > summary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-02T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > .space-y-2.p-3.rounded-lg:nth-child(3) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-baseline\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-04T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg:nth-child(4) > .whitespace-pre-wrap.break-words > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href$=\"a3-outcome-follow-up\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .space-y-2.p-3.rounded-lg > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .space-y-2.p-3.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > .space-y-2.p-3.rounded-lg > .whitespace-pre-wrap.break-words:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".leading-5.text-xs.text-muted-foreground:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000001Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-03\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > .leading-5.text-xs.text-muted-foreground:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(7)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(8) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "a[href=\"/despega/a4\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-foreground.font-semibold.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.leading-6.text-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mt-1.whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > .mt-1.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-sm:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-13\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:13.377Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/30"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > legend"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-purpose\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-constraints\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".px-1"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-review-date\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-review-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-amber-100.font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/20 > .leading-6.text-sm:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.leading-6 > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "strong"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/20 > .h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".flex-wrap > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:13.571Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "stage": "unavailable",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-assistant-question\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6 > .leading-6.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.p-6.space-y-2 > .leading-relaxed.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-2[open=\"\"] > summary"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > .font-semibold:nth-child(1)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(3) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-05T12:00:00.000000Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.p-3.rounded-lg > p:nth-child(5)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-03\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.break-words:nth-child(7) > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".underline"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-foreground.font-semibold"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mt-1.whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > .mt-1.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > p:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-13\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:15.645Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/30"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > legend"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-purpose\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-constraints\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".px-1"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label:nth-child(6)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "fieldset > fieldset > label:nth-child(8)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "form[aria-label=\"Editar mi plan\"] > fieldset > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label[for=\"a2-plan-review-date\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-review-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".text-amber-100.font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-amber-950\\/20 > .leading-6:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-2.leading-6 > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "strong"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".flex-wrap > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .leading-5.text-xs.text-muted-foreground"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:15.788Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.p-6.space-y-4 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "width": 1440,
+      "stage": "personal",
+      "violations": [],
+      "incomplete": [
+        {
+          "id": "color-contrast",
+          "nodes": [
+            {
+              "target": [
+                ".leading-\\[1\\.2\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".self-start.rounded-\\[16px\\].border-border\\/80 > .flex-col.space-y-2.p-6 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".max-h-\\[28rem\\] > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "label"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-assistant-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.space-y-2.p-6 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".space-y-6 > .rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .flex-col.space-y-2.p-6 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-\\[16px\\].border-border\\/80.bg-\\[linear-gradient\\(180deg\\,rgba\\(24\\,32\\,51\\,0\\.96\\)\\,rgba\\(18\\,24\\,39\\,0\\.96\\)\\)\\]:nth-child(1) > .pt-0.p-6.min-w-0 > .leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p[data-guided-reason=\"true\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".py-3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.space-y-2.p-6 > h3"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-reviewed-plan=\"true\"] > .flex-col.space-y-2.p-6 > .leading-relaxed"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "h4"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > .font-medium"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-review-suggestion=\"true\"] > p:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".h-auto.whitespace-normal.bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "details[open=\"\"] > .rounded-md"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros de Entrenamiento\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > h5"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "section[aria-label=\"Registros del Radar\"] > p"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .text-foreground.font-semibold"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .whitespace-pre-wrap.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "li > span"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".whitespace-pre-wrap.mt-1.leading-6"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".mt-1:nth-child(3)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "p:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-13\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "div[data-a2-plan-summary=\"true\"] > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:18.169Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".border-amber-600\\/40"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]:nth-child(2)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]:nth-child(4)"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "#a2-plan-complete-help"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".rounded-sm"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.space-y-4.p-6 > .leading-5.text-xs"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                "time[datetime=\"2026-11-06T23:27:18.637Z\"]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            },
+            {
+              "target": [
+                ".pt-0.space-y-4.p-6 > .bg-\\[rgba\\(18\\,24\\,39\\,0\\.72\\)\\].hover\\:border-\\[rgba\\(126\\,141\\,255\\,0\\.72\\)\\].hover\\:bg-\\[rgba\\(38\\,49\\,73\\,0\\.72\\)\\]"
+              ],
+              "failureSummary": "Fix any of the following:\n  Element's background color could not be determined due to a background gradient"
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "actualComponents": true,
+  "actualAppShell": true,
+  "authAndHttp": "synthetic",
+  "actualDatabaseOrRls": false,
+  "liveModelQuality": false,
+  "fonts": "system Arial and Georgia",
+  "browserVersion": "153.0.8010.0",
+  "viewports": [
+    {
+      "width": 390,
+      "height": 844
+    },
+    {
+      "width": 1440,
+      "height": 844
+    }
+  ],
+  "runtimeErrors": [],
+  "externalRequests": [],
+  "screenshots": [
+    "review-390.png",
+    "source-changed-390.png",
+    "unavailable-390.png",
+    "personal-390.png",
+    "review-1440.png",
+    "source-changed-1440.png",
+    "unavailable-1440.png",
+    "personal-1440.png"
+  ],
+  "sources": [
+    {
+      "path": "components/a2-plan-evidence-review.tsx",
+      "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d"
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d"
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e"
+    },
+    {
+      "path": "lib/a2/review-evidence-contract.ts",
+      "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "e6c21df3851337c3b868863a58cbae11c1b362f84e6c9fbd6c4382691fa6fc50"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "sha256": "0270c8bb2f98482ee73bffd847ae70ee19de6f5e71c2fb6707329ab57a2cdf3f"
+    },
+    {
+      "path": "scripts/test-a2-plan-review-evidence-ui.mjs",
+      "sha256": "f5014501b976287c1ae28c6f12de1be51c4e7cd19e53ddc7cb784f1e0ebb6e22"
+    }
+  ],
+  "sourcesAtEnd": [
+    {
+      "path": "components/a2-plan-evidence-review.tsx",
+      "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d"
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d"
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e"
+    },
+    {
+      "path": "lib/a2/review-evidence-contract.ts",
+      "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538"
+    },
+    {
+      "path": "app/globals.css",
+      "sha256": "e6c21df3851337c3b868863a58cbae11c1b362f84e6c9fbd6c4382691fa6fc50"
+    },
+    {
+      "path": "app/design-system.css",
+      "sha256": "5173b41fede4dafe8c79bfc1b2d9ec8fa797bb29fc0416fe23853eafdbf809d5"
+    },
+    {
+      "path": "tailwind.config.ts",
+      "sha256": "0270c8bb2f98482ee73bffd847ae70ee19de6f5e71c2fb6707329ab57a2cdf3f"
+    },
+    {
+      "path": "scripts/test-a2-plan-review-evidence-ui.mjs",
+      "sha256": "f5014501b976287c1ae28c6f12de1be51c4e7cd19e53ddc7cb784f1e0ebb6e22"
+    }
+  ],
+  "sourcesUnchangedDuringRun": true
+}

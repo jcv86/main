@@ -1,0 +1,45 @@
+{
+  "sourceHash": "7bf669e9e7aca84bd9df7598b67da3eea2d4ec71a3108cd32f33bc52406737eb",
+  "outputHash": "49ebf57d371bc0a606b3d7541cb748807bf7e08e175e0ab496832f418bf645bc",
+  "candidate": {
+    "sha": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "branch": "uat/dtc-20261106",
+    "reference": "https://github.com/jcv86/main/commit/22d533d6e42f3663d2a46b9ca48116bf138c23f7"
+  },
+  "ci": {
+    "conclusion": "success",
+    "sha": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "runId": 42313235840,
+    "url": "https://github.com/jcv86/main/actions/runs/42313235840"
+  },
+  "recordedAt": "2026-11-06T23:58:04.327226+00:00",
+  "outputPath": "/workspace/scratch/7122ccfe4f6a/outputs/dtc_uat_ag05_20261106/DTC_UAT_2026-11-06.xlsx",
+  "changes": [
+    "Protocolo!A139:C164",
+    "Control!B53:F53"
+  ],
+  "preservedSourceValues": true,
+  "preservedSourceFormulas": true,
+  "preservedSwarmAppendix": "Protocolo!A59:C76",
+  "preservedPlanAppendix": "Protocolo!A80:C105",
+  "preservedActionAppendix": "Protocolo!A109:C135",
+  "originalManualCases": 54,
+  "originalManualCasesUnexecuted": 54,
+  "originalAcceptance": "ACEPTADO POR EL RESPONSABLE",
+  "sourceSheets": [
+    "Control",
+    "Casos",
+    "Hallazgos",
+    "Protocolo"
+  ],
+  "reopenedAndVerified": true,
+  "appendixRows": 24,
+  "renders": [
+    "/workspace/scratch/7122ccfe4f6a/uat-ag05-workbook-qa/final-control.png",
+    "/workspace/scratch/7122ccfe4f6a/uat-ag05-workbook-qa/final-protocolo-1.png",
+    "/workspace/scratch/7122ccfe4f6a/uat-ag05-workbook-qa/final-protocolo-2.png",
+    "/workspace/scratch/7122ccfe4f6a/uat-ag05-workbook-qa/final-protocolo-3.png",
+    "/workspace/scratch/7122ccfe4f6a/uat-ag05-workbook-qa/final-protocolo-4.png"
+  ],
+  "nativeFeatureComparison": "Requires companion comparison before delivery"
+}

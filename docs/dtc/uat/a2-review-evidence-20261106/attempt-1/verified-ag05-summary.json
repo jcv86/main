@@ -1,0 +1,4636 @@
+{
+  "version": "dtc-ag05-ci-artifact-verification.v1",
+  "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "expectedRunId": 42313235840,
+  "expectedArtifactId": 13548784558,
+  "expectedCandidateTree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+  "verifiedAt": "2026-11-06T23:53:06.664392+00:00",
+  "status": "PASS",
+  "verifierSha256": "6dd8df430282037f326da9b083cb8c5caed1dd2faa0a9cc49ecbe3b1ac0b4dad",
+  "candidateTree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+  "candidateAttribution": {
+    "exactEmbeddedCommitAnchors": [
+      "a2-plan-scope.json",
+      "a2-plan-browser-results.json",
+      "a2-action-scope.json",
+      "a2-action-browser-results.json",
+      "native-tab-focus-adapter.json",
+      "focus-visibility-preflight.json",
+      "a2-review-evidence-scope.json",
+      "a2-review-evidence-browser-results.json",
+      "a2-review-evidence-sql.json"
+    ],
+    "filesWithoutEmbeddedCommit": [
+      "a2-action-advisors.json",
+      "a2-action-api.json",
+      "a2-action-contract.json",
+      "a2-action-seed.json",
+      "a2-action-sql.json",
+      "a2-assistant-route.json",
+      "a2-plan-advisors.json",
+      "a2-plan-api.json",
+      "a2-plan-contract.json",
+      "a2-plan-seed.json",
+      "a2-plan-sql.json",
+      "a2-review-evidence-advisors.json",
+      "a2-review-evidence-seed.json",
+      "a2-review-evidence.json",
+      "a2-swarm-canary.json",
+      "a2-swarm-provider.json",
+      "a2-swarm-runtime.json"
+    ],
+    "unembeddedCommitMeaning": "Files without an embedded commit are bound to the exact GitHub archive digest, run and tree; reported source and producer hashes are also checked against candidate and checkout.",
+    "artifactZipDigestVerifiedHere": true,
+    "githubRunMetadataVerifiedHere": true,
+    "metadataProvenance": "Caller-provided GitHub API result; no network re-query by this program"
+  },
+  "AG04": {
+    "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "scope": "disposable-local-a2-action",
+    "sourceCount": 31,
+    "verifiedCopiedSources": [
+      {
+        "path": "app/despega/a2/coach/page.tsx",
+        "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-chat-coach.tsx",
+        "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-assistant-action.tsx",
+        "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/layout/app-shell.tsx",
+        "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-reviewed-plan.tsx",
+        "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a2/assistant-actions/route.ts",
+        "sha256": "5c52d33751036ef67c6cb57d8959120678149916c1ea2c3bf88ac55056e4e4cf",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/despega/a2-coach/route.ts",
+        "sha256": "c04c72d05fb132c9a97e6e19bd4af743eae0dc6ab93bd77ccf0f902b0214d7bc",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-plan-evidence-review.tsx",
+        "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/review-evidence-contract.ts",
+        "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/review-evidence-service.ts",
+        "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/response-capture.ts",
+        "sha256": "56bfc03f3a8fd17747b7ef59d1a47bda2975ff7242a306a11c6442c150ce5dea",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/response-history.ts",
+        "sha256": "29936ce2597650ddf099892f2ef6d208745030541cc6ae292e18a66f7a536e68",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/a2-execution-capability.ts",
+        "sha256": "cf03ac91e3eb074820d897ccea8ad36eef8f0def87506cd26592c7f91a9454cb",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/a3-interview-capability.ts",
+        "sha256": "139112eae52d37f14fc838b59dbfb4dc8a1b71bbf0bd57680bb1723cb703fd8a",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a4/strategic-radar.ts",
+        "sha256": "7e65be4ae1558b9d54af56c01070e900e53135fe2ff1eb388af88b993ded93e8",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-contract.ts",
+        "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-api.ts",
+        "sha256": "c1058c2b290098dafb05530e16af667a08fa840a93b113b3ac18a74e1debd80f",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-service.ts",
+        "sha256": "7132ac70f0e65c5914e918ae92a31ce08bf8244464b79fd691655bf110e0a90e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-contract.ts",
+        "sha256": "ea153a56b1f8221c965cd74ec4ed7935baeefc63745e9bcb75dd9754589a181f",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/practice-adjustment.ts",
+        "sha256": "653cbae305a02a28e266fd0d1e58db14f4b14fe6c2d31c887f36e6aba5c6785d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/api-access.ts",
+        "sha256": "a9a3112ee5f00e4ce6481314c45319ddf1382123144454c0a27d01ca92ba22d4",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-contract.ts",
+        "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-context.ts",
+        "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-service.ts",
+        "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/next-action.ts",
+        "sha256": "4b724dd24aba7615a2b66010648cc1e312bf37f09f09e11ebe7ebe004358cadf",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/next-action-service.ts",
+        "sha256": "dbe6fdca1d361a46503398c3bb748c4ce6eb1cf43af4ad9a7ead97ed15c7b8e2",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/service.ts",
+        "sha256": "034430d06e1709c483b117c88863702e46a33a042caf1ed3606039689ef39598",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/contracts.ts",
+        "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/runtime.ts",
+        "sha256": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/openai.ts",
+        "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/canary.ts",
+        "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34",
+        "candidateMatchesLocal": true
+      }
+    ],
+    "seed": {
+      "migration": "20261106221437_a2_assistant_action_receipts.sql",
+      "migrationAppliedTwice": true,
+      "migrationSource": {
+        "path": "supabase/migrations/20261106221437_a2_assistant_action_receipts.sql",
+        "sha256": "3d01f2dc8f57d798ea35fdaa02f7e6b65732a17ed4cf4d3e2e2d2287ee4c34bd",
+        "candidateMatchesLocal": true
+      },
+      "migrationHashEmbeddedInSeed": true,
+      "syntheticBrowserOwners": 4,
+      "eligibleA2": 3,
+      "admittedWithoutA2": 1,
+      "remoteOperations": 0,
+      "contextFixture": "Inherited minimal dtc_documents owner SELECT/INSERT from AG03; actual new receipt/RPC schema.",
+      "canonicalProgress": "Seeded A2 entry prerequisites only; no practice completion or XP."
+    },
+    "sql": {
+      "scope": "disposable-local-postgresql-a2-action",
+      "casesPassed": 20,
+      "caseNames": [
+        "Only service can invoke the empty-search-path invoker RPCs or read immutable private receipts",
+        "A confirmed adjustment and its receipt commit once using the existing v1 document envelope",
+        "Owner RLS permits only the committed owner document and denies other owners/anon",
+        "A dtc_documents fault rolls back both the effect and receipt",
+        "A a2_assistant_action_receipts fault rolls back both the effect and receipt",
+        "Concurrent identical confirmations return one commit and a replay",
+        "Concurrent different confirmations from the same context require re-review of the first result",
+        "A request identifier cannot be reused for different confirmed content",
+        "Deleting the effect keeps its receipt and an old replay never recreates content",
+        "Editing an existing effect cannot be overwritten by replay",
+        "A refreshed exact adjustment reference allows a subsequent different confirmation",
+        "Observed legacy insertion, mutation or deletion invalidates a stale adjustment snapshot",
+        "Source fingerprint mismatch, unavailable/old/future snapshots cannot create an effect",
+        "An adjustment may target only the pending practice day in the server projection",
+        "Santiago dates include today/day+30 but reject yesterday/day+31 independently of SQL session timezone",
+        "Strict payload, calendar, UTF-16 length and storable-text boundaries reject malformed writes",
+        "Missing pilot admission cannot be grandfathered by either RPC",
+        "Revoked pilot admission also denies lookup/replay of a previously committed action",
+        "The same request UUID is private to each owner and produces separate effect ids",
+        "Actions preserve all seeded canonical milestones, completed days, XP and browser fixtures"
+      ],
+      "syntheticOwnersCreated": 16,
+      "syntheticOwnersRemoved": true,
+      "browserOwnersUnchanged": true,
+      "remoteOperations": 0,
+      "invarianceEvidence": "Passing producer assertions compare complete seeded before/after rows; raw row snapshots are not present in this summary."
+    },
+    "advisors": {
+      "scope": "AG04 private receipts/functions plus the inherited document fixture",
+      "candidateFindings": 0,
+      "totalLaboratoryFindings": 0,
+      "cliVersionReported": "2.117.0",
+      "command": "supabase db advisors --local --type security --level warn --output-format json",
+      "remoteOperations": 0
+    },
+    "browser": {
+      "stepsPassed": 13,
+      "stepsByPhase": {
+        "desktop": 6,
+        "mobile": 4,
+        "access": 3
+      },
+      "steps": [
+        {
+          "phase": "desktop",
+          "name": "proposal and edits do not write; explicit confirmation persists the exact reviewed adjustment and receipt",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "identical command replays without writes and a real reload recovers the confirmed adjustment as canonical context",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "source changes reject stale confirmation, preserve the draft and require explicit context review before a new command",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "lost delivery preserves the exact command; retry acknowledges its receipt without resurrecting a later deletion",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "account change during real committed HTTP delivery clears personal UI and rejects the prior actor result",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "all adjustment operations preserve complete snapshots of seven canonical progress and XP tables",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "proposal and edits do not write; explicit confirmation persists the exact reviewed adjustment and receipt",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "identical command replays without writes and a real reload recovers the confirmed adjustment as canonical context",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "mobile lost delivery retries the exact command and confirms its current saved effect without duplicate writes",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "all adjustment operations preserve complete snapshots of seven canonical progress and XP tables",
+          "status": "PASS"
+        },
+        {
+          "phase": "access",
+          "name": "actual API rejects anonymous reads and A2-locked reads and confirmations before any action document or receipt",
+          "status": "PASS"
+        },
+        {
+          "phase": "access",
+          "name": "missing canonical state rejects read and confirmation without initialization or any canonical progress mutation",
+          "status": "PASS"
+        },
+        {
+          "phase": "access",
+          "name": "wrong expected actor and revoked admission reject both read and confirmation without persistence effects",
+          "status": "PASS"
+        }
+      ],
+      "progressTablesCompared": [
+        "despega_user_profiles",
+        "despega_journey_state",
+        "a2_user_task_completions",
+        "a3_user_progress",
+        "a3_route_progression",
+        "user_gamification_profile",
+        "user_dtc_balance"
+      ],
+      "canonicalInvariantEvidence": "Passing desktop/mobile full-snapshot comparison scenarios; no raw canonical row snapshots are exported.",
+      "accessibilityScans": 8,
+      "accessibilityViolations": [],
+      "incompleteScans": 7,
+      "incompleteResults": 7,
+      "incompleteRules": [
+        "color-contrast"
+      ],
+      "accessibility": [
+        {
+          "phase": "desktop",
+          "name": "review",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "saved",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "context-conflict",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "replay-after-deletion",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "account-change",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "phase": "mobile",
+          "name": "review",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "saved",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "recovered-confirmation",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        }
+      ],
+      "layouts": [
+        {
+          "phase": "desktop",
+          "name": "review",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "saved",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "context-conflict",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "replay-after-deletion",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "account-change",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "mobile",
+          "name": "review",
+          "viewport": 390,
+          "document": 390
+        },
+        {
+          "phase": "mobile",
+          "name": "saved",
+          "viewport": 390,
+          "document": 390
+        },
+        {
+          "phase": "mobile",
+          "name": "recovered-confirmation",
+          "viewport": 390,
+          "document": 390
+        }
+      ],
+      "javascriptErrors": 0,
+      "externalRequests": 0,
+      "recordedRequestFailures": [
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a2/assistant-actions",
+          "method": "POST",
+          "error": "net::ERR_CONNECTION_RESET"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a2/assistant-actions",
+          "method": "POST",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a2/assistant-actions",
+          "method": "POST",
+          "error": "net::ERR_CONNECTION_RESET"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "recordedRequestFailureCount": 19,
+      "controlledFaults": [
+        {
+          "phase": "desktop",
+          "kind": "lost_http_after_verified_commit",
+          "exactReplay": true,
+          "laterDeletion": true,
+          "currentEffect": "removed",
+          "unchangedPersistenceOnReplay": true
+        },
+        {
+          "phase": "mobile",
+          "kind": "lost_http_after_verified_commit",
+          "exactReplay": true,
+          "laterDeletion": false,
+          "currentEffect": "present",
+          "unchangedPersistenceOnReplay": true
+        },
+        {
+          "phase": "access",
+          "kind": "missing_canonical_journey_fixture",
+          "ownerFixture": "a2-action-locked",
+          "setup": "one local journey row deleted after genuine login; existing session reused without page navigation"
+        }
+      ],
+      "screenshots": [
+        {
+          "name": "a2-action-desktop-review.png",
+          "path": "dtc-a1-browser/evidence/a2-action-desktop-review.png",
+          "bytes": 414048,
+          "sha256": "921e4e5cd58d19e64690a1d2495c9e430cd10c0e5a731f5d1d0fe47cfbfb9966",
+          "width": 1440,
+          "height": 2616,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-desktop-saved.png",
+          "path": "dtc-a1-browser/evidence/a2-action-desktop-saved.png",
+          "bytes": 366215,
+          "sha256": "45b921b8c542d543303ba341c04f903762c285c35c5740810a6fef7bbeef54d1",
+          "width": 1440,
+          "height": 2140,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-desktop-context-conflict.png",
+          "path": "dtc-a1-browser/evidence/a2-action-desktop-context-conflict.png",
+          "bytes": 512864,
+          "sha256": "840726bb8dec9755940d6c3676cf589cdc0cf084d4c964dfadff43fc852458c2",
+          "width": 1440,
+          "height": 3435,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-desktop-replay-after-deletion.png",
+          "path": "dtc-a1-browser/evidence/a2-action-desktop-replay-after-deletion.png",
+          "bytes": 392948,
+          "sha256": "0d8f27d2e265451d9d4d2e16eebf372aae527ad4ede788b8c2d41ae06bb9dd0c",
+          "width": 1440,
+          "height": 2216,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-desktop-account-change.png",
+          "path": "dtc-a1-browser/evidence/a2-action-desktop-account-change.png",
+          "bytes": 124937,
+          "sha256": "fc6031775cadebbb1e58225c89b1ede1f74386a59d65af96a8758d1bccfa7fdf",
+          "width": 1440,
+          "height": 1092,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-mobile-review.png",
+          "path": "dtc-a1-browser/evidence/a2-action-mobile-review.png",
+          "bytes": 291242,
+          "sha256": "3b0c3266cda4e5d2b3f273087c86f44381a8a8da028aba3764296c2cd0889ed4",
+          "width": 390,
+          "height": 3345,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 390,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-mobile-saved.png",
+          "path": "dtc-a1-browser/evidence/a2-action-mobile-saved.png",
+          "bytes": 252054,
+          "sha256": "8fe53f44a77900925d3c0e5e4a5a48534b6d9bb572a18d57ddb7cad5ff759266",
+          "width": 390,
+          "height": 2848,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 390,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-action-mobile-recovered-confirmation.png",
+          "path": "dtc-a1-browser/evidence/a2-action-mobile-recovered-confirmation.png",
+          "bytes": 259313,
+          "sha256": "b11a9390bb584967d3c036aa5262987df4b0b0d1fabe810ad9bd5f788628d97a",
+          "width": 390,
+          "height": 2923,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 390,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        }
+      ],
+      "screenshotReview": "PNG presence, dimensions and SHA-256 verified; human visual review is not performed by this script.",
+      "transport": "Actual UI, email Auth, action API, owner RLS and PostgreSQL. Only assistant generation responses use declared synthetic proposals.",
+      "notVerified": [
+        "real provider output, utility, latency, cost or real canary traffic",
+        "remote migration, deployment, production document schema or external OAuth",
+        "global transactional freshness across independent context writes",
+        "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+        "manual UAT participant cases or effectiveness of the practice"
+      ],
+      "generationFixtureCount": 6,
+      "generationFixtures": [
+        {
+          "phase": "desktop",
+          "label": "desktop-first",
+          "replacement": "assistant-generation-http-only",
+          "contextRead": "actual-action-api"
+        },
+        {
+          "phase": "desktop",
+          "label": "context-conflict",
+          "replacement": "assistant-generation-http-only",
+          "contextRead": "actual-action-api"
+        },
+        {
+          "phase": "desktop",
+          "label": "desktop-lost-delivery",
+          "replacement": "assistant-generation-http-only",
+          "contextRead": "actual-action-api"
+        },
+        {
+          "phase": "desktop",
+          "label": "account-change",
+          "replacement": "assistant-generation-http-only",
+          "contextRead": "actual-action-api"
+        },
+        {
+          "phase": "mobile",
+          "label": "mobile-first",
+          "replacement": "assistant-generation-http-only",
+          "contextRead": "actual-action-api"
+        },
+        {
+          "phase": "mobile",
+          "label": "mobile-lost-delivery",
+          "replacement": "assistant-generation-http-only",
+          "contextRead": "actual-action-api"
+        }
+      ],
+      "modelGeneration": "synthetic; no live model result is certified",
+      "exactReplayAndAntiResurrection": true,
+      "missingJourneyGetAndPostDeniedWithoutInitialization": true
+    },
+    "declaredScope": {
+      "genuine": [
+        "actual coach and action-review UI with unchanged application source",
+        "local email Auth, cookies, action API, owner document RLS and PostgreSQL RPC",
+        "typed command, atomic document/receipt commit, readback, exact replay and anti-resurrection",
+        "canonical pending day/context selection and seven canonical progress table snapshots"
+      ],
+      "fixtures": [
+        "four fresh synthetic local owners: desktop, mobile, A2-locked and later pilot-revoked",
+        "minimal dtc_documents table inherited explicitly from AG03; its production creation migration is absent",
+        "synthetic C1/C2/A1 and admission prerequisites; no participant assessment or practice completion"
+      ],
+      "substitutions": [
+        "only the assistant generation HTTP response is a declared synthetic reviewed proposal",
+        "that proposal uses the action API current day/hash/guidance; no successful action API response is fabricated",
+        "root document/font shell inherited from the preceding laboratory",
+        "declared local source edits, deleted document and delayed/lost HTTP delivery for recovery scenarios",
+        "after genuine login, the A2-locked fixture journey row is deleted locally; direct action requests must not recreate it or alter its seven canonical tables"
+      ],
+      "notVerified": [
+        "real provider output, utility, latency, cost or real canary traffic",
+        "remote migration, deployment, production document schema or external OAuth",
+        "global transactional freshness across independent context writes",
+        "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+        "manual UAT participant cases or effectiveness of the practice"
+      ],
+      "privacy": "Only synthetic screenshots and sanitized verdicts; no credentials, cookies, HAR, storageState or private server logs."
+    }
+  },
+  "AG03Reexecution": {
+    "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "scope": "disposable-local-a2-plan",
+    "sourceCount": 27,
+    "verifiedCopiedSources": [
+      {
+        "path": "app/despega/a2/coach/page.tsx",
+        "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-chat-coach.tsx",
+        "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-reviewed-plan.tsx",
+        "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-plan-evidence-review.tsx",
+        "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-assistant-action.tsx",
+        "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a2/assistant-actions/route.ts",
+        "sha256": "5c52d33751036ef67c6cb57d8959120678149916c1ea2c3bf88ac55056e4e4cf",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a2/plan/route.ts",
+        "sha256": "a649b7a5c31270186e39f6d73f1b4727ab40be14d1fc8e4f40a0b2a775f7d2a2",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/despega/a2-coach/route.ts",
+        "sha256": "c04c72d05fb132c9a97e6e19bd4af743eae0dc6ab93bd77ccf0f902b0214d7bc",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-contract.ts",
+        "sha256": "ea153a56b1f8221c965cd74ec4ed7935baeefc63745e9bcb75dd9754589a181f",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/contracts.ts",
+        "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/runtime.ts",
+        "sha256": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/openai.ts",
+        "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/canary.ts",
+        "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-api.ts",
+        "sha256": "995018f01334a47b6bd5ca774d46d34c14e84e03fa567153afbb83a8787dd63d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-context.ts",
+        "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-contract.ts",
+        "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-service.ts",
+        "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-api.ts",
+        "sha256": "c1058c2b290098dafb05530e16af667a08fa840a93b113b3ac18a74e1debd80f",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-contract.ts",
+        "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-service.ts",
+        "sha256": "7132ac70f0e65c5914e918ae92a31ce08bf8244464b79fd691655bf110e0a90e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/review-evidence-contract.ts",
+        "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/review-evidence-service.ts",
+        "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/response-capture.ts",
+        "sha256": "56bfc03f3a8fd17747b7ef59d1a47bda2975ff7242a306a11c6442c150ce5dea",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/response-history.ts",
+        "sha256": "29936ce2597650ddf099892f2ef6d208745030541cc6ae292e18a66f7a536e68",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/a2-execution-capability.ts",
+        "sha256": "cf03ac91e3eb074820d897ccea8ad36eef8f0def87506cd26592c7f91a9454cb",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/a3-interview-capability.ts",
+        "sha256": "139112eae52d37f14fc838b59dbfb4dc8a1b71bbf0bd57680bb1723cb703fd8a",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a4/strategic-radar.ts",
+        "sha256": "7e65be4ae1558b9d54af56c01070e900e53135fe2ff1eb388af88b993ded93e8",
+        "candidateMatchesLocal": true
+      }
+    ],
+    "seed": {
+      "migration": "20261106201731_a2_reviewed_plan_atomic.sql",
+      "migrationAppliedTwice": true,
+      "migrationSource": {
+        "path": "supabase/migrations/20261106201731_a2_reviewed_plan_atomic.sql",
+        "sha256": "0665f5db6e0a738dc598c54991818fb1e282461e0f02208d822ba2415e80ca99",
+        "candidateMatchesLocal": true
+      },
+      "migrationHashEmbeddedInSeed": false,
+      "syntheticBrowserOwners": 3,
+      "eligibleA2": 2,
+      "admittedWithoutA2": 1,
+      "remoteOperations": 0,
+      "contextFixture": "minimal dtc_documents owner SELECT/INSERT; no content seeded",
+      "canonicalProgress": "synthetic A2 entry prerequisites only; no task completion or XP"
+    },
+    "sql": {
+      "scope": "disposable-local-postgresql",
+      "casesPassed": 22,
+      "caseNames": [
+        "service-only invoker functions, explicit grants and forced owner RLS",
+        "new plan commits one stable slot, history and metadata receipt with one timestamp",
+        "real owner SELECT isolation, no anonymous read and denied direct client mutations/RPCs",
+        "same request ID is bound to owner and stable command; reordered JSON replays",
+        "stale CAS preserves both saved history and new unsaved command receipt absence",
+        "two real concurrent writers serialize per owner, one CAS winner, another owner stays independent",
+        "two real concurrent identical commands commit once and return a replay",
+        "pause/resume preserve confirmed content and reject invalid terminal transitions",
+        "completion requires declared finished steps and never modifies canonical completion or XP",
+        "real failure at current rolls back current/history/receipt and same command can retry",
+        "real failure at history rolls back current/history/receipt and same command can retry",
+        "real failure at receipt rolls back current/history/receipt and same command can retry",
+        "failed deletion restores content and complete history at purge and receipt boundaries",
+        "delete purges all snapshots, old lost-ACK retries never resurrect, explicit fresh CAS may create again",
+        "source mismatch, unavailable or stale snapshot cannot create a plan",
+        "resume rejects a changed context even when the new command hash matches that changed context",
+        "Santiago today and day+30 are inclusive; past/day+31 and aged resume are refused",
+        "SQL validates actual calendar dates, strict fields, bounded strings and unique step IDs",
+        "compact JSON byte accounting agrees with the actual TypeScript contract at the 12000-byte edge",
+        "pilot admission is checked inside both RPCs and receipt lookup never creates admission",
+        "pilot membership remains locked through the plan commit during a real concurrent revocation",
+        "all plan operations preserve seeded canonical milestones, task rows, XP and browser owners"
+      ],
+      "syntheticOwnersCreated": 20,
+      "syntheticOwnersRemoved": true,
+      "browserOwnersUnchanged": true,
+      "remoteOperations": 0,
+      "invarianceEvidence": "Passing producer assertions compare complete seeded before/after rows; raw row snapshots are not present in this summary."
+    },
+    "advisors": {
+      "scope": "candidate A2 plan tables, private history/receipts and functions",
+      "candidateFindings": 0,
+      "totalLaboratoryFindings": 0,
+      "cliVersionReported": "2.117.0",
+      "command": "supabase db advisors --local --type security --level warn --output-format json",
+      "remoteOperations": 0
+    },
+    "browser": {
+      "stepsPassed": 17,
+      "stepsByPhase": {
+        "desktop": 10,
+        "mobile": 6,
+        "access": 1
+      },
+      "steps": [
+        {
+          "phase": "desktop",
+          "name": "actual email login and owner GET show no prior plan",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "explicit save persists through reload and paused plans resume from the same owner slot",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "correction, declared step completion, completion and cancellation preserve explicit user control",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "real CAS conflict preserves the local draft until explicit comparison and a fresh save",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "source changes require explicit re-review and preserve the canonical continuation",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "real read and source failures preserve saved data and never present a false fresh or empty plan",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "a real tab return refreshes source freshness while retaining the editor for explicit review",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "lost ACK retains the draft; GET does not confirm the command; exact replay returns receipt plus current deletion",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "actual account change during delivery clears personal UI and cannot apply the prior actor response",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "all plan operations leave the complete canonical progress and XP snapshots unchanged",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "actual email login and owner GET show no prior plan",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "mobile editor caps steps at five and preserves focus when removing them",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "explicit save persists through reload and paused plans resume from the same owner slot",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "correction, declared step completion, completion and cancellation preserve explicit user control",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "mobile deletion requires confirmation, purges content and retains the owner revision tombstone",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "all plan operations leave the complete canonical progress and XP snapshots unchanged",
+          "status": "PASS"
+        },
+        {
+          "phase": "access",
+          "name": "actual API rejects anonymous and admitted-but-A2-locked owners without creating a plan",
+          "status": "PASS"
+        }
+      ],
+      "progressTablesCompared": [
+        "despega_user_profiles",
+        "despega_journey_state",
+        "a2_user_task_completions",
+        "a3_user_progress",
+        "a3_route_progression",
+        "user_gamification_profile",
+        "user_dtc_balance"
+      ],
+      "canonicalInvariantEvidence": "Passing desktop/mobile full-snapshot comparison scenarios; no raw canonical row snapshots are exported.",
+      "accessibilityScans": 8,
+      "accessibilityViolations": [],
+      "incompleteScans": 7,
+      "incompleteResults": 7,
+      "incompleteRules": [
+        "color-contrast"
+      ],
+      "accessibility": [
+        {
+          "phase": "desktop",
+          "name": "editor",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "completed",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "conflict-retains-draft",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "replay-after-deletion",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "account-change",
+          "violations": [],
+          "incomplete": []
+        },
+        {
+          "phase": "mobile",
+          "name": "editor",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "completed",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "deleted",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        }
+      ],
+      "layouts": [
+        {
+          "phase": "desktop",
+          "name": "editor",
+          "viewport": 1440,
+          "document": 1432
+        },
+        {
+          "phase": "desktop",
+          "name": "completed",
+          "viewport": 1440,
+          "document": 1432
+        },
+        {
+          "phase": "desktop",
+          "name": "conflict-retains-draft",
+          "viewport": 1440,
+          "document": 1432
+        },
+        {
+          "phase": "desktop",
+          "name": "replay-after-deletion",
+          "viewport": 1440,
+          "document": 1432
+        },
+        {
+          "phase": "desktop",
+          "name": "account-change",
+          "viewport": 1440,
+          "document": 1432
+        },
+        {
+          "phase": "mobile",
+          "name": "editor",
+          "viewport": 390,
+          "document": 382
+        },
+        {
+          "phase": "mobile",
+          "name": "completed",
+          "viewport": 390,
+          "document": 382
+        },
+        {
+          "phase": "mobile",
+          "name": "deleted",
+          "viewport": 390,
+          "document": 382
+        }
+      ],
+      "javascriptErrors": 0,
+      "externalRequests": 0,
+      "recordedRequestFailures": [
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a2/plan",
+          "method": "POST",
+          "error": "net::ERR_CONNECTION_RESET"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a2/plan",
+          "method": "POST",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "recordedRequestFailureCount": 20,
+      "controlledFaults": [
+        {
+          "phase": "desktop",
+          "kind": "local_source_select_revoked",
+          "preservedSavedPlan": true
+        },
+        {
+          "phase": "desktop",
+          "kind": "local_plan_select_revoked",
+          "emptyPlanNotFabricated": true
+        },
+        {
+          "phase": "desktop",
+          "kind": "lost_200_after_verified_sql_commit",
+          "exactReplay": true,
+          "laterDeletionPreserved": true
+        }
+      ],
+      "screenshots": [
+        {
+          "name": "a2-plan-desktop-editor.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-desktop-editor.png",
+          "bytes": 440763,
+          "sha256": "7b97b00c6989aff941a3970e796e77e8a7ad63b822e715893fd821e77c273c6a",
+          "width": 1432,
+          "height": 3277,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1432,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-desktop-completed.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-desktop-completed.png",
+          "bytes": 339053,
+          "sha256": "0bce47758fd62936601140f9111ceba65a241b7d7d8b78758a4683da63ff90eb",
+          "width": 1432,
+          "height": 2047,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1432,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-desktop-conflict-retains-draft.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-desktop-conflict-retains-draft.png",
+          "bytes": 528143,
+          "sha256": "ddf28aaeb5ae69d006269f0de1833fe02ce7502bb8831325839eff438275f793",
+          "width": 1432,
+          "height": 4105,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1432,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-desktop-replay-after-deletion.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-desktop-replay-after-deletion.png",
+          "bytes": 308673,
+          "sha256": "e0be4c237dbb5d13b4c2330e306e017ad78005f2675add3d17b48afe8a8c60e4",
+          "width": 1432,
+          "height": 1781,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1432,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-desktop-account-change.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-desktop-account-change.png",
+          "bytes": 126815,
+          "sha256": "2e48b640baa25a9bedf64f1c88c93a1b03389428f388cf542730920246911fa7",
+          "width": 1432,
+          "height": 1248,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1432,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-mobile-editor.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-mobile-editor.png",
+          "bytes": 312803,
+          "sha256": "3a1d79a8508fea5710d357fdc62e462020eff6caafc65cdc01cc7bc8c3cbddeb",
+          "width": 382,
+          "height": 3961,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 382,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-mobile-completed.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-mobile-completed.png",
+          "bytes": 229597,
+          "sha256": "60fbf7084d010b1b53abbf24061ed3808212132ecd16d4ed564325f97538a58c",
+          "width": 382,
+          "height": 2742,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 382,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-plan-mobile-deleted.png",
+          "path": "dtc-a1-browser/evidence/a2-plan-mobile-deleted.png",
+          "bytes": 185620,
+          "sha256": "0ed6740c63ee36e7bb5fa9b174054b7f834113c0e38b2ce208804db4dc11472f",
+          "width": 382,
+          "height": 2285,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 382,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        }
+      ],
+      "screenshotReview": "PNG presence, dimensions and SHA-256 verified; human visual review is not performed by this script.",
+      "transport": "Actual local UI, email Auth, API, RLS and SQL; no successful plan API response is mocked.",
+      "notVerified": [
+        "model quality, model calls or generated plan quality",
+        "remote deployment or migration application",
+        "atomic freshness across independent context source writes",
+        "a real participant completing A2 or the manual UAT cases"
+      ],
+      "nativePreflightAndApplicationReturnPassed": true,
+      "nativeTabReturns": [
+        {
+          "phase": "desktop",
+          "mechanism": "headed_chromium_native_tab_activation",
+          "focusEmulation": "disabled_in_pinned_adapter",
+          "away": {
+            "page": {
+              "visibility": "hidden",
+              "focused": false
+            },
+            "sibling": {
+              "visibility": "visible",
+              "focused": true
+            }
+          },
+          "returned": {
+            "page": {
+              "visibility": "visible",
+              "focused": true
+            },
+            "sibling": {
+              "visibility": "hidden",
+              "focused": false
+            }
+          },
+          "events": [
+            {
+              "type": "visibilitychange",
+              "isTrusted": true,
+              "visibility": "hidden",
+              "focused": false
+            },
+            {
+              "type": "blur",
+              "isTrusted": true,
+              "visibility": "hidden",
+              "focused": false
+            },
+            {
+              "type": "focus",
+              "isTrusted": true,
+              "visibility": "hidden",
+              "focused": true
+            },
+            {
+              "type": "visibilitychange",
+              "isTrusted": true,
+              "visibility": "visible",
+              "focused": true
+            }
+          ]
+        }
+      ],
+      "nativeFocusAdapter": {
+        "suite": "native-tab-focus-adapter",
+        "version": 1,
+        "status": "PASS",
+        "sourceCommit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+        "preparedAt": "2026-11-06T23:39:18.347Z",
+        "scope": "disposable-runner-tools-only",
+        "playwrightVersion": "1.56.1",
+        "playwrightCoreVersion": "1.56.1",
+        "adapter": "node_modules/playwright/node_modules/playwright-core/lib/server/chromium/crPage.js",
+        "npmIntegrity": "sha512-hutraynyn31F+Bifme+Ps9Vq59hKuUCz7H1kDOcBs+2oGguKkWTU50bBWrtz34OUWmIwpBTWDxaRPXrIXkgvmQ==",
+        "originalSha256": "79a25e4eac0d0fa97dcc6eae4edce83436bcdb4bb1322731f65610adaa8e150f",
+        "modifiedSha256": "9e0e8ffdbe9c9ae3322a3e5ea9e62968dceb161af3861c87d49e716713521d8d",
+        "replacements": 1,
+        "environmentFlag": {
+          "name": "DTC_NATIVE_TAB_FOCUS",
+          "nativeValue": "yes",
+          "defaultEnabled": true
+        }
+      },
+      "versionsReportedByPreflight": {
+        "nodeVersion": "v22.23.4",
+        "playwrightVersion": "1.56.1",
+        "chromiumVersion": "141.0.7390.37"
+      }
+    },
+    "declaredScope": {
+      "genuine": [
+        "actual A2 coach page, plan card, session boundary, API and server context readers",
+        "real local email Auth, cookies, owner RLS, private command receipts and PostgreSQL RPC",
+        "canonical journey access, objective revision and practice-adjustment readers",
+        "atomic CAS/history/receipt writes, deletion tombstone and preserved canonical progress"
+      ],
+      "fixtures": [
+        "two new synthetic local owners with explicitly seeded A2 eligibility and one admitted owner without A2 eligibility",
+        "minimal dtc_documents source table; no preexisting adjustment or plan content",
+        "synthetic C1/C2/A1 evidence is setup data, not an assessment of a real participant"
+      ],
+      "substitutions": [
+        "root document/font shell inherited from the existing browser laboratory",
+        "temporary database faults and intentionally dropped HTTP delivery test recovery only"
+      ],
+      "notVerified": [
+        "model quality, model calls or generated plan quality",
+        "remote deployment or migration application",
+        "atomic freshness across independent context source writes",
+        "a real participant completing A2 or the manual UAT cases"
+      ],
+      "privacy": "Only synthetic screenshots and sanitized verdicts; no keys, passwords, cookies, HAR, browser storage or private server logs."
+    },
+    "historyPolicy": "Separate AG03 execution for this candidate. This verifier neither changes nor reattributes earlier historical AG03 evidence."
+  },
+  "unitSummaries": {
+    "a2-action-contract.json": {
+      "suite": "a2-assistant-action-contract",
+      "casesPassed": 28,
+      "distinctCaseNames": 28,
+      "repeatedCaseNames": {},
+      "scopeChecks": {
+        "actualContracts": true,
+        "realDatabase": false,
+        "modelCalls": 0,
+        "externalNetworkCalls": 0
+      },
+      "verifiedSourceHashes": [
+        {
+          "path": "lib/a2/assistant-action-contract.ts",
+          "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/test-a2-action-contract.mjs",
+          "sha256": "1281a056a24cc9c1ecdd985084cb77e300fd9d4f965ca8b37e82941379b22be7",
+          "candidateMatchesLocal": true
+        }
+      ]
+    },
+    "a2-action-api.json": {
+      "suite": "a2-action-api",
+      "casesPassed": 76,
+      "distinctCaseNames": 76,
+      "repeatedCaseNames": {},
+      "scopeChecks": {
+        "actualRoute": true,
+        "actualHandlers": true,
+        "actualContextHashing": true,
+        "actualStorageReader": true,
+        "actualSupabaseSelectBuilder": true,
+        "sessionJourneyPortsAndStore": "synthetic",
+        "externalNetworkCalls": 0,
+        "liveSqlOrRls": false
+      },
+      "verifiedSourceHashes": [],
+      "syntheticDatabaseHttp": 54
+    },
+    "a2-plan-contract.json": {
+      "suite": "a2-reviewed-plan-contract",
+      "casesPassed": 56,
+      "distinctCaseNames": 56,
+      "repeatedCaseNames": {},
+      "scopeChecks": {
+        "actualContracts": true,
+        "actualCanonicalJourneyProjection": true,
+        "pureHelpersOnly": true,
+        "realDatabase": false,
+        "remoteAuth": false,
+        "modelCalls": 0,
+        "externalNetworkCalls": 0,
+        "productionRollout": false
+      },
+      "verifiedSourceHashes": [
+        {
+          "path": "lib/a2/plan-contract.ts",
+          "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/test-a2-plan-contract.mjs",
+          "sha256": "31c9c0138180d21a26d78e9d04377c30c59cf989287d22043a0e163d470d5eab",
+          "candidateMatchesLocal": true
+        }
+      ]
+    },
+    "a2-plan-api.json": {
+      "suite": "a2-plan-api",
+      "casesPassed": 39,
+      "distinctCaseNames": 39,
+      "repeatedCaseNames": {},
+      "scopeChecks": {
+        "actualHandlers": true,
+        "actualContextHashing": true,
+        "actualStorageReader": true,
+        "actualSupabaseSelectBuilder": true,
+        "sessionAndStore": "synthetic",
+        "externalNetworkCalls": 0,
+        "liveSqlOrRls": false
+      },
+      "verifiedSourceHashes": [],
+      "syntheticDatabaseHttp": 16
+    },
+    "a2-assistant-route.json": {
+      "suite": "a2-assistant-route",
+      "casesPassed": 128,
+      "distinctCaseNames": 126,
+      "repeatedCaseNames": {
+        "baseline final review identity failure drops every private output without a recovery loophole": 2,
+        "swarm final review identity failure drops every private output without a recovery loophole": 2
+      },
+      "scopeChecks": {
+        "actualRoute": true,
+        "sessionAndReadPorts": "synthetic",
+        "providerTransport": "synthetic",
+        "liveAuthOrRls": false,
+        "liveModelQuality": false,
+        "externalNetworkCalls": 0
+      },
+      "verifiedSourceHashes": [],
+      "syntheticProviderCalls": 134
+    },
+    "a2-swarm-runtime.json": {
+      "suite": "a2-swarm-runtime",
+      "casesPassed": 108,
+      "distinctCaseNames": 107,
+      "repeatedCaseNames": {
+        "Tool payload rejects unsafe or invalid nextAction: policy_violation": 2
+      },
+      "scopeChecks": {
+        "actualCoordinator": true,
+        "modelCompletionsAndHttp": "synthetic",
+        "externalNetworkCalls": 0,
+        "liveModelQuality": false,
+        "productionRollout": false
+      },
+      "verifiedSourceHashes": [
+        {
+          "path": "lib/a2/swarm/contracts.ts",
+          "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/swarm/runtime.ts",
+          "sha256": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/swarm/openai.ts",
+          "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/test-a2-swarm.mjs",
+          "sha256": "db083392ae406ac429563d0a5a0f5af4b4cf6709b55abd47e4510b15105133fd",
+          "candidateMatchesLocal": true
+        }
+      ],
+      "syntheticCompletionCalls": 222,
+      "syntheticHttpCalls": 3
+    },
+    "a2-swarm-provider.json": {
+      "suite": "a2-swarm-provider",
+      "casesPassed": 42,
+      "distinctCaseNames": 42,
+      "repeatedCaseNames": {},
+      "scopeChecks": {
+        "actualProviderAdapter": true,
+        "http": "synthetic",
+        "externalNetworkCalls": 0,
+        "liveModelQuality": false,
+        "productionRollout": false
+      },
+      "verifiedSourceHashes": [
+        {
+          "path": "lib/a2/swarm/contracts.ts",
+          "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/swarm/openai.ts",
+          "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/test-a2-swarm-provider.mjs",
+          "sha256": "6865f645342c7eaae3554a683a59ab31c19b9143d60abddc0233bb0af7f923e2",
+          "candidateMatchesLocal": true
+        }
+      ],
+      "syntheticHttpCalls": 31
+    },
+    "a2-swarm-canary.json": {
+      "suite": "a2-swarm-canary",
+      "casesPassed": 56,
+      "distinctCaseNames": 56,
+      "repeatedCaseNames": {},
+      "scopeChecks": {
+        "actualSelector": true,
+        "actualEvidenceEvaluator": true,
+        "actualCli": true,
+        "liveTelemetryCertified": false,
+        "liveProvenanceCertified": false,
+        "productionRollout": false,
+        "networkRequests": 0
+      },
+      "verifiedSourceHashes": [
+        {
+          "path": "lib/a2/swarm/canary.ts",
+          "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/swarm/canary-evidence.ts",
+          "sha256": "058db373f730c88007fc964706f68340f54231f9f3de59b7be3cace763b2e0e5",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/swarm/contracts.ts",
+          "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/check-a2-swarm-canary.mjs",
+          "sha256": "bec6e73ce017c902642724d6a40eb003a9e9d9e824c63915513279de216bea55",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/test-a2-swarm-canary.mjs",
+          "sha256": "5655df8e2ce1eb00e71f9361721d1c783bf54befc1800699d30b86d1aa26279a",
+          "candidateMatchesLocal": true
+        }
+      ],
+      "cliRuns": 12
+    },
+    "a2-review-evidence.json": {
+      "suite": "a2-review-evidence",
+      "casesPassed": 64,
+      "distinctCaseNames": 62,
+      "repeatedCaseNames": {
+        "A failed or malformed A3 read is unavailable while the verified A4 section remains": 3
+      },
+      "scopeChecks": {
+        "actualContracts": true,
+        "actualSourceReader": true,
+        "actualSupabaseSelectBuilder": true,
+        "actualPlanRoute": true,
+        "actualContextHashing": true,
+        "sessionAndHttp": "synthetic",
+        "realSqlOrRls": false,
+        "modelCalls": 0,
+        "externalNetworkCalls": 0
+      },
+      "verifiedSourceHashes": [
+        {
+          "path": "lib/a2/review-evidence-contract.ts",
+          "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/review-evidence-service.ts",
+          "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/plan-contract.ts",
+          "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/plan-context.ts",
+          "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "lib/a2/plan-service.ts",
+          "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "app/api/a2/plan/route.ts",
+          "sha256": "a649b7a5c31270186e39f6d73f1b4727ab40be14d1fc8e4f40a0b2a775f7d2a2",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "scripts/test-a2-review-evidence.mjs",
+          "sha256": "209b119055fce2d76c29e6d547c458c5f2c2f69327716f1f0162c29bf10a92d2",
+          "candidateMatchesLocal": true
+        }
+      ],
+      "syntheticDatabaseHttp": 237
+    }
+  },
+  "verifiedProducerSources": [
+    {
+      "path": ".github/workflows/a1-browser-qa.yml",
+      "sha256": "cbffde9e3ba62b53955fef8239c714b6cc00fb1c4f7c4578e4c670f202d3a205",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-prepare.mjs",
+      "sha256": "194dd4197b5ad89c101574d81be2946d3f75c2892242a6be01d19e857c53af50",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-seed.ts",
+      "sha256": "ae3447094e1c447c61ae9f553a47a2bdb6105f754b8c1c2c951ff628ffcd6091",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-advisors.mjs",
+      "sha256": "3e84a220132684df032f6ce4a3d182cd9a341e98de059343cc35031c9d1c891e",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-action-browser.mjs",
+      "sha256": "b08f323c70001c47aa018729dff95c02116e79f248ac44be4bc229b1249fb619",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-action-sql.mjs",
+      "sha256": "16304075d3a2ab0b6adf463c7a9eefa4cbadb8241263c5670b556c8479a6091a",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-action-contract.mjs",
+      "sha256": "1281a056a24cc9c1ecdd985084cb77e300fd9d4f965ca8b37e82941379b22be7",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-action-api.mjs",
+      "sha256": "5c0360fcb2188b21d9d634a569bc6d2b6c54e9ff6db20e9e4b2636c130e1c630",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-prepare.mjs",
+      "sha256": "d9fe4a75c47fecb6bb94beb2b9ce40906667de7bf0481238858772b7cdd55fb1",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-seed.ts",
+      "sha256": "491b52c11b62a98e162e5c7e84c3c6bd238a19fa9dd8a837d7377e07cf75ad4b",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-advisors.mjs",
+      "sha256": "a520856cfb3abe3c746625ad1d9f71315e703d0d655bc4488e07a45720abb0fe",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-plan-browser.mjs",
+      "sha256": "ee6feadecf3b540a9b02ce86de98745a6e8cacfcc8d53f097d2ff9630297ee3b",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-plan-sql.mjs",
+      "sha256": "8d932e5ba466dd0b6d756ee00971dd3819169aaccbd96aab61843101f05831cd",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-plan-contract.mjs",
+      "sha256": "31c9c0138180d21a26d78e9d04377c30c59cf989287d22043a0e163d470d5eab",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-plan-api.mjs",
+      "sha256": "3d11af06f8d5d679378008e2f368f4ce0d252d9153b61fc43f70d02886abdec2",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/focus-visibility-preflight.mjs",
+      "sha256": "6d4078cb95aca8e5b4b3c82d5ce07ce90f080783c521b839d96cab075e2c7978",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/prepare-native-tab-focus.mjs",
+      "sha256": "76de96eb3bdf010defb574c4135ac971347d91be74af574a1578da66a3ab3e01",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/native-tab-return.mjs",
+      "sha256": "10c048d5f4418c910379f3375690f254048c5a254fafd186b5a2163720023e97",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-assistant.cjs",
+      "sha256": "f6ef301c31d129494798dd193dcbf73ee4eefa05c2345988ac8cf92695c9b299",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-swarm.mjs",
+      "sha256": "db083392ae406ac429563d0a5a0f5af4b4cf6709b55abd47e4510b15105133fd",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-swarm-provider.mjs",
+      "sha256": "6865f645342c7eaae3554a683a59ab31c19b9143d60abddc0233bb0af7f923e2",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-swarm-canary.mjs",
+      "sha256": "5655df8e2ce1eb00e71f9361721d1c783bf54befc1800699d30b86d1aa26279a",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-review-evidence-prepare.mjs",
+      "sha256": "033c6d3d8783001a3de99200b5dac93b889b045e3b4bc509f36f83630a88bf63",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-review-evidence-seed.ts",
+      "sha256": "291b11ea6cb0fba26f32255dadfbafa818bbe8b3bc51f839c681837bac632c62",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-review-evidence-advisors.mjs",
+      "sha256": "b5bab8d95123608d1af634ee2b0f4609c766dfbfb64e8149a5c344ec33b0a323",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/a1-browser-qa/a2-review-evidence-browser.mjs",
+      "sha256": "246f87ee2485e40756ffb1cc7ef00bb704abc45400e8066c30d8d231ea4ab08b",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-review-evidence-sql.mjs",
+      "sha256": "0e12ca2517f59c03340e5987c2221ef65db8d0a56bc54533e6059aa36c28998f",
+      "candidateMatchesLocal": true
+    },
+    {
+      "path": "scripts/test-a2-review-evidence.mjs",
+      "sha256": "209b119055fce2d76c29e6d547c458c5f2c2f69327716f1f0162c29bf10a92d2",
+      "candidateMatchesLocal": true
+    }
+  ],
+  "limitations": [
+    "This program verifies the supplied records, source attribution and file integrity; it does not independently rerun PostgreSQL, RLS or browser assertions.",
+    "AG04 proposal generation is synthetic; action Auth/API/RLS/PostgreSQL behavior is covered by the recorded real laboratory assertions.",
+    "Canonical invariance and cleanup are passing assertions in the SQL/browser records; full raw database snapshots are not exported.",
+    "Source context is dated; no global transaction across legacy/context writers is certified.",
+    "No live AI quality/cost/latency, canary activation, remote deployment, physical mobile/Safari, human visual acceptance or manual UAT execution is certified.",
+    "AG05 source fixtures and full progression are synthetic access setup; no real participant completion or capability improvement is established.",
+    "AG05 real browser persistence performs no generation request; common baseline/swarm context and action-plus-A3/A4 behavior are covered by separate synthetic-port route tests.",
+    "A4 records are user declarations. Linked source contents and external outcomes have not been independently verified.",
+    "Utility with participants, the 54 manual UAT cases, prior business GO and default-off production posture remain outside this technical artifact verification."
+  ],
+  "AG05": {
+    "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "scope": "disposable-local-a2-review-evidence",
+    "sourceCount": 41,
+    "verifiedCopiedSources": [
+      {
+        "path": "app/despega/a2/coach/page.tsx",
+        "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-chat-coach.tsx",
+        "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-reviewed-plan.tsx",
+        "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-plan-evidence-review.tsx",
+        "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/a2-assistant-action.tsx",
+        "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "components/layout/app-shell.tsx",
+        "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a2/plan/route.ts",
+        "sha256": "a649b7a5c31270186e39f6d73f1b4727ab40be14d1fc8e4f40a0b2a775f7d2a2",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/despega/a2-coach/route.ts",
+        "sha256": "c04c72d05fb132c9a97e6e19bd4af743eae0dc6ab93bd77ccf0f902b0214d7bc",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/outcomes/observations/route.ts",
+        "sha256": "ef2a43806a01c24bd0c405240b0897119846344554864396c47d0381228f8408",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a2/assistant-actions/route.ts",
+        "sha256": "5c52d33751036ef67c6cb57d8959120678149916c1ea2c3bf88ac55056e4e4cf",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a4/decisions/route.ts",
+        "sha256": "31588117d5fa5956a14e3d5ebc31b20a3d5105c3b9c7a56ad605267a2ab1252b",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "app/api/a4/signals/route.ts",
+        "sha256": "6d74b6c49ff1abbcf134f587be80ae4a9a247eebce1a8478066e915822a87930",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/review-evidence-contract.ts",
+        "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/review-evidence-service.ts",
+        "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-contract.ts",
+        "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-context.ts",
+        "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-api.ts",
+        "sha256": "995018f01334a47b6bd5ca774d46d34c14e84e03fa567153afbb83a8787dd63d",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/plan-service.ts",
+        "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-contract.ts",
+        "sha256": "ea153a56b1f8221c965cd74ec4ed7935baeefc63745e9bcb75dd9754589a181f",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/api-access.ts",
+        "sha256": "a9a3112ee5f00e4ce6481314c45319ddf1382123144454c0a27d01ca92ba22d4",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-contract.ts",
+        "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-api.ts",
+        "sha256": "c1058c2b290098dafb05530e16af667a08fa840a93b113b3ac18a74e1debd80f",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/assistant-action-service.ts",
+        "sha256": "7132ac70f0e65c5914e918ae92a31ce08bf8244464b79fd691655bf110e0a90e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/contracts.ts",
+        "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/runtime.ts",
+        "sha256": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/openai.ts",
+        "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a2/swarm/canary.ts",
+        "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/service.ts",
+        "sha256": "034430d06e1709c483b117c88863702e46a33a042caf1ed3606039689ef39598",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/flow.ts",
+        "sha256": "4a2501bdde4d30e62b6690347fb9c2b43d63954db9555e111d0b94640c574fb3",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/flow-service.ts",
+        "sha256": "b8f5c305260f54ea8121b35103cbd9130abcf778b14c0bd79a6b44a183adb960",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/next-action.ts",
+        "sha256": "4b724dd24aba7615a2b66010648cc1e312bf37f09f09e11ebe7ebe004358cadf",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/journey/next-action-service.ts",
+        "sha256": "dbe6fdca1d361a46503398c3bb748c4ce6eb1cf43af4ad9a7ead97ed15c7b8e2",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/response-capture.ts",
+        "sha256": "56bfc03f3a8fd17747b7ef59d1a47bda2975ff7242a306a11c6442c150ce5dea",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/response-history.ts",
+        "sha256": "29936ce2597650ddf099892f2ef6d208745030541cc6ae292e18a66f7a536e68",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/a2-execution-capability.ts",
+        "sha256": "cf03ac91e3eb074820d897ccea8ad36eef8f0def87506cd26592c7f91a9454cb",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/outcomes/a3-interview-capability.ts",
+        "sha256": "139112eae52d37f14fc838b59dbfb4dc8a1b71bbf0bd57680bb1723cb703fd8a",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a3/module-catalog.ts",
+        "sha256": "c1a6e66f50afd62107b858f858b034f65d88470e03314671904b391f9fac1015",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a4/strategic-radar.ts",
+        "sha256": "7e65be4ae1558b9d54af56c01070e900e53135fe2ff1eb388af88b993ded93e8",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a4/access-control.ts",
+        "sha256": "c09cfe17ded363179a13904c33469e235154f9c5d2dd1e9f6399ee2665e8ec59",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a4/source-integrity.ts",
+        "sha256": "65019b738f226192b223e48d715b21731da07ce2554d1bf362e3b922b8ba0181",
+        "candidateMatchesLocal": true
+      },
+      {
+        "path": "lib/a4/qa-entitlement.ts",
+        "sha256": "9ca5d61eb3ff756784789493ec1f5b5eeb954e4ff69157633484bf3312f36b8d",
+        "candidateMatchesLocal": true
+      }
+    ],
+    "seed": {
+      "migrationSequenceAppliedTwice": true,
+      "newMigration": false,
+      "inheritedOutcomeVersion": "2-capture",
+      "syntheticAuthOwnersCreated": 4,
+      "fullHistoryOwners": 3,
+      "syntheticA2DaysPerFullHistoryOwner": 90,
+      "syntheticA3ModulesPerFullHistoryOwner": 10,
+      "eligibleProfessionalOwners": 2,
+      "personalHistoryOwner": 1,
+      "admittedA2WithoutA3A4": 1,
+      "qaEntitlements": 0,
+      "initialPlans": 0,
+      "initialPlanReceipts": 0,
+      "remoteOperations": 0,
+      "previousOwnersPreserved": 17,
+      "sourceRowsPerOwner": {
+        "a3UnscoredCaptures": 2,
+        "ignoredNumericV1": 1,
+        "a4Signals": 1,
+        "a4OpenDecisions": 1,
+        "a4ClosedDecisions": 1
+      },
+      "verifiedExistingMigrations": [
+        {
+          "path": "migrations/08-a4-signal-decision-log.sql",
+          "sha256": "4e4181c145611883523c1a35d4623f853c99593da5c9a3e330bc76294b8fd146",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "migrations/10-a4-server-owned-write-hardening.sql",
+          "sha256": "b9475e8e13a563f30a42b80cc19e2b8d29ba47b805da299872c7e8fdd31cc989",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "supabase/migrations/20260914153833_a4_source_integrity.sql",
+          "sha256": "3519e095f3bb019723f051a9e9091974d6c822f71c320e01174a6d64e57d609c",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "supabase/migrations/20260914154438_a4_source_integrity_backward_compatibility.sql",
+          "sha256": "4dae7f0e34392dd030a82ca529526674ef094b48aaecc9d29e5e34c43a941944",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "supabase/migrations/20260914201532_restore_a4_source_integrity_coherence.sql",
+          "sha256": "33614b3ed71fdd7c4b2047127d4907a0d687a4cd15148974478d8f1336c29699",
+          "candidateMatchesLocal": true
+        },
+        {
+          "path": "supabase/migrations/20260920153000_a4_outcome_review.sql",
+          "sha256": "62b351fb2b9b89be2f16d4e07e1026f29645c97b7b17910dfee4d2ade217fc2e",
+          "candidateMatchesLocal": true
+        }
+      ],
+      "canonicalProgress": "Synthetic full progression is access setup only, not a participant completion or ability result. All seven canonical tables are snapshotted afterwards."
+    },
+    "sql": {
+      "casesPassed": 4,
+      "caseNames": [
+        "Actual source schemas enable owner RLS and expose SELECT only to authenticated clients",
+        "Each real owner reads only their source rows; cross-owner IDs return no payload",
+        "Anonymous reads cannot disclose A3 response text or A4 decisions and signal provenance",
+        "Authenticated source INSERT, UPDATE and DELETE remain denied even for the current owner"
+      ],
+      "sourceTables": [
+        "dtc_outcome_observations",
+        "a4_verified_signals",
+        "a4_decision_log"
+      ],
+      "allExistingRowsPreserved": true,
+      "priorOwnersChecked": 17,
+      "newOwnersCreatedByThisSuite": 0,
+      "remoteOperations": 0,
+      "invarianceEvidence": "Passing real role-boundary and full before/after row comparisons; raw database rows are not exported."
+    },
+    "advisors": {
+      "scope": "existing A3 capture, A4 signal/decision source objects and reused A2 plan persistence",
+      "candidateFindings": 0,
+      "totalLaboratoryFindings": 0,
+      "cliVersionReported": "2.117.0",
+      "command": "supabase db advisors --local --type security --level warn --output-format json",
+      "remoteOperations": 0
+    },
+    "browser": {
+      "stepsPassed": 15,
+      "stepsByPhase": {
+        "desktop": 8,
+        "mobile": 5,
+        "access": 2
+      },
+      "steps": [
+        {
+          "phase": "desktop",
+          "name": "real gated source read selects owner v2 captures and dated A4 decisions, excludes newer numeric v1 and performs no writes",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "only explicit confirmation saves the reviewed evidence snapshot through the existing atomic plan CAS and receipt",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "a real newly captured A3 response rejects the old fingerprint, preserves edits and requires explicit re-review before saving",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "a real A4 review changes the dated declaration context and updates the saved snapshot only after explicit plan review",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "actual source permission failure is unavailable rather than empty; confirmation fails closed and recovery preserves the saved plan",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "a newest malformed scored-v2 source blocks context instead of reviving an older valid record",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "exact command replay returns the prior receipt with the current plan; reload recovers the reviewed snapshot without new writes",
+          "status": "PASS"
+        },
+        {
+          "phase": "desktop",
+          "name": "all review and persistence operations preserve complete snapshots of seven canonical progress tables",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "real gated source read selects owner v2 captures and dated A4 decisions, excludes newer numeric v1 and performs no writes",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "only explicit confirmation saves the reviewed evidence snapshot through the existing atomic plan CAS and receipt",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "a real A4 source deletion is missing rather than unavailable; mobile review uses unscored A3 responses and explicitly updates the snapshot",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "exact command replay returns the prior receipt with the current plan; reload recovers the reviewed snapshot without new writes",
+          "status": "PASS"
+        },
+        {
+          "phase": "mobile",
+          "name": "all review and persistence operations preserve complete snapshots of seven canonical progress tables",
+          "status": "PASS"
+        },
+        {
+          "phase": "access",
+          "name": "personal and A3/A4-locked paths skip both professional source reads despite stored decoys and revoked SELECT, without any writes",
+          "status": "PASS"
+        },
+        {
+          "phase": "access",
+          "name": "actual Auth, wrong expected actor and revoked pilot access reject personal context and plan writes without side effects",
+          "status": "PASS"
+        }
+      ],
+      "progressTablesCompared": [
+        "despega_user_profiles",
+        "despega_journey_state",
+        "a2_user_task_completions",
+        "a3_user_progress",
+        "a3_route_progression",
+        "user_gamification_profile",
+        "user_dtc_balance"
+      ],
+      "canonicalInvariantEvidence": "Passing desktop/mobile full-snapshot comparison scenarios; no raw canonical row snapshots are exported.",
+      "accessibilityScans": 8,
+      "accessibilityViolations": [],
+      "incompleteScans": 8,
+      "incompleteResults": 8,
+      "incompleteRules": [
+        "color-contrast"
+      ],
+      "accessibility": [
+        {
+          "phase": "desktop",
+          "name": "source-review",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "editor",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "source-conflict",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "reviewed-a4-plan",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "desktop",
+          "name": "source-unavailable",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "source-review",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "editor",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        },
+        {
+          "phase": "mobile",
+          "name": "reviewed-a3-plan",
+          "violations": [],
+          "incomplete": [
+            "color-contrast"
+          ]
+        }
+      ],
+      "layouts": [
+        {
+          "phase": "desktop",
+          "name": "source-review",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "editor",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "source-conflict",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "reviewed-a4-plan",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "desktop",
+          "name": "source-unavailable",
+          "viewport": 1440,
+          "document": 1440
+        },
+        {
+          "phase": "mobile",
+          "name": "source-review",
+          "viewport": 390,
+          "document": 390
+        },
+        {
+          "phase": "mobile",
+          "name": "editor",
+          "viewport": 390,
+          "document": 390
+        },
+        {
+          "phase": "mobile",
+          "name": "reviewed-a3-plan",
+          "viewport": 390,
+          "document": 390
+        }
+      ],
+      "javascriptErrors": 0,
+      "externalRequests": 0,
+      "recordedRequestFailures": [
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "desktop",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "mobile",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/a4-strategic-score",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        },
+        {
+          "phase": "access",
+          "path": "/api/banco-central-data",
+          "method": "GET",
+          "error": "net::ERR_ABORTED"
+        }
+      ],
+      "recordedRequestFailureCount": 14,
+      "controlledFaults": [
+        {
+          "phase": "desktop",
+          "kind": "a4_owner_select_revoked",
+          "result": "unavailable_not_missing",
+          "savedPlanPreserved": true
+        },
+        {
+          "phase": "desktop",
+          "kind": "newest_v2_capture_contains_numeric_score",
+          "result": "unavailable_without_old_record_fallback"
+        },
+        {
+          "phase": "access",
+          "kind": "both_professional_source_selects_revoked",
+          "personalResult": "not_applicable",
+          "lockedResult": "locked",
+          "contextStillAvailable": true
+        }
+      ],
+      "screenshots": [
+        {
+          "name": "a2-review-evidence-desktop-source-review.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-source-review.png",
+          "bytes": 513016,
+          "sha256": "80f5aead0c2a4eeefceabbdae2db3b22c88b15af2d7c5481b68d079a5b5b28e4",
+          "width": 1440,
+          "height": 3366,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-desktop-editor.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-editor.png",
+          "bytes": 619239,
+          "sha256": "9808396a4e73dbaa41c419c0a41b8dc196b58d1fb65a300c721d0aaf436de98c",
+          "width": 1440,
+          "height": 4539,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-desktop-source-conflict.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-source-conflict.png",
+          "bytes": 711802,
+          "sha256": "1f032107311f4424957d498273381b4b66f28c49c7056e00ae961b48a54bba74",
+          "width": 1440,
+          "height": 5345,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-desktop-reviewed-a4-plan.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-reviewed-a4-plan.png",
+          "bytes": 528770,
+          "sha256": "01213061dacb9f07846db868b50635043ded0779c75139cb8ea806edd16ab963",
+          "width": 1440,
+          "height": 3659,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-desktop-source-unavailable.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-source-unavailable.png",
+          "bytes": 443226,
+          "sha256": "03d1622f7d40a47454d3b51aa695e13ff20a8c8dd45f87ca446298cdc1ae25ad",
+          "width": 1440,
+          "height": 2937,
+          "recordedViewportWidth": 1440,
+          "recordedDocumentWidth": 1440,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-mobile-source-review.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-mobile-source-review.png",
+          "bytes": 374160,
+          "sha256": "13aa95498ebef34edd68e3b1b95c73e02a80104918339ba394c006f4965ed16e",
+          "width": 390,
+          "height": 3923,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 390,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-mobile-editor.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-mobile-editor.png",
+          "bytes": 451834,
+          "sha256": "cbb25fcac8d2e303f686c2ed7ebd08b902203de5e0b479dd7d8d2cc55a1a9512",
+          "width": 390,
+          "height": 5068,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 390,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        },
+        {
+          "name": "a2-review-evidence-mobile-reviewed-a3-plan.png",
+          "path": "dtc-a1-browser/evidence/a2-review-evidence-mobile-reviewed-a3-plan.png",
+          "bytes": 328312,
+          "sha256": "c5b665c9a33a8dc9802a107b87970e9c0a6b1b98a0342289a3ac75fa2bdde2a4",
+          "width": 390,
+          "height": 3608,
+          "recordedViewportWidth": 390,
+          "recordedDocumentWidth": 390,
+          "widthCheck": "exact full-page document width",
+          "matchesVerifiedArchiveEntry": true,
+          "heightCheck": "Positive observed IHDR height; the producer records document width only"
+        }
+      ],
+      "screenshotReview": "PNG presence, dimensions and SHA-256 verified; human visual review is not performed by this script.",
+      "transport": "Actual UI, email Auth, plan and source APIs, owner RLS and PostgreSQL. Synthetic source fixtures and declared local faults only; no successful response is mocked.",
+      "notVerified": [
+        "participant usefulness, career improvement, measured capability or causal benefit",
+        "real model generation quality, provider latency/cost or live canary traffic",
+        "independent verification of reported A4 outcomes or linked opportunity/source contents",
+        "global transactional freshness across independently updated evidence sources",
+        "remote migrations, production deployment or external OAuth",
+        "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+        "the 54 manual UAT cases or replacement of the prior business GO"
+      ],
+      "previousOwnersPreserved": true,
+      "previousOwnersCompared": 17,
+      "generationResponsesSubstituted": 0,
+      "modelRequestsFromBrowser": 0,
+      "sourceChanges": [
+        {
+          "phase": "desktop",
+          "kind": "new_a3_follow_up",
+          "transport": "actual authenticated capture API",
+          "scored": false
+        },
+        {
+          "phase": "desktop",
+          "kind": "a4_declared_review",
+          "transport": "actual authenticated A4 API with server-owned write",
+          "externalOutcome": "no_external_change",
+          "readerSource": "canonical decision row; derived legacy scores are not consumed"
+        },
+        {
+          "phase": "mobile",
+          "kind": "a4_decisions_deleted",
+          "transport": "declared local SQL source event",
+          "deletedRows": 2
+        }
+      ],
+      "sourceChangeCount": 3,
+      "inferenceBoundary": "Recorded declarations and review dates; no measured capability or participant utility is certified."
+    },
+    "declaredScope": {
+      "genuine": [
+        "actual reviewed plan and evidence-review UI, session boundary, plan API and bounded evidence reader",
+        "real local email Auth, cookies, owner SELECT RLS, PostgreSQL plan CAS, history and immutable receipts",
+        "actual existing A3 capture and A4 signal/decision migrations, with current server-owned write hardening",
+        "source changes alter the context fingerprint; explicit review stores the new snapshot and survives reload",
+        "complete snapshots of seven canonical progress tables; previous laboratory owners preserved"
+      ],
+      "fixtures": [
+        "four fresh synthetic local owners: desktop, mobile, personal path and A3/A4-locked",
+        "three owners have synthetic full 90-day A2 history and all ten A3 modules plus route closure for real access gating",
+        "the personal-path owner retains historical professional records solely to verify non-applicability and query skipping",
+        "the locked owner has A2 entry prerequisites but no A3/A4 access, despite decoy source records",
+        "dated A3 v2 captures, numeric v1 decoys and A4 decisions are synthetic declared source fixtures, never participant outcomes",
+        "minimal older supporting tables and document source inherited explicitly from the prior laboratory"
+      ],
+      "substitutions": [
+        "root document/font shell inherited from the preceding laboratory",
+        "declared local source changes and SELECT revocation faults exercise freshness and unavailable states",
+        "no provider call in this browser phase; shared baseline/swarm model-context behavior uses the separate declared synthetic-transport regression suite"
+      ],
+      "notVerified": [
+        "participant usefulness, career improvement, measured capability or causal benefit",
+        "real model generation quality, provider latency/cost or live canary traffic",
+        "independent verification of reported A4 outcomes or linked opportunity/source contents",
+        "global transactional freshness across independently updated evidence sources",
+        "remote migrations, production deployment or external OAuth",
+        "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+        "the 54 manual UAT cases or replacement of the prior business GO"
+      ],
+      "privacy": "Only synthetic screenshots and sanitized verdicts; no keys, passwords, cookies, HAR, storageState or private server logs."
+    }
+  },
+  "observedResults": {
+    "a2-plan": {
+      "sql": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "recordedCases": 22,
+        "caseVerdicts": {
+          "PASS": 22
+        }
+      },
+      "browser-results": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "recordedSteps": 17,
+        "stepStatuses": {
+          "PASS": 17
+        },
+        "recordedAxeScans": 8,
+        "accessibility": [
+          {
+            "phase": "desktop",
+            "name": "editor",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "completed",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "conflict-retains-draft",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "replay-after-deletion",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "account-change",
+            "violations": [],
+            "incomplete": []
+          },
+          {
+            "phase": "mobile",
+            "name": "editor",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "completed",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "deleted",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          }
+        ],
+        "requestFailures": [
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a2/plan",
+            "method": "POST",
+            "error": "net::ERR_CONNECTION_RESET"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a2/plan",
+            "method": "POST",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "controlledFaults": [
+          {
+            "phase": "desktop",
+            "kind": "local_source_select_revoked",
+            "preservedSavedPlan": true
+          },
+          {
+            "phase": "desktop",
+            "kind": "local_plan_select_revoked",
+            "emptyPlanNotFabricated": true
+          },
+          {
+            "phase": "desktop",
+            "kind": "lost_200_after_verified_sql_commit",
+            "exactReplay": true,
+            "laterDeletionPreserved": true
+          }
+        ],
+        "failureScreenshot": null,
+        "layouts": [
+          {
+            "phase": "desktop",
+            "name": "editor",
+            "viewport": 1440,
+            "document": 1432
+          },
+          {
+            "phase": "desktop",
+            "name": "completed",
+            "viewport": 1440,
+            "document": 1432
+          },
+          {
+            "phase": "desktop",
+            "name": "conflict-retains-draft",
+            "viewport": 1440,
+            "document": 1432
+          },
+          {
+            "phase": "desktop",
+            "name": "replay-after-deletion",
+            "viewport": 1440,
+            "document": 1432
+          },
+          {
+            "phase": "desktop",
+            "name": "account-change",
+            "viewport": 1440,
+            "document": 1432
+          },
+          {
+            "phase": "mobile",
+            "name": "editor",
+            "viewport": 390,
+            "document": 382
+          },
+          {
+            "phase": "mobile",
+            "name": "completed",
+            "viewport": 390,
+            "document": 382
+          },
+          {
+            "phase": "mobile",
+            "name": "deleted",
+            "viewport": 390,
+            "document": 382
+          }
+        ]
+      },
+      "advisors": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "candidateFindings": [],
+        "totalLaboratoryFindings": 0
+      }
+    },
+    "a2-action": {
+      "sql": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "recordedCases": 20,
+        "caseVerdicts": {
+          "PASS": 20
+        }
+      },
+      "browser-results": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "recordedSteps": 13,
+        "stepStatuses": {
+          "PASS": 13
+        },
+        "recordedAxeScans": 8,
+        "accessibility": [
+          {
+            "phase": "desktop",
+            "name": "review",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "saved",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "context-conflict",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "replay-after-deletion",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "account-change",
+            "violations": [],
+            "incomplete": []
+          },
+          {
+            "phase": "mobile",
+            "name": "review",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "saved",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "recovered-confirmation",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          }
+        ],
+        "requestFailures": [
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a2/assistant-actions",
+            "method": "POST",
+            "error": "net::ERR_CONNECTION_RESET"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a2/assistant-actions",
+            "method": "POST",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a2/assistant-actions",
+            "method": "POST",
+            "error": "net::ERR_CONNECTION_RESET"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "controlledFaults": [
+          {
+            "phase": "desktop",
+            "kind": "lost_http_after_verified_commit",
+            "exactReplay": true,
+            "laterDeletion": true,
+            "currentEffect": "removed",
+            "unchangedPersistenceOnReplay": true
+          },
+          {
+            "phase": "mobile",
+            "kind": "lost_http_after_verified_commit",
+            "exactReplay": true,
+            "laterDeletion": false,
+            "currentEffect": "present",
+            "unchangedPersistenceOnReplay": true
+          },
+          {
+            "phase": "access",
+            "kind": "missing_canonical_journey_fixture",
+            "ownerFixture": "a2-action-locked",
+            "setup": "one local journey row deleted after genuine login; existing session reused without page navigation"
+          }
+        ],
+        "failureScreenshot": null,
+        "layouts": [
+          {
+            "phase": "desktop",
+            "name": "review",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "saved",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "context-conflict",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "replay-after-deletion",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "account-change",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "mobile",
+            "name": "review",
+            "viewport": 390,
+            "document": 390
+          },
+          {
+            "phase": "mobile",
+            "name": "saved",
+            "viewport": 390,
+            "document": 390
+          },
+          {
+            "phase": "mobile",
+            "name": "recovered-confirmation",
+            "viewport": 390,
+            "document": 390
+          }
+        ]
+      },
+      "advisors": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "candidateFindings": [],
+        "totalLaboratoryFindings": 0
+      }
+    },
+    "a2-review-evidence": {
+      "sql": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "recordedCases": 4,
+        "caseVerdicts": {
+          "PASS": 4
+        }
+      },
+      "browser-results": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "recordedSteps": 15,
+        "stepStatuses": {
+          "PASS": 15
+        },
+        "recordedAxeScans": 8,
+        "accessibility": [
+          {
+            "phase": "desktop",
+            "name": "source-review",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "editor",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "source-conflict",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "reviewed-a4-plan",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "desktop",
+            "name": "source-unavailable",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "source-review",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "editor",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          },
+          {
+            "phase": "mobile",
+            "name": "reviewed-a3-plan",
+            "violations": [],
+            "incomplete": [
+              "color-contrast"
+            ]
+          }
+        ],
+        "requestFailures": [
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "desktop",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "mobile",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/a4-strategic-score",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          },
+          {
+            "phase": "access",
+            "path": "/api/banco-central-data",
+            "method": "GET",
+            "error": "net::ERR_ABORTED"
+          }
+        ],
+        "controlledFaults": [
+          {
+            "phase": "desktop",
+            "kind": "a4_owner_select_revoked",
+            "result": "unavailable_not_missing",
+            "savedPlanPreserved": true
+          },
+          {
+            "phase": "desktop",
+            "kind": "newest_v2_capture_contains_numeric_score",
+            "result": "unavailable_without_old_record_fallback"
+          },
+          {
+            "phase": "access",
+            "kind": "both_professional_source_selects_revoked",
+            "personalResult": "not_applicable",
+            "lockedResult": "locked",
+            "contextStillAvailable": true
+          }
+        ],
+        "failureScreenshot": null,
+        "layouts": [
+          {
+            "phase": "desktop",
+            "name": "source-review",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "editor",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "source-conflict",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "reviewed-a4-plan",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "desktop",
+            "name": "source-unavailable",
+            "viewport": 1440,
+            "document": 1440
+          },
+          {
+            "phase": "mobile",
+            "name": "source-review",
+            "viewport": 390,
+            "document": 390
+          },
+          {
+            "phase": "mobile",
+            "name": "editor",
+            "viewport": 390,
+            "document": 390
+          },
+          {
+            "phase": "mobile",
+            "name": "reviewed-a3-plan",
+            "viewport": 390,
+            "document": 390
+          }
+        ]
+      },
+      "advisors": {
+        "present": true,
+        "reportedVerdict": "PASS",
+        "failure": null,
+        "candidateFindings": [],
+        "totalLaboratoryFindings": 0
+      }
+    }
+  },
+  "archiveVerification": {
+    "path": "/workspace/scratch/7122ccfe4f6a/ci-ag05-attempt-1/artifact.zip",
+    "bytes": 21825666,
+    "sha256": "6f83ca7bfb984cd65e2bc50d3798dc42506da4c1eed879c791a12ef7928da1bc",
+    "matchesGitHubSizeAndDigest": true,
+    "allEntryCrcsChecked": true,
+    "extractedDirectory": "/workspace/scratch/7122ccfe4f6a/ci-ag05-attempt-1/extracted",
+    "extractedFiles": 137,
+    "uncompressedBytes": 23074812,
+    "allExtractedBytesMatchArchive": true,
+    "extraExtractedFiles": 0,
+    "files": [
+      {
+        "path": "dtc-a1-browser/evidence/a1-desktop.png",
+        "bytes": 1076895,
+        "sha256": "5c84150a9a8207dcef220b1fbff2528f939fc71128bf61a79c274b3384253164",
+        "zipCrc32": "ee764d5c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a1-mobile-transition-390x844.png",
+        "bytes": 76681,
+        "sha256": "4a6d7f99925318221e6f74f61d6d98220637377966ef4650d89ae4efcd29d55a",
+        "zipCrc32": "d184ca08"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a1-mobile.png",
+        "bytes": 1154118,
+        "sha256": "3b13d34591b236591b9a21ecc8f92888a1862af553609b9f910e3b9785a5304c",
+        "zipCrc32": "36535c9c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a1-synthetic.pdf",
+        "bytes": 87078,
+        "sha256": "a1b838960d7de02fcdecd8529a77683ffb86266e12b6aa571d0867f9f5cb337d",
+        "zipCrc32": "a099c0cc"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a1-tied-mobile.png",
+        "bytes": 1030472,
+        "sha256": "8710e7c91705055ede71aadffcbd008aec52a6e07d06b67d08aa0e1ce6381acd",
+        "zipCrc32": "b7804d3d"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-advisors.json",
+        "bytes": 330,
+        "sha256": "9df41739b05e0237a9b46993accd546d807f12582c70f0c37ebe7c52ab3f88f5",
+        "zipCrc32": "4016d61d"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-browser-results.json",
+        "bytes": 9965,
+        "sha256": "487cf5994019f7125faef65cb846f35ba63e65ea5f5e674aa3b6c3ba0e0ec43b",
+        "zipCrc32": "bc5a4cdb"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-desktop-account-change.png",
+        "bytes": 124937,
+        "sha256": "fc6031775cadebbb1e58225c89b1ede1f74386a59d65af96a8758d1bccfa7fdf",
+        "zipCrc32": "a2ae1e84"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-desktop-context-conflict.png",
+        "bytes": 512864,
+        "sha256": "840726bb8dec9755940d6c3676cf589cdc0cf084d4c964dfadff43fc852458c2",
+        "zipCrc32": "623ae163"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-desktop-replay-after-deletion.png",
+        "bytes": 392948,
+        "sha256": "0d8f27d2e265451d9d4d2e16eebf372aae527ad4ede788b8c2d41ae06bb9dd0c",
+        "zipCrc32": "072c5d6f"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-desktop-saved.png",
+        "bytes": 366215,
+        "sha256": "45b921b8c542d543303ba341c04f903762c285c35c5740810a6fef7bbeef54d1",
+        "zipCrc32": "3e20fd58"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-desktop-review.png",
+        "bytes": 414048,
+        "sha256": "921e4e5cd58d19e64690a1d2495c9e430cd10c0e5a731f5d1d0fe47cfbfb9966",
+        "zipCrc32": "d169981e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-mobile-recovered-confirmation.png",
+        "bytes": 259313,
+        "sha256": "b11a9390bb584967d3c036aa5262987df4b0b0d1fabe810ad9bd5f788628d97a",
+        "zipCrc32": "e238eec5"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-mobile-review.png",
+        "bytes": 291242,
+        "sha256": "3b0c3266cda4e5d2b3f273087c86f44381a8a8da028aba3764296c2cd0889ed4",
+        "zipCrc32": "52cb1a8b"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-mobile-saved.png",
+        "bytes": 252054,
+        "sha256": "8fe53f44a77900925d3c0e5e4a5a48534b6d9bb572a18d57ddb7cad5ff759266",
+        "zipCrc32": "50e9cce7"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-scope.json",
+        "bytes": 6379,
+        "sha256": "4f2735662d54184808cc33a373976ab2806bb90838cb8e20d9511c524d0ef511",
+        "zipCrc32": "e696afa6"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-seed.json",
+        "bytes": 699,
+        "sha256": "66a79d7123288a0db7c97b92931f12c46b181349a50b23233f0a349e45037213",
+        "zipCrc32": "1a54abdf"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-action-sql.json",
+        "bytes": 3112,
+        "sha256": "cc5b0ed3fa5e7eb8d90461fadb01d25190dfcccbbec06d9f6f98ca1e3a0cd349",
+        "zipCrc32": "4b9c080e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-advisors.json",
+        "bytes": 327,
+        "sha256": "6b148580f1c4f0c67507e8c73f018619275aa6e1bc77bccde16b5cfc0979dec0",
+        "zipCrc32": "b0e8ff4b"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-browser-results.json",
+        "bytes": 10967,
+        "sha256": "1ae9b2c1445782ef3740f61ab7e0b1f4e7e3780cb80dfdf181e87d9ae1dc355a",
+        "zipCrc32": "8291ed56"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-desktop-account-change.png",
+        "bytes": 126815,
+        "sha256": "2e48b640baa25a9bedf64f1c88c93a1b03389428f388cf542730920246911fa7",
+        "zipCrc32": "c31ca741"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-desktop-completed.png",
+        "bytes": 339053,
+        "sha256": "0bce47758fd62936601140f9111ceba65a241b7d7d8b78758a4683da63ff90eb",
+        "zipCrc32": "ff3a70cd"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-desktop-editor.png",
+        "bytes": 440763,
+        "sha256": "7b97b00c6989aff941a3970e796e77e8a7ad63b822e715893fd821e77c273c6a",
+        "zipCrc32": "56151add"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-desktop-conflict-retains-draft.png",
+        "bytes": 528143,
+        "sha256": "ddf28aaeb5ae69d006269f0de1833fe02ce7502bb8831325839eff438275f793",
+        "zipCrc32": "3cd3994a"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-desktop-replay-after-deletion.png",
+        "bytes": 308673,
+        "sha256": "e0be4c237dbb5d13b4c2330e306e017ad78005f2675add3d17b48afe8a8c60e4",
+        "zipCrc32": "fb762b77"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-mobile-completed.png",
+        "bytes": 229597,
+        "sha256": "60fbf7084d010b1b53abbf24061ed3808212132ecd16d4ed564325f97538a58c",
+        "zipCrc32": "210a9ffb"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-mobile-deleted.png",
+        "bytes": 185620,
+        "sha256": "0ed6740c63ee36e7bb5fa9b174054b7f834113c0e38b2ce208804db4dc11472f",
+        "zipCrc32": "3bbdf254"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-mobile-editor.png",
+        "bytes": 312803,
+        "sha256": "3a1d79a8508fea5710d357fdc62e462020eff6caafc65cdc01cc7bc8c3cbddeb",
+        "zipCrc32": "20490780"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-scope.json",
+        "bytes": 5287,
+        "sha256": "7f513a31f3c3df23a5c2d43e5654e51d8a59e526928f472293e0dd7488a0a7dc",
+        "zipCrc32": "6b327a3b"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-seed.json",
+        "bytes": 420,
+        "sha256": "f42123985f86d8edc1bc24efdd809d6506394c6857b0720101e69509a693eed5",
+        "zipCrc32": "9c4cf136"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-plan-sql.json",
+        "bytes": 3330,
+        "sha256": "bee257a68525b569ec6bbc930dbe532d5c33631a3dff1125b18703dfd1ede622",
+        "zipCrc32": "dd8e2b84"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-advisors.json",
+        "bytes": 348,
+        "sha256": "2b5dd2eb6cfbf4faf2713c2e1f8c086aa9d493f4f43cc4aa70e69dcad863a6c1",
+        "zipCrc32": "04e89dcd"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-browser-results.json",
+        "bytes": 9596,
+        "sha256": "d6cb0d9a1b5a75aa5535e4a448263a10d428cf46f8ecc740441eea7c92e74582",
+        "zipCrc32": "51a8abde"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-editor.png",
+        "bytes": 619239,
+        "sha256": "9808396a4e73dbaa41c419c0a41b8dc196b58d1fb65a300c721d0aaf436de98c",
+        "zipCrc32": "a0584f1f"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-reviewed-a4-plan.png",
+        "bytes": 528770,
+        "sha256": "01213061dacb9f07846db868b50635043ded0779c75139cb8ea806edd16ab963",
+        "zipCrc32": "524175ad"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-source-conflict.png",
+        "bytes": 711802,
+        "sha256": "1f032107311f4424957d498273381b4b66f28c49c7056e00ae961b48a54bba74",
+        "zipCrc32": "af52c9cf"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-source-review.png",
+        "bytes": 513016,
+        "sha256": "80f5aead0c2a4eeefceabbdae2db3b22c88b15af2d7c5481b68d079a5b5b28e4",
+        "zipCrc32": "0320c005"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-desktop-source-unavailable.png",
+        "bytes": 443226,
+        "sha256": "03d1622f7d40a47454d3b51aa695e13ff20a8c8dd45f87ca446298cdc1ae25ad",
+        "zipCrc32": "2199cd51"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-mobile-editor.png",
+        "bytes": 451834,
+        "sha256": "cbb25fcac8d2e303f686c2ed7ebd08b902203de5e0b479dd7d8d2cc55a1a9512",
+        "zipCrc32": "ff9f26a3"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-mobile-reviewed-a3-plan.png",
+        "bytes": 328312,
+        "sha256": "c5b665c9a33a8dc9802a107b87970e9c0a6b1b98a0342289a3ac75fa2bdde2a4",
+        "zipCrc32": "47315a93"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-mobile-source-review.png",
+        "bytes": 374160,
+        "sha256": "13aa95498ebef34edd68e3b1b95c73e02a80104918339ba394c006f4965ed16e",
+        "zipCrc32": "fde54f14"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-scope.json",
+        "bytes": 8315,
+        "sha256": "a6a7e451fc5c253323ea308ca37203fc1b95dab3f8306056ba92bb5397e28cee",
+        "zipCrc32": "ee37637f"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-seed.json",
+        "bytes": 1911,
+        "sha256": "4aae8d93e8e55358dc2e2cb3f69849e86dc54e9d510398a107d921681c57831b",
+        "zipCrc32": "245ba5b4"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/a2-review-evidence-sql.json",
+        "bytes": 1099,
+        "sha256": "40bb4d3e7b37210273776185caea9d596c42e6301f2cbc712c45419501be68af",
+        "zipCrc32": "ad920d73"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-access-denied.png",
+        "bytes": 62248,
+        "sha256": "1f3b9402955656d700b835c537d59e98b248ce0a0c872b623ce75eaf79c43fbb",
+        "zipCrc32": "b0f4ad21"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-email-form.png",
+        "bytes": 49983,
+        "sha256": "101e9d2522df2f541f8cd8cb253dee91d6f84a8c0447e748d7b9156bdac2e1d3",
+        "zipCrc32": "463a9402"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-email-html-503.png",
+        "bytes": 59528,
+        "sha256": "e5c09771b89b1c8af133a0ac4e3852836594135e6d748e3633476d91f527a1a1",
+        "zipCrc32": "c474a352"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-email-json-429.png",
+        "bytes": 62197,
+        "sha256": "17dcfb398c811568b26ad67c5096ab4aca06e0762ab84cef1ad24223ca5dc7bf",
+        "zipCrc32": "55bb9a99"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-invalid-credentials.png",
+        "bytes": 61439,
+        "sha256": "4eef08da2df51764269451f62302ed5cf21b3d7eb91f039410f88f4d7b5fefff",
+        "zipCrc32": "54d03331"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-logout-retry.png",
+        "bytes": 247618,
+        "sha256": "d0aa9a1460f3d497bf20c68a1d12cae1f99579654ebabab9d772c3e45eaa0375",
+        "zipCrc32": "6c8f396a"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-new-invited-session.png",
+        "bytes": 232799,
+        "sha256": "ed59888883b68d126747d9448303cb00a133fb84740efe1e1c74351c8ea1a6eb",
+        "zipCrc32": "6e5f1e3c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-returning-session.png",
+        "bytes": 241860,
+        "sha256": "0ec0f37a3f77910a4a4f0eb0bc533e1f34c62118e4597d78511f6f1411b9515f",
+        "zipCrc32": "ea57c429"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-desktop-signin.png",
+        "bytes": 300504,
+        "sha256": "c53870d241ecb7ab41c6e048f4db129ed15d058378a3c7435da71a1834fc8e20",
+        "zipCrc32": "ef112912"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-access-denied.png",
+        "bytes": 52624,
+        "sha256": "9b2acb6205e77885478146fa38df5ebed6dcac19fedd9838b0662502440fb307",
+        "zipCrc32": "4327ad35"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-email-html-503.png",
+        "bytes": 50989,
+        "sha256": "bd34290562de2070f89b03b500bba7c24595447a7c61c579a89c3794f240d04e",
+        "zipCrc32": "0cdbf29f"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-email-form.png",
+        "bytes": 42328,
+        "sha256": "d7dde3cb1c1e5e17b8be8daec9e22e806c10e19fdf4b35f6ba023f56dd3e3b15",
+        "zipCrc32": "66eba022"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-email-json-429.png",
+        "bytes": 52676,
+        "sha256": "347f63b62bfa98e652b3ce2e724c1a03125579158ea2d9f3d3de4cd0d0e1045c",
+        "zipCrc32": "151b4252"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-logout-retry.png",
+        "bytes": 174615,
+        "sha256": "cbb224b632adfae6dfab7ad2090489e9f660fb85a72220108b1b964809d996a7",
+        "zipCrc32": "a720c0cd"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-invalid-credentials.png",
+        "bytes": 52362,
+        "sha256": "8328a4b3e2b7f4aa7318dd34a8b7d39475b146fbf89b5bb081d6cc416b5c810c",
+        "zipCrc32": "f9beb763"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-new-invited-session.png",
+        "bytes": 189942,
+        "sha256": "4823982c32de2d210fa73fd6e0adece44eeefd15934f3866c709142026fd2488",
+        "zipCrc32": "99f2e84b"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-returning-session.png",
+        "bytes": 196686,
+        "sha256": "9b45e689ecaa7475205f2471197216db762c68f581ec74fcb23a0054f4bc8992",
+        "zipCrc32": "eac5acf0"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-mobile-signin.png",
+        "bytes": 108249,
+        "sha256": "2ff3596d5285e64a44b984a565bb70202c88bd4614a859859ec82fa66e10a05b",
+        "zipCrc32": "af242617"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-results.json",
+        "bytes": 81944,
+        "sha256": "5b9b54a0c643120e80e150d9ede7bb4097c8aef34247a572747ba3fb0c423a22",
+        "zipCrc32": "6c2cd9fb"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-scope.json",
+        "bytes": 6946,
+        "sha256": "231951fc4823045612a49e6e565ec0c4405e84e193cfbd2e04184409235920a4",
+        "zipCrc32": "83b67fac"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-advisors.json",
+        "bytes": 346,
+        "sha256": "adbebfb777f4897f6440d16237e7e21b1c3562ed737530b986876f660cd3abe1",
+        "zipCrc32": "37fb87e1"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-atomic-sql.json",
+        "bytes": 2783,
+        "sha256": "832000eae30e2f092b330d532e689708af2bf2c04ef98025a623a17acd68c69f",
+        "zipCrc32": "00b51de6"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/auth-seed.json",
+        "bytes": 198,
+        "sha256": "d8767385ed8bf3f152bd7ff9efa714c40e6749c82055ae9ef206a589ac9f42dc",
+        "zipCrc32": "e42baa70"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-desktop-completion-response-lost.png",
+        "bytes": 149156,
+        "sha256": "5c70e03340aa111403251852ae07553d2286e4bf00c509c574582dd0433dc42e",
+        "zipCrc32": "597fd56e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-desktop-completion-rollback.png",
+        "bytes": 147706,
+        "sha256": "f4937645c54a9650092645470f6d16270f2d2ff19a930473972042374a3c69f4",
+        "zipCrc32": "1357ff8a"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-desktop-restored-household.png",
+        "bytes": 155593,
+        "sha256": "ad51d5bee611381df71115807ff6af338bcd41fdafeb77089884a2ba9ba3b04c",
+        "zipCrc32": "1c78f79c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-desktop-restored-other.png",
+        "bytes": 165473,
+        "sha256": "400a13cf8f3e7f5440a0f4e7e91493111368311cd1e39f2c5353c5d6334ae333",
+        "zipCrc32": "b91e87cf"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-desktop-save-error.png",
+        "bytes": 170637,
+        "sha256": "0893dee3a235d055065a15f3a6fc287a4d55ac3b92a384e916f6eb0ab4c40d17",
+        "zipCrc32": "fd4a9dad"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-mobile-completion-response-lost.png",
+        "bytes": 83496,
+        "sha256": "f4eb64e58318a04ac76780e2ad0f3ca8c563d0e003e92f1c6466a4f2c5fec1fd",
+        "zipCrc32": "dc0102db"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-mobile-completion-rollback.png",
+        "bytes": 82191,
+        "sha256": "eb97fad88b14baf8d568a3e6c269eb5d26a1358c29e2c623d44a9c86c633a99d",
+        "zipCrc32": "ea55a149"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-mobile-restored-household.png",
+        "bytes": 91166,
+        "sha256": "5dbff4e8c399fee6e50548d2deb79dcdc38207e2757fd7ce9cf64b7a44b46f3c",
+        "zipCrc32": "6e4e1dff"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-mobile-restored-other.png",
+        "bytes": 98998,
+        "sha256": "62ce2926eb5f8d5db36a42f71982652535819732b90e78f90e469afeac8c6b15",
+        "zipCrc32": "e4e910c4"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-mobile-save-error.png",
+        "bytes": 105747,
+        "sha256": "8c39abbb8ef7960e34a21e4dc850e8bac6ef7dcb4545d06b9760a5547ef9fec0",
+        "zipCrc32": "71e9563d"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-results.json",
+        "bytes": 13929,
+        "sha256": "94a8ec270f3f8286f5ac5bf7d90a8251b0cb9075e774c437e95ba5c39d51b79e",
+        "zipCrc32": "cd2c5f62"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-scope.json",
+        "bytes": 2690,
+        "sha256": "8f87357066017165c83c68da2da935b465a9861fdd4f6ec8682e6cb810f01c66",
+        "zipCrc32": "6f86f43c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/c1-seed.json",
+        "bytes": 492,
+        "sha256": "e8a75b93f5d40d41c8cdb079d32e462b9b80af6cbe101b627ea5caf9ee14b9ea",
+        "zipCrc32": "af07de30"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-baseline-form-1440.png",
+        "bytes": 230246,
+        "sha256": "210d2650650a4a8b634e64a141ba4e081660ce057d2b8606f09c9b2f0349604c",
+        "zipCrc32": "584e51b3"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-baseline-form-390.png",
+        "bytes": 163236,
+        "sha256": "bc5a5527dbc96db78053664e71d639ba7aab9d7271f4aef040c43dde616fb2db",
+        "zipCrc32": "11313383"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-baseline-restored-1440.png",
+        "bytes": 207853,
+        "sha256": "d0ea76cb1371ca18e4a0dd99d60d643c420efe0a77bfcb9890b92b98476e5e81",
+        "zipCrc32": "280fa5ae"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-baseline-restored-390.png",
+        "bytes": 142310,
+        "sha256": "cd12cea8e842648b31d9bd9a536dd0195160735dbabc705833774cb7d3db3ec1",
+        "zipCrc32": "b9024434"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-follow_up-form-1440.png",
+        "bytes": 241278,
+        "sha256": "fa732f04ce7bcefd460f97df3105e6fa27ab148ea0f480eef935bf2122456ecc",
+        "zipCrc32": "6fdfb5fb"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-follow_up-form-390.png",
+        "bytes": 173891,
+        "sha256": "871690b46d8101ca30b899fe000786d604b81cd946b02de2643bc0bb56d5960c",
+        "zipCrc32": "6655acd1"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-follow_up-restored-1440.png",
+        "bytes": 208437,
+        "sha256": "44009c4483ff032d0a3c41951599bbe61361ff3c0d22eed04a581f52734878ad",
+        "zipCrc32": "8d079da9"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a1-follow_up-restored-390.png",
+        "bytes": 146002,
+        "sha256": "0a0a5ba8b5558a72fca80afc14e2493af9ffaad2f9a73f75151683d17eddb507",
+        "zipCrc32": "df6b264c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-baseline-form-1440.png",
+        "bytes": 247151,
+        "sha256": "70424f694bf738332fbe2e9fb81620ec026af94e1dbb2ed964e31e3be10b4224",
+        "zipCrc32": "8136d6f5"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-baseline-form-390.png",
+        "bytes": 175610,
+        "sha256": "4ef06d8578680a378e4755ccc648639641571569857760c6b347dcb5d56473b1",
+        "zipCrc32": "9f5b8703"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-baseline-restored-1440.png",
+        "bytes": 217920,
+        "sha256": "18444622567650c92a8f17f73d4de9799ede0f294a3539e3269359c63986bcbd",
+        "zipCrc32": "b40b278f"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-follow_up-form-1440.png",
+        "bytes": 258323,
+        "sha256": "22ff31c078ec10014a69747844f6f514c7aedbf490feb105ef4af9e398e0ffad",
+        "zipCrc32": "ea2688e4"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-baseline-restored-390.png",
+        "bytes": 146124,
+        "sha256": "08082ae68e2575d1af4d006dcc9dd5f28f8827f623043120bcfdca79cb9042c6",
+        "zipCrc32": "6197a17c"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-follow_up-form-390.png",
+        "bytes": 187258,
+        "sha256": "4c243b5d91821427c2d58e98255ffea972b9abe1ab305c201dccc7acb4bc163b",
+        "zipCrc32": "5d64f5a5"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-follow_up-restored-1440.png",
+        "bytes": 223191,
+        "sha256": "a7f2f86c84b941a0c9322be1c726c990e9d0319bab436f9fb9694f8a33c5f1fb",
+        "zipCrc32": "4e40385e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a2-follow_up-restored-390.png",
+        "bytes": 156454,
+        "sha256": "f21300533d5d7a9c82836417079668434ce066f541e462ee77762c8dab4d9736",
+        "zipCrc32": "20f2793d"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-baseline-form-1440.png",
+        "bytes": 205279,
+        "sha256": "3272e979088f7b12bb099fd8ec5ece3adbacde0ac57220b7359ffcdf2d1eb5b6",
+        "zipCrc32": "8aaae0a8"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-baseline-form-390.png",
+        "bytes": 137215,
+        "sha256": "01ca81b27ec3552949851a876fd42b6406ade195cde20d6b842e8943f643e4de",
+        "zipCrc32": "f311d729"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-baseline-restored-1440.png",
+        "bytes": 190887,
+        "sha256": "705d595358e61c60d6d93474a45c3d6d45d75400222ecc3d5c36405b3b7797d1",
+        "zipCrc32": "d1ca64a0"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-baseline-restored-390.png",
+        "bytes": 122287,
+        "sha256": "bc47dc1f2b3cbb6a5dfbb0e79731b8a1cfb884f41e53cfe5838293d76f65abb3",
+        "zipCrc32": "781330cb"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-follow_up-form-1440.png",
+        "bytes": 216353,
+        "sha256": "f681bad53226e356c83bb07a38a28102b0638a4f2fd46d5ac1be0730a1cc5a1d",
+        "zipCrc32": "8972c82a"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-follow_up-form-390.png",
+        "bytes": 148753,
+        "sha256": "e09e59b57701d1b928df7a566be862f28e1771eec88c56e106a9849bfd1e88cc",
+        "zipCrc32": "6ceee10a"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-follow_up-restored-1440.png",
+        "bytes": 195533,
+        "sha256": "889ea584c44acf3653cb9e1ca574aa6cd32e8d27b8178232e2f65eeb338a55ea",
+        "zipCrc32": "c5870959"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-a3-follow_up-restored-390.png",
+        "bytes": 131795,
+        "sha256": "50ed0362f4d00d7ad20ebb663eb784b8c5a55b27f5e46e95dcdaa6f19d361b51",
+        "zipCrc32": "cb3400f2"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-appshell-navigation-390.png",
+        "bytes": 148014,
+        "sha256": "e681c523a08419c5bdf97397699d9b74264759177e13175e4ab2d967adf112e6",
+        "zipCrc32": "4cedd4bf"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-early-objective-form-1440.png",
+        "bytes": 378460,
+        "sha256": "e1191e3894829675aaa3c7ee1791c42fd869833b1d5af519081ac20d0564a566",
+        "zipCrc32": "a618bca5"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-early-objective-form-390.png",
+        "bytes": 316588,
+        "sha256": "ac70562b11139ec5dc805d993ca6710a06fc0ba275b4dffecdee6422dd2caba8",
+        "zipCrc32": "4cdc5e70"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-early-objective-restored-1440.png",
+        "bytes": 119691,
+        "sha256": "675f893623bd51c77329e30adb07e91502cc632b14f3325e139ae92d76c4f41b",
+        "zipCrc32": "6f79f795"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-early-objective-restored-390.png",
+        "bytes": 64601,
+        "sha256": "87bb1b2cf47d79f8704a437aac5cc2ce05ddb7f0c0c2541daaf50977dedcea8a",
+        "zipCrc32": "78778b0d"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-results.json",
+        "bytes": 24857,
+        "sha256": "06ec25835fd0bfddc1dd8ec46875820759381cb79a7be1a887d6d1ea9717dd75",
+        "zipCrc32": "67245add"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-scope.json",
+        "bytes": 9453,
+        "sha256": "73e4294470f4a31aa9fb62cbda933fa6cb3ea66dbf1a0ba1c7063eaf8a816e76",
+        "zipCrc32": "92a113e1"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/closure-seed.json",
+        "bytes": 528,
+        "sha256": "7a3bcff50d289cd24869bd232a14e489431db93eca3d5a1e0c8b96fa7ebd3115",
+        "zipCrc32": "f2fbf12e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/flow-1440.png",
+        "bytes": 174576,
+        "sha256": "b6f904484f01f10954637e70449f93868d5171fa866d9cc08c0f8724c42900e0",
+        "zipCrc32": "e9cd913d"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/flow-390.png",
+        "bytes": 184130,
+        "sha256": "c6edfae0bed3356c4c7af4d503d2d46116b48cb44f55a80665572f56a5a415cc",
+        "zipCrc32": "544e9e83"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/flow-results.json",
+        "bytes": 1382,
+        "sha256": "9615c901651f187b5e5c48b10bebf25948b88b2ef72d6986c3251809a0d56473",
+        "zipCrc32": "95232ee2"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/identity-desktop.png",
+        "bytes": 233126,
+        "sha256": "e9e546bb23d3cfae2f1f5f98a521d8640d30f672860b4ed8f38a4dc128991883",
+        "zipCrc32": "8321476b"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/identity-empty-mobile.png",
+        "bytes": 205114,
+        "sha256": "7bfaff3003d8a6b4f80445632694383ea01e2a6c15daaf622b6fae25196377ca",
+        "zipCrc32": "5433f926"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/invitation-browser.json",
+        "bytes": 386,
+        "sha256": "bc2264c6994ca73a48130c3b243933b6a7c07ca29236ee672c337067dd477f97",
+        "zipCrc32": "68b1849e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/identity-mobile.png",
+        "bytes": 235355,
+        "sha256": "f72367bb4f04628ae1c7ea7c025e90a26f88e9517ff41ed9cde99f5801b595aa",
+        "zipCrc32": "9cf55fc6"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/objective-writer-compatibility.json",
+        "bytes": 1125,
+        "sha256": "90780c1e54e171d7fe7358f46478e754a771af6762bb2dbd49e06af39daa0045",
+        "zipCrc32": "e75d515b"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/ops-correlation.json",
+        "bytes": 355,
+        "sha256": "1f366deed6ba86e4e36b65cebbd9f28f8f9d731a8e3b45016489a2d48d679013",
+        "zipCrc32": "0174118e"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/results.json",
+        "bytes": 2557,
+        "sha256": "a10c227c4449cabe1884d4e3daa80a596b1e526adb0ff10ea819179bb78d7ab9",
+        "zipCrc32": "a99218aa"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/runtime-boundary-results.json",
+        "bytes": 799,
+        "sha256": "688c7133c22652890020ff89241284d04b9c98cbcaad3d7ae26ed483f27fbda6",
+        "zipCrc32": "616f44c2"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/scope.json",
+        "bytes": 884,
+        "sha256": "6fabe074631337fcefca863e9149220b11cbee73eacfaed6c62442e8f34220b1",
+        "zipCrc32": "c8276759"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/settings-desktop.png",
+        "bytes": 159861,
+        "sha256": "cc8057a5dd8efaa411aa4c697e4e76da88e58fdab0f5c90124ab186cf1f241a2",
+        "zipCrc32": "092258b9"
+      },
+      {
+        "path": "dtc-a1-browser/evidence/settings-mobile-390x844.png",
+        "bytes": 115679,
+        "sha256": "6a19a08e69c58fc92c2cd5d4c799deeeec6317f6b6fc5f9e48a41d6fc49d93b7",
+        "zipCrc32": "7b5343a5"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-action-api.json",
+        "bytes": 9880,
+        "sha256": "3a82dc5de95bb8e6c97f513ba8a425c82cafc033803141764bb185159bb058ce",
+        "zipCrc32": "41f780c2"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-action-contract.json",
+        "bytes": 3978,
+        "sha256": "ca44bbcd1cc04be70853262d4bd782123eba6ba63e6c82b86889da462687a7dc",
+        "zipCrc32": "cccbc081"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-assistant-route.json",
+        "bytes": 16870,
+        "sha256": "6573c26090052b46b04a7d6e84367f2e11c6d9fad4722983cbc5941c522b98f1",
+        "zipCrc32": "0fb28bdf"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-plan-api.json",
+        "bytes": 4916,
+        "sha256": "a5d066603aa428d1b0b1c05cd5498525f1bf694b2dca88c2ba97914a90bff8e0",
+        "zipCrc32": "f5f7bf29"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-plan-contract.json",
+        "bytes": 6985,
+        "sha256": "8a1d36c81f9cb0989be5af2c4f08d7d3cd3993aee0390bf4c864b92a596e52f4",
+        "zipCrc32": "e5ec7dff"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-review-evidence.json",
+        "bytes": 9619,
+        "sha256": "ee7283694194eefaf920667c743acd7388263e146e2732e8fc31486cba357dbf",
+        "zipCrc32": "b63e6bfc"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-swarm-canary.json",
+        "bytes": 7978,
+        "sha256": "216466886c3ee8cad3916d846735fbcb99861b85d6540dfe0e119556230bd453",
+        "zipCrc32": "9da10b4a"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-swarm-runtime.json",
+        "bytes": 14340,
+        "sha256": "81763c6afe2d9f23cada3c23efcd7a1d2cb9222d7bdcf9473996e74033a2be01",
+        "zipCrc32": "39e2cf7a"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/a2-swarm-provider.json",
+        "bytes": 5021,
+        "sha256": "e05da2bd19dc245104aa9b2fb04e0d1683b904dfcefdcec3ae1d86bfb11dabbb",
+        "zipCrc32": "bb7364bf"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/focus-visibility-preflight.json",
+        "bytes": 2577,
+        "sha256": "161f41d18be77c2c7e611f27e78aece15a163053cb2a54f6af93dc0e4e4f915b",
+        "zipCrc32": "484d9bfc"
+      },
+      {
+        "path": "dtc-a2-swarm-evidence/native-tab-focus-adapter.json",
+        "bytes": 827,
+        "sha256": "a18b077647eae088518a978f52c34e09c7ac54922f42999871ce59a80ae95928",
+        "zipCrc32": "bace9242"
+      }
+    ]
+  },
+  "githubMetadataVerification": {
+    "path": "/workspace/scratch/7122ccfe4f6a/ci-ag05-attempt-1/ci-metadata.json",
+    "bytes": 7524,
+    "sha256": "4685c95903d59efb5998beeb2c6d3d2a2a6de24218136b0f761b7ece072a061a",
+    "repository": "jcv86/main",
+    "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+    "candidateTree": "7b1c57f9f7fce14b439650865ebbdacef15b1725",
+    "run": {
+      "id": 42313235840,
+      "run_attempt": 1,
+      "head_sha": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+      "head_branch": "uat/dtc-20261106",
+      "status": "completed",
+      "conclusion": "success",
+      "html_url": "https://github.com/jcv86/main/actions/runs/42313235840"
+    },
+    "artifact": {
+      "id": 13548784558,
+      "name": "a1-browser-evidence-22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+      "size_in_bytes": 21825666,
+      "digest": "sha256:6f83ca7bfb984cd65e2bc50d3798dc42506da4c1eed879c791a12ef7928da1bc",
+      "expired": false,
+      "workflow_run": {
+        "id": 42313235840,
+        "repository_id": 1023039747,
+        "head_repository_id": 1023039747,
+        "head_branch": "uat/dtc-20261106",
+        "head_sha": "22d533d6e42f3663d2a46b9ca48116bf138c23f7"
+      },
+      "created_at": "2026-11-06T23:51:10Z",
+      "updated_at": "2026-11-06T23:51:10Z",
+      "expires_at": "2026-11-13T23:51:08Z"
+    },
+    "source": "GitHub API metadata supplied by the caller; checked locally, with no network lookup by this verifier"
+  },
+  "inputEvidence": {
+    "a2-action-contract.json": {
+      "path": "dtc-a2-swarm-evidence/a2-action-contract.json",
+      "bytes": 3978,
+      "sha256": "ca44bbcd1cc04be70853262d4bd782123eba6ba63e6c82b86889da462687a7dc"
+    },
+    "a2-action-api.json": {
+      "path": "dtc-a2-swarm-evidence/a2-action-api.json",
+      "bytes": 9880,
+      "sha256": "3a82dc5de95bb8e6c97f513ba8a425c82cafc033803141764bb185159bb058ce"
+    },
+    "a2-plan-contract.json": {
+      "path": "dtc-a2-swarm-evidence/a2-plan-contract.json",
+      "bytes": 6985,
+      "sha256": "8a1d36c81f9cb0989be5af2c4f08d7d3cd3993aee0390bf4c864b92a596e52f4"
+    },
+    "a2-plan-api.json": {
+      "path": "dtc-a2-swarm-evidence/a2-plan-api.json",
+      "bytes": 4916,
+      "sha256": "a5d066603aa428d1b0b1c05cd5498525f1bf694b2dca88c2ba97914a90bff8e0"
+    },
+    "a2-assistant-route.json": {
+      "path": "dtc-a2-swarm-evidence/a2-assistant-route.json",
+      "bytes": 16870,
+      "sha256": "6573c26090052b46b04a7d6e84367f2e11c6d9fad4722983cbc5941c522b98f1"
+    },
+    "a2-swarm-runtime.json": {
+      "path": "dtc-a2-swarm-evidence/a2-swarm-runtime.json",
+      "bytes": 14340,
+      "sha256": "81763c6afe2d9f23cada3c23efcd7a1d2cb9222d7bdcf9473996e74033a2be01"
+    },
+    "a2-swarm-provider.json": {
+      "path": "dtc-a2-swarm-evidence/a2-swarm-provider.json",
+      "bytes": 5021,
+      "sha256": "e05da2bd19dc245104aa9b2fb04e0d1683b904dfcefdcec3ae1d86bfb11dabbb"
+    },
+    "a2-swarm-canary.json": {
+      "path": "dtc-a2-swarm-evidence/a2-swarm-canary.json",
+      "bytes": 7978,
+      "sha256": "216466886c3ee8cad3916d846735fbcb99861b85d6540dfe0e119556230bd453"
+    },
+    "a2-review-evidence.json": {
+      "path": "dtc-a2-swarm-evidence/a2-review-evidence.json",
+      "bytes": 9619,
+      "sha256": "ee7283694194eefaf920667c743acd7388263e146e2732e8fc31486cba357dbf"
+    },
+    "a2-plan-scope.json": {
+      "path": "dtc-a1-browser/evidence/a2-plan-scope.json",
+      "bytes": 5287,
+      "sha256": "7f513a31f3c3df23a5c2d43e5654e51d8a59e526928f472293e0dd7488a0a7dc"
+    },
+    "a2-action-scope.json": {
+      "path": "dtc-a1-browser/evidence/a2-action-scope.json",
+      "bytes": 6379,
+      "sha256": "4f2735662d54184808cc33a373976ab2806bb90838cb8e20d9511c524d0ef511"
+    },
+    "a2-plan-seed.json": {
+      "path": "dtc-a1-browser/evidence/a2-plan-seed.json",
+      "bytes": 420,
+      "sha256": "f42123985f86d8edc1bc24efdd809d6506394c6857b0720101e69509a693eed5"
+    },
+    "a2-action-seed.json": {
+      "path": "dtc-a1-browser/evidence/a2-action-seed.json",
+      "bytes": 699,
+      "sha256": "66a79d7123288a0db7c97b92931f12c46b181349a50b23233f0a349e45037213"
+    },
+    "a2-plan-sql.json": {
+      "path": "dtc-a1-browser/evidence/a2-plan-sql.json",
+      "bytes": 3330,
+      "sha256": "bee257a68525b569ec6bbc930dbe532d5c33631a3dff1125b18703dfd1ede622"
+    },
+    "a2-action-sql.json": {
+      "path": "dtc-a1-browser/evidence/a2-action-sql.json",
+      "bytes": 3112,
+      "sha256": "cc5b0ed3fa5e7eb8d90461fadb01d25190dfcccbbec06d9f6f98ca1e3a0cd349"
+    },
+    "a2-plan-advisors.json": {
+      "path": "dtc-a1-browser/evidence/a2-plan-advisors.json",
+      "bytes": 327,
+      "sha256": "6b148580f1c4f0c67507e8c73f018619275aa6e1bc77bccde16b5cfc0979dec0"
+    },
+    "a2-action-advisors.json": {
+      "path": "dtc-a1-browser/evidence/a2-action-advisors.json",
+      "bytes": 330,
+      "sha256": "9df41739b05e0237a9b46993accd546d807f12582c70f0c37ebe7c52ab3f88f5"
+    },
+    "a2-plan-browser-results.json": {
+      "path": "dtc-a1-browser/evidence/a2-plan-browser-results.json",
+      "bytes": 10967,
+      "sha256": "1ae9b2c1445782ef3740f61ab7e0b1f4e7e3780cb80dfdf181e87d9ae1dc355a"
+    },
+    "native-tab-focus-adapter.json": {
+      "path": "dtc-a2-swarm-evidence/native-tab-focus-adapter.json",
+      "bytes": 827,
+      "sha256": "a18b077647eae088518a978f52c34e09c7ac54922f42999871ce59a80ae95928"
+    },
+    "focus-visibility-preflight.json": {
+      "path": "dtc-a2-swarm-evidence/focus-visibility-preflight.json",
+      "bytes": 2577,
+      "sha256": "161f41d18be77c2c7e611f27e78aece15a163053cb2a54f6af93dc0e4e4f915b"
+    },
+    "a2-action-browser-results.json": {
+      "path": "dtc-a1-browser/evidence/a2-action-browser-results.json",
+      "bytes": 9965,
+      "sha256": "487cf5994019f7125faef65cb846f35ba63e65ea5f5e674aa3b6c3ba0e0ec43b"
+    },
+    "a2-review-evidence-scope.json": {
+      "path": "dtc-a1-browser/evidence/a2-review-evidence-scope.json",
+      "bytes": 8315,
+      "sha256": "a6a7e451fc5c253323ea308ca37203fc1b95dab3f8306056ba92bb5397e28cee"
+    },
+    "a2-review-evidence-seed.json": {
+      "path": "dtc-a1-browser/evidence/a2-review-evidence-seed.json",
+      "bytes": 1911,
+      "sha256": "4aae8d93e8e55358dc2e2cb3f69849e86dc54e9d510398a107d921681c57831b"
+    },
+    "a2-review-evidence-sql.json": {
+      "path": "dtc-a1-browser/evidence/a2-review-evidence-sql.json",
+      "bytes": 1099,
+      "sha256": "40bb4d3e7b37210273776185caea9d596c42e6301f2cbc712c45419501be68af"
+    },
+    "a2-review-evidence-advisors.json": {
+      "path": "dtc-a1-browser/evidence/a2-review-evidence-advisors.json",
+      "bytes": 348,
+      "sha256": "2b5dd2eb6cfbf4faf2713c2e1f8c086aa9d493f4f43cc4aa70e69dcad863a6c1"
+    },
+    "a2-review-evidence-browser-results.json": {
+      "path": "dtc-a1-browser/evidence/a2-review-evidence-browser-results.json",
+      "bytes": 9596,
+      "sha256": "d6cb0d9a1b5a75aa5535e4a448263a10d428cf46f8ecc740441eea7c92e74582"
+    }
+  }
+}

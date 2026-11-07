@@ -1,0 +1,17 @@
+{
+  "unchangedNativeCellsChecked": 2126,
+  "originallyBlankCellsEditedWithinAuthorizedArea": 0,
+  "relationshipComparison": "Resolved targets and relation type/mode; generated internal IDs are not content.",
+  "preservedParts": [
+    "xl/tables/table1.xml",
+    "xl/tables/table2.xml"
+  ],
+  "sourceSheets": [
+    "Control",
+    "Casos",
+    "Hallazgos",
+    "Protocolo"
+  ],
+  "differences": [],
+  "nativePreservationPassed": true
+}

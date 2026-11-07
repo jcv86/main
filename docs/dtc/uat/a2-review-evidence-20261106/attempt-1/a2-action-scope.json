@@ -1,0 +1,156 @@
+{
+  "commit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "environment": "disposable-local-a2-action",
+  "copied": [
+    {
+      "path": "app/despega/a2/coach/page.tsx",
+      "sha256": "d8515dba91b5aae0ad0133c0484e4ea3938b08fbcd2ecafe4e8f90f22090c146"
+    },
+    {
+      "path": "components/a2-chat-coach.tsx",
+      "sha256": "9ea29334a659233b6b34cb57ff2b6f80722432447d2dfbe9d55d193c13a75d0d"
+    },
+    {
+      "path": "components/a2-assistant-action.tsx",
+      "sha256": "16fc44f3e13805d9f0c82dfa83c7f56de8d3c5b5632e2c8592721b0b4db2b11d"
+    },
+    {
+      "path": "components/layout/app-shell.tsx",
+      "sha256": "2b06499a4b93040325ec6650ba5bb07295477c41f0880f35d3514e24d3bfdf3c"
+    },
+    {
+      "path": "components/a2-reviewed-plan.tsx",
+      "sha256": "5564c5618ec00a5869985ad9b966b7e6232ad5e784f73cbed87fc5e3a8b19585"
+    },
+    {
+      "path": "app/api/a2/assistant-actions/route.ts",
+      "sha256": "5c52d33751036ef67c6cb57d8959120678149916c1ea2c3bf88ac55056e4e4cf"
+    },
+    {
+      "path": "app/api/despega/a2-coach/route.ts",
+      "sha256": "c04c72d05fb132c9a97e6e19bd4af743eae0dc6ab93bd77ccf0f902b0214d7bc"
+    },
+    {
+      "path": "components/a2-plan-evidence-review.tsx",
+      "sha256": "2f703369b6ac4be0d588e2cfccecf26ceb31d31c3dbcd1f4eefcb80bd849393a"
+    },
+    {
+      "path": "lib/a2/review-evidence-contract.ts",
+      "sha256": "b2d94cd121e5bef26b8f1d4e46e0268a531b881cc7cb4ee6f4fd7b00a7e87538"
+    },
+    {
+      "path": "lib/a2/review-evidence-service.ts",
+      "sha256": "b084b86d3b127e8a848c3d56580c04c2eab52e0e4761121dec4232d4b9ffd468"
+    },
+    {
+      "path": "lib/outcomes/response-capture.ts",
+      "sha256": "56bfc03f3a8fd17747b7ef59d1a47bda2975ff7242a306a11c6442c150ce5dea"
+    },
+    {
+      "path": "lib/outcomes/response-history.ts",
+      "sha256": "29936ce2597650ddf099892f2ef6d208745030541cc6ae292e18a66f7a536e68"
+    },
+    {
+      "path": "lib/outcomes/a2-execution-capability.ts",
+      "sha256": "cf03ac91e3eb074820d897ccea8ad36eef8f0def87506cd26592c7f91a9454cb"
+    },
+    {
+      "path": "lib/outcomes/a3-interview-capability.ts",
+      "sha256": "139112eae52d37f14fc838b59dbfb4dc8a1b71bbf0bd57680bb1723cb703fd8a"
+    },
+    {
+      "path": "lib/a4/strategic-radar.ts",
+      "sha256": "7e65be4ae1558b9d54af56c01070e900e53135fe2ff1eb388af88b993ded93e8"
+    },
+    {
+      "path": "lib/a2/assistant-action-contract.ts",
+      "sha256": "1cd0d9b02a3c3fa78f7d17ef49eb4d9706129477235fef9832e5ef9b1af71adc"
+    },
+    {
+      "path": "lib/a2/assistant-action-api.ts",
+      "sha256": "c1058c2b290098dafb05530e16af667a08fa840a93b113b3ac18a74e1debd80f"
+    },
+    {
+      "path": "lib/a2/assistant-action-service.ts",
+      "sha256": "7132ac70f0e65c5914e918ae92a31ce08bf8244464b79fd691655bf110e0a90e"
+    },
+    {
+      "path": "lib/a2/assistant-contract.ts",
+      "sha256": "ea153a56b1f8221c965cd74ec4ed7935baeefc63745e9bcb75dd9754589a181f"
+    },
+    {
+      "path": "lib/a2/practice-adjustment.ts",
+      "sha256": "653cbae305a02a28e266fd0d1e58db14f4b14fe6c2d31c887f36e6aba5c6785d"
+    },
+    {
+      "path": "lib/a2/api-access.ts",
+      "sha256": "a9a3112ee5f00e4ce6481314c45319ddf1382123144454c0a27d01ca92ba22d4"
+    },
+    {
+      "path": "lib/a2/plan-contract.ts",
+      "sha256": "ec58f3c778e08d8d0c3bf78081e7297a695dca90123919f5084847406d9da11e"
+    },
+    {
+      "path": "lib/a2/plan-context.ts",
+      "sha256": "694cd6ade7bdd8127fc51de2f7a1d0aad14cf34e4a20396aa64f8f2ee6229cb6"
+    },
+    {
+      "path": "lib/a2/plan-service.ts",
+      "sha256": "2dba51a7fedd834ec950341ba30986b7513afa26d425b091945e67eed20f51b4"
+    },
+    {
+      "path": "lib/journey/next-action.ts",
+      "sha256": "4b724dd24aba7615a2b66010648cc1e312bf37f09f09e11ebe7ebe004358cadf"
+    },
+    {
+      "path": "lib/journey/next-action-service.ts",
+      "sha256": "dbe6fdca1d361a46503398c3bb748c4ce6eb1cf43af4ad9a7ead97ed15c7b8e2"
+    },
+    {
+      "path": "lib/journey/service.ts",
+      "sha256": "034430d06e1709c483b117c88863702e46a33a042caf1ed3606039689ef39598"
+    },
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b"
+    },
+    {
+      "path": "lib/a2/swarm/runtime.ts",
+      "sha256": "9aa6b1be9083ec82fefe3e53913ccb7c145cb9f4f43422964a5bfe49c5abe556"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "lib/a2/swarm/canary.ts",
+      "sha256": "7e1fc84a6a4ca725c69dbdae68d870217de3d6e7d7ac8c37a5f4461a3d80ac34"
+    }
+  ],
+  "genuine": [
+    "actual coach and action-review UI with unchanged application source",
+    "local email Auth, cookies, action API, owner document RLS and PostgreSQL RPC",
+    "typed command, atomic document/receipt commit, readback, exact replay and anti-resurrection",
+    "canonical pending day/context selection and seven canonical progress table snapshots"
+  ],
+  "fixtures": [
+    "four fresh synthetic local owners: desktop, mobile, A2-locked and later pilot-revoked",
+    "minimal dtc_documents table inherited explicitly from AG03; its production creation migration is absent",
+    "synthetic C1/C2/A1 and admission prerequisites; no participant assessment or practice completion"
+  ],
+  "substitutions": [
+    "only the assistant generation HTTP response is a declared synthetic reviewed proposal",
+    "that proposal uses the action API current day/hash/guidance; no successful action API response is fabricated",
+    "root document/font shell inherited from the preceding laboratory",
+    "declared local source edits, deleted document and delayed/lost HTTP delivery for recovery scenarios",
+    "after genuine login, the A2-locked fixture journey row is deleted locally; direct action requests must not recreate it or alter its seven canonical tables"
+  ],
+  "notVerified": [
+    "real provider output, utility, latency, cost or real canary traffic",
+    "remote migration, deployment, production document schema or external OAuth",
+    "global transactional freshness across independent context writes",
+    "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+    "manual UAT participant cases or effectiveness of the practice"
+  ],
+  "privacy": "Only synthetic screenshots and sanitized verdicts; no credentials, cookies, HAR, storageState or private server logs."
+}

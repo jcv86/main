@@ -1,0 +1,320 @@
+{
+  "suite": "a2-action-api",
+  "cases": 76,
+  "passed": 76,
+  "actualRoute": true,
+  "actualHandlers": true,
+  "actualContextHashing": true,
+  "actualStorageReader": true,
+  "actualSupabaseSelectBuilder": true,
+  "sessionJourneyPortsAndStore": "synthetic",
+  "syntheticDatabaseHttp": 54,
+  "externalNetworkCalls": 0,
+  "liveSqlOrRls": false,
+  "results": [
+    {
+      "name": "Actual GET route reads without initialization and denies missing canonical journey",
+      "status": "passed"
+    },
+    {
+      "name": "Actual GET route reads without initialization and denies different journey owner",
+      "status": "passed"
+    },
+    {
+      "name": "Actual GET route reads without initialization and denies locked A2 access",
+      "status": "passed"
+    },
+    {
+      "name": "Actual POST route reads without initialization and denies missing canonical journey",
+      "status": "passed"
+    },
+    {
+      "name": "Actual POST route reads without initialization and denies different journey owner",
+      "status": "passed"
+    },
+    {
+      "name": "Actual POST route reads without initialization and denies locked A2 access",
+      "status": "passed"
+    },
+    {
+      "name": "Actual eligible GET route uses read-only journey before reading current context",
+      "status": "passed"
+    },
+    {
+      "name": "Actual personal action GET skips A3 and A4 even when later stages are enabled",
+      "status": "passed"
+    },
+    {
+      "name": "A3 captured response changed after a proposal rejects the old confirmation fingerprint before mutation",
+      "status": "passed"
+    },
+    {
+      "name": "A4 declared result changed after a proposal rejects the old confirmation fingerprint before mutation",
+      "status": "passed"
+    },
+    {
+      "name": "A4 microsecond revision changed after a proposal rejects the old confirmation fingerprint before mutation",
+      "status": "passed"
+    },
+    {
+      "name": "Unavailable a3 cannot confirm a newly proposed adjustment",
+      "status": "passed"
+    },
+    {
+      "name": "Unavailable a4 cannot confirm a newly proposed adjustment",
+      "status": "passed"
+    },
+    {
+      "name": "Historical confirmed action replays after newly applicable A3/A4 evidence without changing its document",
+      "status": "passed"
+    },
+    {
+      "name": "GET returns the actual canonical pending day, guidance and hashed context without a write",
+      "status": "passed"
+    },
+    {
+      "name": "A non-practice canonical next step cannot be confirmed as a day action",
+      "status": "passed"
+    },
+    {
+      "name": "Read failures remain unavailable, not an empty or zero-progress view",
+      "status": "passed"
+    },
+    {
+      "name": "A known unavailable source cannot authorize confirmation",
+      "status": "passed"
+    },
+    {
+      "name": "Explicit confirmation returns one verified current effect and receipt",
+      "status": "passed"
+    },
+    {
+      "name": "An identical retry reads a receipt and current effect without a second mutation",
+      "status": "passed"
+    },
+    {
+      "name": "A lost response after commit is recovered by exactly the same command",
+      "status": "passed"
+    },
+    {
+      "name": "Readback failure cannot claim persistence; retry recovers the real existing effect",
+      "status": "passed"
+    },
+    {
+      "name": "Replay precedes later date, day and unavailable-context preconditions",
+      "status": "passed"
+    },
+    {
+      "name": "A receipt appearing after initial lookup wins over a stale-context failure",
+      "status": "passed"
+    },
+    {
+      "name": "Changing content under the same request id is conflict, never overwrite",
+      "status": "passed"
+    },
+    {
+      "name": "A replay reports changed current effect without resurrecting original content",
+      "status": "passed"
+    },
+    {
+      "name": "A replay reports removed current effect without resurrecting original content",
+      "status": "passed"
+    },
+    {
+      "name": "A change immediately after commit is truthfully returned as changed",
+      "status": "passed"
+    },
+    {
+      "name": "A change immediately after commit is truthfully returned as removed",
+      "status": "passed"
+    },
+    {
+      "name": "Changed context is returned for explicit review without a write",
+      "status": "passed"
+    },
+    {
+      "name": "Day number cannot target a different unlocked or completed day",
+      "status": "passed"
+    },
+    {
+      "name": "Review date 2026-11-05 is rejected before mutation",
+      "status": "passed"
+    },
+    {
+      "name": "Review date 2026-12-07 is rejected before mutation",
+      "status": "passed"
+    },
+    {
+      "name": "Review date 2026-11-06 is accepted at the inclusive Chile window",
+      "status": "passed"
+    },
+    {
+      "name": "Review date 2026-12-06 is accepted at the inclusive Chile window",
+      "status": "passed"
+    },
+    {
+      "name": "A UTC midnight still uses the calendar day in Chile",
+      "status": "passed"
+    },
+    {
+      "name": "owner injection is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "generic tool is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "missing confirmation fields is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "invalid date is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "NUL text is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "unpaired surrogate is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "forged full context is rejected as an invalid command",
+      "status": "passed"
+    },
+    {
+      "name": "foreign origin is rejected before looking up a receipt",
+      "status": "passed"
+    },
+    {
+      "name": "cross-site request is rejected before looking up a receipt",
+      "status": "passed"
+    },
+    {
+      "name": "non-JSON request is rejected before looking up a receipt",
+      "status": "passed"
+    },
+    {
+      "name": "declared oversized request is rejected before looking up a receipt",
+      "status": "passed"
+    },
+    {
+      "name": "different expected owner is rejected before looking up a receipt",
+      "status": "passed"
+    },
+    {
+      "name": "A streamed body exceeding the actual byte bound is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "An interrupted stream cannot write or disclose provider/internal errors",
+      "status": "passed"
+    },
+    {
+      "name": "A never-ending stream terminates at the body budget and cancels its reader",
+      "status": "passed"
+    },
+    {
+      "name": "Anonymous and unavailable access stop before context and receipt reads",
+      "status": "passed"
+    },
+    {
+      "name": "GET with a changed final owner exposes no context and no asserted actor header",
+      "status": "passed"
+    },
+    {
+      "name": "A changed owner before confirmation prevents mutation",
+      "status": "passed"
+    },
+    {
+      "name": "A changed owner after commit exposes no result, receipt or reviewed text",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed or wrong-command receipts cannot be acknowledged",
+      "status": "passed"
+    },
+    {
+      "name": "Document readback compares JSON meaning regardless of key order",
+      "status": "passed"
+    },
+    {
+      "name": "Readback accepts the same precise instant with Z and UTC offset",
+      "status": "passed"
+    },
+    {
+      "name": "Readback accepts the same precise instant with nonzero offset",
+      "status": "passed"
+    },
+    {
+      "name": "Readback accepts the same precise instant with fraction length",
+      "status": "passed"
+    },
+    {
+      "name": "Readback accepts the same precise instant with absent and zero fraction across date boundary",
+      "status": "passed"
+    },
+    {
+      "name": "Readback rejects a timestamp changed below millisecond precision (2026-11-06T20:00:00.123457+00:00)",
+      "status": "passed"
+    },
+    {
+      "name": "Readback rejects a timestamp changed below millisecond precision (2026-11-06T17:00:00.123789-03:00)",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with malformed JSON is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with empty content is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed module is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed day is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed type is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed status is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with invented AI provenance is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed title is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with invalid timestamp is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed timestamp is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with changed server suggestion is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "Effect with extra stored fields is changed and returns no prior content",
+      "status": "passed"
+    },
+    {
+      "name": "A missing document is removed, but SQL errors or mismatched identity are unavailable",
+      "status": "passed"
+    }
+  ]
+}

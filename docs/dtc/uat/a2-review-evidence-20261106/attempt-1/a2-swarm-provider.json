@@ -1,0 +1,195 @@
+{
+  "suite": "a2-swarm-provider",
+  "cases": 42,
+  "passed": 42,
+  "actualProviderAdapter": true,
+  "http": "synthetic",
+  "syntheticHttpCalls": 31,
+  "externalNetworkCalls": 0,
+  "liveModelQuality": false,
+  "productionRollout": false,
+  "sourceHashes": [
+    {
+      "path": "lib/a2/swarm/contracts.ts",
+      "sha256": "19991014dd5d219f0ff51fd0cfce43363bdb58539632e74b840e835892ed4c4b"
+    },
+    {
+      "path": "lib/a2/swarm/openai.ts",
+      "sha256": "0e7da2a049b5bb711c781b2004748d24dbf6fa3db05f84cc41fddce89d021e7e"
+    },
+    {
+      "path": "scripts/test-a2-swarm-provider.mjs",
+      "sha256": "6865f645342c7eaae3554a683a59ab31c19b9143d60abddc0233bb0af7f923e2"
+    }
+  ],
+  "results": [
+    {
+      "name": "Each agent uses its fixed strict schema, one bounded request and no persistence/tools",
+      "status": "passed"
+    },
+    {
+      "name": "Unknown agent",
+      "status": "passed"
+    },
+    {
+      "name": "Output limit increased",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid numeric output limit",
+      "status": "passed"
+    },
+    {
+      "name": "Extra completion option",
+      "status": "passed"
+    },
+    {
+      "name": "Messages can only use text",
+      "status": "passed"
+    },
+    {
+      "name": "System message missing",
+      "status": "passed"
+    },
+    {
+      "name": "Later system role cannot override instructions",
+      "status": "passed"
+    },
+    {
+      "name": "Injected tool message metadata",
+      "status": "passed"
+    },
+    {
+      "name": "Input bounded across all messages",
+      "status": "passed"
+    },
+    {
+      "name": "Non-AbortSignal rejected before transport",
+      "status": "passed"
+    },
+    {
+      "name": "Schema name cannot select another agent",
+      "status": "passed"
+    },
+    {
+      "name": "Schema cannot be relaxed by caller",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed request rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Missing or malformed credentials never reach transport or escape in errors",
+      "status": "passed"
+    },
+    {
+      "name": "Timeout configuration can only shorten the fixed budget",
+      "status": "passed"
+    },
+    {
+      "name": "Pre-aborted request starts zero provider calls",
+      "status": "passed"
+    },
+    {
+      "name": "Provider refusal, even alongside valid-looking content",
+      "status": "passed"
+    },
+    {
+      "name": "Truncated completion is not accepted as finished",
+      "status": "passed"
+    },
+    {
+      "name": "Filtered completion is not accepted",
+      "status": "passed"
+    },
+    {
+      "name": "Unsolicited tool call is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Wrong response role is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Multiple choices are rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Successful HTTP with error envelope is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Markdown-wrapped content is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Model JSON primitive is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Model JSON array is rejected",
+      "status": "passed"
+    },
+    {
+      "name": "Model JSON character limit is enforced independently of HTTP bytes",
+      "status": "passed"
+    },
+    {
+      "name": "Non-JSON HTTP is rejected without reading an error page",
+      "status": "passed"
+    },
+    {
+      "name": "Malformed outer JSON is rejected with no provider text",
+      "status": "passed"
+    },
+    {
+      "name": "Invalid UTF-8 is rejected instead of silently replacing bytes",
+      "status": "passed"
+    },
+    {
+      "name": "Split multibyte UTF-8 survives bounded streaming reads",
+      "status": "passed"
+    },
+    {
+      "name": "Declared oversized HTTP response is cancelled before decoding",
+      "status": "passed"
+    },
+    {
+      "name": "Actual UTF-8 bytes are bounded even when Content-Length lies",
+      "status": "passed"
+    },
+    {
+      "name": "HTTP failures cancel the body without consuming it or retrying",
+      "status": "passed"
+    },
+    {
+      "name": "Thrown transport errors are sanitized with no automatic retries",
+      "status": "passed"
+    },
+    {
+      "name": "Caller abort bounds a transport that never resolves or checks signal",
+      "status": "passed"
+    },
+    {
+      "name": "Adapter deadline bounds uncooperative headers without caller abort",
+      "status": "passed"
+    },
+    {
+      "name": "Adapter deadline bounds an uncooperative body and requests cancellation",
+      "status": "passed"
+    },
+    {
+      "name": "Caller abort bounds a body reader even when cancellation never settles",
+      "status": "passed"
+    },
+    {
+      "name": "Late provider response after cancellation is discarded and cannot succeed",
+      "status": "passed"
+    },
+    {
+      "name": "Separate simultaneous completions do not share cancellation state",
+      "status": "passed"
+    }
+  ]
+}

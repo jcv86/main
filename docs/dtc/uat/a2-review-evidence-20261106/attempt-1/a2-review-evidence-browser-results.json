@@ -1,0 +1,352 @@
+{
+  "commit": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "scope": "disposable-local-a2-review-evidence",
+  "verdict": "PASS",
+  "steps": [
+    {
+      "phase": "desktop",
+      "name": "real gated source read selects owner v2 captures and dated A4 decisions, excludes newer numeric v1 and performs no writes",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "only explicit confirmation saves the reviewed evidence snapshot through the existing atomic plan CAS and receipt",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "a real newly captured A3 response rejects the old fingerprint, preserves edits and requires explicit re-review before saving",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "a real A4 review changes the dated declaration context and updates the saved snapshot only after explicit plan review",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "actual source permission failure is unavailable rather than empty; confirmation fails closed and recovery preserves the saved plan",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "a newest malformed scored-v2 source blocks context instead of reviving an older valid record",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "exact command replay returns the prior receipt with the current plan; reload recovers the reviewed snapshot without new writes",
+      "status": "PASS"
+    },
+    {
+      "phase": "desktop",
+      "name": "all review and persistence operations preserve complete snapshots of seven canonical progress tables",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "real gated source read selects owner v2 captures and dated A4 decisions, excludes newer numeric v1 and performs no writes",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "only explicit confirmation saves the reviewed evidence snapshot through the existing atomic plan CAS and receipt",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "a real A4 source deletion is missing rather than unavailable; mobile review uses unscored A3 responses and explicitly updates the snapshot",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "exact command replay returns the prior receipt with the current plan; reload recovers the reviewed snapshot without new writes",
+      "status": "PASS"
+    },
+    {
+      "phase": "mobile",
+      "name": "all review and persistence operations preserve complete snapshots of seven canonical progress tables",
+      "status": "PASS"
+    },
+    {
+      "phase": "access",
+      "name": "personal and A3/A4-locked paths skip both professional source reads despite stored decoys and revoked SELECT, without any writes",
+      "status": "PASS"
+    },
+    {
+      "phase": "access",
+      "name": "actual Auth, wrong expected actor and revoked pilot access reject personal context and plan writes without side effects",
+      "status": "PASS"
+    }
+  ],
+  "accessibility": [
+    {
+      "phase": "desktop",
+      "name": "source-review",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "source-conflict",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "reviewed-a4-plan",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "desktop",
+      "name": "source-unavailable",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "source-review",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "editor",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    },
+    {
+      "phase": "mobile",
+      "name": "reviewed-a3-plan",
+      "violations": [],
+      "incomplete": [
+        "color-contrast"
+      ]
+    }
+  ],
+  "layouts": [
+    {
+      "phase": "desktop",
+      "name": "source-review",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "editor",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "source-conflict",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "reviewed-a4-plan",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "desktop",
+      "name": "source-unavailable",
+      "viewport": 1440,
+      "document": 1440
+    },
+    {
+      "phase": "mobile",
+      "name": "source-review",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "editor",
+      "viewport": 390,
+      "document": 390
+    },
+    {
+      "phase": "mobile",
+      "name": "reviewed-a3-plan",
+      "viewport": 390,
+      "document": 390
+    }
+  ],
+  "javascriptErrors": [],
+  "blockedHosts": [],
+  "requestFailures": [
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "desktop",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "mobile",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/a4-strategic-score",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    },
+    {
+      "phase": "access",
+      "path": "/api/banco-central-data",
+      "method": "GET",
+      "error": "net::ERR_ABORTED"
+    }
+  ],
+  "controlledFaults": [
+    {
+      "phase": "desktop",
+      "kind": "a4_owner_select_revoked",
+      "result": "unavailable_not_missing",
+      "savedPlanPreserved": true
+    },
+    {
+      "phase": "desktop",
+      "kind": "newest_v2_capture_contains_numeric_score",
+      "result": "unavailable_without_old_record_fallback"
+    },
+    {
+      "phase": "access",
+      "kind": "both_professional_source_selects_revoked",
+      "personalResult": "not_applicable",
+      "lockedResult": "locked",
+      "contextStillAvailable": true
+    }
+  ],
+  "sourceChanges": [
+    {
+      "phase": "desktop",
+      "kind": "new_a3_follow_up",
+      "transport": "actual authenticated capture API",
+      "scored": false
+    },
+    {
+      "phase": "desktop",
+      "kind": "a4_declared_review",
+      "transport": "actual authenticated A4 API with server-owned write",
+      "externalOutcome": "no_external_change",
+      "readerSource": "canonical decision row; derived legacy scores are not consumed"
+    },
+    {
+      "phase": "mobile",
+      "kind": "a4_decisions_deleted",
+      "transport": "declared local SQL source event",
+      "deletedRows": 2
+    }
+  ],
+  "progressTablesCompared": [
+    "despega_user_profiles",
+    "despega_journey_state",
+    "a2_user_task_completions",
+    "a3_user_progress",
+    "a3_route_progression",
+    "user_gamification_profile",
+    "user_dtc_balance"
+  ],
+  "previousOwnersPreserved": true,
+  "previousOwnersCompared": 17,
+  "generationResponsesSubstituted": 0,
+  "modelRequestsFromBrowser": 0,
+  "transport": "Actual UI, email Auth, plan and source APIs, owner RLS and PostgreSQL. Synthetic source fixtures and declared local faults only; no successful response is mocked.",
+  "notVerified": [
+    "participant usefulness, career improvement, measured capability or causal benefit",
+    "real model generation quality, provider latency/cost or live canary traffic",
+    "independent verification of reported A4 outcomes or linked opportunity/source contents",
+    "global transactional freshness across independently updated evidence sources",
+    "remote migrations, production deployment or external OAuth",
+    "physical mobile, touch or Safari; mobile means Chromium viewport 390 by 844",
+    "the 54 manual UAT cases or replacement of the prior business GO"
+  ],
+  "failure": null,
+  "failureScreenshot": null
+}

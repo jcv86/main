@@ -1,0 +1,11 @@
+{
+  "candidate": "22d533d6e42f3663d2a46b9ca48116bf138c23f7",
+  "sources": 11,
+  "allSourceHashesMatchCandidate": true,
+  "reportSha256": "4fbb28b7e827c32b25668257b4ff70b28932f2e37387f87cbbc9cef68f8069a9",
+  "checks": 55,
+  "audits": 8,
+  "violations": 0,
+  "incomplete": 8,
+  "scope": "Actual UI and CSS with synthetic Auth/HTTP; real integration has separate provenance."
+}
