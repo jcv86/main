@@ -2,7 +2,7 @@
 
 Revisión del 26 de noviembre de 2026. Rama `uat/dtc-20261106` en `jcv86/main`. Referencia de código para AG05 `22d533d`, con evidencia registrada en `124537c`.
 
-**Estado de entrega.** La versión nueva de UAT todavía carece de una URL navegable. La [aceptación de negocio](DTC_UAT_ACCEPTANCE_20261106.md) corresponde a `7eb0544` y a su alcance de Auth/C1. La [evidencia de AG05](DTC_A2_REVIEW_EVIDENCE_20261106.md) acredita en laboratorio 4 comprobaciones SQL y 15 pasos de navegador sobre el candidato posterior. Los 48 casos base y 6 condicionales manuales siguen registrados como no ejecutados.
+**Estado de entrega.** La versión nueva de UAT todavía carece de un despliegue navegable. Su Supabase dedicado ya está activo y Vercel tiene configurada la conexión pública. La [aceptación de negocio](DTC_UAT_ACCEPTANCE_20261106.md) corresponde a `7eb0544` y a su alcance de Auth/C1. La [evidencia de AG05](DTC_A2_REVIEW_EVIDENCE_20261106.md) acredita en laboratorio 4 comprobaciones SQL y 15 pasos de navegador sobre el candidato posterior. Los 48 casos base y 6 condicionales manuales siguen registrados como no ejecutados.
 
 ## Ambientes y conexiones
 
@@ -14,13 +14,13 @@ flowchart TB
   end
   subgraph T["Demo UAT · conexiones pendientes"]
     T1["Presentador y cuentas ficticias"] -.-> T2["Vercel dtc-uat · sin despliegue"]
-    T2 -.-> T3["Supabase aislado · por identificar"]
+    T2 -.-> T3["Supabase dtc-uat · activo, esquema pendiente"]
     T2 -.-> T4["Proveedor IA · por comprobar"]
   end
   G["GitHub · uat/dtc-20261106"] -.-> T2
 ```
 
-Las líneas discontinuas marcan conexiones pendientes de configuración o verificación. El proyecto de UAT tiene protección Vercel SSO y solo registra `DTC_ENVIRONMENT`. El despliegue Git automático de esa rama está deshabilitado en [vercel.json](../../vercel.json). El intento anterior de Preview, en el proyecto productivo y sobre `367c573`, figura ERROR. El último build productivo READY observado corresponde a `7f11f17`, con [registro de despliegue](https://vercel.com/despega-tu-carrera/v0-fork-of-despega-tu-carrera-clone/CYMMTZc1qcUjsWnzvyXCt7LbopJM). La preparación de la demo requiere su propia URL y la comprobación de su SHA exacto.
+Las líneas discontinuas marcan conexiones pendientes de configuración o verificación. El proyecto de UAT tiene protección Vercel SSO. Supabase `dtc-uat` (`vpgygvlkwmbytuimyryf`, US East) está activo y el dominio `dtc-uat.vercel.app` está verificado. Vercel registra `DTC_ENVIRONMENT`, `DTC_UAT_SUPABASE_REF`, `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY` y `NEXT_PUBLIC_APP_URL`. Falta `SUPABASE_SERVICE_ROLE_KEY` del proyecto UAT. La consulta al destino devolvió cero tablas públicas y cero migraciones aplicadas. El despliegue Git automático de esa rama está deshabilitado en [vercel.json](../../vercel.json). El intento anterior de Preview, en el proyecto productivo y sobre `367c573`, figura ERROR. El último build productivo READY observado corresponde a `7f11f17`, con [registro de despliegue](https://vercel.com/despega-tu-carrera/v0-fork-of-despega-tu-carrera-clone/CYMMTZc1qcUjsWnzvyXCt7LbopJM). La preparación de la demo requiere su propia URL y la comprobación de su SHA exacto.
 
 ## Base de datos
 
@@ -89,7 +89,7 @@ flowchart TD
 
 | Orden | Trabajo | Evidencia exigida |
 | --- | --- | --- |
-| 1 | Identificar o provisionar el Supabase UAT dedicado. | Ref explícitamente asociado a DTC UAT y separado de DTCFINAL. |
+| 1 | Supabase UAT dedicado provisionado. | `vpgygvlkwmbytuimyryf`, activo en la organización DespegaTuCarrera. |
 | 2 | Preparar esquema base, migraciones y cuentas ficticias. | Aplicación reproducible en limpio, catálogo y permisos comprobados, rollback ensayado en UAT. |
 | 3 | Configurar `dtc-uat` y publicar en forma controlada desde el SHA elegido. | URL protegida READY, SHA exacto, backend UAT confirmado y cuenta de presentación con acceso. |
 | 4 | Ejecutar el recorrido anterior, escritorio y móvil, con dos cuentas. | Evidencia de cada transición, recarga, aislamiento, sesión y recuperación. Registrar resultados por caso en la matriz. |
